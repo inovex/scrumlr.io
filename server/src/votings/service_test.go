@@ -2,138 +2,625 @@ package votings
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 
 	"scrumlr.io/server/realtime"
 )
 
-type VotingServiceTestSuite struct {
-	suite.Suite
+func TestAddVote(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	votingID := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().AddVote(boardID, userID, noteID).
+		Return(DatabaseVote{Board: boardID, Voting: votingID, User: userID, Note: noteID}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	vote, err := service.AddVote(context.Background(), VoteRequest{Board: boardID, User: userID, Note: noteID})
+
+	assert.Nil(t, err)
+	assert.Equal(t, votingID, vote.Voting)
+	assert.Equal(t, noteID, vote.Note)
+	assert.Equal(t, userID, vote.User)
 }
 
-func TestVotingServiceTestSuite(t *testing.T) {
-	suite.Run(t, new(VotingServiceTestSuite))
+func TestAddVote_VoteLimit(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().AddVote(boardID, userID, noteID).
+		Return(DatabaseVote{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	vote, err := service.AddVote(context.Background(), VoteRequest{Board: boardID, User: userID, Note: noteID})
+
+	assert.Nil(t, vote)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
 }
 
-func (suite *VotingServiceTestSuite) TestCreateVoting() {
+func TestAddVote_Failed(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	dbError := "Failed to add vote"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().AddVote(boardID, userID, noteID).
+		Return(DatabaseVote{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	vote, err := service.AddVote(context.Background(), VoteRequest{Board: boardID, User: userID, Note: noteID})
+
+	assert.Nil(t, vote)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestRemoveVote(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	noteId := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().RemoveVote(boardId, userId, noteId).Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	err := service.RemoveVote(context.Background(), VoteRequest{Board: boardId, User: userId, Note: noteId})
+
+	assert.Nil(t, err)
+}
+
+func TestRemoveVote_Failed(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	noteId := uuid.New()
+	dbError := "failed to remove vote"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().RemoveVote(boardId, userId, noteId).Return(errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	err := service.RemoveVote(context.Background(), VoteRequest{Board: boardId, User: userId, Note: noteId})
+
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestGetVotes(t *testing.T) {
+	boardId := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId}).
+		Return([]DatabaseVote{
+			{Board: boardId, Voting: uuid.New(), User: uuid.New(), Note: uuid.New()},
+			{Board: boardId, Voting: uuid.New(), User: uuid.New(), Note: uuid.New()},
+			{Board: boardId, Voting: uuid.New(), User: uuid.New(), Note: uuid.New()},
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	votes, err := service.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
+
+	assert.Nil(t, err)
+	assert.Len(t, votes, 3)
+}
+
+func TestGetVotes_Failed(t *testing.T) {
+	boardId := uuid.New()
+	dbError := "cannot create voting"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId}).
+		Return([]DatabaseVote{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	votes, err := service.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
+
+	assert.Nil(t, votes)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateVoting(t *testing.T) {
 	votingId := uuid.New()
 	boardId := uuid.New()
 	votingLimit := 10
 	allowMultiple := false
 	showVotes := false
 
-	mockDb := NewMockVotingDatabase(suite.T())
+	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Create(DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
 		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, nil)
-	mockDb.EXPECT().Get(boardId, votingId).
-		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, []DatabaseVote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	create, err := service.Create(context.Background(), VotingCreateRequest{
+	voting, err := service.Create(context.Background(), VotingCreateRequest{
 		Board:              boardId,
 		VoteLimit:          votingLimit,
 		AllowMultipleVotes: allowMultiple,
 		ShowVotesOfOthers:  showVotes,
 	})
 
-	assert.NotNil(suite.T(), create)
-	assert.NoError(suite.T(), err)
-	mockDb.AssertExpectations(suite.T())
-	mockBroker.AssertExpectations(suite.T())
+	assert.Nil(t, err)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, votingLimit, voting.VoteLimit)
+	assert.False(t, voting.AllowMultipleVotes)
+	assert.False(t, voting.ShowVotesOfOthers)
+	assert.False(t, voting.IsAnonymous)
 }
 
-func (suite *VotingServiceTestSuite) TestUpdateVotingOpen() {
+func TestCreateVoting_SecondVoting(t *testing.T) {
+	boardId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Create(DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Create(context.Background(), VotingCreateRequest{
+		Board:              boardId,
+		VoteLimit:          votingLimit,
+		AllowMultipleVotes: allowMultiple,
+		ShowVotesOfOthers:  showVotes,
+	})
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("only one open voting session is allowed")), err)
+}
+
+func TestCreateVoting_Failed(t *testing.T) {
+	boardId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+	dbError := "cannot create voting"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Create(DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
+		Return(DatabaseVoting{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Create(context.Background(), VotingCreateRequest{
+		Board:              boardId,
+		VoteLimit:          votingLimit,
+		AllowMultipleVotes: allowMultiple,
+		ShowVotesOfOthers:  showVotes,
+	})
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.InternalServerError, err)
+}
+
+func TestUpdateVotingOpen(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
 	status := Open
 
-	mockDb := NewMockVotingDatabase(suite.T())
+	mockDb := NewMockVotingDatabase(t)
 
-	mockBroker := realtime.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
 	voting, err := service.Update(context.Background(), VotingUpdateRequest{ID: votingID, Board: boardId, Status: status}, nil)
 
-	assert.Nil(suite.T(), voting)
-	assert.Error(suite.T(), err)
-	mockDb.AssertExpectations(suite.T())
-	mockBroker.AssertExpectations(suite.T())
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("not allowed ot change to open state")), err)
 }
 
-func (suite *VotingServiceTestSuite) TestUpdateVotingClose() {
+func TestUpdateVotingClose(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
 	status := Closed
 
-	mockDb := NewMockVotingDatabase(suite.T())
+	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Update(DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
-	mockDb.EXPECT().Get(boardId, votingID).
-		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, []DatabaseVote{}, nil)
 	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingID}).
 		Return([]DatabaseVote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
 	voting, err := service.Update(context.Background(), VotingUpdateRequest{ID: votingID, Board: boardId, Status: status}, nil)
 
-	assert.NoError(suite.T(), err)
-	assert.NotNil(suite.T(), voting)
-	assert.Equal(suite.T(), status, voting.Status)
-	mockDb.AssertExpectations(suite.T())
-	mockBroker.AssertExpectations(suite.T())
+	assert.NoError(t, err)
+	assert.NotNil(t, voting)
+	assert.Equal(t, status, voting.Status)
 }
 
-func (suite *VotingServiceTestSuite) TestAddVotes() {
-	boardID := uuid.New()
-	userID := uuid.New()
-	noteID := uuid.New()
+func TestUpdateVotingClose_NotFound(t *testing.T) {
+	boardId := uuid.New()
 	votingID := uuid.New()
-	expectedVote := DatabaseVote{
-		Board:  boardID,
-		Voting: votingID,
-		User:   userID,
-		Note:   noteID,
-	}
+	status := Closed
 
-	mockDb := NewMockVotingDatabase(suite.T())
-	mockDb.EXPECT().AddVote(boardID, userID, noteID).Return(expectedVote, nil)
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Update(DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
 
-	mockBroker := realtime.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
+	voting, err := service.Update(context.Background(), VotingUpdateRequest{ID: votingID, Board: boardId, Status: status}, nil)
 
-	result, err := service.AddVote(context.Background(), VoteRequest{
-		Board: boardID,
-		User:  userID,
-		Note:  noteID,
-	})
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.NotFoundError, err)
+}
 
-	require.NoError(suite.T(), err)
-	require.NotNil(suite.T(), result)
-	assert.Equal(suite.T(), &Vote{
-		Voting: votingID,
-		Note:   noteID,
-		User:   userID,
-	}, result)
+func TestUpdateVotingClose_Failed(t *testing.T) {
+	boardId := uuid.New()
+	votingID := uuid.New()
+	status := Closed
+	dbError := "failed to update"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Update(DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
+		Return(DatabaseVoting{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Update(context.Background(), VotingUpdateRequest{ID: votingID, Board: boardId, Status: status}, nil)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.InternalServerError, err)
+}
+
+func TestUpdateVotingClose_FailedToGetVotes(t *testing.T) {
+	boardId := uuid.New()
+	votingID := uuid.New()
+	status := Closed
+	dbError := "failed to get votes"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Update(DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
+		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingID}).
+		Return([]DatabaseVote{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Update(context.Background(), VotingUpdateRequest{ID: votingID, Board: boardId, Status: status}, nil)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestGetVoting_Open(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+	status := Open
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Get(boardId, votingId).
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Get(context.Background(), boardId, votingId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, votingLimit, voting.VoteLimit)
+	assert.Equal(t, status, voting.Status)
+	assert.False(t, voting.AllowMultipleVotes)
+	assert.False(t, voting.ShowVotesOfOthers)
+	assert.False(t, voting.IsAnonymous)
+	assert.Nil(t, voting.VotingResults)
+}
+
+func TestGetVoting_Open_NotFound(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Get(boardId, votingId).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Get(context.Background(), boardId, votingId)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.NotFoundError, err)
+}
+
+func TestGetVoting_Open_FailedToGetVoting(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+	dbError := "failed to get voting"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Get(boardId, votingId).
+		Return(DatabaseVoting{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Get(context.Background(), boardId, votingId)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.InternalServerError, err)
+}
+
+func TestGetVoting_Closed(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+	status := Closed
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Get(boardId, votingId).
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingId}).
+		Return([]DatabaseVote{
+			{Board: boardId, Voting: votingId, User: uuid.New(), Note: uuid.New()},
+			{Board: boardId, Voting: votingId, User: uuid.New(), Note: uuid.New()},
+			{Board: boardId, Voting: votingId, User: uuid.New(), Note: uuid.New()},
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Get(context.Background(), boardId, votingId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, votingLimit, voting.VoteLimit)
+	assert.Equal(t, status, voting.Status)
+	assert.False(t, voting.AllowMultipleVotes)
+	assert.False(t, voting.ShowVotesOfOthers)
+	assert.False(t, voting.IsAnonymous)
+	assert.NotNil(t, voting.VotingResults)
+	assert.Equal(t, 3, voting.VotingResults.Total)
+}
+
+func TestGetVoting_Closed_FailedToGetVotes(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+	status := Closed
+	dbError := "Failed to get votes"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Get(boardId, votingId).
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingId}).
+		Return([]DatabaseVote{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Get(context.Background(), boardId, votingId)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestGetAllVotings(t *testing.T) {
+	boardId := uuid.New()
+	firstVotingId := uuid.New()
+	secondVotingId := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetAll(boardId).
+		Return([]DatabaseVoting{
+			{ID: firstVotingId, Board: boardId, Status: Open},
+			{ID: secondVotingId, Board: boardId, Status: Closed},
+		}, nil)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId}).
+		Return([]DatabaseVote{
+			{Voting: firstVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
+			{Voting: firstVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
+			{Voting: secondVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
+			{Voting: secondVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	votings, err := service.GetAll(context.Background(), boardId)
+
+	assert.Nil(t, err)
+	assert.Len(t, votings, 2)
+
+	assert.Equal(t, firstVotingId, votings[0].ID)
+	assert.Equal(t, Open, votings[0].Status)
+	assert.Nil(t, votings[0].VotingResults)
+
+	assert.Equal(t, secondVotingId, votings[1].ID)
+	assert.Equal(t, Closed, votings[1].Status)
+	assert.NotNil(t, votings[1].VotingResults)
+	assert.Equal(t, 2, votings[1].VotingResults.Total)
+}
+
+func TestGetAllVotings_FailedToGetVotings(t *testing.T) {
+	boardId := uuid.New()
+	firstVotingId := uuid.New()
+	secondVotingId := uuid.New()
+	dbError := "Failed to get votes"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetAll(boardId).
+		Return([]DatabaseVoting{
+			{ID: firstVotingId, Board: boardId, Status: Open},
+			{ID: secondVotingId, Board: boardId, Status: Closed},
+		}, nil)
+	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId}).
+		Return([]DatabaseVote{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	votings, err := service.GetAll(context.Background(), boardId)
+
+	assert.Nil(t, votings)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestGetAllVotings_FailedToGetVotes(t *testing.T) {
+	boardId := uuid.New()
+	dbError := "Failed to get votings"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetAll(boardId).Return([]DatabaseVoting{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	votings, err := service.GetAll(context.Background(), boardId)
+
+	assert.Nil(t, votings)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestGetOpenVoting(t *testing.T) {
+	boardId := uuid.New()
+	votingId := uuid.New()
+	votingLimit := 10
+	allowMultiple := false
+	showVotes := false
+	status := Open
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetOpenVoting(boardId).
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.GetOpen(context.Background(), boardId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, votingLimit, voting.VoteLimit)
+	assert.Equal(t, status, voting.Status)
+	assert.False(t, voting.AllowMultipleVotes)
+	assert.False(t, voting.ShowVotesOfOthers)
+	assert.False(t, voting.IsAnonymous)
+	assert.Nil(t, voting.VotingResults)
+}
+
+func TestGetOpenVoting_FailedToGetVoting(t *testing.T) {
+	boardId := uuid.New()
+	dbError := "Failed to get open voting"
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetOpenVoting(boardId).
+		Return(DatabaseVoting{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.GetOpen(context.Background(), boardId)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
 }

@@ -121,7 +121,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 	return rankUpdate
 }
 
-func (d *DB) Get(board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
+func (d *DB) Get(board, id uuid.UUID) (DatabaseVoting, error) {
 	var voting DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&voting).
@@ -129,15 +129,10 @@ func (d *DB) Get(board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
 		Where("id = ?", id).
 		Scan(context.Background())
 
-	if voting.Status == Closed {
-		votes, err := d.GetVotes(filter.VoteFilter{Board: board, Voting: &id})
-		return voting, votes, err
-	}
-
-	return voting, []DatabaseVote{}, err
+	return voting, err
 }
 
-func (d *DB) GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
+func (d *DB) GetAll(board uuid.UUID) ([]DatabaseVoting, error) {
 	var votings []DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&votings).
@@ -145,12 +140,7 @@ func (d *DB) GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
 		OrderExpr("array_position(array['OPEN', 'CLOSED', 'ABORTED']::voting_status[], status) ASC, created_at DESC").
 		Scan(context.Background())
 
-	if err != nil {
-		return votings, []DatabaseVote{}, err
-	}
-
-	votes, err := d.GetVotes(filter.VoteFilter{Board: board})
-	return votings, votes, err
+	return votings, err
 }
 
 func (d *DB) GetVotes(f filter.VoteFilter) ([]DatabaseVote, error) {
