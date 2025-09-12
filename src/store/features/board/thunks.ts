@@ -55,25 +55,26 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   }
 });
 
-async function participantsWithUser(message: BoardInitEvent) {
-  const {participants} = message.data;
-  const participantsWithUser: Participant[] = [];
-  for (let i = 0; i < participants.length; i++) {
-    const user = await API.getUserById((participants[i] as unknown as ParticipantDTO).id);
-    participantsWithUser.push({
-      connected: participants[i].connected,
-      raisedHand: participants[i].raisedHand,
-      ready: participants[i].ready,
-      role: participants[i].role,
-      showHiddenColumns: participants[i].showHiddenColumns,
-      user,
-      banned: participants[i].banned,
-    });
-  }
+const dtoToParticipant = async (dto: ParticipantDTO): Promise<Participant> => {
+  const user: Auth = await API.getUserById(dto.id);
+  return {
+    user,
+    connected: dto.connected,
+    raisedHand: dto.raisedHand,
+    ready: dto.ready,
+    showHiddenColumns: dto.showHiddenColumns,
+    role: dto.role,
+    banned: dto.banned,
+  };
+};
 
-  message.data.participants = participantsWithUser;
-  return participantsWithUser;
-}
+const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<Participant[]> => {
+  const {participants} = message.data;
+  const asDTOs = participants as unknown as ParticipantDTO[];
+  const mapped = await Promise.all(asDTOs.map(dtoToParticipant));
+  message.data.participants = mapped;
+  return mapped;
+};
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
 export const permittedBoardAccess = createAsyncThunk<
@@ -93,7 +94,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "INIT") {
         const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
-        const newParticipants = await participantsWithUser(message);
+        const newParticipants = await mapParticipantsWithUsers(message as BoardInitEvent);
         dispatch(
           initializeBoard({
             fullBoard: {
@@ -140,8 +141,7 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(updatedNotes(notes));
       }
       if (message.type === "NOTE_DELETED") {
-        const noteId = message.data.note;
-        const {deleteStack} = message.data;
+        const {note: noteId, deleteStack} = message.data;
         dispatch(deletedNote({noteId, deleteStack}));
       }
       if (message.type === "REACTION_ADDED") {
@@ -161,55 +161,29 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        const {user, connected, ready, raisedHand, showHiddenColumns, role, banned} = message.data;
-        const userWithID: ParticipantDTO = message.data as unknown as ParticipantDTO;
-        const fullUser: Auth = await API.getUserById(userWithID.id);
-        const participant: Participant = {
-          user: fullUser,
-          connected,
-          ready,
-          raisedHand,
-          showHiddenColumns,
-          role,
-          banned,
-        };
+        const participant = await dtoToParticipant(message.data as unknown as ParticipantDTO);
         dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        const userWithID: ParticipantDTO = message.data as unknown as ParticipantDTO;
-        const fullUser: Auth = await API.getUserById(userWithID.id);
+        const dto = message.data as unknown as ParticipantDTO;
+        const participant = await dtoToParticipant(dto);
         dispatch(
           updatedParticipant({
-            participant: {
-              user: fullUser,
-              connected: userWithID.connected,
-              ready: userWithID.ready,
-              raisedHand: userWithID.raisedHand,
-              showHiddenColumns: userWithID.showHiddenColumns,
-              role: userWithID.role,
-              banned: userWithID.banned,
-            },
+            participant,
             self: getState().auth.user!,
           })
         );
       }
 
       if (message.type === "PARTICIPANTS_UPDATED") {
-        const participants = message.data;
-        const participantsWithUser: Participant[] = [];
-        for (let i = 0; i < participants.length; i++) {
-          const user = await API.getUserById((participants[i] as unknown as ParticipantDTO).id);
-          participantsWithUser.push({
-            connected: participants[i].connected,
-            raisedHand: participants[i].raisedHand,
-            ready: participants[i].ready,
-            role: participants[i].role,
-            showHiddenColumns: participants[i].showHiddenColumns,
-            user,
-            banned: participants[i].banned,
-          });
-        }
-        dispatch(setParticipants({participants: participantsWithUser, self: getState().auth.user!}));
+        const dtos = message.data as unknown as ParticipantDTO[];
+        const participants = await Promise.all(dtos.map(dtoToParticipant));
+        dispatch(
+          setParticipants({
+            participants,
+            self: getState().auth.user!,
+          })
+        );
       }
 
       if (message.type === "VOTING_CREATED") {
