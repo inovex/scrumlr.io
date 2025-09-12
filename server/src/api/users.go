@@ -1,14 +1,15 @@
 package api
 
 import (
+	"github.com/go-chi/chi/v5"
 	"net/http"
+	"scrumlr.io/server/users"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/sessions"
 )
 
 // getUser get a user
@@ -25,11 +26,26 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
+func (s *Server) getUserByID(w http.ResponseWriter, r *http.Request) {
+	//callerId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	userParam := chi.URLParam(r, "user")
+	requestedUserId, err := uuid.Parse(userParam)
+	user, err := s.users.Get(r.Context(), requestedUserId)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, user)
+}
+
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body sessions.UserUpdateRequest
+	var body users.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -42,16 +58,6 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
-	}
-
-	// because of a import cycle the boards are updated through the session service
-	// after a user update.
-	updateBoards := sessions.BoardSessionUpdateRequest{
-		User: user,
-	}
-	_, err = s.sessions.UpdateUserBoards(r.Context(), updateBoards)
-	if err != nil {
-		log.Errorw("Unable to update user boards")
 	}
 
 	render.Status(r, http.StatusOK)
