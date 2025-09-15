@@ -1,0 +1,17 @@
+.sortable {
+  position: relative;
+  touch-action: manipulation;
+
+  &--dragging {
+    opacity: 0.5;
+  }
+
+  &--locked {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &--should-combine {
+    // Add any shouldCombine styles here if needed
+  }
+}
