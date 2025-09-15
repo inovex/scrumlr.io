@@ -8,6 +8,7 @@ import {useAppDispatch, useAppSelector} from "store";
 import {editNote, broadcastNoteDragStart, broadcastNoteDragEnd} from "store/features";
 import {Avatar} from "components/Avatar";
 import "./DragLockIndicator.scss";
+import "./Sortable.scss";
 
 type SortableProps = {
   id: UniqueIdentifier;
@@ -84,16 +85,12 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   useDndMonitor({
     onDragStart: (event) => {
       setLocalItems(items);
-      // Only broadcast from the component of the note being dragged
       if (event.active?.id === id) {
-        console.log(`🚀 Broadcasting drag start for note ${id}`);
         dispatch(broadcastNoteDragStart(id.toString()));
       }
     },
     onDragEnd: (event: DragEndEvent) => {
-      // Only broadcast from the component of the note that was dragged
       if (event.active?.id === id) {
-        console.log(`🔚 Broadcasting drag end for note ${id}`);
         dispatch(broadcastNoteDragEnd(id.toString()));
       }
       if (!columnId || !active) return;
@@ -160,19 +157,16 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   return (
     <div
       ref={setNodeRef}
-      className={classNames(className, {
-        shouldCombine: combine,
-        "note--locked": isLockedByOther,
+      className={classNames(className, "sortable", {
+        "sortable--should-combine": combine,
+        "sortable--locked": isLockedByOther,
+        "sortable--dragging": isDragging,
       })}
       {...attributes}
       {...listeners}
       style={{
         transition,
         transform: CSS.Transform.toString(transform),
-        opacity: isDragging ? 0.5 : isLockedByOther ? 0.7 : 1,
-        touchAction: "manipulation",
-        cursor: isLockedByOther ? "not-allowed" : undefined,
-        position: "relative",
       }}
       tabIndex={-1}
     >
