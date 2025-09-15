@@ -5,7 +5,9 @@ import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
-import {editNote} from "store/features";
+import {editNote, broadcastNoteDragStart, broadcastNoteDragEnd} from "store/features";
+import {Avatar} from "components/Avatar";
+import "./DragLockIndicator.scss";
 
 type SortableProps = {
   id: UniqueIdentifier;
@@ -46,10 +48,27 @@ export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], new
 export const Sortable = ({id, children, disabled, className, columnId, setItems}: SortableProps) => {
   const dispatch = useAppDispatch();
   const {collisions} = useDndContext();
+
+  // Check if this note is locked by another user
+  const {lockedNotes} = useAppSelector((state) => state.dragLocks);
+  const currentUserId = useAppSelector((state) => state.participants?.self?.user?.id);
+  const participants = useAppSelector((state) => state.participants);
+  const isLockedByOther = lockedNotes[id.toString()] && lockedNotes[id.toString()] !== currentUserId;
+  const dragDisabled = disabled || isLockedByOther;
+
+  // Get the user who is dragging this note
+  const draggingUserId = lockedNotes[id.toString()];
+  const draggingUser = draggingUserId ? [...(participants?.others || []), participants?.self].find((p) => p?.user?.id === draggingUserId) : null;
+
+  // Debug logging
+  if (isLockedByOther) {
+    console.log(`Note ${id} is locked by user ${lockedNotes[id.toString()]}, current user: ${currentUserId}`);
+  }
+
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
     data: {columnId, type: "note"},
-    disabled,
+    disabled: dragDisabled || undefined,
   });
 
   const combine = shouldCombine(id, items, newIndex, collisions, active);
@@ -63,10 +82,20 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const [localItems, setLocalItems] = useState(items);
 
   useDndMonitor({
-    onDragStart: () => {
+    onDragStart: (event) => {
       setLocalItems(items);
+      // Only broadcast from the component of the note being dragged
+      if (event.active?.id === id) {
+        console.log(`🚀 Broadcasting drag start for note ${id}`);
+        dispatch(broadcastNoteDragStart(id.toString()));
+      }
     },
     onDragEnd: (event: DragEndEvent) => {
+      // Only broadcast from the component of the note that was dragged
+      if (event.active?.id === id) {
+        console.log(`🔚 Broadcasting drag end for note ${id}`);
+        dispatch(broadcastNoteDragEnd(id.toString()));
+      }
       if (!columnId || !active) return;
 
       if (shouldStack(id, items, newIndex, collisions, active)) {
@@ -131,13 +160,31 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   return (
     <div
       ref={setNodeRef}
-      className={classNames(className, {shouldCombine: combine})}
+      className={classNames(className, {
+        shouldCombine: combine,
+        "note--locked": isLockedByOther,
+      })}
       {...attributes}
       {...listeners}
-      style={{transition, transform: CSS.Transform.toString(transform), opacity: isDragging ? 0.5 : 1, touchAction: "manipulation"}}
+      style={{
+        transition,
+        transform: CSS.Transform.toString(transform),
+        opacity: isDragging ? 0.5 : isLockedByOther ? 0.7 : 1,
+        touchAction: "manipulation",
+        cursor: isLockedByOther ? "not-allowed" : undefined,
+        position: "relative",
+      }}
       tabIndex={-1}
     >
       {children}
+      {isLockedByOther && draggingUser && (
+        <div className="drag-lock-indicator">
+          <div className="drag-lock-indicator__avatar">
+            <Avatar seed={draggingUser.user?.id} avatar={draggingUser.user?.avatar} />
+          </div>
+          <div className="drag-lock-indicator__tooltip">{draggingUser.user?.name || "Someone"} is moving this</div>
+        </div>
+      )}
     </div>
   );
 };
