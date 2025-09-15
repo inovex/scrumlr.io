@@ -10,6 +10,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/realtime"
 )
 
 // createNote creates a new note
@@ -119,5 +120,43 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, nil)
+}
+
+// noteDragStart broadcasts that a note drag has started
+func (s *Server) noteDragStart(w http.ResponseWriter, r *http.Request) {
+	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	// Broadcast drag start event
+	_ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragStart,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, nil)
+}
+
+// noteDragEnd broadcasts that a note drag has ended
+func (s *Server) noteDragEnd(w http.ResponseWriter, r *http.Request) {
+	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	// Broadcast drag end event
+	_ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragEnd,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	render.Status(r, http.StatusOK)
 	render.Respond(w, r, nil)
 }

@@ -356,6 +356,8 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Get("/", s.getNote)
 			r.With(s.BoardEditableContext).Put("/", s.updateNote)
 			r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
+			r.With(s.BoardEditableContext).Post("/drag-start", s.noteDragStart)
+			r.With(s.BoardEditableContext).Post("/drag-end", s.noteDragEnd)
 		})
 	})
 }
