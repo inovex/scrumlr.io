@@ -118,9 +118,8 @@ exports[`Column should have correct style show column with correct style 1`] = `
             aria-describedby="DndDescribedBy-1"
             aria-disabled="false"
             aria-roledescription="sortable"
-            class="note__root accent-color__planning-pink"
+            class="note__root accent-color__planning-pink sortable"
             role="button"
-            style="opacity: 1;"
             tabindex="-1"
           >
             <div
@@ -701,9 +700,8 @@ exports[`Column should have correct style show column with correct style 1`] = `
             aria-describedby="DndDescribedBy-1"
             aria-disabled="false"
             aria-roledescription="sortable"
-            class="note__root accent-color__planning-pink"
+            class="note__root accent-color__planning-pink sortable"
             role="button"
-            style="opacity: 1;"
             tabindex="-1"
           >
             <div
@@ -1363,9 +1361,8 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
               aria-describedby="DndDescribedBy-0"
               aria-disabled="false"
               aria-roledescription="sortable"
-              class="note__root accent-color__planning-pink"
+              class="note__root accent-color__planning-pink sortable"
               role="button"
-              style="opacity: 1;"
               tabindex="-1"
             >
               <div
@@ -1946,9 +1943,8 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
               aria-describedby="DndDescribedBy-0"
               aria-disabled="false"
               aria-roledescription="sortable"
-              class="note__root accent-color__planning-pink"
+              class="note__root accent-color__planning-pink sortable"
               role="button"
-              style="opacity: 1;"
               tabindex="-1"
             >
               <div
