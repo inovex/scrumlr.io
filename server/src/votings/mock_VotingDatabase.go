@@ -170,7 +170,7 @@ func (_c *MockVotingDatabase_Create_Call) RunAndReturn(run func(insert DatabaseV
 }
 
 // Get provides a mock function for the type MockVotingDatabase
-func (_mock *MockVotingDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
+func (_mock *MockVotingDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseVoting, error) {
 	ret := _mock.Called(board, id)
 
 	if len(ret) == 0 {
@@ -178,9 +178,8 @@ func (_mock *MockVotingDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseVot
 	}
 
 	var r0 DatabaseVoting
-	var r1 []DatabaseVote
-	var r2 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (DatabaseVoting, []DatabaseVote, error)); ok {
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (DatabaseVoting, error)); ok {
 		return returnFunc(board, id)
 	}
 	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) DatabaseVoting); ok {
@@ -188,19 +187,12 @@ func (_mock *MockVotingDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseVot
 	} else {
 		r0 = ret.Get(0).(DatabaseVoting)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) []DatabaseVote); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
 		r1 = returnFunc(board, id)
 	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]DatabaseVote)
-		}
+		r1 = ret.Error(1)
 	}
-	if returnFunc, ok := ret.Get(2).(func(uuid.UUID, uuid.UUID) error); ok {
-		r2 = returnFunc(board, id)
-	} else {
-		r2 = ret.Error(2)
-	}
-	return r0, r1, r2
+	return r0, r1
 }
 
 // MockVotingDatabase_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
@@ -233,18 +225,18 @@ func (_c *MockVotingDatabase_Get_Call) Run(run func(board uuid.UUID, id uuid.UUI
 	return _c
 }
 
-func (_c *MockVotingDatabase_Get_Call) Return(databaseVoting DatabaseVoting, databaseVotes []DatabaseVote, err error) *MockVotingDatabase_Get_Call {
-	_c.Call.Return(databaseVoting, databaseVotes, err)
+func (_c *MockVotingDatabase_Get_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_Get_Call {
+	_c.Call.Return(databaseVoting, err)
 	return _c
 }
 
-func (_c *MockVotingDatabase_Get_Call) RunAndReturn(run func(board uuid.UUID, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error)) *MockVotingDatabase_Get_Call {
+func (_c *MockVotingDatabase_Get_Call) RunAndReturn(run func(board uuid.UUID, id uuid.UUID) (DatabaseVoting, error)) *MockVotingDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function for the type MockVotingDatabase
-func (_mock *MockVotingDatabase) GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
+func (_mock *MockVotingDatabase) GetAll(board uuid.UUID) ([]DatabaseVoting, error) {
 	ret := _mock.Called(board)
 
 	if len(ret) == 0 {
@@ -252,9 +244,8 @@ func (_mock *MockVotingDatabase) GetAll(board uuid.UUID) ([]DatabaseVoting, []Da
 	}
 
 	var r0 []DatabaseVoting
-	var r1 []DatabaseVote
-	var r2 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error)); ok {
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseVoting, error)); ok {
 		return returnFunc(board)
 	}
 	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseVoting); ok {
@@ -264,19 +255,12 @@ func (_mock *MockVotingDatabase) GetAll(board uuid.UUID) ([]DatabaseVoting, []Da
 			r0 = ret.Get(0).([]DatabaseVoting)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) []DatabaseVote); ok {
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
 		r1 = returnFunc(board)
 	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]DatabaseVote)
-		}
+		r1 = ret.Error(1)
 	}
-	if returnFunc, ok := ret.Get(2).(func(uuid.UUID) error); ok {
-		r2 = returnFunc(board)
-	} else {
-		r2 = ret.Error(2)
-	}
-	return r0, r1, r2
+	return r0, r1
 }
 
 // MockVotingDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
@@ -303,12 +287,12 @@ func (_c *MockVotingDatabase_GetAll_Call) Run(run func(board uuid.UUID)) *MockVo
 	return _c
 }
 
-func (_c *MockVotingDatabase_GetAll_Call) Return(databaseVotings []DatabaseVoting, databaseVotes []DatabaseVote, err error) *MockVotingDatabase_GetAll_Call {
-	_c.Call.Return(databaseVotings, databaseVotes, err)
+func (_c *MockVotingDatabase_GetAll_Call) Return(databaseVotings []DatabaseVoting, err error) *MockVotingDatabase_GetAll_Call {
+	_c.Call.Return(databaseVotings, err)
 	return _c
 }
 
-func (_c *MockVotingDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error)) *MockVotingDatabase_GetAll_Call {
+func (_c *MockVotingDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID) ([]DatabaseVoting, error)) *MockVotingDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -1,7 +1,7 @@
 package votings
 
 import (
-	"database/sql"
+	"context"
 	"errors"
 	"log"
 	"testing"
@@ -9,45 +9,161 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/technical_helper"
 )
 
-type DatabaseVotingTestSuite struct {
+type VotingServiceIntegrationTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	users     map[string]TestUser
-	boards    map[string]TestBoard
-	columns   map[string]TestColumn
-	notes     map[string]TestNote
-	votings   map[string]DatabaseVoting
-	votes     map[string]DatabaseVote
+	dbContainer          *postgres.PostgresContainer
+	natsContainer        *nats.NATSContainer
+	db                   *bun.DB
+	natsConnectionString string
+	users                map[string]TestUser
+	boards               map[string]TestBoard
+	columns              map[string]TestColumn
+	notes                map[string]TestNote
+	votings              map[string]DatabaseVoting
+	votes                map[string]DatabaseVote
 }
 
-func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
-	suite.Run(t, new(DatabaseVotingTestSuite))
+func TestVotingServiceIntegrationTestSuite(t *testing.T) {
+	suite.Run(t, new(VotingServiceIntegrationTestSuite))
 }
 
-func (suite *DatabaseVotingTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
+func (suite *VotingServiceIntegrationTestSuite) SetupSuite() {
+	dbContainer, bun := initialize.StartTestDatabase()
 	suite.SeedDatabase(bun)
+	natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.container = container
+	suite.dbContainer = dbContainer
+	suite.natsContainer = natsContainer
 	suite.db = bun
+	suite.natsConnectionString = connectionString
 }
 
-func (suite *DatabaseVotingTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *VotingServiceIntegrationTestSuite) TeardownSuite() {
+	initialize.StopTestDatabase(suite.dbContainer)
+	initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
+func (suite *VotingServiceIntegrationTestSuite) Test_AddVote() {
 	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	userId := suite.users["Santa"].id
+	noteId := suite.notes["WriteAdd"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
 	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	vote, err := service.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
+
+	assert.Nil(t, err)
+	assert.Equal(t, noteId, vote.Note)
+	assert.Equal(t, userId, vote.User)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) Test_AddVote_ClosedVoting() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["WriteClosed"].id
+	userId := suite.users["Santa"].id
+	noteId := suite.notes["WriteClosed"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	vote, err := service.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
+
+	assert.Nil(t, vote)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	userId := suite.users["Stan"].id
+	noteId := suite.notes["Delete"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	err = service.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
+
+	assert.Nil(t, err)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote_ClosedVoting() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["WriteClosed"].id
+	userId := suite.users["Stan"].id
+	noteId := suite.notes["WriteClosed"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	err = service.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
+
+	assert.Nil(t, err)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) Test_GetVotes() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	votes, err := service.GetVotes(ctx, filter.VoteFilter{Board: boardId})
+
+	assert.Nil(t, err)
+	assert.Len(t, votes, 18)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
+	t := suite.T()
+	ctx := context.Background()
 
 	boardId := suite.boards["Create"].id
 	voteLimit := 10
@@ -56,307 +172,236 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(boardId)
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	voting, err := service.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
 
 	assert.Nil(t, err)
-	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, voteLimit, dbVoting.VoteLimit)
-	assert.Equal(t, allowMultiple, dbVoting.AllowMultipleVotes)
-	assert.Equal(t, showOfOthers, dbVoting.ShowVotesOfOthers)
-	assert.Equal(t, anonymous, dbVoting.IsAnonymous)
-	assert.Equal(t, status, dbVoting.Status)
-	assert.NotNil(t, dbVoting.CreatedAt)
+	assert.Equal(t, status, voting.Status)
+	assert.Equal(t, voteLimit, voting.VoteLimit)
+	assert.Equal(t, allowMultiple, voting.AllowMultipleVotes)
+	assert.Equal(t, showOfOthers, voting.ShowVotesOfOthers)
+	assert.Equal(t, anonymous, voting.IsAnonymous)
+	assert.Nil(t, voting.VotingResults)
+
+	msg := <-events
+	assert.Equal(t, realtime.BoardEventVotingCreated, msg.Type)
+	votingData, err := technical_helper.Unmarshal[Voting](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, status, votingData.Status)
+	assert.Equal(t, voteLimit, votingData.VoteLimit)
+	assert.Equal(t, allowMultiple, votingData.AllowMultipleVotes)
+	assert.Equal(t, showOfOthers, votingData.ShowVotesOfOthers)
+	assert.Equal(t, anonymous, votingData.IsAnonymous)
+	assert.Nil(t, voting.VotingResults)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_Duplicate() {
+func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	boardId := suite.boards["Update"].id
 	voteLimit := 10
 	allowMultiple := true
 	showOfOthers := false
 	anonymous := false
-	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
 
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	voting, err := service.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
+
+	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
+	assert.Equal(t, common.BadRequestError(errors.New("only one open voting session is allowed")), err)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_NegativeVoteLimit() {
+func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["CreateEmpty"].id
-	voteLimit := -1
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
-
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("vote limit shall not be a negative number"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_HighVoteLimit() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["CreateEmpty"].id
-	voteLimit := 100
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
-
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("vote limit shall not be greater than 99"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Update() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	votingId := suite.votings["Update"].ID
 	boardId := suite.boards["Update"].id
+	status := Closed
 
-	dbVoting, err := database.Update(DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Closed})
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(boardId)
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	affectedNotes := []Note{
+		{ID: suite.notes["Update1"].id, Author: suite.notes["Update1"].authorId, Text: suite.notes["Update1"].text, Position: NotePosition{Column: suite.notes["Update1"].columnId}},
+		{ID: suite.notes["Update2"].id, Author: suite.notes["Update2"].authorId, Text: suite.notes["Update2"].text, Position: NotePosition{Column: suite.notes["Update2"].columnId}},
+		{ID: suite.notes["Update3"].id, Author: suite.notes["Update3"].authorId, Text: suite.notes["Update3"].text, Position: NotePosition{Column: suite.notes["Update3"].columnId}},
+	}
+	voting, err := service.Update(ctx, VotingUpdateRequest{ID: votingId, Board: boardId, Status: status}, affectedNotes)
 
 	assert.Nil(t, err)
-	assert.Equal(t, votingId, dbVoting.ID)
-	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, Closed, dbVoting.Status)
-	assert.Equal(t, 7, dbVoting.VoteLimit)
-	assert.True(t, dbVoting.AllowMultipleVotes)
-	assert.False(t, dbVoting.ShowVotesOfOthers)
-	assert.False(t, dbVoting.IsAnonymous)
-	assert.NotNil(t, dbVoting.CreatedAt)
-	// TODO: test note rank
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, status, voting.Status)
+	assert.NotNil(t, voting.VotingResults)
+	assert.Equal(t, 6, voting.VotingResults.Total)
+
+	msg := <-events
+	assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
+	type UpdateVoting struct {
+		Voting *Voting
+		Notes  []Note
+	}
+	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, status, votingData.Voting.Status)
+	assert.NotNil(t, votingData.Voting.VotingResults)
+	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
+
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Update_ClosedToOpen() {
+func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Open() {
 	t := suite.T()
+	ctx := context.Background()
+
+	votingId := suite.votings["Update"].ID
+	boardId := suite.boards["Update"].id
+	status := Open
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
 	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
 
-	votingId := suite.votings["ClosedUpdate"].ID
-	boardId := suite.boards["ClosedUpdate"].id
+	affectedNotes := []Note{
+		{ID: suite.notes["Update1"].id, Author: suite.notes["Update1"].authorId, Text: suite.notes["Update1"].text, Position: NotePosition{Column: suite.notes["Update1"].columnId}},
+		{ID: suite.notes["Update2"].id, Author: suite.notes["Update2"].authorId, Text: suite.notes["Update2"].text, Position: NotePosition{Column: suite.notes["Update2"].columnId}},
+		{ID: suite.notes["Update3"].id, Author: suite.notes["Update3"].authorId, Text: suite.notes["Update3"].text, Position: NotePosition{Column: suite.notes["Update3"].columnId}},
+	}
+	voting, err := service.Update(ctx, VotingUpdateRequest{ID: votingId, Board: boardId, Status: status}, affectedNotes)
 
-	dbVoting, err := database.Update(DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Open})
-
+	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("only allowed to close or abort a voting"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
+	assert.Equal(t, common.BadRequestError(errors.New("not allowed ot change to open state")), err)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Get_Open() {
+func (suite *VotingServiceIntegrationTestSuite) Test_GetVoting_Open() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadOpen"].ID
 
-	dbVoting, err := database.Get(boardId, votingId)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	voting, err := service.Get(ctx, boardId, votingId)
 
 	assert.Nil(t, err)
-
-	assert.Equal(t, votingId, dbVoting.ID)
-	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, dbVoting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, dbVoting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, dbVoting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, dbVoting.IsAnonymous)
-	assert.Equal(t, Open, dbVoting.Status)
-	assert.NotNil(t, dbVoting.CreatedAt)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
+	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
+	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
+	assert.Equal(t, suite.votings["ReadOpen"].Status, voting.Status)
+	assert.Nil(t, voting.VotingResults)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Get_Closed() {
+func (suite *VotingServiceIntegrationTestSuite) Test_GetVoting_Close() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadClosed"].ID
 
-	dbVoting, err := database.Get(boardId, votingId)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	voting, err := service.Get(ctx, boardId, votingId)
 
 	assert.Nil(t, err)
-
-	assert.Equal(t, votingId, dbVoting.ID)
-	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, suite.votings["ReadClosed"].VoteLimit, dbVoting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadClosed"].AllowMultipleVotes, dbVoting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadClosed"].ShowVotesOfOthers, dbVoting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadClosed"].IsAnonymous, dbVoting.IsAnonymous)
-	assert.Equal(t, Closed, dbVoting.Status)
-	assert.NotNil(t, dbVoting.CreatedAt)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, suite.votings["ReadClosed"].VoteLimit, voting.VoteLimit)
+	assert.Equal(t, suite.votings["ReadClosed"].AllowMultipleVotes, voting.AllowMultipleVotes)
+	assert.Equal(t, suite.votings["ReadClosed"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+	assert.Equal(t, suite.votings["ReadClosed"].IsAnonymous, voting.IsAnonymous)
+	assert.Equal(t, suite.votings["ReadClosed"].Status, voting.Status)
+	assert.NotNil(t, voting.VotingResults)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_GetAll() {
+func (suite *VotingServiceIntegrationTestSuite) Test_GetAllVotings() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	boardId := suite.boards["Read"].id
 
-	dbVotings, err := database.GetAll(boardId)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	votings, err := service.GetAll(ctx, boardId)
 
 	assert.Nil(t, err)
-	assert.Len(t, dbVotings, 2)
+	assert.Len(t, votings, 2)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_GetOpenVoting() {
+func (suite *VotingServiceIntegrationTestSuite) Test_GetOpenVoting() {
 	t := suite.T()
-	database := NewVotingDatabase(suite.db)
+	ctx := context.Background()
 
 	boardId := suite.boards["Read"].id
 
-	dbVoting, err := database.GetOpenVoting(boardId)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	database := NewVotingDatabase(suite.db)
+	service := NewVotingService(database, broker)
+
+	voting, err := service.GetOpen(ctx, boardId)
 
 	assert.Nil(t, err)
-	assert.Equal(t, suite.votings["ReadOpen"].ID, dbVoting.ID)
-	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, dbVoting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, dbVoting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, dbVoting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, dbVoting.IsAnonymous)
-	assert.Equal(t, Open, dbVoting.Status)
-	assert.NotNil(t, dbVoting.CreatedAt)
+	assert.Equal(t, suite.votings["ReadOpen"].ID, voting.ID)
+	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
+	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
+	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
+	assert.Equal(t, Open, voting.Status)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_AddVote() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Santa"].id
-	noteId := suite.notes["WriteAdd"].id
-
-	dbVote, err := database.AddVote(boardId, userId, noteId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, boardId, dbVote.Board)
-	assert.Equal(t, noteId, dbVote.Note)
-	assert.Equal(t, userId, dbVote.User)
-	assert.Equal(t, suite.votings["Write"].ID, dbVote.Voting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_Closed() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["WriteClosed"].id
-	userId := suite.users["Santa"].id
-	noteId := suite.notes["WriteClosed"].id
-
-	dbVote, err := database.AddVote(boardId, userId, noteId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-	assert.Equal(t, DatabaseVote{}, dbVote)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_AboveLimit() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["WriteLimit"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["WriteLimit"].id
-
-	dbVote, err := database.AddVote(boardId, userId, noteId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-	assert.Equal(t, DatabaseVote{}, dbVote)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_MultipleNotAllowed() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["WriteMultiple"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["WriteMultiple"].id
-
-	dbVote, err := database.AddVote(boardId, userId, noteId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-	assert.Equal(t, DatabaseVote{}, dbVote)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_RemoveVote() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["Delete"].id
-
-	err := database.RemoveVote(boardId, userId, noteId)
-
-	assert.Nil(t, err)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_RemoveVote_Closed() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["WriteClosed"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["WriteClosed"].id
-
-	err := database.RemoveVote(boardId, userId, noteId)
-
-	assert.Nil(t, err)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_GetVotes() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["Read"].id
-
-	dbVotes, err := database.GetVotes(filter.VoteFilter{Board: boardId})
-
-	assert.Nil(t, err)
-	assert.Len(t, dbVotes, 18)
-}
-
-type TestUser struct {
-	id          uuid.UUID
-	name        string
-	accountType common.AccountType
-}
-
-type TestBoard struct {
-	id   uuid.UUID
-	name string
-}
-
-type TestColumn struct {
-	id      uuid.UUID
-	boardId uuid.UUID
-	name    string
-	index   int
-}
-
-type TestNote struct {
-	id       uuid.UUID
-	authorId uuid.UUID
-	boardId  uuid.UUID
-	columnId uuid.UUID
-	text     string
-}
-
-func (suite *DatabaseVotingTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *VotingServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
