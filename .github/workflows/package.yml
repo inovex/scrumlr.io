@@ -4,37 +4,34 @@ on:
   workflow_call:
     outputs:
       frontend-image-tag:
-        description: The tag of the frontend image
-        value: ${{ jobs.package-frontend.outputs.frontend-image-tag }}
+        description: The tag of the frontend image (amd64)
+        value: ${{ jobs.export-outputs.outputs.frontend-image-tag }}
       server-image-tag:
-        description: The tag of the server image
-        value: ${{ jobs.package-server.outputs.server-image-tag }}
+        description: The tag of the server image (amd64)
+        value: ${{ jobs.export-outputs.outputs.server-image-tag }}
       frontend-image-tag-arm64:
-        description: The tag of the frontend arm64 image
-        value: ${{ jobs.package-frontend-arm64.outputs.frontend-image-tag-arm64 }}
+        description: The tag of the frontend image (arm64)
+        value: ${{ jobs.export-outputs.outputs.frontend-image-tag-arm64 }}
       server-image-tag-arm64:
-        description: The tag of the server arm64 image
-        value: ${{ jobs.package-server-arm64.outputs.server-image-tag-arm64 }}
+        description: The tag of the server image (arm64)
+        value: ${{ jobs.export-outputs.outputs.server-image-tag-arm64 }}
 
 jobs:
-  determine-platforms:
-    runs-on: ubuntu-latest
-    outputs:
-      platforms: ${{ steps.platforms.outputs.platforms }}
-    steps:
-      - name: Set platforms
-        id: platforms
-        run: |
-          # CHANGED: always build amd64 here to avoid emulation on x86 runners
-          # (arm64 will be handled by dedicated native ARM jobs below)
-          echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
-
-
-  package-frontend:
-    needs: determine-platforms
-    outputs:
-      frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
-    runs-on: ubuntu-latest
+  build-frontend:
+    name: Build frontend (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+            platform: linux/amd64
+            suffix: ""
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            platform: linux/arm64
+            suffix: "-arm64"
     permissions:
       contents: read
       packages: write
@@ -45,148 +42,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub container registry
+      - name: Default platform env (only for arm64)
+        if: matrix.arch == 'arm64'
+        run: echo "DOCKER_DEFAULT_PLATFORM=${{ matrix.platform }}" >> $GITHUB_ENV
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Frontend image meta information
-        id: meta-frontend
+      - name: Frontend metadata (${{ matrix.arch }})
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-            type=sha,prefix=sha-,format=short
-          labels: |
-            org.opencontainers.image.authors=info@scrumlr.io
-            org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-frontend
-            org.opencontainers.image.source=https://github.com/inovex/scrumlr.io
-            org.opencontainers.image.vendor=inovex
-            org.opencontainers.image.licenses=MIT
-            org.opencontainers.image.title=scrumlr.io Frontend
-            org.opencontainers.image.description=The web client for scrumlr.io
-
-      - name: Build and push frontend images
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-frontend.outputs.tags }}
-          labels: ${{ steps.meta-frontend.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
-          cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
-
-      - name: Set outputs
-        id: outputs
-        run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          echo frontend-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')" ) >> $GITHUB_OUTPUT
-
-  package-server:
-    needs: determine-platforms
-    outputs:
-      server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: scrumlr.io - Server image meta information
-        id: meta-server
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-            type=sha,prefix=sha-,format=short
-          labels: |
-            org.opencontainers.image.authors=info@scrumlr.io
-            org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-server
-            org.opencontainers.image.source=https://github.com/inovex/scrumlr.io
-            org.opencontainers.image.vendor=inovex
-            org.opencontainers.image.licenses=MIT
-            org.opencontainers.image.title=scrumlr.io Server
-            org.opencontainers.image.description=The server for scrumlr.io
-
-      - name: Build and push server images
-        uses: docker/build-push-action@v6
-        with:
-          context: ./server/src
-          file: ./server/src/Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-server.outputs.tags }}
-          labels: ${{ steps.meta-server.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Set outputs
-        id: outputs
-        run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          echo server-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')" ) >> $GITHUB_OUTPUT
-
-
-  package-frontend-arm64:
-    runs-on: ubuntu-24.04-arm
-    permissions:
-      contents: read
-      packages: write
-    outputs:
-      frontend-image-tag-arm64: ${{ steps.outputs.outputs.frontend-image-tag-arm64 }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Set default platform (ARM64)
-        run: echo "DOCKER_DEFAULT_PLATFORM=linux/arm64" >> $GITHUB_ENV
-
-      - name: Log in to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: scrumlr.io - Frontend image meta information (arm64)
-        id: meta-frontend-arm
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+          images: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
           flavor: |
-            suffix=-arm64
+            suffix=${{ matrix.suffix }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -195,35 +68,53 @@ jobs:
             type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.title=scrumlr.io Frontend
-            org.opencontainers.image.description=The web client for scrumlr.io (arm64)
+            org.opencontainers.image.description=The web client for scrumlr.io${{ matrix.suffix }}
 
-      - name: Build & push frontend (arm64)
+      - name: Build & push (${{ matrix.platform }})
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/arm64
+          platforms: ${{ matrix.platform }}
           push: true
-          tags: ${{ steps.meta-frontend-arm.outputs.tags }}
-          labels: ${{ steps.meta-frontend-arm.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
           cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
 
-      - name: Set outputs (arm64)
-        id: outputs
+      - name: Extract tag and save artifact
+        shell: bash
         run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          # Example result: sha-1a2b3c4-arm64 (because of the flavor suffix)
-          echo frontend-image-tag-arm64=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+-arm64')" ) >> $GITHUB_OUTPUT
+          # Match sha-<hash> for amd64 and sha-<hash>-arm64 for arm64
+          echo "${DOCKER_METADATA_OUTPUT_TAGS}" | grep -oP 'sha-[a-f0-9]+(-arm64)?' | head -n1 > tag.txt
+          echo "Built tag: $(cat tag.txt)"
 
-  package-server-arm64:
-    runs-on: ubuntu-24.04-arm
+      - name: Upload tag artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-${{ matrix.arch }}
+          path: tag.txt
+          if-no-files-found: error
+
+
+  build-server:
+    name: Build server (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+            platform: linux/amd64
+            suffix: ""
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+            platform: linux/arm64
+            suffix: "-arm64"
     permissions:
       contents: read
       packages: write
-    outputs:
-      server-image-tag-arm64: ${{ steps.outputs.outputs.server-image-tag-arm64 }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -231,24 +122,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set default platform (ARM64)
-        run: echo "DOCKER_DEFAULT_PLATFORM=linux/arm64" >> $GITHUB_ENV
+      - name: Default platform env (only for arm64)
+        if: matrix.arch == 'arm64'
+        run: echo "DOCKER_DEFAULT_PLATFORM=${{ matrix.platform }}" >> $GITHUB_ENV
 
-      - name: Log in to GitHub container registry
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Server image meta information (arm64)
-        id: meta-server-arm
+      - name: Server metadata (${{ matrix.arch }})
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server
+          images: ghcr.io/inovex/scrumlr.io/scrumlr-server
           flavor: |
-            suffix=-arm64
+            suffix=${{ matrix.suffix }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -257,24 +148,69 @@ jobs:
             type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.title=scrumlr.io Server
-            org.opencontainers.image.description=The server for scrumlr.io (arm64)
+            org.opencontainers.image.description=The server for scrumlr.io${{ matrix.suffix }}
 
-      - name: Build & push server (arm64)
+      - name: Build & push (${{ matrix.platform }})
         uses: docker/build-push-action@v6
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
-          platforms: linux/arm64
+          platforms: ${{ matrix.platform }}
           push: true
-          tags: ${{ steps.meta-server-arm.outputs.tags }}
-          labels: ${{ steps.meta-server-arm.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Set outputs (arm64)
-        id: outputs
+      - name: Extract tag and save artifact
+        shell: bash
         run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          # Example result: sha-1a2b3c4-arm64 (because of the flavor suffix)
-          echo server-image-tag-arm64=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+-arm64')" ) >> $GITHUB_OUTPUT
+          echo "${DOCKER_METADATA_OUTPUT_TAGS}" | grep -oP 'sha-[a-f0-9]+(-arm64)?' | head -n1 > tag.txt
+          echo "Built tag: $(cat tag.txt)"
+
+      - name: Upload tag artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-${{ matrix.arch }}
+          path: tag.txt
+          if-no-files-found: error
+
+  export-outputs:
+    name: Collect & export image tags
+    runs-on: ubuntu-latest
+    needs:
+      - build-frontend
+      - build-server
+    outputs:
+      frontend-image-tag: ${{ steps.collect.outputs.frontend_image_tag }}
+      server-image-tag: ${{ steps.collect.outputs.server_image_tag }}
+      frontend-image-tag-arm64: ${{ steps.collect.outputs.frontend_image_tag_arm64 }}
+      server-image-tag-arm64: ${{ steps.collect.outputs.server_image_tag_arm64 }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-*"
+          path: artifacts
+          merge-multiple: true
+
+      - name: Show what we got
+        shell: bash
+        run: |
+          for f in artifacts/*-*; do
+            [ -f "$f" ] && echo "$(basename "$f") -> $(cat "$f")"
+          done
+
+      - name: Set outputs
+        id: collect
+        shell: bash
+        run: |
+          fe_amd64=$(cat artifacts/frontend-amd64 2>/dev/null || true)
+          sv_amd64=$(cat artifacts/server-amd64   2>/dev/null || true)
+          fe_arm64=$(cat artifacts/frontend-arm64 2>/dev/null || true)
+          sv_arm64=$(cat artifacts/server-arm64   2>/dev/null || true)
+
+          echo "frontend_image_tag=${fe_amd64}"       >> "$GITHUB_OUTPUT"
+          echo "server_image_tag=${sv_amd64}"         >> "$GITHUB_OUTPUT"
+          echo "frontend_image_tag_arm64=${fe_arm64}" >> "$GITHUB_OUTPUT"
+          echo "server_image_tag_arm64=${sv_arm64}"   >> "$GITHUB_OUTPUT"
