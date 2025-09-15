@@ -158,7 +158,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
     <div
       ref={setNodeRef}
       className={classNames(className, "sortable", {
-        "sortable--should-combine": combine,
+        shouldCombine: combine,
         "sortable--locked": isLockedByOther,
         "sortable--dragging": isDragging,
       })}
