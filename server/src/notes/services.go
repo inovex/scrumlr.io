@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -73,20 +72,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	return new(Note).From(note), err
 }
 
-func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
-	log := logger.FromContext(ctx)
-	note, err := service.database.Get(id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, common.NotFoundError
-		}
-		log.Errorw("unable to get note", "note", id, "error", err)
-		return nil, common.InternalServerError
-	}
-	return new(Note).From(note), err
-}
-
-func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*Note, error) {
+func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpdateRequest) (*Note, error) {
 	log := logger.FromContext(ctx)
 	var positionUpdate *NoteUpdatePosition
 	edited := body.Text != nil
@@ -98,7 +84,7 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
 		}
 	}
 
-	note, err := service.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), DatabaseNoteUpdate{
+	note, err := service.database.UpdateNote(user, DatabaseNoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,
@@ -115,25 +101,11 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
 	return new(Note).From(note), err
 }
 
-func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
+func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDeleteRequest) error {
 	log := logger.FromContext(ctx)
-	notes, err := service.database.GetAll(boardID, columnID...)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, common.NotFoundError
-		}
-		log.Errorw("unable to get notes", "board", boardID, "error", err)
-	}
-	return Notes(notes), err
-}
-
-func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, noteID uuid.UUID) error {
-	log := logger.FromContext(ctx)
-	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
-	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	votes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{
-		Note: &noteID,
+		Note: &body.ID,
 	})
 	if err != nil {
 		return err
@@ -149,14 +121,39 @@ func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, note
 		return err
 	}
 
-	err = service.database.DeleteNote(user, board, noteID, body.DeleteStack)
+	err = service.database.DeleteNote(user, body.Board, body.ID, body.DeleteStack)
 	if err != nil {
 		log.Errorw("unable to delete note", "note", body, "err", err)
 		return err
 	}
 
-	service.deletedNote(user, board, noteID, votes, body.DeleteStack)
+	service.deletedNote(body.Board, body.ID, votes, body.DeleteStack)
 	return nil
+}
+
+func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
+	log := logger.FromContext(ctx)
+	note, err := service.database.Get(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get note", "note", id, "error", err)
+		return nil, common.InternalServerError
+	}
+	return new(Note).From(note), err
+}
+
+func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	notes, err := service.database.GetAll(boardID, columnID...)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get notes", "board", boardID, "error", err)
+	}
+	return Notes(notes), err
 }
 
 func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
@@ -187,14 +184,16 @@ func (service *Service) updatedNotes(board uuid.UUID) {
 	})
 }
 
-func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
-	noteData := map[string]interface{}{
-		"note":        note,
-		"deleteStack": deleteStack,
-	}
+func (service *Service) deletedNote(board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
-		Data: noteData,
+		Data: struct {
+			Note        uuid.UUID `json:"note"`
+			DeleteStack bool      `json:"deleteStack"`
+		}{
+			Note:        note,
+			DeleteStack: deleteStack,
+		},
 	})
 
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/votings"
@@ -187,7 +186,6 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	}
 
 	ctx := logger.InitTestLogger(context.Background())
-	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().GetAll(boardID).Return([]DatabaseNote{}, nil)
@@ -208,7 +206,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
 
-	_, err := service.Update(ctx, NoteUpdateRequest{
+	_, err := service.Update(ctx, callerID, NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteID,
 		Board:    boardID,
@@ -227,10 +225,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	secondUserId := uuid.New()
 	deleteStack := true
 
-	ctx := logger.InitTestLogger(context.Background())
-	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
-	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
-	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
+	ctx := context.Background()
 
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().DeleteNote(callerID, boardID, noteID, deleteStack).Return(nil)
@@ -251,7 +246,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
 
-	err := service.Delete(ctx, NoteDeleteRequest{DeleteStack: deleteStack}, noteID)
+	err := service.Delete(ctx, callerID, NoteDeleteRequest{ID: noteID, Board: boardID, DeleteStack: deleteStack})
 
 	assert.NoError(suite.T(), err)
 	mockDB.AssertExpectations(suite.T())

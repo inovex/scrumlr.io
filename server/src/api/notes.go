@@ -75,6 +75,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -85,7 +86,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	body.ID = noteID
 	body.Board = boardID
-	note, err := s.notes.Update(r.Context(), body)
+	note, err := s.notes.Update(r.Context(), userId, body)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -99,6 +100,8 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -107,7 +110,10 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := s.notes.Delete(r.Context(), body, note); err != nil {
+	body.ID = note
+	body.Board = board
+
+	if err := s.notes.Delete(r.Context(), user, body); err != nil {
 		common.Throw(w, r, err)
 		return
 	}
