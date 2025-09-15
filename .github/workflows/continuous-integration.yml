@@ -137,7 +137,7 @@ jobs:
           sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v5.3.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
