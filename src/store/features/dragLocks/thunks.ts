@@ -10,9 +10,7 @@ export const broadcastNoteDragStart = createAsyncThunk<void, string, {state: App
   try {
     await NoteAPI.noteDragStart(boardId, noteId);
   } catch (error) {
-    // For drag events, we don't need to show error toast or retry
-    // The drag will still work locally, just without real-time sync
-    console.warn("Failed to broadcast drag start:", error);
+    // Silently handle errors to avoid disrupting user experience
   }
 });
 
@@ -24,8 +22,6 @@ export const broadcastNoteDragEnd = createAsyncThunk<void, string, {state: Appli
   try {
     await NoteAPI.noteDragEnd(boardId, noteId);
   } catch (error) {
-    // For drag events, we don't need to show error toast or retry
-    // The drag will still work locally, just without real-time sync
-    console.warn("Failed to broadcast drag end:", error);
+    // Silently handle errors to avoid disrupting user experience
   }
 });

@@ -61,11 +61,6 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const draggingUserId = lockedNotes[id.toString()];
   const draggingUser = draggingUserId ? [...(participants?.others || []), participants?.self].find((p) => p?.user?.id === draggingUserId) : null;
 
-  // Debug logging
-  if (isLockedByOther) {
-    console.log(`Note ${id} is locked by user ${lockedNotes[id.toString()]}, current user: ${currentUserId}`);
-  }
-
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
     data: {columnId, type: "note"},
