@@ -177,6 +177,8 @@ jobs:
 
   export-outputs:
     name: Collect & export image tags
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     needs:
       - build-frontend
