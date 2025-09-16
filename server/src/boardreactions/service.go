@@ -6,13 +6,13 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/realtime"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
-
-//var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
 
 type Service struct {
 	realtime *realtime.Broker

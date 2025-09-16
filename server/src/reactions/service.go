@@ -104,7 +104,7 @@ func (service *Service) Create(ctx context.Context, board uuid.UUID, body Reacti
 	}
 
 	service.addReaction(ctx, board, reaction)
-	reactionCounter.Add(ctx, 1)
+	reactionCreatedCounter.Add(ctx, 1)
 	return new(Reaction).From(reaction), err
 }
 

@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
@@ -17,8 +18,7 @@ import (
 )
 
 var userTracer trace.Tracer = otel.Tracer("scrumlr.io/server/users")
-
-//var userMeter metric.Meter = otel.Meter("scrumlr.io/server/users")
+var userMeter metric.Meter = otel.Meter("scrumlr.io/server/users")
 
 type UserDatabase interface {
 	CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error)
