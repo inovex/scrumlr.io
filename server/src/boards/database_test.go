@@ -607,7 +607,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 2)
 
-	firstBoard := checkBoardInList(dbBoards, suite.boards["Read1"].ID)
+	firstBoard := checkDbBoardInList(dbBoards, suite.boards["Read1"].ID)
 	assert.NotNil(t, firstBoard)
 	assert.Equal(t, suite.boards["Read1"].ID, firstBoard.ID)
 	assert.Equal(t, suite.boards["Read1"].Name, firstBoard.Name)
@@ -619,7 +619,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	assert.Equal(t, suite.boards["Read1"].AllowStacking, firstBoard.AllowStacking)
 	assert.Equal(t, suite.boards["Read1"].IsLocked, firstBoard.IsLocked)
 
-	secondBoard := checkBoardInList(dbBoards, suite.boards["Read2"].ID)
+	secondBoard := checkDbBoardInList(dbBoards, suite.boards["Read2"].ID)
 	assert.NotNil(t, secondBoard)
 	assert.Equal(t, suite.boards["Read2"].ID, secondBoard.ID)
 	assert.Equal(t, suite.boards["Read2"].Name, secondBoard.Name)
@@ -721,7 +721,7 @@ func (suite *DatabaseBoardTestSuite) SeedDatabase(db *bun.DB) {
 	}
 }
 
-func checkBoardInList(list []DatabaseBoard, id uuid.UUID) *DatabaseBoard {
+func checkDbBoardInList(list []DatabaseBoard, id uuid.UUID) *DatabaseBoard {
 	for _, board := range list {
 		if board.ID == id {
 			return &board
