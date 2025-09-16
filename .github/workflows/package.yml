@@ -89,17 +89,15 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          # Match sha-<hash> for amd64 and sha-<hash>-arm64 for arm64
-          echo "${DOCKER_METADATA_OUTPUT_TAGS}" | grep -oP 'sha-[a-f0-9]+(-arm64)?' | head -n1 > tag.txt
-          echo "Built tag: $(cat tag.txt)"
+          echo "${{ steps.meta.outputs.tags }}" | grep -oE 'sha-[a-f0-9]+(-arm64)?' | head -n1 > "frontend-${{ matrix.arch }}"
+          echo "Built tag: $(cat frontend-${{ matrix.arch }})"
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-${{ matrix.arch }}
-          path: tag.txt
+          path: frontend-${{ matrix.arch }}
           if-no-files-found: error
-
 
   build-server:
     name: Build server (${{ matrix.arch }})
@@ -169,14 +167,14 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          echo "${DOCKER_METADATA_OUTPUT_TAGS}" | grep -oP 'sha-[a-f0-9]+(-arm64)?' | head -n1 > tag.txt
-          echo "Built tag: $(cat tag.txt)"
+          echo "${{ steps.meta.outputs.tags }}" | grep -oE 'sha-[a-f0-9]+(-arm64)?' | head -n1 > "server-${{ matrix.arch }}"
+          echo "Built tag: $(cat server-${{ matrix.arch }})"
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
           name: server-${{ matrix.arch }}
-          path: tag.txt
+          path: server-${{ matrix.arch }}
           if-no-files-found: error
 
   export-outputs:
@@ -205,7 +203,7 @@ jobs:
         run: |
           shopt -s nullglob
           for f in artifacts/*-*; do
-           echo "$(basename "$f") -> $(cat "$f")"
+            echo "$(basename "$f") -> $(cat "$f")"
           done
 
       - name: Set outputs
@@ -221,3 +219,9 @@ jobs:
           echo "server_image_tag=${sv_amd64}"         >> "$GITHUB_OUTPUT"
           echo "frontend_image_tag_arm64=${fe_arm64}" >> "$GITHUB_OUTPUT"
           echo "server_image_tag_arm64=${sv_arm64}"   >> "$GITHUB_OUTPUT"
+
+          if [ -z "$fe_amd64" ] || [ -z "$sv_amd64" ] || [ -z "$fe_arm64" ] || [ -z "$sv_arm64" ]; then
+            echo "ERROR: One or more image tags are empty. Aborting to avoid deploying with an empty tag."
+            ls -l artifacts || true
+            exit 1
+          fi
