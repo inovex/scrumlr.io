@@ -150,7 +150,7 @@ $side-padding--desktop: 14vw;
     // stretch main to full width
     grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
     // adds a row where the mobile search bar resides,
-    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--base 57px $spacing--sm auto 1fr;
+    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 57px auto 1fr;
     grid-template-areas:
       ".    .        .       .       .       .        ."
       ".    logo     .       .       .       user     ."
