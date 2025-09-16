@@ -16,6 +16,10 @@ on:
         description: The tag of the server image (arm64)
         value: ${{ jobs.export-outputs.outputs.server-image-tag-arm64 }}
 
+concurrency:
+  group: package-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-frontend:
     name: Build frontend (${{ matrix.arch }})
@@ -199,8 +203,9 @@ jobs:
       - name: Show what we got
         shell: bash
         run: |
+          shopt -s nullglob
           for f in artifacts/*-*; do
-            [ -f "$f" ] && echo "$(basename "$f") -> $(cat "$f")"
+           echo "$(basename "$f") -> $(cat "$f")"
           done
 
       - name: Set outputs
