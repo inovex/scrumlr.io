@@ -2,7 +2,7 @@ package reactions
 
 import (
 	"context"
-	"database/sql"
+	"errors"
 	"log"
 	"testing"
 
@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/technical_helper"
 )
 
 type ReactionServiceIntegrationTestSuite struct {
@@ -68,7 +69,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create() {
 
 	service := NewReactionService(database, broker)
 
-	reaction, err := service.Create(ctx, boardId, ReactionCreateRequest{Board: boardId, Note: noteId, User: userId, ReactionType: Joy})
+	reaction, err := service.Create(ctx, ReactionCreateRequest{Board: boardId, Note: noteId, User: userId, ReactionType: Joy})
 
 	assert.Nil(t, err)
 	assert.NotNil(t, reaction.ID)
@@ -78,8 +79,55 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create() {
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventReactionAdded, msg.Type)
-	reactionData := msg.Data.(map[string]interface{})
-	assert.Equal(t, string(Joy), reactionData["reactionType"].(string))
+	reactionData, err := technical_helper.Unmarshal[DatabaseReaction](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, Joy, reactionData.ReactionType)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Create_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	noteId := uuid.New()
+	userId := suite.users["Santa"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	reaction, err := service.Create(ctx, ReactionCreateRequest{Board: boardId, Note: noteId, User: userId, ReactionType: Joy})
+
+	assert.Nil(t, reaction)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.InternalServerError, err)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Create_Multiple() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	noteId := suite.notes["Update"].id
+	userId := suite.users["Santa"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	reaction, err := service.Create(ctx, ReactionCreateRequest{Board: boardId, Note: noteId, User: userId, ReactionType: Joy})
+
+	assert.Nil(t, reaction)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.ConflictError(errors.New("cannot make multiple reactions on the same note by the same user")), err)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
@@ -109,8 +157,55 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventReactionUpdated, msg.Type)
-	reactionData := msg.Data.(map[string]interface{})
-	assert.Equal(t, string(Thinking), reactionData["reactionType"].(string))
+	reactionData, err := technical_helper.Unmarshal[DatabaseReaction](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, Thinking, reactionData.ReactionType)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Update_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	reactionId := uuid.New()
+	userId := suite.users["Santa"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	reaction, err := service.Update(ctx, boardId, userId, reactionId, ReactionUpdateTypeRequest{ReactionType: Thinking})
+
+	assert.Nil(t, reaction)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.NotFoundError, err)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Update_Forbidden() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	reactionId := suite.reactions["Update"].ID
+	userId := suite.users["Stan"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	reaction, err := service.Update(ctx, boardId, userId, reactionId, ReactionUpdateTypeRequest{ReactionType: Thinking})
+
+	assert.Nil(t, reaction)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
@@ -137,7 +232,53 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventReactionDeleted, msg.Type)
-	assert.Equal(t, reactionId.String(), msg.Data.(string))
+	reactionData, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, reactionId, *reactionData)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	reactionId := uuid.New()
+	userId := suite.users["Stan"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	err = service.Delete(ctx, boardId, userId, reactionId)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, common.NotFoundError, err)
+}
+
+func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_Forbidden() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].id
+	reactionId := suite.reactions["DeleteNot"].ID
+	userId := suite.users["Stan"].id
+
+	database := NewReactionsDatabase(suite.db)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	service := NewReactionService(database, broker)
+
+	err = service.Delete(ctx, boardId, userId, reactionId)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Get() {
@@ -178,7 +319,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Get_NotFound() {
 	reaction, err := service.Get(ctx, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.Equal(t, common.NotFoundError, err)
 	assert.Nil(t, reaction)
 }
 
@@ -251,6 +392,7 @@ func (suite *ReactionServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	// reaction for writing (update, delete, insert error)
 	suite.reactions = make(map[string]Reaction, 5)
 	suite.reactions["Delete"] = Reaction{ID: uuid.New(), Note: suite.notes["Delete"].id, User: suite.users["Stan"].id, ReactionType: Like}
+	suite.reactions["DeleteNot"] = Reaction{ID: uuid.New(), Note: suite.notes["Delete"].id, User: suite.users["Santa"].id, ReactionType: Poop}
 	suite.reactions["Update"] = Reaction{ID: uuid.New(), Note: suite.notes["Update"].id, User: suite.users["Santa"].id, ReactionType: Heart}
 	// reactions for reading reactions, these don't change
 	suite.reactions["Get1"] = Reaction{ID: uuid.New(), Note: suite.notes["Read1"].id, User: suite.users["Stan"].id, ReactionType: Heart}
