@@ -103,16 +103,16 @@ func (_c *MockReactionDatabase_Create_Call) RunAndReturn(run func(board uuid.UUI
 }
 
 // Delete provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Delete(board uuid.UUID, user uuid.UUID, id uuid.UUID) error {
-	ret := _mock.Called(board, user, id)
+func (_mock *MockReactionDatabase) Delete(id uuid.UUID) error {
+	ret := _mock.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(board, user, id)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) error); ok {
+		r0 = returnFunc(id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -125,31 +125,19 @@ type MockReactionDatabase_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
 //   - id uuid.UUID
-func (_e *MockReactionDatabase_Expecter) Delete(board interface{}, user interface{}, id interface{}) *MockReactionDatabase_Delete_Call {
-	return &MockReactionDatabase_Delete_Call{Call: _e.mock.On("Delete", board, user, id)}
+func (_e *MockReactionDatabase_Expecter) Delete(id interface{}) *MockReactionDatabase_Delete_Call {
+	return &MockReactionDatabase_Delete_Call{Call: _e.mock.On("Delete", id)}
 }
 
-func (_c *MockReactionDatabase_Delete_Call) Run(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID)) *MockReactionDatabase_Delete_Call {
+func (_c *MockReactionDatabase_Delete_Call) Run(run func(id uuid.UUID)) *MockReactionDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
 			arg0 = args[0].(uuid.UUID)
 		}
-		var arg1 uuid.UUID
-		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
 		run(
 			arg0,
-			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -160,7 +148,7 @@ func (_c *MockReactionDatabase_Delete_Call) Return(err error) *MockReactionDatab
 	return _c
 }
 
-func (_c *MockReactionDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID) error) *MockReactionDatabase_Delete_Call {
+func (_c *MockReactionDatabase_Delete_Call) RunAndReturn(run func(id uuid.UUID) error) *MockReactionDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -350,8 +338,8 @@ func (_c *MockReactionDatabase_GetAllForNote_Call) RunAndReturn(run func(note uu
 }
 
 // Update provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Update(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
-	ret := _mock.Called(board, user, id, update)
+func (_mock *MockReactionDatabase) Update(id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
+	ret := _mock.Called(id, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -359,16 +347,16 @@ func (_mock *MockReactionDatabase) Update(board uuid.UUID, user uuid.UUID, id uu
 
 	var r0 DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) (DatabaseReaction, error)); ok {
-		return returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseReactionUpdate) (DatabaseReaction, error)); ok {
+		return returnFunc(id, update)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) DatabaseReaction); ok {
-		r0 = returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseReactionUpdate) DatabaseReaction); ok {
+		r0 = returnFunc(id, update)
 	} else {
 		r0 = ret.Get(0).(DatabaseReaction)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) error); ok {
-		r1 = returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, DatabaseReactionUpdate) error); ok {
+		r1 = returnFunc(id, update)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -381,37 +369,25 @@ type MockReactionDatabase_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
 //   - id uuid.UUID
 //   - update DatabaseReactionUpdate
-func (_e *MockReactionDatabase_Expecter) Update(board interface{}, user interface{}, id interface{}, update interface{}) *MockReactionDatabase_Update_Call {
-	return &MockReactionDatabase_Update_Call{Call: _e.mock.On("Update", board, user, id, update)}
+func (_e *MockReactionDatabase_Expecter) Update(id interface{}, update interface{}) *MockReactionDatabase_Update_Call {
+	return &MockReactionDatabase_Update_Call{Call: _e.mock.On("Update", id, update)}
 }
 
-func (_c *MockReactionDatabase_Update_Call) Run(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate)) *MockReactionDatabase_Update_Call {
+func (_c *MockReactionDatabase_Update_Call) Run(run func(id uuid.UUID, update DatabaseReactionUpdate)) *MockReactionDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
 			arg0 = args[0].(uuid.UUID)
 		}
-		var arg1 uuid.UUID
+		var arg1 DatabaseReactionUpdate
 		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
-		var arg3 DatabaseReactionUpdate
-		if args[3] != nil {
-			arg3 = args[3].(DatabaseReactionUpdate)
+			arg1 = args[1].(DatabaseReactionUpdate)
 		}
 		run(
 			arg0,
 			arg1,
-			arg2,
-			arg3,
 		)
 	})
 	return _c
@@ -422,7 +398,7 @@ func (_c *MockReactionDatabase_Update_Call) Return(databaseReaction DatabaseReac
 	return _c
 }
 
-func (_c *MockReactionDatabase_Update_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)) *MockReactionDatabase_Update_Call {
+func (_c *MockReactionDatabase_Update_Call) RunAndReturn(run func(id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)) *MockReactionDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
