@@ -159,7 +159,7 @@ func TestDeleteColumn_NoteServiceGetAllError(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+	mockNoteService.EXPECT().GetAll(mock.Anything, boardId, []uuid.UUID{columnId}).
 		Return(nil, common.NotFoundError)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -185,11 +185,11 @@ func TestDeleteColumn_NoteServiceDeleteError(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+	mockNoteService.EXPECT().GetAll(mock.Anything, boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{
 			{ID: noteId, Text: noteText, Position: notes.NotePosition{Column: columnId}},
 		}, nil)
-	mockNoteService.EXPECT().Delete(context.Background(), userId, notes.NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: true}).
+	mockNoteService.EXPECT().Delete(mock.Anything, userId, notes.NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: true}).
 		Return(errors.New(serviceError))
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
