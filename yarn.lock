@@ -10239,10 +10239,10 @@ qs@6.14.0:
   dependencies:
     side-channel "^1.1.0"
 
-query-string@^9.2.2:
-  version "9.2.2"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.2.2.tgz#a0104824edfdd2c1db2f18af71cef7abf6a3b20f"
-  integrity sha512-pDSIZJ9sFuOp6VnD+5IkakSVf+rICAuuU88Hcsr6AKL0QtxSIfVuKiVP2oahFI7tk3CRSexwV+Ya6MOoTxzg9g==
+query-string@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.3.0.tgz#f2d60d6b4442cb445f374b5ff749b937b2cccd03"
+  integrity sha512-IQHOQ9aauHAApwAaUYifpEyLHv6fpVGVkMOnwPzcDScLjbLj8tLsILn6unSW79NafOw1llh8oK7Gd0VwmXBFmA==
   dependencies:
     decode-uri-component "^0.4.1"
     filter-obj "^5.1.0"
