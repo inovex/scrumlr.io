@@ -22,8 +22,8 @@ jobs:
       fail-fast: false
       matrix:
         build_info:
-          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '' }
-          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64' }
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '', arch: 'amd64' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64', arch: 'arm64' }
     permissions:
       contents: read
       packages: write
@@ -73,20 +73,19 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          arch="$(echo "${{ matrix.build_info.platform }}" | cut -d/ -f2)"
           echo "${{ steps.meta.outputs.tags }}" \
             | grep -oE 'sha-[a-f0-9]+(-arm64)?' \
-            | head -n1 > "frontend-${arch}"
-          echo "Built tag: $(cat frontend-${arch})"
-          if [ ! -s "frontend-${arch}" ]; then
+            | head -n1 > "frontend-${{ matrix.build_info.arch }}"
+          echo "Built tag: $(cat frontend-${{ matrix.build_info.arch }})"
+          if [ ! -s "frontend-${{ matrix.build_info.arch }}" ]; then
             echo "ERROR: No frontend image sha tag produced"; exit 1
           fi
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-${{ matrix.build_info.platform }}
-          path: frontend-*
+          name: frontend-${{ matrix.build_info.arch }}
+          path: frontend-${{ matrix.build_info.arch }}
           if-no-files-found: error
 
   build-server:
@@ -96,8 +95,8 @@ jobs:
       fail-fast: false
       matrix:
         build_info:
-          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '' }
-          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64' }
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '', arch: 'amd64' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64', arch: 'arm64' }
     permissions:
       contents: read
       packages: write
@@ -147,20 +146,19 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          arch="$(echo "${{ matrix.build_info.platform }}" | cut -d/ -f2)"   # -> amd64 or arm64
           echo "${{ steps.meta.outputs.tags }}" \
             | grep -oE 'sha-[a-f0-9]+(-arm64)?' \
-            | head -n1 > "server-${arch}"
-          echo "Built tag: $(cat server-${arch})"
-          if [ ! -s "server-${arch}" ]; then
+            | head -n1 > "server-${{ matrix.build_info.arch }}"
+          echo "Built tag: $(cat server-${{ matrix.build_info.arch }})"
+          if [ ! -s "server-${{ matrix.build_info.arch }}" ]; then
             echo "ERROR: No server image sha tag produced"; exit 1
           fi
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
-          name: server-${{ matrix.build_info.platform }}
-          path: server-*
+          name: server-${{ matrix.build_info.arch }}
+          path: server-${{ matrix.build_info.arch }}
           if-no-files-found: error
 
   export-outputs:
