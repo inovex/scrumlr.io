@@ -18,7 +18,7 @@
   margin-top: $spacing--base;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
@@ -33,27 +33,19 @@
     @extend .cookie-notice__button;
     background: $blue--500;
     color: $gray--000;
-    order: 3;
-
-    @media (max-width: 768px) {
-      order: 1;
-    }
   }
   &-decline {
     @extend .cookie-notice__button;
     background: $gray--300;
     color: $navy--700;
-    order: 2;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
     background: $gray--300;
     color: $navy--700;
-    order: 1;
     flex: 1;
 
     @media (max-width: 768px) {
-      order: 3;
       flex: none;
     }
   }
