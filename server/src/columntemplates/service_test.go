@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columns"
 )
 
@@ -20,7 +21,7 @@ func TestCreateColumnTemplate(t *testing.T) {
 	visible := true
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Create(DatabaseColumnTemplateInsert{
+	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
 		BoardTemplate: board,
 		Name:          name,
 		Color:         color,
@@ -66,7 +67,7 @@ func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 	visible := true
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Create(DatabaseColumnTemplateInsert{
+	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
 		BoardTemplate: board,
 		Name:          name,
 		Color:         color,
@@ -98,7 +99,7 @@ func TestGetColumnTemplate(t *testing.T) {
 	index := 1
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Get(boardId, columnId).
+	mockColumnTemplateDatabase.EXPECT().Get(mock.Anything, boardId, columnId).
 		Return(DatabaseColumnTemplate{
 			ID:            columnId,
 			BoardTemplate: boardId,
@@ -127,7 +128,7 @@ func TestGetColumnTemplate_DatabaseError(t *testing.T) {
 	columnId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Get(boardId, columnId).
+	mockColumnTemplateDatabase.EXPECT().Get(mock.Anything, boardId, columnId).
 		Return(DatabaseColumnTemplate{}, dbError)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
@@ -147,7 +148,7 @@ func TestGetAllColumnTemplate(t *testing.T) {
 	secondColumnName := "This is another name"
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().GetAll(boardId).
+	mockColumnTemplateDatabase.EXPECT().GetAll(mock.Anything, boardId).
 		Return([]DatabaseColumnTemplate{
 			{
 				ID:            firstColumnId,
@@ -183,7 +184,7 @@ func TestGetAllColumnTemplate_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().GetAll(boardId).
+	mockColumnTemplateDatabase.EXPECT().GetAll(mock.Anything, boardId).
 		Return([]DatabaseColumnTemplate{}, dbError)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
@@ -203,7 +204,7 @@ func TestUpdateColumnTemplate(t *testing.T) {
 	color := columns.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Update(DatabaseColumnTemplateUpdate{
+	mockColumnTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseColumnTemplateUpdate{
 		ID:            id,
 		BoardTemplate: board,
 		Name:          name,
@@ -247,7 +248,7 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 	color := columns.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Update(DatabaseColumnTemplateUpdate{
+	mockColumnTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseColumnTemplateUpdate{
 		ID:            id,
 		BoardTemplate: board,
 		Name:          name,
@@ -276,7 +277,7 @@ func TestDeleteColumnTemplate(t *testing.T) {
 	columnId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(nil)
+	mockColumnTemplateDatabase.EXPECT().Delete(mock.Anything, boardId, columnId).Return(nil)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 
@@ -291,7 +292,7 @@ func TestDeleteColumnTemplate_DatabaseError(t *testing.T) {
 	columnId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(dbError)
+	mockColumnTemplateDatabase.EXPECT().Delete(mock.Anything, boardId, columnId).Return(dbError)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 

@@ -48,7 +48,7 @@ func (suite *BoardReactionServiceIntegrationTestSuite) Test_Create() {
 		log.Fatalf("Failed to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	service := NewBoardReactionService(broker)
 

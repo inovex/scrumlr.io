@@ -5,6 +5,8 @@
 package notes
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,8 +39,8 @@ func (_m *MockNotesDatabase) EXPECT() *MockNotesDatabase_Expecter {
 }
 
 // CreateNote provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) CreateNote(insert DatabaseNoteInsert) (DatabaseNote, error) {
-	ret := _mock.Called(insert)
+func (_mock *MockNotesDatabase) CreateNote(ctx context.Context, insert DatabaseNoteInsert) (DatabaseNote, error) {
+	ret := _mock.Called(ctx, insert)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateNote")
@@ -46,16 +48,16 @@ func (_mock *MockNotesDatabase) CreateNote(insert DatabaseNoteInsert) (DatabaseN
 
 	var r0 DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseNoteInsert) (DatabaseNote, error)); ok {
-		return returnFunc(insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseNoteInsert) (DatabaseNote, error)); ok {
+		return returnFunc(ctx, insert)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseNoteInsert) DatabaseNote); ok {
-		r0 = returnFunc(insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseNoteInsert) DatabaseNote); ok {
+		r0 = returnFunc(ctx, insert)
 	} else {
 		r0 = ret.Get(0).(DatabaseNote)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseNoteInsert) error); ok {
-		r1 = returnFunc(insert)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseNoteInsert) error); ok {
+		r1 = returnFunc(ctx, insert)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -68,19 +70,25 @@ type MockNotesDatabase_CreateNote_Call struct {
 }
 
 // CreateNote is a helper method to define mock.On call
+//   - ctx context.Context
 //   - insert DatabaseNoteInsert
-func (_e *MockNotesDatabase_Expecter) CreateNote(insert interface{}) *MockNotesDatabase_CreateNote_Call {
-	return &MockNotesDatabase_CreateNote_Call{Call: _e.mock.On("CreateNote", insert)}
+func (_e *MockNotesDatabase_Expecter) CreateNote(ctx interface{}, insert interface{}) *MockNotesDatabase_CreateNote_Call {
+	return &MockNotesDatabase_CreateNote_Call{Call: _e.mock.On("CreateNote", ctx, insert)}
 }
 
-func (_c *MockNotesDatabase_CreateNote_Call) Run(run func(insert DatabaseNoteInsert)) *MockNotesDatabase_CreateNote_Call {
+func (_c *MockNotesDatabase_CreateNote_Call) Run(run func(ctx context.Context, insert DatabaseNoteInsert)) *MockNotesDatabase_CreateNote_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseNoteInsert
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseNoteInsert)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseNoteInsert
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseNoteInsert)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -91,22 +99,22 @@ func (_c *MockNotesDatabase_CreateNote_Call) Return(databaseNote DatabaseNote, e
 	return _c
 }
 
-func (_c *MockNotesDatabase_CreateNote_Call) RunAndReturn(run func(insert DatabaseNoteInsert) (DatabaseNote, error)) *MockNotesDatabase_CreateNote_Call {
+func (_c *MockNotesDatabase_CreateNote_Call) RunAndReturn(run func(ctx context.Context, insert DatabaseNoteInsert) (DatabaseNote, error)) *MockNotesDatabase_CreateNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // DeleteNote provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
-	ret := _mock.Called(caller, board, id, deleteStack)
+func (_mock *MockNotesDatabase) DeleteNote(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
+	ret := _mock.Called(ctx, caller, board, id, deleteStack)
 
 	if len(ret) == 0 {
 		panic("no return value specified for DeleteNote")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID, bool) error); ok {
-		r0 = returnFunc(caller, board, id, deleteStack)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID, bool) error); ok {
+		r0 = returnFunc(ctx, caller, board, id, deleteStack)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -119,19 +127,20 @@ type MockNotesDatabase_DeleteNote_Call struct {
 }
 
 // DeleteNote is a helper method to define mock.On call
+//   - ctx context.Context
 //   - caller uuid.UUID
 //   - board uuid.UUID
 //   - id uuid.UUID
 //   - deleteStack bool
-func (_e *MockNotesDatabase_Expecter) DeleteNote(caller interface{}, board interface{}, id interface{}, deleteStack interface{}) *MockNotesDatabase_DeleteNote_Call {
-	return &MockNotesDatabase_DeleteNote_Call{Call: _e.mock.On("DeleteNote", caller, board, id, deleteStack)}
+func (_e *MockNotesDatabase_Expecter) DeleteNote(ctx interface{}, caller interface{}, board interface{}, id interface{}, deleteStack interface{}) *MockNotesDatabase_DeleteNote_Call {
+	return &MockNotesDatabase_DeleteNote_Call{Call: _e.mock.On("DeleteNote", ctx, caller, board, id, deleteStack)}
 }
 
-func (_c *MockNotesDatabase_DeleteNote_Call) Run(run func(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool)) *MockNotesDatabase_DeleteNote_Call {
+func (_c *MockNotesDatabase_DeleteNote_Call) Run(run func(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool)) *MockNotesDatabase_DeleteNote_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
@@ -141,15 +150,20 @@ func (_c *MockNotesDatabase_DeleteNote_Call) Run(run func(caller uuid.UUID, boar
 		if args[2] != nil {
 			arg2 = args[2].(uuid.UUID)
 		}
-		var arg3 bool
+		var arg3 uuid.UUID
 		if args[3] != nil {
-			arg3 = args[3].(bool)
+			arg3 = args[3].(uuid.UUID)
+		}
+		var arg4 bool
+		if args[4] != nil {
+			arg4 = args[4].(bool)
 		}
 		run(
 			arg0,
 			arg1,
 			arg2,
 			arg3,
+			arg4,
 		)
 	})
 	return _c
@@ -160,14 +174,14 @@ func (_c *MockNotesDatabase_DeleteNote_Call) Return(err error) *MockNotesDatabas
 	return _c
 }
 
-func (_c *MockNotesDatabase_DeleteNote_Call) RunAndReturn(run func(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error) *MockNotesDatabase_DeleteNote_Call {
+func (_c *MockNotesDatabase_DeleteNote_Call) RunAndReturn(run func(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error) *MockNotesDatabase_DeleteNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Get provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) Get(id uuid.UUID) (DatabaseNote, error) {
-	ret := _mock.Called(id)
+func (_mock *MockNotesDatabase) Get(ctx context.Context, id uuid.UUID) (DatabaseNote, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -175,16 +189,16 @@ func (_mock *MockNotesDatabase) Get(id uuid.UUID) (DatabaseNote, error) {
 
 	var r0 DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (DatabaseNote, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (DatabaseNote, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) DatabaseNote); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) DatabaseNote); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseNote)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -197,19 +211,25 @@ type MockNotesDatabase_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockNotesDatabase_Expecter) Get(id interface{}) *MockNotesDatabase_Get_Call {
-	return &MockNotesDatabase_Get_Call{Call: _e.mock.On("Get", id)}
+func (_e *MockNotesDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockNotesDatabase_Get_Call {
+	return &MockNotesDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
-func (_c *MockNotesDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockNotesDatabase_Get_Call {
+func (_c *MockNotesDatabase_Get_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockNotesDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -220,18 +240,18 @@ func (_c *MockNotesDatabase_Get_Call) Return(databaseNote DatabaseNote, err erro
 	return _c
 }
 
-func (_c *MockNotesDatabase_Get_Call) RunAndReturn(run func(id uuid.UUID) (DatabaseNote, error)) *MockNotesDatabase_Get_Call {
+func (_c *MockNotesDatabase_Get_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (DatabaseNote, error)) *MockNotesDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]DatabaseNote, error) {
+func (_mock *MockNotesDatabase) GetAll(ctx context.Context, board uuid.UUID, columns ...uuid.UUID) ([]DatabaseNote, error) {
 	var tmpRet mock.Arguments
 	if len(columns) > 0 {
-		tmpRet = _mock.Called(board, columns)
+		tmpRet = _mock.Called(ctx, board, columns)
 	} else {
-		tmpRet = _mock.Called(board)
+		tmpRet = _mock.Called(ctx, board)
 	}
 	ret := tmpRet
 
@@ -241,18 +261,18 @@ func (_mock *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([
 
 	var r0 []DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) ([]DatabaseNote, error)); ok {
-		return returnFunc(board, columns...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) ([]DatabaseNote, error)); ok {
+		return returnFunc(ctx, board, columns...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) []DatabaseNote); ok {
-		r0 = returnFunc(board, columns...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) []DatabaseNote); ok {
+		r0 = returnFunc(ctx, board, columns...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseNote)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, ...uuid.UUID) error); ok {
-		r1 = returnFunc(board, columns...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, ...uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board, columns...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -265,28 +285,34 @@ type MockNotesDatabase_GetAll_Call struct {
 }
 
 // GetAll is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - columns ...uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetAll(board interface{}, columns ...interface{}) *MockNotesDatabase_GetAll_Call {
+func (_e *MockNotesDatabase_Expecter) GetAll(ctx interface{}, board interface{}, columns ...interface{}) *MockNotesDatabase_GetAll_Call {
 	return &MockNotesDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{board}, columns...)...)}
+		append([]interface{}{ctx, board}, columns...)...)}
 }
 
-func (_c *MockNotesDatabase_GetAll_Call) Run(run func(board uuid.UUID, columns ...uuid.UUID)) *MockNotesDatabase_GetAll_Call {
+func (_c *MockNotesDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID, columns ...uuid.UUID)) *MockNotesDatabase_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 []uuid.UUID
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 []uuid.UUID
 		var variadicArgs []uuid.UUID
-		if len(args) > 1 {
-			variadicArgs = args[1].([]uuid.UUID)
+		if len(args) > 2 {
+			variadicArgs = args[2].([]uuid.UUID)
 		}
-		arg1 = variadicArgs
+		arg2 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2...,
 		)
 	})
 	return _c
@@ -297,14 +323,14 @@ func (_c *MockNotesDatabase_GetAll_Call) Return(databaseNotes []DatabaseNote, er
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID, columns ...uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetAll_Call {
+func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, columns ...uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetChildNotes provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) GetChildNotes(parentNote uuid.UUID) ([]DatabaseNote, error) {
-	ret := _mock.Called(parentNote)
+func (_mock *MockNotesDatabase) GetChildNotes(ctx context.Context, parentNote uuid.UUID) ([]DatabaseNote, error) {
+	ret := _mock.Called(ctx, parentNote)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetChildNotes")
@@ -312,18 +338,18 @@ func (_mock *MockNotesDatabase) GetChildNotes(parentNote uuid.UUID) ([]DatabaseN
 
 	var r0 []DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseNote, error)); ok {
-		return returnFunc(parentNote)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseNote, error)); ok {
+		return returnFunc(ctx, parentNote)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseNote); ok {
-		r0 = returnFunc(parentNote)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseNote); ok {
+		r0 = returnFunc(ctx, parentNote)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseNote)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(parentNote)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, parentNote)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -336,19 +362,25 @@ type MockNotesDatabase_GetChildNotes_Call struct {
 }
 
 // GetChildNotes is a helper method to define mock.On call
+//   - ctx context.Context
 //   - parentNote uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetChildNotes(parentNote interface{}) *MockNotesDatabase_GetChildNotes_Call {
-	return &MockNotesDatabase_GetChildNotes_Call{Call: _e.mock.On("GetChildNotes", parentNote)}
+func (_e *MockNotesDatabase_Expecter) GetChildNotes(ctx interface{}, parentNote interface{}) *MockNotesDatabase_GetChildNotes_Call {
+	return &MockNotesDatabase_GetChildNotes_Call{Call: _e.mock.On("GetChildNotes", ctx, parentNote)}
 }
 
-func (_c *MockNotesDatabase_GetChildNotes_Call) Run(run func(parentNote uuid.UUID)) *MockNotesDatabase_GetChildNotes_Call {
+func (_c *MockNotesDatabase_GetChildNotes_Call) Run(run func(ctx context.Context, parentNote uuid.UUID)) *MockNotesDatabase_GetChildNotes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -359,14 +391,14 @@ func (_c *MockNotesDatabase_GetChildNotes_Call) Return(databaseNotes []DatabaseN
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetChildNotes_Call) RunAndReturn(run func(parentNote uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetChildNotes_Call {
+func (_c *MockNotesDatabase_GetChildNotes_Call) RunAndReturn(run func(ctx context.Context, parentNote uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetChildNotes_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetStack provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) GetStack(noteID uuid.UUID) ([]DatabaseNote, error) {
-	ret := _mock.Called(noteID)
+func (_mock *MockNotesDatabase) GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error) {
+	ret := _mock.Called(ctx, noteID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetStack")
@@ -374,18 +406,18 @@ func (_mock *MockNotesDatabase) GetStack(noteID uuid.UUID) ([]DatabaseNote, erro
 
 	var r0 []DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseNote, error)); ok {
-		return returnFunc(noteID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseNote, error)); ok {
+		return returnFunc(ctx, noteID)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseNote); ok {
-		r0 = returnFunc(noteID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseNote); ok {
+		r0 = returnFunc(ctx, noteID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseNote)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(noteID)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, noteID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -398,19 +430,25 @@ type MockNotesDatabase_GetStack_Call struct {
 }
 
 // GetStack is a helper method to define mock.On call
+//   - ctx context.Context
 //   - noteID uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetStack(noteID interface{}) *MockNotesDatabase_GetStack_Call {
-	return &MockNotesDatabase_GetStack_Call{Call: _e.mock.On("GetStack", noteID)}
+func (_e *MockNotesDatabase_Expecter) GetStack(ctx interface{}, noteID interface{}) *MockNotesDatabase_GetStack_Call {
+	return &MockNotesDatabase_GetStack_Call{Call: _e.mock.On("GetStack", ctx, noteID)}
 }
 
-func (_c *MockNotesDatabase_GetStack_Call) Run(run func(noteID uuid.UUID)) *MockNotesDatabase_GetStack_Call {
+func (_c *MockNotesDatabase_GetStack_Call) Run(run func(ctx context.Context, noteID uuid.UUID)) *MockNotesDatabase_GetStack_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -421,14 +459,14 @@ func (_c *MockNotesDatabase_GetStack_Call) Return(databaseNotes []DatabaseNote, 
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetStack_Call) RunAndReturn(run func(noteID uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetStack_Call {
+func (_c *MockNotesDatabase_GetStack_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetStack_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // ImportNote provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) ImportNote(insert DatabaseNoteImport) (DatabaseNote, error) {
-	ret := _mock.Called(insert)
+func (_mock *MockNotesDatabase) ImportNote(ctx context.Context, insert DatabaseNoteImport) (DatabaseNote, error) {
+	ret := _mock.Called(ctx, insert)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ImportNote")
@@ -436,16 +474,16 @@ func (_mock *MockNotesDatabase) ImportNote(insert DatabaseNoteImport) (DatabaseN
 
 	var r0 DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseNoteImport) (DatabaseNote, error)); ok {
-		return returnFunc(insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseNoteImport) (DatabaseNote, error)); ok {
+		return returnFunc(ctx, insert)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseNoteImport) DatabaseNote); ok {
-		r0 = returnFunc(insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseNoteImport) DatabaseNote); ok {
+		r0 = returnFunc(ctx, insert)
 	} else {
 		r0 = ret.Get(0).(DatabaseNote)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseNoteImport) error); ok {
-		r1 = returnFunc(insert)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseNoteImport) error); ok {
+		r1 = returnFunc(ctx, insert)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -458,19 +496,25 @@ type MockNotesDatabase_ImportNote_Call struct {
 }
 
 // ImportNote is a helper method to define mock.On call
+//   - ctx context.Context
 //   - insert DatabaseNoteImport
-func (_e *MockNotesDatabase_Expecter) ImportNote(insert interface{}) *MockNotesDatabase_ImportNote_Call {
-	return &MockNotesDatabase_ImportNote_Call{Call: _e.mock.On("ImportNote", insert)}
+func (_e *MockNotesDatabase_Expecter) ImportNote(ctx interface{}, insert interface{}) *MockNotesDatabase_ImportNote_Call {
+	return &MockNotesDatabase_ImportNote_Call{Call: _e.mock.On("ImportNote", ctx, insert)}
 }
 
-func (_c *MockNotesDatabase_ImportNote_Call) Run(run func(insert DatabaseNoteImport)) *MockNotesDatabase_ImportNote_Call {
+func (_c *MockNotesDatabase_ImportNote_Call) Run(run func(ctx context.Context, insert DatabaseNoteImport)) *MockNotesDatabase_ImportNote_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseNoteImport
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseNoteImport)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseNoteImport
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseNoteImport)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -481,14 +525,14 @@ func (_c *MockNotesDatabase_ImportNote_Call) Return(databaseNote DatabaseNote, e
 	return _c
 }
 
-func (_c *MockNotesDatabase_ImportNote_Call) RunAndReturn(run func(insert DatabaseNoteImport) (DatabaseNote, error)) *MockNotesDatabase_ImportNote_Call {
+func (_c *MockNotesDatabase_ImportNote_Call) RunAndReturn(run func(ctx context.Context, insert DatabaseNoteImport) (DatabaseNote, error)) *MockNotesDatabase_ImportNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // UpdateNote provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) UpdateNote(caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error) {
-	ret := _mock.Called(caller, update)
+func (_mock *MockNotesDatabase) UpdateNote(ctx context.Context, caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error) {
+	ret := _mock.Called(ctx, caller, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateNote")
@@ -496,16 +540,16 @@ func (_mock *MockNotesDatabase) UpdateNote(caller uuid.UUID, update DatabaseNote
 
 	var r0 DatabaseNote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseNoteUpdate) (DatabaseNote, error)); ok {
-		return returnFunc(caller, update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseNoteUpdate) (DatabaseNote, error)); ok {
+		return returnFunc(ctx, caller, update)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseNoteUpdate) DatabaseNote); ok {
-		r0 = returnFunc(caller, update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseNoteUpdate) DatabaseNote); ok {
+		r0 = returnFunc(ctx, caller, update)
 	} else {
 		r0 = ret.Get(0).(DatabaseNote)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, DatabaseNoteUpdate) error); ok {
-		r1 = returnFunc(caller, update)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, DatabaseNoteUpdate) error); ok {
+		r1 = returnFunc(ctx, caller, update)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -518,25 +562,31 @@ type MockNotesDatabase_UpdateNote_Call struct {
 }
 
 // UpdateNote is a helper method to define mock.On call
+//   - ctx context.Context
 //   - caller uuid.UUID
 //   - update DatabaseNoteUpdate
-func (_e *MockNotesDatabase_Expecter) UpdateNote(caller interface{}, update interface{}) *MockNotesDatabase_UpdateNote_Call {
-	return &MockNotesDatabase_UpdateNote_Call{Call: _e.mock.On("UpdateNote", caller, update)}
+func (_e *MockNotesDatabase_Expecter) UpdateNote(ctx interface{}, caller interface{}, update interface{}) *MockNotesDatabase_UpdateNote_Call {
+	return &MockNotesDatabase_UpdateNote_Call{Call: _e.mock.On("UpdateNote", ctx, caller, update)}
 }
 
-func (_c *MockNotesDatabase_UpdateNote_Call) Run(run func(caller uuid.UUID, update DatabaseNoteUpdate)) *MockNotesDatabase_UpdateNote_Call {
+func (_c *MockNotesDatabase_UpdateNote_Call) Run(run func(ctx context.Context, caller uuid.UUID, update DatabaseNoteUpdate)) *MockNotesDatabase_UpdateNote_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 DatabaseNoteUpdate
+		var arg1 uuid.UUID
 		if args[1] != nil {
-			arg1 = args[1].(DatabaseNoteUpdate)
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 DatabaseNoteUpdate
+		if args[2] != nil {
+			arg2 = args[2].(DatabaseNoteUpdate)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -547,7 +597,7 @@ func (_c *MockNotesDatabase_UpdateNote_Call) Return(databaseNote DatabaseNote, e
 	return _c
 }
 
-func (_c *MockNotesDatabase_UpdateNote_Call) RunAndReturn(run func(caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error)) *MockNotesDatabase_UpdateNote_Call {
+func (_c *MockNotesDatabase_UpdateNote_Call) RunAndReturn(run func(ctx context.Context, caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error)) *MockNotesDatabase_UpdateNote_Call {
 	_c.Call.Return(run)
 	return _c
 }

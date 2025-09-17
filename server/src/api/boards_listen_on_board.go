@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/sessions"
 
@@ -18,6 +19,8 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 )
+
+//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
@@ -35,22 +38,26 @@ type InitEvent struct {
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	id := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Errorw("unable to upgrade websocket",
-			"err", err,
-			"board", id,
-			"user", userID)
+		span.SetStatus(codes.Error, "failed to upgrade websocket")
+		span.RecordError(err)
+		log.Errorw("unable to upgrade websocket", "err", err, "board", id, "user", userID)
 		return
 	}
 
-	fullBoard, err := s.boards.FullBoard(r.Context(), id)
+	fullBoard, err := s.boards.FullBoard(ctx, id)
 	if err != nil {
-		s.closeBoardSocket(id, userID, conn)
+		span.SetStatus(codes.Error, "failed to get full board")
+		span.RecordError(err)
+		s.closeBoardSocket(ctx, id, userID, conn)
 		return
 	}
 
@@ -62,37 +69,43 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	initEvent = eventInitFilter(initEvent, userID)
 	err = conn.WriteJSON(initEvent)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to send init message")
+		span.RecordError(err)
 		log.Errorw("failed to send init message", "board", id, "user", userID, "err", err)
-		s.closeBoardSocket(id, userID, conn)
+		s.closeBoardSocket(ctx, id, userID, conn)
 		return
 	}
 
-	err = s.sessions.Connect(r.Context(), id, userID)
+	err = s.sessions.Connect(ctx, id, userID)
 	if err != nil {
-		logger.Get().Warnw("failed to connect session", "board", id, "user", userID, "err", err)
+		span.SetStatus(codes.Error, "failed to connect session")
+		span.RecordError(err)
+		log.Warnw("failed to connect session", "board", id, "user", userID, "err", err)
 	}
-	defer s.closeBoardSocket(id, userID, conn)
+	defer s.closeBoardSocket(context.Background(), id, userID, conn)
 
-	s.listenOnBoard(id, userID, conn, initEvent.Data)
+	s.listenOnBoard(ctx, id, userID, conn, initEvent.Data)
 
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
-				logger.Get().Debugw("websocket to user no longer available, about to disconnect", "user", userID)
+				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
 				delete(s.boardSubscriptions[id].clients, userID)
-				err := s.sessions.Disconnect(r.Context(), id, userID)
+				err := s.sessions.Disconnect(ctx, id, userID)
 				if err != nil {
-					logger.Get().Warnw("failed to disconnected session", "board", id, "user", userID, "err", err)
+					span.SetStatus(codes.Error, "failed to disconnect session")
+					span.RecordError(err)
+					log.Warnw("failed to disconnected session", "board", id, "user", userID, "err", err)
 				}
 			}
 			break
 		}
-		logger.Get().Debugw("received message", "message", message)
+		log.Debugw("received message", "message", message)
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData boards.FullBoard) {
+func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn *websocket.Conn, initEventData boards.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -109,7 +122,7 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
-		b.subscription = s.realtime.GetBoardChannel(boardID)
+		b.subscription = s.realtime.GetBoardChannel(ctx, boardID)
 		go b.startListeningOnBoard()
 	}
 }
@@ -126,10 +139,16 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 	}
 }
 
-func (s *Server) closeBoardSocket(board, user uuid.UUID, conn *websocket.Conn) {
+func (s *Server) closeBoardSocket(ctx context.Context, board, user uuid.UUID, conn *websocket.Conn) {
+	ctx, span := tracer.Start(ctx, "scrumlr.listen.api.soket.close")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
 	_ = conn.Close()
-	err := s.sessions.Disconnect(context.Background(), board, user)
+	err := s.sessions.Disconnect(ctx, board, user)
 	if err != nil {
-		logger.Get().Warnw("failed to disconnected session", "board", board, "user", user, "err", err)
+		span.SetStatus(codes.Error, "failed to disconnect session")
+		span.RecordError(err)
+		log.Warnw("failed to disconnected session", "board", board, "user", user, "err", err)
 	}
 }

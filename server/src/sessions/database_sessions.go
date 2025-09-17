@@ -21,7 +21,7 @@ func NewSessionDatabase(database *bun.DB) SessionDatabase {
 	return db
 }
 
-func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
+func (database *SessionDB) Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
 	if boardSession.Role == common.OwnerRole {
 		return DatabaseBoardSession{}, errors.New("not allowed to create board session with owner role")
 	}
@@ -39,7 +39,7 @@ func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (Data
 		Where("s.board = ?", boardSession.Board).
 		Where("s.user = ?", boardSession.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(common.ContextWithValues(context.Background(),
+		Scan(common.ContextWithValues(ctx,
 			"Database", database,
 			"Operation", "INSERT",
 			identifiers.BoardIdentifier, boardSession.Board,
@@ -49,7 +49,7 @@ func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (Data
 	return session, err
 }
 
-func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
+func (database *SessionDB) Update(ctx context.Context, update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
 	updateQuery := database.db.NewUpdate().
 		Model(&update)
 
@@ -93,7 +93,7 @@ func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBo
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(common.ContextWithValues(context.Background(),
+		Scan(common.ContextWithValues(ctx,
 			"Database", database,
 			"Operation", "UPDATE",
 			identifiers.BoardIdentifier, update.Board,
@@ -103,7 +103,7 @@ func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBo
 	return session, err
 }
 
-func (database *SessionDB) UpdateAll(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) UpdateAll(ctx context.Context, update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
 	updateQuery := database.db.NewUpdate().
 		Model(&update)
 
@@ -126,38 +126,38 @@ func (database *SessionDB) UpdateAll(update DatabaseBoardSessionUpdate) ([]Datab
 		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", update.Board).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(context.Background(), &sessions)
+		Scan(ctx, &sessions)
 
 	return sessions, err
 }
 
-func (database *SessionDB) Exists(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) Exists(ctx context.Context, board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
-		Exists(context.Background())
+		Exists(ctx)
 }
 
-func (database *SessionDB) ModeratorExists(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) ModeratorExists(ctx context.Context, board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
 		Where("role <> ?", common.ParticipantRole).
-		Exists(context.Background())
+		Exists(ctx)
 }
 
-func (database *SessionDB) IsParticipantBanned(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
 		Where("\"banned\" = ?", true).
-		Exists(context.Background())
+		Exists(ctx)
 }
 
-func (database *SessionDB) Get(board, user uuid.UUID) (DatabaseBoardSession, error) {
+func (database *SessionDB) Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error) {
 	var session DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
@@ -165,12 +165,12 @@ func (database *SessionDB) Get(board, user uuid.UUID) (DatabaseBoardSession, err
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(context.Background(), &session)
+		Scan(ctx, &session)
 
 	return session, err
 }
 
-func (database *SessionDB) GetAll(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
 	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
 		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
@@ -194,12 +194,12 @@ func (database *SessionDB) GetAll(board uuid.UUID, filter ...BoardSessionFilter)
 	}
 
 	var sessions []DatabaseBoardSession
-	err := query.Scan(context.Background(), &sessions)
+	err := query.Scan(ctx, &sessions)
 	return sessions, err
 }
 
 // Gets all board sessions of a single user who he is currently connected to
-func (database *SessionDB) GetUserConnectedBoards(user uuid.UUID) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
 	var sessions []DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
@@ -207,7 +207,7 @@ func (database *SessionDB) GetUserConnectedBoards(user uuid.UUID) ([]DatabaseBoa
 		Where("s.user = ?", user).
 		Where("s.connected").
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(context.Background(), &sessions)
+		Scan(ctx, &sessions)
 
 	return sessions, err
 }

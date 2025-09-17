@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columntemplates"
 )
 
@@ -24,7 +25,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 	visible := true
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Create(DatabaseBoardTemplateInsert{
+	mockBoardTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
@@ -94,7 +95,7 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	visible := true
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Create(DatabaseBoardTemplateInsert{
+	mockBoardTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
@@ -148,7 +149,7 @@ func TestGetBoardTemplate(t *testing.T) {
 	description := "This is a description"
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Get(boardId).
+	mockBoardTemplateDatabase.EXPECT().Get(mock.Anything, boardId).
 		Return(DatabaseBoardTemplate{
 			ID:          boardId,
 			Creator:     userId,
@@ -174,7 +175,7 @@ func TestGetBoardTemplate_DatabaseError(t *testing.T) {
 	id := uuid.New()
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Get(id).
+	mockBoardTemplateDatabase.EXPECT().Get(mock.Anything, id).
 		Return(DatabaseBoardTemplate{}, dbError)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
@@ -198,7 +199,7 @@ func TestGetAllBoardTemplate(t *testing.T) {
 	secondColumnName := "Column 2"
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().GetAll(userId).
+	mockBoardTemplateDatabase.EXPECT().GetAll(mock.Anything, userId).
 		Return([]DatabaseBoardTemplateFull{
 			{
 				Template: DatabaseBoardTemplate{
@@ -256,7 +257,7 @@ func TestGetAllBoardTemplate_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().GetAll(userId).
+	mockBoardTemplateDatabase.EXPECT().GetAll(mock.Anything, userId).
 		Return([]DatabaseBoardTemplateFull{}, dbError)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
@@ -275,7 +276,7 @@ func TestUpdateBoardTemplate(t *testing.T) {
 	description := "This is a description"
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{
+	mockBoardTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -306,7 +307,7 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 	description := "This is a description"
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{
+	mockBoardTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -330,7 +331,7 @@ func TestDeleteBoardTemplate(t *testing.T) {
 	id := uuid.New()
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Delete(id).Return(nil)
+	mockBoardTemplateDatabase.EXPECT().Delete(mock.Anything, id).Return(nil)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 
@@ -344,7 +345,7 @@ func TestDeleteBoardTemplate_DatabaseError(t *testing.T) {
 	id := uuid.New()
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Delete(id).Return(dbError)
+	mockBoardTemplateDatabase.EXPECT().Delete(mock.Anything, id).Return(dbError)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 

@@ -65,7 +65,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			noteMock.EXPECT().Create(req.req.Context(), notes.NoteCreateRequest{
+			noteMock.EXPECT().Create(mock.Anything, notes.NoteCreateRequest{
 				Board:  boardId,
 				User:   userId,
 				Text:   testText,
@@ -106,7 +106,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 			req := NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.NoteIdentifier, noteID)
 
-			noteMock.EXPECT().Get(req.req.Context(), noteID).Return(&notes.Note{
+			noteMock.EXPECT().Get(mock.Anything, noteID).Return(&notes.Note{
 				ID: noteID,
 			}, tt.err)
 
@@ -176,13 +176,13 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			}, nil)
 
 			// Mock the SessionExists method
-			sessionMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(true, nil)
+			sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
 
 			// Mock the ModeratorSessionExists method
 			sessionMock.EXPECT().ModeratorSessionExists(mock.Anything, boardID, userID).Return(true, nil)
 
 			// Mock the ParticipantBanned method
-			sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, nil)
+			sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, nil)
 
 			if tt.isLocked {
 				noteMock.EXPECT().Delete(mock.Anything, userID, notes.NoteDeleteRequest{ID: noteID, Board: boardID, DeleteStack: false}).
@@ -232,7 +232,7 @@ func (suite *NotesTestSuite) TestEditNote() {
 				AddToContext(identifiers.NoteIdentifier, noteId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			noteMock.EXPECT().Update(req.req.Context(), userId, notes.NoteUpdateRequest{
+			noteMock.EXPECT().Update(mock.Anything, userId, notes.NoteUpdateRequest{
 				Text:     &updatedText,
 				Position: nil,
 				Edited:   false,

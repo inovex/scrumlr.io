@@ -64,7 +64,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	service := NewReactionService(database, broker)
 
@@ -96,7 +96,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	service := NewReactionService(database, broker)
 
@@ -127,7 +127,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	service := NewReactionService(database, broker)
 

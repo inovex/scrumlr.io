@@ -3,9 +3,10 @@ package boards
 import (
 	"context"
 	"errors"
-	"scrumlr.io/server/sessions"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columns"
@@ -25,7 +26,7 @@ func TestGet(t *testing.T) {
 	boardID := uuid.New()
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(boardID).Return(DatabaseBoard{ID: boardID}, nil)
+	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -53,7 +54,7 @@ func TestGetError(t *testing.T) {
 	dbError := errors.New("db error")
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(boardID).Return(DatabaseBoard{}, dbError)
+	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).Return(DatabaseBoard{}, dbError)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -87,7 +88,7 @@ func TestCreate(t *testing.T) {
 	columnDescription := "Test Column Description"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().CreateBoard(userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
+	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
 		[]columns.DatabaseColumnInsert{{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
@@ -146,7 +147,7 @@ func TestDelete(t *testing.T) {
 	boardID := uuid.New()
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().DeleteBoard(boardID).Return(nil)
+	mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -172,7 +173,7 @@ func TestUpdate(t *testing.T) {
 	updatedName := "Updated Board Name"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -181,13 +182,13 @@ func TestUpdate(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(context.Background(), boardID).Return([]*columns.Column{}, nil)
+	columnMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{}, nil)
 
 	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(context.Background(), boardID).Return([]*notes.Note{}, nil)
+	noteMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*notes.Note{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -206,7 +207,7 @@ func TestSetTimer(t *testing.T) {
 	timerEnd := timerStart.Add(time.Minute * time.Duration(5))
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
 		Return(DatabaseBoard{ID: boardID, TimerEnd: &timerEnd}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -217,7 +218,7 @@ func TestSetTimer(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -236,7 +237,7 @@ func TestDeleteTimer(t *testing.T) {
 	boardID := uuid.New()
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: nil, TimerEnd: nil}).
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: nil, TimerEnd: nil}).
 		Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -247,7 +248,7 @@ func TestDeleteTimer(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -269,9 +270,9 @@ func TestIncrementTimer(t *testing.T) {
 	updatedTimerEnd := updatedTimer.Add(time.Minute * time.Duration(1))
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(boardID).
+	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
 		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
 		Return(DatabaseBoard{ID: boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -282,7 +283,7 @@ func TestIncrementTimer(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

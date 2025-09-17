@@ -24,7 +24,7 @@ func NewColumnTemplateDatabase(database *bun.DB) ColumnTemplateDatabase {
 
 // CreateColumnTemplate creates a new column template. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
-func (db *DB) Create(column DatabaseColumnTemplateInsert) (DatabaseColumnTemplate, error) {
+func (db *DB) Create(ctx context.Context, column DatabaseColumnTemplateInsert) (DatabaseColumnTemplate, error) {
 	maxIndexSelect := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		ColumnExpr("COUNT(*) as index").
@@ -55,36 +55,36 @@ func (db *DB) Create(column DatabaseColumnTemplateInsert) (DatabaseColumnTemplat
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
 	return c, err
 }
 
 // GetColumnTemplate returns the column template for the specified id.
-func (db *DB) Get(board, id uuid.UUID) (DatabaseColumnTemplate, error) {
+func (db *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumnTemplate, error) {
 	var column DatabaseColumnTemplate
 	err := db.db.NewSelect().
 		Model(&column).
 		Where("board_template = ?", board).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	return column, err
 }
 
-func (db *DB) GetAll(board uuid.UUID) ([]DatabaseColumnTemplate, error) {
+func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemplate, error) {
 	var columns []DatabaseColumnTemplate
 	err := db.db.NewSelect().
 		Model(&columns).
 		Where("board_template = ?", board).
 		Order("index ASC").
-		Scan(context.Background())
+		Scan(ctx)
 
 	return columns, err
 }
 
 // UpdateColumnTemplate updates the column template  and re-orders all indices of the column templates if necessary.
-func (db *DB) Update(column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplate, error) {
+func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplate, error) {
 	newIndex := column.Index
 	if column.Index < 0 {
 		newIndex = 0
@@ -129,13 +129,13 @@ func (db *DB) Update(column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplat
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
 		Where("id = ?", column.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
 	return c, err
 }
 
 // DeleteColumnTemplate  deletes a column template  and adapts all indices of the other columns.
-func (db *DB) Delete(board, column uuid.UUID) error {
+func (db *DB) Delete(ctx context.Context, board, column uuid.UUID) error {
 	var columns []DatabaseColumnTemplate
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
@@ -153,7 +153,7 @@ func (db *DB) Delete(board, column uuid.UUID) error {
 		Model((*DatabaseColumnTemplate)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, "Result", &columns), &columns)
 
 	return err
 }
