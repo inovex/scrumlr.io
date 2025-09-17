@@ -9,12 +9,6 @@ on:
       server-image-tag:
         description: The tag of the server image (amd64)
         value: ${{ jobs.export-outputs.outputs.server-image-tag }}
-      frontend-image-tag-arm64:
-        description: The tag of the frontend image (arm64)
-        value: ${{ jobs.export-outputs.outputs.frontend-image-tag-arm64 }}
-      server-image-tag-arm64:
-        description: The tag of the server image (arm64)
-        value: ${{ jobs.export-outputs.outputs.server-image-tag-arm64 }}
 
 concurrency:
   group: package-${{ github.workflow }}-${{ github.ref }}
@@ -22,20 +16,14 @@ concurrency:
 
 jobs:
   build-frontend:
-    name: Build frontend (${{ matrix.arch }})
-    runs-on: ${{ matrix.runner }}
+    name: Build frontend (${{ matrix.build_info.platform }})
+    runs-on: ${{ matrix.build_info.runner }}
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - arch: amd64
-            runner: ubuntu-latest
-            platform: linux/amd64
-            suffix: ""
-          - arch: arm64
-            runner: ubuntu-24.04-arm
-            platform: linux/arm64
-            suffix: "-arm64"
+        build_info:
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64' }
     permissions:
       contents: read
       packages: write
@@ -46,10 +34,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Default platform env (only for arm64)
-        if: matrix.arch == 'arm64'
-        run: echo "DOCKER_DEFAULT_PLATFORM=${{ matrix.platform }}" >> $GITHUB_ENV
-
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -57,13 +41,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Frontend metadata (${{ matrix.arch }})
+      - name: Frontend metadata (${{ matrix.build_info.platform }})
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
           flavor: |
-            suffix=${{ matrix.suffix }}
+            suffix=${{ matrix.build_info.suffix }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -72,14 +56,14 @@ jobs:
             type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.title=scrumlr.io Frontend
-            org.opencontainers.image.description=The web client for scrumlr.io${{ matrix.suffix }}
+            org.opencontainers.image.description=The web client for scrumlr.io${{ matrix.build_info.suffix }}
 
-      - name: Build & push (${{ matrix.platform }})
+      - name: Build & push (${{ matrix.build_info.platform }})
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -89,31 +73,31 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          echo "${{ steps.meta.outputs.tags }}" | grep -oE 'sha-[a-f0-9]+(-arm64)?' | head -n1 > "frontend-${{ matrix.arch }}"
-          echo "Built tag: $(cat frontend-${{ matrix.arch }})"
+          arch="$(echo "${{ matrix.build_info.platform }}" | cut -d/ -f2)"
+          echo "${{ steps.meta.outputs.tags }}" \
+            | grep -oE 'sha-[a-f0-9]+(-arm64)?' \
+            | head -n1 > "frontend-${arch}"
+          echo "Built tag: $(cat frontend-${arch})"
+          if [ ! -s "frontend-${arch}" ]; then
+            echo "ERROR: No frontend image sha tag produced"; exit 1
+          fi
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-${{ matrix.arch }}
-          path: frontend-${{ matrix.arch }}
+          name: frontend-${{ matrix.build_info.platform }}
+          path: frontend-*
           if-no-files-found: error
 
   build-server:
-    name: Build server (${{ matrix.arch }})
-    runs-on: ${{ matrix.runner }}
+    name: Build server (${{ matrix.build_info.platform }})
+    runs-on: ${{ matrix.build_info.runner }}
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - arch: amd64
-            runner: ubuntu-latest
-            platform: linux/amd64
-            suffix: ""
-          - arch: arm64
-            runner: ubuntu-24.04-arm
-            platform: linux/arm64
-            suffix: "-arm64"
+        build_info:
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest',    suffix: '' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm', suffix: '-arm64' }
     permissions:
       contents: read
       packages: write
@@ -124,10 +108,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Default platform env (only for arm64)
-        if: matrix.arch == 'arm64'
-        run: echo "DOCKER_DEFAULT_PLATFORM=${{ matrix.platform }}" >> $GITHUB_ENV
-
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -135,13 +115,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Server metadata (${{ matrix.arch }})
+      - name: Server metadata (${{ matrix.build_info.platform }})
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/inovex/scrumlr.io/scrumlr-server
           flavor: |
-            suffix=${{ matrix.suffix }}
+            suffix=${{ matrix.build_info.suffix }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -150,14 +130,14 @@ jobs:
             type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.title=scrumlr.io Server
-            org.opencontainers.image.description=The server for scrumlr.io${{ matrix.suffix }}
+            org.opencontainers.image.description=The server for scrumlr.io${{ matrix.build_info.suffix }}
 
-      - name: Build & push (${{ matrix.platform }})
+      - name: Build & push (${{ matrix.build_info.platform }})
         uses: docker/build-push-action@v6
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -167,14 +147,20 @@ jobs:
       - name: Extract tag and save artifact
         shell: bash
         run: |
-          echo "${{ steps.meta.outputs.tags }}" | grep -oE 'sha-[a-f0-9]+(-arm64)?' | head -n1 > "server-${{ matrix.arch }}"
-          echo "Built tag: $(cat server-${{ matrix.arch }})"
+          arch="$(echo "${{ matrix.build_info.platform }}" | cut -d/ -f2)"   # -> amd64 or arm64
+          echo "${{ steps.meta.outputs.tags }}" \
+            | grep -oE 'sha-[a-f0-9]+(-arm64)?' \
+            | head -n1 > "server-${arch}"
+          echo "Built tag: $(cat server-${arch})"
+          if [ ! -s "server-${arch}" ]; then
+            echo "ERROR: No server image sha tag produced"; exit 1
+          fi
 
       - name: Upload tag artifact
         uses: actions/upload-artifact@v4
         with:
-          name: server-${{ matrix.arch }}
-          path: server-${{ matrix.arch }}
+          name: server-${{ matrix.build_info.platform }}
+          path: server-*
           if-no-files-found: error
 
   export-outputs:
@@ -188,8 +174,6 @@ jobs:
     outputs:
       frontend-image-tag: ${{ steps.collect.outputs.frontend_image_tag }}
       server-image-tag: ${{ steps.collect.outputs.server_image_tag }}
-      frontend-image-tag-arm64: ${{ steps.collect.outputs.frontend_image_tag_arm64 }}
-      server-image-tag-arm64: ${{ steps.collect.outputs.server_image_tag_arm64 }}
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -212,16 +196,10 @@ jobs:
         run: |
           fe_amd64=$(cat artifacts/frontend-amd64 2>/dev/null || true)
           sv_amd64=$(cat artifacts/server-amd64   2>/dev/null || true)
-          fe_arm64=$(cat artifacts/frontend-arm64 2>/dev/null || true)
-          sv_arm64=$(cat artifacts/server-arm64   2>/dev/null || true)
 
-          echo "frontend_image_tag=${fe_amd64}"       >> "$GITHUB_OUTPUT"
-          echo "server_image_tag=${sv_amd64}"         >> "$GITHUB_OUTPUT"
-          echo "frontend_image_tag_arm64=${fe_arm64}" >> "$GITHUB_OUTPUT"
-          echo "server_image_tag_arm64=${sv_arm64}"   >> "$GITHUB_OUTPUT"
-
-          if [ -z "$fe_amd64" ] || [ -z "$sv_amd64" ] || [ -z "$fe_arm64" ] || [ -z "$sv_arm64" ]; then
-            echo "ERROR: One or more image tags are empty. Aborting to avoid deploying with an empty tag."
-            ls -l artifacts || true
-            exit 1
+          if [ -z "$fe_amd64" ] || [ -z "$sv_amd64" ]; then
+            echo "ERROR: Missing amd64 image tag(s)"; exit 1
           fi
+
+          echo "frontend_image_tag=${fe_amd64}" >> "$GITHUB_OUTPUT"
+          echo "server_image_tag=${sv_amd64}"   >> "$GITHUB_OUTPUT"
