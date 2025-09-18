@@ -9,5 +9,4 @@ CREATE TABLE IF NOT EXISTS drag_locks (
     CONSTRAINT fk_drag_locks_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_drag_locks_created_at ON drag_locks(created_at);
 CREATE INDEX idx_drag_locks_board_id ON drag_locks(board_id);
