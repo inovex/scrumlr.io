@@ -104,7 +104,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
-	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	userId := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -137,8 +137,8 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -164,34 +164,50 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-// noteDragStart broadcasts that a note drag has started
-func (s *Server) noteDragStart(w http.ResponseWriter, r *http.Request) {
-	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
-	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-
-	// Broadcast drag start event
-	_ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
-		Type: realtime.BoardEventNoteDragStart,
-		Data: map[string]string{
-			"noteId": noteID.String(),
-			"userId": userID.String(),
-		},
-	})
-
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, nil)
+type NoteDragStateRequest struct {
+	Dragging bool `json:"dragging"`
 }
 
-// noteDragEnd broadcasts that a note drag has ended
-func (s *Server) noteDragEnd(w http.ResponseWriter, r *http.Request) {
+// updateNoteDragState updates the drag state of a note
+func (s *Server) updateNoteDragState(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	// Broadcast drag end event
+	var body NoteDragStateRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	// Handle drag state with lock management
+	var eventType realtime.BoardEventType
+	var success bool
+
+	if body.Dragging {
+		// Try to acquire the lock
+		success = s.dragLocks.AcquireLock(noteID, userID, boardID)
+		if !success {
+			// Note is already locked by another user
+			render.Status(r, http.StatusConflict)
+			render.Respond(w, r, map[string]string{"error": "Note is currently being dragged by another user"})
+			return
+		}
+		eventType = realtime.BoardEventNoteDragStart
+	} else {
+		// Release the lock
+		success = s.dragLocks.ReleaseLock(noteID, userID)
+		if !success {
+			log.Warnw("attempted to release lock not owned by user", "noteId", noteID, "userId", userID)
+		}
+		eventType = realtime.BoardEventNoteDragEnd
+	}
+
+	// Broadcast drag state change event
 	_ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
-		Type: realtime.BoardEventNoteDragEnd,
+		Type: eventType,
 		Data: map[string]string{
 			"noteId": noteID.String(),
 			"userId": userID.String(),
