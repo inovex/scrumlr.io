@@ -84,42 +84,26 @@ export const NoteAPI = {
   },
 
   /**
-   * Broadcasts that a note drag has started
+   * Updates the drag state of a note
    */
-  noteDragStart: async (boardId: string, noteId: string) => {
+  updateNoteDragState: async (boardId: string, noteId: string, dragging: boolean) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes/${noteId}/drag-start`, {
-        method: "POST",
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes/${noteId}/drag-state`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
+        body: JSON.stringify({dragging}),
       });
 
       if (response.status === 200) {
         return;
       }
 
-      throw new Error(`note drag start request resulted in status ${response.status}`);
+      throw new Error(`note drag state update resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to broadcast note drag start: ${error}`);
-    }
-  },
-
-  /**
-   * Broadcasts that a note drag has ended
-   */
-  noteDragEnd: async (boardId: string, noteId: string) => {
-    try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes/${noteId}/drag-end`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (response.status === 200) {
-        return;
-      }
-
-      throw new Error(`note drag end request resulted in status ${response.status}`);
-    } catch (error) {
-      throw new Error(`unable to broadcast note drag end: ${error}`);
+      throw new Error(`unable to update note drag state: ${error}`);
     }
   },
 };
