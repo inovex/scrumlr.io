@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/serviceinitialize"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/draglocks"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
@@ -427,6 +428,7 @@ func run(c *cli.Context) error {
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	dragLockService := draglocks.InitializeDatabaseLockService(db, rt)
 
 	s := api.New(
 		basePath,
@@ -446,6 +448,7 @@ func run(c *cli.Context) error {
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,
+		dragLockService,
 
 		logger.GetLogLevel() == zap.DebugLevel || c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
