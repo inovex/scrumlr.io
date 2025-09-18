@@ -30,7 +30,7 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern",
-      "signInToCreateBoards": "Um eigene Boards zu erstellen, melde dich bitte mit deinem Microsoft oder Google Konto an."
+      "signInToCreateBoards": "Um ein Board zu erstellen, melde Dich mit einem Identitätsanbieter an."
     },
     "TemplateEditor": {
       "createTitle": "Erstelle eine Vorlage",
