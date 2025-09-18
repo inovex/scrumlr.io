@@ -9,7 +9,7 @@ import {Participant} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
 import {useAppDispatch, useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
-import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
+import {EmojiPickerReactionBar} from "./EmojiPickerReactionBar/EmojiPickerReactionBar";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import "./NoteReactionList.scss";
@@ -44,6 +44,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
@@ -118,11 +119,15 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionBar(false);
   };
 
-  // on clicking anywhere but the note, close the reaction bar
+  // on clicking anywhere but the note or emoji picker, close the reaction bar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) {
-        // click not inside note -> close bar
+      const target = e.target as Node;
+      const isInsideNote = rootRef.current?.contains(target);
+      const isInsideEmojiPicker = target && (target as Element).closest?.(".emoji-picker-reaction-bar__picker-portal");
+
+      if (!isInsideNote && !isInsideEmojiPicker) {
+        // click not inside note or emoji picker -> close bar
         setShowReactionBar(false);
       }
     };
@@ -180,7 +185,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionPopup(false);
   };
 
-  if (!props.show) return null;
+  if (!props.show || !showBoardReactions) return null;
 
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
@@ -208,7 +213,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           >
             <AddEmoji className="note-reaction-list__add-reaction-sticker" />
           </button>
-          {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+          {showReactionBar && <EmojiPickerReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
         </div>
       )}
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
