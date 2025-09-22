@@ -1,33 +1,35 @@
+@import "src/constants/style.scss";
+
 .drag-lock-indicator {
   position: absolute;
-  bottom: -12px;
-  right: -12px;
+  bottom: $spacing--sm;
+  right: $spacing--sm;
   display: flex;
   align-items: center;
-  gap: 8px;
-  z-index: 1000;
+  gap: $spacing--xs;
+  z-index: $tooltip-z-index;
   pointer-events: none;
 
   &__avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid #ff6b35;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: $icon--large;
+    height: $icon--large;
+    border-radius: $rounded--full;
+    border: 2px solid $orange--500;
+    background-color: $gray--000;
+    box-shadow: $box-shadow--light;
     overflow: hidden;
     flex-shrink: 0;
   }
 
   &__tooltip {
-    background-color: rgba(255, 107, 53, 0.95);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
+    background-color: rgba($orange--500, 0.95);
+    color: $gray--000;
+    padding: $spacing--xxs $spacing--xs;
+    border-radius: $spacing--sm;
+    font-size: $text--xs;
     font-weight: 600;
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba($gray--000, 0.2);
   }
 }
