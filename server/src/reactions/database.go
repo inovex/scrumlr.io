@@ -2,7 +2,6 @@ package reactions
 
 import (
 	"context"
-	"errors"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -60,20 +59,8 @@ func (d *DB) GetAllForNote(ctx context.Context, note uuid.UUID) ([]DatabaseReact
 
 // Create inserts a new reaction
 func (d *DB) Create(ctx context.Context, board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
-	var currentNoteReactions, err = d.GetAllForNote(ctx, insert.Note)
-	if err != nil {
-		return DatabaseReaction{}, err
-	}
-
-	// check if user has already made a reaction on this note
-	for _, r := range currentNoteReactions {
-		if r.User == insert.User {
-			return DatabaseReaction{}, errors.New("cannot make multiple reactions on the same note by the same user")
-		}
-	}
-
 	var reaction DatabaseReaction
-	_, err = d.db.NewInsert().
+	_, err := d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.BoardIdentifier, board), &reaction)
@@ -82,42 +69,25 @@ func (d *DB) Create(ctx context.Context, board uuid.UUID, insert DatabaseReactio
 }
 
 // Delete deletes a reaction
-func (d *DB) Delete(ctx context.Context, board, user, id uuid.UUID) error {
-	var reaction, err = d.Get(ctx, id)
-	if err != nil {
-		return err
-	}
-
-	if reaction.User != user {
-		return common.ForbiddenError(errors.New("forbidden"))
-	}
-	_, err = d.db.NewDelete().
+func (d *DB) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := d.db.NewDelete().
 		Model((*DatabaseReaction)(nil)).
 		Where("id = ?", id).
-		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, id))
+		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.ReactionIdentifier, id))
 
 	return err
 }
 
 // Update updates the reaction type
-func (d *DB) Update(ctx context.Context, board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
-	var r, err = d.Get(ctx, id)
-	if err != nil {
-		return DatabaseReaction{}, err
-	}
-
-	if r.User != user {
-		return DatabaseReaction{}, common.ForbiddenError(errors.New("forbidden"))
-	}
-
+func (d *DB) Update(ctx context.Context, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
 	var reaction DatabaseReaction
-	_, err = d.db.
+	_, err := d.db.
 		NewUpdate().
 		Model(&reaction).
 		Set("reaction_type = ?", update.ReactionType).
 		Where("id = ?", id).
 		Returning("*").
-		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, reaction))
+		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.ReactionIdentifier, reaction))
 
 	return reaction, err
 }

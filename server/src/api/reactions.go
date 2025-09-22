@@ -71,8 +71,9 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 
 	// user is filled from context
 	body.User = user
+	body.Board = board
 
-	reaction, err := s.reactions.Create(ctx, board, body)
+	reaction, err := s.reactions.Create(ctx, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create reaction")
 		span.RecordError(err)
