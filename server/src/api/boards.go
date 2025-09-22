@@ -215,7 +215,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, board, user)
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
@@ -251,7 +251,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, board, user)
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
