@@ -82,28 +82,4 @@ export const NoteAPI = {
       throw new Error(`unable to update note: ${error}`);
     }
   },
-
-  /**
-   * Updates the drag state of a note
-   */
-  updateNoteDragState: async (boardId: string, noteId: string, dragging: boolean) => {
-    try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes/${noteId}/drag-state`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({dragging}),
-      });
-
-      if (response.status === 200) {
-        return;
-      }
-
-      throw new Error(`note drag state update resulted in status ${response.status}`);
-    } catch (error) {
-      throw new Error(`unable to update note drag state: ${error}`);
-    }
-  },
 };
