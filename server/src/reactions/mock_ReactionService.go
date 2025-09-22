@@ -39,8 +39,8 @@ func (_m *MockReactionService) EXPECT() *MockReactionService_Expecter {
 }
 
 // Create provides a mock function for the type MockReactionService
-func (_mock *MockReactionService) Create(ctx context.Context, board uuid.UUID, body ReactionCreateRequest) (*Reaction, error) {
-	ret := _mock.Called(ctx, board, body)
+func (_mock *MockReactionService) Create(ctx context.Context, body ReactionCreateRequest) (*Reaction, error) {
+	ret := _mock.Called(ctx, body)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -48,18 +48,18 @@ func (_mock *MockReactionService) Create(ctx context.Context, board uuid.UUID, b
 
 	var r0 *Reaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ReactionCreateRequest) (*Reaction, error)); ok {
-		return returnFunc(ctx, board, body)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ReactionCreateRequest) (*Reaction, error)); ok {
+		return returnFunc(ctx, body)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ReactionCreateRequest) *Reaction); ok {
-		r0 = returnFunc(ctx, board, body)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ReactionCreateRequest) *Reaction); ok {
+		r0 = returnFunc(ctx, body)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Reaction)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, ReactionCreateRequest) error); ok {
-		r1 = returnFunc(ctx, board, body)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ReactionCreateRequest) error); ok {
+		r1 = returnFunc(ctx, body)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -73,30 +73,24 @@ type MockReactionService_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
-//   - board uuid.UUID
 //   - body ReactionCreateRequest
-func (_e *MockReactionService_Expecter) Create(ctx interface{}, board interface{}, body interface{}) *MockReactionService_Create_Call {
-	return &MockReactionService_Create_Call{Call: _e.mock.On("Create", ctx, board, body)}
+func (_e *MockReactionService_Expecter) Create(ctx interface{}, body interface{}) *MockReactionService_Create_Call {
+	return &MockReactionService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
-func (_c *MockReactionService_Create_Call) Run(run func(ctx context.Context, board uuid.UUID, body ReactionCreateRequest)) *MockReactionService_Create_Call {
+func (_c *MockReactionService_Create_Call) Run(run func(ctx context.Context, body ReactionCreateRequest)) *MockReactionService_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 uuid.UUID
+		var arg1 ReactionCreateRequest
 		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 ReactionCreateRequest
-		if args[2] != nil {
-			arg2 = args[2].(ReactionCreateRequest)
+			arg1 = args[1].(ReactionCreateRequest)
 		}
 		run(
 			arg0,
 			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -107,7 +101,7 @@ func (_c *MockReactionService_Create_Call) Return(reaction *Reaction, err error)
 	return _c
 }
 
-func (_c *MockReactionService_Create_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, body ReactionCreateRequest) (*Reaction, error)) *MockReactionService_Create_Call {
+func (_c *MockReactionService_Create_Call) RunAndReturn(run func(ctx context.Context, body ReactionCreateRequest) (*Reaction, error)) *MockReactionService_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
