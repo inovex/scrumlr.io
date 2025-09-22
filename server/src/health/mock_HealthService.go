@@ -5,6 +5,8 @@
 package health
 
 import (
+	"context"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -36,16 +38,16 @@ func (_m *MockHealthService) EXPECT() *MockHealthService_Expecter {
 }
 
 // IsDatabaseHealthy provides a mock function for the type MockHealthService
-func (_mock *MockHealthService) IsDatabaseHealthy() bool {
-	ret := _mock.Called()
+func (_mock *MockHealthService) IsDatabaseHealthy(ctx context.Context) bool {
+	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for IsDatabaseHealthy")
 	}
 
 	var r0 bool
-	if returnFunc, ok := ret.Get(0).(func() bool); ok {
-		r0 = returnFunc()
+	if returnFunc, ok := ret.Get(0).(func(context.Context) bool); ok {
+		r0 = returnFunc(ctx)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
@@ -58,13 +60,20 @@ type MockHealthService_IsDatabaseHealthy_Call struct {
 }
 
 // IsDatabaseHealthy is a helper method to define mock.On call
-func (_e *MockHealthService_Expecter) IsDatabaseHealthy() *MockHealthService_IsDatabaseHealthy_Call {
-	return &MockHealthService_IsDatabaseHealthy_Call{Call: _e.mock.On("IsDatabaseHealthy")}
+//   - ctx context.Context
+func (_e *MockHealthService_Expecter) IsDatabaseHealthy(ctx interface{}) *MockHealthService_IsDatabaseHealthy_Call {
+	return &MockHealthService_IsDatabaseHealthy_Call{Call: _e.mock.On("IsDatabaseHealthy", ctx)}
 }
 
-func (_c *MockHealthService_IsDatabaseHealthy_Call) Run(run func()) *MockHealthService_IsDatabaseHealthy_Call {
+func (_c *MockHealthService_IsDatabaseHealthy_Call) Run(run func(ctx context.Context)) *MockHealthService_IsDatabaseHealthy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -74,22 +83,22 @@ func (_c *MockHealthService_IsDatabaseHealthy_Call) Return(b bool) *MockHealthSe
 	return _c
 }
 
-func (_c *MockHealthService_IsDatabaseHealthy_Call) RunAndReturn(run func() bool) *MockHealthService_IsDatabaseHealthy_Call {
+func (_c *MockHealthService_IsDatabaseHealthy_Call) RunAndReturn(run func(ctx context.Context) bool) *MockHealthService_IsDatabaseHealthy_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // IsRealtimeHealthy provides a mock function for the type MockHealthService
-func (_mock *MockHealthService) IsRealtimeHealthy() bool {
-	ret := _mock.Called()
+func (_mock *MockHealthService) IsRealtimeHealthy(ctx context.Context) bool {
+	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for IsRealtimeHealthy")
 	}
 
 	var r0 bool
-	if returnFunc, ok := ret.Get(0).(func() bool); ok {
-		r0 = returnFunc()
+	if returnFunc, ok := ret.Get(0).(func(context.Context) bool); ok {
+		r0 = returnFunc(ctx)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
@@ -102,13 +111,20 @@ type MockHealthService_IsRealtimeHealthy_Call struct {
 }
 
 // IsRealtimeHealthy is a helper method to define mock.On call
-func (_e *MockHealthService_Expecter) IsRealtimeHealthy() *MockHealthService_IsRealtimeHealthy_Call {
-	return &MockHealthService_IsRealtimeHealthy_Call{Call: _e.mock.On("IsRealtimeHealthy")}
+//   - ctx context.Context
+func (_e *MockHealthService_Expecter) IsRealtimeHealthy(ctx interface{}) *MockHealthService_IsRealtimeHealthy_Call {
+	return &MockHealthService_IsRealtimeHealthy_Call{Call: _e.mock.On("IsRealtimeHealthy", ctx)}
 }
 
-func (_c *MockHealthService_IsRealtimeHealthy_Call) Run(run func()) *MockHealthService_IsRealtimeHealthy_Call {
+func (_c *MockHealthService_IsRealtimeHealthy_Call) Run(run func(ctx context.Context)) *MockHealthService_IsRealtimeHealthy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -118,7 +134,7 @@ func (_c *MockHealthService_IsRealtimeHealthy_Call) Return(b bool) *MockHealthSe
 	return _c
 }
 
-func (_c *MockHealthService_IsRealtimeHealthy_Call) RunAndReturn(run func() bool) *MockHealthService_IsRealtimeHealthy_Call {
+func (_c *MockHealthService_IsRealtimeHealthy_Call) RunAndReturn(run func(ctx context.Context) bool) *MockHealthService_IsRealtimeHealthy_Call {
 	_c.Call.Return(run)
 	return _c
 }

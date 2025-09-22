@@ -7,8 +7,14 @@ import (
 	"net/http"
 	"time"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
 )
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/feedback")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/feedback")
 
 type Service struct {
 	client     *http.Client
@@ -25,6 +31,9 @@ func NewFeedbackService(client *http.Client, webhookUrl string) FeedbackService 
 
 func (service *Service) Create(ctx context.Context, feedbackType string, contact string, text string) error {
 	log := logger.FromContext(ctx)
+	_, span := tracer.Start(ctx, "scrumlr.feedback.service.create")
+	defer span.End()
+
 	log.Info("Webhook URL", service.webhookUrl)
 
 	var jsonData = []byte(fmt.Sprintf(`{
@@ -49,6 +58,7 @@ func (service *Service) Create(ctx context.Context, feedbackType string, contact
 
 	_, err := service.client.Post(service.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
 
+	feedbackCreatedCounter.Add(ctx, 1)
 	return err
 }
 

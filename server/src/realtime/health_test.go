@@ -1,6 +1,7 @@
 package realtime
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -40,22 +41,24 @@ func (suite *RealtimeHealthTestSuite) TearDownSuite() {
 
 func (suite *RealtimeHealthTestSuite) Test_Nats_Healthy() {
 	t := suite.T()
+	ctx := context.Background()
 
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	healthy := broker.IsHealthy()
+	healthy := broker.IsHealthy(ctx)
 
 	assert.True(t, healthy)
 }
 
 func (suite *RealtimeHealthTestSuite) Test_Redis_Healthy() {
 	t := suite.T()
+	ctx := context.Background()
 
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	healthy := broker.IsHealthy()
+	healthy := broker.IsHealthy(ctx)
 
 	assert.True(t, healthy)
 }
@@ -71,13 +74,14 @@ func (suite *RealtimeHealthTestSuite) Test_Nats_WrongUrl() {
 
 func (suite *RealtimeHealthTestSuite) Test_Redis_WrongUrl() {
 	t := suite.T()
+	ctx := context.Background()
 
 	broker, err := NewRedis(RedisServer{Addr: "foo"})
 
 	assert.Nil(t, err)
 	assert.NotNil(t, broker)
 
-	healthy := broker.IsHealthy()
+	healthy := broker.IsHealthy(ctx)
 
 	assert.False(t, healthy)
 }

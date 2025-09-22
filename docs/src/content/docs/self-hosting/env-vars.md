@@ -271,6 +271,18 @@ This is not required.
 SCRUMLR_FEEDBACK_WEBHOOK_URL=''
 ```
 
+### OpenTelemetry
+
+To configure the backend to send logs, metrics and traces use one of the following variables
+If non of the variables is set, no logs, metrics and traces are collected.
+
+```ini
+SCRUMLR_OTEL_GRPC=''
+SCRUMLR_OTEL_HTTP=''
+```
+
+Note: If both variables are set, the grpc endpoint is used.
+
 ### Scrumlr Config Path
 
 The path to the Scrumlr configuration file.

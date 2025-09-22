@@ -102,3 +102,7 @@ disable-check-origin = true
 
 # Specify the URL for the feedback webhook.
 feedback-webhook-url = ""
+
+# Sepcify the OTel endpoint for sending logs, traces and metrics
+otel-grpc = ""
+otel-http = ""

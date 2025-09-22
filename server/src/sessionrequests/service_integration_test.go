@@ -65,7 +65,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	ws := websocket.Upgrader{
 		ReadBufferSize:  1024,
@@ -109,7 +109,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	ws := websocket.Upgrader{
 		ReadBufferSize:  1024,

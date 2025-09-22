@@ -5,6 +5,8 @@
 package reactions
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,8 +39,8 @@ func (_m *MockReactionDatabase) EXPECT() *MockReactionDatabase_Expecter {
 }
 
 // Create provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Create(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
-	ret := _mock.Called(board, insert)
+func (_mock *MockReactionDatabase) Create(ctx context.Context, board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
+	ret := _mock.Called(ctx, board, insert)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -46,16 +48,16 @@ func (_mock *MockReactionDatabase) Create(board uuid.UUID, insert DatabaseReacti
 
 	var r0 DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseReactionInsert) (DatabaseReaction, error)); ok {
-		return returnFunc(board, insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseReactionInsert) (DatabaseReaction, error)); ok {
+		return returnFunc(ctx, board, insert)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, DatabaseReactionInsert) DatabaseReaction); ok {
-		r0 = returnFunc(board, insert)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseReactionInsert) DatabaseReaction); ok {
+		r0 = returnFunc(ctx, board, insert)
 	} else {
 		r0 = ret.Get(0).(DatabaseReaction)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, DatabaseReactionInsert) error); ok {
-		r1 = returnFunc(board, insert)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, DatabaseReactionInsert) error); ok {
+		r1 = returnFunc(ctx, board, insert)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -68,25 +70,31 @@ type MockReactionDatabase_Create_Call struct {
 }
 
 // Create is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - insert DatabaseReactionInsert
-func (_e *MockReactionDatabase_Expecter) Create(board interface{}, insert interface{}) *MockReactionDatabase_Create_Call {
-	return &MockReactionDatabase_Create_Call{Call: _e.mock.On("Create", board, insert)}
+func (_e *MockReactionDatabase_Expecter) Create(ctx interface{}, board interface{}, insert interface{}) *MockReactionDatabase_Create_Call {
+	return &MockReactionDatabase_Create_Call{Call: _e.mock.On("Create", ctx, board, insert)}
 }
 
-func (_c *MockReactionDatabase_Create_Call) Run(run func(board uuid.UUID, insert DatabaseReactionInsert)) *MockReactionDatabase_Create_Call {
+func (_c *MockReactionDatabase_Create_Call) Run(run func(ctx context.Context, board uuid.UUID, insert DatabaseReactionInsert)) *MockReactionDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 DatabaseReactionInsert
+		var arg1 uuid.UUID
 		if args[1] != nil {
-			arg1 = args[1].(DatabaseReactionInsert)
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 DatabaseReactionInsert
+		if args[2] != nil {
+			arg2 = args[2].(DatabaseReactionInsert)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -97,22 +105,22 @@ func (_c *MockReactionDatabase_Create_Call) Return(databaseReaction DatabaseReac
 	return _c
 }
 
-func (_c *MockReactionDatabase_Create_Call) RunAndReturn(run func(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error)) *MockReactionDatabase_Create_Call {
+func (_c *MockReactionDatabase_Create_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error)) *MockReactionDatabase_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Delete provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Delete(board uuid.UUID, user uuid.UUID, id uuid.UUID) error {
-	ret := _mock.Called(board, user, id)
+func (_mock *MockReactionDatabase) Delete(ctx context.Context, id uuid.UUID) error {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(board, user, id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -125,31 +133,25 @@ type MockReactionDatabase_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockReactionDatabase_Expecter) Delete(board interface{}, user interface{}, id interface{}) *MockReactionDatabase_Delete_Call {
-	return &MockReactionDatabase_Delete_Call{Call: _e.mock.On("Delete", board, user, id)}
+func (_e *MockReactionDatabase_Expecter) Delete(ctx interface{}, id interface{}) *MockReactionDatabase_Delete_Call {
+	return &MockReactionDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
-func (_c *MockReactionDatabase_Delete_Call) Run(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID)) *MockReactionDatabase_Delete_Call {
+func (_c *MockReactionDatabase_Delete_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockReactionDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
 		run(
 			arg0,
 			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -160,14 +162,14 @@ func (_c *MockReactionDatabase_Delete_Call) Return(err error) *MockReactionDatab
 	return _c
 }
 
-func (_c *MockReactionDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID) error) *MockReactionDatabase_Delete_Call {
+func (_c *MockReactionDatabase_Delete_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) error) *MockReactionDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Get provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Get(id uuid.UUID) (DatabaseReaction, error) {
-	ret := _mock.Called(id)
+func (_mock *MockReactionDatabase) Get(ctx context.Context, id uuid.UUID) (DatabaseReaction, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -175,16 +177,16 @@ func (_mock *MockReactionDatabase) Get(id uuid.UUID) (DatabaseReaction, error) {
 
 	var r0 DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (DatabaseReaction, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (DatabaseReaction, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) DatabaseReaction); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) DatabaseReaction); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseReaction)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -197,19 +199,25 @@ type MockReactionDatabase_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockReactionDatabase_Expecter) Get(id interface{}) *MockReactionDatabase_Get_Call {
-	return &MockReactionDatabase_Get_Call{Call: _e.mock.On("Get", id)}
+func (_e *MockReactionDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockReactionDatabase_Get_Call {
+	return &MockReactionDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
-func (_c *MockReactionDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockReactionDatabase_Get_Call {
+func (_c *MockReactionDatabase_Get_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockReactionDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -220,14 +228,14 @@ func (_c *MockReactionDatabase_Get_Call) Return(databaseReaction DatabaseReactio
 	return _c
 }
 
-func (_c *MockReactionDatabase_Get_Call) RunAndReturn(run func(id uuid.UUID) (DatabaseReaction, error)) *MockReactionDatabase_Get_Call {
+func (_c *MockReactionDatabase_Get_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (DatabaseReaction, error)) *MockReactionDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) GetAll(board uuid.UUID) ([]DatabaseReaction, error) {
-	ret := _mock.Called(board)
+func (_mock *MockReactionDatabase) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseReaction, error) {
+	ret := _mock.Called(ctx, board)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAll")
@@ -235,18 +243,18 @@ func (_mock *MockReactionDatabase) GetAll(board uuid.UUID) ([]DatabaseReaction, 
 
 	var r0 []DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseReaction, error)); ok {
-		return returnFunc(board)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseReaction, error)); ok {
+		return returnFunc(ctx, board)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseReaction); ok {
-		r0 = returnFunc(board)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseReaction); ok {
+		r0 = returnFunc(ctx, board)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseReaction)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(board)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -259,19 +267,25 @@ type MockReactionDatabase_GetAll_Call struct {
 }
 
 // GetAll is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockReactionDatabase_Expecter) GetAll(board interface{}) *MockReactionDatabase_GetAll_Call {
-	return &MockReactionDatabase_GetAll_Call{Call: _e.mock.On("GetAll", board)}
+func (_e *MockReactionDatabase_Expecter) GetAll(ctx interface{}, board interface{}) *MockReactionDatabase_GetAll_Call {
+	return &MockReactionDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
-func (_c *MockReactionDatabase_GetAll_Call) Run(run func(board uuid.UUID)) *MockReactionDatabase_GetAll_Call {
+func (_c *MockReactionDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockReactionDatabase_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -282,14 +296,14 @@ func (_c *MockReactionDatabase_GetAll_Call) Return(databaseReactions []DatabaseR
 	return _c
 }
 
-func (_c *MockReactionDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID) ([]DatabaseReaction, error)) *MockReactionDatabase_GetAll_Call {
+func (_c *MockReactionDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID) ([]DatabaseReaction, error)) *MockReactionDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAllForNote provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) GetAllForNote(note uuid.UUID) ([]DatabaseReaction, error) {
-	ret := _mock.Called(note)
+func (_mock *MockReactionDatabase) GetAllForNote(ctx context.Context, note uuid.UUID) ([]DatabaseReaction, error) {
+	ret := _mock.Called(ctx, note)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAllForNote")
@@ -297,18 +311,18 @@ func (_mock *MockReactionDatabase) GetAllForNote(note uuid.UUID) ([]DatabaseReac
 
 	var r0 []DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseReaction, error)); ok {
-		return returnFunc(note)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseReaction, error)); ok {
+		return returnFunc(ctx, note)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseReaction); ok {
-		r0 = returnFunc(note)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseReaction); ok {
+		r0 = returnFunc(ctx, note)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseReaction)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(note)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, note)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -321,19 +335,25 @@ type MockReactionDatabase_GetAllForNote_Call struct {
 }
 
 // GetAllForNote is a helper method to define mock.On call
+//   - ctx context.Context
 //   - note uuid.UUID
-func (_e *MockReactionDatabase_Expecter) GetAllForNote(note interface{}) *MockReactionDatabase_GetAllForNote_Call {
-	return &MockReactionDatabase_GetAllForNote_Call{Call: _e.mock.On("GetAllForNote", note)}
+func (_e *MockReactionDatabase_Expecter) GetAllForNote(ctx interface{}, note interface{}) *MockReactionDatabase_GetAllForNote_Call {
+	return &MockReactionDatabase_GetAllForNote_Call{Call: _e.mock.On("GetAllForNote", ctx, note)}
 }
 
-func (_c *MockReactionDatabase_GetAllForNote_Call) Run(run func(note uuid.UUID)) *MockReactionDatabase_GetAllForNote_Call {
+func (_c *MockReactionDatabase_GetAllForNote_Call) Run(run func(ctx context.Context, note uuid.UUID)) *MockReactionDatabase_GetAllForNote_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -344,14 +364,14 @@ func (_c *MockReactionDatabase_GetAllForNote_Call) Return(databaseReactions []Da
 	return _c
 }
 
-func (_c *MockReactionDatabase_GetAllForNote_Call) RunAndReturn(run func(note uuid.UUID) ([]DatabaseReaction, error)) *MockReactionDatabase_GetAllForNote_Call {
+func (_c *MockReactionDatabase_GetAllForNote_Call) RunAndReturn(run func(ctx context.Context, note uuid.UUID) ([]DatabaseReaction, error)) *MockReactionDatabase_GetAllForNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Update provides a mock function for the type MockReactionDatabase
-func (_mock *MockReactionDatabase) Update(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
-	ret := _mock.Called(board, user, id, update)
+func (_mock *MockReactionDatabase) Update(ctx context.Context, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
+	ret := _mock.Called(ctx, id, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -359,16 +379,16 @@ func (_mock *MockReactionDatabase) Update(board uuid.UUID, user uuid.UUID, id uu
 
 	var r0 DatabaseReaction
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) (DatabaseReaction, error)); ok {
-		return returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseReactionUpdate) (DatabaseReaction, error)); ok {
+		return returnFunc(ctx, id, update)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) DatabaseReaction); ok {
-		r0 = returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseReactionUpdate) DatabaseReaction); ok {
+		r0 = returnFunc(ctx, id, update)
 	} else {
 		r0 = ret.Get(0).(DatabaseReaction)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID, uuid.UUID, DatabaseReactionUpdate) error); ok {
-		r1 = returnFunc(board, user, id, update)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, DatabaseReactionUpdate) error); ok {
+		r1 = returnFunc(ctx, id, update)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -381,37 +401,31 @@ type MockReactionDatabase_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
+//   - ctx context.Context
 //   - id uuid.UUID
 //   - update DatabaseReactionUpdate
-func (_e *MockReactionDatabase_Expecter) Update(board interface{}, user interface{}, id interface{}, update interface{}) *MockReactionDatabase_Update_Call {
-	return &MockReactionDatabase_Update_Call{Call: _e.mock.On("Update", board, user, id, update)}
+func (_e *MockReactionDatabase_Expecter) Update(ctx interface{}, id interface{}, update interface{}) *MockReactionDatabase_Update_Call {
+	return &MockReactionDatabase_Update_Call{Call: _e.mock.On("Update", ctx, id, update)}
 }
 
-func (_c *MockReactionDatabase_Update_Call) Run(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate)) *MockReactionDatabase_Update_Call {
+func (_c *MockReactionDatabase_Update_Call) Run(run func(ctx context.Context, id uuid.UUID, update DatabaseReactionUpdate)) *MockReactionDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 uuid.UUID
+		var arg2 DatabaseReactionUpdate
 		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
-		var arg3 DatabaseReactionUpdate
-		if args[3] != nil {
-			arg3 = args[3].(DatabaseReactionUpdate)
+			arg2 = args[2].(DatabaseReactionUpdate)
 		}
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3,
 		)
 	})
 	return _c
@@ -422,7 +436,7 @@ func (_c *MockReactionDatabase_Update_Call) Return(databaseReaction DatabaseReac
 	return _c
 }
 
-func (_c *MockReactionDatabase_Update_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)) *MockReactionDatabase_Update_Call {
+func (_c *MockReactionDatabase_Update_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)) *MockReactionDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

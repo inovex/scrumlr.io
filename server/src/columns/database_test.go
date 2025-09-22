@@ -1,6 +1,7 @@
 package columns
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"testing"
@@ -49,7 +50,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 	visible := true
 	index := 0
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -71,7 +72,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 	visible := true
 	index := 0
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -94,7 +95,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 	index := -1
 	expectedIndex := 0
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -116,7 +117,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -139,7 +140,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 	index := 99
 	expectedIndex := 1
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -161,7 +162,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -183,7 +184,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumn{}, dbColumn)
@@ -199,7 +200,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyColor() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: "", Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: "", Visible: &visible, Index: &index})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumn{}, dbColumn)
@@ -217,7 +218,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Update() {
 	visible := false
 	index := 1
 
-	dbColumn, err := database.Update(DatabaseColumnUpdate{ID: columnId, Board: boardId, Name: name, Description: description, Color: color, Visible: visible, Index: index})
+	dbColumn, err := database.Update(context.Background(), DatabaseColumnUpdate{ID: columnId, Board: boardId, Name: name, Description: description, Color: color, Visible: visible, Index: index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, columnId, dbColumn.ID)
@@ -236,7 +237,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Delete() {
 	columnId := suite.columns["Delete"].ID
 	boardId := suite.columns["Delete"].Board
 
-	err := database.Delete(boardId, columnId)
+	err := database.Delete(context.Background(), boardId, columnId)
 
 	assert.Nil(t, err)
 }
@@ -248,7 +249,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Get() {
 	columnId := suite.columns["Read1"].ID
 	boardId := suite.columns["Read1"].Board
 
-	dbColumn, err := database.Get(boardId, columnId)
+	dbColumn, err := database.Get(context.Background(), boardId, columnId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, columnId, dbColumn.ID)
@@ -267,7 +268,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Get_NotFound_Column() {
 	columnId := uuid.New()
 	boardId := suite.columns["Read1"].Board
 
-	dbColumn, err := database.Get(boardId, columnId)
+	dbColumn, err := database.Get(context.Background(), boardId, columnId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -281,7 +282,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Get_NotFound_Board() {
 	columnId := suite.columns["Read1"].ID
 	boardId := uuid.New()
 
-	dbColumn, err := database.Get(boardId, columnId)
+	dbColumn, err := database.Get(context.Background(), boardId, columnId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -294,7 +295,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	dbColumns, err := database.GetAll(boardId)
+	dbColumns, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbColumns, 3)
@@ -330,7 +331,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_GetAll_NotFound() {
 
 	boardId := uuid.New()
 
-	dbColumns, err := database.GetAll(boardId)
+	dbColumns, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbColumns, 0)

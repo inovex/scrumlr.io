@@ -1,6 +1,7 @@
 package realtime
 
 import (
+	"context"
 	"testing"
 
 	"github.com/google/uuid"
@@ -43,15 +44,16 @@ func (suite *RealtimeBoardTestSuite) TearDownSuite() {
 
 func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendNil() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{Type: BoardEventInit, Data: nil})
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: nil})
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -62,15 +64,16 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendNil() {
 
 func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendNil() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{Type: BoardEventInit, Data: nil})
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: nil})
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -81,15 +84,16 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendNil() {
 
 func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendData() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -101,15 +105,16 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendData() {
 
 func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendData() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -121,15 +126,16 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendData() {
 
 func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendComplexData() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{
 		Type: BoardEventInit,
 		Data: struct {
 			More    string
@@ -160,15 +166,16 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendComplexData() {
 
 func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendComplexData() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(boardId)
+	eventChannel := broker.GetBoardChannel(ctx, boardId)
 
-	err = broker.BroadcastToBoard(boardId, BoardEvent{
+	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{
 		Type: BoardEventInit,
 		Data: struct {
 			More    string

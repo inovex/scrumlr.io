@@ -1,6 +1,7 @@
 package realtime
 
 import (
+	"context"
 	"testing"
 
 	"github.com/google/uuid"
@@ -41,6 +42,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) TearDownSuite() {
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Accepted() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -49,9 +51,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -61,6 +63,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Accepted() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -69,9 +72,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -81,6 +84,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Rejected() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -89,9 +93,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -101,6 +105,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Rejected() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -109,9 +114,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -121,6 +126,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Undefined() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -129,9 +135,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel
@@ -141,6 +147,7 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 
 func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Undefined() {
 	t := suite.T()
+	ctx := context.Background()
 
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -149,9 +156,9 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
 
-	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
 
 	event := <-eventChannel

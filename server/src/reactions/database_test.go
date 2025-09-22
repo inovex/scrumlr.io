@@ -1,8 +1,7 @@
 package reactions
 
 import (
-	"database/sql"
-	"errors"
+	"context"
 	"log"
 	"testing"
 
@@ -53,7 +52,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction() {
 		ReactionType: Like,
 	}
 
-	dbReaction, err := database.Create(suite.boards["Write"].id, reaction)
+	dbReaction, err := database.Create(context.Background(), suite.boards["Write"].id, reaction)
 
 	assert.Nil(t, err)
 	assert.Equal(t, reaction.Note, dbReaction.Note)
@@ -61,31 +60,13 @@ func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction() {
 	assert.Equal(t, reaction.ReactionType, dbReaction.ReactionType)
 }
 
-func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction_MultipleReaction() {
-	t := suite.T()
-	database := NewReactionsDatabase(suite.db)
-
-	reactionInsert := DatabaseReactionInsert{
-		Note:         suite.notes["Update"].id,
-		User:         suite.users["Santa"].id,
-		ReactionType: Like,
-	}
-
-	dbReaction, err := database.Create(suite.boards["Write"].id, reactionInsert)
-
-	assert.Equal(t, DatabaseReaction{}, dbReaction)
-	assert.Equal(t, errors.New("cannot make multiple reactions on the same note by the same user"), err)
-}
-
 func (suite *DatabaseReactionTestSuite) Test_Database_Delete() {
 	t := suite.T()
 	database := NewReactionsDatabase(suite.db)
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
 	reactionId := suite.reactions["Delete"].ID
 
-	err := database.Delete(boardId, userId, reactionId)
+	err := database.Delete(context.Background(), reactionId)
 
 	assert.Nil(t, err)
 }
@@ -94,35 +75,17 @@ func (suite *DatabaseReactionTestSuite) Test_Database_Delete_NotFound() {
 	t := suite.T()
 	database := NewReactionsDatabase(suite.db)
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
 	reactionId := uuid.New()
 
-	err := database.Delete(boardId, userId, reactionId)
+	err := database.Delete(context.Background(), reactionId)
 
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-}
-
-func (suite *DatabaseReactionTestSuite) Test_Database_Delete_UserError() {
-	t := suite.T()
-	database := NewReactionsDatabase(suite.db)
-
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
-	reactionId := suite.reactions["Update"].ID
-
-	err := database.Delete(boardId, userId, reactionId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+	assert.Nil(t, err)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_Update() {
 	t := suite.T()
 	database := NewReactionsDatabase(suite.db)
 
-	boardId := suite.boards["Write"].id
 	userId := suite.users["Santa"].id
 	noteId := suite.notes["Update"].id
 	reactionId := suite.reactions["Update"].ID
@@ -134,7 +97,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_Update() {
 		ReactionType: Poop,
 	}
 
-	dbReaction, err := database.Update(boardId, userId, reactionId, DatabaseReactionUpdate{ReactionType: Poop})
+	dbReaction, err := database.Update(context.Background(), reactionId, DatabaseReactionUpdate{ReactionType: Poop})
 
 	assert.Nil(t, err)
 	assert.Equal(t, reaction.ID, dbReaction.ID)
@@ -147,30 +110,12 @@ func (suite *DatabaseReactionTestSuite) Test_Database_Update_NotFound() {
 	t := suite.T()
 	database := NewReactionsDatabase(suite.db)
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Santa"].id
 	reactionId := uuid.New()
 
-	dbReaction, err := database.Update(boardId, userId, reactionId, DatabaseReactionUpdate{ReactionType: Poop})
+	dbReaction, err := database.Update(context.Background(), reactionId, DatabaseReactionUpdate{ReactionType: Poop})
 
 	assert.Equal(t, DatabaseReaction{}, dbReaction)
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-}
-
-func (suite *DatabaseReactionTestSuite) Test_Database_Update_UserError() {
-	t := suite.T()
-	database := NewReactionsDatabase(suite.db)
-
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
-	reactionId := suite.reactions["Update"].ID
-
-	dbReaction, err := database.Update(boardId, userId, reactionId, DatabaseReactionUpdate{ReactionType: Poop})
-
-	assert.Equal(t, DatabaseReaction{}, dbReaction)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+	assert.Nil(t, err)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_GetReaction() {
@@ -179,7 +124,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetReaction() {
 
 	reactionId := suite.reactions["Get1"].ID
 
-	dbReaction, err := database.Get(reactionId)
+	dbReaction, err := database.Get(context.Background(), reactionId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, suite.reactions["Get1"].ID, dbReaction.ID)
@@ -194,7 +139,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	dbReactions, err := database.GetAll(boardId)
+	dbReactions, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbReactions, 3)
@@ -227,7 +172,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetAllForNote() {
 
 	noteId := suite.notes["Read1"].id
 
-	dbReactions, err := database.GetAllForNote(noteId)
+	dbReactions, err := database.GetAllForNote(context.Background(), noteId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbReactions, 2)

@@ -1,6 +1,7 @@
 package health
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -35,7 +36,7 @@ func (suite *DatabaseHealthTestSuite) Test_Database_IsHealthy() {
 	t := suite.T()
 	database := NewHealthDatabase(suite.db)
 
-	healthy := database.IsHealthy()
+	healthy := database.IsHealthy(context.Background())
 
 	assert.True(t, healthy)
 }

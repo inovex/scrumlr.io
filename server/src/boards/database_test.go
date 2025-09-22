@@ -1,6 +1,7 @@
 package boards
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"log"
@@ -51,7 +52,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -76,7 +77,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_PublicWithPassphrase()
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public, Passphrase: &passphrase},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -98,7 +99,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_PublicWithSalt() {
 	description := "This board was inserted"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public, Salt: &salt},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -121,7 +122,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 	passphrase := "This is a super secret passphrase"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Passphrase: &passphrase, Salt: &salt},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -146,7 +147,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_PassphraseWithoutPassp
 	description := "This board was inserted"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Salt: &salt},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -168,7 +169,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_PassphraseWithoutSalt(
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Passphrase: &passphrase},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -189,7 +190,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -214,7 +215,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInviteWithPassphrase
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite, Passphrase: &passphrase},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -236,7 +237,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInviteWithSalt() {
 	description := "This board was inserted"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(userId,
+	dbBoard, err := database.CreateBoard(context.Background(), userId,
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite, Salt: &salt},
 		[]columns.DatabaseColumnInsert{
 			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
@@ -265,7 +266,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -308,7 +309,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase_With
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -341,7 +342,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase_With
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -373,7 +374,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -414,7 +415,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic_With
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -447,7 +448,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic_With
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -479,7 +480,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -512,7 +513,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(DatabaseBoardUpdate{
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -539,7 +540,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	startTime := time.Now().UTC().Round(time.Millisecond)
 	endTime := startTime.Add(time.Minute * 2)
 
-	dbBoard, err := database.UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
+	dbBoard, err := database.UpdateBoardTimer(context.Background(), DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -553,7 +554,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Delete() {
 
 	boardId := suite.boards["Delete"].ID
 
-	err := database.DeleteBoard(boardId)
+	err := database.DeleteBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 }
@@ -564,7 +565,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get() {
 
 	boardId := suite.boards["Read1"].ID
 
-	dbBoard, err := database.GetBoard(boardId)
+	dbBoard, err := database.GetBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -589,7 +590,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get_NotFound() {
 
 	boardId := uuid.New()
 
-	dbBoard, err := database.GetBoard(boardId)
+	dbBoard, err := database.GetBoard(context.Background(), boardId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -602,12 +603,12 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 
 	userId := suite.users["Stan"].id
 
-	dbBoards, err := database.GetBoards(userId)
+	dbBoards, err := database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 2)
 
-	firstBoard := checkBoardInList(dbBoards, suite.boards["Read1"].ID)
+	firstBoard := checkDbBoardInList(dbBoards, suite.boards["Read1"].ID)
 	assert.NotNil(t, firstBoard)
 	assert.Equal(t, suite.boards["Read1"].ID, firstBoard.ID)
 	assert.Equal(t, suite.boards["Read1"].Name, firstBoard.Name)
@@ -619,7 +620,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	assert.Equal(t, suite.boards["Read1"].AllowStacking, firstBoard.AllowStacking)
 	assert.Equal(t, suite.boards["Read1"].IsLocked, firstBoard.IsLocked)
 
-	secondBoard := checkBoardInList(dbBoards, suite.boards["Read2"].ID)
+	secondBoard := checkDbBoardInList(dbBoards, suite.boards["Read2"].ID)
 	assert.NotNil(t, secondBoard)
 	assert.Equal(t, suite.boards["Read2"].ID, secondBoard.ID)
 	assert.Equal(t, suite.boards["Read2"].Name, secondBoard.Name)
@@ -638,7 +639,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser_NotFound() {
 
 	userId := uuid.New()
 
-	dbBoards, err := database.GetBoards(userId)
+	dbBoards, err := database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 0)
@@ -721,7 +722,7 @@ func (suite *DatabaseBoardTestSuite) SeedDatabase(db *bun.DB) {
 	}
 }
 
-func checkBoardInList(list []DatabaseBoard, id uuid.UUID) *DatabaseBoard {
+func checkDbBoardInList(list []DatabaseBoard, id uuid.UUID) *DatabaseBoard {
 	for _, board := range list {
 		if board.ID == id {
 			return &board

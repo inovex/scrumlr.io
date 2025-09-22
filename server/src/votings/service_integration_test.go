@@ -177,7 +177,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	database := NewVotingDatabase(suite.db)
 	service := NewVotingService(database, broker)
@@ -242,7 +242,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	database := NewVotingDatabase(suite.db)
 	service := NewVotingService(database, broker)

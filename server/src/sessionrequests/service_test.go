@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/sessions"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -23,7 +24,7 @@ func TestGetSessionRequest(t *testing.T) {
 	userId := uuid.New()
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
+	mockSessionRequestDb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -49,7 +50,7 @@ func TestGetSessionRequest_NotFound(t *testing.T) {
 	dbError := "Not found"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
+	mockSessionRequestDb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -75,7 +76,7 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	query := ""
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetAll(boardId).
+	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId).
 		Return([]DatabaseBoardSessionRequest{
 			{bun.BaseModel{}, boardId, firstUserId, "Test1", RequestAccepted, time.Now()},
 			{bun.BaseModel{}, boardId, secondUserId, "Test2", RequestPending, time.Now()},
@@ -109,7 +110,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	query := ""
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetAll(boardId).
+	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId).
 		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
 
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -135,7 +136,7 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	query := "PENDING"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetAll(boardId, []RequestStatus{RequestPending}).
+	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId, []RequestStatus{RequestPending}).
 		Return([]DatabaseBoardSessionRequest{
 			{Board: boardId, User: firstUserId, Name: "Test1", Status: RequestPending, CreatedAt: time.Now()},
 			{Board: boardId, User: secondUserId, Name: "Test2", Status: RequestPending, CreatedAt: time.Now()},
@@ -169,7 +170,7 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	query := "ACCEPTED"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetAll(boardId, []RequestStatus{RequestAccepted}).
+	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId, []RequestStatus{RequestAccepted}).
 		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
 
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -215,13 +216,13 @@ func TestCreateSessionRequest(t *testing.T) {
 	userId := uuid.New()
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
+	mockSessionRequestDb.EXPECT().Create(mock.Anything, DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
 		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId}, nil)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -241,7 +242,7 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 	dbError := "Failed to execute"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
+	mockSessionRequestDb.EXPECT().Create(mock.Anything, DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
 		Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
 
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -268,15 +269,15 @@ func TestUpdatesessionRequest(t *testing.T) {
 		ID: userId,
 	}
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
+	mockSessionRequestDb.EXPECT().Update(mock.Anything, DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
 		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
 
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().Create(context.Background(), boardId, userId).
+	mockSessionService.EXPECT().Create(mock.Anything, boardId, userId).
 		Return(&sessions.BoardSession{Board: boardId, User: user}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -296,7 +297,7 @@ func TestUpdatesessionRequest_DBError(t *testing.T) {
 	dbError := "Failed to execute"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
+	mockSessionRequestDb.EXPECT().Update(mock.Anything, DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
 		Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
 
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -320,7 +321,7 @@ func TestSessionRequestExists(t *testing.T) {
 	userId := uuid.New()
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Exists(boardId, userId).Return(true, nil)
+	mockSessionRequestDb.EXPECT().Exists(mock.Anything, boardId, userId).Return(true, nil)
 	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -342,7 +343,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	dbError := "database error"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Exists(boardId, userId).Return(false, errors.New(dbError))
+	mockSessionRequestDb.EXPECT().Exists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
 	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -373,7 +374,7 @@ func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 	mockWebSocket.EXPECT().OpenSocket(mock.Anything, mock.Anything)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	service.OpenSocket(mockResponseWriter, mockRequest)
+	service.OpenSocket(context.Background(), mockResponseWriter, mockRequest)
 
 	mockWebSocket.AssertCalled(t, "OpenSocket", mockResponseWriter, mockRequest)
 }

@@ -1,9 +1,11 @@
 package realtime
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/codes"
 
 	"scrumlr.io/server/logger"
 )
@@ -41,16 +43,26 @@ type BoardEvent struct {
 	Data interface{}    `json:"data,omitempty"`
 }
 
-func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
-	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
-	return b.Con.Publish(boardsSubject(boardID), msg)
+func (b *Broker) BroadcastToBoard(ctx context.Context, boardID uuid.UUID, msg BoardEvent) error {
+	ctx, span := tracer.Start(ctx, "scrumlr.realtime.board.broadcast")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	log.Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
+	return b.Con.Publish(ctx, boardsSubject(boardID), msg)
 }
 
-func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
-	c, err := b.Con.SubscribeToBoardEvents(boardsSubject(boardID))
+func (b *Broker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) chan *BoardEvent {
+	ctx, span := tracer.Start(ctx, "scrumlr.realtime.board.subscribe")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	c, err := b.Con.SubscribeToBoardEvents(ctx, boardsSubject(boardID))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
-		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
+		span.SetStatus(codes.Error, "failed to subscribe to board channel")
+		span.RecordError(err)
+		log.Errorw("failed to subscribe to BoardChannel", "err", err)
 	}
 	return c
 }

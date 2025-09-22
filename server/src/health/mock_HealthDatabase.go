@@ -5,6 +5,8 @@
 package health
 
 import (
+	"context"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -36,16 +38,16 @@ func (_m *MockHealthDatabase) EXPECT() *MockHealthDatabase_Expecter {
 }
 
 // IsHealthy provides a mock function for the type MockHealthDatabase
-func (_mock *MockHealthDatabase) IsHealthy() bool {
-	ret := _mock.Called()
+func (_mock *MockHealthDatabase) IsHealthy(ctx context.Context) bool {
+	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for IsHealthy")
 	}
 
 	var r0 bool
-	if returnFunc, ok := ret.Get(0).(func() bool); ok {
-		r0 = returnFunc()
+	if returnFunc, ok := ret.Get(0).(func(context.Context) bool); ok {
+		r0 = returnFunc(ctx)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
@@ -58,13 +60,20 @@ type MockHealthDatabase_IsHealthy_Call struct {
 }
 
 // IsHealthy is a helper method to define mock.On call
-func (_e *MockHealthDatabase_Expecter) IsHealthy() *MockHealthDatabase_IsHealthy_Call {
-	return &MockHealthDatabase_IsHealthy_Call{Call: _e.mock.On("IsHealthy")}
+//   - ctx context.Context
+func (_e *MockHealthDatabase_Expecter) IsHealthy(ctx interface{}) *MockHealthDatabase_IsHealthy_Call {
+	return &MockHealthDatabase_IsHealthy_Call{Call: _e.mock.On("IsHealthy", ctx)}
 }
 
-func (_c *MockHealthDatabase_IsHealthy_Call) Run(run func()) *MockHealthDatabase_IsHealthy_Call {
+func (_c *MockHealthDatabase_IsHealthy_Call) Run(run func(ctx context.Context)) *MockHealthDatabase_IsHealthy_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -74,7 +83,7 @@ func (_c *MockHealthDatabase_IsHealthy_Call) Return(b bool) *MockHealthDatabase_
 	return _c
 }
 
-func (_c *MockHealthDatabase_IsHealthy_Call) RunAndReturn(run func() bool) *MockHealthDatabase_IsHealthy_Call {
+func (_c *MockHealthDatabase_IsHealthy_Call) RunAndReturn(run func(ctx context.Context) bool) *MockHealthDatabase_IsHealthy_Call {
 	_c.Call.Return(run)
 	return _c
 }

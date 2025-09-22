@@ -29,6 +29,8 @@ import (
 	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
 
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
@@ -104,6 +106,7 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(otelhttp.NewMiddleware("scrumlr"))
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
