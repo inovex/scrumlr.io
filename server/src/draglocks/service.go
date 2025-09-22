@@ -1,10 +1,10 @@
 package draglocks
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 	"scrumlr.io/server/realtime"
 )
 
@@ -31,6 +31,6 @@ type DragLockService interface {
 }
 
 // InitializeDatabaseLockService creates a database-backed drag lock service
-func InitializeDatabaseLockService(db *sql.DB, rt *realtime.Broker) DragLockService {
+func InitializeDatabaseLockService(db *bun.DB, rt *realtime.Broker) DragLockService {
 	return NewDatabaseDragLockService(db, rt)
 }
