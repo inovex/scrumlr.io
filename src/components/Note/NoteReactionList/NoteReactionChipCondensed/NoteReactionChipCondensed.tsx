@@ -1,10 +1,9 @@
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {REACTION_EMOJI_MAP} from "store/features/reactions/types";
+import {getEmojiDisplay, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import {useAppSelector} from "store";
-import {getEmojiWithSkinTone} from "utils/reactions";
+import {Emoji} from "emoji-picker-react";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 
@@ -18,15 +17,17 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const {noteId} = props.reactions[0];
   // filter out own reaction if exists.
   const reactionsFiltered = props.reactions.filter((r) => !r.myReactionId);
-  const reactionImages = reactionsFiltered.map((r) => REACTION_EMOJI_MAP.get(r.reactionType));
+  const reactionDisplays = reactionsFiltered.map((r) => ({
+    display: getEmojiDisplay(r.reactionType),
+    legacyReaction: LEGACY_REACTION_EMOJI_MAP.get(r.reactionType),
+    reactionType: r.reactionType,
+  }));
   // result example: [0]: "User 1, User 2: laughingEmoji"
   //                 [1]: "User 3: heartEmoji"
-  const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${REACTION_EMOJI_MAP.get(r.reactionType)}`);
+  const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${getEmojiDisplay(r.reactionType)}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
   const anchorId = uniqueId(`reactions-${noteId}-condensed`);
-
-  const skinTone = useAppSelector((state) => state.skinTone);
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -43,9 +44,9 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         {...bindLongPress()}
       >
         <div className="note-reaction-chip-condensed__reactions-container">
-          {reactionImages.map((emoji) => (
-            <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
-              {getEmojiWithSkinTone(emoji!, skinTone)}
+          {reactionDisplays.map((reaction) => (
+            <div className="note-reaction-chip-condensed__reaction" key={`reaction-${reaction.reactionType}`}>
+              {reaction.legacyReaction ? <Emoji unified={reaction.legacyReaction.unified} size={14} /> : reaction.display}
             </div>
           ))}
         </div>
