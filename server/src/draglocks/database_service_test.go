@@ -7,46 +7,32 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 
-	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/realtime"
 )
 
 type DatabaseDragLockTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	service   DragLockService
+	db      *bun.DB
+	service DragLockService
 }
 
 func TestDatabaseDragLockTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseDragLockTestSuite))
 }
 
-func (suite *DatabaseDragLockTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.container = container
-	suite.db = bun
+func (suite *DatabaseDragLockTestSuite) SetupTest() {
+	db := testDbTemplates.NewBaseTestDB(suite.T(), false)
+	suite.db = db
 
 	// Create mock realtime broker
 	mockClient := realtime.NewMockClient(suite.T())
-	mockClient.On("Publish", mock.Anything, mock.Anything).Return(nil).Maybe()
+	mockClient.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Maybe()
 	mockRealtime := &realtime.Broker{Con: mockClient}
 
 	suite.service = NewDatabaseDragLockService(suite.db.DB, mockRealtime)
-}
-
-func (suite *DatabaseDragLockTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
-}
-
-func (suite *DatabaseDragLockTestSuite) SetupTest() {
-	// Clean drag_locks table before each test
-	_, err := suite.db.DB.Exec("DELETE FROM drag_locks")
-	suite.Require().NoError(err)
 }
 
 func (suite *DatabaseDragLockTestSuite) TestAcquireLock() {

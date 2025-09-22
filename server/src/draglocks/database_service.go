@@ -276,7 +276,7 @@ func (s *DatabaseService) broadcastLockEvent(boardID uuid.UUID, eventType realti
 		},
 	}
 
-	err := s.realtime.BroadcastToBoard(boardID, event)
+	err := s.realtime.BroadcastToBoard(context.Background(), boardID, event)
 	if err != nil {
 		logger.Get().Errorw("failed to broadcast lock event", "eventType", eventType, "noteId", noteID, "error", err)
 	}

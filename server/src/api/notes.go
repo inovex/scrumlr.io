@@ -206,7 +206,7 @@ func (s *Server) updateNoteDragState(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Broadcast drag state change event
-	_ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(r.Context(), boardID, realtime.BoardEvent{
 		Type: eventType,
 		Data: map[string]string{
 			"noteId": noteID.String(),

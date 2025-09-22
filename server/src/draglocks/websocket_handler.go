@@ -11,7 +11,7 @@ import (
 
 // WebSocketConnection interface for testability
 type WebSocketConnection interface {
-	WriteJSON(v interface{}) error
+	WriteJSON(ctx context.Context, v interface{}) error
 }
 
 // HandleWebSocketMessage processes a drag lock WebSocket message
@@ -111,7 +111,7 @@ func ReleaseUserLocks(ctx context.Context, service DragLockService, rt *realtime
 
 // sendResponse sends a response message to a WebSocket connection
 func sendResponse(conn WebSocketConnection, response DragLockResponse) {
-	if err := conn.WriteJSON(response); err != nil {
+	if err := conn.WriteJSON(context.Background(), response); err != nil {
 		logger.Get().Errorw("failed to send drag lock response", "error", err, "response", response)
 	}
 }
@@ -126,7 +126,7 @@ func broadcastLockEvent(rt *realtime.Broker, boardID uuid.UUID, eventType realti
 		},
 	}
 
-	err := rt.BroadcastToBoard(boardID, event)
+	err := rt.BroadcastToBoard(context.Background(), boardID, event)
 	if err != nil {
 		logger.Get().Errorw("failed to broadcast lock event", "eventType", eventType, "noteId", noteID, "error", err)
 	}
