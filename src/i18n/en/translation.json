@@ -30,7 +30,7 @@
       "column_other": "{{count}} Columns",
       "start": "Start",
       "save": "Save",
-      "signInToCreateBoards": "To create a board, please sign in with your Google or Microsoft account."
+      "signInToCreateBoards": "To create a board, sign in using an identity provider."
     },
     "TemplateEditor": {
       "createTitle": "Create a Template",
