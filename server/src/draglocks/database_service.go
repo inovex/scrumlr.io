@@ -2,23 +2,23 @@ package draglocks
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 // DatabaseService manages drag locks using PostgreSQL and NATS
 type DatabaseService struct {
-	db       *sql.DB
+	db       *bun.DB
 	realtime *realtime.Broker
 	cleanup  chan struct{}
 }
 
 // NewDatabaseDragLockService creates a new database-backed drag lock service
-func NewDatabaseDragLockService(db *sql.DB, rt *realtime.Broker) DragLockService {
+func NewDatabaseDragLockService(db *bun.DB, rt *realtime.Broker) DragLockService {
 	service := &DatabaseService{
 		db:       db,
 		realtime: rt,
@@ -39,13 +39,18 @@ func (s *DatabaseService) AcquireLock(noteID, userID, boardID uuid.UUID) bool {
 	// First cleanup expired locks for this note
 	s.cleanupExpiredLock(ctx, noteID)
 
-	// Try to insert lock atomically
-	query := `
-		INSERT INTO drag_locks (note_id, user_id, board_id, created_at)
-		VALUES ($1, $2, $3, NOW())
-		ON CONFLICT (note_id) DO NOTHING`
+	// Try to insert lock atomically using Bun
+	insert := DatabaseDragLockInsert{
+		NoteID:  noteID,
+		UserID:  userID,
+		BoardID: boardID,
+	}
 
-	result, err := s.db.ExecContext(ctx, query, noteID, userID, boardID)
+	result, err := s.db.NewInsert().
+		Model(&insert).
+		On("CONFLICT (note_id) DO NOTHING").
+		Exec(ctx)
+
 	if err != nil {
 		logger.Get().Errorw("failed to acquire drag lock", "noteId", noteID, "userId", userID, "error", err)
 		return false
@@ -67,12 +72,12 @@ func (s *DatabaseService) AcquireLock(noteID, userID, boardID uuid.UUID) bool {
 		// Check if lock is owned by same user (refresh case)
 		if s.isLockOwnedByUser(ctx, noteID, userID) {
 			// Update timestamp to refresh lock
-			refreshQuery := `
-				UPDATE drag_locks
-				SET created_at = NOW()
-				WHERE note_id = $1 AND user_id = $2`
+			_, err := s.db.NewUpdate().
+				Model((*DatabaseDragLock)(nil)).
+				Set("created_at = NOW()").
+				Where("note_id = ? AND user_id = ?", noteID, userID).
+				Exec(ctx)
 
-			_, err := s.db.ExecContext(ctx, refreshQuery, noteID, userID)
 			if err != nil {
 				logger.Get().Errorw("failed to refresh drag lock", "noteId", noteID, "userId", userID, "error", err)
 				return false
@@ -93,22 +98,24 @@ func (s *DatabaseService) ReleaseLock(noteID, userID uuid.UUID) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Get board ID before deleting (for NATS event)
-	var boardID uuid.UUID
-	boardQuery := `SELECT board_id FROM drag_locks WHERE note_id = $1 AND user_id = $2`
-	err := s.db.QueryRowContext(ctx, boardQuery, noteID, userID).Scan(&boardID)
+	// Get the lock before deleting it (for NATS event)
+	var dbLock DatabaseDragLock
+	err := s.db.NewSelect().
+		Model(&dbLock).
+		Where("note_id = ? AND user_id = ?", noteID, userID).
+		Scan(ctx)
+
 	if err != nil {
-		if err == sql.ErrNoRows {
-			logger.Get().Debugw("drag lock not found for release", "noteId", noteID, "userId", userID)
-			return false
-		}
-		logger.Get().Errorw("failed to get board for drag lock", "noteId", noteID, "userId", userID, "error", err)
+		logger.Get().Debugw("drag lock not found for release", "noteId", noteID, "userId", userID, "error", err)
 		return false
 	}
 
-	// Delete lock
-	query := `DELETE FROM drag_locks WHERE note_id = $1 AND user_id = $2`
-	result, err := s.db.ExecContext(ctx, query, noteID, userID)
+	// Delete the lock
+	result, err := s.db.NewDelete().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ? AND user_id = ?", noteID, userID).
+		Exec(ctx)
+
 	if err != nil {
 		logger.Get().Errorw("failed to release drag lock", "noteId", noteID, "userId", userID, "error", err)
 		return false
@@ -125,7 +132,7 @@ func (s *DatabaseService) ReleaseLock(noteID, userID uuid.UUID) bool {
 		logger.Get().Debugw("released drag lock", "noteId", noteID, "userId", userID)
 
 		// Broadcast lock release via NATS
-		s.broadcastLockEvent(boardID, realtime.BoardEventNoteDragEnd, noteID, userID)
+		s.broadcastLockEvent(dbLock.BoardID, realtime.BoardEventNoteDragEnd, noteID, userID)
 	}
 
 	return success
@@ -139,28 +146,26 @@ func (s *DatabaseService) IsLocked(noteID uuid.UUID) (*DragLock, bool) {
 	// Cleanup expired lock first
 	s.cleanupExpiredLock(ctx, noteID)
 
-	query := `
-		SELECT note_id, user_id, board_id, created_at
-		FROM drag_locks
-		WHERE note_id = $1 AND created_at > NOW() - INTERVAL '30 seconds'`
-
-	var lock DragLock
-	err := s.db.QueryRowContext(ctx, query, noteID).Scan(
-		&lock.NoteID,
-		&lock.UserID,
-		&lock.BoardID,
-		&lock.Timestamp,
-	)
+	var dbLock DatabaseDragLock
+	err := s.db.NewSelect().
+		Model(&dbLock).
+		Where("note_id = ? AND created_at > NOW() - INTERVAL '30 seconds'", noteID).
+		Scan(ctx)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, false
-		}
-		logger.Get().Errorw("failed to check if note is locked", "noteId", noteID, "error", err)
+		// No lock found or other error
 		return nil, false
 	}
 
-	return &lock, true
+	// Convert database model to service model
+	lock := &DragLock{
+		NoteID:    dbLock.NoteID,
+		UserID:    dbLock.UserID,
+		BoardID:   dbLock.BoardID,
+		Timestamp: dbLock.CreatedAt,
+	}
+
+	return lock, true
 }
 
 // GetLocksForBoard returns all active locks for a board
@@ -171,32 +176,26 @@ func (s *DatabaseService) GetLocksForBoard(boardID uuid.UUID) []*DragLock {
 	// First cleanup expired locks for this board
 	s.cleanupExpiredLocksForBoard(ctx, boardID)
 
-	query := `
-		SELECT note_id, user_id, board_id, created_at
-		FROM drag_locks
-		WHERE board_id = $1 AND created_at > NOW() - INTERVAL '30 seconds'`
+	var dbLocks []DatabaseDragLock
+	err := s.db.NewSelect().
+		Model(&dbLocks).
+		Where("board_id = ? AND created_at > NOW() - INTERVAL '30 seconds'", boardID).
+		Scan(ctx)
 
-	rows, err := s.db.QueryContext(ctx, query, boardID)
 	if err != nil {
 		logger.Get().Errorw("failed to get locks for board", "boardId", boardID, "error", err)
 		return nil
 	}
-	defer rows.Close()
 
-	var locks []*DragLock
-	for rows.Next() {
-		var lock DragLock
-		err := rows.Scan(
-			&lock.NoteID,
-			&lock.UserID,
-			&lock.BoardID,
-			&lock.Timestamp,
-		)
-		if err != nil {
-			logger.Get().Errorw("failed to scan drag lock", "error", err)
-			continue
+	// Convert database models to service models
+	locks := make([]*DragLock, len(dbLocks))
+	for i, dbLock := range dbLocks {
+		locks[i] = &DragLock{
+			NoteID:    dbLock.NoteID,
+			UserID:    dbLock.UserID,
+			BoardID:   dbLock.BoardID,
+			Timestamp: dbLock.CreatedAt,
 		}
-		locks = append(locks, &lock)
 	}
 
 	return locks
@@ -209,16 +208,19 @@ func (s *DatabaseService) Close() {
 
 // isLockOwnedByUser checks if a lock is owned by a specific user
 func (s *DatabaseService) isLockOwnedByUser(ctx context.Context, noteID, userID uuid.UUID) bool {
-	query := `SELECT 1 FROM drag_locks WHERE note_id = $1 AND user_id = $2`
-	var exists int
-	err := s.db.QueryRowContext(ctx, query, noteID, userID).Scan(&exists)
-	return err == nil
+	exists, err := s.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ? AND user_id = ?", noteID, userID).
+		Exists(ctx)
+	return err == nil && exists
 }
 
 // cleanupExpiredLock removes an expired lock for a specific note
 func (s *DatabaseService) cleanupExpiredLock(ctx context.Context, noteID uuid.UUID) {
-	query := `DELETE FROM drag_locks WHERE note_id = $1 AND created_at <= NOW() - INTERVAL '30 seconds'`
-	_, err := s.db.ExecContext(ctx, query, noteID)
+	_, err := s.db.NewDelete().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ? AND created_at <= NOW() - INTERVAL '30 seconds'", noteID).
+		Exec(ctx)
 	if err != nil {
 		logger.Get().Debugw("failed to cleanup expired lock", "noteId", noteID, "error", err)
 	}
@@ -226,8 +228,10 @@ func (s *DatabaseService) cleanupExpiredLock(ctx context.Context, noteID uuid.UU
 
 // cleanupExpiredLocksForBoard removes expired locks for a board
 func (s *DatabaseService) cleanupExpiredLocksForBoard(ctx context.Context, boardID uuid.UUID) {
-	query := `DELETE FROM drag_locks WHERE board_id = $1 AND created_at <= NOW() - INTERVAL '30 seconds'`
-	_, err := s.db.ExecContext(ctx, query, boardID)
+	_, err := s.db.NewDelete().
+		Model((*DatabaseDragLock)(nil)).
+		Where("board_id = ? AND created_at <= NOW() - INTERVAL '30 seconds'", boardID).
+		Exec(ctx)
 	if err != nil {
 		logger.Get().Debugw("failed to cleanup expired locks for board", "boardId", boardID, "error", err)
 	}
@@ -253,8 +257,11 @@ func (s *DatabaseService) cleanupAllExpiredLocks() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	query := `DELETE FROM drag_locks WHERE created_at <= NOW() - INTERVAL '30 seconds'`
-	result, err := s.db.ExecContext(ctx, query)
+	result, err := s.db.NewDelete().
+		Model((*DatabaseDragLock)(nil)).
+		Where("created_at <= NOW() - INTERVAL '30 seconds'").
+		Exec(ctx)
+
 	if err != nil {
 		logger.Get().Errorw("failed to cleanup all expired locks", "error", err)
 		return
