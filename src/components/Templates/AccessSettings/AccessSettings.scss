@@ -48,11 +48,11 @@
 
 @media screen and (max-width: $breakpoint--smartphone) {
   .access-settings__wrapper {
-    align-items: flex-start;
     padding: $spacing--xs;
   }
 
   .access-settings {
+    height: 90%;
     width: 85%;
     gap: $spacing--md;
 
