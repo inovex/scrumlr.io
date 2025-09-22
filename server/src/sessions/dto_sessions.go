@@ -40,6 +40,12 @@ type BoardSession struct {
 	Board uuid.UUID `json:"-"`
 }
 
+type BoardSessionCreateRequest struct {
+	Board uuid.UUID
+	User  uuid.UUID
+	Role  common.SessionRole
+}
+
 // BoardSessionUpdateRequest represents the request to update a single participant.
 type BoardSessionUpdateRequest struct {
 
