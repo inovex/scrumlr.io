@@ -106,8 +106,34 @@ func (s *DatabaseService) ReleaseLock(noteID, userID uuid.UUID) bool {
 		Scan(ctx)
 
 	if err != nil {
-		logger.Get().Debugw("drag lock not found for release", "noteId", noteID, "userId", userID, "error", err)
-		return false
+		// Lock doesn't exist - try to delete anyway and return based on rows affected
+		logger.Get().Debugw("drag lock not found for release, attempting delete anyway", "noteId", noteID, "userId", userID, "error", err)
+
+		// Try to delete even if we couldn't find it (race condition protection)
+		result, deleteErr := s.db.NewDelete().
+			Model((*DatabaseDragLock)(nil)).
+			Where("note_id = ? AND user_id = ?", noteID, userID).
+			Exec(ctx)
+
+		if deleteErr != nil {
+			logger.Get().Errorw("failed to delete drag lock", "noteId", noteID, "userId", userID, "error", deleteErr)
+			return false
+		}
+
+		rowsAffected, rowsErr := result.RowsAffected()
+		if rowsErr != nil {
+			logger.Get().Errorw("failed to check rows affected during fallback delete", "error", rowsErr)
+			return false
+		}
+
+		// If we deleted something, it was successful
+		if rowsAffected > 0 {
+			logger.Get().Debugw("released drag lock via fallback delete", "noteId", noteID, "userId", userID)
+			// We don't have boardID, so we can't broadcast the event in this case
+			// This is acceptable since the lock was likely already expired
+		}
+
+		return rowsAffected > 0
 	}
 
 	// Delete the lock

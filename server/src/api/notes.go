@@ -10,7 +10,6 @@ import (
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/notes"
-  "scrumlr.io/server/realtime"
 )
 
 // createNote creates a new note
@@ -120,59 +119,5 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
   }
 
   render.Status(r, http.StatusNoContent)
-  render.Respond(w, r, nil)
-}
-
-type NoteDragStateRequest struct {
-  Dragging bool `json:"dragging"`
-}
-
-// updateNoteDragState updates the drag state of a note
-func (s *Server) updateNoteDragState(w http.ResponseWriter, r *http.Request) {
-  log := logger.FromRequest(r)
-  boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-  noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
-  userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-
-  var body NoteDragStateRequest
-  if err := render.Decode(r, &body); err != nil {
-    log.Errorw("unable to decode body", "err", err)
-    common.Throw(w, r, common.BadRequestError(err))
-    return
-  }
-
-  // Handle drag state with lock management
-  var eventType realtime.BoardEventType
-  var success bool
-
-  if body.Dragging {
-    // Try to acquire the lock
-    success = s.dragLocks.AcquireLock(noteID, userID, boardID)
-    if !success {
-      // Note is already locked by another user
-      render.Status(r, http.StatusConflict)
-      render.Respond(w, r, map[string]string{"error": "Note is currently being dragged by another user"})
-      return
-    }
-    eventType = realtime.BoardEventNoteDragStart
-  } else {
-    // Release the lock
-    success = s.dragLocks.ReleaseLock(noteID, userID)
-    if !success {
-      log.Warnw("attempted to release lock not owned by user", "noteId", noteID, "userId", userID)
-    }
-    eventType = realtime.BoardEventNoteDragEnd
-  }
-
-  // Broadcast drag state change event
-  _ = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
-    Type: eventType,
-    Data: map[string]string{
-      "noteId": noteID.String(),
-      "userId": userID.String(),
-    },
-  })
-
-  render.Status(r, http.StatusOK)
   render.Respond(w, r, nil)
 }
