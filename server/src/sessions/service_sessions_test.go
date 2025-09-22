@@ -287,10 +287,11 @@ func TestListSessions_DatabaseError(t *testing.T) {
 func TestCreateSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	role := common.ParticipantRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: role}).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -302,23 +303,24 @@ func TestCreateSession(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	session, err := sessionService.Create(context.Background(), boardId, userId)
+	session, err := sessionService.Create(context.Background(), BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
 	assert.Nil(t, err)
 	assert.NotNil(t, session)
 
 	assert.Equal(t, boardId, session.Board)
 	assert.Equal(t, userId, session.User.ID)
-	assert.Equal(t, common.ParticipantRole, session.Role)
+	assert.Equal(t, role, session.Role)
 }
 
 func TestCreateSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	role := common.ParticipantRole
 	dbError := "unable to create"
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
+	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: role}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -330,7 +332,7 @@ func TestCreateSession_DatabaseError(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	session, err := sessionService.Create(context.Background(), boardId, userId)
+	session, err := sessionService.Create(context.Background(), BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
