@@ -1,16 +1,19 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
-import {NoteAPI} from "api/note";
+import {sendWebSocketMessage} from "../board/thunks";
 
 export const updateNoteDragState = createAsyncThunk<void, {noteId: string; dragging: boolean}, {state: ApplicationState}>(
   "dragLocks/updateNoteDragState",
-  async ({noteId, dragging}, {getState}) => {
-    const boardId = getState().board.data?.id;
-
-    if (!boardId) return;
-
+  async ({noteId, dragging}) => {
     try {
-      await NoteAPI.updateNoteDragState(boardId, noteId, dragging);
+      const message = {
+        type: "DRAG_LOCK_MESSAGE",
+        data: {
+          action: dragging ? "ACQUIRE" : "RELEASE",
+          noteId,
+        },
+      };
+      sendWebSocketMessage(message);
     } catch (error) {
       // Silently handle errors to avoid disrupting user experience
     }
