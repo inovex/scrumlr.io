@@ -60,8 +60,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const dragDisabled = Boolean(disabled || isLockedByOther);
 
   // Get the user who is dragging this note
-  const allParticipants = [...participants.others, participants.self];
-  const draggingUser = draggingUserId ? (allParticipants.find((participant) => participant.user!.id === draggingUserId) ?? null) : null;
+  const findParticipantById = (userId: string) => participants.others?.find((p) => p.user!.id === userId) ?? (participants.self?.user!.id === userId ? participants.self : null);
+  const draggingUser = draggingUserId ? findParticipantById(draggingUserId) : null;
 
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
