@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -326,13 +325,37 @@ func (s *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting Dat
 		attribute.Bool("scrumlr.votings.service.update.show_votes", voting.ShowVotesOfOthers),
 	)
 
+	aVoting := new(Voting).From(voting, votes)
+	var notesSortedByVotes []notesWithVotes
+	if aVoting.VotingResults != nil {
+
+		for k, v := range aVoting.VotingResults.Votes {
+			note, err := popNote(&affectedNotes, k)
+			if err != nil {
+				span.SetStatus(codes.Error, "missing note from voting results")
+				span.RecordError(err)
+				log.Errorw("unable to find note from a voting", "note", k, "err", err)
+				return
+			}
+			if len(notesSortedByVotes) == 0 || notesSortedByVotes[0].Votes > v.Total {
+				notesSortedByVotes = append([]notesWithVotes{{note, v.Total}}, notesSortedByVotes...)
+			} else {
+				notesSortedByVotes = append(notesSortedByVotes, notesWithVotes{note, v.Total})
+			}
+		}
+
+		for _, note := range notesSortedByVotes {
+			affectedNotes = append([]Note{note.Note}, affectedNotes...)
+		}
+	}
+
 	err := s.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
 			Voting *Voting `json:"voting"`
 			Notes  []Note  `json:"notes"`
 		}{
-			Voting: new(Voting).From(voting, votes),
+			Voting: aVoting,
 			Notes:  affectedNotes,
 		},
 	})
@@ -342,4 +365,14 @@ func (s *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting Dat
 		span.RecordError(err)
 		log.Errorw("unable to send voting update", "err", err)
 	}
+}
+
+func popNote(affectedNotes *[]Note, noteID uuid.UUID) (Note, error) {
+	for i, n := range *affectedNotes {
+		if n.ID == noteID {
+			*affectedNotes = append((*affectedNotes)[:i], (*affectedNotes)[i+1:]...)
+			return n, nil
+		}
+	}
+	return Note{}, errors.New("note not found")
 }
