@@ -27,6 +27,13 @@ const redirectToBoardDeletedPage = () => {
 
 let socket: Socket | null = null;
 
+// Function to send WebSocket messages using sockette's json method
+export const sendWebSocketMessage = (message: any) => {
+  if (socket) {
+    socket.json(message);
+  }
+};
+
 // creates a board from a template and returns board id if successful
 export const createBoardFromTemplate = createAsyncThunk<
   string,
