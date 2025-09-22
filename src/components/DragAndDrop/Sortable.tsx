@@ -52,14 +52,16 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
   // Check if this note is locked by another user
   const {lockedNotes} = useAppSelector((state) => state.dragLocks);
-  const currentUserId = useAppSelector((state) => state.participants?.self?.user?.id);
-  const participants = useAppSelector((state) => state.participants);
-  const isLockedByOther = lockedNotes[id.toString()] && lockedNotes[id.toString()] !== currentUserId;
-  const dragDisabled = disabled || isLockedByOther;
+  const currentUserId = useAppSelector((state) => state.participants!.self!.user!.id);
+  const participants = useAppSelector((state) => state.participants!);
+
+  const draggingUserId = lockedNotes[id.toString()];
+  const isLockedByOther = draggingUserId && draggingUserId !== currentUserId;
+  const dragDisabled = Boolean(disabled || isLockedByOther);
 
   // Get the user who is dragging this note
-  const draggingUserId = lockedNotes[id.toString()];
-  const draggingUser = draggingUserId ? [...(participants?.others || []), participants?.self].find((p) => p?.user?.id === draggingUserId) : null;
+  const allParticipants = [...participants.others, participants.self];
+  const draggingUser = draggingUserId ? (allParticipants.find((participant) => participant.user!.id === draggingUserId) ?? null) : null;
 
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
