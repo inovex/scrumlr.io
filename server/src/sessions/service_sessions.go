@@ -55,30 +55,31 @@ func NewSessionService(db SessionDatabase, rt *realtime.Broker, columnService co
 	return service
 }
 
-func (service *BoardSessionService) Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error) {
+func (service *BoardSessionService) Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.create")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.sessions.service.create.board", boardID.String()),
-		attribute.String("scrumlr.sessions.service.create.user", userID.String()),
+		attribute.String("scrumlr.sessions.service.create.board", body.Board.String()),
+		attribute.String("scrumlr.sessions.service.create.user", body.User.String()),
+		attribute.String("scrumlr.sessions.service.create.role", string(body.Role)),
 	)
 
 	session, err := service.database.Create(ctx, DatabaseBoardSessionInsert{
-		Board: boardID,
-		User:  userID,
-		Role:  common.ParticipantRole,
+		Board: body.Board,
+		User:  body.User,
+		Role:  body.Role,
 	})
 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create board session")
 		span.RecordError(err)
-		log.Errorw("unable to create board session", "board", boardID, "user", userID, "error", err)
+		log.Errorw("unable to create board session", "board", body.Board, "user", body.User, "error", err)
 		return nil, err
 	}
 
-	service.createdSession(ctx, boardID, session)
+	service.createdSession(ctx, body.Board, session)
 
 	sessionCreatedCounter.Add(ctx, 1)
 	return new(BoardSession).From(session), err
@@ -201,7 +202,7 @@ func (service *BoardSessionService) UpdateUserBoards(ctx context.Context, body B
 
 	connectedBoards, err := service.database.GetUserConnectedBoards(ctx, body.User)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update all sessions")
+		span.SetStatus(codes.Error, "failed to get connected boards")
 		span.RecordError(err)
 		return nil, err
 	}
