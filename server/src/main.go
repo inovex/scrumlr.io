@@ -428,7 +428,7 @@ func run(c *cli.Context) error {
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-	dragLockService := draglocks.InitializeDatabaseLockService(db, rt)
+	dragLockService := draglocks.InitializeDatabaseLockService(bun, rt)
 
 	s := api.New(
 		basePath,

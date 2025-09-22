@@ -1,6 +1,7 @@
 package draglocks
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -36,7 +37,7 @@ func (suite *DatabaseDragLockTestSuite) SetupSuite() {
 	mockClient.On("Publish", mock.Anything, mock.Anything).Return(nil).Maybe()
 	mockRealtime := &realtime.Broker{Con: mockClient}
 
-	suite.service = NewDatabaseDragLockService(suite.db.DB, mockRealtime)
+	suite.service = NewDatabaseDragLockService(suite.db, mockRealtime)
 }
 
 func (suite *DatabaseDragLockTestSuite) TearDownSuite() {
@@ -44,8 +45,21 @@ func (suite *DatabaseDragLockTestSuite) TearDownSuite() {
 }
 
 func (suite *DatabaseDragLockTestSuite) SetupTest() {
+	// Disable foreign key checks for tests
+	_, err := suite.db.Exec("SET session_replication_role = replica;")
+	suite.Require().NoError(err)
+
 	// Clean drag_locks table before each test
-	_, err := suite.db.DB.Exec("DELETE FROM drag_locks")
+	_, err = suite.db.NewDelete().
+		Model((*DatabaseDragLock)(nil)).
+		Where("1 = 1").
+		Exec(context.Background())
+	suite.Require().NoError(err)
+}
+
+func (suite *DatabaseDragLockTestSuite) TearDownTest() {
+	// Re-enable foreign key checks after test
+	_, err := suite.db.Exec("SET session_replication_role = DEFAULT;")
 	suite.Require().NoError(err)
 }
 
@@ -60,8 +74,10 @@ func (suite *DatabaseDragLockTestSuite) TestAcquireLock() {
 	suite.True(result)
 
 	// Verify lock exists in database
-	var count int
-	err := suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err := suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count)
 
@@ -70,7 +86,10 @@ func (suite *DatabaseDragLockTestSuite) TestAcquireLock() {
 	suite.False(result)
 
 	// Verify only one lock exists
-	err = suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err = suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count)
 
@@ -79,7 +98,10 @@ func (suite *DatabaseDragLockTestSuite) TestAcquireLock() {
 	suite.True(result)
 
 	// Should still be only one lock
-	err = suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err = suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count)
 }
@@ -99,8 +121,10 @@ func (suite *DatabaseDragLockTestSuite) TestReleaseLock() {
 	suite.True(result)
 
 	// Verify lock is removed from database
-	var count int
-	err := suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err := suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(0, count)
 
@@ -118,7 +142,10 @@ func (suite *DatabaseDragLockTestSuite) TestReleaseLock() {
 	suite.False(result)
 
 	// Verify lock still exists
-	err = suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err = suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count)
 }
@@ -169,10 +196,15 @@ func (suite *DatabaseDragLockTestSuite) TestCleanupOldLocks() {
 
 	// Insert old lock directly into database
 	oldTime := time.Now().Add(-2 * time.Hour)
-	_, err := suite.db.DB.Exec(
-		"INSERT INTO drag_locks (note_id, user_id, board_id, created_at) VALUES ($1, $2, $3, $4)",
-		noteID1, userID, boardID, oldTime,
-	)
+	oldLock := DatabaseDragLock{
+		NoteID:    noteID1,
+		UserID:    userID,
+		BoardID:   boardID,
+		CreatedAt: oldTime,
+	}
+	_, err := suite.db.NewInsert().
+		Model(&oldLock).
+		Exec(context.Background())
 	suite.Require().NoError(err)
 
 	// Insert recent lock
@@ -183,12 +215,17 @@ func (suite *DatabaseDragLockTestSuite) TestCleanupOldLocks() {
 	time.Sleep(100 * time.Millisecond)
 
 	// Verify old lock is removed but recent lock remains
-	var count1, count2 int
-	err = suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID1).Scan(&count1)
+	_, err = suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID1).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	// Note: Background cleanup may or may not have run yet
 
-	err = suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID2).Scan(&count2)
+	count2, err := suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID2).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count2)
 }
@@ -221,8 +258,10 @@ func (suite *DatabaseDragLockTestSuite) TestConcurrency() {
 	suite.Equal(1, successCount)
 
 	// Verify only one lock exists in database
-	var count int
-	err := suite.db.DB.QueryRow("SELECT COUNT(*) FROM drag_locks WHERE note_id = $1", noteID).Scan(&count)
+	count, err := suite.db.NewSelect().
+		Model((*DatabaseDragLock)(nil)).
+		Where("note_id = ?", noteID).
+		Count(context.Background())
 	suite.Require().NoError(err)
 	suite.Equal(1, count)
 }
