@@ -19,7 +19,7 @@ type MockWebSocketConn struct {
 	messages []interface{}
 }
 
-func (m *MockWebSocketConn) WriteJSON(v interface{}) error {
+func (m *MockWebSocketConn) WriteJSON(_ context.Context, v interface{}) error {
 	m.messages = append(m.messages, v)
 	return nil
 }
