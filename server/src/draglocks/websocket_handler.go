@@ -118,6 +118,7 @@ func sendResponse(conn WebSocketConnection, response DragLockResponse) {
 
 // broadcastLockEvent broadcasts lock events via NATS
 func broadcastLockEvent(rt *realtime.Broker, boardID uuid.UUID, eventType realtime.BoardEventType, noteID, userID uuid.UUID) {
+	ctx := context.Background()
 	event := realtime.BoardEvent{
 		Type: eventType,
 		Data: map[string]string{
@@ -126,7 +127,7 @@ func broadcastLockEvent(rt *realtime.Broker, boardID uuid.UUID, eventType realti
 		},
 	}
 
-	err := rt.BroadcastToBoard(boardID, event)
+	err := rt.BroadcastToBoard(ctx, boardID, event)
 	if err != nil {
 		logger.Get().Errorw("failed to broadcast lock event", "eventType", eventType, "noteId", noteID, "error", err)
 	}

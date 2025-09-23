@@ -301,6 +301,7 @@ func (s *DatabaseService) cleanupAllExpiredLocks() {
 
 // broadcastLockEvent sends lock events via NATS
 func (s *DatabaseService) broadcastLockEvent(boardID uuid.UUID, eventType realtime.BoardEventType, noteID, userID uuid.UUID) {
+	ctx := context.Background()
 	event := realtime.BoardEvent{
 		Type: eventType,
 		Data: map[string]string{
@@ -309,7 +310,7 @@ func (s *DatabaseService) broadcastLockEvent(boardID uuid.UUID, eventType realti
 		},
 	}
 
-	err := s.realtime.BroadcastToBoard(boardID, event)
+	err := s.realtime.BroadcastToBoard(ctx, boardID, event)
 	if err != nil {
 		logger.Get().Errorw("failed to broadcast lock event", "eventType", eventType, "noteId", noteID, "error", err)
 	}
