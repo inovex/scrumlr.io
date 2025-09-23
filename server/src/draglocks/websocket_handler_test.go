@@ -12,8 +12,6 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-
-
 // MockWebSocketConn captures messages for testing
 type MockWebSocketConn struct {
 	messages []interface{}
@@ -42,7 +40,7 @@ func (suite *WebSocketHandlerTestSuite) SetupTest() {
 	suite.mockService = &MockDragLockService{}
 
 	mockClient := realtime.NewMockClient(suite.T())
-	mockClient.On("Publish", mock.Anything, mock.Anything).Return(nil).Maybe()
+	mockClient.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Maybe()
 	suite.mockRealtime = &realtime.Broker{Con: mockClient}
 }
 
