@@ -13,8 +13,8 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/serviceinitialize"
 
-  "scrumlr.io/server/auth"
-  "scrumlr.io/server/draglocks"
+	"scrumlr.io/server/auth"
+	"scrumlr.io/server/draglocks"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
@@ -415,28 +415,28 @@ func run(c *cli.Context) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
-  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-  dragLockService := draglocks.InitializeDatabaseLockService(bun, rt)
+	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	dragLockService := draglocks.InitializeDatabaseLockService(bun, rt)
 
 	s := api.New(
 		basePath,
 		rt,
 		authConfig,
 
-    boardService,
-    columnService,
-    votingService,
-    userService,
-    noteService,
-    reactionService,
-    sessionService,
-    sessionRequestService,
-    healthService,
-    feedbackService,
-    boardReactionService,
-    boardTemplateService,
-    columnTemplateService,
-    dragLockService,
+		boardService,
+		columnService,
+		votingService,
+		userService,
+		noteService,
+		reactionService,
+		sessionService,
+		sessionRequestService,
+		healthService,
+		feedbackService,
+		boardReactionService,
+		boardTemplateService,
+		columnTemplateService,
+		dragLockService,
 
 		logger.GetLogLevel() == zap.DebugLevel || c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
