@@ -123,6 +123,62 @@ func TestGetSessions(t *testing.T) {
 	assert.Equal(t, boardId, boardSessions[1].Board)
 }
 
+func TestGetUserConnectedBoards(t *testing.T) {
+	userId := uuid.New()
+	firstBoard := uuid.New()
+	secondBoard := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
+		Return([]DatabaseBoardSession{
+			{User: userId, Board: firstBoard},
+			{User: userId, Board: secondBoard},
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	sessions, err := sessionService.GetUserConnectedBoards(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, sessions, 2)
+
+	assert.Equal(t, userId, sessions[0].User.ID)
+	assert.Equal(t, firstBoard, sessions[0].Board)
+	assert.Equal(t, userId, sessions[1].User.ID)
+	assert.Equal(t, secondBoard, sessions[1].Board)
+}
+
+func TestGetUserConnectedBoards_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	dbError := "database error"
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
+		Return([]DatabaseBoardSession{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	sessions, err := sessionService.GetUserConnectedBoards(context.Background(), userId)
+
+	assert.Nil(t, sessions)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
 func TestListSessions_WithFilterConnected(t *testing.T) {
 	boardId := uuid.New()
 	connected := true
@@ -733,6 +789,87 @@ func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 	assert.Equal(t, errors.New(dbError), err)
 }
 
+func TestUpdateUserBoard(t *testing.T) {
+	userId := uuid.New()
+	firstBoard := uuid.New()
+	secondBoard := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
+	thirdColumnId := uuid.New()
+	fourthColumnId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
+		Return([]DatabaseBoardSession{
+			{Board: firstBoard, User: userId},
+			{Board: secondBoard, User: userId},
+		}, nil)
+	mockSessiondb.EXPECT().Get(mock.Anything, firstBoard, userId).
+		Return(DatabaseBoardSession{Board: firstBoard, User: userId}, nil)
+	mockSessiondb.EXPECT().Get(mock.Anything, secondBoard, userId).
+		Return(DatabaseBoardSession{Board: secondBoard, User: userId}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(mock.Anything, firstBoard).
+		Return([]*columns.Column{
+			{ID: firstColumnId, Name: "First Column"},
+			{ID: secondColumnId, Name: "Second column"},
+		}, nil)
+	mockColumnService.EXPECT().GetAll(mock.Anything, secondBoard).
+		Return([]*columns.Column{
+			{ID: thirdColumnId, Name: "First Column"},
+			{ID: fourthColumnId, Name: "Second column"},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(mock.Anything, firstBoard, []uuid.UUID{firstColumnId, secondColumnId}).
+		Return([]*notes.Note{
+			{ID: uuid.New(), Text: "This is a note"},
+			{ID: uuid.New(), Text: "This is another note"},
+		}, nil)
+	mockNoteService.EXPECT().GetAll(mock.Anything, secondBoard, []uuid.UUID{thirdColumnId, fourthColumnId}).
+		Return([]*notes.Note{
+			{ID: uuid.New(), Text: "Also a note"},
+			{ID: uuid.New(), Text: "You know it"},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	sessions, err := sessionService.UpdateUserBoards(context.Background(), BoardSessionUpdateRequest{User: userId})
+
+	assert.Nil(t, err)
+	assert.Len(t, sessions, 2)
+}
+
+func TestUpdateUserBoard_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	dbError := "database error"
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
+		Return([]DatabaseBoardSession{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	sessions, err := sessionService.UpdateUserBoards(context.Background(), BoardSessionUpdateRequest{User: userId})
+
+	assert.Nil(t, sessions)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
 func TestConnectSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
@@ -1103,4 +1240,55 @@ func TestFilterfromQueryString_Role(t *testing.T) {
 	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
 
 	assert.Equal(t, BoardSessionFilter{Role: &role}, filter)
+}
+
+func TestCheckSessionRole(t *testing.T) {
+	userId := uuid.New()
+	sessions := []*BoardSession{
+		{User: User{ID: uuid.New()}, Role: common.ParticipantRole},
+		{User: User{ID: userId}, Role: common.ModeratorRole},
+		{User: User{ID: uuid.New()}, Role: common.OwnerRole},
+	}
+	roles := []common.SessionRole{
+		common.ModeratorRole,
+		common.OwnerRole,
+	}
+
+	check := CheckSessionRole(userId, sessions, roles)
+
+	assert.True(t, check)
+}
+
+func TestCheckSessionRole_NoRole(t *testing.T) {
+	userId := uuid.New()
+	sessions := []*BoardSession{
+		{User: User{ID: uuid.New()}, Role: common.ParticipantRole},
+		{User: User{ID: userId}, Role: common.ModeratorRole},
+		{User: User{ID: uuid.New()}, Role: common.OwnerRole},
+	}
+	roles := []common.SessionRole{
+		common.ParticipantRole,
+		common.OwnerRole,
+	}
+
+	check := CheckSessionRole(userId, sessions, roles)
+
+	assert.False(t, check)
+}
+
+func TestCheckSessionRole_NoUser(t *testing.T) {
+	userId := uuid.New()
+	sessions := []*BoardSession{
+		{User: User{ID: uuid.New()}, Role: common.ParticipantRole},
+		{User: User{ID: uuid.New()}, Role: common.ModeratorRole},
+		{User: User{ID: uuid.New()}, Role: common.OwnerRole},
+	}
+	roles := []common.SessionRole{
+		common.ParticipantRole,
+		common.OwnerRole,
+	}
+
+	check := CheckSessionRole(userId, sessions, roles)
+
+	assert.False(t, check)
 }
