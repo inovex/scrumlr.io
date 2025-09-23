@@ -34,7 +34,7 @@ func (suite *DatabaseDragLockTestSuite) SetupSuite() {
 
 	// Create mock realtime broker
 	mockClient := realtime.NewMockClient(suite.T())
-	mockClient.On("Publish", mock.Anything, mock.Anything).Return(nil).Maybe()
+	mockClient.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Maybe()
 	mockRealtime := &realtime.Broker{Con: mockClient}
 
 	suite.service = NewDatabaseDragLockService(suite.db, mockRealtime)
