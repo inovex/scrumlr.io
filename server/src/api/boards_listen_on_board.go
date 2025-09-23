@@ -109,8 +109,9 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 			}
 			break
 		}
+		log.Debugw("received message", "message", message)
 		// Handle incoming WebSocket messages
-		s.handleWebSocketMessage(r.Context(), id, userID, conn, message)
+		s.handleWebSocketMessage(ctx, id, userID, conn, message)
 	}
 }
 
