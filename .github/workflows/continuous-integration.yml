@@ -82,6 +82,10 @@ jobs:
         working-directory: ./server/src
         run: go list -m all
 
+      - name: Check Go formatting
+        working-directory: ./server
+        run: make format-check
+
       - name: Go lint
         uses: golangci/golangci-lint-action@v4
         with:
