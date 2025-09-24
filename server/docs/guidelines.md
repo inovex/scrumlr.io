@@ -2,6 +2,16 @@
 
 Please make sure to use the [.editorconfig](./../../.editorconfig) in your editor.
 
+## Code Formatting
+
+To ensure consistent code formatting across all team members and development environments:
+
+- **Before committing**: Run `make format-check` to verify your code is properly formatted
+- **Auto-format code**: Run `make format` to automatically format all Go code
+- **Linting**: Use `make go-lint` which includes formatting checks
+
+The project uses `goimports` for automatic import organization and `gofmt` for code formatting.
+
 ## Code style
 
 Each service should have an interface in which the public methods are defined.
