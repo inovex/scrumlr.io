@@ -22,7 +22,7 @@ import {TemplateWithColumns} from "../templates";
 let socket: Socket | null = null;
 
 // Function to send WebSocket messages using sockette's json method
-export const sendWebSocketMessage = (message: any) => {
+export const sendWebSocketMessage = (message: string) => {
   if (socket) {
     socket.json(message);
   }
