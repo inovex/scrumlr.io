@@ -209,9 +209,10 @@ func (service *BoardSessionRequestService) createdSessionRequest(ctx context.Con
 
 func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
 	var status realtime.BoardSessionRequestEventType
-	if request.Status == RequestAccepted {
+	switch request.Status {
+	case RequestAccepted:
 		status = realtime.RequestAccepted
-	} else if request.Status == RequestRejected {
+	case RequestRejected:
 		status = realtime.RequestRejected
 	}
 
