@@ -1,11 +1,6 @@
 module scrumlr.io/server
 
-go 1.23.0
-
-toolchain go1.23.6
-
-// https://github.com/inovex/scrumlr.io/security/dependabot/108
-replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
+go 1.25.1
 
 require (
 	github.com/go-chi/chi/v5 v5.2.3
