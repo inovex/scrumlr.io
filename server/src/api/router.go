@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/notes"
 
 	"github.com/go-chi/chi/v5"
@@ -58,6 +59,7 @@ type Server struct {
 	boardReactions  boardreactions.BoardReactionService
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
+	dragLocks       draglocks.DragLockService
 
 	upgrader websocket.Upgrader
 
@@ -90,6 +92,7 @@ func New(
 	boardReactions boardreactions.BoardReactionService,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
+	dragLocks draglocks.DragLockService,
 
 	verbose bool,
 	checkOrigin bool,
@@ -141,6 +144,7 @@ func New(
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 		columntemplates:                  columntemplates,
+		dragLocks:                        dragLocks,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
