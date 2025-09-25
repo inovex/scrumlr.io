@@ -1,8 +1,9 @@
 package notes
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/technical_helper"
 )
 
