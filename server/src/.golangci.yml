@@ -1,0 +1,22 @@
+run:
+  timeout: 5m
+  go: "1.21"
+  modules-download-mode: mod
+
+linters:
+  enable:
+    - gofmt
+    - goimports
+  disable-all: true
+
+linters-settings:
+  goimports:
+    local-prefixes: scrumlr
+
+issues:
+  exclude-rules:
+    # Ignore formatting issues in generated mocks
+    - path: "mock_.*\\.go"
+      linters:
+        - gofmt
+        - goimports
