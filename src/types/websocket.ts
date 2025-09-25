@@ -140,6 +140,16 @@ export interface NoteDragEndEvent {
   };
 }
 
+export interface DragLockMessage {
+  type: "DRAG_LOCK_MESSAGE";
+  data: {
+    action: "ACQUIRE" | "RELEASE";
+    noteId: string;
+  };
+}
+
+export type ClientMessage = DragLockMessage;
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
