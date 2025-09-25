@@ -26,5 +26,5 @@ func (feedbackType *FeedbackType) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
-	return errors.New("Invalid feedback type")
+	return errors.New("invalid feedback type")
 }
