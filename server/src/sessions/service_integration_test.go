@@ -16,25 +16,26 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
 )
 
-type UserServiceIntegrationTestsuite struct {
+type SessionServiceIntegrationTestSuite struct {
 	suite.Suite
 	dbContainer          *postgres.PostgresContainer
 	natsContainer        *nats.NATSContainer
 	db                   *bun.DB
 	natsConnectionString string
-	users                map[string]User
+	users                map[string]uuid.UUID
 	boards               map[string]TestBoard
 	sessions             map[string]BoardSession
 }
 
-func TestUserServiceIntegrationTestSuite(t *testing.T) {
-	suite.Run(t, new(UserServiceIntegrationTestsuite))
+func TestSessionServiceIntegrationTestSuite(t *testing.T) {
+	suite.Run(t, new(SessionServiceIntegrationTestSuite))
 }
 
-func (suite *UserServiceIntegrationTestsuite) SetupSuite() {
+func (suite *SessionServiceIntegrationTestSuite) SetupSuite() {
 	dbContainer, bun := initialize.StartTestDatabase()
 	suite.SeedDatabase(bun)
 	natsContainer, connectionString := initialize.StartTestNats()
@@ -45,263 +46,256 @@ func (suite *UserServiceIntegrationTestsuite) SetupSuite() {
 	suite.natsConnectionString = connectionString
 }
 
-func (suite *UserServiceIntegrationTestsuite) TeardownSuite() {
+func (suite *SessionServiceIntegrationTestSuite) TearDownSuite() {
 	initialize.StopTestDatabase(suite.dbContainer)
 	initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
+func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userName := "Test User"
+	boardId := suite.boards["Write"].id
+	userId := suite.users["Luke"]
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateAnonymous(ctx, userName)
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Anonymous, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateAppleUser(ctx, "appleId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Apple, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureadUser() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateAzureAdUser(ctx, "azureId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.AzureAd, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateGitHubUser(ctx, "githubId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.GitHub, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateGoogleUser(ctx, "googleId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Google, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateMicrosoftUser(ctx, "microsoftId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Microsoft, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateOIDCUser(ctx, "oidcId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.TypeOIDC, user.AccountType)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_Update() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userId := suite.users["Update"].ID
-	boardId := suite.boards["Update"].id
-	userName := "Test User"
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	user, err := userService.Update(ctx, UserUpdateRequest{ID: userId, Name: userName})
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	session, err := sessionService.Create(ctx, boardId, userId)
 
 	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
-	assert.Equal(t, userName, user.Name)
+	assert.Equal(t, boardId, session.Board)
+	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, common.ParticipantRole, session.Role)
+
+	msg := <-events
+	assert.Equal(t, realtime.BoardEventParticipantCreated, msg.Type)
+	sessionData, err := technical_helper.Unmarshal[BoardSession](msg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, userId, sessionData.ID)
+	assert.Equal(t, common.ParticipantRole, sessionData.Role)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Update"].id
+	userId := suite.users["Luke"]
+	callerId := suite.users["Stan"]
+	role := common.ModeratorRole
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	session, err := sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: &role})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, session.Board)
+	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, common.ModeratorRole, session.Role)
+
+	msgSession := <-events
+	msgColumns := <-events
+	msgNotes := <-events
+	assert.Equal(t, realtime.BoardEventParticipantUpdated, msgSession.Type)
+	assert.Equal(t, realtime.BoardEventColumnsUpdated, msgColumns.Type)
+	assert.Equal(t, realtime.BoardEventNotesSync, msgNotes.Type)
+	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, common.ModeratorRole, sessionData.Role)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdateAll"].id
+	ready := false
+	raisedHand := false
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	sessions, err := sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: &ready, RaisedHand: &raisedHand})
+
+	assert.Nil(t, err)
+	assert.Len(t, sessions, 4)
+
+	msg := <-events
+	assert.Equal(t, realtime.BoardEventParticipantsUpdated, msg.Type)
+	sessionData, err := technical_helper.UnmarshalSlice[BoardSession](msg.Data)
+	assert.Nil(t, err)
+	assert.Len(t, sessionData, 4)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_UpdateUserBoard() {
+
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_Get() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Santa"]
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	session, err := sessionService.Get(ctx, boardId, userId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, session.Board)
+	assert.Equal(t, userId, session.ID)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_GetAll() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	sessions, err := sessionService.GetAll(ctx, boardId, BoardSessionFilter{})
+	assert.Nil(t, err)
+	assert.Len(t, sessions, 4)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
+	t := suite.T()
+	ctx := context.Background()
+
+	userId := suite.users["Stan"]
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	sessions, err := sessionService.GetUserConnectedBoards(ctx, userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, sessions, 2)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Update"].id
+	userId := suite.users["Luke"]
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	err = sessionService.Connect(ctx, boardId, userId)
+
+	assert.Nil(t, err)
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventParticipantUpdated, msg.Type)
-	sessionData := msg.Data.(map[string]interface{})
-	assert.True(t, sessionData["connected"].(bool))
-	assert.Equal(t, string(common.OwnerRole), sessionData["role"].(string))
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_Get() {
+func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"].ID
+	boardId := suite.boards["Update"].id
+	userId := suite.users["Leia"]
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	voteDatabase := votings.NewVotingDatabase(suite.db)
 	voteService := votings.NewVotingService(voteDatabase, broker)
@@ -311,21 +305,23 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
 	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
 
-	user, err := userService.Get(ctx, userId)
+	err = sessionService.Disconnect(ctx, boardId, userId)
 
 	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
-	assert.Equal(t, suite.users["Stan"].Name, user.Name)
+
+	msgColumn := <-events
+	msgNote := <-events
+	assert.Equal(t, realtime.BoardEventColumnsUpdated, msgColumn.Type)
+	assert.Equal(t, realtime.BoardEventNotesSync, msgNote.Type)
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
+func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := uuid.New()
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Stan"]
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -340,49 +336,19 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
 	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
 
-	user, err := userService.Get(ctx, userId)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
-}
-
-func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userId := suite.users["Santa"].ID
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	available, err := userService.IsUserAvailableForKeyMigration(ctx, userId)
+	exists, err := sessionService.Exists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
-	assert.True(t, available)
+	assert.True(t, exists)
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
+func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"].ID
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Stan"]
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -397,34 +363,95 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
 	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
 
-	user, err := userService.SetKeyMigration(ctx, userId)
+	exists, err := sessionService.ModeratorSessionExists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
+	assert.True(t, exists)
 }
 
-func (suite *UserServiceIntegrationTestsuite) SeedDatabase(db *bun.DB) {
-	// test users
-	suite.users = make(map[string]User, 3)
-	suite.users["Stan"] = User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
-	suite.users["Santa"] = User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Update"] = User{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
+func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Bob"]
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	voteDatabase := votings.NewVotingDatabase(suite.db)
+	voteService := votings.NewVotingService(voteDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+
+	banned, err := sessionService.IsParticipantBanned(ctx, boardId, userId)
+
+	assert.Nil(t, err)
+	assert.True(t, banned)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
+	// tests users
+	suite.users = make(map[string]uuid.UUID, 7)
+	suite.users["Stan"] = uuid.New()
+	suite.users["Friend"] = uuid.New()
+	suite.users["Santa"] = uuid.New()
+	suite.users["Bob"] = uuid.New()
+	suite.users["Luke"] = uuid.New()
+	suite.users["Leia"] = uuid.New()
+	suite.users["Han"] = uuid.New()
 
 	// test boards
-	suite.boards = make(map[string]TestBoard, 1)
+	suite.boards = make(map[string]TestBoard, 5)
+	suite.boards["Write"] = TestBoard{id: uuid.New(), name: "Write"}
 	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update"}
+	suite.boards["Read"] = TestBoard{id: uuid.New(), name: "Read"}
+	suite.boards["ReadFilter"] = TestBoard{id: uuid.New(), name: "ReadFilter"}
+	suite.boards["UpdateAll"] = TestBoard{id: uuid.New(), name: "UpdateAll"}
 
 	// test sessions
-	suite.sessions = make(map[string]BoardSession, 1)
-	suite.sessions["Update"] = BoardSession{User: suite.users["Update"], Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
+	suite.sessions = make(map[string]BoardSession, 16)
+	// test sessions for the write board
+	suite.sessions["Write"] = BoardSession{ID: suite.users["Han"], Board: suite.boards["Write"].id, Role: common.ParticipantRole}
+	// test sessions for the update board
+	suite.sessions["UpdateOwner"] = BoardSession{ID: suite.users["Stan"], Board: suite.boards["Update"].id, Role: common.OwnerRole}
+	suite.sessions["UpdateParticipantModerator"] = BoardSession{ID: suite.users["Luke"], Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["UpdateParticipantOwner"] = BoardSession{ID: suite.users["Leia"], Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["UpdateModeratorOwner"] = BoardSession{ID: suite.users["Han"], Board: suite.boards["Update"].id, Role: common.ParticipantRole}
+	// test sessions for the read board
+	suite.sessions["Read1"] = BoardSession{ID: suite.users["Stan"], Board: suite.boards["Read"].id, Role: common.OwnerRole}
+	suite.sessions["Read2"] = BoardSession{ID: suite.users["Friend"], Board: suite.boards["Read"].id, Role: common.ModeratorRole}
+	suite.sessions["Read3"] = BoardSession{ID: suite.users["Santa"], Board: suite.boards["Read"].id, Role: common.ParticipantRole}
+	suite.sessions["Read4"] = BoardSession{ID: suite.users["Bob"], Board: suite.boards["Read"].id, Role: common.ParticipantRole, Banned: true}
+	// test sessions for the read filter board
+	suite.sessions["ReadFilter1"] = BoardSession{ID: suite.users["Stan"], Board: suite.boards["ReadFilter"].id, Role: common.OwnerRole, Ready: true, Connected: true}
+	suite.sessions["ReadFilter2"] = BoardSession{ID: suite.users["Friend"], Board: suite.boards["ReadFilter"].id, Role: common.ModeratorRole, Ready: true}
+	suite.sessions["ReadFilter3"] = BoardSession{ID: suite.users["Santa"], Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true, Connected: true}
+	suite.sessions["ReadFilter4"] = BoardSession{ID: suite.users["Bob"], Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true}
+	// test sessions for the update all board
+	suite.sessions["UpdateAll1"] = BoardSession{ID: suite.users["Stan"], Board: suite.boards["UpdateAll"].id, Role: common.OwnerRole, Connected: true, RaisedHand: true, Ready: false}
+	suite.sessions["UpdateAll2"] = BoardSession{ID: suite.users["Luke"], Board: suite.boards["UpdateAll"].id, Role: common.ModeratorRole, Connected: true, RaisedHand: false, Ready: true}
+	suite.sessions["UpdateAll3"] = BoardSession{ID: suite.users["Leia"], Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true, RaisedHand: false, Ready: false}
+	suite.sessions["UpdateAll4"] = BoardSession{ID: suite.users["Han"], Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true, RaisedHand: true, Ready: true}
 
-	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
-		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
+	for name, user := range suite.users {
+		if name == "Stan" {
+			err := initialize.InsertUser(db, user, name, string(common.Google))
+			if err != nil {
+				log.Fatalf("Failed to insert test user %s", err)
+			}
+		} else {
+			err := initialize.InsertUser(db, user, name, string(common.Anonymous))
+			if err != nil {
+				log.Fatalf("Failed to insert test user %s", err)
+			}
 		}
 	}
 
@@ -436,7 +463,7 @@ func (suite *UserServiceIntegrationTestsuite) SeedDatabase(db *bun.DB) {
 	}
 
 	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.User.ID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
+		err := initialize.InsertSession(db, session.ID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
 		if err != nil {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}

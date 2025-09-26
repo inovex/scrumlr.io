@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/users"
 	"time"
 
 	"scrumlr.io/server/sessions"
@@ -48,7 +49,7 @@ type Server struct {
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
-	users           sessions.UserService
+	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
@@ -80,7 +81,7 @@ func New(
 	boards boards.BoardService,
 	columns columns.ColumnService,
 	votings votings.VotingService,
-	users sessions.UserService,
+	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
@@ -260,6 +261,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Route("/user", func(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Put("/", s.updateUser)
+			r.Get("/{user}", s.getUserByID)
 		})
 	})
 }

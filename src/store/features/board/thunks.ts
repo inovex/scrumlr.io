@@ -1,7 +1,7 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SERVER_WEBSOCKET_URL} from "config";
-import {ServerEvent} from "types/websocket";
+import {BoardInitEvent, ServerEvent} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
@@ -10,39 +10,43 @@ import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
-import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
+import {createdParticipant, Participant, ParticipantDTO, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
+import {Auth} from "../auth";
 
 let socket: Socket | null = null;
 
 // creates a board from a template and returns board id if successful
-export const createBoardFromTemplate = createAsyncThunk<string, {templateWithColumns: TemplateWithColumns; accessPolicy: CreateSessionAccessPolicy}>(
-  "board/createBoardFromTemplate",
-  async (payload) => {
-    // finally, translate names and descriptions, since only the keys were stored until this point
-    const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
-      template: {
-        ...toBeTranslated.template,
-        name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
-        description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
-      },
-      columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
-        ...toBeTranslatedColumn,
-        name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
-        description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
-      })),
-    });
-
-    const translatedTemplateWithColumns =
-      payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
-    return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+export const createBoardFromTemplate = createAsyncThunk<
+  string,
+  {
+    templateWithColumns: TemplateWithColumns;
+    accessPolicy: CreateSessionAccessPolicy;
   }
-);
+>("board/createBoardFromTemplate", async (payload) => {
+  // finally, translate names and descriptions, since only the keys were stored until this point
+  const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
+    template: {
+      ...toBeTranslated.template,
+      name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
+      description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+    },
+    columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
+      ...toBeTranslatedColumn,
+      name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
+      description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+    })),
+  });
+
+  const translatedTemplateWithColumns =
+    payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
+  return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+});
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {
@@ -50,6 +54,27 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
     socket = null;
   }
 });
+
+const dtoToParticipant = async (dto: ParticipantDTO): Promise<Participant> => {
+  const user: Auth = await API.getUserById(dto.id);
+  return {
+    user,
+    connected: dto.connected,
+    raisedHand: dto.raisedHand,
+    ready: dto.ready,
+    showHiddenColumns: dto.showHiddenColumns,
+    role: dto.role,
+    banned: dto.banned,
+  };
+};
+
+const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<Participant[]> => {
+  const {participants} = message.data;
+  const asDTOs = participants as unknown as ParticipantDTO[];
+  const mapped = await Promise.all(asDTOs.map(dtoToParticipant));
+  message.data.participants = mapped;
+  return mapped;
+};
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
 export const permittedBoardAccess = createAsyncThunk<
@@ -68,14 +93,15 @@ export const permittedBoardAccess = createAsyncThunk<
       const message: ServerEvent = JSON.parse(evt.data);
 
       if (message.type === "INIT") {
-        const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
+        const {board, columns, notes, reactions, votes, votings, requests} = message.data;
+        const newParticipants = await mapParticipantsWithUsers(message as BoardInitEvent);
         dispatch(
           initializeBoard({
             fullBoard: {
               board,
               columns,
               notes: notes ?? [],
-              participants,
+              participants: newParticipants,
               reactions: reactions ?? [],
               requests: requests ?? [],
               votes: votes ?? [],
@@ -115,8 +141,7 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(updatedNotes(notes));
       }
       if (message.type === "NOTE_DELETED") {
-        const noteId = message.data.note;
-        const {deleteStack} = message.data;
+        const {note: noteId, deleteStack} = message.data;
         dispatch(deletedNote({noteId, deleteStack}));
       }
       if (message.type === "REACTION_ADDED") {
@@ -136,13 +161,29 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        dispatch(createdParticipant(message.data));
+        const participant = await dtoToParticipant(message.data as unknown as ParticipantDTO);
+        dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        dispatch(updatedParticipant({participant: message.data, self: getState().auth.user!}));
+        const dto = message.data as unknown as ParticipantDTO;
+        const participant = await dtoToParticipant(dto);
+        dispatch(
+          updatedParticipant({
+            participant,
+            self: getState().auth.user!,
+          })
+        );
       }
+
       if (message.type === "PARTICIPANTS_UPDATED") {
-        dispatch(setParticipants({participants: message.data, self: getState().auth.user!}));
+        const dtos = message.data as unknown as ParticipantDTO[];
+        const participants = await Promise.all(dtos.map(dtoToParticipant));
+        dispatch(
+          setParticipants({
+            participants,
+            self: getState().auth.user!,
+          })
+        );
       }
 
       if (message.type === "VOTING_CREATED") {
@@ -299,7 +340,13 @@ export const deleteBoard = createAsyncThunk<
     document.location.pathname = "/";
   });
 });
-export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
+export const importBoard = createAsyncThunk<
+  void,
+  string,
+  {
+    state: ApplicationState;
+  }
+>("board/importBoard", async (payload, {dispatch}) => {
   retryable(
     () => API.importBoard(payload),
     dispatch,

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/users"
 	"testing"
 	"time"
 
@@ -265,7 +266,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 
-	user := sessions.User{
+	user := users.User{
 		ID: userId,
 	}
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
@@ -274,7 +275,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 
 	mockSessionService := sessions.NewMockSessionService(t)
 	mockSessionService.EXPECT().Create(mock.Anything, boardId, userId).
-		Return(&sessions.BoardSession{Board: boardId, User: user}, nil)
+		Return(&sessions.BoardSession{Board: boardId, ID: user.ID}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
