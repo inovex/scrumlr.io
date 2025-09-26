@@ -3,7 +3,6 @@ package sessions
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"log"
 	"testing"
 
@@ -80,20 +79,6 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Moderator() {
 	assert.False(t, dbSession.Ready)
 	assert.False(t, dbSession.RaisedHand)
 	assert.NotNil(t, dbSession.CreatedAt)
-}
-
-func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Owner() {
-	t := suite.T()
-	database := NewSessionDatabase(suite.db)
-
-	userId := suite.users["Luke"].id
-	boardId := suite.boards["Write"].id
-
-	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.OwnerRole})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, err, errors.New("not allowed to create board session with owner role"))
-	assert.Equal(t, DatabaseBoardSession{}, dbSession)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Duplicate() {

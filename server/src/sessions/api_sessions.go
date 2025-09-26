@@ -8,7 +8,7 @@ import (
 )
 
 type SessionService interface {
-	Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
+	Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)
 	Update(ctx context.Context, body BoardSessionUpdateRequest) (*BoardSession, error)
 	UpdateAll(ctx context.Context, body BoardSessionsUpdateRequest) ([]*BoardSession, error)
 	UpdateUserBoards(ctx context.Context, body BoardSessionUpdateRequest) ([]*BoardSession, error)

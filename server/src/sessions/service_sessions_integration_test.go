@@ -57,6 +57,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Luke"].ID
+	role := common.ParticipantRole
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -74,19 +75,19 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	sessionDatabase := NewSessionDatabase(suite.db)
 	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
 
-	session, err := sessionService.Create(ctx, boardId, userId)
+	session, err := sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, session.Board)
 	assert.Equal(t, userId, session.User.ID)
-	assert.Equal(t, common.ParticipantRole, session.Role)
+	assert.Equal(t, role, session.Role)
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventParticipantCreated, msg.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msg.Data)
 	assert.Nil(t, err)
 	assert.Equal(t, userId, sessionData.User.ID)
-	assert.Equal(t, common.ParticipantRole, sessionData.Role)
+	assert.Equal(t, role, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Update() {

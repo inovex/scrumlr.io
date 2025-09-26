@@ -107,7 +107,7 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	}
 
 	if request.Status == RequestAccepted {
-		_, err := service.sessionService.Create(ctx, request.Board, request.User)
+		_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{Board: request.Board, User: request.User, Role: common.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create board session")
 			span.RecordError(err)
