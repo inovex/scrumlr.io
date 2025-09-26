@@ -93,7 +93,7 @@ export const permittedBoardAccess = createAsyncThunk<
       const message: ServerEvent = JSON.parse(evt.data);
 
       if (message.type === "INIT") {
-        const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
+        const {board, columns, notes, reactions, votes, votings, requests} = message.data;
         const newParticipants = await mapParticipantsWithUsers(message as BoardInitEvent);
         dispatch(
           initializeBoard({
