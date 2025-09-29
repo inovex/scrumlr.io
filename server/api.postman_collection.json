@@ -482,6 +482,52 @@
 							"body": "{\n    \"id\": \"34fc390b-8abe-458b-8a1e-9a918dec4b48\",\n    \"name\": \"Jane Doe\"\n}"
 						}
 					]
+				},
+				{
+					"name": "Get user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"pm.test(\"Successful GET request\", () => {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
+									"});",
+									"",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
+									"});",
+									"",
+									"pm.test(\"Check identical id\", () => {",
+									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "These resources can update or read user information of the currently authenticated user. Since the `jwt` Cookie, which holds the user session, is set to HTTP only and therefore cannot be read from your web application you can use these methods to check which is user is actively using the application.",
