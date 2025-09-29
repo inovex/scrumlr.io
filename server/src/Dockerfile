@@ -1,5 +1,5 @@
 # Build application
-FROM golang:1.23
+FROM golang:1.25
 
 ARG TARGETARCH
 ARG TARGETOS
@@ -9,7 +9,7 @@ COPY ./ .
 RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main
 
 # Start application
-FROM alpine:3.20
+FROM alpine:3.22
 
 RUN mkdir /app
 WORKDIR /app
