@@ -127,7 +127,3 @@ type NotePosition struct {
   // The note rank.
   Rank int `json:"rank"`
 }
-type notesWithVotes struct {
-  Note  Note
-  Votes int
-}
