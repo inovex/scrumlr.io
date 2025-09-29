@@ -327,7 +327,7 @@ func (s *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting Dat
     attribute.Bool("scrumlr.votings.service.update.show_votes", voting.ShowVotesOfOthers),
   )
 
-  aVoting := new(Voting).From(voting, votes)
+  currentVoting := new(Voting).From(voting, votes)
   if affectedNotes != nil {
     //map notes for quick lookup
     noteMap := make(map[uuid.UUID]Note, len(affectedNotes))
@@ -335,14 +335,14 @@ func (s *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting Dat
       noteMap[note.ID] = note
     }
 
-    noteIDs := make([]uuid.UUID, 0, len(aVoting.VotingResults.Votes))
+    noteIDs := make([]uuid.UUID, 0, len(currentVoting.VotingResults.Votes))
 
-    for key := range aVoting.VotingResults.Votes {
+    for key := range currentVoting.VotingResults.Votes {
       noteIDs = append(noteIDs, key)
     }
     // sort note IDs by votes
     sort.SliceStable(noteIDs, func(i, j int) bool {
-      return aVoting.VotingResults.Votes[noteIDs[i]].Total > aVoting.VotingResults.Votes[noteIDs[j]].Total
+      return currentVoting.VotingResults.Votes[noteIDs[i]].Total > currentVoting.VotingResults.Votes[noteIDs[j]].Total
     })
     // order notes by votes based on sorted note IDs
     affectedNotes = make([]Note, 0, len(noteIDs))
@@ -359,7 +359,7 @@ func (s *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting Dat
       Voting *Voting `json:"voting"`
       Notes  []Note  `json:"notes"`
     }{
-      Voting: aVoting,
+      Voting: currentVoting,
       Notes:  affectedNotes,
     },
   })
