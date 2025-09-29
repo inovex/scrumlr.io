@@ -38,7 +38,7 @@ func TestGetSession(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, session)
 	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, userId, session.UserID)
 }
 
 func TestGetSession_NotFound(t *testing.T) {
@@ -116,10 +116,10 @@ func TestGetSessions(t *testing.T) {
 	assert.NotNil(t, boardSessions)
 	assert.Len(t, boardSessions, 2)
 
-	assert.Equal(t, firstUserId, boardSessions[0].ID)
+	assert.Equal(t, firstUserId, boardSessions[0].UserID)
 	assert.Equal(t, boardId, boardSessions[0].Board)
 
-	assert.Equal(t, secondUserId, boardSessions[1].ID)
+	assert.Equal(t, secondUserId, boardSessions[1].UserID)
 	assert.Equal(t, boardId, boardSessions[1].Board)
 }
 
@@ -308,7 +308,7 @@ func TestCreateSession(t *testing.T) {
 	assert.NotNil(t, session)
 
 	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, userId, session.UserID)
 	assert.Equal(t, common.ParticipantRole, session.Role)
 }
 
@@ -389,7 +389,7 @@ func TestUpdateSession_Role(t *testing.T) {
 	assert.NotNil(t, session)
 
 	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, userId, session.UserID)
 	assert.Equal(t, common.ModeratorRole, session.Role)
 }
 
@@ -442,7 +442,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 	assert.NotNil(t, session)
 
 	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.ID)
+	assert.Equal(t, userId, session.UserID)
 	assert.Equal(t, raisedHand, session.RaisedHand)
 }
 
@@ -698,11 +698,11 @@ func TestUpdateAllSessions(t *testing.T) {
 	assert.Len(t, boardSessions, 2)
 
 	assert.Equal(t, boardId, boardSessions[0].Board)
-	assert.Equal(t, firstUserId, boardSessions[0].ID)
+	assert.Equal(t, firstUserId, boardSessions[0].UserID)
 	assert.Equal(t, ready, boardSessions[0].Ready)
 
 	assert.Equal(t, boardId, boardSessions[1].Board)
-	assert.Equal(t, secondUserId, boardSessions[1].ID)
+	assert.Equal(t, secondUserId, boardSessions[1].UserID)
 	assert.Equal(t, ready, boardSessions[1].Ready)
 }
 
