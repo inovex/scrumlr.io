@@ -8581,10 +8581,10 @@ linkifyjs@^4.3.2:
   resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.3.2.tgz#d97eb45419aabf97ceb4b05a7adeb7b8c8ade2b1"
   integrity sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==
 
-lint-staged@^16.2.1:
-  version "16.2.1"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-16.2.1.tgz#bb82da8ce10059296b220f321980f0ee1ce40c28"
-  integrity sha512-KMeYmH9wKvHsXdUp+z6w7HN3fHKHXwT1pSTQTYxB9kI6ekK1rlL3kLZEoXZCppRPXFK9PFW/wfQctV7XUqMrPQ==
+lint-staged@^16.2.3:
+  version "16.2.3"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-16.2.3.tgz#790866221d75602510507b5be40b2c7963715960"
+  integrity sha512-1OnJEESB9zZqsp61XHH2fvpS1es3hRCxMplF/AJUDa8Ho8VrscYDIuxGrj3m8KPXbcWZ8fT9XTMUhEQmOVKpKw==
   dependencies:
     commander "^14.0.1"
     listr2 "^9.0.4"
@@ -10415,10 +10415,10 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-router@^7.9.2:
-  version "7.9.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.9.2.tgz#f424a14f87e4d7b5b268ce3647876e9504e4fca6"
-  integrity sha512-i2TPp4dgaqrOqiRGLZmqh2WXmbdFknUyiCRmSKs0hf6fWXkTKg5h56b+9F22NbGRAMxjYfqQnpi63egzD2SuZA==
+react-router@^7.9.3:
+  version "7.9.3"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.9.3.tgz#f2d5ff6181851de3df3acb4e7364fce0dee5fba2"
+  integrity sha512-4o2iWCFIwhI/eYAIL43+cjORXYn/aRQPgtFRRZb3VzoyQ5Uej0Bmqj7437L97N9NJW4wnicSwLOLS+yCXfAPgg==
   dependencies:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
