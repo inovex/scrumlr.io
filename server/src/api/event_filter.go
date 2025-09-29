@@ -199,7 +199,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 	if isMod {
 		// Cache the changes of when a participant got updated
 		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
-			if boardSession.ID == participantSession.ID {
+			if boardSession.UserID == participantSession.UserID {
 				return participantSession
 			} else {
 				return boardSession

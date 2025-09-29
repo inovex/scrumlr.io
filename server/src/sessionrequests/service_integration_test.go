@@ -139,7 +139,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 	sessionData, err := technical_helper.Unmarshal[sessions.BoardSession](sessionMsg.Data)
 
 	assert.Nil(t, err)
-	assert.Equal(t, userId, sessionData.ID)
+	assert.Equal(t, userId, sessionData.UserID)
 
 	updatedMsg := <-events
 	assert.Equal(t, realtime.BoardEventSessionRequestUpdated, updatedMsg.Type)

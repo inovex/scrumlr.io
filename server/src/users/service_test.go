@@ -728,13 +728,13 @@ func TestUpdateUser(t *testing.T) {
 	mockUserService := sessions.NewMockSessionService(t)
 	mockUserService.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
 		Return([]*sessions.BoardSession{
-			{ID: user.ID, Board: firstBoardId},
-			{ID: user.ID, Board: secondBoardId},
+			{UserID: user.ID, Board: firstBoardId},
+			{UserID: user.ID, Board: secondBoardId},
 		}, nil)
 	mockUserService.EXPECT().Get(mock.Anything, firstBoardId, userId).
-		Return(&sessions.BoardSession{ID: user.ID, Board: firstBoardId}, nil)
+		Return(&sessions.BoardSession{UserID: user.ID, Board: firstBoardId}, nil)
 	mockUserService.EXPECT().Get(mock.Anything, secondBoardId, userId).
-		Return(&sessions.BoardSession{ID: user.ID, Board: secondBoardId}, nil)
+		Return(&sessions.BoardSession{UserID: user.ID, Board: secondBoardId}, nil)
 
 	userService := NewUserService(mockUserDatabase, broker, mockUserService)
 
