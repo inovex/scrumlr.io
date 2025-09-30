@@ -50,7 +50,15 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 	visible := true
 	index := 0
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -72,7 +80,16 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 	visible := true
 	index := 0
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -93,9 +110,18 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 	color := ColorOnlineOrange
 	visible := true
 	index := -1
-	expectedIndex := 0
+	expectedIndex := -1
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -117,7 +143,16 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -138,9 +173,18 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 	color := ColorOnlineOrange
 	visible := true
 	index := 99
-	expectedIndex := 1
+	expectedIndex := 99
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -162,7 +206,16 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.Board)
@@ -184,7 +237,15 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       index,
+		})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumn{}, dbColumn)
@@ -200,7 +261,16 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyColor() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(context.Background(), DatabaseColumnInsert{Board: boardId, Name: name, Description: description, Color: "", Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(),
+		DatabaseColumnInsert{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       "",
+			Visible:     &visible,
+			Index:       index,
+		},
+	)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumn{}, dbColumn)
