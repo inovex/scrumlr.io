@@ -7,6 +7,7 @@
   width: fit-content; // change to constant value for overflow ellipsis
   // height: $stack-view__header-height;
   min-height: $stack-view__min-height;
+  max-width: 80vw;
   letter-spacing: $letter-spacing--large;
   text-align: center;
   cursor: initial;
@@ -46,6 +47,12 @@
   color: $gray--000;
   &:hover {
     color: $gray--000;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .note-dialog-header {
+    max-width: calc(100vw - 60px);
   }
 }
 
