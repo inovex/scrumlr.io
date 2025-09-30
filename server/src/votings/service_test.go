@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 
 	"scrumlr.io/server/realtime"
 )
@@ -123,7 +122,7 @@ func TestGetVotes(t *testing.T) {
 	boardId := uuid.New()
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{}).
 		Return([]DatabaseVote{
 			{Board: boardId, Voting: uuid.New(), User: uuid.New(), Note: uuid.New()},
 			{Board: boardId, Voting: uuid.New(), User: uuid.New(), Note: uuid.New()},
@@ -135,7 +134,7 @@ func TestGetVotes(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	votes, err := service.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
+	votes, err := service.GetVotes(context.Background(), boardId, VoteFilter{})
 
 	assert.Nil(t, err)
 	assert.Len(t, votes, 3)
@@ -146,7 +145,7 @@ func TestGetVotes_Failed(t *testing.T) {
 	dbError := "cannot create voting"
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{}).
 		Return([]DatabaseVote{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -154,7 +153,7 @@ func TestGetVotes_Failed(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	votes, err := service.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
+	votes, err := service.GetVotes(context.Background(), boardId, VoteFilter{})
 
 	assert.Nil(t, votes)
 	assert.NotNil(t, err)
@@ -275,7 +274,7 @@ func TestUpdateVotingClose(t *testing.T) {
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId, Voting: &votingID}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingID}).
 		Return([]DatabaseVote{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -343,7 +342,7 @@ func TestUpdateVotingClose_FailedToGetVotes(t *testing.T) {
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId, Voting: &votingID}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingID}).
 		Return([]DatabaseVote{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -439,7 +438,7 @@ func TestGetVoting_Closed(t *testing.T) {
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Get(mock.Anything, boardId, votingId).
 		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId, Voting: &votingId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingId}).
 		Return([]DatabaseVote{
 			{Board: boardId, Voting: votingId, User: uuid.New(), Note: uuid.New()},
 			{Board: boardId, Voting: votingId, User: uuid.New(), Note: uuid.New()},
@@ -476,7 +475,7 @@ func TestGetVoting_Closed_FailedToGetVotes(t *testing.T) {
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Get(mock.Anything, boardId, votingId).
 		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: status}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId, Voting: &votingId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingId}).
 		Return([]DatabaseVote{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -502,7 +501,7 @@ func TestGetAllVotings(t *testing.T) {
 			{ID: firstVotingId, Board: boardId, Status: Open},
 			{ID: secondVotingId, Board: boardId, Status: Closed},
 		}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{}).
 		Return([]DatabaseVote{
 			{Voting: firstVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
 			{Voting: firstVotingId, Board: boardId, User: uuid.New(), Note: uuid.New()},
@@ -542,7 +541,7 @@ func TestGetAllVotings_FailedToGetVotings(t *testing.T) {
 			{ID: firstVotingId, Board: boardId, Status: Open},
 			{ID: secondVotingId, Board: boardId, Status: Closed},
 		}, nil)
-	mockDb.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardId}).
+	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{}).
 		Return([]DatabaseVote{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)

@@ -13,7 +13,6 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -27,7 +26,7 @@ type VotingDatabase interface {
 	Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, error)
-	GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error)
+	GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error)
 	AddVote(ctx context.Context, board, user, note uuid.UUID) (DatabaseVote, error)
 	RemoveVote(ctx context.Context, board, user, note uuid.UUID) error
 	GetOpenVoting(ctx context.Context, board uuid.UUID) (DatabaseVoting, error)
@@ -96,16 +95,16 @@ func (s *Service) RemoveVote(ctx context.Context, body VoteRequest) error {
 	return err
 }
 
-func (s *Service) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error) {
+func (s *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.get.all")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.votes.service.get.all.filter_board", f.Board.String()),
+		attribute.String("scrumlr.votes.service.get.all.filter_board", board.String()),
 	)
 
-	votes, err := s.database.GetVotes(ctx, f)
+	votes, err := s.database.GetVotes(ctx, board, f)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
@@ -194,7 +193,7 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 		return nil, common.InternalServerError
 	}
 
-	receivedVotes, err := s.database.GetVotes(ctx, filter.VoteFilter{Board: body.Board, Voting: &body.ID})
+	receivedVotes, err := s.database.GetVotes(ctx, body.Board, VoteFilter{Voting: &body.ID})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
@@ -233,7 +232,7 @@ func (s *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting, erro
 		return new(Voting).From(voting, []DatabaseVote{}), err
 	}
 
-	receivedVotes, err := s.database.GetVotes(ctx, filter.VoteFilter{Board: boardID, Voting: &id})
+	receivedVotes, err := s.database.GetVotes(ctx, boardID, VoteFilter{Voting: &id})
 	if err != nil {
 		span.SetStatus(codes.Error, "")
 		span.RecordError(err)
@@ -262,7 +261,7 @@ func (s *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Voting, err
 		return nil, err
 	}
 
-	votes, err := s.database.GetVotes(ctx, filter.VoteFilter{Board: boardID})
+	votes, err := s.database.GetVotes(ctx, boardID, VoteFilter{})
 	if err != nil {
 		log.Errorw("unable to get votes", "board", boardID, "error", err)
 		return nil, err

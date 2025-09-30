@@ -13,7 +13,6 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/initialize"
 )
 
@@ -325,7 +324,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetVotes() {
 
 	boardId := suite.boards["Read"].id
 
-	dbVotes, err := database.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
+	dbVotes, err := database.GetVotes(context.Background(), boardId, VoteFilter{})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbVotes, 18)
