@@ -44,7 +44,7 @@ func (d *DB) CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseB
 	if len(columns) > 0 {
 		for index := range columns {
 			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
+			columns[index].Index = newColumnIndex
 		}
 
 		query = query.With("createdColumns", d.db.NewInsert().
