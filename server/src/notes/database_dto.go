@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 type DatabaseNote struct {
@@ -43,4 +44,10 @@ type DatabaseNoteUpdate struct {
 	Text          *string
 	Position      *NoteUpdatePosition `bun:"embed"`
 	Edited        bool
+}
+
+type Precondition struct {
+	StackingAllowed bool
+	CallerRole      common.SessionRole
+	Author          uuid.UUID
 }

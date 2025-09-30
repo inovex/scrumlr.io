@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -36,6 +36,7 @@ type NotesDatabase interface {
 	UpdateNote(ctx context.Context, caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error)
 	DeleteNote(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error)
+	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker, votingService votings.VotingService) NotesService {
@@ -57,6 +58,14 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		attribute.String("scrumlr.notes.service.create.user", body.User.String()),
 		attribute.String("scrumlr.notes.service.create.column", body.Column.String()),
 	)
+
+	if body.Text == "" {
+		err := errors.New("cannot create note with empty text")
+		span.SetStatus(codes.Error, "cannot create note with empty text")
+		span.RecordError(err)
+		return nil, common.BadRequestError(err)
+	}
+
 	note, err := service.database.CreateNote(ctx, DatabaseNoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create note")
@@ -82,6 +91,13 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		attribute.String("scrumlr.notes.service.import.column", body.Position.Column.String()),
 	)
 
+	if body.Text == "" {
+		err := errors.New("cannot import note with empty text")
+		span.SetStatus(codes.Error, "cannot import note with empty text")
+		span.RecordError(err)
+		return nil, common.BadRequestError(err)
+	}
+
 	note, err := service.database.ImportNote(ctx, DatabaseNoteImport{
 		Author: body.User,
 		Board:  body.Board,
@@ -96,7 +112,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		span.SetStatus(codes.Error, "failed to import note")
 		span.RecordError(err)
 		log.Errorw("Could not import notes", "err", err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	notesImportCounter.Add(ctx, 1)
@@ -108,9 +124,46 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.update")
 	defer span.End()
 
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.update.note", body.ID.String()),
+		attribute.String("scrumlr.notes.service.update.board", body.Board.String()),
+	)
+
+	precondition, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get preconditions")
+		span.RecordError(err)
+		return nil, common.InternalServerError
+	}
+
+	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole {
+		err := errors.New("not allowed to change note")
+		span.SetStatus(codes.Error, "not allowed to change note")
+		span.RecordError(err)
+		return nil, common.ForbiddenError(err)
+	}
+
 	var positionUpdate *NoteUpdatePosition
 	edited := body.Text != nil
 	if body.Position != nil {
+		if !precondition.StackingAllowed && body.Position.Stack.Valid {
+			err := errors.New("not allowed to stack notes")
+			span.SetStatus(codes.Error, "not allowed to stack notes")
+			span.RecordError(err)
+			return nil, common.ForbiddenError(err)
+		}
+
+		if body.Position.Stack.Valid && body.Position.Stack.UUID == body.ID {
+			err := errors.New("not allowed to stack a note on self")
+			span.SetStatus(codes.Error, "not allowed to stack a note on self")
+			span.RecordError(err)
+			return nil, common.ForbiddenError(err)
+		}
+
+		if body.Position.Rank < 0 {
+			body.Position.Rank = 0
+		}
+
 		positionUpdate = &NoteUpdatePosition{
 			Column: body.Position.Column,
 			Rank:   body.Position.Rank,
@@ -124,10 +177,6 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		)
 	}
 
-	span.SetAttributes(
-		attribute.String("scrumlr.notes.service.update.note", body.ID.String()),
-		attribute.String("scrumlr.notes.service.update.board", body.Board.String()),
-	)
 	note, err := service.database.UpdateNote(ctx, user, DatabaseNoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
@@ -159,26 +208,27 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		attribute.Bool("scrumlr.notes.service.delete.stack", body.DeleteStack),
 	)
 
-	votes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{
-		Note: &body.ID,
-	})
+	preconditions, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get preconditions")
+		span.RecordError(err)
+		return err
+	}
+
+	if preconditions.Author != user && preconditions.CallerRole == common.ParticipantRole {
+		err := errors.New("not allowed to delete note from other user")
+		span.SetStatus(codes.Error, "not allowed to delete note from other user")
+		span.RecordError(err)
+		return common.ForbiddenError(err)
+	}
+
+	// Get votes for sending them over the websockets.
+	// Votes don't have to be deleted by the backend, because of cascad deleteing in the database
+	votes, err := service.votingService.GetVotes(ctx, body.Board, votings.VoteFilter{Note: &body.ID})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
-		return err
-	}
-
-	for _, vote := range votes {
-		err = service.votingService.RemoveVote(ctx, votings.VoteRequest{
-			Note: vote.Note,
-			User: vote.User,
-		})
-	}
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to remove votes")
-		span.RecordError(err)
-		return err
+		return common.InternalServerError
 	}
 
 	err = service.database.DeleteNote(ctx, user, body.Board, body.ID, body.DeleteStack)
@@ -227,6 +277,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 	span.SetAttributes(
 		attribute.String("scrumlr.notes.service.get.all.board", boardID.String()),
 	)
+
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -238,6 +289,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
+		return nil, common.InternalServerError
 	}
 	return Notes(notes), err
 }
