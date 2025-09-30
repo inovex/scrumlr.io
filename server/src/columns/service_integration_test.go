@@ -117,7 +117,16 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	database := NewColumnsDatabase(suite.db)
 	service := NewColumnService(database, broker, noteService)
 
-	column, err := service.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	column, err := service.Create(ctx,
+		ColumnRequest{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       &index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, name, column.Name)
