@@ -6,9 +6,39 @@ Please make sure to use the [.editorconfig](./../../.editorconfig) in your edito
 
 To ensure consistent code formatting across all team members and development environments:
 
-- **Before committing**: Run `make format-check` to verify your code is properly formatted
+### Automatic Setup (Recommended)
+1. **One-time setup**: Run `./scripts/setup-git-hooks.sh` from the `server/` directory
+2. **That's it!** All commits will automatically format Go code
+
+### Manual Commands
 - **Auto-format code**: Run `make format` to automatically format all Go code
+- **Before committing**: Run `make format-check` to verify your code is properly formatted
 - **Linting**: Use `make go-lint` which includes formatting checks
+
+### IDE Setup (Optional but Recommended)
+Configure your editor to format on save:
+
+**VS Code** (`.vscode/settings.json`):
+```json
+{
+  "go.formatTool": "goimports",
+  "editor.formatOnSave": true,
+  "[go]": {
+    "editor.formatOnSave": true
+  }
+}
+```
+
+**GoLand/IntelliJ**:
+- Go to Settings → Tools → File Watchers
+- Add "goimports" file watcher
+- Or enable "Reformat code" in commit dialog
+
+### How It Works
+- **Git hooks**: Automatically format staged Go files before commit
+- **CI checks**: Verify formatting in pull requests
+- **Tools**: Uses `goimports` for import organization and `gofmt` for code formatting
+- **Bypass**: Use `git commit --no-verify` to skip formatting (not recommended)
 
 The project uses `goimports` for automatic import organization and `gofmt` for code formatting.
 
