@@ -39,6 +39,7 @@ postman: ## Run the postman tests
 format: ## Format all Go code
 	cd src
 	goimports -w .
+	gofmt -w .
 
 .ONESHELL:
 format-check: ## Check if code is properly formatted
