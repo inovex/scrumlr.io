@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
-import EmojiPicker, {EmojiClickData, Emoji, Theme as EmojiPickerTheme} from "emoji-picker-react";
+import EmojiPicker, {EmojiClickData, EmojiStyle, Emoji, Theme as EmojiPickerTheme} from "emoji-picker-react";
 import classNames from "classnames";
 import {LEGACY_REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
 import {useAppSelector} from "store";
@@ -161,7 +161,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
                 onClick={(e) => handleClickQuickReaction(e, reaction.type)}
               >
-                {reaction.unified ? <Emoji unified={reaction.unified} size={20} /> : <span style={{fontSize: "20px"}}>{reaction.emoji}</span>}
+                {reaction.unified ? <Emoji unified={reaction.unified} size={20} emojiStyle={EmojiStyle.NATIVE} /> : <span style={{fontSize: "20px"}}>{reaction.emoji}</span>}
               </button>
             );
           })}
@@ -202,6 +202,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 skinTonesDisabled={false}
                 searchDisabled={false}
                 lazyLoadEmojis
+                emojiStyle={EmojiStyle.NATIVE}
                 theme={convertToEmojiPickerTheme(theme)}
               />
             </div>

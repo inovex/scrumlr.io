@@ -3,7 +3,7 @@ import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {getEmojiDisplay, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import {Emoji} from "emoji-picker-react";
+import {Emoji, EmojiStyle} from "emoji-picker-react";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 
@@ -46,7 +46,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         <div className="note-reaction-chip-condensed__reactions-container">
           {reactionDisplays.map((reaction) => (
             <div className="note-reaction-chip-condensed__reaction" key={`reaction-${reaction.reactionType}`}>
-              {reaction.legacyReaction ? <Emoji unified={reaction.legacyReaction.unified} size={14} /> : reaction.display}
+              {reaction.legacyReaction ? <Emoji unified={reaction.legacyReaction.unified} size={14} emojiStyle={EmojiStyle.NATIVE} /> : reaction.display}
             </div>
           ))}
         </div>

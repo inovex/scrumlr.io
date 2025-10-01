@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
 import {getEmojiDisplay, ReactionType, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
-import {Emoji} from "emoji-picker-react";
+import {Emoji, EmojiStyle} from "emoji-picker-react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useTranslation} from "react-i18next";
@@ -91,7 +91,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 onClick={(e) => removeOwnReaction(e, r)}
               >
                 {LEGACY_REACTION_EMOJI_MAP.get(r.reactionType) ? (
-                  <Emoji unified={LEGACY_REACTION_EMOJI_MAP.get(r.reactionType)!.unified} size={18} />
+                  <Emoji unified={LEGACY_REACTION_EMOJI_MAP.get(r.reactionType)!.unified} size={18} emojiStyle={EmojiStyle.NATIVE} />
                 ) : (
                   getEmojiDisplay(r.reactionType)
                 )}
