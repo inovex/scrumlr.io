@@ -45,6 +45,9 @@ format-check: ## Check if code is properly formatted
 	cd src
 	test -z "$$(goimports -l .)"
 
+setup-hooks: ## Setup Git pre-commit hooks for automatic Go formatting
+	./scripts/setup-git-hooks.sh
+
 .ONESHELL:
 go-lint: ## Run the go linter
 	cd src
