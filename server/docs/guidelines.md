@@ -10,10 +10,13 @@ To ensure consistent code formatting across all team members and development env
 1. **One-time setup**: Run `./scripts/setup-git-hooks.sh` from the `server/` directory
 2. **That's it!** All commits will automatically format Go code
 
-### Manual Commands
-- **Auto-format code**: Run `make format` to automatically format all Go code
-- **Before committing**: Run `make format-check` to verify your code is properly formatted
-- **Linting**: Use `make go-lint` which includes formatting checks
+### Manual Commands (Optional)
+With Git hooks enabled, these commands are rarely needed but available when necessary:
+
+- **Auto-format code**: `make format` - manually format all Go code
+- **Check formatting**: `make format-check` - verify code is properly formatted
+- **Run linting**: `make go-lint` - run all linters including formatting checks
+- **Update golangci-lint**: `go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest` - fix local version conflicts
 
 ### IDE Setup (Optional but Recommended)
 Configure your editor to format on save:
