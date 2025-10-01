@@ -11,7 +11,7 @@ jobs:
     if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Docker meta
         id: meta
@@ -40,7 +40,7 @@ jobs:
     if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
@@ -70,7 +70,7 @@ jobs:
     needs: [build-frontend, build-server]
     steps:
       - name: checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: generate values-dev.yaml
         run: |
