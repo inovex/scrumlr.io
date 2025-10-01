@@ -55,7 +55,7 @@ $header-max-width: 80vw;
 }
 
 [theme="dark"] {
-  .note-dialog-header > h2::after {
-    background: var(--accent-color--dark);
+  .note-dialog-header__name {
+    border-bottom-color: var(--accent-color--dark);
   }
 }
