@@ -1,6 +1,8 @@
 @import "constants/style";
 @import "routes/StackView/StackView.scss";
 
+$header-max-width: 80vw;
+
 .note-dialog-header {
   display: flex;
   min-height: $stack-view__min-height;
@@ -9,7 +11,8 @@
   align-items: center;
   gap: $spacing--base;
 
-  max-width: 80vw;
+  width: $header-max-width;
+  max-width: $header-max-width;
 
   color: $gray--000;
 
@@ -19,7 +22,7 @@
 }
 
 .note-dialog-header__name {
-  width: 100%;
+  max-width: 100%;
 
   font-size: calc($text--2xl + 0.8vw);
   font-weight: 700;
@@ -32,6 +35,7 @@
 }
 
 .note-dialog-header__description {
+  width: 100%;
   font-size: $text--lg;
   font-weight: 600;
   line-height: 30px;
