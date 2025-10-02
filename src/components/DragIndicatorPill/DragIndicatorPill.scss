@@ -18,6 +18,9 @@
   pointer-events: none;
 
   &__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: $spacing--md;
     height: $spacing--md;
     border-radius: $rounded--full;
