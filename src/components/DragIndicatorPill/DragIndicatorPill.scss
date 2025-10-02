@@ -21,8 +21,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: $spacing--md;
-    height: $spacing--md;
+    width: $icon--medium;
+    height: $icon--medium;
     border-radius: $rounded--full;
     border: 2px solid $gray--000;
     background-color: $gray--000;
@@ -32,8 +32,8 @@
   }
 
   &__avatar-image {
-    width: $spacing--md;
-    height: $spacing--md;
+    width: $icon--medium;
+    height: $icon--medium;
   }
 
   &__text {
