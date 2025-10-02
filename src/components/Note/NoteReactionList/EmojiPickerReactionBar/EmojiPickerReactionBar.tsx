@@ -3,10 +3,11 @@ import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import EmojiPicker, {EmojiClickData, EmojiStyle, Emoji, Theme as EmojiPickerTheme} from "emoji-picker-react";
 import classNames from "classnames";
-import {LEGACY_REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {buildQuickReactions, isDefaultEmoji, ReactionType, EmojiData} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {Theme} from "store/features/view/types";
 import {ReactionModeled} from "../NoteReactionList";
+import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
 import "./EmojiPickerReactionBar.scss";
 
 interface EmojiPickerReactionBarProps {
@@ -32,7 +33,7 @@ const convertToEmojiPickerTheme = (appTheme: Theme): EmojiPickerTheme =>
   appTheme as EmojiPickerTheme;
 
 const RECENT_EMOJIS_KEY = "scrumlr-recent-emojis";
-const MAX_RECENT_EMOJIS = 5;
+const MAX_RECENT_EMOJIS = 3;
 
 const getRecentEmojis = (): string[] => {
   try {
@@ -70,8 +71,8 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent note modal from opening
 
-    // Add to recent emojis if it's not a legacy reaction
-    if (!LEGACY_REACTION_EMOJI_MAP.has(reactionType)) {
+    // Add to recent emojis if it's not a default emoji
+    if (!isDefaultEmoji(reactionType)) {
       addRecentEmoji(reactionType);
       setRecentEmojis(getRecentEmojis());
     }
@@ -102,17 +103,8 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     props.handleClickReaction(syntheticEvent, reactionType);
   };
 
-  // Create quick reactions from recent emojis, falling back to legacy reactions
-  const quickReactions: Array<{emoji: string; type: string; unified?: string}> =
-    recentEmojis.length > 0
-      ? recentEmojis.map((emoji) => ({emoji, type: emoji}))
-      : Array.from(LEGACY_REACTION_EMOJI_MAP.entries())
-          .slice(0, 5)
-          .map(([type, data]) => ({
-            emoji: data.emoji,
-            type,
-            unified: data.unified,
-          }));
+  // Build quick reactions using clean utility function
+  const quickReactions: EmojiData[] = buildQuickReactions(recentEmojis);
 
   const togglePicker = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -151,7 +143,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
         role="toolbar"
         aria-label="Emoji reaction picker"
       >
-        {/* Quick reactions (recent or legacy emojis) */}
+        {/* Quick reactions (built using clean utility function) */}
         <div className="emoji-picker-reaction-bar__quick-reactions">
           {quickReactions.map((reaction) => {
             const active = !!props.reactions.find((r) => r.reactionType === reaction.type && !!r.myReactionId);
@@ -173,7 +165,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
             onClick={togglePicker}
             aria-label="More emojis"
           >
-            ➕
+            <ShowMoreEmojiesIcon />
           </button>
         </div>
       </div>
