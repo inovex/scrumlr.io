@@ -3,10 +3,13 @@ import {arrayMove, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
+import {getColorClassName} from "constants/colors";
 import {ReactNode, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {editNote, broadcastNoteDragStart, broadcastNoteDragEnd} from "store/features";
-import {Avatar} from "components/Avatar";
+import {UserAvatar} from "components/BoardUsers";
+import "components/Note/NoteAuthorList/NoteAuthorList.scss";
 import "./DragLockIndicator.scss";
 import "./Sortable.scss";
 
@@ -49,6 +52,7 @@ export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], new
 export const Sortable = ({id, children, disabled, className, columnId, setItems}: SortableProps) => {
   const dispatch = useAppDispatch();
   const {collisions} = useDndContext();
+  const {t} = useTranslation();
 
   // Check if this note is locked by another user
   const {lockedNotes} = useAppSelector((state) => state.dragLocks);
@@ -72,6 +76,12 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const combine = shouldCombine(id, items, newIndex, collisions, active);
 
   const globalNotes = useAppSelector((state) => state.notes);
+  const columns = useAppSelector((state) => state.columns);
+
+  // Get the column color for this note
+  const note = globalNotes.find((n) => n.id === id.toString());
+  const column = columns.find((c) => c.id === note?.position.column);
+  const noteColorClassName = column ? getColorClassName(column.color) : undefined;
 
   const topCollision = collisions?.at(0);
   /* const hasActive = !!active && items.includes(active.id.toString());
@@ -169,11 +179,19 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
     >
       {children}
       {isLockedByOther && draggingUser && (
-        <div className="drag-lock-indicator">
-          <div className="drag-lock-indicator__avatar">
-            <Avatar seed={draggingUser.user?.id} avatar={draggingUser.user?.avatar} />
+        <div className={classNames("drag-lock-indicator", noteColorClassName)}>
+          <div className="note-author__container note-author__container--self">
+            <figure className="note__author" aria-roledescription="author">
+              <UserAvatar
+                id={draggingUser.user?.id!}
+                avatar={draggingUser.user?.avatar}
+                title={draggingUser.user?.name || "Someone"}
+                className="note__user-avatar"
+                avatarClassName="note__user-avatar"
+              />
+            </figure>
+            <div className="note__author-name note__author-name--self">{t("Note.isMovingThis", {user: draggingUser.user?.name || "Someone"})}</div>
           </div>
-          <div className="drag-lock-indicator__tooltip">{draggingUser.user?.name || "Someone"} is moving this</div>
         </div>
       )}
     </div>
