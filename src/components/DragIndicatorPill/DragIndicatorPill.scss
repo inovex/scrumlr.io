@@ -1,0 +1,52 @@
+@import "src/constants/style.scss";
+
+.drag-indicator-pill {
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
+
+  background-color: rgba(var(--accent-color--light-rgb), 0.95);
+  color: $gray--000;
+  padding: $spacing--xxs $spacing--xs;
+  border-radius: $spacing--lg;
+  font-size: $text--xs;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 $spacing--xxs $spacing--sm rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba($gray--000, 0.2);
+
+  pointer-events: none;
+
+  &__avatar {
+    width: $spacing--md;
+    height: $spacing--md;
+    border-radius: $rounded--full;
+    border: 2px solid $gray--000;
+    background-color: $gray--000;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: -$spacing--xxs;
+  }
+
+  &__avatar-image {
+    width: $spacing--md;
+    height: $spacing--md;
+  }
+
+  &__text {
+    // Text styling is inherited from parent
+  }
+}
+
+[theme="dark"] {
+  .drag-indicator-pill {
+    background-color: rgba(var(--accent-color--dark-rgb), 0.95);
+    border: 1px solid rgba($navy--900, 0.3);
+    box-shadow: 0 $spacing--xxs $spacing--sm rgba($navy--900, 0.4);
+
+    &__avatar {
+      border: 2px solid $navy--400;
+      background-color: $navy--400;
+    }
+  }
+}
