@@ -8,8 +8,7 @@ import {ReactNode, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {editNote, broadcastNoteDragStart, broadcastNoteDragEnd} from "store/features";
-import {UserAvatar} from "components/BoardUsers";
-import "components/Note/NoteAuthorList/NoteAuthorList.scss";
+import {DragIndicatorPill} from "components/DragIndicatorPill";
 import "./DragLockIndicator.scss";
 import "./Sortable.scss";
 
@@ -180,18 +179,12 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       {children}
       {isLockedByOther && draggingUser && (
         <div className={classNames("drag-lock-indicator", noteColorClassName)}>
-          <div className="note-author__container note-author__container--self">
-            <figure className="note__author" aria-roledescription="author">
-              <UserAvatar
-                id={draggingUser.user?.id || ""}
-                avatar={draggingUser.user?.avatar}
-                title={draggingUser.user?.name || "Someone"}
-                className="note__user-avatar"
-                avatarClassName="note__user-avatar"
-              />
-            </figure>
-            <div className="note__author-name note__author-name--self">{t("Note.isMovingThis", {user: draggingUser.user?.name || "Someone"})}</div>
-          </div>
+          <DragIndicatorPill
+            userId={draggingUser.user?.id || ""}
+            userName={draggingUser.user?.name || "Someone"}
+            userAvatar={draggingUser.user?.avatar}
+            message={t("Note.isMovingThis", {user: draggingUser.user?.name || "Someone"})}
+          />
         </div>
       )}
     </div>
