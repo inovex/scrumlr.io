@@ -1,0 +1,33 @@
+@import "src/constants/style.scss";
+
+.drag-overlay {
+  .note {
+    background-color: rgba(var(--accent-color--light-rgb), 0.5);
+    border: 1px solid rgba(var(--accent-color--light-rgb), 0.5);
+    box-shadow:
+      0 $spacing--xxs $spacing--xs rgba(var(--accent-color--light-rgb), 0.1),
+      $box-shadow--light;
+  }
+
+  .note__in-stack {
+    background-color: rgba(var(--accent-color--light-rgb), 0.03);
+    box-shadow: 0 $spacing--xxs $spacing--xs rgba(var(--accent-color--light-rgb), 0.08);
+  }
+}
+
+[theme="dark"] {
+  .drag-overlay {
+    .note {
+      background-color: rgba(var(--accent-color--dark-rgb), 0.5);
+      border: 1px solid rgba(var(--accent-color--dark-rgb), 0.5);
+      box-shadow:
+        0 $spacing--xxs $spacing--xs rgba(var(--accent-color--dark-rgb), 0.15),
+        $box-shadow--dark;
+    }
+
+    .note__in-stack {
+      background-color: rgba(var(--accent-color--dark-rgb), 0.05);
+      box-shadow: 0 $spacing--xxs $spacing--xs rgba(var(--accent-color--dark-rgb), 0.12);
+    }
+  }
+}
