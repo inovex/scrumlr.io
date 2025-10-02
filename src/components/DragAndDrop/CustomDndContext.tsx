@@ -22,6 +22,7 @@ import {ReactNode, useState} from "react";
 import {useAppSelector} from "store";
 import {Column} from "store/features/columns/types";
 import {isEqual} from "underscore";
+import "./DragOverlay.scss";
 
 type CustomDndContextProps = {
   children: ReactNode;
@@ -66,6 +67,11 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     if (isNote(overCollision)) setMaxCollision(overCollision);
   };
 
+  const onDragEnd = () => {
+    setDragActive(undefined);
+    setMaxCollision(undefined);
+  };
+
   const collisionDetectionWrapper =
     (collisionDetection: CollisionDetection) =>
     (...[args]: Parameters<typeof collisionDetection>) => {
@@ -84,11 +90,11 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     };
 
   return (
-    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
+    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
       {children}
 
       <DragOverlay zIndex={1000} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
-        {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
+        {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} colorClassName={dragActive.colorClassName} /> : null}
       </DragOverlay>
     </DndContext>
   );
