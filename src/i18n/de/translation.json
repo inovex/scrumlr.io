@@ -413,7 +413,8 @@
     "me": "Ich",
     "you": "dir",
     "userImageAlt": "Von {{user}} hochgeladenes Bild",
-    "edited": "bearbeitet"
+    "edited": "bearbeitet",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Vorheriges Kärtchen",
