@@ -20,6 +20,9 @@ jest.mock("emoji-picker-react", () => ({
       Mock Emoji
     </span>
   ),
+  EmojiStyle: {
+    NATIVE: "native",
+  },
 }));
 
 describe("EmojiPickerReactionBar", () => {
@@ -27,19 +30,19 @@ describe("EmojiPickerReactionBar", () => {
     renderEmojiPickerReactionBar();
     // Check that reaction buttons are rendered
     const reactionButtons = screen.getAllByRole("button");
-    expect(reactionButtons).toHaveLength(6); // 5 reactions + 1 plus button
+    expect(reactionButtons).toHaveLength(7); // 6 reactions + 1 show more button
   });
 
-  it("renders the plus button", () => {
+  it("renders the show more button", () => {
     renderEmojiPickerReactionBar();
-    expect(screen.getByText("➕")).toBeInTheDocument();
+    expect(screen.getByLabelText("More emojis")).toBeInTheDocument();
   });
 
   it("calls handleClickReaction when a reaction button is clicked", () => {
     const handleClickReactionFunction = jest.fn();
     renderEmojiPickerReactionBar(undefined, handleClickReactionFunction);
     const reactionButtons = screen.getAllByRole("button");
-    // Click first reaction button (not the plus button)
+    // Click first reaction button (not the show more button)
     fireEvent.click(reactionButtons[0]);
     expect(handleClickReactionFunction).toHaveBeenCalled();
   });
@@ -51,10 +54,10 @@ describe("EmojiPickerReactionBar", () => {
     expect(closeReactionBarFunction).toHaveBeenCalled();
   });
 
-  it("shows emoji picker when plus button is clicked", () => {
+  it("shows emoji picker when show more button is clicked", () => {
     renderEmojiPickerReactionBar();
-    const plusButton = screen.getByText("➕");
-    fireEvent.click(plusButton);
+    const showMoreButton = screen.getByLabelText("More emojis");
+    fireEvent.click(showMoreButton);
     expect(screen.getByTestId("emoji-picker")).toBeInTheDocument();
   });
 });
