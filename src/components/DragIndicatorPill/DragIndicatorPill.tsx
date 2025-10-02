@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
-import {AvataaarProps} from "avataaars";
+import {AvataaarProps} from "types/avatar";
 import "./DragIndicatorPill.scss";
 
 type DragIndicatorPillProps = {
