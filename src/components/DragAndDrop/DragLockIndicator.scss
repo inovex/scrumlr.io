@@ -6,17 +6,4 @@
   right: -$spacing--sm;
   z-index: $tooltip-z-index + 1;
   pointer-events: none;
-
-  // Add enhanced shadow to make it more prominent
-  .note-author__container--self {
-    box-shadow: 0 $spacing--xxs $spacing--sm rgba(0, 0, 0, 0.2);
-  }
-}
-
-[theme="dark"] {
-  .drag-lock-indicator {
-    .note-author__container--self {
-      box-shadow: 0 $spacing--xxs $spacing--sm rgba($navy--900, 0.4);
-    }
-  }
 }
