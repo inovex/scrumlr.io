@@ -2,34 +2,21 @@
 
 .drag-lock-indicator {
   position: absolute;
-  bottom: $spacing--sm;
-  right: $spacing--sm;
-  display: flex;
-  align-items: center;
-  gap: $spacing--xs;
-  z-index: $tooltip-z-index;
+  bottom: -$spacing--sm;
+  right: -$spacing--sm;
+  z-index: $tooltip-z-index + 1;
   pointer-events: none;
 
-  &__avatar {
-    width: $icon--large;
-    height: $icon--large;
-    border-radius: $rounded--full;
-    border: 2px solid $orange--500;
-    background-color: $gray--000;
-    box-shadow: $box-shadow--light;
-    overflow: hidden;
-    flex-shrink: 0;
+  // Add enhanced shadow to make it more prominent
+  .note-author__container--self {
+    box-shadow: 0 $spacing--xxs $spacing--sm rgba(0, 0, 0, 0.2);
   }
+}
 
-  &__tooltip {
-    background-color: rgba($orange--500, 0.95);
-    color: $gray--000;
-    padding: $spacing--xxs $spacing--xs;
-    border-radius: $spacing--sm;
-    font-size: $text--xs;
-    font-weight: 600;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba($gray--000, 0.2);
+[theme="dark"] {
+  .drag-lock-indicator {
+    .note-author__container--self {
+      box-shadow: 0 $spacing--xxs $spacing--sm rgba($navy--900, 0.4);
+    }
   }
 }
