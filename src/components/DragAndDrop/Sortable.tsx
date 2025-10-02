@@ -108,11 +108,11 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
         const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
         if (!maxNoteCollision) return;
 
-        const note = globalNotes.find((n) => n.id === maxNoteCollision.id.toString());
+        const targetNote = globalNotes.find((n) => n.id === maxNoteCollision.id.toString());
         const position = {
           stack: maxNoteCollision.id.toString(),
-          column: note?.position.column ?? columnId,
-          rank: note?.position.rank ?? 0,
+          column: targetNote?.position.column ?? columnId,
+          rank: targetNote?.position.rank ?? 0,
         };
 
         dispatch(
@@ -183,7 +183,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
           <div className="note-author__container note-author__container--self">
             <figure className="note__author" aria-roledescription="author">
               <UserAvatar
-                id={draggingUser.user?.id!}
+                id={draggingUser.user?.id || ""}
                 avatar={draggingUser.user?.avatar}
                 title={draggingUser.user?.name || "Someone"}
                 className="note__user-avatar"
