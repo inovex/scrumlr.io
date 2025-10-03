@@ -296,7 +296,7 @@ export const deleteBoard = createAsyncThunk<
 >("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
-    document.location.pathname = "/";
+    document.location.href = "/?boardDeleted=true";
   });
 });
 export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
