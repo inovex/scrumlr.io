@@ -34,11 +34,19 @@ export const Homepage = withTranslation()(() => {
   };
 
   useEffect(() => {
-    const boardDeleted = new URLSearchParams(window.location.search).get("boardDeleted");
+    const searchParams = new URLSearchParams(window.location.search);
+    const boardDeleted = searchParams.get("boardDeleted");
 
     if (boardDeleted) {
       Toast.info({
         title: i18n.t("Error.boardDeleted"),
+      });
+
+      setTimeout(() => {
+        searchParams.delete("boardDeleted");
+        const newSearch = searchParams.toString();
+        const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : "");
+        window.history.replaceState({}, document.title, newUrl);
       });
     }
   }, [i18n]);
