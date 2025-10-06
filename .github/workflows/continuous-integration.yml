@@ -149,7 +149,9 @@ jobs:
         uses: SonarSource/sonarqube-quality-gate-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   package:
+    if: github.event.pull_request.head.repo.fork == false
     needs: [test-frontend, test-backend]
     uses: ./.github/workflows/package.yml
 
@@ -163,7 +165,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -186,6 +188,7 @@ jobs:
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: ./.github/workflows/deploy_docs.yml
     secrets: inherit
+
   deployment_health_check:
     needs: deploy_to_dev_cluster
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
