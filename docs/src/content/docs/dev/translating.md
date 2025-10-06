@@ -134,7 +134,7 @@ e.g. `src/i18n/en/translation.json`:
 {
   "Language": {
     "english": "English",
-    "german": "Deutsch",
+    "german": "German",
     "{language_name}": "{Language Name in English}"
   }
 }
