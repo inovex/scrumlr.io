@@ -68,7 +68,7 @@ const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Partici
       banned: dto.banned,
     };
   } catch (error) {
-    console.error("Failed to map participant with user:", error);
+    // console.error("Failed to map participant with user:", error);
     return Promise.reject(error);
   }
 };
@@ -80,14 +80,14 @@ const mapMultipleParticipants = async (dtos: ParticipantWithUserId[]): Promise<P
       .map((dto) => {
         const user = users.find((u: Auth) => u.id === dto.id);
         if (!user) {
-          console.warn(`User not found for participant ${dto.id}`);
+          // console.warn(`User not found for participant ${dto.id}`);
           return null;
         }
         return {user, ...dto};
       })
       .filter(Boolean) as ParticipantWithUser[];
   } catch (error) {
-    console.error("Failed to map participants with users:", error);
+    // console.error("Failed to map participants with users:", error);
     return [];
   }
 };
