@@ -1,176 +1,213 @@
 package sessions
 
 import (
-	"context"
-	"fmt"
-	"strings"
-	"time"
+  "context"
+  "errors"
 
-	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
+  "github.com/google/uuid"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/identifiers"
 )
 
 type DB struct {
-	db *bun.DB
+  db *bun.DB
 }
 
-func NewUserDatabase(database *bun.DB) UserDatabase {
-	db := new(DB)
-	db.db = database
+func NewSessionDatabase(database *bun.DB) SessionDatabase {
+  db := new(DB)
+  db.db = database
 
-	return db
+  return db
 }
 
-func (db *DB) CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error) {
-	var user DatabaseUser
-	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: common.Anonymous}
-	_, err := db.db.NewInsert().
-		Model(&insert).
-		Returning("*").
-		Exec(ctx, &user)
+func (database *DB) Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
+  if boardSession.Role == common.OwnerRole {
+    return DatabaseBoardSession{}, errors.New("not allowed to create board session with owner role")
+  }
 
-	return user, err
+  var session DatabaseBoardSession
+  insertQuery := database.db.NewInsert().
+    Model(&boardSession).
+    Returning("*")
+
+  err := database.db.NewSelect().
+    With("insertQuery", insertQuery).
+    Model((*DatabaseBoardSession)(nil)).
+    ModelTableExpr("\"insertQuery\" AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.board = ?", boardSession.Board).
+    Where("s.user = ?", boardSession.User).
+    Join("INNER JOIN users AS u ON u.id = s.user").
+    Scan(common.ContextWithValues(ctx,
+      "Database", database,
+      "Operation", "INSERT",
+      identifiers.BoardIdentifier, boardSession.Board,
+      "Result", &session,
+    ), &session)
+
+  return session, err
 }
 
-func (db *DB) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.Apple, "apple_users")
+func (database *DB) Update(ctx context.Context, update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
+  updateQuery := database.db.NewUpdate().
+    Model(&update)
+
+  if update.Connected != nil {
+    updateQuery = updateQuery.Column("connected")
+  }
+
+  if update.Ready != nil {
+    updateQuery = updateQuery.Column("ready")
+  }
+
+  if update.ShowHiddenColumns != nil {
+    updateQuery = updateQuery.Column("show_hidden_columns")
+  }
+
+  if update.RaisedHand != nil {
+    updateQuery = updateQuery.Column("raised_hand")
+  }
+
+  if update.Role != nil {
+    updateQuery = updateQuery.Column("role")
+    if *update.Role == common.OwnerRole {
+      updateQuery.Where("role = ?", common.OwnerRole)
+    }
+  }
+
+  if update.Banned != nil {
+    updateQuery = updateQuery.Column("banned")
+  }
+
+  updateQuery.Where("\"board\" = ?", update.Board).
+    Where("\"user\" = ?", update.User).
+    Returning("*")
+
+  var session DatabaseBoardSession
+  err := database.db.NewSelect().
+    With("updateQuery", updateQuery).
+    Model((*DatabaseBoardSession)(nil)).
+    ModelTableExpr("\"updateQuery\" AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.board = ?", update.Board).
+    Where("s.user = ?", update.User).
+    Join("INNER JOIN users AS u ON u.id = s.user").
+    Scan(common.ContextWithValues(ctx,
+      "Database", database,
+      "Operation", "UPDATE",
+      identifiers.BoardIdentifier, update.Board,
+      "Result", &session,
+    ), &session)
+
+  return session, err
 }
 
-func (db *DB) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.AzureAd, "azure_ad_users")
+func (database *DB) UpdateAll(ctx context.Context, update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
+  updateQuery := database.db.NewUpdate().
+    Model(&update)
+
+  if update.Ready != nil {
+    updateQuery = updateQuery.Column("ready")
+  }
+
+  if update.RaisedHand != nil {
+    updateQuery = updateQuery.Column("raised_hand")
+  }
+
+  updateQuery.Where("\"board\" = ?", update.Board).
+    Returning("*")
+
+  var sessions []DatabaseBoardSession
+  err := database.db.NewSelect().
+    With("updateQuery", updateQuery).
+    Model((*DatabaseBoardSession)(nil)).
+    ModelTableExpr("\"updateQuery\" AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.board = ?", update.Board).
+    Join("INNER JOIN users AS u ON u.id = s.user").
+    Scan(ctx, &sessions)
+
+  return sessions, err
 }
 
-func (db *DB) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.GitHub, "github_users")
+func (database *DB) Exists(ctx context.Context, board, user uuid.UUID) (bool, error) {
+  return database.db.NewSelect().
+    Table("board_sessions").
+    Where("\"board\" = ?", board).
+    Where("\"user\" = ?", user).
+    Exists(ctx)
 }
 
-func (db *DB) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.Google, "google_users")
+func (database *DB) ModeratorExists(ctx context.Context, board, user uuid.UUID) (bool, error) {
+  return database.db.NewSelect().
+    Table("board_sessions").
+    Where("\"board\" = ?", board).
+    Where("\"user\" = ?", user).
+    Where("role <> ?", common.ParticipantRole).
+    Exists(ctx)
 }
 
-func (db *DB) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.Microsoft, "microsoft_users")
+func (database *DB) IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error) {
+  return database.db.NewSelect().
+    Table("board_sessions").
+    Where("\"board\" = ?", board).
+    Where("\"user\" = ?", user).
+    Where("\"banned\" = ?", true).
+    Exists(ctx)
 }
 
-func (db *DB) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(ctx, id, name, avatarUrl, common.TypeOIDC, "oidc_users")
+func (database *DB) Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error) {
+  var session DatabaseBoardSession
+  err := database.db.NewSelect().
+    TableExpr("board_sessions AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.board = ?", board).
+    Where("s.user = ?", user).
+    Join("INNER JOIN users AS u ON u.id = s.user").
+    Scan(ctx, &session)
+
+  return session, err
 }
 
-func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error) {
-	update.Name = strings.TrimSpace(update.Name)
-	var user DatabaseUser
-	_, err := db.db.NewUpdate().
-		Model(&update).
-		Where("id = ?", update.ID).
-		Returning("*").
-		Exec(common.ContextWithValues(ctx, "Database", db), &user)
+func (database *DB) GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
+  query := database.db.NewSelect().
+    TableExpr("board_sessions AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.board = ?", board).
+    Join("INNER JOIN users AS u ON u.id = s.user")
 
-	return user, err
+  if len(filter) > 0 {
+    f := filter[0]
+    if f.Ready != nil {
+      query = query.Where("s.ready = ?", *f.Ready)
+    }
+    if f.RaisedHand != nil {
+      query = query.Where("s.raised_hand = ?", *f.RaisedHand)
+    }
+    if f.Connected != nil {
+      query = query.Where("s.connected = ?", *f.Connected)
+    }
+    if f.Role != nil {
+      query = query.Where("s.role = ?", *f.Role)
+    }
+  }
+
+  var sessions []DatabaseBoardSession
+  err := query.Scan(ctx, &sessions)
+  return sessions, err
 }
 
-func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
-	var user DatabaseUser
-	err := db.db.NewSelect().
-		Model(&user).
-		Where("id = ?", id).
-		Scan(ctx)
+// Gets all board sessions of a single user who he is currently connected to
+func (database *DB) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+  var sessions []DatabaseBoardSession
+  err := database.db.NewSelect().
+    TableExpr("board_sessions AS s").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+    Where("s.user = ?", user).
+    Where("s.connected").
+    Join("INNER JOIN users AS u ON u.id = s.user").
+    Scan(ctx, &sessions)
 
-	return user, err
-}
-
-func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
-	count, err := db.db.NewSelect().
-		Table("users").
-		Column("role").
-		Where("id = ?", id).
-		Where("account_type = ?", common.Anonymous).
-		Count(ctx)
-
-	if err != nil {
-		return false, err
-	}
-
-	return count > 0, nil
-}
-
-func (db *DB) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
-	count, err := db.db.NewSelect().
-		Table("users").
-		Column("role").
-		Where("id = ?", id).
-		Where("account_type = ?", common.Anonymous).
-		Where("key_migration IS NULL").
-		Count(ctx)
-
-	if err != nil {
-		return false, err
-	}
-
-	return count > 0, nil
-}
-
-func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
-	var user DatabaseUser
-	_, err := db.db.NewUpdate().
-		Table("users").
-		Set("key_migration = ?", time.Now()).
-		Where("id = ?", id).
-		Returning("*").
-		Exec(common.ContextWithValues(ctx, "Database", db), &user)
-
-	return user, err
-}
-
-func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
-	name = strings.TrimSpace(name)
-	existingUser := db.db.NewSelect().
-		TableExpr(table).
-		ColumnExpr("*").
-		Where("id = ?", id)
-
-	existsCheck := db.db.NewSelect().
-		ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
-
-	updateName := db.db.NewUpdate().
-		Model((*DatabaseUser)(nil)).
-		Column("name").Set("name = ?", name).
-		Where("(SELECT user_exists FROM exists_check)").
-		Where("id=(SELECT \"user\" FROM \"existing_user\")").
-		Where("name=(SELECT name FROM \"existing_user\")")
-
-	createNewUser := db.db.NewInsert().
-		Model((*DatabaseUser)(nil)).
-		ColumnExpr("name, account_type").
-		TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).
-		Returning("*")
-
-	selectUser := db.db.NewSelect().
-		ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
-
-	insertExternalUser := db.db.NewInsert().
-		TableExpr(table).
-		ColumnExpr("\"user\", id, name, avatar_url").
-		TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).
-		On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
-
-	selectExistingUser := db.db.NewSelect().
-		Model((*DatabaseUser)(nil)).
-		Where("id=(SELECT id FROM select_user)")
-
-	var user DatabaseUser
-	_, err := db.db.NewSelect().
-		With("existing_user", existingUser).
-		With("exists_check", existsCheck).
-		With("update_name", updateName).
-		With("create_new_user", createNewUser).
-		With("select_user", selectUser).
-		With("insert_external_user", insertExternalUser).
-		With("select_existing_user", selectExistingUser).
-		TableExpr("select_existing_user").
-		ColumnExpr("*").
-		Join("FULL JOIN \"create_new_user\" ON true").
-		Exec(ctx, &user)
-
-	return user, err
+  return sessions, err
 }

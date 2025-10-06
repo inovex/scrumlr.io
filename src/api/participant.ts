@@ -1,4 +1,4 @@
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const ParticipantsAPI = {
@@ -81,7 +81,7 @@ export const ParticipantsAPI = {
    * @param moderator the flag whether the user receives or loses moderator permissions
    * @returns a {status, description} object
    */
-  editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<Participant, "user" | "connected">>) => {
+  editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<ParticipantWithUser, "user" | "connected">>) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants/${userId}`, {
         method: "PUT",
@@ -90,7 +90,7 @@ export const ParticipantsAPI = {
       });
 
       if (response.status === 200) {
-        return (await response.json()) as Participant;
+        return (await response.json()) as ParticipantWithUser;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);
@@ -119,6 +119,38 @@ export const ParticipantsAPI = {
       throw new Error(`unable to update ready states with response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to update ready states: ${error}`);
+    }
+  },
+
+  getUserById: async (userId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/${userId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.status === 200) {
+        return await response.json();
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
+    }
+  },
+
+  getUsersByIds: async (userIds: string[]) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(userIds),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
     }
   },
 };
