@@ -1,10 +1,11 @@
 package technical_helper
 
 import (
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 type TestStruct struct {

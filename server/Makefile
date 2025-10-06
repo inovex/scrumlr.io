@@ -36,6 +36,20 @@ postman: ## Run the postman tests
 	newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
 
 .ONESHELL:
+format: ## Format all Go code
+	cd src
+	goimports -w .
+	gofmt -w .
+
+.ONESHELL:
+format-check: ## Check if code is properly formatted
+	cd src
+	test -z "$$(goimports -l .)"
+
+setup-hooks: ## Setup Git pre-commit hooks for automatic Go formatting
+	./scripts/setup-git-hooks.sh
+
+.ONESHELL:
 go-lint: ## Run the go linter
 	cd src
 	golangci-lint run --verbose
