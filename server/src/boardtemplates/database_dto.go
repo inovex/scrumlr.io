@@ -1,10 +1,11 @@
 package boardtemplates
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columntemplates"
-	"time"
 )
 
 type DatabaseBoardTemplate struct {

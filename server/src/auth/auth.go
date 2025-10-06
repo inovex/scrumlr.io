@@ -12,6 +12,8 @@ import (
 	"scrumlr.io/server/users"
 	"strings"
 
+	"scrumlr.io/server/sessions"
+
 	"github.com/uptrace/bun"
 
 	"github.com/go-chi/chi/v5"

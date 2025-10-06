@@ -20,7 +20,6 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-)
 
 // createValidBoardTemplateRequest creates a valid board template request for testing
 func createValidBoardTemplateRequest() boardtemplates.CreateBoardTemplateRequest {
