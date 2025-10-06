@@ -5,6 +5,7 @@ on:
     types: [completed]
   pull_request:
     types: [labeled]
+
 jobs:
   build-frontend:
     runs-on: self-hosted
@@ -94,6 +95,7 @@ jobs:
           kubectl wait --for=delete namespace/scrumlr-$PR_NUMBER --timeout=60s
           helm dep up deployment/chart/
           helm install scrumlr-$PR_NUMBER ./deployment/chart -f values-dev.yaml --namespace scrumlr-$PR_NUMBER --create-namespace
+
   deploy-main:
     name: Deploy Main Branch
     runs-on: self-hosted
