@@ -1,0 +1,75 @@
+.show-more-emojies-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.show-more-emojies-icon__icon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s ease;
+}
+
+// Default: show default icons, hide hover and active
+.show-more-emojies-icon__icon--default {
+  opacity: 1;
+}
+
+.show-more-emojies-icon__icon--hover,
+.show-more-emojies-icon__icon--active {
+  opacity: 0;
+}
+
+// Dark theme: hide light icons by default
+[theme="dark"] {
+  .show-more-emojies-icon__icon--light {
+    display: none;
+  }
+}
+
+// Light theme: hide dark icons by default
+[theme="light"] {
+  .show-more-emojies-icon__icon--dark {
+    display: none;
+  }
+}
+
+// Hover state: show hover icons, hide default and active
+.emoji-picker-reaction-bar__more:hover {
+  .show-more-emojies-icon__icon--default,
+  .show-more-emojies-icon__icon--active {
+    opacity: 0;
+  }
+
+  .show-more-emojies-icon__icon--hover {
+    opacity: 1;
+  }
+}
+
+// Active state: show active icons, hide default and hover
+.emoji-picker-reaction-bar__more--active {
+  .show-more-emojies-icon__icon--default,
+  .show-more-emojies-icon__icon--hover {
+    opacity: 0;
+  }
+
+  .show-more-emojies-icon__icon--active {
+    opacity: 1;
+  }
+}
+
+// Active state should override hover
+.emoji-picker-reaction-bar__more--active:hover {
+  .show-more-emojies-icon__icon--default,
+  .show-more-emojies-icon__icon--hover {
+    opacity: 0;
+  }
+
+  .show-more-emojies-icon__icon--active {
+    opacity: 1;
+  }
+}

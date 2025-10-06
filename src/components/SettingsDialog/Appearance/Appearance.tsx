@@ -8,7 +8,6 @@ import "../SettingsDialog.scss";
 import {ThemeSettings} from "../Components/ThemeSettings";
 import {NotificationSettings} from "../Components/NotificationSettings";
 import {BoardReactionsSettings} from "../Components/BoardReactionsSettings";
-import {SkinToneSelector} from "../Components/SkinToneSelector";
 import "./Appearance.scss";
 import {SnowfallSettings} from "../Components/SnowfallSettings";
 
@@ -31,7 +30,6 @@ export const Appearance = () => {
         {isDecemberOrJanuary && <SnowfallSettings />}
         <NotificationSettings />
         <BoardReactionsSettings />
-        <SkinToneSelector />
         <LanguageSettingsDropdown />
       </div>
     </div>
