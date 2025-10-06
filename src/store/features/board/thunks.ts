@@ -10,7 +10,7 @@ import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
-import {createdParticipant, Participant, ParticipantWithUserId, setParticipants, updatedParticipant} from "../participants";
+import {createdParticipant, ParticipantWithUser, ParticipantWithUserId, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
@@ -55,7 +55,7 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   }
 });
 
-const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Participant> => {
+const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<ParticipantWithUser> => {
   try {
     const user: Auth = await API.getUserById(dto.id);
     return {
@@ -72,7 +72,7 @@ const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Partici
     return Promise.reject(error);
   }
 };
-const mapMultipleParticipants = async (dtos: ParticipantWithUserId[]): Promise<Participant[]> => {
+const mapMultipleParticipants = async (dtos: ParticipantWithUserId[]): Promise<ParticipantWithUser[]> => {
   try {
     const userIds = dtos.map((dto) => dto.id);
     const users = await API.getUsersByIds(userIds);
@@ -85,13 +85,13 @@ const mapMultipleParticipants = async (dtos: ParticipantWithUserId[]): Promise<P
         }
         return {user, ...dto};
       })
-      .filter(Boolean) as Participant[];
+      .filter(Boolean) as ParticipantWithUser[];
   } catch (error) {
     console.error("Failed to map participants with users:", error);
     return [];
   }
 };
-const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<Participant[]> => {
+const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<ParticipantWithUser[]> => {
   const {participants} = message.data;
   const participantsWithId = participants as unknown as ParticipantWithUserId[];
   const mapped = await mapMultipleParticipants(participantsWithId);

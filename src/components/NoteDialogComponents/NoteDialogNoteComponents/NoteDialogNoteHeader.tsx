@@ -1,5 +1,5 @@
 import {NoteAuthorList} from "components/Note/NoteAuthorList/NoteAuthorList";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {useAppSelector} from "store";
 import {AvataaarProps} from "types/avatar";
 import {Votes} from "../../Votes";
@@ -11,7 +11,7 @@ interface NoteDialogNoteHeaderProps {
   avatar?: AvataaarProps;
   authorName: string;
   noteId: string;
-  viewer: Participant;
+  viewer: ParticipantWithUser;
   colorClassName?: string;
 }
 

@@ -1,4 +1,4 @@
-import {Participant} from "../participants";
+import {ParticipantWithUser} from "../participants";
 import {Request} from "../requests";
 import {Column} from "../columns";
 import {Note} from "../notes";
@@ -37,13 +37,13 @@ export type BoardImportData = {
   };
   columns: Column[];
   notes: Note[];
-  participants: Participant;
+  participants: ParticipantWithUser;
   voting: Voting;
 };
 
 export type BoardActionType = {
   board: Board;
-  participants: Participant[];
+  participants: ParticipantWithUser[];
   requests: Request[];
   columns: Column[];
   notes: Note[];
