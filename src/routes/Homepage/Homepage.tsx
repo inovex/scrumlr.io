@@ -42,7 +42,7 @@ export const Homepage = withTranslation()(() => {
         title: i18n.t("Error.boardDeleted"),
       });
 
-      setTimeout(() => {
+      queueMicrotask(() => {
         searchParams.delete("boardDeleted");
         const newSearch = searchParams.toString();
         const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : "");

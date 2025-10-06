@@ -97,7 +97,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "BOARD_DELETED") {
         dispatch(leaveBoard());
-        window.location.assign("/?boardDeleted=true");
+        redirectToBoardDeletedPage();
       }
 
       if (message.type === "COLUMNS_UPDATED") {
@@ -296,7 +296,7 @@ export const deleteBoard = createAsyncThunk<
 >("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
-    document.location.href = "/?boardDeleted=true";
+    redirectToBoardDeletedPage();
   });
 });
 export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
@@ -307,3 +307,8 @@ export const importBoard = createAsyncThunk<void, string, {state: ApplicationSta
     "deleteBoard"
   ).then((boardID) => window.location.assign(`/board/${boardID}`));
 });
+
+// helper function to handle board deletion redirects
+const redirectToBoardDeletedPage = () => {
+  window.location.replace("/?boardDeleted=true");
+};
