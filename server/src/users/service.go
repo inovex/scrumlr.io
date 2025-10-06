@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"scrumlr.io/server/sessions"
 	"strings"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -23,6 +24,7 @@ type UserDatabase interface {
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
+	GetMultipleUsers(ctx context.Context, ids []uuid.UUID) ([]DatabaseUser, error)
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
@@ -177,6 +179,23 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	}
 
 	return new(User).From(user), err
+}
+
+func (service *Service) GetMultiple(ctx context.Context, ids []uuid.UUID) ([]User, error) {
+	log := logger.FromContext(ctx)
+
+	users, err := service.database.GetMultipleUsers(ctx, ids)
+	if err != nil {
+		log.Errorw("unable to get multiple users", "users", ids, "err", err)
+		return nil, err
+	}
+
+	mappedUsers := make([]User, 0, len(users))
+	for _, user := range users {
+		mappedUsers = append(mappedUsers, *new(User).From(user))
+
+	}
+	return mappedUsers, nil
 }
 
 func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {

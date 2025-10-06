@@ -39,3 +39,7 @@ func (u *User) From(user DatabaseUser) *User {
 func (*User) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
+
+type UserID struct {
+	UserID uuid.UUID `json:"id"`
+}

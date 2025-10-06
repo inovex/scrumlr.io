@@ -654,6 +654,74 @@ func (_c *MockUserService_Get_Call) RunAndReturn(run func(ctx context.Context, i
 	return _c
 }
 
+// GetMultiple provides a mock function for the type MockUserService
+func (_mock *MockUserService) GetMultiple(ctx context.Context, id []uuid.UUID) ([]User, error) {
+	ret := _mock.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetMultiple")
+	}
+
+	var r0 []User
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []uuid.UUID) ([]User, error)); ok {
+		return returnFunc(ctx, id)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []uuid.UUID) []User); ok {
+		r0 = returnFunc(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]User)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserService_GetMultiple_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetMultiple'
+type MockUserService_GetMultiple_Call struct {
+	*mock.Call
+}
+
+// GetMultiple is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id []uuid.UUID
+func (_e *MockUserService_Expecter) GetMultiple(ctx interface{}, id interface{}) *MockUserService_GetMultiple_Call {
+	return &MockUserService_GetMultiple_Call{Call: _e.mock.On("GetMultiple", ctx, id)}
+}
+
+func (_c *MockUserService_GetMultiple_Call) Run(run func(ctx context.Context, id []uuid.UUID)) *MockUserService_GetMultiple_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].([]uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserService_GetMultiple_Call) Return(users []User, err error) *MockUserService_GetMultiple_Call {
+	_c.Call.Return(users, err)
+	return _c
+}
+
+func (_c *MockUserService_GetMultiple_Call) RunAndReturn(run func(ctx context.Context, id []uuid.UUID) ([]User, error)) *MockUserService_GetMultiple_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // IsUserAvailableForKeyMigration provides a mock function for the type MockUserService
 func (_mock *MockUserService) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
 	ret := _mock.Called(ctx, id)

@@ -79,6 +79,23 @@ func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	return user, err
 }
 
+func (db *DB) GetMultipleUsers(ctx context.Context, ids []uuid.UUID) ([]DatabaseUser, error) {
+	var users []DatabaseUser
+
+	query := db.db.NewSelect().
+		Model(&users)
+
+	query = query.Where("id IN (?)", bun.In(ids))
+
+	err := query.Scan(ctx, &users)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return users, err
+}
+
 func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
 	count, err := db.db.NewSelect().
 		Table("users").

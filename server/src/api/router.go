@@ -3,8 +3,9 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/users"
 	"time"
+
+	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/sessions"
 
@@ -262,6 +263,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Put("/", s.updateUser)
 			r.Get("/{user}", s.getUserByID)
+			r.Post("/", s.getMultipleUserByID)
 		})
 	})
 }

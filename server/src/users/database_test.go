@@ -179,6 +179,30 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
 	assert.Equal(t, suite.users["Stan"].KeyMigration, dbUser.KeyMigration)
 	assert.Equal(t, suite.users["Stan"].Avatar, dbUser.Avatar)
 }
+func (suite *DatabaseUserTestSuite) Test_Database_GetMultipleUsers() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := []uuid.UUID{suite.users["Stan"].ID, suite.users["Santa"].ID}
+
+	dbUser, err := database.GetMultipleUsers(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, suite.users["Stan"].ID, dbUser[0].ID)
+	assert.Equal(t, suite.users["Santa"].ID, dbUser[1].ID)
+}
+
+func (suite *DatabaseUserTestSuite) Test_Database_GetMultipleUsers_Empty() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := []uuid.UUID{uuid.New(), uuid.New()}
+
+	dbUser, err := database.GetMultipleUsers(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Empty(t, dbUser)
+}
 
 func (suite *DatabaseUserTestSuite) Test_Database_GetUser_NotFound() {
 	t := suite.T()
