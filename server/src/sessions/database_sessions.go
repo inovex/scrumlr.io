@@ -2,7 +2,6 @@ package sessions
 
 import (
 	"context"
-	"errors"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -22,10 +21,6 @@ func NewSessionDatabase(database *bun.DB) SessionDatabase {
 }
 
 func (database *SessionDB) Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
-	if boardSession.Role == common.OwnerRole {
-		return DatabaseBoardSession{}, errors.New("not allowed to create board session with owner role")
-	}
-
 	var session DatabaseBoardSession
 	insertQuery := database.db.NewInsert().
 		Model(&boardSession).
