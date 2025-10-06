@@ -136,4 +136,21 @@ export const ParticipantsAPI = {
       throw new Error(`unable to fetch user: ${error}`);
     }
   },
+
+  getUsersByIds: async (userIds: string[]) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(userIds),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
+    }
+  },
 };

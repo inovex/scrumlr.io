@@ -10,7 +10,7 @@ import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
-import {createdParticipant, Participant, ParticipantDTO, setParticipants, updatedParticipant} from "../participants";
+import {createdParticipant, Participant, ParticipantWithUserId, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
@@ -55,23 +55,46 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   }
 });
 
-const dtoToParticipant = async (dto: ParticipantDTO): Promise<Participant> => {
-  const user: Auth = await API.getUserById(dto.id);
-  return {
-    user,
-    connected: dto.connected,
-    raisedHand: dto.raisedHand,
-    ready: dto.ready,
-    showHiddenColumns: dto.showHiddenColumns,
-    role: dto.role,
-    banned: dto.banned,
-  };
+const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Participant> => {
+  try {
+    const user: Auth = await API.getUserById(dto.id);
+    return {
+      user,
+      connected: dto.connected,
+      raisedHand: dto.raisedHand,
+      ready: dto.ready,
+      showHiddenColumns: dto.showHiddenColumns,
+      role: dto.role,
+      banned: dto.banned,
+    };
+  } catch (error) {
+    console.error("Failed to map participant with user:", error);
+    return Promise.reject(error);
+  }
 };
-
+const mapMultipleParticipants = async (dtos: ParticipantWithUserId[]): Promise<Participant[]> => {
+  try {
+    const userIds = dtos.map((dto) => dto.id);
+    const users = await API.getUsersByIds(userIds);
+    return dtos
+      .map((dto) => {
+        const user = users.find((u: Auth) => u.id === dto.id);
+        if (!user) {
+          console.warn(`User not found for participant ${dto.id}`);
+          return null;
+        }
+        return {user, ...dto};
+      })
+      .filter(Boolean) as Participant[];
+  } catch (error) {
+    console.error("Failed to map participants with users:", error);
+    return [];
+  }
+};
 const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<Participant[]> => {
   const {participants} = message.data;
-  const asDTOs = participants as unknown as ParticipantDTO[];
-  const mapped = await Promise.all(asDTOs.map(dtoToParticipant));
+  const participantsWithId = participants as unknown as ParticipantWithUserId[];
+  const mapped = await mapMultipleParticipants(participantsWithId);
   message.data.participants = mapped;
   return mapped;
 };
@@ -161,12 +184,11 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        const participant = await dtoToParticipant(message.data as unknown as ParticipantDTO);
+        const participant = await mapSingleParticipant(message.data as unknown as ParticipantWithUserId);
         dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        const dto = message.data as unknown as ParticipantDTO;
-        const participant = await dtoToParticipant(dto);
+        const participant = await mapSingleParticipant(message.data as unknown as ParticipantWithUserId);
         dispatch(
           updatedParticipant({
             participant,
@@ -176,8 +198,7 @@ export const permittedBoardAccess = createAsyncThunk<
       }
 
       if (message.type === "PARTICIPANTS_UPDATED") {
-        const dtos = message.data as unknown as ParticipantDTO[];
-        const participants = await Promise.all(dtos.map(dtoToParticipant));
+        const participants = await mapMultipleParticipants(message.data as unknown as ParticipantWithUserId[]);
         dispatch(
           setParticipants({
             participants,

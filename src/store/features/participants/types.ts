@@ -12,7 +12,7 @@ export interface Participant {
   banned?: boolean;
 }
 
-export interface ParticipantDTO {
+export interface ParticipantWithUserId {
   id: string;
   connected: boolean;
   ready: boolean;
