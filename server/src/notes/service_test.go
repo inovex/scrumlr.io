@@ -181,35 +181,25 @@ func TestImport_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestUpdateNote(t *testing.T) {
+func TestUpdate_Text_Owner(t *testing.T) {
 	callerId := uuid.New()
-	authorId := callerId
+	callerRole := common.OwnerRole
+	authorId := uuid.New()
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
 	rank := 0
-	pos := NotePosition{
-		Column: columnId,
-		Rank:   rank - 1,
-		Stack:  stackId,
-	}
-	posUpdate := NoteUpdatePosition{
-		Column: columnId,
-		Rank:   rank,
-		Stack:  stackId,
-	}
 
 	mockDB := NewMockNotesDatabase(t)
 	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: common.ParticipantRole, Author: authorId}, nil)
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
 	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     &text,
-		Position: &posUpdate,
+		Position: nil,
 		Edited:   true,
 	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
 	mockDB.EXPECT().GetAll(mock.Anything, boardId).
@@ -228,7 +218,7 @@ func TestUpdateNote(t *testing.T) {
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
-		Position: &pos,
+		Position: nil,
 		Edited:   true,
 	})
 
@@ -241,7 +231,7 @@ func TestUpdateNote(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdateNote_Owner(t *testing.T) {
+func TestUpdate_Position_Owner(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.OwnerRole
 	authorId := uuid.New()
@@ -269,8 +259,58 @@ func TestUpdateNote_Owner(t *testing.T) {
 	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
-		Text:     &text,
+		Text:     nil,
 		Position: &posUpdate,
+		Edited:   false,
+	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
+	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]DatabaseNote{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockVotingService := votings.NewMockVotingService(t)
+
+	service := NewNotesService(mockDB, broker, mockVotingService)
+
+	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+		ID:       noteId,
+		Text:     nil,
+		Board:    boardId,
+		Position: &pos,
+		Edited:   false,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, noteId, note.ID)
+	assert.Equal(t, authorId, note.Author)
+	assert.Equal(t, text, note.Text)
+	assert.False(t, note.Edited)
+	assert.Equal(t, columnId, note.Position.Column)
+	assert.Equal(t, rank, note.Position.Rank)
+}
+
+func TestUpdate_Text_Moderator(t *testing.T) {
+	callerId := uuid.New()
+	callerRole := common.ModeratorRole
+	authorId := uuid.New()
+	noteId := uuid.New()
+	boardId := uuid.New()
+	columnId := uuid.New()
+	stackAllowed := true
+	text := "Updated text"
+	rank := 0
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+		ID:       noteId,
+		Board:    boardId,
+		Text:     &text,
+		Position: nil,
 		Edited:   true,
 	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
 	mockDB.EXPECT().GetAll(mock.Anything, boardId).
@@ -289,7 +329,7 @@ func TestUpdateNote_Owner(t *testing.T) {
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
-		Position: &pos,
+		Position: nil,
 		Edited:   true,
 	})
 
@@ -302,7 +342,7 @@ func TestUpdateNote_Owner(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdateNote_Moderator(t *testing.T) {
+func TestUpdate_Position_Moderator(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ModeratorRole
 	authorId := uuid.New()
@@ -330,8 +370,58 @@ func TestUpdateNote_Moderator(t *testing.T) {
 	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
-		Text:     &text,
+		Text:     nil,
 		Position: &posUpdate,
+		Edited:   false,
+	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
+	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]DatabaseNote{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockVotingService := votings.NewMockVotingService(t)
+
+	service := NewNotesService(mockDB, broker, mockVotingService)
+
+	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+		Text:     nil,
+		ID:       noteId,
+		Board:    boardId,
+		Position: &pos,
+		Edited:   false,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, noteId, note.ID)
+	assert.Equal(t, authorId, note.Author)
+	assert.Equal(t, text, note.Text)
+	assert.False(t, note.Edited)
+	assert.Equal(t, columnId, note.Position.Column)
+	assert.Equal(t, rank, note.Position.Rank)
+}
+
+func TestUpdate_Text_Participant(t *testing.T) {
+	callerId := uuid.New()
+	callerRole := common.ParticipantRole
+	authorId := callerId
+	noteId := uuid.New()
+	boardId := uuid.New()
+	columnId := uuid.New()
+	stackAllowed := true
+	text := "Updated text"
+	rank := 0
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+		ID:       noteId,
+		Board:    boardId,
+		Text:     &text,
+		Position: nil,
 		Edited:   true,
 	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
 	mockDB.EXPECT().GetAll(mock.Anything, boardId).
@@ -350,8 +440,8 @@ func TestUpdateNote_Moderator(t *testing.T) {
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
-		Position: &pos,
-		Edited:   true,
+		Position: nil,
+		Edited:   false,
 	})
 
 	assert.Nil(t, err)
@@ -363,7 +453,7 @@ func TestUpdateNote_Moderator(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_UserNotAllowed(t *testing.T) {
+func TestUpdate_Text_Participant_NotAllowed(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := uuid.New()
@@ -401,7 +491,68 @@ func TestUpdate_UserNotAllowed(t *testing.T) {
 
 	assert.Nil(t, note)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change note")), err)
+	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change text of note")), err)
+}
+
+func TestUpdate_Position_Participant(t *testing.T) {
+	callerId := uuid.New()
+	callerRole := common.ParticipantRole
+	authorId := callerId
+	noteId := uuid.New()
+	boardId := uuid.New()
+	columnId := uuid.New()
+	stackAllowed := true
+	text := "Updated text"
+	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
+	rank := 0
+	pos := NotePosition{
+		Column: columnId,
+		Rank:   rank,
+		Stack:  stackId,
+	}
+	posUpdate := NoteUpdatePosition{
+		Column: columnId,
+		Rank:   rank,
+		Stack:  stackId,
+	}
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+		ID:       noteId,
+		Board:    boardId,
+		Text:     nil,
+		Position: &posUpdate,
+		Edited:   false,
+	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
+	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]DatabaseNote{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockVotingService := votings.NewMockVotingService(t)
+
+	service := NewNotesService(mockDB, broker, mockVotingService)
+
+	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+		Text:     nil,
+		ID:       noteId,
+		Board:    boardId,
+		Position: &pos,
+		Edited:   false,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, noteId, note.ID)
+	assert.Equal(t, authorId, note.Author)
+	assert.Equal(t, text, note.Text)
+	assert.False(t, note.Edited)
+	assert.Equal(t, columnId, note.Position.Column)
+	assert.Equal(t, rank, note.Position.Rank)
 }
 
 func TestUpdate_StackingNotAllowed(t *testing.T) {

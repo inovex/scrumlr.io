@@ -136,15 +136,15 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		return nil, common.InternalServerError
 	}
 
-	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole {
-		err := errors.New("not allowed to change note")
-		span.SetStatus(codes.Error, "not allowed to change note")
+	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole && body.Text != nil {
+		err := errors.New("not allowed to change text of note")
+		span.SetStatus(codes.Error, "not allowed to change text of note")
 		span.RecordError(err)
 		return nil, common.ForbiddenError(err)
 	}
 
 	var positionUpdate *NoteUpdatePosition
-	edited := body.Text != nil
+	edited := body.Text != nil || body.Edited
 	if body.Position != nil {
 		if !precondition.StackingAllowed && body.Position.Stack.Valid {
 			err := errors.New("not allowed to stack notes")
