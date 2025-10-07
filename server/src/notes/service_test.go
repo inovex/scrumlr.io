@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/votings"
 
 	"database/sql"
 	"errors"
@@ -36,9 +35,7 @@ func TestCreate(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -63,9 +60,7 @@ func TestCreate_EmptyText(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -89,9 +84,7 @@ func TestCreate_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -117,9 +110,7 @@ func TestImport(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -144,9 +135,7 @@ func TestImport_EmptyText(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -170,9 +159,7 @@ func TestImport_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -210,9 +197,7 @@ func TestUpdate_Text_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -271,9 +256,7 @@ func TestUpdate_Position_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		ID:       noteId,
@@ -321,9 +304,7 @@ func TestUpdate_Text_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -382,9 +363,7 @@ func TestUpdate_Position_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     nil,
@@ -432,9 +411,7 @@ func TestUpdate_Text_Participant(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -477,9 +454,7 @@ func TestUpdate_Text_Participant_NotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -534,9 +509,7 @@ func TestUpdate_Position_Participant(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     nil,
@@ -579,9 +552,7 @@ func TestUpdate_StackingNotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -620,9 +591,7 @@ func TestUpdate_StackOnSelf(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -674,9 +643,7 @@ func TestUpdate_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -697,7 +664,6 @@ func TestDeleteNote(t *testing.T) {
 	authorId := callerId
 	boardId := uuid.New()
 	noteId := uuid.New()
-	votingId := uuid.New()
 	deleteStack := true
 
 	ctx := context.Background()
@@ -713,16 +679,7 @@ func TestDeleteNote(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-	mockVotingService.EXPECT().GetVotes(mock.Anything, boardId, votings.VoteFilter{Note: &noteId}).
-		Return([]*votings.Vote{
-			{Voting: votingId, Note: noteId, User: uuid.New()},
-			{Voting: votingId, Note: noteId, User: uuid.New()},
-			{Voting: votingId, Note: noteId, User: callerId},
-			{Voting: uuid.New(), Note: noteId, User: callerId},
-		}, nil)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -735,7 +692,6 @@ func TestDeleteNote_Owner(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	noteId := uuid.New()
-	votingId := uuid.New()
 	deleteStack := true
 
 	ctx := context.Background()
@@ -751,16 +707,7 @@ func TestDeleteNote_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-	mockVotingService.EXPECT().GetVotes(mock.Anything, boardId, votings.VoteFilter{Note: &noteId}).
-		Return([]*votings.Vote{
-			{Voting: votingId, Note: noteId, User: authorId},
-			{Voting: votingId, Note: noteId, User: authorId},
-			{Voting: votingId, Note: noteId, User: callerId},
-			{Voting: uuid.New(), Note: noteId, User: callerId},
-		}, nil)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -773,7 +720,6 @@ func TestDeleteNote_Moderator(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	noteId := uuid.New()
-	votingId := uuid.New()
 	deleteStack := true
 
 	ctx := context.Background()
@@ -789,16 +735,7 @@ func TestDeleteNote_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-	mockVotingService.EXPECT().GetVotes(mock.Anything, boardId, votings.VoteFilter{Note: &noteId}).
-		Return([]*votings.Vote{
-			{Voting: votingId, Note: noteId, User: authorId},
-			{Voting: votingId, Note: noteId, User: authorId},
-			{Voting: votingId, Note: noteId, User: callerId},
-			{Voting: uuid.New(), Note: noteId, User: callerId},
-		}, nil)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -823,9 +760,7 @@ func TestDeleteNote_NotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -849,9 +784,7 @@ func TestGet(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -875,9 +808,7 @@ func TestGet_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -898,9 +829,7 @@ func TestGet_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -931,9 +860,7 @@ func TestGetAll(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -970,9 +897,7 @@ func TestGetAll_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -993,9 +918,7 @@ func TestGetAll_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -1018,9 +941,7 @@ func TestGetStack(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	result, err := service.GetStack(context.Background(), noteID)
 
@@ -1057,9 +978,7 @@ func TestGetStack_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockVotingService := votings.NewMockVotingService(t)
-
-	service := NewNotesService(mockDB, broker, mockVotingService)
+	service := NewNotesService(mockDB, broker)
 
 	result, err := service.GetStack(context.Background(), noteID)
 

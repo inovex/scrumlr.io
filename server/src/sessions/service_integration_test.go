@@ -16,7 +16,6 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/votings"
 )
 
 type UserServiceIntegrationTestsuite struct {
@@ -61,10 +60,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -90,10 +87,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -119,10 +114,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureadUser() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -148,10 +141,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -177,10 +168,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -206,10 +195,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -235,10 +222,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -266,10 +251,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -303,10 +286,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -332,10 +313,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -361,10 +340,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -389,10 +366,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
