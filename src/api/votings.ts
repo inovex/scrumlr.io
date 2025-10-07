@@ -27,12 +27,11 @@ export const VotingAPI = {
     }
   },
 
-  changeVotingStatus: async (board: string, voting: string, status: "CLOSED" | "ABORTED") => {
+  changeVotingStatus: async (board: string, voting: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings/${voting}`, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({status}),
       });
 
       if (response.status === 200) {

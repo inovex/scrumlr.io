@@ -66,11 +66,8 @@ func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseV
 	return voting, err
 }
 
-func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
-	if update.Status == Open {
-		return DatabaseVoting{}, errors.New("only allowed to close or abort a voting")
-	}
-
+func (d *DB) Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
+	var voting DatabaseVoting
 	updateQuery := d.db.NewUpdate().
 		Model(&update).
 		Where("id = ?", update.ID).
@@ -78,23 +75,18 @@ func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseV
 		Where("status = ?", Open).
 		Returning("*")
 
-	var voting DatabaseVoting
-	var err error
+	updateBoard := d.db.NewUpdate().
+		Model((*common.DatabaseBoard)(nil)).
+		Set("show_voting = (SELECT id FROM \"updateQuery\")").
+		Where("id = ?", update.Board)
 
-	if update.Status == Closed {
-		updateBoard := d.db.NewUpdate().
-			Model((*common.DatabaseBoard)(nil)).
-			Set("show_voting = (SELECT id FROM \"updateQuery\")").
-			Where("id = ?", update.Board)
-
-		err = d.db.NewSelect().
-			With("updateQuery", updateQuery).
-			With("updateBoard", updateBoard).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
-			Model((*DatabaseVoting)(nil)).
-			ModelTableExpr("\"updateQuery\" AS voting").
-			Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
-	}
+	err := d.db.NewSelect().
+		With("updateQuery", updateQuery).
+		With("updateBoard", updateBoard).
+		With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
+		Model((*DatabaseVoting)(nil)).
+		ModelTableExpr("\"updateQuery\" AS voting").
+		Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 
 	return voting, err
 }

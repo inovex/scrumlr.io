@@ -23,7 +23,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
 
 type VotingDatabase interface {
 	Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error)
-	Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
+	Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, error)
 	GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error)
@@ -156,44 +156,36 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 	return new(Voting).From(voting, nil), err
 }
 
-func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error) {
+func (s *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
 	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.update")
+	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.close")
 	defer span.End()
 
-	if body.Status == Open {
-		err := common.BadRequestError(errors.New("not allowed ot change to open state"))
-		span.SetStatus(codes.Error, "not alowed to change state to open")
-		span.RecordError(err)
-		return nil, err
-	}
-
 	span.SetAttributes(
-		attribute.String("scrumlr.votings.service.update.voting", body.ID.String()),
-		attribute.String("scrumlr.votings.service.update.board", body.Board.String()),
-		attribute.String("scrumlr.votings.service.update.status", string(body.Status)),
+		attribute.String("scrumlr.votings.service.close.voting", id.String()),
+		attribute.String("scrumlr.votings.service.close.board", board.String()),
 	)
 
-	voting, err := s.database.Update(ctx, DatabaseVotingUpdate{
-		ID:     body.ID,
-		Board:  body.Board,
-		Status: body.Status,
+	voting, err := s.database.Close(ctx, DatabaseVotingUpdate{
+		ID:     id,
+		Board:  board,
+		Status: Closed,
 	})
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "No vote found to update")
+			span.SetStatus(codes.Error, "No voting found to update")
 			span.RecordError(err)
 			return nil, common.NotFoundError
 		}
 
-		span.SetStatus(codes.Error, "failed to update voting")
+		span.SetStatus(codes.Error, "failed to close voting")
 		span.RecordError(err)
-		log.Errorw("unable to update voting", "err", err)
+		log.Errorw("unable to close voting", "err", err)
 		return nil, common.InternalServerError
 	}
 
-	receivedVotes, err := s.database.GetVotes(ctx, body.Board, VoteFilter{Voting: &body.ID})
+	receivedVotes, err := s.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
@@ -201,7 +193,7 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 		return nil, err
 	}
 
-	s.updatedVoting(ctx, body.Board, voting, receivedVotes, affectedNotes)
+	s.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
 	return new(Voting).From(voting, receivedVotes), err
 }
 

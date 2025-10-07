@@ -8,7 +8,7 @@ import (
 
 type VotingService interface {
 	Create(ctx context.Context, body VotingCreateRequest) (*Voting, error)
-	Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error)
+	Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (*Voting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]*Voting, error)
 	GetOpen(ctx context.Context, board uuid.UUID) (*Voting, error)

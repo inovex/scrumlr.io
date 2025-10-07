@@ -206,8 +206,10 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
 func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 	t := suite.T()
 	ctx := context.Background()
+	t := suite.T()
+	ctx := context.Background()
 
-	boardId := suite.boards["Update"].id
+	boardId := suite.boards["CreateDuplicate"].id
 	voteLimit := 10
 	allowMultiple := true
 	showOfOthers := false
@@ -228,13 +230,12 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 	assert.Equal(t, common.BadRequestError(errors.New("only one open voting session is allowed")), err)
 }
 
-func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting() {
+func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 	t := suite.T()
 	ctx := context.Background()
 
 	votingId := suite.votings["Update"].ID
 	boardId := suite.boards["Update"].id
-	status := Closed
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -251,11 +252,11 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting() {
 		{ID: suite.notes["Update2"].id, Author: suite.notes["Update2"].authorId, Text: suite.notes["Update2"].text, Position: NotePosition{Column: suite.notes["Update2"].columnId}},
 		{ID: suite.notes["Update3"].id, Author: suite.notes["Update3"].authorId, Text: suite.notes["Update3"].text, Position: NotePosition{Column: suite.notes["Update3"].columnId}},
 	}
-	voting, err := service.Update(ctx, VotingUpdateRequest{ID: votingId, Board: boardId, Status: status}, affectedNotes)
+	voting, err := service.Close(ctx, votingId, boardId, affectedNotes)
 
 	assert.Nil(t, err)
 	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, status, voting.Status)
+	assert.Equal(t, Closed, voting.Status)
 	assert.NotNil(t, voting.VotingResults)
 	assert.Equal(t, 6, voting.VotingResults.Total)
 
@@ -267,19 +268,18 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting() {
 	}
 	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
 	assert.Nil(t, err)
-	assert.Equal(t, status, votingData.Voting.Status)
+	assert.Equal(t, Closed, votingData.Voting.Status)
 	assert.NotNil(t, votingData.Voting.VotingResults)
 	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
 
 }
 
-func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Sorted_Cards() {
+func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() {
 	t := suite.T()
 	ctx := context.Background()
 
 	votingId := suite.votings["SortedUpdate"].ID
 	boardId := suite.boards["SortedUpdate"].id
-	status := Closed
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -296,11 +296,11 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Sorted_Cards()
 		{ID: suite.notes["SortedUpdate2"].id, Author: suite.notes["SortedUpdate2"].authorId, Text: suite.notes["SortedUpdate2"].text, Position: NotePosition{Column: suite.notes["SortedUpdate2"].columnId}},
 		{ID: suite.notes["SortedUpdate3"].id, Author: suite.notes["SortedUpdate3"].authorId, Text: suite.notes["SortedUpdate3"].text, Position: NotePosition{Column: suite.notes["SortedUpdate3"].columnId}},
 	}
-	voting, err := service.Update(ctx, VotingUpdateRequest{ID: votingId, Board: boardId, Status: status}, affectedNotes)
+	voting, err := service.Close(ctx, votingId, boardId, affectedNotes)
 
 	assert.Nil(t, err)
 	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, status, voting.Status)
+	assert.Equal(t, Closed, voting.Status)
 	assert.NotNil(t, voting.VotingResults)
 	assert.Equal(t, 6, voting.VotingResults.Total)
 
@@ -312,7 +312,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Sorted_Cards()
 	}
 	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
 	assert.Nil(t, err)
-	assert.Equal(t, status, votingData.Voting.Status)
+	assert.Equal(t, Closed, votingData.Voting.Status)
 	assert.NotNil(t, votingData.Voting.VotingResults)
 	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
 	assert.Len(t, votingData.Notes, 3)
@@ -328,34 +328,6 @@ func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Sorted_Cards()
 		suite.notes["SortedUpdate2"].id, // 1 vote
 	}
 	assert.Equal(t, got, want, "notes should be ordered by vote count DESC")
-}
-
-func (suite *VotingServiceIntegrationTestSuite) Test_UpdateVoting_Open() {
-	t := suite.T()
-	ctx := context.Background()
-
-	votingId := suite.votings["Update"].ID
-	boardId := suite.boards["Update"].id
-	status := Open
-
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	affectedNotes := []Note{
-		{ID: suite.notes["Update7"].id, Author: suite.notes["Update7"].authorId, Text: suite.notes["Update7"].text, Position: NotePosition{Column: suite.notes["Update7"].columnId}},
-		{ID: suite.notes["Update8"].id, Author: suite.notes["Update8"].authorId, Text: suite.notes["Update8"].text, Position: NotePosition{Column: suite.notes["Update8"].columnId}},
-		{ID: suite.notes["Update9"].id, Author: suite.notes["Update9"].authorId, Text: suite.notes["Update9"].text, Position: NotePosition{Column: suite.notes["Update9"].columnId}},
-	}
-	voting, err := service.Update(ctx, VotingUpdateRequest{ID: votingId, Board: boardId, Status: status}, affectedNotes)
-
-	assert.Nil(t, voting)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("not allowed ot change to open state")), err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetVoting_Open() {
