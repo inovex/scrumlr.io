@@ -3,10 +3,11 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"

@@ -293,7 +293,8 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				}
 			} else {
 				if !te.sessionExists {
-					sessionMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessions.BoardSession), te.err)
+					sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+						Return(new(sessions.BoardSession), te.err)
 				}
 
 			}

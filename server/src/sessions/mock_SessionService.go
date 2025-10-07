@@ -154,8 +154,8 @@ func (_c *MockSessionService_Connect_Call) RunAndReturn(run func(ctx context.Con
 }
 
 // Create provides a mock function for the type MockSessionService
-func (_mock *MockSessionService) Create(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSession, error) {
-	ret := _mock.Called(ctx, boardID, userID)
+func (_mock *MockSessionService) Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error) {
+	ret := _mock.Called(ctx, body)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -163,18 +163,18 @@ func (_mock *MockSessionService) Create(ctx context.Context, boardID uuid.UUID, 
 
 	var r0 *BoardSession
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (*BoardSession, error)); ok {
-		return returnFunc(ctx, boardID, userID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, BoardSessionCreateRequest) (*BoardSession, error)); ok {
+		return returnFunc(ctx, body)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) *BoardSession); ok {
-		r0 = returnFunc(ctx, boardID, userID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, BoardSessionCreateRequest) *BoardSession); ok {
+		r0 = returnFunc(ctx, body)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*BoardSession)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
-		r1 = returnFunc(ctx, boardID, userID)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, BoardSessionCreateRequest) error); ok {
+		r1 = returnFunc(ctx, body)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -188,30 +188,24 @@ type MockSessionService_Create_Call struct {
 
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
-//   - boardID uuid.UUID
-//   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) Create(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_Create_Call {
-	return &MockSessionService_Create_Call{Call: _e.mock.On("Create", ctx, boardID, userID)}
+//   - body BoardSessionCreateRequest
+func (_e *MockSessionService_Expecter) Create(ctx interface{}, body interface{}) *MockSessionService_Create_Call {
+	return &MockSessionService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
-func (_c *MockSessionService_Create_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionService_Create_Call {
+func (_c *MockSessionService_Create_Call) Run(run func(ctx context.Context, body BoardSessionCreateRequest)) *MockSessionService_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 uuid.UUID
+		var arg1 BoardSessionCreateRequest
 		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
+			arg1 = args[1].(BoardSessionCreateRequest)
 		}
 		run(
 			arg0,
 			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -222,7 +216,7 @@ func (_c *MockSessionService_Create_Call) Return(boardSession *BoardSession, err
 	return _c
 }
 
-func (_c *MockSessionService_Create_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSession, error)) *MockSessionService_Create_Call {
+func (_c *MockSessionService_Create_Call) RunAndReturn(run func(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)) *MockSessionService_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }

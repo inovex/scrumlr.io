@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -264,6 +265,7 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 func TestUpdatesessionRequest(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	role := common.ParticipantRole
 
 	user := sessions.User{
 		ID: userId,
@@ -273,8 +275,8 @@ func TestUpdatesessionRequest(t *testing.T) {
 		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
 
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().Create(mock.Anything, boardId, userId).
-		Return(&sessions.BoardSession{Board: boardId, User: user}, nil)
+	mockSessionService.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardId, User: userId, Role: role}).
+		Return(&sessions.BoardSession{Board: boardId, User: user, Role: role}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
