@@ -461,6 +461,11 @@ func (d *DB) GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, er
 
 func (d *DB) GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error) {
 	var precondition Precondition
+	boardSelect := d.db.NewSelect().
+		Model((*common.DatabaseBoard)(nil)).
+		Column("allow_stacking").
+		Where("id = ?", board)
+
 	sessionSelect := d.db.NewSelect().
 		Model((*common.DatabaseBoardSession)(nil)).
 		Column("role").
@@ -474,6 +479,7 @@ func (d *DB) GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID,
 		Where("board = ?", board)
 
 	err := d.db.NewSelect().
+		ColumnExpr("(?) AS stacking_allowed", boardSelect).
 		ColumnExpr("(?) AS caller_role", sessionSelect).
 		ColumnExpr("(?) as author", noteSelect).
 		Scan(ctx, &precondition)
