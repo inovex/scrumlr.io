@@ -219,6 +219,23 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		return common.ForbiddenError(err)
 	}
 
+	stackIds := []uuid.UUID{body.ID}
+	if body.DeleteStack {
+		stack, err := service.GetStack(ctx, body.ID)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get note stack")
+			span.RecordError(err)
+			return common.InternalServerError
+		}
+
+		for _, s := range stack {
+			if s.ID == body.ID {
+				continue
+			}
+			stackIds = append(stackIds, s.ID)
+		}
+	}
+
 	err = service.database.DeleteNote(ctx, user, body.Board, body.ID, body.DeleteStack)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete note")
@@ -227,7 +244,8 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		return err
 	}
 
-	service.deletedNote(ctx, body.Board, body.ID, body.DeleteStack)
+	service.deletedNote(ctx, body.Board, stackIds...)
+
 	notesDeletedCounter.Add(ctx, 1)
 	return nil
 }
@@ -328,24 +346,16 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	})
 }
 
-func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, deleteStack bool) {
+func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes ...uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.delete")
 	defer span.End()
 
 	span.SetAttributes(
 		attribute.String("scrumlr.notes.service.delete.board", board.String()),
-		attribute.String("scrumlr.notes.service.delete.note", note.String()),
-		attribute.Bool("scrumlr.notes.service.delete.stack", deleteStack),
 	)
 
 	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
-		Data: struct {
-			Note        uuid.UUID `json:"note"`
-			DeleteStack bool      `json:"deleteStack"`
-		}{
-			Note:        note,
-			DeleteStack: deleteStack,
-		},
+		Data: notes,
 	})
 }
