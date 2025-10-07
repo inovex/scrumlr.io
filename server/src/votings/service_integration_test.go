@@ -436,10 +436,11 @@ func (suite *VotingServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
 
 	// test board
-	suite.boards = make(map[string]TestBoard, 7)
+	suite.boards = make(map[string]TestBoard, 8)
 	// test boards for creating, updating and reading votings
 	suite.boards["Create"] = TestBoard{id: uuid.New(), name: "Create Board"}
 	suite.boards["CreateEmpty"] = TestBoard{id: uuid.New(), name: "Create Board"}
+	suite.boards["CreateDuplicate"] = TestBoard{id: uuid.New(), name: "Create Duplicate Board"}
 	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update Board"}
 	suite.boards["ClosedUpdate"] = TestBoard{id: uuid.New(), name: "Closed update Board"}
 	suite.boards["Read"] = TestBoard{id: uuid.New(), name: "Read Board"}
@@ -487,7 +488,8 @@ func (suite *VotingServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	suite.notes["WriteMultiple"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["WriteMultiple"].id, columnId: suite.columns["WriteMultiple"].id, text: "Note for multiple votes"}
 
 	// test voting
-	suite.votings = make(map[string]DatabaseVoting, 7)
+	suite.votings = make(map[string]DatabaseVoting, 10)
+	suite.votings["CreateDuplicate"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["CreateDuplicate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
 	suite.votings["Update"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Update"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
 	suite.votings["ClosedUpdate"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["ClosedUpdate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
 	suite.votings["ReadOpen"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Read"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}

@@ -128,6 +128,20 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 		attribute.Bool("scrumlr.votings.service.create.show_votes", body.ShowVotesOfOthers),
 	)
 
+	if body.VoteLimit < 0 {
+		err := errors.New("vote limit cannot be smaller than 0")
+		span.SetStatus(codes.Error, "Vote limit cannot be smaller than 0")
+		span.RecordError(err)
+		return nil, common.BadRequestError(err)
+	}
+
+	if body.VoteLimit >= 100 {
+		err := errors.New("vote limit cannot be greater than 100")
+		span.SetStatus(codes.Error, "Vote limit cannot be greater than 100")
+		span.RecordError(err)
+		return nil, common.BadRequestError(err)
+	}
+
 	voting, err := s.database.Create(ctx, DatabaseVotingInsert{
 		Board:              body.Board,
 		VoteLimit:          body.VoteLimit,

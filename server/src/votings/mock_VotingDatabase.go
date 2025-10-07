@@ -116,6 +116,72 @@ func (_c *MockVotingDatabase_AddVote_Call) RunAndReturn(run func(ctx context.Con
 	return _c
 }
 
+// Close provides a mock function for the type MockVotingDatabase
+func (_mock *MockVotingDatabase) Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
+	ret := _mock.Called(ctx, update)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Close")
+	}
+
+	var r0 DatabaseVoting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseVotingUpdate) (DatabaseVoting, error)); ok {
+		return returnFunc(ctx, update)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseVotingUpdate) DatabaseVoting); ok {
+		r0 = returnFunc(ctx, update)
+	} else {
+		r0 = ret.Get(0).(DatabaseVoting)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseVotingUpdate) error); ok {
+		r1 = returnFunc(ctx, update)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockVotingDatabase_Close_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Close'
+type MockVotingDatabase_Close_Call struct {
+	*mock.Call
+}
+
+// Close is a helper method to define mock.On call
+//   - ctx context.Context
+//   - update DatabaseVotingUpdate
+func (_e *MockVotingDatabase_Expecter) Close(ctx interface{}, update interface{}) *MockVotingDatabase_Close_Call {
+	return &MockVotingDatabase_Close_Call{Call: _e.mock.On("Close", ctx, update)}
+}
+
+func (_c *MockVotingDatabase_Close_Call) Run(run func(ctx context.Context, update DatabaseVotingUpdate)) *MockVotingDatabase_Close_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseVotingUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseVotingUpdate)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockVotingDatabase_Close_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_Close_Call {
+	_c.Call.Return(databaseVoting, err)
+	return _c
+}
+
+func (_c *MockVotingDatabase_Close_Call) RunAndReturn(run func(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)) *MockVotingDatabase_Close_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Create provides a mock function for the type MockVotingDatabase
 func (_mock *MockVotingDatabase) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error) {
 	ret := _mock.Called(ctx, insert)
@@ -527,72 +593,6 @@ func (_c *MockVotingDatabase_RemoveVote_Call) Return(err error) *MockVotingDatab
 }
 
 func (_c *MockVotingDatabase_RemoveVote_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, user uuid.UUID, note uuid.UUID) error) *MockVotingDatabase_RemoveVote_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// Update provides a mock function for the type MockVotingDatabase
-func (_mock *MockVotingDatabase) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
-	ret := _mock.Called(ctx, update)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Update")
-	}
-
-	var r0 DatabaseVoting
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseVotingUpdate) (DatabaseVoting, error)); ok {
-		return returnFunc(ctx, update)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseVotingUpdate) DatabaseVoting); ok {
-		r0 = returnFunc(ctx, update)
-	} else {
-		r0 = ret.Get(0).(DatabaseVoting)
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseVotingUpdate) error); ok {
-		r1 = returnFunc(ctx, update)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockVotingDatabase_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
-type MockVotingDatabase_Update_Call struct {
-	*mock.Call
-}
-
-// Update is a helper method to define mock.On call
-//   - ctx context.Context
-//   - update DatabaseVotingUpdate
-func (_e *MockVotingDatabase_Expecter) Update(ctx interface{}, update interface{}) *MockVotingDatabase_Update_Call {
-	return &MockVotingDatabase_Update_Call{Call: _e.mock.On("Update", ctx, update)}
-}
-
-func (_c *MockVotingDatabase_Update_Call) Run(run func(ctx context.Context, update DatabaseVotingUpdate)) *MockVotingDatabase_Update_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 DatabaseVotingUpdate
-		if args[1] != nil {
-			arg1 = args[1].(DatabaseVotingUpdate)
-		}
-		run(
-			arg0,
-			arg1,
-		)
-	})
-	return _c
-}
-
-func (_c *MockVotingDatabase_Update_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_Update_Call {
-	_c.Call.Return(databaseVoting, err)
-	return _c
-}
-
-func (_c *MockVotingDatabase_Update_Call) RunAndReturn(run func(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)) *MockVotingDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

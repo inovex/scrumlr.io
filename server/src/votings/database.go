@@ -2,7 +2,6 @@ package votings
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -22,16 +21,6 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 }
 
 func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error) {
-	if insert.Status != Open {
-		return DatabaseVoting{}, errors.New("unable to create voting with other state than 'OPEN'")
-	}
-
-	if insert.VoteLimit < 0 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be a negative number")
-	} else if insert.VoteLimit >= 100 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be greater than 99")
-	}
-
 	countOpenVotings := d.db.NewSelect().
 		Model((*Voting)(nil)).
 		ColumnExpr("COUNT(*) as count").

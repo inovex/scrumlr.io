@@ -68,7 +68,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 	body.Board = board
 	body.User = user
 
-	err := s.votings.RemoveVote(r.Context(), body)
+	err := s.votings.RemoveVote(ctx, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to remove vote")
 		span.RecordError(err)
