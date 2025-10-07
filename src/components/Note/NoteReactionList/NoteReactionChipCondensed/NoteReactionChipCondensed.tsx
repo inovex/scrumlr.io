@@ -21,13 +21,16 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const reactionImages = reactionsFiltered.map((r) => REACTION_EMOJI_MAP.get(r.reactionType));
   // result example: [0]: "User 1, User 2: laughingEmoji"
   //                 [1]: "User 3: heartEmoji"
-  const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${REACTION_EMOJI_MAP.get(r.reactionType)}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
   const anchorId = uniqueId(`reactions-${noteId}-condensed`);
 
   const skinTone = useAppSelector((state) => state.skinTone);
-
+  const reactionUsersTitle = reactionsFiltered.map(({reactionType, users}) => {
+    const emoji = getEmojiWithSkinTone(REACTION_EMOJI_MAP.get(reactionType)!, skinTone);
+    const userNames = users.map(({user}) => user.name).join(", ");
+    return `${userNames}: ${emoji}`;
+  });
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
