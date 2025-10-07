@@ -1,8 +1,9 @@
 package boards
 
 import (
-	"scrumlr.io/server/sessions"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
