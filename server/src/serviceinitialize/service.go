@@ -128,9 +128,9 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 	return userService
 }
 
-func (init *ServiceInitializer) InitializeNotesService(votingService votings.VotingService) notes.NotesService {
+func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.rt, votingService)
+	notesService := notes.NewNotesService(notesDB, init.rt)
 
 	return notesService
 }

@@ -10,7 +10,6 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -22,9 +21,8 @@ var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 
 type Service struct {
-	database      NotesDatabase
-	votingService votings.VotingService
-	realtime      *realtime.Broker
+	database NotesDatabase
+	realtime *realtime.Broker
 }
 
 type NotesDatabase interface {
@@ -39,11 +37,10 @@ type NotesDatabase interface {
 	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker, votingService votings.VotingService) NotesService {
+func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
-	service.votingService = votingService
 
 	return service
 }
@@ -222,15 +219,6 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		return common.ForbiddenError(err)
 	}
 
-	// Get votes for sending them over the websockets.
-	// Votes don't have to be deleted by the backend, because of cascad deleteing in the database
-	votes, err := service.votingService.GetVotes(ctx, body.Board, votings.VoteFilter{Note: &body.ID})
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
-		span.RecordError(err)
-		return common.InternalServerError
-	}
-
 	err = service.database.DeleteNote(ctx, user, body.Board, body.ID, body.DeleteStack)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete note")
@@ -239,7 +227,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		return err
 	}
 
-	service.deletedNote(ctx, body.Board, body.ID, votes, body.DeleteStack)
+	service.deletedNote(ctx, body.Board, body.ID, body.DeleteStack)
 	notesDeletedCounter.Add(ctx, 1)
 	return nil
 }
@@ -340,7 +328,7 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	})
 }
 
-func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
+func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, deleteStack bool) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.delete")
 	defer span.End()
 
@@ -359,10 +347,5 @@ func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, 
 			Note:        note,
 			DeleteStack: deleteStack,
 		},
-	})
-
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotesDeleted,
-		Data: deletedVotes,
 	})
 }

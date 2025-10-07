@@ -67,10 +67,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Create() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	note, err := service.Create(ctx, NoteCreateRequest{Board: boardId, User: authorId, Column: columnId, Text: text})
 
@@ -102,10 +100,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Import() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	note, err := service.Import(ctx, NoteImportRequest{User: userId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -133,10 +129,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Update() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	note, err := service.Update(ctx, userId, NoteUpdateRequest{
 		ID:     noteId,
@@ -180,10 +174,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Delete() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	err = service.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -218,10 +210,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	note, err := service.Get(ctx, noteId)
 
@@ -246,10 +236,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	note, err := service.Get(ctx, noteId)
 
@@ -270,10 +258,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	notes, err := service.GetAll(ctx, boardId, columnId)
 
@@ -308,10 +294,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetStack() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker, voteService)
+	service := NewNotesService(database, broker)
 
 	notes, err := service.GetStack(ctx, noteId)
 
