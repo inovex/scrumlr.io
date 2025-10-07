@@ -317,10 +317,13 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete board")
 		span.RecordError(err)
 		log.Errorw("unable to delete board", "err", err)
+		return err
 	}
 
+	service.DeletedBoard(ctx, id)
 	boardDeletedCounter.Add(ctx, 1)
-	return err
+
+	return nil
 }
 
 func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
