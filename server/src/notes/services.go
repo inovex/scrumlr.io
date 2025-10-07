@@ -13,7 +13,6 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -159,9 +158,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		attribute.Bool("scrumlr.notes.service.delete.stack", body.DeleteStack),
 	)
 
-	votes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{
-		Note: &body.ID,
-	})
+	votes, err := service.votingService.GetVotes(ctx, body.Board, votings.VoteFilter{Note: &body.ID})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)

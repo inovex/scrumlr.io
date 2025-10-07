@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common/filter"
 )
 
 type VotingService interface {
@@ -16,7 +15,7 @@ type VotingService interface {
 
 	AddVote(ctx context.Context, req VoteRequest) (*Vote, error)
 	RemoveVote(ctx context.Context, req VoteRequest) error
-	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error)
+	GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error)
 }
 
 type VotingApi struct {

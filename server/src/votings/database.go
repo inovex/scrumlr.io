@@ -2,13 +2,11 @@ package votings
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 )
 
 type DB struct {
@@ -23,16 +21,6 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 }
 
 func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error) {
-	if insert.Status != Open {
-		return DatabaseVoting{}, errors.New("unable to create voting with other state than 'OPEN'")
-	}
-
-	if insert.VoteLimit < 0 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be a negative number")
-	} else if insert.VoteLimit >= 100 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be greater than 99")
-	}
-
 	countOpenVotings := d.db.NewSelect().
 		Model((*Voting)(nil)).
 		ColumnExpr("COUNT(*) as count").
@@ -135,10 +123,10 @@ func (d *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, err
 	return votings, err
 }
 
-func (d *DB) GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error) {
+func (d *DB) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error) {
 	voteQuery := d.db.NewSelect().
 		Model((*Vote)(nil)).
-		Where("board = ?", f.Board)
+		Where("board = ?", board)
 
 	if f.Voting != nil {
 		voteQuery = voteQuery.Where("voting = ?", *f.Voting)
