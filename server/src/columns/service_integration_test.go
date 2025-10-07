@@ -221,9 +221,13 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Delete() {
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventColumnDeleted, msg.Type)
-	columnData, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
+	type DeleteColumn struct {
+		Column uuid.UUID
+		Notes  []uuid.UUID
+	}
+	columnData, err := technical_helper.Unmarshal[DeleteColumn](msg.Data)
 	assert.Nil(t, err)
-	assert.Equal(t, columnId, *columnData)
+	assert.Equal(t, columnId, columnData.Column)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Get() {

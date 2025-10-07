@@ -116,6 +116,11 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		return err
 	}
 
+	noteIds := make([]uuid.UUID, 0, len(notes))
+	for _, n := range notes {
+		noteIds = append(noteIds, n.ID)
+	}
+
 	err = service.database.Delete(ctx, board, column)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete column")
@@ -124,7 +129,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		return err
 	}
 
-	service.deletedColumn(ctx, board, column, notes)
+	service.deletedColumn(ctx, board, column, noteIds)
 	columnsDeletedCounter.Add(ctx, 1)
 	return err
 }
@@ -271,17 +276,18 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	return "", err
 }
 
-func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID, notes []*notes.Note) {
+func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID, notes []uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
 	defer span.End()
 
 	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
-		Data: column,
-	})
-
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventNotesUpdated,
-		Data: notes,
+		Data: struct {
+			Column uuid.UUID   `json:"column"`
+			Notes  []uuid.UUID `json:"notes"`
+		}{
+			Column: column,
+			Notes:  notes,
+		},
 	})
 }
