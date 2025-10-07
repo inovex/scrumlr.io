@@ -1,0 +1,774 @@
+{
+  "InfoBar": {
+    "ReturnToPresentedNote": "Retour à la note présentée",
+    "VotingIsAnonymous": "Le vote est anonyme",
+    "VotingIsNotAnonymous": "Le vote n'est pas anonyme"
+  },
+  "LegacyNewBoard": {
+    "boardName": "Nom du tableau",
+    "createNewBoard": "Créer un nouveau tableau",
+    "extendedConfigurationButton": "Configuration avancée",
+    "basicConfigurationButton": "Sélection de modèle",
+    "extendedConfigurationTitle": "Configuration avancée",
+    "basicConfigurationTitle": "Choisir un modèle",
+    "importBoard": "Importer JSON",
+    "uploadFile": "Télécharger un fichier ou glisser ici",
+    "importNewBoard": "Importer maintenant"
+  },
+  "Templates": {
+    "switchTitle": "Modèles",
+    "title": "Choisir un modèle",
+    "savedTemplates": "Vos modèles",
+    "recommendedTemplates": "Nos recommandations",
+    "CreateTemplateCard": {
+      "create": "Créer un nouveau modèle"
+    },
+    "TemplateCard": {
+      "addFavourite": "Marquer comme favori",
+      "removeFavourite": "Retirer des favoris",
+      "column_one": "{{count}} colonne",
+      "column_other": "{{count}} colonnes",
+      "start": "Démarrer",
+      "save": "Enregistrer",
+      "signInToCreateBoards": "Pour créer un tableau, connectez-vous avec un fournisseur d'identité."
+    },
+    "TemplateEditor": {
+      "createTitle": "Créer un modèle",
+      "editTitle": "Modifier un modèle",
+      "cancel": "Annuler",
+      "saveEdit": "Enregistrer",
+      "saveCreate": "Créer le modèle",
+      "info": "Les modifications peuvent être apportées à tout moment, y compris sur le tableau."
+    },
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Colonne 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Colonne {{index}}",
+      "namePlaceholder": "Titre",
+      "descriptionPlaceholder": "Description (optionnel)",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
+    "AccessSettings": {
+      "title": "Paramètres d'accès",
+      "Options": {
+        "Public": {
+          "title": "Ouvert",
+          "description": "Les participants peuvent rejoindre facilement et rapidement via le lien - cela offre une sécurité de base."
+        },
+        "By_Invite": {
+          "title": "Approbation",
+          "description": "Les participants doivent être approuvés avant de rejoindre - garantissant un haut niveau de sécurité."
+        },
+        "By_Passphrase": {
+          "title": "Protégé par mot de passe",
+          "description": "L'accès n'est possible qu'avec un mot de passe défini - garantissant un haut niveau de sécurité."
+        }
+      },
+      "Buttons": {
+        "cancel": "Retour",
+        "start": "Démarrer la session"
+      }
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choisir une session"
+  },
+  "CreateBoard": {
+    "title": "Créer un nouveau tableau",
+    "dropdown": {
+      "open": "Ouvert",
+      "password": "Mot de passe",
+      "approval": "Approbation"
+    },
+    "validation": {
+      "REQUIRED": "La saisie est obligatoire."
+    }
+  },
+  "LoginBoard": {
+    "title": "Se connecter à scrumlr.io",
+    "anonymousLogin": "Rejoindre le tableau de manière anonyme",
+    "usernameValidationError": "Le nom d'utilisateur ne peut pas être vide",
+    "termsValidationError": "Vous devez accepter les conditions et la politique de confidentialité",
+    "anonymousLoginDisabledError": "Les comptes anonymes sont désactivés ; veuillez utiliser l'un des fournisseurs ci-dessus",
+    "noLoginAvailable": "Aucune connexion valide n'est disponible",
+    "errorOnRedirect": "Une erreur s'est produite lors de votre redirection",
+    "login": "Se connecter",
+    "acceptTerms": "J'accepte les <terms>conditions</terms> et la <privacy>politique de confidentialité</privacy>",
+    "generateRandomName": "Générer un nom aléatoire",
+    "username": "Nom d'utilisateur"
+  },
+  "AccessPolicy": {
+    "PUBLIC": "Ouvert",
+    "BY_PASSPHRASE": "Protégé par mot de passe",
+    "BY_INVITE": "Fermé"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "Mot de passe incorrect utilisé.",
+    "reject": "Vous avez été rejeté.",
+    "returnToHomepage": "Retour à la page d'accueil",
+    "waitingForApproval": "En attente d'approbation."
+  },
+  "AuthRedirect": {
+    "error": "Oups ! La connexion a échoué, veuillez réessayer."
+  },
+  "AccessPolicySelection": {
+    "title": "Politique d'accès",
+    "publicTitle": "Ouvert",
+    "byPassphraseTitle": "Protégé",
+    "manualVerificationTitle": "Approbation manuelle",
+    "passphrase": "Mot de passe",
+    "public": "Accès par URL sans vérification supplémentaire. Les URL sont difficiles à deviner, cela devrait donc suffire pour la plupart des sessions.",
+    "byPassphrase": "Accès par URL et mot de passe. Si vous avez l'intention d'écrire des données sensibles et que vous ne collaborerez pas simultanément, cela conviendra le mieux.",
+    "manualVerification": "Les administrateurs du tableau peuvent vérifier ou rejeter manuellement chaque demande d'accès utilisateur individuellement. Cette politique est la plus sûre, car l'administrateur peut refuser tout accès non approuvé.",
+    "generatePassphrase": "Générer un mot de passe aléatoire",
+    "copyPassphraseToClipboard": "Copier le mot de passe dans le presse-papiers",
+    "passphraseValidationError": "Un mot de passe doit être défini",
+    "togglePassphraseVisibility": "Basculer la visibilité du mot de passe"
+  },
+  "BoardHeader": {
+    "returnToHomepage": "Retour à la page d'accueil",
+    "showParticipants": "Afficher les participants",
+    "showAllBoardSettings": "Afficher tous les paramètres du tableau",
+    "showProfileSettings": "Afficher les paramètres du profil"
+  },
+  "ConfirmationDialog": {
+    "returnToHomepage": "Êtes-vous sûr de vouloir quitter cette session et retourner à la page d'accueil ?",
+    "deleteBoard": "Êtes-vous absolument sûr de vouloir supprimer ce tableau ?",
+    "deleteNote": "Êtes-vous sûr de vouloir supprimer cette note ?",
+    "deleteNoteButton": "Supprimer la note",
+    "deleteStackButton": "Supprimer la pile",
+    "deleteOptions": "Que voulez-vous supprimer ?",
+    "banParticipant": "Êtes-vous sûr de vouloir retirer le participant '{{user}}' de la session ?",
+    "unbanParticipant": "Êtes-vous sûr de vouloir autoriser le participant '{{user}}' à rejoindre la session à nouveau ?",
+    "warning": "Cette action ne peut pas être annulée.",
+    "yes": "Oui",
+    "no": "Non",
+    "cancel": "Annuler",
+    "close": "Fermer"
+  },
+  "DeleteBoardOption": {
+    "warning": "Êtes-vous absolument sûr de vouloir supprimer le tableau ? Cette action ne peut pas être annulée.",
+    "button": "Supprimer le tableau"
+  },
+  "ExportBoardOption": {
+    "title": "Exporter le tableau",
+    "button": "Exporter le tableau",
+    "exportAsJson": "Exporter en JSON",
+    "exportAsCSV": "Exporter en CSV",
+    "openPrintView": "Exporter en PDF",
+    "exportToClipboard": "Copier le Markdown dans le presse-papiers",
+    "copyToClipboardSuccess": "Markdown copié !",
+    "hintHiddenColumns": "Les colonnes suivantes sont masquées et ne seront pas exportées :",
+    "hintHiddenNotes": "Les notes des autres participants sont masquées et ne seront pas exportées."
+  },
+  "PrintView": {
+    "Participants": "Participants",
+    "GeneratedOn": "Généré le",
+    "ProvidedBy": "Fourni avec ♥️ par",
+    "Notes": "Notes",
+    "Votes": "Votes",
+    "Print": "Imprimer",
+    "Close": "Fermer"
+  },
+  "MarkdownExport": {
+    "columns": "Colonnes",
+    "note": "Note",
+    "notes": "Notes",
+    "participants": "Participants",
+    "linkToBoard": "Lien vers le tableau",
+    "vote": "Vote",
+    "votes": "Votes",
+    "stackSize": "Taille de la pile",
+    "showAuthorsDisabled": "Les auteurs des notes sont masqués"
+  },
+  "ShareQrCodeOption": {
+    "title": "Partager la session",
+    "button": "Partager le tableau",
+    "copyInviteURL": "Copier l'URL d'invitation",
+    "inviteUrlCopied": "URL d'invitation copiée"
+  },
+  "Column": {
+    "settings": "Paramètres",
+    "editName": "Modifier le nom",
+    "submitName": "Confirmer le nom",
+    "resetName": "Annuler",
+    "hideColumn": "Masquer la colonne",
+    "showColumn": "Afficher la colonne",
+    "deleteColumn": "Supprimer la colonne",
+    "addColumnLeft": "Ajouter une colonne à gauche",
+    "addColumnRight": "Ajouter une colonne à droite",
+    "hiddenColumn": "La colonne est masquée pour tous les participants",
+    "notes_one": "{{count}} note",
+    "notes_other": "{{count}} notes",
+    "color": "Changer la couleur",
+    "Header": {
+      "descriptionPlaceholder": "Ajouter une description (optionnel)"
+    }
+  },
+  "ErrorPage": {
+    "navigateHome": "Accueil",
+    "navigateBack": "Retour"
+  },
+  "NotFoundPage": {
+    "title": "Oh non ! Erreur",
+    "descriptionLine1": "Cette page n'existe pas.",
+    "descriptionLine2": "Retournez à la page d'accueil.",
+    "navigateHome": "Retour à la page d'accueil"
+  },
+  "JoinRequest": {
+    "title": "Demande à participer",
+    "accept": "Accepter",
+    "reject": "Rejeter"
+  },
+  "RaiseRequest": {
+    "title": "Lève la main",
+    "lower": "Baisser la main"
+  },
+  "Request": {
+    "title": "Quelqu'un demande à participer/a levé la main"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Se connecter avec Google",
+    "signInWithGitHub": "Se connecter avec Github",
+    "signInWithMicrosoft": "Se connecter avec Microsoft",
+    "signInWithAzureAd": "Se connecter avec Azure AD",
+    "signInWithApple": "Se connecter avec Apple",
+    "signInWithOIDC": "Se connecter avec OpenID Connect"
+  },
+  "NoteInput": {
+    "placeholder": "Ajoutez votre note...",
+    "imageInfo": "Ce lien sera ajouté en tant qu'image !",
+    "create": "Créer une note"
+  },
+  "PassphraseDialog": {
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "label": "Entrez le mot de passe pour ouvrir ce tableau",
+    "submit": "Ouvrir le tableau",
+    "inputPlaceholder": "Mot de passe",
+    "incorrectPassphrase": "Oups, ce n'était pas le bon mot de passe. Réessayez."
+  },
+  "PassphraseModal": {
+    "title": "Attribuer un nouveau mot de passe",
+    "continuePublic": "Continuer sans mot de passe",
+    "newPassword": "Ouvrir le tableau",
+    "info": "Ce tableau était autrefois protégé par un mot de passe. Entrez un nouveau mot de passe pour continuer la protection, ou continuez sans mot de passe. Vous pouvez modifier tous les paramètres à tout moment.",
+    "submit": "Ouvrir le tableau",
+    "inputPlaceholder": "Mot de passe",
+    "showPassword": "Afficher le mot de passe"
+  },
+  "Timer": {
+    "endTimer": "Terminer le minuteur",
+    "addOneMinute": "Augmenter le minuteur d'une minute",
+    "reduce": "Réduire le temps",
+    "increase": "Augmenter le temps"
+  },
+  "CookieNotice": {
+    "description": "Nous et nos partenaires sélectionnés utilisons des cookies ou des technologies similaires comme spécifié dans la politique des cookies. Vous pouvez consentir à l'utilisation de ces technologies en fermant cet avis,\n            en interagissant avec n'importe quel lien ou bouton en dehors de cet avis ou en continuant à naviguer autrement.",
+    "learnMore": "En savoir plus sur notre politique de cookies",
+    "decline": "Refuser",
+    "accept": "Accepter"
+  },
+  "CookiePolicy": {
+    "title": "Politique de cookies de scrumlr.io",
+    "decline": "Refuser",
+    "accept": "Accepter",
+    "body": "Ce document informe les utilisateurs des technologies qui aident scrumlr.io à atteindre les objectifs décrits ci-dessous.\nCes technologies permettent au propriétaire d'accéder et de stocker des informations (par exemple en utilisant un cookie) ou d'utiliser des ressources\n(par exemple en exécutant un script) sur l'appareil d'un utilisateur lorsqu'il interagit avec scrumlr.io.\n\nPour plus de simplicité, toutes ces technologies sont définies comme &quot;Traceurs&quot; dans ce document – sauf s'il y a une\nraison de différencier. Par exemple, bien que les cookies puissent être utilisés à la fois sur les navigateurs web et mobiles, il serait inexact\nde parler de cookies dans le contexte des applications mobiles car ce sont des traceurs basés sur le navigateur. Pour cette\nraison, dans ce document, le terme Cookies n'est utilisé que lorsqu'il est spécifiquement destiné à indiquer ce type particulier\nde traceur.\n\nCertains des objectifs pour lesquels les traceurs sont utilisés peuvent également nécessiter le consentement de l'utilisateur. Chaque fois que le consentement est donné,\nil peut être librement retiré à tout moment en suivant les instructions fournies dans ce document.\n\nScrumlr.io utilise uniquement des traceurs gérés directement par le propriétaire (appelés traceurs &quot;première partie&quot;). La validité\net les périodes d'expiration des cookies de première partie et autres traceurs similaires peuvent varier en fonction de la durée de vie définie par le\npropriétaire. Certains d'entre eux expirent à la fin de la session de navigation de l'utilisateur.\n\n## Activités strictement nécessaires au fonctionnement de scrumlr.io et à la fourniture du service\n\nScrumlr.io utilise des cookies dits &quot;techniques&quot; et d'autres traceurs similaires pour effectuer des activités qui sont strictement\nnécessaires au fonctionnement ou à la fourniture du service.\n\n## Comment gérer les préférences et fournir ou retirer le consentement\n\nIl existe diverses façons de gérer les préférences relatives aux traceurs et de fournir et retirer le consentement, le cas échéant :\nLes utilisateurs peuvent gérer les préférences relatives aux traceurs directement depuis les paramètres de leur propre appareil, par exemple, en\nempêchant l'utilisation ou le stockage des traceurs. De plus, chaque fois que l'utilisation de traceurs est basée sur le consentement, les utilisateurs peuvent\nfournir ou retirer ce consentement en définissant leurs préférences dans l'avis de cookie ou en mettant à jour ces préférences\nen conséquence via le widget de préférences de consentement pertinent, s'il est disponible.\n\nIl est également possible, via les fonctionnalités pertinentes du navigateur ou de l'appareil, de supprimer les traceurs précédemment stockés, y compris ceux\nutilisés pour mémoriser le consentement initial de l'utilisateur. D'autres traceurs dans la mémoire locale du navigateur peuvent être effacés en supprimant\nl'historique de navigation.\n\n## Localisation des paramètres de traceur\n\nLes utilisateurs peuvent, par exemple, trouver des informations sur la façon de gérer les cookies dans les navigateurs les plus couramment utilisés aux adresses suivantes\n:\n\n- Google Chrome\n- Mozilla Firefox\n- Apple Safari\n- Microsoft Internet Explorer\n- Microsoft Edge\n- Brave\n- Opera\n\nLes utilisateurs peuvent également gérer certaines catégories de traceurs utilisés sur les applications mobiles en se désabonnant via les paramètres pertinents de l'appareil,\ntels que les paramètres de publicité de l'appareil pour les appareils mobiles, ou les paramètres de suivi en général (les utilisateurs peuvent ouvrir les paramètres de l'appareil\n, afficher et rechercher le paramètre pertinent).\n\nPropriétaire et responsable du traitement des données\ninovex GmbH\n\nKarlsruher Straße 71\n\n75179 Pforzheim\n\nAllemagne\n\nEmail de contact du propriétaire : info@scrumlr.io\n\nÉtant donné la complexité objective entourant les technologies de suivi, les utilisateurs sont encouragés à contacter le propriétaire s'ils\nsouhaitent recevoir des informations supplémentaires sur l'utilisation de ces technologies par scrumlr.io."
+  },
+  "MenuBars": {
+    "markAsDone": "Me marquer comme terminé",
+    "unmarkAsDone": "Me démarquer comme terminé",
+    "addImage": "Ajouter une image ou un giphy",
+    "addSticker": "Ajouter un autocollant",
+    "themeToggle": "Changer le schéma de couleurs",
+    "editColumns": "Démarrer le mode colonne",
+    "stopEditingColumns": "Terminer le mode colonne",
+    "startPresenterMode": "Démarrer le mode présentateur",
+    "stopPresenterMode": "Terminer le mode présentateur",
+    "returnToHomepage": "Retour à la page d'accueil",
+    "raiseHand": "Lever la main",
+    "lowerHand": "Baisser la main",
+    "openBoardReactionMenu": "Réagir",
+    "settings": "Paramètres",
+    "openMenu": "Ouvrir le menu utilisateur"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Raccourcis clavier activés !",
+    "hotkeysDisabled": "Raccourcis clavier désactivés !",
+    "hotkeyToggle": "Activer les raccourcis clavier",
+    "timerStarted": "Un minuteur de {{duration}} minutes a été démarré",
+    "cheatSheet": "Aide-mémoire des raccourcis clavier",
+    "toggleColumnVisibility": {
+      "hide": "Les colonnes masquées sont maintenant cachées pour vous",
+      "show": "Les colonnes masquées sont maintenant visibles pour vous"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "Les notes des autres participants sont maintenant masquées",
+      "show": "Les notes des autres participants sont maintenant visibles"
+    },
+    "toggleShowAuthors": {
+      "hide": "Les auteurs des notes sont maintenant masqués",
+      "show": "Les auteurs des notes sont maintenant visibles"
+    },
+    "toggleRaisedHand": {
+      "raise": "Vous avez levé la main",
+      "lower": "Vous avez baissé la main"
+    },
+    "toggleReadyState": {
+      "ready": "Vous vous êtes marqué comme prêt",
+      "notReady": "Vous vous êtes marqué comme pas prêt"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "Vous avez démarré le mode présentateur",
+      "endPresenting": "Vous avez terminé le mode présentateur"
+    }
+  },
+  "VoteConfigurationButton": {
+    "label": "Vote",
+    "isAnonymous": "Vote anonyme",
+    "allowMultipleVotesPerNote": "Autoriser le vote cumulatif",
+    "numberOfVotes": "Nombre de votes",
+    "increaseVotes": "Augmenter le nombre de votes",
+    "decreaseVotes": "Diminuer le nombre de votes",
+    "startVoting": "Démarrer la phase de vote",
+    "cancelVoting": "Annuler la phase de vote",
+    "stopVoting": "Terminer la phase de vote"
+  },
+  "VoteDisplay": {
+    "finishActionTooltip": "Conclure le vote",
+    "tooltip": "{{remaining}} votes sur {{total}} restants"
+  },
+  "TimerToggleButton": {
+    "label": "Minuteur",
+    "1min": "1 minute",
+    "3min": "3 minutes",
+    "5min": "5 minutes",
+    "min": "minutes",
+    "customTime": "Temps personnalisé",
+    "cancelTimer": "Annuler le minuteur"
+  },
+  "BoardReactionsMenu": {
+    "react": "Réagir avec {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Moi"
+  },
+  "AppInfo": {
+    "version": "Lien vers la liste des versions sur GitHub"
+  },
+  "Toast": {
+    "authenticationError": "Un problème est survenu lors de votre connexion",
+    "votingStarted": "Vous avez démarré la phase de vote !",
+    "votingFinished": "Vous avez terminé la phase de vote !",
+    "focusModeStart": "Vous avez démarré la phase de modération ! Les notes que vous sélectionnez seront présentées à tous les utilisateurs",
+    "focusModeFinished": "Vous avez terminé la phase de modération",
+    "votingPhaseStarted": "Phase de vote démarrée ! Vous pouvez voter maintenant !",
+    "votingPhaseEnded": "Phase de vote terminée ! Vous ne pouvez plus voter !",
+    "moderationStarted": "Phase de modération démarrée !",
+    "moderationEnded": "Phase de modération terminée !",
+    "timerStarted": "Minuteur démarré !",
+    "timerEnded": "Minuteur terminé !",
+    "timerCancelled": "Minuteur annulé !",
+    "hiddenColumnsVisible": "Les colonnes masquées sont maintenant visibles pour vous !",
+    "passwordCopied": "Tableau protégé et mot de passe copié !",
+    "boardMadePublic": "Le tableau est maintenant public !",
+    "allParticipantsDone": "Tous les participants sont prêts !",
+    "moderatorResetReadyStates": "Voulez-vous réinitialiser l'état de préparation des participants ?",
+    "moderatorResetReadyStatesButton": "Réinitialiser !",
+    "bannedParticipant": "Le participant '{{user}}' a été retiré",
+    "unbannedParticipant": "L'interdiction du participant '{{user}}' a été révoquée",
+    "lockedBoard": "Le tableau est actuellement verrouillé ; seuls les modérateurs peuvent y apporter des modifications.",
+    "noteToHiddenColumn": "Vous venez d'ajouter une note à une colonne masquée !",
+    "noteToHiddenColumnButton": "Révéler la colonne",
+    "noteMovedToStack": "La note a été déplacée vers une pile !",
+    "noteDeleted": "La note a été supprimée !",
+    "emptyNoteDialog": "La note doit contenir du texte.",
+    "ready": "Êtes-vous prêt ?",
+    "readyButton": "Prêt !",
+    "boardReactionsDisabled": "Les réactions du tableau sont désactivées",
+    "enable": "Activer",
+    "failedImport": "Erreur lors de l'importation du fichier"
+  },
+  "Language": {
+    "german": "Allemand",
+    "english": "Anglais",
+    "french": "Français"
+  },
+  "Homepage": {
+    "developers": "© 2021-{{currentYear}}, fourni par <inovex>inovex</inovex> avec ❤️",
+    "teaserTitle": "Atteignez de nouveaux sommets avec votre <team>équipe</team> et commencez votre première <retrospective>rétrospective.</retrospective>",
+    "teaserText": "Commencez votre première session collaborative en un instant - aucune inscription requise et entièrement gratuit.",
+    "startButton": "Commencer maintenant",
+    "privacyPolicy": "Politique de confidentialité",
+    "cookiePolicy": "Politique de cookies",
+    "terms": "Conditions générales"
+  },
+  "Note": {
+    "me": "Moi",
+    "you": "vous",
+    "userImageAlt": "média fourni par {{user}}",
+    "edited": "modifié"
+  },
+  "StackView": {
+    "prevNote": "Note précédente",
+    "nextNote": "Note suivante",
+    "close": "Fermer"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Supprimer cette pile"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Supprimer cette note"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Retirer cette note de la pile"
+  },
+  "NoteReactionList": {
+    "toggleBarLabel": "basculer la barre de réaction"
+  },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "Toutes"
+  },
+  "Input": {
+    "placeholder": {
+      "search": "Rechercher"
+    }
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Paramètres du tableau",
+    "BoardSettingsDescription": "Nom, politique d'accès",
+    "Participants": "Participants",
+    "ParticipantsDescription": "Liste des utilisateurs, rôle utilisateur",
+    "Appearance": "Apparence",
+    "AppearanceDescription": "Notifications, langue, interface utilisateur",
+    "ShareSession": "Partager la session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Exporter le tableau",
+    "ExportBoardDescription": "Partager le tableau",
+    "Feedback": "Commentaires",
+    "FeedbackDescription": "Nous aimons vous entendre",
+    "ProfileDescription": "Modifier le profil",
+    "Logout": "Déconnexion"
+  },
+  "BoardSettings": {
+    "BoardName": "Nom du tableau",
+    "AccessPolicy": "Politique d'accès",
+    "Password": "Mot de passe",
+    "SetAccessPolicyOpen": "Retirer la protection par mot de passe",
+    "SecurePasswordHint": "Veuillez entrer un mot de passe sécurisé",
+    "DeleteBoard": "Supprimer le tableau",
+    "ShowAuthorOption": "Afficher les auteurs des notes",
+    "ShowHiddenColumnsOption": "Afficher les colonnes masquées pour moi",
+    "ShowOtherUsersNotesOption": "Afficher les notes des autres utilisateurs",
+    "ShowNoteReactionsOptions": "Afficher les réactions aux notes",
+    "AllowNoteRepositioningOption": "Autoriser le repositionnement des notes",
+    "IsLocked": "Verrouiller le tableau",
+    "generatePassword": "Générer un mot de passe et protéger",
+    "save": "enregistrer",
+    "edit": "modifier"
+  },
+  "Participants": {
+    "Title": "Participants",
+    "OwnerFilterTooltip": "Afficher uniquement le propriétaire",
+    "ModeratorFilterTooltip": "Afficher uniquement les modérateurs",
+    "ParticipantFilterTooltip": "Afficher uniquement les participants",
+    "OnlineFilterTooltip": "Afficher les participants déconnectés",
+    "ChangeRoleToParticipantTooltip": "Changer le rôle en participant",
+    "ChangeRoleToModeratorTooltip": "Changer le rôle en modérateur",
+    "ResetBannerText": "Réinitialiser les états de préparation de tous les utilisateurs.",
+    "ResetBannerButton": "Réinitialiser",
+    "BanParticipantTooltip": "Bannir le participant '{{user}}'",
+    "UnbanParticipantTooltip": "Révoquer le bannissement du participant '{{user}}'"
+  },
+  "UserRole": {
+    "Owner": "Propriétaire",
+    "Moderator": "Modérateur",
+    "Participant": "Participant"
+  },
+  "Appearance": {
+    "SyncMode": "Synchroniser le mode d'apparence avec le système",
+    "SyncModeDescription": "Scrumlr correspondra au mode d'apparence (sombre ou clair) avec vos paramètres système actifs",
+    "AllowNotifications": "Autoriser les notifications",
+    "Language": "Langue",
+    "EmojiSkinTone": "Teinte de peau des emojis",
+    "colorScheme": "Schéma de couleurs",
+    "colorSchemeLight": "Clair",
+    "colorSchemeDark": "Sombre",
+    "showHotkeyNotifications": "Afficher les notifications de raccourcis clavier",
+    "showBoardReactions": "Afficher les réactions du tableau",
+    "showSnowfall": "Afficher les chutes de neige"
+  },
+  "Feedback": {
+    "PraiseInputLabel": "Autre chose que vous souhaitez nous dire ?",
+    "BugReportInputLabel": "Quel bug souhaitez-vous signaler ?",
+    "FeatureRequestInputLabel": "Quelle fonctionnalité souhaitez-vous avoir ?",
+    "FeedbackInputPlaceholder": "Tapez quelque chose d'additionnel ici !",
+    "ContactInputLabel": "Si vous souhaitez que nous vous contactions, laissez votre email ! (Optionnel)",
+    "SubmitButton": "Envoyer des commentaires",
+    "ErrorUndefinedType": "Veuillez sélectionner le type de vos commentaires !",
+    "ErrorInvalidEmail": "Veuillez entrer un email valide !",
+    "ErrorMissingFeatureRequestText": "Veuillez spécifier la fonctionnalité que vous souhaitez demander !",
+    "ErrorMissingBugReportText": "Veuillez spécifier le bug que vous souhaitez signaler !",
+    "SubmitNotification": "Merci pour vos commentaires !"
+  },
+  "ProfileSettings": {
+    "Profile": "Profil",
+    "UserName": "Nom d'utilisateur"
+  },
+  "Error": {
+    "editBoard": "Désolé, mais nous avons des difficultés à mettre à jour le tableau. Veuillez réessayer.",
+    "shareNote": "Désolé, mais nous avons des difficultés à partager la note. Veuillez réessayer.",
+    "unshareNote": "Désolé, mais nous avons des difficultés à arrêter le partage de la note. Veuillez réessayer.",
+    "deleteBoard": "Désolé, mais nous avons des difficultés à supprimer le tableau. Veuillez réessayer.",
+    "editColumn": "Désolé, mais nous avons des difficultés à mettre à jour la colonne. Veuillez réessayer.",
+    "createColumn": "Désolé, mais nous avons des difficultés à ajouter la colonne. Veuillez réessayer.",
+    "deleteColumn": "Désolé, mais nous avons des difficultés à supprimer la colonne. Veuillez réessayer.",
+    "addNote": "Désolé, mais nous avons des difficultés à ajouter la note. Veuillez réessayer.",
+    "deleteNote": "Désolé, mais nous avons des difficultés à supprimer la note. Veuillez réessayer.",
+    "deleteNoteWhenShared": "Désolé, mais vous ne pouvez pas supprimer votre carte pendant qu'elle est partagée.",
+    "editNote": "Désolé, mais nous avons des difficultés à mettre à jour la note. Veuillez réessayer.",
+    "unstackNote": "Désolé, mais nous avons des difficultés à retirer la note de la pile. Veuillez réessayer.",
+    "setRaiseHand": "Désolé, mais nous avons des difficultés à lever votre main. Veuillez réessayer.",
+    "setUserReady": "Désolé, mais nous avons des difficultés à vous marquer comme prêt. Veuillez réessayer.",
+    "setUserBanned": "Désolé, mais nous avons des difficultés à bannir/débannir cet utilisateur. Veuillez réessayer.",
+    "setShowHiddenColumns": "Désolé, mais nous avons des difficultés à modifier la visibilité des colonnes. Veuillez réessayer.",
+    "changePermission": "Désolé, mais nous avons des difficultés à mettre à jour les permissions. Veuillez réessayer.",
+    "logout": "Désolé, mais nous avons des difficultés à vous déconnecter.",
+    "serverConnection": "La connexion au serveur n'a pas pu être établie. Veuillez essayer de recharger la page.",
+    "retry": "Réessayer",
+    "joinBoard": "Désolé, mais nous avons des difficultés à rejoindre le tableau. Veuillez réessayer.",
+    "boardDeleted": "Le tableau a été supprimé ! Vous avez été redirigé vers la page d'accueil.",
+    "acceptJoinRequests": "Désolé, mais nous avons des difficultés à accepter les demandes. Veuillez réessayer.",
+    "rejectJoinRequests": "Désolé, mais nous avons des difficultés à rejeter les demandes. Veuillez réessayer.",
+    "initApplication": "Désolé, mais nous avons des difficultés à contacter le serveur pour obtenir des informations. Veuillez essayer de recharger la page.",
+    "addVote": "Désolé, mais nous avons des difficultés à ajouter le vote. Veuillez réessayer.",
+    "deleteVote": "Désolé, mais nous avons des difficultés à supprimer le vote. Veuillez réessayer.",
+    "createVoting": "Désolé, mais nous avons des difficultés à démarrer un nouveau vote. Veuillez réessayer.",
+    "closeVoting": "Désolé, mais nous avons des difficultés à terminer le vote. Veuillez réessayer.",
+    "abortVoting": "Désolé, mais nous avons des difficultés à annuler le vote. Veuillez réessayer.",
+    "editSelf": "Désolé, mais nous avons des difficultés à mettre à jour vos informations. Veuillez réessayer."
+  },
+  "Validation": {
+    "REQUIRED": "requis",
+    "BAD_INPUT": "mauvaise saisie",
+    "PATTERN_MISMATCH": "non-concordance de modèle",
+    "TYPE_MISMATCH": "non-concordance de type",
+    "RANGE": "plage"
+  },
+  "Avatar": {
+    "random": "Générer un avatar aléatoire",
+    "prevOption": "Option précédente",
+    "nextOption": "Option suivante",
+    "groups": {
+      "hair": "Chapeaux et coiffure",
+      "facialFeatures": "Traits du visage",
+      "clothing": "Vêtements"
+    },
+    "hairColor": {
+      "label": "Couleur de cheveux",
+      "Auburn": "Auburn",
+      "Black": "Noir",
+      "Blonde": "Blond",
+      "BlondeGolden": "Blond doré",
+      "Brown": "Marron",
+      "BrownDark": "Marron foncé",
+      "PastelPink": "Rose pastel",
+      "Blue": "Bleu",
+      "Platinum": "Platine",
+      "Red": "Roux",
+      "SilverGray": "Gris argenté"
+    },
+    "eyebrowType": {
+      "label": "Type de sourcils",
+      "Angry": "En colère #1",
+      "AngryNatural": "En colère #2",
+      "Default": "Par défaut #1",
+      "DefaultNatural": "Par défaut #2",
+      "FlatNatural": "Plat",
+      "FrownNatural": "Froncement",
+      "RaisedExcited": "Excité #1",
+      "RaisedExcitedNatural": "Excité #2",
+      "SadConcerned": "Préoccupé #1",
+      "SadConcernedNatural": "Préoccupé #2",
+      "UnibrowNatural": "Monosourcil",
+      "UpDown": "Levé #1",
+      "UpDownNatural": "Levé #2"
+    },
+    "facialHairColor": {
+      "label": "Couleur de la pilosité faciale",
+      "Auburn": "Auburn",
+      "Black": "Noir",
+      "Blonde": "Blond",
+      "BlondeGolden": "Blond doré",
+      "Brown": "Marron",
+      "BrownDark": "Marron foncé",
+      "Platinum": "Platine",
+      "Red": "Roux"
+    },
+    "facialHairType": {
+      "label": "Type de pilosité faciale",
+      "Blank": "Aucune",
+      "BeardMedium": "Barbe moyenne",
+      "BeardLight": "Barbe légère",
+      "BeardMajestic": "Barbe majestueuse",
+      "MoustacheFancy": "Moustache fantaisie",
+      "MoustacheMagnum": "Moustache magnum"
+    },
+    "skinColor": {
+      "label": "Couleur de peau",
+      "Tanned": "Bronzé",
+      "Yellow": "Jaune",
+      "Pale": "Pâle",
+      "Light": "Clair",
+      "Brown": "Marron",
+      "DarkBrown": "Marron foncé",
+      "Black": "Noir"
+    },
+    "eyeType": {
+      "label": "Type d'yeux",
+      "Close": "Fermés",
+      "Cry": "En pleurs",
+      "Default": "Par défaut",
+      "Dizzy": "Étourdis",
+      "EyeRoll": "Yeux levés au ciel",
+      "Happy": "Heureux",
+      "Hearts": "Cœurs",
+      "Side": "Regard de côté",
+      "Squint": "Plissés",
+      "Surprised": "Surpris",
+      "Wink": "Clin d'œil",
+      "WinkWacky": "Clin d'œil farfelu"
+    },
+    "mouthType": {
+      "label": "Type de bouche",
+      "Concerned": "Préoccupé",
+      "Default": "Par défaut",
+      "Disbelief": "Incrédule",
+      "Eating": "En train de manger",
+      "Grimace": "Grimace",
+      "Sad": "Triste",
+      "ScreamOpen": "Cri",
+      "Serious": "Sérieux",
+      "Smile": "Sourire",
+      "Tongue": "Langue tirée",
+      "Twinkle": "Scintillement",
+      "Vomit": "Vomi"
+    },
+    "topType": {
+      "label": "Type de coiffure",
+      "Eyepatch": "Cache-œil",
+      "Hat": "Chapeau",
+      "Hijab": "Hijab",
+      "LongHairBigHair": "Cheveux longs et ondulés",
+      "LongHairBob": "Bob",
+      "LongHairBun": "Chignon",
+      "LongHairCurly": "Cheveux longs et bouclés",
+      "LongHairCurvy": "Cheveux longs et courbés",
+      "LongHairDreads": "Dreadlocks",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro avec bandeau",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Cheveux mi-longs",
+      "LongHairShavedSides": "Cheveux longs avec côtés rasés",
+      "LongHairStraight": "Cheveux longs et raides #1",
+      "LongHairStraight2": "Cheveux longs et raides #2",
+      "LongHairStraightStrand": "Cheveux longs et raides #3",
+      "NoHair": "Pas de cheveux",
+      "ShortHairDreads01": "Dreads courtes #1",
+      "ShortHairDreads02": "Dreads courtes #2",
+      "ShortHairFrizzle": "Cheveux crépus",
+      "ShortHairShaggyMullet": "Mulet ébouriffé",
+      "ShortHairShortCurly": "Cheveux courts et bouclés",
+      "ShortHairShortFlat": "Cheveux courts et plats",
+      "ShortHairShortRound": "Cheveux courts et ronds",
+      "ShortHairShortWaved": "Cheveux courts et ondulés",
+      "ShortHairSides": "Demi-chauve",
+      "ShortHairTheCaesar": "Le César #1",
+      "ShortHairTheCaesarSidePart": "Le César #2",
+      "Turban": "Turban",
+      "WinterHat1": "Bonnet d'hiver #1",
+      "WinterHat2": "Bonnet d'hiver #2",
+      "WinterHat3": "Bonnet d'hiver #3",
+      "WinterHat4": "Bonnet d'hiver #4"
+    },
+    "accessoriesType": {
+      "label": "Lunettes",
+      "Blank": "Aucune",
+      "Kurt": "Kurt",
+      "Prescription01": "De vue #1",
+      "Prescription02": "De vue #2",
+      "Round": "Rondes",
+      "Sunglasses": "De soleil",
+      "Wayfarers": "Wayfarers"
+    },
+    "clotheColor": {
+      "label": "Couleur des vêtements",
+      "Black": "Noir",
+      "Blue01": "Bleu #1",
+      "Blue02": "Bleu #2",
+      "Blue03": "Bleu #3",
+      "Gray01": "Gris #1",
+      "Gray02": "Gris #2",
+      "Heather": "Bruyère",
+      "PastelBlue": "Bleu pastel",
+      "PastelGreen": "Vert pastel",
+      "PastelOrange": "Orange pastel",
+      "PastelRed": "Rouge pastel",
+      "PastelYellow": "Jaune pastel",
+      "Pink": "Rose",
+      "Red": "Rouge",
+      "White": "Blanc"
+    },
+    "clotheType": {
+      "label": "Type de vêtements",
+      "BlazerShirt": "Blazer avec chemise",
+      "BlazerSweater": "Blazer avec pull",
+      "CollarSweater": "Pull à col",
+      "GraphicShirt": "T-shirt graphique",
+      "Hoodie": "Sweat à capuche",
+      "Overall": "Salopette",
+      "ShirtCrewNeck": "T-shirt col rond",
+      "ShirtScoopNeck": "T-shirt col arrondi",
+      "ShirtVNeck": "T-shirt col en V"
+    },
+    "graphicType": {
+      "label": "Type de graphique",
+      "Bat": "Chauve-souris",
+      "Cumbia": "Cumbia !",
+      "Deer": "Cerf",
+      "Diamond": "Diamant",
+      "Hola": "Hola !",
+      "Pizza": "Pizza",
+      "Resist": "Résister !",
+      "Selena": "Selena",
+      "Bear": "Ours",
+      "SkullOutline": "Crâne contour",
+      "Skull": "Crâne"
+    }
+  },
+  "ToggleButton": {
+    "active": "Actif",
+    "inactive": "Inactif"
+  },
+  "RejectionPage": {
+    "title": "Oups !",
+    "description": "Il semble que les portes de cette session restent fermées pour le moment. Nous apprécions votre intérêt, mais malheureusement, votre demande de participation a été refusée.",
+    "banned": "Nous sommes désolés, mais il semble que vous ayez été exclu de cette session.",
+    "button": "Retour à la page d'accueil"
+  },
+  "Votes": {
+    "AddVote": "Ajouter un vote",
+    "RemoveVote": "Retirer un vote",
+    "VotesOnNote_one": "{{count}} vote",
+    "VotesOnNote_other": "{{count}} votes",
+    "VoteLimitReached": "Nombre maximum de votes atteint",
+    "MultipleVotesNotAllowed": "Les votes multiples ne sont pas autorisés"
+  },
+  "Snowfall": {
+    "toastTitle": "Joyeuses Fêtes 🎄",
+    "toastMessage": "Joyeuses Fêtes de la part de l'équipe Scrumlr ! Vous pouvez désactiver les animations de neige dans les paramètres d'apparence."
+  }
+}

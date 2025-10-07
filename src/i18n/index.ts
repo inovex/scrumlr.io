@@ -6,8 +6,10 @@ import {LOCALE_STORAGE_KEY} from "constants/storage";
 import {setLanguage} from "store/features";
 import translationDe from "./de/translation.json";
 import translationEn from "./en/translation.json";
+import translationFr from "./fr/translation.json";
 import templatesDe from "./de/templates.json";
 import templatesEn from "./en/templates.json";
+import templatesFr from "./fr/templates.json";
 
 export const resources = {
   en: {
@@ -17,6 +19,10 @@ export const resources = {
   de: {
     translation: translationDe,
     templates: templatesDe,
+  },
+  fr: {
+    translation: translationFr,
+    templates: templatesFr,
   },
 };
 
