@@ -43,7 +43,7 @@ export interface UpdatedColumnsEvent {
 
 export interface DeletedColumnEvent {
   type: "COLUMN_DELETED";
-  data: string;
+  data: {column: string; notes: string[]};
 }
 
 export interface UpdatedNotesEvent {

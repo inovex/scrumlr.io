@@ -1,4 +1,5 @@
 import {createReducer, isAnyOf} from "@reduxjs/toolkit";
+import {deletedColumn} from "store/features/columns";
 import {NotesState} from "./types";
 import {initializeBoard} from "../board";
 import {deletedNote, syncNotes, updatedNotes} from "./actions";
@@ -82,6 +83,7 @@ export const notesReducer = createReducer(initialState, (builder) =>
         return n;
       });
     })
+    .addCase(deletedColumn, (state, action) => state.filter((note) => note.position.column !== action.payload))
     .addCase(updatedVoting, (_state, action) => action.payload.notes)
     .addMatcher(isAnyOf(updatedNotes, syncNotes), (_state, action) => action.payload)
 );

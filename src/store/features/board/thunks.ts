@@ -106,8 +106,9 @@ export const permittedBoardAccess = createAsyncThunk<
       }
 
       if (message.type === "COLUMN_DELETED") {
-        const columnId = message.data;
-        dispatch(deletedColumn(columnId));
+        const {column, notes} = message.data;
+        dispatch(deletedColumn(column));
+        notes.forEach((note) => dispatch(deletedNote({noteId: note, deleteStack: true})));
       }
 
       if (message.type === "NOTES_UPDATED") {
