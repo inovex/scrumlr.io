@@ -5,12 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 )
@@ -26,38 +24,12 @@ func NewBoardDatabase(database *bun.DB) BoardDatabase {
 	return db
 }
 
-func (d *DB) CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
-	boardInsert := d.db.NewInsert().
-		Model(&board).
-		Returning("*")
-
-	if board.AccessPolicy == ByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
-		return DatabaseBoard{}, errors.New("passphrase or salt may not be empty")
-	} else if board.AccessPolicy != ByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
-		return DatabaseBoard{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
-	}
-
-	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: common.OwnerRole}
-
+func (d *DB) CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error) {
 	var b DatabaseBoard
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = newColumnIndex
-		}
-
-		query = query.With("createdColumns", d.db.NewInsert().
-			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
-	}
-	err := query.
-		With("createdSession", d.db.NewInsert().
-			Model(&session).
-			Value("board", "(SELECT id FROM \"createdBoard\")")).
-		Table("createdBoard").
-		Column("*").
-		Scan(ctx, &b)
+	_, err := d.db.NewInsert().
+		Model(&board).
+		Returning("*").
+		Exec(ctx, &b)
 
 	return b, err
 }
