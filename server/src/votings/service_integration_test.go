@@ -227,7 +227,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting session is allowed")), err)
+	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {

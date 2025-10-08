@@ -55,7 +55,16 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(),
+		DatabaseVotingInsert{
+			Board:              boardId,
+			VoteLimit:          voteLimit,
+			AllowMultipleVotes: allowMultiple,
+			ShowVotesOfOthers:  showOfOthers,
+			IsAnonymous:        anonymous,
+			Status:             status,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbVoting.Board)
