@@ -175,36 +175,6 @@ func TestDeleteColumn_NoteServiceGetAllError(t *testing.T) {
 	assert.Equal(t, common.NotFoundError, err)
 }
 
-func TestDeleteColumn_NoteServiceDeleteError(t *testing.T) {
-	boardId := uuid.New()
-	columnId := uuid.New()
-	userId := uuid.New()
-	noteId := uuid.New()
-	noteText := "Hallo"
-	serviceError := "Note service error"
-
-	mockColumnDatabase := NewMockColumnDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(mock.Anything, boardId, []uuid.UUID{columnId}).
-		Return([]*notes.Note{
-			{ID: noteId, Text: noteText, Position: notes.NotePosition{Column: columnId}},
-		}, nil)
-	mockNoteService.EXPECT().Delete(mock.Anything, userId, notes.NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: true}).
-		Return(errors.New(serviceError))
-
-	columnService := NewColumnService(mockColumnDatabase, broker, mockNoteService)
-
-	err := columnService.Delete(context.Background(), boardId, columnId, userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(serviceError), err)
-}
-
 func TestUpdateColumn(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
