@@ -59,7 +59,7 @@ func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -71,7 +71,7 @@ func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -87,7 +87,7 @@ func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -99,7 +99,7 @@ func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -115,7 +115,7 @@ func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarU
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -127,7 +127,7 @@ func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarU
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -143,7 +143,7 @@ func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -155,7 +155,7 @@ func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -171,7 +171,7 @@ func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -183,7 +183,7 @@ func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -199,7 +199,7 @@ func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avata
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -211,7 +211,7 @@ func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avata
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -227,7 +227,7 @@ func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -239,7 +239,7 @@ func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -256,7 +256,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
@@ -271,10 +271,17 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	})
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "user to update not found")
+			span.RecordError(err)
+			log.Errorw("user to update not found", "user", body.ID, "err", err)
+			return nil, common.NotFoundError
+		}
+
 		span.SetStatus(codes.Error, "failed to update user")
 		span.RecordError(err)
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	service.updatedUser(ctx, user)
