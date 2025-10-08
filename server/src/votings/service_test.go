@@ -168,6 +168,8 @@ func TestCreateVoting(t *testing.T) {
 	showVotes := false
 
 	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetOpenVoting(mock.Anything, boardId).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
 	mockDb.EXPECT().Create(mock.Anything, DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
 		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, nil)
 
@@ -199,8 +201,8 @@ func TestCreateVoting_SecondVoting(t *testing.T) {
 	showVotes := false
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Create(mock.Anything, DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
-		Return(DatabaseVoting{}, sql.ErrNoRows)
+	mockDb.EXPECT().GetOpenVoting(mock.Anything, boardId).
+		Return(DatabaseVoting{Board: boardId, Status: Open}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -216,7 +218,7 @@ func TestCreateVoting_SecondVoting(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting session is allowed")), err)
+	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
 }
 
 func TestCreateVoting_Failed(t *testing.T) {
@@ -227,6 +229,8 @@ func TestCreateVoting_Failed(t *testing.T) {
 	dbError := "cannot create voting"
 
 	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().GetOpenVoting(mock.Anything, boardId).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
 	mockDb.EXPECT().Create(mock.Anything, DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
 		Return(DatabaseVoting{}, errors.New(dbError))
 
