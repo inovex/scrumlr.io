@@ -671,6 +671,8 @@ func TestDeleteNote(t *testing.T) {
 	mockDB := NewMockNotesDatabase(t)
 	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
 	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
 		Return(nil)
 
@@ -699,6 +701,8 @@ func TestDeleteNote_Owner(t *testing.T) {
 	mockDB := NewMockNotesDatabase(t)
 	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
 	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
 		Return(nil)
 
@@ -727,6 +731,8 @@ func TestDeleteNote_Moderator(t *testing.T) {
 	mockDB := NewMockNotesDatabase(t)
 	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
 	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
 		Return(nil)
 

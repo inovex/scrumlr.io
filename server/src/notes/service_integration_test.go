@@ -15,7 +15,6 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/votings"
 )
 
 type NoteServiceIntegrationTestSuite struct {
@@ -183,20 +182,9 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Delete() {
 
 	msgNoteDelete := <-events
 	assert.Equal(t, realtime.BoardEventNoteDeleted, msgNoteDelete.Type)
-	type NoteData struct {
-		Note        uuid.UUID `json:"note"`
-		DeleteStack bool      `json:"deleteStack"`
-	}
-	noteData, err := technical_helper.Unmarshal[NoteData](msgNoteDelete.Data)
+	noteData, err := technical_helper.Unmarshal[[]uuid.UUID](msgNoteDelete.Data)
 	assert.Nil(t, err)
-	assert.Equal(t, noteId, noteData.Note)
-	assert.Equal(t, deleteStack, noteData.DeleteStack)
-
-	msgVoteDelete := <-events
-	assert.Equal(t, realtime.BoardEventVotesDeleted, msgVoteDelete.Type)
-	voteData, err := technical_helper.Unmarshal[[]*votings.Vote](msgVoteDelete.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, voteData)
+	assert.Contains(t, *noteData, noteId)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_Get() {
