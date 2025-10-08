@@ -42,7 +42,7 @@ type Service struct {
 }
 
 type BoardDatabase interface {
-	CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error)
+	CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error)
 	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
 	UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error)
 	GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error)
@@ -100,7 +100,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -126,13 +126,21 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	var board DatabaseBoardInsert
 	switch body.AccessPolicy {
 	case Public, ByInvite:
+		if body.Passphrase != nil {
+			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			span.RecordError(err)
+			return nil, common.BadRequestError(err)
+		}
+
 		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
 			span.SetStatus(codes.Error, "passphrase not set")
 			span.RecordError(err)
-			return nil, err
+			return nil, common.BadRequestError(err)
 		}
 
 		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
@@ -145,26 +153,32 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		}
 	}
 
-	// map request on column objects to insert into database
-	newColumns := make([]columns.DatabaseColumnInsert, 0, len(body.Columns))
-	for index, value := range body.Columns {
-		newColumns = append(newColumns,
-			columns.DatabaseColumnInsert{
-				Name:        value.Name,
-				Description: value.Description,
-				Color:       value.Color,
-				Visible:     value.Visible,
-				Index:       index,
-			},
-		)
-	}
-
 	// create the board
-	b, err := service.database.CreateBoard(ctx, body.Owner, board, newColumns)
+	b, err := service.database.CreateBoard(ctx, board)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
+		return nil, common.InternalServerError
+	}
+
+	// create the columns
+	for index, value := range body.Columns {
+		column := columns.ColumnRequest{Board: b.ID, User: body.Owner, Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index}
+		_, err = service.columnService.Create(ctx, column)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to create column")
+			span.RecordError(err)
+			return nil, err
+		}
+	}
+
+	// create the owner session
+	sessionRequest := sessions.BoardSessionCreateRequest{Board: b.ID, User: body.Owner, Role: common.OwnerRole}
+	_, err = service.sessionService.Create(ctx, sessionRequest)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create session")
+		span.RecordError(err)
 		return nil, err
 	}
 
@@ -181,7 +195,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		attribute.String("scrumlr.boards.service.board.get.full.board", boardID.String()),
 	)
 
-	board, err := service.database.GetBoard(ctx, boardID)
+	board, err := service.Get(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
@@ -246,7 +260,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 	}
 
 	return &FullBoard{
-		Board:                new(Board).From(board),
+		Board:                board,
 		BoardSessionRequests: boardRequests,
 		BoardSessions:        boardSessions,
 		Columns:              boardColumns,
@@ -268,7 +282,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 	overviewBoards := make([]*BoardOverview, 0, len(boardIDs))
 	for _, id := range boardIDs {
-		board, err := service.database.GetBoard(ctx, id)
+		board, err := service.Get(ctx, id)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get board")
 			span.RecordError(err)
@@ -284,7 +298,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
-		boardColumns, err := service.columnService.GetAll(ctx, id)
+		numColumns, err := service.columnService.GetCount(ctx, id)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get columns")
 			span.RecordError(err)
@@ -293,16 +307,14 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		}
 
 		participantNum := len(boardSessions)
-		columnNum := len(boardColumns)
-		dtoBoard := new(Board).From(board)
 		for _, session := range boardSessions {
 			if session.User.ID == user {
 				sessionCreated := session.CreatedAt
 				overviewBoards = append(overviewBoards, &BoardOverview{
-					Board:        dtoBoard,
+					Board:        board,
 					Participants: participantNum,
 					CreatedAt:    sessionCreated,
-					Columns:      columnNum,
+					Columns:      numColumns,
 				})
 			}
 		}
