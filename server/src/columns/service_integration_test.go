@@ -358,10 +358,8 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	votingDatabase := votings.NewVotingDatabase(suite.db)
-	votingService := votings.NewVotingService(votingDatabase, broker)
 	notesDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(notesDatabase, broker, votingService)
+	noteService := notes.NewNotesService(notesDatabase, broker)
 	database := NewColumnsDatabase(suite.db)
 	service := NewColumnService(database, broker, noteService)
 
@@ -382,10 +380,8 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount_BoarNotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	votingDatabase := votings.NewVotingDatabase(suite.db)
-	votingService := votings.NewVotingService(votingDatabase, broker)
 	notesDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(notesDatabase, broker, votingService)
+	noteService := notes.NewNotesService(notesDatabase, broker)
 	database := NewColumnsDatabase(suite.db)
 	service := NewColumnService(database, broker, noteService)
 

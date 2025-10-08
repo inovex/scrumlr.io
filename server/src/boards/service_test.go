@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/sessions"
 
 	"github.com/stretchr/testify/mock"
@@ -50,12 +51,13 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, boardID, result.ID)
 }
 
-func TestGetError(t *testing.T) {
+func TestGet_DatabaseError(t *testing.T) {
 	boardID := uuid.New()
-	dbError := errors.New("db error")
+	dbError := errors.New("database error")
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).Return(DatabaseBoard{}, dbError)
+	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
+		Return(DatabaseBoard{}, dbError)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -89,15 +91,32 @@ func TestCreate(t *testing.T) {
 	columnDescription := "Test Column Description"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
-		[]columns.DatabaseColumnInsert{
-			{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: index},
+	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything,
+		DatabaseBoardInsert{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
 		}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
 	columnMock := columns.NewMockColumnService(t)
+	columnMock.EXPECT().Create(mock.Anything,
+		columns.ColumnRequest{
+			Board:       boardID,
+			Name:        columnName,
+			Description: columnDescription,
+			Color:       columns.ColorGoalGreen,
+			Visible:     nil,
+			Index:       &index,
+			User:        userID,
+		}).
+		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: false, Index: index}, nil)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{User: sessions.User{ID: userID}, Board: boardID, Role: common.OwnerRole}, nil)
+
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
 	noteMock := notes.NewMockNotesService(t)
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
@@ -109,9 +128,23 @@ func TestCreate(t *testing.T) {
 	mockClock := timeprovider.NewMockTimeProvider(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
-	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: Public, Columns: []columns.ColumnRequest{
-		{Board: boardID, Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
-	}})
+	result, err := service.Create(context.Background(),
+		CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			Owner:        userID,
+			AccessPolicy: Public,
+			Columns: []columns.ColumnRequest{
+				{
+					Board:       boardID,
+					Name:        columnName,
+					Description: columnDescription,
+					Color:       columns.ColorGoalGreen,
+					Visible:     nil,
+					Index:       &index,
+					User:        userID,
+				},
+			}})
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -139,11 +172,20 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 	mockClock := timeprovider.NewMockTimeProvider(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
-	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: ByPassphrase, Columns: nil, Passphrase: nil})
+	result, err := service.Create(context.Background(),
+		CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			Owner:        userID,
+			AccessPolicy: ByPassphrase,
+			Columns:      nil,
+			Passphrase:   nil,
+		},
+	)
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Equal(t, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
 }
 
 func TestDelete(t *testing.T) {

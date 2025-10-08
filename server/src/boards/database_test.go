@@ -13,7 +13,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
 )
@@ -48,16 +47,11 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 	t := suite.T()
 	database := NewBoardDatabase(suite.db)
 
-	userId := suite.users["Santa"].id
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
+	dbBoard, err := database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
 	)
 
 	assert.Nil(t, err)
@@ -68,65 +62,22 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 	assert.Equal(t, Public, dbBoard.AccessPolicy)
 }
 
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_PublicWithPassphrase() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	passphrase := "This is a super secret passphrase"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public, Passphrase: &passphrase},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
-}
-
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_PublicWithSalt() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	salt := "This is also super secret"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public, Salt: &salt},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
-}
-
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 	t := suite.T()
 	database := NewBoardDatabase(suite.db)
 
-	userId := suite.users["Santa"].id
 	name := "Insert Board"
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Passphrase: &passphrase, Salt: &salt},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
+	dbBoard, err := database.CreateBoard(context.Background(),
+		DatabaseBoardInsert{
+			Name:         &name,
+			Description:  &description,
+			AccessPolicy: ByPassphrase,
+			Passphrase:   &passphrase,
+			Salt:         &salt,
 		},
 	)
 
@@ -138,63 +89,18 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 	assert.Equal(t, ByPassphrase, dbBoard.AccessPolicy)
 }
 
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_PassphraseWithoutPassphrase() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	salt := "This is also super secret"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Salt: &salt},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt may not be empty"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
-}
-
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_PassphraseWithoutSalt() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	passphrase := "This is a super secret passphrase"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByPassphrase, Passphrase: &passphrase},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt may not be empty"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
-}
-
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 	t := suite.T()
 	database := NewBoardDatabase(suite.db)
 
-	userId := suite.users["Santa"].id
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
+	dbBoard, err := database.CreateBoard(context.Background(),
+		DatabaseBoardInsert{
+			Name:         &name,
+			Description:  &description,
+			AccessPolicy: ByInvite,
 		},
 	)
 
@@ -204,50 +110,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 	assert.Nil(t, dbBoard.Passphrase)
 	assert.Nil(t, dbBoard.Salt)
 	assert.Equal(t, ByInvite, dbBoard.AccessPolicy)
-}
-
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInviteWithPassphrase() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	passphrase := "This is a super secret passphrase"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite, Passphrase: &passphrase},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
-}
-
-func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInviteWithSalt() {
-	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
-	userId := suite.users["Santa"].id
-	name := "Insert Board"
-	description := "This board was inserted"
-	salt := "This is also super secret"
-
-	dbBoard, err := database.CreateBoard(context.Background(), userId,
-		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: ByInvite, Salt: &salt},
-		[]columns.DatabaseColumnInsert{
-			{Name: "Column 1", Description: "This is a description", Color: columns.ColorGoalGreen},
-			{Name: "Column 2", Description: "This is a description", Color: columns.ColorGoalGreen},
-		},
-	)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'"), err)
-	assert.Equal(t, DatabaseBoard{}, dbBoard)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
