@@ -165,3 +165,12 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, er
 
 	return columns, err
 }
+
+func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
+	count, err := db.db.NewSelect().
+		Model((*DatabaseColumn)(nil)).
+		Where("board = ?", board).
+		Count(ctx)
+
+	return count, err
+}
