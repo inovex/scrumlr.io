@@ -146,3 +146,12 @@ func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
 		Where("board = ?", board).
 		Count(ctx)
 }
+
+func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
+	count, err := db.db.NewSelect().
+		Model((*DatabaseColumn)(nil)).
+		Where("board = ?", board).
+		Count(ctx)
+
+	return count, err
+}

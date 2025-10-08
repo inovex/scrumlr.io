@@ -12,6 +12,7 @@ type ColumnService interface {
 	Update(ctx context.Context, body ColumnUpdateRequest) (*Column, error)
 	Get(ctx context.Context, boardID, columnID uuid.UUID) (*Column, error)
 	GetAll(ctx context.Context, boardID uuid.UUID) ([]*Column, error)
+	GetCount(ctx context.Context, boardID uuid.UUID) (int, error)
 }
 
 type ColumnApi struct {

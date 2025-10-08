@@ -29,6 +29,7 @@ type ColumnDatabase interface {
 	Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumn, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, error)
 	GetIndex(ctx context.Context, board uuid.UUID) (int, error)
+	Count(ctx context.Context, board uuid.UUID) (int, error)
 }
 
 type Service struct {
@@ -205,7 +206,10 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.get.all")
 	defer span.End()
 
-	span.SetAttributes(attribute.String("scrumlr.columns.service.get.all.board", boardID.String()))
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.get.all.board", boardID.String()),
+	)
+
 	columns, err := service.database.GetAll(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
@@ -215,6 +219,26 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 	}
 
 	return Columns(columns), err
+}
+
+func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.get.count")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.get.count.board", boardID.String()),
+	)
+
+	count, err := service.database.Count(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get column count")
+		span.RecordError(err)
+		log.Errorw("failed to get column count", "board", boardID, "error", err)
+		return count, common.InternalServerError
+	}
+
+	return count, err
 }
 
 func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
