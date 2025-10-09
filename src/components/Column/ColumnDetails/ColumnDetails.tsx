@@ -145,7 +145,29 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const renderName = () =>
     props.mode === "edit" ? (
-      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
+      <input
+        {...emoji.inputBindings}
+        ref={inputRef}
+        className={classNames("column-details__name", "column-details__name--editing")}
+        maxLength={MAX_BOARD_NAME_LENGTH}
+        onKeyDown={(e) => {
+          // handle emoji input first
+          emoji.inputBindings.onKeyDown?.(e);
+          if (e.defaultPrevented) return;
+
+          // handle Enter key submission
+          if (e.key === "Enter") {
+            e.preventDefault();
+            updateColumnDetails();
+          }
+          // escape to cancel
+          else if (e.key === "Escape") {
+            e.preventDefault();
+            cancelUpdate();
+            changeMode("view");
+          }
+        }}
+      />
     ) : (
       <>
         <div
@@ -256,6 +278,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         rows={3}
         emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
+        onCancel={() => {
+          cancelUpdate();
+          changeMode("view");
+        }}
         onSubmit={updateColumnDetails}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
