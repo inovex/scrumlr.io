@@ -34,6 +34,11 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   const isEditing = props.openState === "nameFirst" || props.openState === "descriptionFirst";
 
+  const cancelChanges = () => {
+    props.setOpenState("closed");
+    (document.activeElement as HTMLElement)?.blur(); // leave input (or we can keep typing inside it)
+  };
+
   const saveChanges = () => {
     props.updateColumnTitle(name, description);
     // show visual feedback for 2s before displaying menu options again
@@ -49,10 +54,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       className: "mini-menu-item--cancel",
       element: <CloseIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
-      onClick(): void {
-        props.setOpenState("closed");
-        (document.activeElement as HTMLElement)?.blur(); // leave input (or we can keep typing inside it)
-      },
+      onClick: cancelChanges,
     },
     {
       className: "mini-menu-item--save",
@@ -96,6 +98,11 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             e.preventDefault();
             saveChanges();
           }
+          // escape to cancel
+          else if (e.key === "Escape") {
+            e.preventDefault();
+            cancelChanges();
+          }
         }}
       />
       {isEditing ? (
@@ -111,6 +118,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             onBlur={handleBlurNameWrapperContents}
             maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
             onSubmit={saveChanges}
+            onCancel={cancelChanges}
           />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
         </div>
