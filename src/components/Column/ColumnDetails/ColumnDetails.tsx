@@ -272,6 +272,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         rows={3}
         emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
+        onCancel={() => {
+          cancelUpdate();
+          changeMode("view");
+        }}
         onSubmit={updateColumnDetails}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />

@@ -34,6 +34,7 @@ type TextAreaProps = {
   onClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onDoubleClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onSubmit?: () => void; // caused by shortcut
+  onCancel?: () => void; // caused by shortcut
 };
 
 const ROWS_DEFAULT = 7;
@@ -89,6 +90,11 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
           if (e.key === "Enter" && !e.shiftKey && props.onSubmit) {
             e.preventDefault();
             props.onSubmit();
+          }
+          // escape to cancel
+          else if (e.key === "Escape") {
+            e.preventDefault();
+            props.onCancel?.();
           }
         }}
         disabled={props.disabled}
