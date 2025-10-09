@@ -36,10 +36,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.removeVote },
 		},
 		{
-			name:    "votings.updateVoting",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateVoting },
-		},
-		{
 			name:    "notes.createNote",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.createNote },
 		},

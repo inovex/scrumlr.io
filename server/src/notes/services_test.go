@@ -3,7 +3,6 @@ package notes
 import (
 	"context"
 
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/votings"
@@ -236,7 +235,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	broker.Con = mockBroker
 
 	mockVotingService := votings.NewMockVotingService(suite.T())
-	mockVotingService.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Note: &noteID}).
+	mockVotingService.EXPECT().GetVotes(mock.Anything, boardID, votings.VoteFilter{Note: &noteID}).
 		Return([]*votings.Vote{
 			{User: firstUserId, Note: noteID},
 			{User: secondUserId, Note: noteID},

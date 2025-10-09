@@ -70,7 +70,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 
 }
 
-func (suite *VotingTestSuite) TestUpdateVoting() {
+func (suite *VotingTestSuite) TestCloseVoting() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
@@ -87,9 +87,7 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 			s.votings = votingMock
 			s.notes = notesMock
 
-			req := NewTestRequestBuilder("PUT", "/", strings.NewReader(`{
-				"status": "CLOSED"
-				}`))
+			req := NewTestRequestBuilder("PUT", "/", nil)
 			req.req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.VotingIdentifier, votingId)
@@ -97,18 +95,13 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
-			votingMock.EXPECT().Update(mock.Anything, votings.VotingUpdateRequest{
-				Board:  boardId,
-				ID:     votingId,
-				Status: votings.Closed,
-			}, []votings.Note(nil)).Return(&votings.Voting{
-				Status: votings.Closed,
-			}, tt.err)
+			votingMock.EXPECT().Close(mock.Anything, votingId, boardId, []votings.Note(nil)).
+				Return(&votings.Voting{Status: votings.Closed}, tt.err)
 
 			s.updateVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			votingMock.AssertExpectations(suite.T())
-			votingMock.AssertNumberOfCalls(suite.T(), "Update", 1)
+			votingMock.AssertNumberOfCalls(suite.T(), "Close", 1)
 		})
 	}
 

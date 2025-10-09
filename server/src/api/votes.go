@@ -5,7 +5,6 @@ import (
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/votings"
@@ -69,7 +68,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 	body.Board = board
 	body.User = user
 
-	err := s.votings.RemoveVote(r.Context(), body)
+	err := s.votings.RemoveVote(ctx, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to remove vote")
 		span.RecordError(err)
@@ -90,9 +89,8 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	requestFilter := filter.VoteFilter{
-		Board: board,
-		User:  &user,
+	requestFilter := votings.VoteFilter{
+		User: &user,
 	}
 
 	votingQuery := r.URL.Query().Get("voting")
@@ -121,7 +119,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 		requestFilter.Note = &note
 	}
 
-	votes, err := s.votings.GetVotes(ctx, requestFilter)
+	votes, err := s.votings.GetVotes(ctx, board, requestFilter)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)

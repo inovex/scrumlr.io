@@ -57,21 +57,8 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.update")
 	defer span.End()
 
-	log := logger.FromContext(ctx)
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := ctx.Value(identifiers.VotingIdentifier).(uuid.UUID)
-
-	var body votings.VotingUpdateRequest
-	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
-		log.Errorw("Unable to decode body", "err", err)
-		common.Throw(w, r, common.BadRequestError(err))
-		return
-	}
-
-	body.Board = board
-	body.ID = id
 
 	notes, err := s.notes.GetAll(ctx, board)
 	if err != nil {
@@ -96,7 +83,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	voting, err := s.votings.Update(ctx, body, affectedNotes)
+	voting, err := s.votings.Close(ctx, id, board, affectedNotes)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update voting")
 		span.RecordError(err)
