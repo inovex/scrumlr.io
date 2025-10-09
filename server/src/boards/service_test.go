@@ -90,7 +90,9 @@ func TestCreate(t *testing.T) {
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
-		[]columns.DatabaseColumnInsert{{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
+		[]columns.DatabaseColumnInsert{
+			{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: index},
+		}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
