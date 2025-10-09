@@ -160,6 +160,12 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             e.preventDefault();
             updateColumnDetails();
           }
+          // escape to cancel
+          else if (e.key === "Escape") {
+            e.preventDefault();
+            cancelUpdate();
+            changeMode("view");
+          }
         }}
       />
     ) : (
