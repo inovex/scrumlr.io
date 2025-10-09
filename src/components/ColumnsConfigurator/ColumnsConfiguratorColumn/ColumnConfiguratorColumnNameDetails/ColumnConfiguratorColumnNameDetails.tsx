@@ -90,6 +90,13 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         onFocus={() => props.setOpenState("nameFirst")}
         onBlur={handleBlurNameWrapperContents}
         autoComplete="off"
+        onKeyDown={(e) => {
+          // handle Enter key submission
+          if (e.key === "Enter") {
+            e.preventDefault();
+            saveChanges();
+          }
+        }}
       />
       {isEditing ? (
         <div className="column-configurator-column-name-details__description-wrapper">
@@ -103,6 +110,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             autoFocus={props.openState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
             maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
+            onSubmit={saveChanges}
           />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
         </div>
