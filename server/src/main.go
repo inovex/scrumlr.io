@@ -411,7 +411,7 @@ func run(c *cli.Context) error {
 	columnTemplateService := initializer.InitializeColumnTemplateService()
 
 	votingService := initializer.InitializeVotingService()
-	noteService := initializer.InitializeNotesService(votingService)
+	noteService := initializer.InitializeNotesService()
 	columnService := initializer.InitializeColumnService(noteService)
 
 	sessionService := initializer.InitializeSessionService(columnService, noteService)

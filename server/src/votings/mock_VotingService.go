@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common/filter"
 )
 
 // NewMockVotingService creates a new instance of MockVotingService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -386,8 +385,8 @@ func (_c *MockVotingService_GetOpen_Call) RunAndReturn(run func(ctx context.Cont
 }
 
 // GetVotes provides a mock function for the type MockVotingService
-func (_mock *MockVotingService) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error) {
-	ret := _mock.Called(ctx, f)
+func (_mock *MockVotingService) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error) {
+	ret := _mock.Called(ctx, board, f)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetVotes")
@@ -395,18 +394,18 @@ func (_mock *MockVotingService) GetVotes(ctx context.Context, f filter.VoteFilte
 
 	var r0 []*Vote
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, filter.VoteFilter) ([]*Vote, error)); ok {
-		return returnFunc(ctx, f)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, VoteFilter) ([]*Vote, error)); ok {
+		return returnFunc(ctx, board, f)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, filter.VoteFilter) []*Vote); ok {
-		r0 = returnFunc(ctx, f)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, VoteFilter) []*Vote); ok {
+		r0 = returnFunc(ctx, board, f)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]*Vote)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, filter.VoteFilter) error); ok {
-		r1 = returnFunc(ctx, f)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, VoteFilter) error); ok {
+		r1 = returnFunc(ctx, board, f)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -420,24 +419,30 @@ type MockVotingService_GetVotes_Call struct {
 
 // GetVotes is a helper method to define mock.On call
 //   - ctx context.Context
-//   - f filter.VoteFilter
-func (_e *MockVotingService_Expecter) GetVotes(ctx interface{}, f interface{}) *MockVotingService_GetVotes_Call {
-	return &MockVotingService_GetVotes_Call{Call: _e.mock.On("GetVotes", ctx, f)}
+//   - board uuid.UUID
+//   - f VoteFilter
+func (_e *MockVotingService_Expecter) GetVotes(ctx interface{}, board interface{}, f interface{}) *MockVotingService_GetVotes_Call {
+	return &MockVotingService_GetVotes_Call{Call: _e.mock.On("GetVotes", ctx, board, f)}
 }
 
-func (_c *MockVotingService_GetVotes_Call) Run(run func(ctx context.Context, f filter.VoteFilter)) *MockVotingService_GetVotes_Call {
+func (_c *MockVotingService_GetVotes_Call) Run(run func(ctx context.Context, board uuid.UUID, f VoteFilter)) *MockVotingService_GetVotes_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 filter.VoteFilter
+		var arg1 uuid.UUID
 		if args[1] != nil {
-			arg1 = args[1].(filter.VoteFilter)
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 VoteFilter
+		if args[2] != nil {
+			arg2 = args[2].(VoteFilter)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -448,7 +453,7 @@ func (_c *MockVotingService_GetVotes_Call) Return(votes []*Vote, err error) *Moc
 	return _c
 }
 
-func (_c *MockVotingService_GetVotes_Call) RunAndReturn(run func(ctx context.Context, f filter.VoteFilter) ([]*Vote, error)) *MockVotingService_GetVotes_Call {
+func (_c *MockVotingService_GetVotes_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error)) *MockVotingService_GetVotes_Call {
 	_c.Call.Return(run)
 	return _c
 }
