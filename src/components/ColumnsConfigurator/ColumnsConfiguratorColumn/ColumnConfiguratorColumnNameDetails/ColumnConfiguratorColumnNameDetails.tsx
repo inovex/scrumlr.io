@@ -34,6 +34,16 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   const isEditing = props.openState === "nameFirst" || props.openState === "descriptionFirst";
 
+  const saveChanges = () => {
+    props.updateColumnTitle(name, description);
+    // show visual feedback for 2s before displaying menu options again
+    (document.activeElement as HTMLElement)?.blur(); // leave input (or we can keep typing inside it)
+    props.setOpenState("visualFeedback");
+    setTimeout(() => {
+      props.setOpenState("closed");
+    }, 2000);
+  };
+
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
       className: "mini-menu-item--cancel",
@@ -48,14 +58,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       className: "mini-menu-item--save",
       element: <CheckDoneIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.save"),
-      onClick(): void {
-        props.updateColumnTitle(name, description);
-        // show visual feedback for 2s before displaying menu options again
-        props.setOpenState("visualFeedback");
-        setTimeout(() => {
-          props.setOpenState("closed");
-        }, 2000);
-      },
+      onClick: saveChanges,
     },
   ];
 
