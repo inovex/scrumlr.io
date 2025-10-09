@@ -9,9 +9,9 @@ type NoteDialogHeaderProps = {
 
 export const NoteDialogHeader: FC<NoteDialogHeaderProps> = ({columnName, columnDescription}: NoteDialogHeaderProps) => (
   <div className="note-dialog-header">
-    <h2 className="note-dialog-header__name" data-clarity-mask="True">
+    <div className="note-dialog-header__name" data-clarity-mask="True">
       {columnName}
-    </h2>
+    </div>
     <TextArea
       className="note-dialog-header__description"
       input={columnDescription}
