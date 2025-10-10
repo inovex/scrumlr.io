@@ -51,10 +51,11 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     const setOpenStateSpy = jest.fn();
     const {container} = renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy});
 
-    const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
-
-    fireEvent.focus(inputElement);
-    fireEvent.blur(inputElement);
+    // note: useOnBlur does not actually use the native blur event, but scans for clicks outside the element instead.
+    // this is why to simulate the blur, we just click somewhere on the document.
+    // const wrapperElement = container.firstChild as HTMLDivElement
+    // fireEvent.blur(wrapperElement);
+    fireEvent.click(document);
 
     expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
   });
