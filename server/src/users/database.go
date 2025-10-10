@@ -82,12 +82,8 @@ func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 func (db *DB) GetMultipleUsers(ctx context.Context, ids []uuid.UUID) ([]DatabaseUser, error) {
 	var users []DatabaseUser
 
-	query := db.db.NewSelect().
-		Model(&users)
-
-	query = query.Where("id IN (?)", bun.In(ids))
-
-	err := query.Scan(ctx, &users)
+	err := db.db.NewSelect().
+		Model(&users).Where("id IN (?)", bun.In(ids)).Scan(ctx, &users)
 
 	if err != nil {
 		return nil, err
