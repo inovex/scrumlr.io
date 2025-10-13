@@ -117,7 +117,16 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	database := NewColumnsDatabase(suite.db)
 	service := NewColumnService(database, broker, noteService)
 
-	column, err := service.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	column, err := service.Create(ctx,
+		ColumnRequest{
+			Board:       boardId,
+			Name:        name,
+			Description: description,
+			Color:       color,
+			Visible:     &visible,
+			Index:       &index,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, name, column.Name)
@@ -212,9 +221,13 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Delete() {
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventColumnDeleted, msg.Type)
-	columnData, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
+	type DeleteColumn struct {
+		Column uuid.UUID
+		Notes  []uuid.UUID
+	}
+	columnData, err := technical_helper.Unmarshal[DeleteColumn](msg.Data)
 	assert.Nil(t, err)
-	assert.Equal(t, columnId, *columnData)
+	assert.Equal(t, columnId, columnData.Column)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Get() {
