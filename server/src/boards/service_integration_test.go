@@ -15,6 +15,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -72,6 +73,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -87,7 +89,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -127,6 +129,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -142,7 +145,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -190,6 +193,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -205,7 +209,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -270,6 +274,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -285,7 +290,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -344,6 +349,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -359,7 +365,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -417,6 +423,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -432,7 +439,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -490,6 +497,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -505,7 +513,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -563,6 +571,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -578,7 +587,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -637,6 +646,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -652,7 +662,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -708,6 +718,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -723,7 +734,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	err = service.Delete(ctx, boardId)
 
@@ -742,6 +753,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -757,7 +769,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Get(ctx, boardId)
 
@@ -781,6 +793,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -796,7 +809,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Get(ctx, boardId)
 
@@ -817,6 +830,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -832,7 +846,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	boards, err := service.GetBoards(ctx, userId)
 
@@ -857,6 +871,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -872,7 +887,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.FullBoard(ctx, boardId)
 
@@ -903,6 +918,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -918,7 +934,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.FullBoard(ctx, boardId)
 
@@ -940,6 +956,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -955,7 +972,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	boards, err := service.BoardOverview(ctx, boardIds, userId)
 
@@ -988,6 +1005,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -1003,7 +1021,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.SetTimer(ctx, boardId, minutes)
 
@@ -1024,6 +1042,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -1039,7 +1058,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.DeleteTimer(ctx, boardId)
 
@@ -1062,6 +1081,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -1077,7 +1097,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	_, err = service.SetTimer(ctx, boardId, minutes)
 	assert.Nil(t, err)
