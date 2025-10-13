@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
@@ -244,7 +245,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	boardName := "Test Name"
 	boardDescription := "Test Description"
 	salt := "z9YcpBno6azI2ueA"
-	passphrase := common.Sha512BySalt("123", salt)
+	passphrase := hash.NewHashSha512().HashBySalt("123", salt)
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).

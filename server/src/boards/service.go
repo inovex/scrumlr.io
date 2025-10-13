@@ -16,6 +16,7 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -30,6 +31,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
 
 type Service struct {
 	clock    timeprovider.TimeProvider
+	hash     hash.Hash
 	database BoardDatabase
 	realtime *realtime.Broker
 
@@ -50,9 +52,10 @@ type BoardDatabase interface {
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
 }
 
-func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, clock timeprovider.TimeProvider) BoardService {
+func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, clock timeprovider.TimeProvider, hash hash.Hash) BoardService {
 	b := new(Service)
 	b.clock = clock
+	b.hash = hash
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
@@ -143,7 +146,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 			return nil, common.BadRequestError(err)
 		}
 
-		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
+		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
 		board = DatabaseBoardInsert{
 			Name:         body.Name,
 			Description:  body.Description,
@@ -395,7 +398,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				return nil, common.BadRequestError(err)
 			}
 
-			passphrase, salt, err := common.Sha512WithSalt(*body.Passphrase)
+			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
