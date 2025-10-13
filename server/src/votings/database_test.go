@@ -3,7 +3,6 @@ package votings
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"log"
 	"testing"
 
@@ -56,7 +55,16 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(),
+		DatabaseVotingInsert{
+			Board:              boardId,
+			VoteLimit:          voteLimit,
+			AllowMultipleVotes: allowMultiple,
+			ShowVotesOfOthers:  showOfOthers,
+			IsAnonymous:        anonymous,
+			Status:             status,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbVoting.Board)
@@ -68,68 +76,20 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
 	assert.NotNil(t, dbVoting.CreatedAt)
 }
 
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_Duplicate() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["Update"].id
-	voteLimit := 10
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
-
-	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_NegativeVoteLimit() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["CreateEmpty"].id
-	voteLimit := -1
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
-
-	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("vote limit shall not be a negative number"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Create_HighVoteLimit() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	boardId := suite.boards["CreateEmpty"].id
-	voteLimit := 100
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
-
-	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("vote limit shall not be greater than 99"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Update() {
+func (suite *DatabaseVotingTestSuite) Test_Database_Close() {
 	t := suite.T()
 	database := NewVotingDatabase(suite.db)
 
 	votingId := suite.votings["Update"].ID
 	boardId := suite.boards["Update"].id
 
-	dbVoting, err := database.Update(context.Background(), DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Closed})
+	dbVoting, err := database.Close(context.Background(),
+		DatabaseVotingUpdate{
+			ID:     votingId,
+			Board:  boardId,
+			Status: Closed,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, votingId, dbVoting.ID)
@@ -141,20 +101,6 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Update() {
 	assert.False(t, dbVoting.IsAnonymous)
 	assert.NotNil(t, dbVoting.CreatedAt)
 	// TODO: test note rank
-}
-
-func (suite *DatabaseVotingTestSuite) Test_Database_Update_ClosedToOpen() {
-	t := suite.T()
-	database := NewVotingDatabase(suite.db)
-
-	votingId := suite.votings["ClosedUpdate"].ID
-	boardId := suite.boards["ClosedUpdate"].id
-
-	dbVoting, err := database.Update(context.Background(), DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Open})
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("only allowed to close or abort a voting"), err)
-	assert.Equal(t, DatabaseVoting{}, dbVoting)
 }
 
 func (suite *DatabaseVotingTestSuite) Test_Database_Get_Open() {
