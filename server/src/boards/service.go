@@ -354,6 +354,15 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		attribute.String("scrumlr.boards.service.board.update.board", body.ID.String()),
 	)
 
+	if body.Name != nil {
+		if len(*body.Name) == 0 {
+			err := errors.New("name cannot be empty")
+			span.SetStatus(codes.Error, "name cannot be empty")
+			span.RecordError(err)
+			return nil, common.BadRequestError(err)
+		}
+	}
+
 	update := DatabaseBoardUpdate{
 		ID:                    body.ID,
 		Name:                  body.Name,
@@ -370,8 +379,16 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 
 	if body.AccessPolicy != nil {
 		update.AccessPolicy = body.AccessPolicy
-		if *body.AccessPolicy == ByPassphrase {
-			if body.Passphrase == nil {
+		switch *body.AccessPolicy {
+		case ByInvite, Public:
+			if body.Passphrase != nil {
+				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
+				span.RecordError(err)
+				return nil, common.BadRequestError(err)
+			}
+		case ByPassphrase:
+			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
 				span.SetStatus(codes.Error, "no passphrase provided")
 				span.RecordError(err)

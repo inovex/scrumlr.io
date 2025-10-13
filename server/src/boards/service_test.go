@@ -231,10 +231,12 @@ func TestUpdate(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{}, nil)
+	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*columns.Column{}, nil)
 
 	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*notes.Note{}, nil)
+	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*notes.Note{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -244,10 +246,240 @@ func TestUpdate(t *testing.T) {
 	mockClock := timeprovider.NewMockTimeProvider(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
-	result, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
 
-	require.NoError(t, err)
-	assert.Equal(t, boardID, result.ID)
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, board.ID)
+	assert.Equal(t, updatedName, *board.Name)
+}
+
+func TestUpdate_EmptyName(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := ""
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
+
+	assert.Nil(t, board)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("name cannot be empty")), err)
+}
+
+func TestUpdate_ToPassphrase(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := ByPassphrase
+	passphrase := "SuperStrongPassword"
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase}).
+		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase}, nil)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+
+	columnMock := columns.NewMockColumnService(t)
+	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*columns.Column{}, nil)
+
+	noteMock := notes.NewMockNotesService(t)
+	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*notes.Note{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, board.ID)
+	assert.Equal(t, updatedName, *board.Name)
+	assert.Equal(t, passphrase, board.Passphrase)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+}
+
+func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := ByPassphrase
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+
+	assert.Nil(t, board)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")), err)
+}
+
+func TestUpdate_ToPublic(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := Public
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+
+	columnMock := columns.NewMockColumnService(t)
+	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*columns.Column{}, nil)
+
+	noteMock := notes.NewMockNotesService(t)
+	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*notes.Note{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, board.ID)
+	assert.Equal(t, updatedName, *board.Name)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+}
+
+func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := Public
+	passphrase := "SuperStrongPassword"
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+
+	assert.Nil(t, board)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+}
+
+func TestUpdate_ToInvite(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := ByInvite
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+
+	columnMock := columns.NewMockColumnService(t)
+	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*columns.Column{}, nil)
+
+	noteMock := notes.NewMockNotesService(t)
+	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+		Return([]*notes.Note{}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, board.ID)
+	assert.Equal(t, updatedName, *board.Name)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+}
+
+func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
+	accessPolicy := ByInvite
+	passphrase := "SuperStrongPassword"
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+
+	assert.Nil(t, board)
+	assert.NotNil(t, err)
+	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
 }
 
 func TestSetTimer(t *testing.T) {
