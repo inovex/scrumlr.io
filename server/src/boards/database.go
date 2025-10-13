@@ -2,7 +2,6 @@ package boards
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"scrumlr.io/server/votings"
@@ -58,18 +57,6 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
-		if *update.AccessPolicy == ByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
-			return DatabaseBoard{}, errors.New("passphrase and salt should be set when access policy is updated")
-		} else if *update.AccessPolicy != ByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
-			return DatabaseBoard{}, errors.New("passphrase and salt should not be set if access policy is defined as 'BY_PASSPHRASE'")
-		}
-
-		if *update.AccessPolicy == ByInvite {
-			query.Where("access_policy = ?", ByInvite)
-		} else {
-			query.Where("access_policy <> ?", ByInvite)
-		}
-
 		query.Column("access_policy", "passphrase", "salt")
 	}
 	if update.ShowAuthors != nil {
