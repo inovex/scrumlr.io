@@ -206,8 +206,6 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
 func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 	t := suite.T()
 	ctx := context.Background()
-	t := suite.T()
-	ctx := context.Background()
 
 	boardId := suite.boards["CreateDuplicate"].id
 	voteLimit := 10

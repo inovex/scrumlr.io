@@ -105,12 +105,6 @@ type VoteFilter struct {
 	Note   *uuid.UUID
 }
 
-type VoteFilter struct {
-	Voting *uuid.UUID
-	User   *uuid.UUID
-	Note   *uuid.UUID
-}
-
 type Note struct {
 	// The id of the note
 	ID uuid.UUID `json:"id"`
