@@ -16,7 +16,6 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -230,7 +229,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		return nil, err
 	}
 
-	boardVotes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{Board: boardID})
+	boardVotes, err := service.votingService.GetVotes(ctx, boardID, votings.VoteFilter{})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)

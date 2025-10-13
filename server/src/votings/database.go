@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 )
 
 type DB struct {
@@ -143,10 +142,10 @@ func (d *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, err
 	return votings, err
 }
 
-func (d *DB) GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error) {
+func (d *DB) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error) {
 	voteQuery := d.db.NewSelect().
 		Model((*Vote)(nil)).
-		Where("board = ?", f.Board)
+		Where("board = ?", board)
 
 	if f.Voting != nil {
 		voteQuery = voteQuery.Where("voting = ?", *f.Voting)
