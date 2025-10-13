@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
@@ -89,7 +90,9 @@ func TestCreate(t *testing.T) {
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
-		[]columns.DatabaseColumnInsert{{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
+		[]columns.DatabaseColumnInsert{
+			{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: index},
+		}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -157,6 +160,10 @@ func TestDelete(t *testing.T) {
 	votingMock := votings.NewMockVotingService(t)
 
 	mockBroker := realtime.NewMockClient(t)
+	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	expectedEvent := realtime.BoardEvent{Type: realtime.BoardEventBoardDeleted}
+	mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil)
+
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -296,4 +303,46 @@ func TestIncrementTimer(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, boardID, result.ID)
 	assert.Equal(t, updatedTimerEnd, *result.TimerEnd)
+}
+
+func TestDelete_BroadcastsCorrectEvent(t *testing.T) {
+	boardID := uuid.New()
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
+
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
+
+	mockBroker := realtime.NewMockClient(t)
+
+	// Verify the exact event that's broadcasted
+	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	expectedEvent := realtime.BoardEvent{
+		Type: realtime.BoardEventBoardDeleted,
+		Data: nil, // Board deletion event has no data
+	}
+
+	// Set up the expectation to capture the broadcast
+	mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil).Once()
+
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+
+	// Act
+	err := service.Delete(context.Background(), boardID)
+
+	// Assert
+	require.NoError(t, err)
+
+	// Verify that all expectations were met (including the Publish call)
+	mockBroker.AssertExpectations(t)
 }

@@ -307,6 +307,72 @@ func (_c *MockColumnDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
+// GetIndex provides a mock function for the type MockColumnDatabase
+func (_mock *MockColumnDatabase) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
+	ret := _mock.Called(ctx, board)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetIndex")
+	}
+
+	var r0 int
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (int, error)); ok {
+		return returnFunc(ctx, board)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) int); ok {
+		r0 = returnFunc(ctx, board)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockColumnDatabase_GetIndex_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetIndex'
+type MockColumnDatabase_GetIndex_Call struct {
+	*mock.Call
+}
+
+// GetIndex is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board uuid.UUID
+func (_e *MockColumnDatabase_Expecter) GetIndex(ctx interface{}, board interface{}) *MockColumnDatabase_GetIndex_Call {
+	return &MockColumnDatabase_GetIndex_Call{Call: _e.mock.On("GetIndex", ctx, board)}
+}
+
+func (_c *MockColumnDatabase_GetIndex_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockColumnDatabase_GetIndex_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockColumnDatabase_GetIndex_Call) Return(n int, err error) *MockColumnDatabase_GetIndex_Call {
+	_c.Call.Return(n, err)
+	return _c
+}
+
+func (_c *MockColumnDatabase_GetIndex_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID) (int, error)) *MockColumnDatabase_GetIndex_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Update provides a mock function for the type MockColumnDatabase
 func (_mock *MockColumnDatabase) Update(ctx context.Context, column DatabaseColumnUpdate) (DatabaseColumn, error) {
 	ret := _mock.Called(ctx, column)

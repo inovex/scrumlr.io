@@ -32,6 +32,11 @@ coverage: ## Create a html coverage report
 	go tool cover -html=coverage.out -o coverage.html
 	rm coverage.out
 
+.ONESHELL:
+clean-test: ## Clear the go test cache
+	cd src
+	go clean -testcache
+
 postman: ## Run the postman tests
 	newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
 

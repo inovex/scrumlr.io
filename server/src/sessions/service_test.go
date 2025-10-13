@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	mock "github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 )
@@ -98,10 +98,11 @@ func TestCreateAnonymusUser(t *testing.T) {
 
 func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
 	name := "Stan"
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -115,7 +116,7 @@ func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
@@ -135,7 +136,7 @@ func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
@@ -155,7 +156,7 @@ func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateAppleUser(t *testing.T) {
@@ -185,10 +186,11 @@ func TestCreateAppleUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -202,7 +204,7 @@ func TestCreateAppleUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateAppleUser_EmptyUsername(t *testing.T) {
@@ -224,7 +226,7 @@ func TestCreateAppleUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateAppleUser_NewLineUsername(t *testing.T) {
@@ -246,7 +248,7 @@ func TestCreateAppleUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateAzureUser(t *testing.T) {
@@ -276,10 +278,11 @@ func TestCreateAzureUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -293,7 +296,7 @@ func TestCreateAzureUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateAzureUser_EmptyUsername(t *testing.T) {
@@ -315,7 +318,7 @@ func TestCreateAzureUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateAzureUser_NewLineUsername(t *testing.T) {
@@ -337,7 +340,7 @@ func TestCreateAzureUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateGitHubUser(t *testing.T) {
@@ -367,10 +370,11 @@ func TestCreateGitHubUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -384,7 +388,7 @@ func TestCreateGitHubUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
@@ -406,7 +410,7 @@ func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
@@ -428,7 +432,7 @@ func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateGoogleUser(t *testing.T) {
@@ -458,10 +462,11 @@ func TestCreateGoogleUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -475,7 +480,7 @@ func TestCreateGoogleUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
@@ -497,7 +502,7 @@ func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
@@ -519,7 +524,7 @@ func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateMicrosoftUser(t *testing.T) {
@@ -549,10 +554,11 @@ func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -566,7 +572,7 @@ func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
@@ -588,7 +594,7 @@ func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
@@ -610,7 +616,7 @@ func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestCreateOIDCUser(t *testing.T) {
@@ -640,10 +646,11 @@ func TestCreateOIDCUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -657,7 +664,7 @@ func TestCreateOIDCUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
@@ -679,7 +686,7 @@ func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
@@ -701,7 +708,7 @@ func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestUpdateUser(t *testing.T) {
@@ -746,11 +753,11 @@ func TestUpdateUser(t *testing.T) {
 func TestUpdateUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Stan"
-	dbError := "unable to execute"
+	dbError := errors.New("database error")
 
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: userId, Name: name}).
-		Return(DatabaseUser{}, errors.New(dbError))
+		Return(DatabaseUser{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -764,7 +771,7 @@ func TestUpdateUser_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
 func TestUpdateUser_EmptyUsername(t *testing.T) {
@@ -785,7 +792,7 @@ func TestUpdateUser_EmptyUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
 func TestUpdateUser_NewLineUsername(t *testing.T) {
@@ -806,7 +813,7 @@ func TestUpdateUser_NewLineUsername(t *testing.T) {
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
 func TestAvailableForKeyMigration(t *testing.T) {

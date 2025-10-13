@@ -17,7 +17,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/votings"
 )
 
 type SessionServiceIntegrationTestSuite struct {
@@ -57,6 +56,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Luke"].ID
+	role := common.ParticipantRole
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -65,28 +65,26 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
 	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
 
-	session, err := sessionService.Create(ctx, boardId, userId)
+	session, err := sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, session.Board)
 	assert.Equal(t, userId, session.User.ID)
-	assert.Equal(t, common.ParticipantRole, session.Role)
+	assert.Equal(t, role, session.Role)
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventParticipantCreated, msg.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msg.Data)
 	assert.Nil(t, err)
 	assert.Equal(t, userId, sessionData.User.ID)
-	assert.Equal(t, common.ParticipantRole, sessionData.Role)
+	assert.Equal(t, role, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
@@ -105,10 +103,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -148,10 +144,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -185,10 +179,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -212,10 +204,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -237,10 +227,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -266,10 +254,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -297,10 +283,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -328,10 +312,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -355,10 +337,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)
@@ -382,10 +362,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := NewSessionDatabase(suite.db)

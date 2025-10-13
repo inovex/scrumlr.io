@@ -25,7 +25,7 @@ type DatabaseColumnInsert struct {
 	Description   string
 	Color         Color
 	Visible       *bool
-	Index         *int
+	Index         int
 }
 
 // ColumnUpdate the update model for a new Column

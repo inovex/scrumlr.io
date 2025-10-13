@@ -5,7 +5,7 @@ import {uniqueId} from "underscore";
 import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import {getEmojiWithSkinTone} from "utils/reactions";
+import {getEmojiWithSkinTone, formatReactionUsers} from "utils/reactions";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
@@ -19,7 +19,7 @@ interface NoteReactionChipProps {
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionImage = REACTION_EMOJI_MAP.get(props.reaction.reactionType);
-  const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
+  const reactionUsers = formatReactionUsers(props.reaction.users);
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
   const skinTone = useAppSelector((state) => state.skinTone);
