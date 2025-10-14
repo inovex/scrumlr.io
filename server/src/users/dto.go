@@ -36,6 +36,18 @@ func (u *User) From(user DatabaseUser) *User {
 	return u
 }
 
+func UserSlice(users []DatabaseUser) []*User {
+	if users == nil {
+		return nil
+	}
+
+	list := make([]*User, len(users))
+	for index, user := range users {
+		list[index] = new(User).From(user)
+	}
+	return list
+}
+
 func (*User) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
