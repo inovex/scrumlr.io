@@ -1,6 +1,6 @@
 import {Board} from "../store/features/board/types";
 import {Column} from "../store/features/columns/types";
-import {Participant} from "../store/features/participants/types";
+import {ParticipantWithUser} from "../store/features/participants/types";
 import {Note} from "../store/features/notes/types";
 import {Vote} from "../store/features/votes/types";
 import {Voting} from "../store/features/votings/types";
@@ -17,7 +17,7 @@ export interface BoardInitEvent {
     reactions?: Reaction[];
     votings?: Voting[];
     votes?: Vote[];
-    participants: Participant[];
+    participants: ParticipantWithUser[];
     requests?: Request[];
   };
 }
@@ -91,17 +91,17 @@ export interface RequestUpdatedEvent {
 
 export interface ParticipantCreatedEvent {
   type: "PARTICIPANT_CREATED";
-  data: Participant;
+  data: ParticipantWithUser;
 }
 
 export interface ParticipantUpdatedEvent {
   type: "PARTICIPANT_UPDATED";
-  data: Participant;
+  data: ParticipantWithUser;
 }
 
 export interface ParticipantsUpdatedEvent {
   type: "PARTICIPANTS_UPDATED";
-  data: Participant[];
+  data: ParticipantWithUser[];
 }
 
 export interface VotingCreatedEvent {

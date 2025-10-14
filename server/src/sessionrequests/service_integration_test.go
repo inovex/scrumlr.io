@@ -5,6 +5,8 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/users"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
@@ -27,7 +29,7 @@ type SessionRequestServiceIntegrationTestSuite struct {
 	natsContainer        *nats.NATSContainer
 	db                   *bun.DB
 	natsConnectionString string
-	users                map[string]sessions.User
+	users                map[string]users.User
 	boards               map[string]TestBoard
 	sessionsRequests     map[string]DatabaseBoardSessionRequest
 }
@@ -133,7 +135,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 	sessionData, err := technical_helper.Unmarshal[sessions.BoardSession](sessionMsg.Data)
 
 	assert.Nil(t, err)
-	assert.Equal(t, userId, sessionData.User.ID)
+	assert.Equal(t, userId, sessionData.UserID)
 
 	updatedMsg := <-events
 	assert.Equal(t, realtime.BoardEventSessionRequestUpdated, updatedMsg.Type)
@@ -242,13 +244,13 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 
 func (suite *SessionRequestServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	// tests users
-	suite.users = make(map[string]sessions.User, 6)
-	suite.users["Stan"] = sessions.User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
-	suite.users["Friend"] = sessions.User{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
-	suite.users["Santa"] = sessions.User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Bob"] = sessions.User{ID: uuid.New(), Name: "Bob", AccountType: common.Anonymous}
-	suite.users["Luke"] = sessions.User{ID: uuid.New(), Name: "Luke", AccountType: common.Anonymous}
-	suite.users["Leia"] = sessions.User{ID: uuid.New(), Name: "Leia", AccountType: common.Anonymous}
+	suite.users = make(map[string]users.User, 6)
+	suite.users["Stan"] = users.User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
+	suite.users["Friend"] = users.User{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
+	suite.users["Santa"] = users.User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
+	suite.users["Bob"] = users.User{ID: uuid.New(), Name: "Bob", AccountType: common.Anonymous}
+	suite.users["Luke"] = users.User{ID: uuid.New(), Name: "Luke", AccountType: common.Anonymous}
+	suite.users["Leia"] = users.User{ID: uuid.New(), Name: "Leia", AccountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 2)

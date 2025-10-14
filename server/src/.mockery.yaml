@@ -37,8 +37,6 @@ packages:
     interfaces:
       SessionService:
       SessionDatabase:
-      UserService:
-      UserDatabase:
 
   scrumlr.io/server/sessionrequests:
     interfaces:
@@ -46,15 +44,15 @@ packages:
       SessionRequestDatabase:
       Websocket:
 
+  scrumlr.io/server/users:
+    interfaces:
+      UserService:
+      UserDatabase:
+
   scrumlr.io/server/notes:
     interfaces:
       NotesService:
       NotesDatabase:
-# todo: reimplement this interface
-#  scrumlr.io/server/sessions:
-#    interfaces:
-#      UserService:
-#      UserDatabase:
 
   scrumlr.io/server/votings:
     interfaces:

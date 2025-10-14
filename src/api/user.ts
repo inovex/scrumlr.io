@@ -25,4 +25,36 @@ export const UserAPI = {
       throw new Error(`unable to update user: ${error}`);
     }
   },
+
+  getUserById: async (userId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/${userId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.status === 200) {
+        return await response.json();
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
+    }
+  },
+
+  getUsers: async (boardID: string) => {
+    console.log(boardID);
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/${boardID}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
+    }
+  },
 };

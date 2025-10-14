@@ -5,7 +5,7 @@ import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
 import {Reaction, ReactionType} from "store/features/reactions/types";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
 import {useAppDispatch, useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
@@ -24,7 +24,7 @@ interface NoteReactionListProps {
 export interface ReactionModeled {
   reactionType: ReactionType;
   amount: number;
-  users: Participant[];
+  users: ParticipantWithUser[];
   // since we reduce the reactions, we still need to know what out specific reaction id is (if it exists) so that we can operate on it (e.g. remove)
   myReactionId?: string;
   noteId: string;
