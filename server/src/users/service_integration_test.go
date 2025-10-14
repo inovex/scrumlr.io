@@ -363,7 +363,6 @@ func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
     for _, user := range users {
       yield(user.ID)
     }
-    return
   })
   assert.Nil(t, err)
   assert.ElementsMatch(t, userIds, ids)
