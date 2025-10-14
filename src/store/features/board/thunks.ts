@@ -18,6 +18,11 @@ import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
 
+// helper function to handle board deletion redirects
+const redirectToBoardDeletedPage = () => {
+  window.location.replace("/?boardDeleted=true");
+};
+
 let socket: Socket | null = null;
 
 // creates a board from a template and returns board id if successful
@@ -307,8 +312,3 @@ export const importBoard = createAsyncThunk<void, string, {state: ApplicationSta
     "deleteBoard"
   ).then((boardID) => window.location.assign(`/board/${boardID}`));
 });
-
-// helper function to handle board deletion redirects
-const redirectToBoardDeletedPage = () => {
-  window.location.replace("/?boardDeleted=true");
-};
