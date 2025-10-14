@@ -4,7 +4,7 @@ import {SERVER_WEBSOCKET_URL} from "config";
 import {BoardInitEvent, ServerEvent} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
-import {ApplicationState, retryable, store} from "store";
+import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
@@ -76,7 +76,6 @@ const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Partici
 const mapMultipleParticipants = async (dtos: ParticipantWithUserId[], boardID: string): Promise<ParticipantWithUser[]> => {
   try {
     const users = await API.getUsers(boardID);
-    console.log(users);
     return dtos
       .map((dto) => {
         const user = users.find((u: Auth) => u.id === dto.id);

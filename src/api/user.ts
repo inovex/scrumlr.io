@@ -42,7 +42,6 @@ export const UserAPI = {
   },
 
   getUsers: async (boardID: string) => {
-    console.log(boardID);
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/users/${boardID}`, {
         method: "GET",
