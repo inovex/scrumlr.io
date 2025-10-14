@@ -10,7 +10,7 @@ export const UserAPI = {
    */
   editUser: async (user: Auth) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(user),
@@ -28,7 +28,7 @@ export const UserAPI = {
 
   getUserById: async (userId: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/user/${userId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
         method: "GET",
         credentials: "include",
       });
@@ -43,7 +43,7 @@ export const UserAPI = {
 
   getUsers: async (boardID: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users/${boardID}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/board/${boardID}`, {
         method: "GET",
         credentials: "include",
       });
