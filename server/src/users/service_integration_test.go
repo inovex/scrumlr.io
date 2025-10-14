@@ -341,7 +341,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
 	ctx := context.Background()
 
 	board := suite.boards["Update"]
-	userIds := []uuid.UUID{suite.users["Stan"].ID, suite.users["Santa"].ID}
+	userIds := []uuid.UUID{suite.users["Stan"].ID, suite.users["Update"].ID}
 
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
@@ -434,7 +434,7 @@ func (suite *UserServiceIntegrationTestsuite) SeedDatabase(db *bun.DB) {
 	// test sessions
 	suite.sessions = make(map[string]sessions.BoardSession, 1)
 	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
-	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["Update"] = sessions.BoardSession{UserID: suite.users["Update"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
 
 	for _, user := range suite.users {
 		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
