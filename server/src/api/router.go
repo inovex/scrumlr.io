@@ -258,13 +258,12 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardReactionResources(r)
 		})
 
-		r.Route("/user", func(r chi.Router) {
+		r.Route("/users", func(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Get("/{user}", s.getUserByID)
 			r.Put("/", s.updateUser)
-
+			r.With(s.BoardParticipantContext).Get("/board/{id}", s.getUsers)
 		})
-		r.With(s.BoardParticipantContext).Get("/users/{id}", s.getUsers)
 	})
 }
 
