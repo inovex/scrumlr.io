@@ -116,7 +116,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_PendingFromRe
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
-	assert.Equal(t, dbRequest, DatabaseBoardSessionRequest{})
+	assert.Equal(t, DatabaseBoardSessionRequest{}, dbRequest)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_PendingFromAccepted() {
@@ -130,7 +130,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_PendingFromAc
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
-	assert.Equal(t, dbRequest, DatabaseBoardSessionRequest{})
+	assert.Equal(t, DatabaseBoardSessionRequest{}, dbRequest)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_RejectedFromAccepted() {
@@ -144,7 +144,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_RejectedFromA
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
-	assert.Equal(t, dbRequest, DatabaseBoardSessionRequest{})
+	assert.Equal(t, DatabaseBoardSessionRequest{}, dbRequest)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_Get() {
@@ -168,7 +168,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Get_NotFound() {
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
-	assert.Equal(t, dbRequest, DatabaseBoardSessionRequest{})
+	assert.Equal(t, DatabaseBoardSessionRequest{}, dbRequest)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Accepted() {
