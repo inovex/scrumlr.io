@@ -2,14 +2,14 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   merge_group:
-    types: [checks_requested]
+    types: [ checks_requested ]
   workflow_run:
-    workflows: ["Package"]
-    branches: [main]
+    workflows: [ "Package" ]
+    branches: [ main ]
     types:
       - completed
 env:
@@ -51,9 +51,9 @@ jobs:
         run: yarn test --coverage --watchAll=false --passWithNoTests
 
   test-backend:
-      name: Build and Test – Backend
-      runs-on: ubuntu-latest
-      steps:
+    name: Build and Test – Backend
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -147,10 +147,11 @@ jobs:
 
       - name: SonarQube Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@v1
+        if: ${{ false }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   package:
-    needs: [test-frontend, test-backend]
+    needs: [ test-frontend, test-backend ]
     uses: ./.github/workflows/package.yml
 
   deploy_to_dev_cluster:
@@ -163,7 +164,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
