@@ -1,16 +1,28 @@
-name: Cleanup Feature Branch Deployment
-
+name: Cleanup Feature Branch
 on:
   pull_request:
-    branches: [main]
-    types: [closed,unlabeled]
+    types:
+      - closed
 jobs:
-  cluster-cleanup:
-    name: Clean Up Cluster Resources
-    runs-on: self-hosted
-    if: "${{ github.event.action  == 'closed' || github.event.label.name == 'Action: Deploy PR'}}"
+  cleanup-cache:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
-      - name: scrumlr
+      - name: Cleanup
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: refs/pull/${{ github.event.pull_request.number }}/merge
         run: |
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          kubectl get po -n scrumlr-$PR_NUMBER  | grep 'Running\|Completed' && helm uninstall scrumlr-$PR_NUMBER -n scrumlr-$PR-NUMBER && kubectl delete ns scrumlr-$PR_NUMBER
+          echo "Fetching list of cache keys"
+          cacheKeysForPR=$(gh cache list --ref $BRANCH --limit 100 --json id --jq '.[].id')
+
+          ## Setting this to not fail the workflow while deleting cache keys.
+          set +e
+          echo "Deleting caches..."
+          for cacheKey in $cacheKeysForPR
+          do
+              gh cache delete $cacheKey
+          done
+          echo "Done"

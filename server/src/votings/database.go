@@ -2,13 +2,11 @@ package votings
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 )
 
 type DB struct {
@@ -23,55 +21,17 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 }
 
 func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error) {
-	if insert.Status != Open {
-		return DatabaseVoting{}, errors.New("unable to create voting with other state than 'OPEN'")
-	}
-
-	if insert.VoteLimit < 0 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be a negative number")
-	} else if insert.VoteLimit >= 100 {
-		return DatabaseVoting{}, errors.New("vote limit shall not be greater than 99")
-	}
-
-	countOpenVotings := d.db.NewSelect().
-		Model((*Voting)(nil)).
-		ColumnExpr("COUNT(*) as count").
-		Where("board = ?", insert.Board).
-		Where("status = ?", Open)
-
-	values := d.db.NewSelect().
-		ColumnExpr("uuid(?) as board", insert.Board).
-		ColumnExpr("? as vote_limit", insert.VoteLimit).
-		ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
-		ColumnExpr("? as allow_multiple_votes", insert.AllowMultipleVotes).
-		ColumnExpr("?::voting_status as status", insert.Status).
-		ColumnExpr("? as is_anonymous", insert.IsAnonymous).
-		Where("(SELECT count FROM \"countOpenVotings\") = 0")
-
-	updateBoard := d.db.NewUpdate().
-		Model((*common.DatabaseBoard)(nil)).
-		Set("show_voting = null").
-		Where("(SELECT count FROM \"countOpenVotings\") = 0")
-
 	var voting DatabaseVoting
 	_, err := d.db.NewInsert().
-		With("countOpenVotings", countOpenVotings).
-		With("updateBoard", updateBoard).
-		With("_values", values).
 		Model(&insert).
-		TableExpr("_values").
-		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status", "is_anonymous").
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 
 	return voting, err
 }
 
-func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
-	if update.Status == Open {
-		return DatabaseVoting{}, errors.New("only allowed to close or abort a voting")
-	}
-
+func (d *DB) Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
+	var voting DatabaseVoting
 	updateQuery := d.db.NewUpdate().
 		Model(&update).
 		Where("id = ?", update.ID).
@@ -79,23 +39,18 @@ func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseV
 		Where("status = ?", Open).
 		Returning("*")
 
-	var voting DatabaseVoting
-	var err error
+	updateBoard := d.db.NewUpdate().
+		Model((*common.DatabaseBoard)(nil)).
+		Set("show_voting = (SELECT id FROM \"updateQuery\")").
+		Where("id = ?", update.Board)
 
-	if update.Status == Closed {
-		updateBoard := d.db.NewUpdate().
-			Model((*common.DatabaseBoard)(nil)).
-			Set("show_voting = (SELECT id FROM \"updateQuery\")").
-			Where("id = ?", update.Board)
-
-		err = d.db.NewSelect().
-			With("updateQuery", updateQuery).
-			With("updateBoard", updateBoard).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
-			Model((*DatabaseVoting)(nil)).
-			ModelTableExpr("\"updateQuery\" AS voting").
-			Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
-	}
+	err := d.db.NewSelect().
+		With("updateQuery", updateQuery).
+		With("updateBoard", updateBoard).
+		With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
+		Model((*DatabaseVoting)(nil)).
+		ModelTableExpr("\"updateQuery\" AS voting").
+		Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 
 	return voting, err
 }
@@ -143,10 +98,10 @@ func (d *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, err
 	return votings, err
 }
 
-func (d *DB) GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error) {
+func (d *DB) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error) {
 	voteQuery := d.db.NewSelect().
 		Model((*Vote)(nil)).
-		Where("board = ?", f.Board)
+		Where("board = ?", board)
 
 	if f.Voting != nil {
 		voteQuery = voteQuery.Where("voting = ?", *f.Voting)

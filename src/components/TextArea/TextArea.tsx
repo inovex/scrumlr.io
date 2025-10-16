@@ -34,6 +34,7 @@ type TextAreaProps = {
   onClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onDoubleClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onSubmit?: () => void; // caused by shortcut
+  onCancel?: () => void; // caused by shortcut
 };
 
 const ROWS_DEFAULT = 7;
@@ -80,6 +81,22 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         onBlur={props.onBlur}
         onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
+        onKeyDown={(e) => {
+          // handle emoji input first
+          emoji.inputBindings.onKeyDown?.(e);
+          if (e.defaultPrevented) return;
+
+          // handle Enter key submission
+          if (e.key === "Enter" && !e.shiftKey && props.onSubmit) {
+            e.preventDefault();
+            props.onSubmit();
+          }
+          // escape to cancel
+          else if (e.key === "Escape") {
+            e.preventDefault();
+            props.onCancel?.();
+          }
+        }}
         disabled={props.disabled}
         readOnly={props.readOnly}
       />

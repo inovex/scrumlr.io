@@ -4,7 +4,7 @@ import {REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {useAppSelector} from "store";
-import {getEmojiWithSkinTone} from "utils/reactions";
+import {getEmojiWithSkinTone, formatReactionUsers} from "utils/reactions";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 
@@ -28,8 +28,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const skinTone = useAppSelector((state) => state.skinTone);
   const reactionUsersTitle = reactionsFiltered.map(({reactionType, users}) => {
     const emoji = getEmojiWithSkinTone(REACTION_EMOJI_MAP.get(reactionType)!, skinTone);
-    const userNames = users.map(({user}) => user.name).join(", ");
-    return `${userNames}: ${emoji}`;
+    return `${formatReactionUsers(users)}: ${emoji}`;
   });
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {

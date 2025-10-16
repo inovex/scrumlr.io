@@ -16,7 +16,6 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -149,7 +148,15 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	// map request on column objects to insert into database
 	newColumns := make([]columns.DatabaseColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
-		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index})
+		newColumns = append(newColumns,
+			columns.DatabaseColumnInsert{
+				Name:        value.Name,
+				Description: value.Description,
+				Color:       value.Color,
+				Visible:     value.Visible,
+				Index:       index,
+			},
+		)
 	}
 
 	// create the board
@@ -230,7 +237,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		return nil, err
 	}
 
-	boardVotes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{Board: boardID})
+	boardVotes, err := service.votingService.GetVotes(ctx, boardID, votings.VoteFilter{})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)

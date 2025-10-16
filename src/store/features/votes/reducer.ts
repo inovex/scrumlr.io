@@ -1,4 +1,5 @@
 import {createReducer} from "@reduxjs/toolkit";
+import {deletedNote} from "store/features/notes";
 import {VotesState} from "./types";
 import {initializeBoard} from "../board";
 import {createdVote, deletedVote, deletedVotes, updatedVotes} from "./actions";
@@ -24,4 +25,6 @@ export const votesReducer = createReducer(initialState, (builder) =>
       return state;
     })
     .addCase(createdVoting, () => [])
+    // delete associated votes when a note is deleted
+    .addCase(deletedNote, (state, action) => state.filter((vote) => vote.note !== action.payload.noteId))
 );
