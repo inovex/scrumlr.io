@@ -313,6 +313,22 @@ exports[`Appearance should render all Settings correctly with Snowfall 1`] = `
             </span>
           </button>
         </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+            >
+              FR.svg
+            </svg>
+            <span>
+              French
+            </span>
+          </button>
+        </li>
       </ul>
     </div>
   </div>
@@ -611,6 +627,22 @@ exports[`Appearance should render all Settings correctly without Snowfall 1`] = 
             </svg>
             <span>
               German
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+            >
+              FR.svg
+            </svg>
+            <span>
+              French
             </span>
           </button>
         </li>
