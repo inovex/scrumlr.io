@@ -2062,10 +2062,10 @@
     "@react-spring/shared" "~10.0.3"
     "@react-spring/types" "~10.0.3"
 
-"@reduxjs/toolkit@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.9.0.tgz#d4b12b90c27716a6a507193f8c3b2880729b97d5"
-  integrity sha512-fSfQlSRu9Z5yBkvsNhYF2rPS8cGXn/TZVrlwN1948QyZ8xMZ0JvP50S2acZNaf+o63u6aEeMjipFyksjIcWrog==
+"@reduxjs/toolkit@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.9.1.tgz#5a917eb5258492a44a0ae21bd28dd5e6a8124dfe"
+  integrity sha512-sETJ3qO72y7L7WiR5K54UFLT3jRzAtqeBPVO15xC3bGA6kDqCH8m/v7BKCPH4czydXzz/1lPEGLvew7GjOO3Qw==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@standard-schema/utils" "^0.3.0"
