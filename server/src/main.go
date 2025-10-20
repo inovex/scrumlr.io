@@ -407,8 +407,8 @@ func run(c *cli.Context) error {
 	boardReactionService := initializer.InitializeBoardReactionService()
 	reactionService := initializer.InitializeReactionService()
 
-	boardTemplateService := initializer.InitializeBoardTemplateService()
 	columnTemplateService := initializer.InitializeColumnTemplateService()
+	boardTemplateService := initializer.InitializeBoardTemplateService(columnTemplateService)
 
 	votingService := initializer.InitializeVotingService()
 	noteService := initializer.InitializeNotesService()
