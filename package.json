@@ -71,7 +71,7 @@
     "@types/smoothscroll-polyfill": "^0.3.4",
     "@types/underscore": "^1.13.0",
     "@types/uuid": "^11.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^5.62.0",
     "cross-env": "^10.1.0",
     "cypress": "^15.4.0",
