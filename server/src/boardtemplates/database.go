@@ -8,7 +8,6 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 )
 
 type DB struct {
@@ -22,30 +21,12 @@ func NewBoardTemplateDatabase(database *bun.DB) BoardTemplateDatabase {
 	return db
 }
 
-func (db *DB) Create(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
-	boardInsert := db.db.NewInsert().
-		Model(&board).
-		Returning("*")
-
+func (db *DB) Create(ctx context.Context, board DatabaseBoardTemplateInsert) (DatabaseBoardTemplate, error) {
 	var template DatabaseBoardTemplate
-	query := db.db.NewSelect().
-		With("createdBoardTemplate", boardInsert)
-
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
-
-		// create columns
-		query = query.With("createdColumns", db.db.NewInsert().
-			Model(&columns).
-			Value("board_template", "(SELECT id FROM \"createdBoardTemplate\")"))
-	}
-
-	err := query.Table("createdBoardTemplate").
-		Column("*").
-		Scan(ctx, &template)
+	_, err := db.db.NewInsert().
+		Model(&board).
+		Returning("*").
+		Exec(ctx, &template)
 
 	return template, err
 }
@@ -118,11 +99,6 @@ func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (Da
 		Where("id = ?", board.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, "Result", &boardTemplate), &boardTemplate)
-
-	if err != nil {
-		logger.Get().Errorw("failed to update board template settings", "board", board.ID, "err", err)
-		return DatabaseBoardTemplate{}, err
-	}
 
 	return boardTemplate, err
 }
