@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 )
 
@@ -22,6 +23,7 @@ type ColumnTemplateDatabase interface {
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemplate, error)
 	Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplate, error)
 	Delete(ctx context.Context, board, column uuid.UUID) error
+	GetIndex(ctx context.Context, board uuid.UUID) (int, error)
 }
 
 type Service struct {
@@ -45,6 +47,21 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 		attribute.String("scrumlr.column_templates.service.create.user", body.User.String()),
 		attribute.String("scrumlr.column_templates.service.create.color", string(body.Color)),
 	)
+
+	index, err := service.database.GetIndex(ctx, body.BoardTemplate)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get index")
+		span.RecordError(err)
+		return nil, common.InternalServerError
+	}
+
+	if body.Index == nil {
+		body.Index = &index
+	} else {
+		if *body.Index > index || *body.Index < 0 {
+			body.Index = &index
+		}
+	}
 
 	column, err := service.database.Create(ctx, DatabaseColumnTemplateInsert{
 		BoardTemplate: body.BoardTemplate,
@@ -118,7 +135,21 @@ func (service *Service) Update(ctx context.Context, body ColumnTemplateUpdateReq
 		attribute.String("scrumlr.column_templates.service.update.color", string(body.Color)),
 	)
 
-	column, err := service.database.Update(ctx, DatabaseColumnTemplateUpdate{ID: body.ID, BoardTemplate: body.BoardTemplate, Name: body.Name, Description: body.Description, Color: body.Color, Visible: body.Visible, Index: body.Index})
+	if body.Index < 0 {
+		body.Index = 0
+	}
+
+	column, err := service.database.Update(ctx,
+		DatabaseColumnTemplateUpdate{
+			ID:            body.ID,
+			BoardTemplate: body.BoardTemplate,
+			Name:          body.Name,
+			Description:   body.Description,
+			Color:         body.Color,
+			Visible:       body.Visible,
+			Index:         body.Index,
+		},
+	)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update column templates")
 		span.RecordError(err)
