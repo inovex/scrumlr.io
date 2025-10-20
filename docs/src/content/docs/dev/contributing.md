@@ -33,7 +33,7 @@ Before you start contributing to our web application, please ensure that you hav
 
 ### Client
 1. Run `yarn` to install the Front-end dependencies
-2. Run `yarn start` to start the Front-end in development mode. 
+2. Run `yarn start` to start the Front-end in development mode.
 3. Open http://localhost:3000 to view it in the browser. The page will automatically reload if you make changes to the code. You will see the build errors and lint warnings in the console.
 
 ### Server
@@ -57,7 +57,7 @@ yarn test
 This command will execute the test suite and provide you with detailed feedback on the test results, including any failures or errors encountered. Running tests locally helps you verify that your changes have not introduced any regressions and ensures that the existing functionality remains intact.
 
 ### Backend Testing
-To ensure the functionality of your backend, you can run tests locally using the following methods: 
+To ensure the functionality of your backend, you can run tests locally using the following methods:
 To test your general Go code, use the built-in testing tool:
 ```bash
 go test ./... -cover -coverprofile=coverage.txt
@@ -73,7 +73,17 @@ In addition to local testing, we utilize GitHub Actions to automate the testing 
 We strongly encourage contributors to write new tests when introducing new features or modifying existing functionality. These tests help validate the behavior and correctness of the code, making it easier to identify and fix issues early on.
 
 ## Translating
-If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
+Scrumlr supports multiple languages through i18next internationalization. Currently supported languages are English, German and French.
+
+To contribute a new language translation, please follow our comprehensive [Translation Guide](./translating). The process involves:
+
+1. Creating translation files for your language
+2. Translating UI text and board templates
+3. Updating the i18n configuration
+4. Adding your language to the UI selector
+5. Testing the complete translation
+
+For the complete step-by-step process, see the [Contributing Translations](./translating) guide.
 
 ## Definition of Done
 Behold our Definition of Done, an agreement we have established to ensure the quality and completeness of our work:
@@ -115,13 +125,13 @@ The description section serves as a crucial component of a pull request, providi
 If your pull request refers to or fixes an issue, be sure to add refs #XXX or fixes #XXX to the PR description. Replacing XXX with the respective issue number. See more about Linking a pull request to an issue.
 
 ### Changelog
-The Changelog section of a pull request provides a concise and organized summary of the changes made to the code base, documentation, or any other relevant components. It is typically presented as a bullet point list, highlighting the specific modifications introduced by the pull request. The Changelog serves as a valuable reference for developers and project maintainers, enabling them to quickly grasp the nature and extent of the changes. Each bullet point in the Changelog should focus on a specific alteration or addition, providing a clear and brief description of the corresponding update. 
+The Changelog section of a pull request provides a concise and organized summary of the changes made to the code base, documentation, or any other relevant components. It is typically presented as a bullet point list, highlighting the specific modifications introduced by the pull request. The Changelog serves as a valuable reference for developers and project maintainers, enabling them to quickly grasp the nature and extent of the changes. Each bullet point in the Changelog should focus on a specific alteration or addition, providing a clear and brief description of the corresponding update.
 
 ### Visual Changes
-The 'Visual Changes' section of a pull request focuses on documenting any alterations to the user interface or visual appearance of a component or part of the web application. This section is particularly useful when there are noticeable visual modifications resulting from the pull request, such as changes to the design, layout, or styling. It is common practice to include 'Before' and 'After' screenshots to clearly illustrate the visual differences. If a new feature or part of the web app has been implemented, a screenshot showcasing the new addition should be included as well. 
+The 'Visual Changes' section of a pull request focuses on documenting any alterations to the user interface or visual appearance of a component or part of the web application. This section is particularly useful when there are noticeable visual modifications resulting from the pull request, such as changes to the design, layout, or styling. It is common practice to include 'Before' and 'After' screenshots to clearly illustrate the visual differences. If a new feature or part of the web app has been implemented, a screenshot showcasing the new addition should be included as well.
 
 ## Code Review
-Code reviews are mandatory in our project. While it may add overhead to each change, it plays a crucial role in maintaining code quality. Code reviews ensure that simple yet often overlooked problems are identified and resolved early on, reducing the likelihood of bugs and technical debt. By engaging in code reviews, team members can leverage their collective expertise, identify potential improvements, and maintain consistent coding standards. 
+Code reviews are mandatory in our project. While it may add overhead to each change, it plays a crucial role in maintaining code quality. Code reviews ensure that simple yet often overlooked problems are identified and resolved early on, reducing the likelihood of bugs and technical debt. By engaging in code reviews, team members can leverage their collective expertise, identify potential improvements, and maintain consistent coding standards.
 
 ## Contact and Communication
 
