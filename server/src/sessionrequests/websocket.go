@@ -50,10 +50,7 @@ func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := socket.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Errorw("unable to upgrade websocket",
-			"err", err,
-			"board", id,
-			"user", userID)
+		log.Errorw("unable to upgrade websocket", "err", err, "board", id, "user", userID)
 		return
 	}
 
