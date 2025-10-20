@@ -17,10 +17,12 @@ func TestCreateColumnTemplate(t *testing.T) {
 	board := uuid.New()
 	name := "template test"
 	color := columns.ColorGoalGreen
-	index := 1
+	index := 0
 	visible := true
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
+	mockColumnTemplateDatabase.EXPECT().GetIndex(mock.Anything, board).
+		Return(0, nil)
 	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
 		BoardTemplate: board,
 		Name:          name,
@@ -58,15 +60,115 @@ func TestCreateColumnTemplate(t *testing.T) {
 	assert.Equal(t, visible, column.Visible)
 }
 
+func TestCreateColumnTemplate_NegativeIndex(t *testing.T) {
+	id := uuid.New()
+	board := uuid.New()
+	name := "template test"
+	color := columns.ColorGoalGreen
+	index := -1
+	expectedIndex := 0
+	visible := true
+
+	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
+	mockColumnTemplateDatabase.EXPECT().GetIndex(mock.Anything, board).
+		Return(0, nil)
+	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
+		BoardTemplate: board,
+		Name:          name,
+		Color:         color,
+		Visible:       &visible,
+		Index:         &expectedIndex,
+	}).
+		Return(DatabaseColumnTemplate{
+			ID:            id,
+			BoardTemplate: board,
+			Name:          name,
+			Color:         color,
+			Visible:       visible,
+			Index:         expectedIndex,
+		}, nil)
+
+	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
+
+	column, err := columnTemplateService.Create(context.Background(), ColumnTemplateRequest{
+		BoardTemplate: board,
+		Name:          name,
+		Color:         color,
+		Visible:       &visible,
+		Index:         &index,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+
+	assert.Equal(t, id, column.ID)
+	assert.Equal(t, board, column.BoardTemplate)
+	assert.Equal(t, name, column.Name)
+	assert.Equal(t, color, column.Color)
+	assert.Equal(t, expectedIndex, column.Index)
+	assert.Equal(t, visible, column.Visible)
+}
+
+func TestCreateColumnTemplate_HigherIndex(t *testing.T) {
+	id := uuid.New()
+	board := uuid.New()
+	name := "template test"
+	color := columns.ColorGoalGreen
+	index := 99
+	expectedIndex := 0
+	visible := true
+
+	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
+	mockColumnTemplateDatabase.EXPECT().GetIndex(mock.Anything, board).
+		Return(0, nil)
+	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
+		BoardTemplate: board,
+		Name:          name,
+		Color:         color,
+		Visible:       &visible,
+		Index:         &expectedIndex,
+	}).
+		Return(DatabaseColumnTemplate{
+			ID:            id,
+			BoardTemplate: board,
+			Name:          name,
+			Color:         color,
+			Visible:       visible,
+			Index:         expectedIndex,
+		}, nil)
+
+	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
+
+	column, err := columnTemplateService.Create(context.Background(), ColumnTemplateRequest{
+		BoardTemplate: board,
+		Name:          name,
+		Color:         color,
+		Visible:       &visible,
+		Index:         &index,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+
+	assert.Equal(t, id, column.ID)
+	assert.Equal(t, board, column.BoardTemplate)
+	assert.Equal(t, name, column.Name)
+	assert.Equal(t, color, column.Color)
+	assert.Equal(t, expectedIndex, column.Index)
+	assert.Equal(t, visible, column.Visible)
+}
+
 func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	board := uuid.New()
 	name := "template test"
 	color := columns.ColorGoalGreen
-	index := 1
+	index := 0
 	visible := true
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
+	mockColumnTemplateDatabase.EXPECT().GetIndex(mock.Anything, board).
+		Return(0, nil)
 	mockColumnTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseColumnTemplateInsert{
 		BoardTemplate: board,
 		Name:          name,
@@ -270,6 +372,54 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
 	assert.Equal(t, dbError, err)
+}
+
+func TestUpdateColumnTemplate_NegativeIndex(t *testing.T) {
+	id := uuid.New()
+	board := uuid.New()
+	name := "New Name"
+	description := "New Description"
+	color := columns.ColorValueViolet
+	index := -1
+
+	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
+	mockColumnTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseColumnTemplateUpdate{
+		ID:            id,
+		BoardTemplate: board,
+		Name:          name,
+		Description:   description,
+		Color:         color,
+		Index:         0,
+	}).
+		Return(DatabaseColumnTemplate{
+			ID:            id,
+			BoardTemplate: board,
+			Name:          name,
+			Description:   description,
+			Color:         color,
+			Index:         0,
+		}, nil)
+
+	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
+
+	column, err := columnTemplateService.Update(context.Background(), ColumnTemplateUpdateRequest{
+		ID:            id,
+		BoardTemplate: board,
+		Name:          name,
+		Description:   description,
+		Color:         color,
+		Index:         index,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+
+	assert.Equal(t, id, column.ID)
+	assert.Equal(t, board, column.BoardTemplate)
+	assert.Equal(t, name, column.Name)
+	assert.Equal(t, description, column.Description)
+	assert.Equal(t, color, column.Color)
+	assert.Equal(t, 0, column.Index)
 }
 
 func TestDeleteColumnTemplate(t *testing.T) {
