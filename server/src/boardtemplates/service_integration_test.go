@@ -49,8 +49,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Create() {
 	name := "My Template"
 	description := "This is a description"
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardtemplate, err := service.Create(ctx,
 		CreateBoardTemplateRequest{Name: &name, Creator: userId, Description: &description,
@@ -78,8 +80,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Update() {
 	description := "This description was updated"
 	favourite := true
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardtemplate, err := service.Update(ctx,
 		BoardTemplateUpdateRequest{ID: id, Name: &name, Description: &description, Favourite: &favourite},
@@ -98,8 +102,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Delete() {
 
 	id := suite.templates["Delete"].ID
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	err := service.Delete(ctx, id)
 
@@ -112,8 +118,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Delete_NotFound() {
 
 	id := uuid.New()
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	err := service.Delete(ctx, id)
 
@@ -126,8 +134,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_GetAll() {
 
 	userId := suite.users["Stan"].id
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardTemplates, err := service.GetAll(ctx, userId)
 
@@ -155,8 +165,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_GetAll_NoTemplates()
 
 	userId := suite.users["Bob"].id
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardTemplates, err := service.GetAll(ctx, userId)
 
@@ -173,8 +185,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Get() {
 	description := suite.templates["Read1"].Description
 	favourite := suite.templates["Read1"].Favourite
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardTemplate, err := service.Get(ctx, id)
 
@@ -191,8 +205,10 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	id := uuid.New()
 
+	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(suite.db)
+	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(suite.db)
-	service := NewBoardTemplateService(database)
+	service := NewBoardTemplateService(database, columnTemplateService)
 
 	boardTemplate, err := service.Get(ctx, id)
 
