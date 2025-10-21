@@ -10,7 +10,7 @@ refactoring.
   - Change models to contain only the Ids of nested objects
   - Change the event models to contain only the Ids of nested object
   - Adjust frontend to the changes
-- ~~Rewrite the database tests~~
+- Rewrite the database tests
 - Combine `Create` and `Update` in the `sessionrequests` package to an `Upsert`
 - Move logic out of the database querries to the services
 
