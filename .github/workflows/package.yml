@@ -87,6 +87,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - package-frontend
+    permissions:
+      contents: read
+      packages: write
     outputs:
       frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
     steps:
@@ -212,6 +215,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - package-server
+    permissions:
+      contents: read
+      packages: write
     outputs:
       server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
     steps:
