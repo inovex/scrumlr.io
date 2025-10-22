@@ -77,7 +77,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
                 setInput={setPasswordInput}
                 height="normal"
               />
-              <p className="hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
+              <p className="access-settings__hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
             </SelectOption>
           </Select>
         </main>

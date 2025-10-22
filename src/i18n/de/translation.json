@@ -190,7 +190,8 @@
     "title": "Sitzung teilen",
     "button": "Sitzung teilen",
     "copyInviteURL": "URL kopieren",
-    "inviteUrlCopied": "URL wurde kopiert"
+    "inviteUrlCopied": "URL wurde kopiert",
+    "hint": "Das Passwort kann in den Board Einstellungen geändert werden."
   },
   "Column": {
     "settings": "Einstellungen",
