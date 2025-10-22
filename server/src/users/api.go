@@ -15,6 +15,7 @@ type UserService interface {
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error)
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error)
 	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
 	GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
 
