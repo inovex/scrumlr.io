@@ -63,7 +63,9 @@
         },
         "By_Passphrase": {
           "title": "Passwortgeschützt",
-          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit."
+          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit.",
+          "inputPlaceholder": "Passwort eingeben",
+          "hint": "Das Passwort kann später in den Einstellungen geändert werden."
         }
       },
       "Buttons": {

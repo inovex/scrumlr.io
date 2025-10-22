@@ -69,7 +69,15 @@ export const AccessSettings = (props: AccessSettingsProps) => {
               description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
               icon={<KeyIcon />}
             >
-              <Input type="password" required input={passwordInput} setInput={setPasswordInput} height="normal" />
+              <Input
+                type="password"
+                required
+                placeholder={t("Templates.AccessSettings.Options.By_Passphrase.inputPlaceholder")}
+                input={passwordInput}
+                setInput={setPasswordInput}
+                height="normal"
+              />
+              <p className="hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
             </SelectOption>
           </Select>
         </main>
