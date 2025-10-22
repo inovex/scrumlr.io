@@ -76,5 +76,3 @@ export {ReactComponent as Printer} from "assets/icons/printer.svg";
 export {ReactComponent as ThreeDots} from "assets/icons/three-dots.svg";
 export {ReactComponent as Menu} from "assets/icons/menu.svg";
 export {ReactComponent as Minus} from "assets/icons/minus.svg";
-export {ReactComponent as Share1} from "assets/icons/share1.svg";
-export {ReactComponent as Share2} from "assets/icons/share2.svg";
