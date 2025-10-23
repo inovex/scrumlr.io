@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from "react";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
 import {useAppDispatch, useAppSelector} from "store";
@@ -19,7 +19,7 @@ type NoteDialogNoteContentProps = {
   noteId?: string;
   authorId: string;
   text: string;
-  viewer: Participant;
+  viewer: ParticipantWithUser;
   isStackedNote: boolean;
 };
 

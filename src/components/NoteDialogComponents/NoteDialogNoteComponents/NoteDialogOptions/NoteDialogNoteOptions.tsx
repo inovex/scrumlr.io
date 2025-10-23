@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {Trash, Eject} from "components/Icon";
 import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";
@@ -14,7 +14,7 @@ type NoteDialogNoteOptionsProps = {
   noteId: string;
   authorId: string;
   onClose: () => void;
-  viewer: Participant;
+  viewer: ParticipantWithUser;
 };
 
 export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
