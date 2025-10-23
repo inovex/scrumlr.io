@@ -62,7 +62,9 @@
         },
         "By_Passphrase": {
           "title": "Protégé par mot de passe",
-          "description": "L'accès n'est possible qu'avec un mot de passe défini - garantissant un haut niveau de sécurité."
+          "description": "L'accès n'est possible qu'avec un mot de passe défini - garantissant un haut niveau de sécurité.",
+          "inputPlaceholder": "Entrer le mot de passe",
+          "hint": "Le mot de passe peut être modifié ultérieurement dans les paramètres."
         }
       },
       "Buttons": {
@@ -187,7 +189,8 @@
     "title": "Partager la session",
     "button": "Partager le tableau",
     "copyInviteURL": "Copier l'URL d'invitation",
-    "inviteUrlCopied": "URL d'invitation copiée"
+    "inviteUrlCopied": "URL d'invitation copiée",
+    "hint": "Le mot de passe peut être modifié dans les paramètres du tableau."
   },
   "Column": {
     "settings": "Paramètres",

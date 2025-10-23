@@ -46,6 +46,10 @@
   gap: $spacing--md;
 }
 
+.access-settings__hint {
+  color: $gray--800;
+}
+
 @media screen and (max-width: $breakpoint--smartphone) {
   .access-settings__wrapper {
     padding: $spacing--xs;

@@ -58,6 +58,12 @@ $header-menu-border-bottom-color: #efefef;
   }
 }
 
+.share-session__hint {
+  color: $gray--800;
+  text-align: center;
+  text-decoration: underline;
+}
+
 .share-session__container {
   display: flex;
   align-items: center;
