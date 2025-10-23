@@ -79,6 +79,15 @@ func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	return user, err
 }
 
+func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	_, err := db.db.NewDelete().
+		Model((*DatabaseUser)(nil)).
+		Where("id = ?", id).
+		Exec(ctx)
+
+	return err
+}
+
 func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
 	count, err := db.db.NewSelect().
 		Table("users").

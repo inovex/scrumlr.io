@@ -329,6 +329,31 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 	assert.Equal(t, common.NotFoundError, err)
 }
 
+func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
+	t := suite.T()
+	ctx := context.Background()
+
+	userId := suite.users["Delete"].ID
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(suite.db)
+	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
+	userDatabase := NewUserDatabase(suite.db)
+	userService := NewUserService(userDatabase, broker, sessionService)
+
+	err = userService.Delete(ctx, userId)
+
+	assert.Nil(t, err)
+}
+
 func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
 	t := suite.T()
 	ctx := context.Background()
@@ -383,10 +408,11 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 
 func (suite *UserServiceIntegrationTestsuite) SeedDatabase(db *bun.DB) {
 	// test users
-	suite.users = make(map[string]User, 3)
+	suite.users = make(map[string]User, 4)
 	suite.users["Stan"] = User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
 	suite.users["Santa"] = User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
 	suite.users["Update"] = User{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
+	suite.users["Delete"] = User{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 1)
