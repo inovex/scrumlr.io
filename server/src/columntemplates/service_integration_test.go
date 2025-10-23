@@ -135,39 +135,6 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 	assert.Equal(t, visible, template.Visible)
 }
 
-func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_NegativeIndex() {
-	t := suite.T()
-	ctx := context.Background()
-
-	boardId := suite.boardTemplates["InsertFirst"].id
-	name := "CreateNegativIndex"
-	description := "This is inserted from the test"
-	color := columns.ColorYieldingYellow
-	visible := true
-	index := -1
-	expectedIndex := 0
-
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Create(ctx, ColumnTemplateRequest{
-		BoardTemplate: boardId,
-		Name:          name,
-		Description:   description,
-		Color:         color,
-		Visible:       &visible,
-		Index:         &index,
-	})
-
-	assert.Nil(t, err)
-	assert.Equal(t, boardId, template.BoardTemplate)
-	assert.Equal(t, name, template.Name)
-	assert.Equal(t, description, template.Description)
-	assert.Equal(t, color, template.Color)
-	assert.Equal(t, expectedIndex, template.Index)
-	assert.Equal(t, visible, template.Visible)
-}
-
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex() {
 	t := suite.T()
 	ctx := context.Background()

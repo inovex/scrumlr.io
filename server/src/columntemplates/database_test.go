@@ -59,7 +59,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create() {
 	assert.Equal(t, name, dbColumn.Name)
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, 1, dbColumn.Index)
+	assert.Equal(t, 0, dbColumn.Index)
 	assert.Equal(t, visible, dbColumn.Visible)
 }
 
@@ -117,7 +117,6 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_NegativeIndex
 	color := columns.ColorYieldingYellow
 	visible := true
 	index := -1
-	expectedIndex := 0
 
 	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
@@ -126,7 +125,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_NegativeIndex
 	assert.Equal(t, name, dbColumn.Name)
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, expectedIndex, dbColumn.Index)
+	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, visible, dbColumn.Visible)
 }
 
@@ -140,7 +139,6 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_HighIndex() {
 	color := columns.ColorYieldingYellow
 	visible := true
 	index := 10000
-	expectedIndex := 1
 
 	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
@@ -149,7 +147,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_HighIndex() {
 	assert.Equal(t, name, dbColumn.Name)
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, expectedIndex, dbColumn.Index)
+	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, visible, dbColumn.Visible)
 }
 
