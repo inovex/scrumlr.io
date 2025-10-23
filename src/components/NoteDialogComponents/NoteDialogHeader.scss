@@ -1,43 +1,41 @@
 @import "constants/style";
 @import "routes/StackView/StackView.scss";
 
+$header-max-width: 80vw;
+
 .note-dialog-header {
-  font-size: calc(24px + 0.8vw);
-  color: $gray--000;
-  width: fit-content; // change to constant value for overflow ellipsis
-  // height: $stack-view__header-height;
+  display: flex;
   min-height: $stack-view__min-height;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  gap: $spacing--base;
+
+  width: $header-max-width;
+  max-width: $header-max-width;
+
+  color: $gray--000;
+
   letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
   text-align: center;
   cursor: initial;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  gap: $spacing--base;
 }
 
 .note-dialog-header__name {
-  width: 100%;
-  margin: $spacing--lg 0 0 0;
+  max-width: 100%;
+
+  font-size: calc($text--2xl + 0.8vw);
+  font-weight: 700;
 
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  &::after {
-    content: " ";
-    display: block;
-    height: 6px;
-    background: var(--accent-color--light);
-    border-radius: $rounded--full;
-    margin-top: $spacing--base;
-  }
+  border-bottom: 6px solid var(--accent-color--light);
 }
 
 .note-dialog-header__description {
-  width: 60%;
+  width: 100%;
   font-size: $text--lg;
   font-weight: 600;
   line-height: 30px;
@@ -50,8 +48,14 @@
   }
 }
 
+@media screen and (max-width: $breakpoint--smartphone) {
+  .note-dialog-header {
+    max-width: calc(100vw - 60px);
+  }
+}
+
 [theme="dark"] {
-  .note-dialog-header > h2::after {
-    background: var(--accent-color--dark);
+  .note-dialog-header__name {
+    border-bottom-color: var(--accent-color--dark);
   }
 }
