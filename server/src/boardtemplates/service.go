@@ -17,7 +17,7 @@ var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boardtemplates")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/boardtemplates")
 
 type BoardTemplateDatabase interface {
-	Create(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)
+	Create(ctx context.Context, board DatabaseBoardTemplateInsert) (DatabaseBoardTemplate, error)
 	Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, error)
 	GetAll(ctx context.Context, user uuid.UUID) ([]DatabaseBoardTemplateFull, error)
 	Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error)
@@ -25,12 +25,14 @@ type BoardTemplateDatabase interface {
 }
 
 type Service struct {
-	database BoardTemplateDatabase
+	database              BoardTemplateDatabase
+	columnTemplateService columntemplates.ColumnTemplateService
 }
 
-func NewBoardTemplateService(db BoardTemplateDatabase) BoardTemplateService {
+func NewBoardTemplateService(db BoardTemplateDatabase, columnTempalteService columntemplates.ColumnTemplateService) BoardTemplateService {
 	service := new(Service)
 	service.database = db
+	service.columnTemplateService = columnTempalteService
 
 	return service
 }
@@ -48,31 +50,28 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 		Favourite:   body.Favourite,
 	}
 
-	// map request column templates to db column template inserts
-	columns := make([]columntemplates.DatabaseColumnTemplateInsert, 0, len(body.Columns))
-	for index, value := range body.Columns {
-		var currentIndex = index
-		columns = append(columns, columntemplates.DatabaseColumnTemplateInsert{
-			Name:        value.Name,
-			Description: value.Description,
-			Color:       value.Color,
-			Visible:     value.Visible,
-			Index:       &currentIndex,
-		})
-	}
-
 	span.SetAttributes(
 		attribute.String("scrumlr.board_templates.service.create.user", board.Creator.String()),
-		attribute.Int("scrumlr.board_templates.service.create.columns.count", len(columns)),
+		attribute.Int("scrumlr.board_templates.service.create.columns.count", len(body.Columns)),
 	)
 
 	// create the board template
-	b, err := service.database.Create(ctx, board, columns)
+	b, err := service.database.Create(ctx, board)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create board template")
 		span.RecordError(err)
 		log.Errorw("unable to create board template", "creator", body.Creator, "policy", "err", err)
 		return nil, err
+	}
+
+	for index, value := range body.Columns {
+		column := columntemplates.ColumnTemplateRequest{BoardTemplate: b.ID, Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index, User: body.Creator}
+		_, err := service.columnTemplateService.Create(ctx, column)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to create column template")
+			span.RecordError(err)
+			return nil, err
+		}
 	}
 
 	boardTemplatesCreatedCounter.Add(ctx, 1)
