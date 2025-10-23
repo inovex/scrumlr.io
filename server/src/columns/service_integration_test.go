@@ -347,6 +347,50 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_GetAll_NotFound() {
 	assert.Len(t, columns, 0)
 }
 
+func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].id
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	notesDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(notesDatabase, broker)
+	database := NewColumnsDatabase(suite.db)
+	service := NewColumnService(database, broker, noteService)
+
+	count, err := service.GetCount(ctx, boardId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 3, count)
+}
+
+func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount_BoarNotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := uuid.New()
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	notesDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(notesDatabase, broker)
+	database := NewColumnsDatabase(suite.db)
+	service := NewColumnService(database, broker, noteService)
+
+	count, err := service.GetCount(ctx, boardId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, count)
+}
+
 func (suite *ColumnServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	// test boards
 	suite.boards = make(map[string]TestBoard, 9)
