@@ -9,8 +9,9 @@ import (
 	"io"
 	"math"
 	"net/http"
-	"scrumlr.io/server/sessions"
 	"strings"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/uptrace/bun"
 

@@ -164,6 +164,21 @@ func (suite *DatabaseUserTestSuite) Test_Database_UpdateUser() {
 	assert.NotNil(t, dbUser.CreatedAt)
 }
 
+func (suite *DatabaseUserTestSuite) Test_Database_UpdateUser_NotFound() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := uuid.New()
+	userName := "Stan"
+	avatar := common.Avatar{ClotheColor: avatar.ClotheColorBlack, ClotheType: avatar.ClotheTypeCollarSweater}
+
+	dbUser, err := database.UpdateUser(context.Background(), DatabaseUserUpdate{ID: userId, Name: userName, Avatar: &avatar})
+
+	assert.Equal(t, DatabaseUser{}, dbUser)
+	assert.NotNil(t, err)
+	assert.Equal(t, sql.ErrNoRows, err)
+}
+
 func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)

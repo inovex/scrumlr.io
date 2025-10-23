@@ -1,15 +1,16 @@
 package boards
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+	"time"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
-	"time"
 )
 
 // Board is the response for all board requests.

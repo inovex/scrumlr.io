@@ -51,7 +51,14 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Create() {
 	columnId := suite.columns["Write"].id
 	text := "This is a created note"
 
-	dbNote, err := database.CreateNote(context.Background(), DatabaseNoteInsert{Author: authorId, Board: boardId, Column: columnId, Text: text})
+	dbNote, err := database.CreateNote(context.Background(),
+		DatabaseNoteInsert{
+			Author: authorId,
+			Board:  boardId,
+			Column: columnId,
+			Text:   text,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, authorId, dbNote.Author)
@@ -73,7 +80,14 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Create_EmptyText() {
 	columnId := suite.columns["Write1"].id
 	text := ""
 
-	dbNote, err := database.CreateNote(context.Background(), DatabaseNoteInsert{Author: authorId, Board: boardId, Column: columnId, Text: text})
+	dbNote, err := database.CreateNote(context.Background(),
+		DatabaseNoteInsert{
+			Author: authorId,
+			Board:  boardId,
+			Column: columnId,
+			Text:   text,
+		},
+	)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseNote{}, dbNote)
@@ -88,7 +102,16 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Import() {
 	text := "This note is imported"
 	columnId := suite.columns["Write"].id
 
-	dbNote, err := database.ImportNote(context.Background(), DatabaseNoteImport{Author: userId, Board: boardId, Text: text, Position: &NoteUpdatePosition{Column: columnId}})
+	dbNote, err := database.ImportNote(context.Background(),
+		DatabaseNoteImport{
+			Author: userId,
+			Board:  boardId,
+			Text:   text,
+			Position: &NoteUpdatePosition{
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbNote.Author)
@@ -101,6 +124,30 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Import() {
 	assert.NotNil(t, dbNote.CreatedAt)
 }
 
+func (suite *DatabaseNoteTestSuite) Test_Database_Import_EmptyText() {
+	t := suite.T()
+	database := NewNotesDatabase(suite.db)
+
+	userId := suite.users["Stan"].id
+	boardId := suite.boards["Write"].id
+	columnId := suite.columns["Write1"].id
+	text := ""
+
+	dbNote, err := database.ImportNote(context.Background(),
+		DatabaseNoteImport{
+			Author: userId,
+			Board:  boardId,
+			Text:   text,
+			Position: &NoteUpdatePosition{
+				Column: columnId,
+			},
+		},
+	)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, DatabaseNote{}, dbNote)
+}
+
 func (suite *DatabaseNoteTestSuite) Test_Database_Update_Text() {
 	t := suite.T()
 	database := NewNotesDatabase(suite.db)
@@ -111,7 +158,15 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_Text() {
 	columnId := suite.columns["Update"].id
 	text := "This note was updated"
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Text: &text, Edited: true})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:     noteId,
+			Board:  boardId,
+			Text:   &text,
+			Edited: true,
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -135,7 +190,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_HigherPosition() {
 	columnId := suite.columns["UpdateUp"].id
 	text := suite.notes[1].Text
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Rank: 1, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Rank:   1,
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -159,7 +224,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_HighPosition() {
 	columnId := suite.columns["UpdateUp"].id
 	text := suite.notes[2].Text
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Rank: 1000, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Rank:   1000,
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -183,7 +258,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_LowerPosition() {
 	columnId := suite.columns["UpdateDown"].id
 	text := suite.notes[6].Text
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Rank: 1, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Rank:   1,
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -207,7 +292,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_NegativePosition() {
 	columnId := suite.columns["UpdateDown"].id
 	text := suite.notes[5].Text
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Rank: -99, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Rank:   -99,
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -215,7 +310,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_NegativePosition() {
 	assert.Equal(t, boardId, dbNote.Board)
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
-	assert.Equal(t, 0, dbNote.Rank)
+	assert.Equal(t, -99, dbNote.Rank)
 	assert.Equal(t, uuid.NullUUID{}, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
@@ -231,7 +326,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_ZeroPosition() {
 	columnId := suite.columns["UpdateDown"].id
 	text := suite.notes[6].Text
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Rank: 0, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Rank:   0,
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -254,7 +359,16 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveStack() {
 	boardId := suite.boards["Update"].id
 	columnId := suite.columns["UpdateStack2"].id
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -277,7 +391,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveNoteToOtherStack() 
 	boardId := suite.boards["Update"].id
 	columnId := suite.columns["UpdateStack1"].id
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Stack: uuid.NullUUID{UUID: baseNoteId, Valid: true}, Column: columnId}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Stack:  uuid.NullUUID{UUID: baseNoteId, Valid: true},
+				Column: columnId,
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
@@ -300,7 +424,17 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveWithinStack() { //T
 	boardId := suite.boards["Update"].id
 	columnId := suite.columns["UpdateStack1"].id
 
-	dbNote, err := database.UpdateNote(context.Background(), userId, DatabaseNoteUpdate{ID: noteId, Board: boardId, Position: &NoteUpdatePosition{Column: columnId, Stack: uuid.NullUUID{UUID: stackId, Valid: true}}})
+	dbNote, err := database.UpdateNote(context.Background(),
+		userId,
+		DatabaseNoteUpdate{
+			ID:    noteId,
+			Board: boardId,
+			Position: &NoteUpdatePosition{
+				Column: columnId,
+				Stack:  uuid.NullUUID{UUID: stackId, Valid: true},
+			},
+		},
+	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, noteId, dbNote.ID)
