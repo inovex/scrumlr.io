@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/columns"
 )
 
 // NewMockBoardDatabase creates a new instance of MockBoardDatabase. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -40,8 +39,8 @@ func (_m *MockBoardDatabase) EXPECT() *MockBoardDatabase_Expecter {
 }
 
 // CreateBoard provides a mock function for the type MockBoardDatabase
-func (_mock *MockBoardDatabase) CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns1 []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
-	ret := _mock.Called(ctx, creator, board, columns1)
+func (_mock *MockBoardDatabase) CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error) {
+	ret := _mock.Called(ctx, board)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateBoard")
@@ -49,16 +48,16 @@ func (_mock *MockBoardDatabase) CreateBoard(ctx context.Context, creator uuid.UU
 
 	var r0 DatabaseBoard
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) (DatabaseBoard, error)); ok {
-		return returnFunc(ctx, creator, board, columns1)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardInsert) (DatabaseBoard, error)); ok {
+		return returnFunc(ctx, board)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) DatabaseBoard); ok {
-		r0 = returnFunc(ctx, creator, board, columns1)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardInsert) DatabaseBoard); ok {
+		r0 = returnFunc(ctx, board)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoard)
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) error); ok {
-		r1 = returnFunc(ctx, creator, board, columns1)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardInsert) error); ok {
+		r1 = returnFunc(ctx, board)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -72,36 +71,24 @@ type MockBoardDatabase_CreateBoard_Call struct {
 
 // CreateBoard is a helper method to define mock.On call
 //   - ctx context.Context
-//   - creator uuid.UUID
 //   - board DatabaseBoardInsert
-//   - columns1 []columns.DatabaseColumnInsert
-func (_e *MockBoardDatabase_Expecter) CreateBoard(ctx interface{}, creator interface{}, board interface{}, columns1 interface{}) *MockBoardDatabase_CreateBoard_Call {
-	return &MockBoardDatabase_CreateBoard_Call{Call: _e.mock.On("CreateBoard", ctx, creator, board, columns1)}
+func (_e *MockBoardDatabase_Expecter) CreateBoard(ctx interface{}, board interface{}) *MockBoardDatabase_CreateBoard_Call {
+	return &MockBoardDatabase_CreateBoard_Call{Call: _e.mock.On("CreateBoard", ctx, board)}
 }
 
-func (_c *MockBoardDatabase_CreateBoard_Call) Run(run func(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns1 []columns.DatabaseColumnInsert)) *MockBoardDatabase_CreateBoard_Call {
+func (_c *MockBoardDatabase_CreateBoard_Call) Run(run func(ctx context.Context, board DatabaseBoardInsert)) *MockBoardDatabase_CreateBoard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 uuid.UUID
+		var arg1 DatabaseBoardInsert
 		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 DatabaseBoardInsert
-		if args[2] != nil {
-			arg2 = args[2].(DatabaseBoardInsert)
-		}
-		var arg3 []columns.DatabaseColumnInsert
-		if args[3] != nil {
-			arg3 = args[3].([]columns.DatabaseColumnInsert)
+			arg1 = args[1].(DatabaseBoardInsert)
 		}
 		run(
 			arg0,
 			arg1,
-			arg2,
-			arg3,
 		)
 	})
 	return _c
@@ -112,7 +99,7 @@ func (_c *MockBoardDatabase_CreateBoard_Call) Return(databaseBoard DatabaseBoard
 	return _c
 }
 
-func (_c *MockBoardDatabase_CreateBoard_Call) RunAndReturn(run func(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns1 []columns.DatabaseColumnInsert) (DatabaseBoard, error)) *MockBoardDatabase_CreateBoard_Call {
+func (_c *MockBoardDatabase_CreateBoard_Call) RunAndReturn(run func(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error)) *MockBoardDatabase_CreateBoard_Call {
 	_c.Call.Return(run)
 	return _c
 }
