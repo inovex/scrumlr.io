@@ -15,6 +15,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -72,6 +73,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -87,7 +89,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -127,6 +129,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -142,7 +145,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -173,11 +176,9 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["UpdatePassphrase"].ID
+	boardId := suite.boards["Update"].ID
 	name := "New Name"
 	description := "This is a new description"
-	passphrase := "SuperSecret"
-	accessPolicy := ByPassphrase
 	showAuthors := false
 	showNotesOfOtherUsers := false
 	showNoteReactions := false
@@ -192,6 +193,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -207,7 +209,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Update(
 		ctx,
@@ -215,9 +217,9 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 			ID:                    boardId,
 			Name:                  &name,
 			Description:           &description,
-			AccessPolicy:          &accessPolicy,
+			AccessPolicy:          nil,
 			ShowAuthors:           &showAuthors,
-			Passphrase:            &passphrase,
+			Passphrase:            nil,
 			ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
 			ShowNoteReactions:     &showNoteReactions,
 			AllowStacking:         &allowStacking,
@@ -227,9 +229,9 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	assert.Nil(t, err)
 	assert.Equal(t, &name, board.Name)
 	assert.Equal(t, &description, board.Description)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
-	assert.NotNil(t, board.Passphrase)
-	assert.NotNil(t, board.Salt)
+	assert.Equal(t, Public, board.AccessPolicy)
+	assert.Nil(t, board.Passphrase)
+	assert.Nil(t, board.Salt)
 	assert.Equal(t, allowStacking, board.AllowStacking)
 	assert.Equal(t, isLocked, board.IsLocked)
 	assert.Equal(t, showAuthors, board.ShowAuthors)
@@ -242,12 +244,460 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	assert.Nil(t, err)
 	assert.Equal(t, &name, boardData.Name)
 	assert.Equal(t, &description, boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Equal(t, Public, boardData.AccessPolicy)
 	assert.Equal(t, allowStacking, boardData.AllowStacking)
 	assert.Equal(t, isLocked, boardData.IsLocked)
 	assert.Equal(t, showAuthors, boardData.ShowAuthors)
 	assert.Equal(t, showNoteReactions, boardData.ShowNoteReactions)
 	assert.Equal(t, showNotesOfOtherUsers, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdatePublicToPassphrase"].ID
+	passphrase := "SuperSecret"
+	accessPolicy := ByPassphrase
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+			Passphrase:   &passphrase,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPassphrase", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.NotNil(t, board.Passphrase)
+	assert.NotNil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPassphrase", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdatePublicToInvite"].ID
+	accessPolicy := ByInvite
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToInvite", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.Nil(t, board.Passphrase)
+	assert.Nil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToInvite", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdatePassphraseToPublic"].ID
+	accessPolicy := Public
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPublic", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.Nil(t, board.Passphrase)
+	assert.Nil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPublic", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdatePassphraseToInvite"].ID
+	accessPolicy := ByInvite
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToInvite", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.Nil(t, board.Passphrase)
+	assert.Nil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToInvite", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdateInviteToPublic"].ID
+	accessPolicy := Public
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPublic", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.Nil(t, board.Passphrase)
+	assert.Nil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPublic", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
+
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["UpdateInviteToPassphrase"].ID
+	accessPolicy := ByPassphrase
+	passphrase := "SuperStrongPassword"
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	if err != nil {
+		log.Fatalf("Faild to connect to nats server %s", err)
+	}
+
+	events := broker.GetBoardChannel(ctx, boardId)
+
+	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
+	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	ws := websocket.Upgrader{ReadBufferSize: 1024, WriteBufferSize: 1024}
+	websocket := sessionrequests.NewWebsocket(ws, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	database := NewBoardDatabase(suite.db)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
+
+	board, err := service.Update(
+		ctx,
+		BoardUpdateRequest{
+			ID:           boardId,
+			AccessPolicy: &accessPolicy,
+			Passphrase:   &passphrase,
+		})
+
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPassphrase", *board.Name)
+	assert.Equal(t, "This is a board to update", *board.Description)
+	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	assert.NotNil(t, board.Passphrase)
+	assert.NotNil(t, board.Salt)
+	assert.True(t, board.AllowStacking)
+	assert.False(t, board.IsLocked)
+	assert.True(t, board.ShowAuthors)
+	assert.True(t, board.ShowNoteReactions)
+	assert.True(t, board.ShowNotesOfOtherUsers)
+
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, "UpdateToPassphrase", *boardData.Name)
+	assert.Equal(t, "This is a board to update", *boardData.Description)
+	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
+	assert.Nil(t, boardData.Passphrase)
+	assert.Nil(t, boardData.Salt)
+	assert.True(t, boardData.AllowStacking)
+	assert.False(t, boardData.IsLocked)
+	assert.True(t, boardData.ShowAuthors)
+	assert.True(t, boardData.ShowNoteReactions)
+	assert.True(t, boardData.ShowNotesOfOtherUsers)
 
 	noteMsg := <-events
 	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
@@ -268,6 +718,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -283,7 +734,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	err = service.Delete(ctx, boardId)
 
@@ -302,6 +753,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -317,7 +769,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Get(ctx, boardId)
 
@@ -341,6 +793,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -356,7 +809,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.Get(ctx, boardId)
 
@@ -377,6 +830,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -392,7 +846,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	boards, err := service.GetBoards(ctx, userId)
 
@@ -417,6 +871,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -432,7 +887,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.FullBoard(ctx, boardId)
 
@@ -463,6 +918,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -478,7 +934,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.FullBoard(ctx, boardId)
 
@@ -500,6 +956,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -515,7 +972,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	boards, err := service.BoardOverview(ctx, boardIds, userId)
 
@@ -548,6 +1005,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -563,7 +1021,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.SetTimer(ctx, boardId, minutes)
 
@@ -584,6 +1042,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -599,7 +1058,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	board, err := service.DeleteTimer(ctx, boardId)
 
@@ -622,6 +1081,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	}
 
 	clock := timeprovider.NewClock()
+	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(suite.db)
@@ -637,7 +1097,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
 	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock)
+	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, hash)
 
 	_, err = service.SetTimer(ctx, boardId, minutes)
 	assert.Nil(t, err)
@@ -655,34 +1115,51 @@ func (suite *BoardServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
 	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
 
 	// tests boards
-	suite.boards = make(map[string]Board, 10)
+	suite.boards = make(map[string]Board, 11)
 	firstReadName := "Read1"
 	firstReadDescription := "This is a board"
 	suite.boards["Read1"] = Board{ID: uuid.New(), Name: &firstReadName, Description: &firstReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
 	secondReadName := "Read2"
 	secondReadDescription := "This is also a board"
 	suite.boards["Read2"] = Board{ID: uuid.New(), Name: &secondReadName, Description: &secondReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
 	timerName := "TimerUpdate"
 	timerDescription := "This is a board to update the timer"
 	suite.boards["Timer"] = Board{ID: uuid.New(), Name: &timerName, Description: &timerDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNamePassphrase := "UpdatePassphrase"
+
+	updateName := "Update"
+	updateDescription := "This is a board to update"
+	suite.boards["Update"] = Board{ID: uuid.New(), Name: &updateName, Description: &updateDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNamePassphrase := "UpdateToPassphrase"
 	updateDescriptionPassphrase := "This is a board to update"
-	suite.boards["UpdatePassphrase"] = Board{ID: uuid.New(), Name: &updateNamePassphrase, Description: &updateDescriptionPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailPassphrase := "Update"
-	updateDescriptionFailPassphrase := "This is a board to update"
-	suite.boards["UpdateFailPassphrase"] = Board{ID: uuid.New(), Name: &updateNameFailPassphrase, Description: &updateDescriptionFailPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNamePublic := "Update"
-	updateDescriptionPublic := "This is a board to update"
-	suite.boards["UpdatePublic"] = Board{ID: uuid.New(), Name: &updateNamePublic, Description: &updateDescriptionPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailPublic := "Update"
-	updateDescriptionFailPublic := "This is a board to update"
-	suite.boards["UpdateFailPublic"] = Board{ID: uuid.New(), Name: &updateNameFailPublic, Description: &updateDescriptionFailPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameInvite := "Update"
-	updateDescriptionInvite := "This is a board to update"
-	suite.boards["UpdateInvite"] = Board{ID: uuid.New(), Name: &updateNameInvite, Description: &updateDescriptionInvite, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailInvite := "Update"
-	updateDescriptionFailInvite := "This is a board to update"
-	suite.boards["UpdateFailInvite"] = Board{ID: uuid.New(), Name: &updateNameFailInvite, Description: &updateDescriptionFailInvite, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdatePublicToPassphrase"] = Board{ID: uuid.New(), Name: &updateNamePassphrase, Description: &updateDescriptionPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNamePublicToInvite := "UpdateToInvite"
+	updateDescriptionPublicToInvite := "This is a board to update"
+	suite.boards["UpdatePublicToInvite"] = Board{ID: uuid.New(), Name: &updateNamePublicToInvite, Description: &updateDescriptionPublicToInvite, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNamePassphraseToPublic := "UpdateToPublic"
+	updateDescriptionPassphraseToPublic := "This is a board to update"
+	passphrasePassphraseToPublic := "SuperStrongPassword"
+	saltPassphraseToPublic := "SaltForPassphrase"
+	suite.boards["UpdatePassphraseToPublic"] = Board{ID: uuid.New(), Name: &updateNamePassphraseToPublic, Description: &updateDescriptionPassphraseToPublic, Passphrase: &passphrasePassphraseToPublic, Salt: &saltPassphraseToPublic, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNamePassphraseToInvite := "UpdateToInvite"
+	updateDescriptionPassphraseToInvite := "This is a board to update"
+	passphrasePassphraseToInvite := "SuperStrongPassword"
+	saltPassphraseToInvite := "SaltForPassphrase"
+	suite.boards["UpdatePassphraseToInvite"] = Board{ID: uuid.New(), Name: &updateNamePassphraseToInvite, Description: &updateDescriptionPassphraseToInvite, Passphrase: &passphrasePassphraseToInvite, Salt: &saltPassphraseToInvite, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNameInviteToPublic := "UpdateToPublic"
+	updateDescriptionInviteToPublic := "This is a board to update"
+	suite.boards["UpdateInviteToPublic"] = Board{ID: uuid.New(), Name: &updateNameInviteToPublic, Description: &updateDescriptionInviteToPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
+	updateNameInviteToPassphrase := "UpdateToPassphrase"
+	updateDescriptionInviteToPassphrase := "This is a board to update"
+	suite.boards["UpdateInviteToPassphrase"] = Board{ID: uuid.New(), Name: &updateNameInviteToPassphrase, Description: &updateDescriptionInviteToPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+
 	deleteName := "DeleteBoard"
 	deleteDescription := "This is a board to delete"
 	suite.boards["Delete"] = Board{ID: uuid.New(), Name: &deleteName, Description: &deleteDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
