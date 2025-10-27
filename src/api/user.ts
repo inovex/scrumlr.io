@@ -1,5 +1,6 @@
 import {Auth} from "store/features/auth/types";
 import {SERVER_HTTP_URL} from "../config";
+import {ParticipantWithUserId} from "../store/features";
 
 export const UserAPI = {
   /**
