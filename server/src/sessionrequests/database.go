@@ -2,7 +2,6 @@ package sessionrequests
 
 import (
 	"context"
-	"errors"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -70,14 +69,6 @@ func (database *SessionRequestDB) Update(ctx context.Context, update DatabaseBoa
 			identifiers.BoardIdentifier, update.Board,
 			"Result", &r,
 		), &r)
-
-	if err != nil {
-		return DatabaseBoardSessionRequest{}, err
-	}
-
-	if r.Board == uuid.Nil {
-		return DatabaseBoardSessionRequest{}, errors.New("no session to update found")
-	}
 
 	return r, err
 }

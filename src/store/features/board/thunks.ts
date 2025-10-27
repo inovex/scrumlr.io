@@ -18,6 +18,11 @@ import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
 
+// helper function to handle board deletion redirects
+const redirectToBoardDeletedPage = () => {
+  window.location.replace("/?boardDeleted=true");
+};
+
 let socket: Socket | null = null;
 
 // creates a board from a template and returns board id if successful
@@ -97,7 +102,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "BOARD_DELETED") {
         dispatch(leaveBoard());
-        window.location.assign("/?boardDeleted=true");
+        redirectToBoardDeletedPage();
       }
 
       if (message.type === "COLUMNS_UPDATED") {
@@ -297,7 +302,7 @@ export const deleteBoard = createAsyncThunk<
 >("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
-    document.location.pathname = "/";
+    redirectToBoardDeletedPage();
   });
 });
 export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
