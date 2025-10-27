@@ -65,12 +65,7 @@ const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Partici
     const user: Auth = await API.getUserById(dto.id);
     return {
       user,
-      connected: dto.connected,
-      raisedHand: dto.raisedHand,
-      ready: dto.ready,
-      showHiddenColumns: dto.showHiddenColumns,
-      role: dto.role,
-      banned: dto.banned,
+      ...dto,
     };
   } catch (error) {
     // console.error("Failed to map participant with user:", error);
@@ -96,13 +91,6 @@ const mapMultipleParticipants = async (dtos: ParticipantWithUserId[], boardID: s
     return [];
   }
 };
-const mapParticipantsWithUsers = async (message: BoardInitEvent): Promise<ParticipantWithUser[]> => {
-  const {participants} = message.data;
-  const participantsWithId = participants as unknown as ParticipantWithUserId[];
-  const mapped = await mapMultipleParticipants(participantsWithId, message.data.board.id);
-  message.data.participants = mapped;
-  return mapped;
-};
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
 export const permittedBoardAccess = createAsyncThunk<
@@ -122,7 +110,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "INIT") {
         const {board, columns, notes, reactions, votes, votings, requests} = message.data;
-        const newParticipants = await mapParticipantsWithUsers(message as BoardInitEvent);
+        const newParticipants = await mapMultipleParticipants(message.data.participants, message.data.board.id);
         dispatch(
           initializeBoard({
             fullBoard: {
@@ -190,11 +178,11 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        const participant = await mapSingleParticipant(message.data as unknown as ParticipantWithUserId);
+        const participant = await mapSingleParticipant(message.data);
         dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        const participant = await mapSingleParticipant(message.data as unknown as ParticipantWithUserId);
+        const participant = await mapSingleParticipant(message.data);
         dispatch(
           updatedParticipant({
             participant,
@@ -205,7 +193,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "PARTICIPANTS_UPDATED") {
         const boardID = getState().board.data!.id;
-        const participants = await mapMultipleParticipants(message.data as unknown as ParticipantWithUserId[], boardID);
+        const participants = await mapMultipleParticipants(message.data, boardID);
         dispatch(
           setParticipants({
             participants,

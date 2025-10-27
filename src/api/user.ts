@@ -1,5 +1,6 @@
 import {Auth} from "store/features/auth/types";
 import {SERVER_HTTP_URL} from "../config";
+import {ParticipantWithUserId} from "../store/features";
 
 export const UserAPI = {
   /**
@@ -33,7 +34,7 @@ export const UserAPI = {
         credentials: "include",
       });
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Auth;
       }
       throw new Error(`unable to fetch user with response status ${response.status}`);
     } catch (error) {
@@ -49,7 +50,7 @@ export const UserAPI = {
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Auth[];
       }
       throw new Error(`unable to fetch user with response status ${response.status}`);
     } catch (error) {
