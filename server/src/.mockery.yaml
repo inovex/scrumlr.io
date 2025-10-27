@@ -28,6 +28,10 @@ packages:
       ReactionService:
       ReactionDatabase:
 
+  scrumlr.io/server/hash:
+    interfaces:
+      Hash:
+
   scrumlr.io/server/health:
     interfaces:
       HealthService:
