@@ -260,6 +260,7 @@ export const BoardSettings = () => {
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
                 icon={Trash}
+                reverseOrder
               />
             </>
           )}

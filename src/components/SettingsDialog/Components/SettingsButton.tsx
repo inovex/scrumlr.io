@@ -9,16 +9,17 @@ export interface SettingsButtonProps {
   onBlur?: FocusEventHandler<HTMLButtonElement> | undefined;
   className?: string;
   disabled?: boolean;
+  reverseOrder?: boolean;
   [key: string]: unknown;
 }
 
-export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
+export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({label, icon, onClick, onBlur, className, children, disabled, reverseOrder, ...other}) => {
   const Icon = icon!;
 
   return (
     <button
       aria-label={label}
-      className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, className)}
+      className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, {"settings-option-button-reverse-order": reverseOrder}, className)}
       disabled={disabled}
       onClick={onClick}
       onBlur={onBlur}
