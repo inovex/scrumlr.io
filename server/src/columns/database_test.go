@@ -407,6 +407,30 @@ func (suite *DatabaseColumnTestSuite) Test_Database_GetAll_NotFound() {
 	assert.Len(t, dbColumns, 0)
 }
 
+func (suite *DatabaseColumnTestSuite) Test_Database_Count() {
+	t := suite.T()
+	database := NewColumnsDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+
+	count, err := database.Count(context.Background(), boardId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 3, count)
+}
+
+func (suite *DatabaseColumnTestSuite) Test_Database_Count_BoardNotFound() {
+	t := suite.T()
+	database := NewColumnsDatabase(suite.db)
+
+	boardId := uuid.New()
+
+	count, err := database.Count(context.Background(), boardId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, count)
+}
+
 type TestBoard struct {
 	id   uuid.UUID
 	name string
