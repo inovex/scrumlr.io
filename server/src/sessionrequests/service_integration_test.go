@@ -19,7 +19,6 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/votings"
 )
 
 type SessionRequestServiceIntegrationTestSuite struct {
@@ -72,10 +71,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 		WriteBufferSize: 1024,
 	}
 	websocket := NewWebsocket(ws, broker)
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -116,10 +113,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 		WriteBufferSize: 1024,
 	}
 	websocket := NewWebsocket(ws, broker)
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -166,10 +161,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Get() {
 		WriteBufferSize: 1024,
 	}
 	websocket := NewWebsocket(ws, broker)
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -200,10 +193,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_GetAll() {
 		WriteBufferSize: 1024,
 	}
 	websocket := NewWebsocket(ws, broker)
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -234,10 +225,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 		WriteBufferSize: 1024,
 	}
 	websocket := NewWebsocket(ws, broker)
-	voteDatabase := votings.NewVotingDatabase(suite.db)
-	voteService := votings.NewVotingService(voteDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker, voteService)
+	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
