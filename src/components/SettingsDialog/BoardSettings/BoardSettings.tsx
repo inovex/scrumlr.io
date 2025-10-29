@@ -2,8 +2,8 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
-import {deleteBoard, editBoard, setShowHiddenColumns} from "store/features";
-import {LockClosed, Trash, Refresh} from "components/Icon";
+import {deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
+import {LockClosed, Trash, Refresh, Info} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
@@ -27,6 +27,7 @@ export const BoardSettings = () => {
       board: applicationState.board.data!,
       me: applicationState.participants?.self,
       currentUserIsModerator: applicationState.participants?.self?.role === "OWNER" || applicationState.participants?.self?.role === "MODERATOR",
+      hotkeysAreActive: applicationState.view.hotkeysAreActive,
     }),
     isEqual
   );
@@ -238,11 +239,28 @@ export const BoardSettings = () => {
                 </SettingsButton>
               </div>
 
+              <div className="board-settings__hotkey-settings">
+                <SettingsButton
+                  className="board-settings__toggle-hotkeys-button"
+                  label={t("Hotkeys.hotkeyToggle")}
+                  onClick={() => {
+                    dispatch(setHotkeyState(!state.hotkeysAreActive));
+                  }}
+                >
+                  <Toggle active={state.hotkeysAreActive} />
+                </SettingsButton>
+                <a className="board-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
+                  <p>{t("Hotkeys.cheatSheet")}</p>
+                  <Info />
+                </a>
+              </div>
+
               <SettingsButton
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
                 icon={Trash}
+                reverseOrder
               />
             </>
           )}

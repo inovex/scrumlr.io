@@ -248,9 +248,40 @@ exports[`BoardSettings should match snapshot 1`] = `
           </div>
         </button>
       </div>
+      <div
+        class="board-settings__hotkey-settings"
+      >
+        <button
+          aria-label="Enable hotkeys"
+          class="settings-option-button board-settings__toggle-hotkeys-button"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Enable hotkeys
+          </span>
+          <div
+            class="toggle toggle--active"
+          />
+        </button>
+        <a
+          class="board-settings__open-cheat-sheet-button"
+          href="/hotkeys.pdf"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <p>
+            Hotkey Cheat Sheet
+          </p>
+          <svg>
+            info.svg
+          </svg>
+        </a>
+      </div>
       <button
         aria-label="Delete Board"
-        class="settings-option-button board-settings__delete-button"
+        class="settings-option-button settings-option-button-reverse-order board-settings__delete-button"
         type="button"
       >
         <span

@@ -30,36 +30,36 @@ export const ExportBoard = () => {
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
           icon={FileJson}
-          className="export-board__button-reverse-order"
           onClick={() => {
             exportAsJSON(boardId, boardName);
           }}
           data-testid="export-json"
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
           icon={FileCsv}
-          className="export-board__button-reverse-order"
           onClick={() => {
             exportAsCSV(boardId, boardName);
           }}
           data-testid="export-csv"
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
           icon={Printer}
-          className="export-board__button-reverse-order export-board__button-print-view"
+          className="export-board__button-print-view"
           onClick={() => {
             window.open(`/board/${boardId}/print`, "_blank");
           }}
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportToClipboard")}
           icon={Duplicate}
-          className="export-board__button-reverse-order"
           onClick={() => {
             getMarkdownExport(boardId).then((result) => {
               navigator.clipboard.writeText(result).then(() => {
@@ -68,6 +68,7 @@ export const ExportBoard = () => {
             });
           }}
           data-testid="export-markdown"
+          reverseOrder
         />
       </div>
 
