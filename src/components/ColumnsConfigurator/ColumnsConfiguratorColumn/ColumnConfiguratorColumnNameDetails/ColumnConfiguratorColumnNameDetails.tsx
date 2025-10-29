@@ -89,7 +89,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         onInput={(e) => setName(e.currentTarget.value)}
         onFocus={() => props.setOpenState("nameFirst")}
         autoComplete="off"
-        onKeyDown={(e) => {
+        onKeyUp={(e) => {
           // handle Enter key submission
           if (e.key === "Enter") {
             e.preventDefault();
