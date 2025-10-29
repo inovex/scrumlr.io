@@ -11,8 +11,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
 )
@@ -52,10 +50,6 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Create() {
 
 	dbTemplate, err := database.Create(context.Background(),
 		DatabaseBoardTemplateInsert{Creator: userId, Name: &name, Description: &description},
-		[]columntemplates.DatabaseColumnTemplateInsert{
-			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
-			{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
-		},
 	)
 
 	assert.Nil(t, err)
