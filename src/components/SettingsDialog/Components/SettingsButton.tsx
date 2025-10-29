@@ -19,7 +19,7 @@ export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({labe
   return (
     <button
       aria-label={label}
-      className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, {"settings-option-button-reverse-order": reverseOrder}, className)}
+      className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, {"settings-option-button--reverse-order": reverseOrder}, className)}
       disabled={disabled}
       onClick={onClick}
       onBlur={onBlur}
