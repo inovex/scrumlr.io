@@ -122,7 +122,7 @@ const Router = () => {
           path="/board/:boardId"
           element={
             <RequireAuthentication>
-              <BoardGuard printViewEnabled={false} />
+              <BoardGuard />
             </RequireAuthentication>
           }
         >

@@ -1,7 +1,6 @@
 @import "constants/style";
 
 .share-button {
-  color: $blue--500;
   outline: none;
   border: 2px solid $navy--500;
   color: $navy--500;
@@ -27,7 +26,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
+    box-shadow: 0 0 0 2px rgba($navy--500, 0.32);
   }
 }
 
@@ -42,7 +41,7 @@
     color: $blue--200;
 
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
+      box-shadow: 0 0 0 2px rgba($blue--200, 0.48);
     }
   }
 }
