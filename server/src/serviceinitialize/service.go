@@ -7,6 +7,7 @@ import (
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
+	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/votings"
 
@@ -124,9 +125,9 @@ func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket 
 	return websocket
 }
 
-func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) sessions.UserService {
-	userDb := sessions.NewUserDatabase(init.db)
-	userService := sessions.NewUserService(userDb, init.rt, sessionService)
+func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
+	userDb := users.NewUserDatabase(init.db)
+	userService := users.NewUserService(userDb, init.rt, sessionService)
 
 	return userService
 }

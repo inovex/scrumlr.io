@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel/codes"
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
@@ -121,7 +121,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var internalUser *sessions.User
+	var internalUser *users.User
 	switch provider {
 	case common.Google:
 		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)

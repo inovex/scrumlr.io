@@ -3,7 +3,7 @@
 These are some todos that were not resolved during the first refactoring of the backend or came from the first
 refactoring.
 
-- Remove `user` from `session` package into its own package
+- ~~Remove `user` from `session` package into its own package~~
 - Try to get rid of the `common` package
 - Refactor API
   - Move the API endpoints to their respective package
@@ -16,7 +16,7 @@ refactoring.
 
 ## Improvements
 
-- Add OpenTelemetry
+- ~~Add OpenTelemetry~~
 - Add OpenAPI documents
 - Evaluate the standard golang logger and improve logging
   - configure the log level throug env variables

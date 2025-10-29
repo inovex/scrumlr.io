@@ -478,8 +478,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User.ID == note.Author {
-					user, _ := s.users.Get(ctx, session.User.ID) // TODO handle error
+				if session.UserID == note.Author {
+					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
 					author = user.Name
 				}
 			}

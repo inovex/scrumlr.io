@@ -1,4 +1,4 @@
-import {Participant} from "../participants";
+import {ParticipantWithUser} from "../participants";
 import {Request} from "../requests";
 import {Column} from "../columns";
 import {Note} from "../notes";
@@ -7,13 +7,16 @@ import {Vote} from "../votes";
 import {Voting} from "../votings";
 
 export type AccessPolicy = "PUBLIC" | "BY_PASSPHRASE" | "BY_INVITE";
-
 // smart type which comes with a passphrase for the respective access policy
-export type CreateSessionAccessPolicy = {policy: Extract<AccessPolicy, "PUBLIC" | "BY_INVITE">} | {policy: Extract<AccessPolicy, "BY_PASSPHRASE">; passphrase: string};
+export type CreateSessionAccessPolicy =
+  | {policy: Extract<AccessPolicy, "PUBLIC" | "BY_INVITE">}
+  | {
+      policy: Extract<AccessPolicy, "BY_PASSPHRASE">;
+      passphrase: string;
+    };
 
 export interface Board {
   id: string;
-
   name?: string;
   accessPolicy: AccessPolicy;
   showAuthors: boolean;
@@ -23,7 +26,6 @@ export interface Board {
   isLocked: boolean;
   timerStart?: Date;
   timerEnd?: Date;
-
   sharedNote?: string;
   showVoting?: string;
 }
@@ -37,13 +39,13 @@ export type BoardImportData = {
   };
   columns: Column[];
   notes: Note[];
-  participants: Participant;
+  participants: ParticipantWithUser;
   voting: Voting;
 };
 
 export type BoardActionType = {
   board: Board;
-  participants: Participant[];
+  participants: ParticipantWithUser[];
   requests: Request[];
   columns: Column[];
   notes: Note[];
@@ -51,11 +53,8 @@ export type BoardActionType = {
   votes: Vote[];
   votings: Voting[];
 };
-
 export type BoardWithServerTimeOffset = {board: Board; serverTimeOffset: number};
-
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
-
 export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase" | "too_many_join_requests" | "banned";
 
 export interface BoardState {
