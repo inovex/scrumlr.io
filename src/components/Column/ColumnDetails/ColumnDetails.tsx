@@ -150,7 +150,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         ref={inputRef}
         className={classNames("column-details__name", "column-details__name--editing")}
         maxLength={MAX_BOARD_NAME_LENGTH}
-        onKeyDown={(e) => {
+        onKeyUp={(e) => {
           // handle emoji input first
           emoji.inputBindings.onKeyDown?.(e);
           if (e.defaultPrevented) return;
@@ -182,7 +182,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           }}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => {
+          onKeyUp={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               setFocusTarget("name");
