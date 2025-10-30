@@ -1,3 +1,5 @@
+@use "constants/colors.scss";
+
 @import "~@fontsource/raleway/300.css";
 @import "~@fontsource/raleway/400.css";
 @import "~@fontsource/raleway/500.css";
@@ -48,4 +50,8 @@ code {
 
 html[theme="dark"] {
   background: $navy--600;
+}
+
+:root {
+  @include colors.set-base-colors(colors.$base-colors);
 }
