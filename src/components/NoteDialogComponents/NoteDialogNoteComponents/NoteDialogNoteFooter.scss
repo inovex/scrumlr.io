@@ -1,7 +1,7 @@
-@import "src/constants/style";
-@import "src/components/Note/Note.scss";
-@import "src/components/TooltipButton/TooltipButton.scss";
-@import "src/components/Votes/Votes.scss";
+@import "constants/style";
+@import "components/Note/Note.scss";
+@import "components/TooltipButton/TooltipButton.scss";
+@import "components/Votes/Votes.scss";
 
 .note-dialog__note-footer {
   position: relative;
