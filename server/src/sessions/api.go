@@ -16,6 +16,7 @@ type UserService interface {
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error)
 	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)

@@ -67,3 +67,9 @@ var oicdUserCreatedCounter, _ = userMeter.Int64Counter(
 	metric.WithDescription("Number of anonymous users created"),
 	metric.WithUnit("users"),
 )
+
+var deletedUserCounter, _ = userMeter.Int64Counter(
+	"scrumlr.users.deleted.counter",
+	metric.WithDescription("Number of deleted users"),
+	metric.WithUnit("users"),
+)

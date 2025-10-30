@@ -30,6 +30,7 @@ type UserDatabase interface {
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
+	DeleteUser(ctx context.Context, id uuid.UUID) error
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
@@ -313,6 +314,27 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	}
 
 	return new(User).From(user), err
+}
+
+func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.delete.id", id.String()),
+	)
+
+	err := service.database.DeleteUser(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete user")
+		span.RecordError(err)
+		log.Errorw("failed to delete user", "user", id, "err", err)
+		return common.InternalServerError
+	}
+
+	deletedUserCounter.Add(ctx, 1)
+	return err
 }
 
 func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
