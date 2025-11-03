@@ -5,6 +5,7 @@ import (
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/middleware"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/users"
@@ -128,7 +129,6 @@ func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
 	userDb := users.NewUserDatabase(init.db)
 	userService := users.NewUserService(userDb, init.rt, sessionService)
-
 	return userService
 }
 
@@ -144,4 +144,9 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	votingService := votings.NewVotingService(votingDB, init.rt)
 
 	return votingService
+}
+
+func (init *ServiceInitializer) InitializeContextService(anonymousLoginDisabled bool) middleware.ContextService {
+	contextService := middleware.NewContextService(anonymousLoginDisabled)
+	return contextService
 }
