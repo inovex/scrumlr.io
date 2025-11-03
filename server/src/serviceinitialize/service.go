@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/cache"
+	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -31,16 +33,18 @@ type ServiceInitializer struct {
 	hash   hash.Hash
 	db     *bun.DB
 	rt     *realtime.Broker
+	cache  *cache.Cache
 	ws     websocket.Upgrader
 	client *http.Client
 }
 
-func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, rt *realtime.Broker, cache *cache.Cache) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.clock = timeprovider.NewClock()
 	initializer.hash = hash.NewHashSha512()
 	initializer.db = db
 	initializer.rt = rt
+	initializer.cache = cache
 	initializer.ws = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -143,4 +147,10 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	votingService := votings.NewVotingService(votingDB, init.rt)
 
 	return votingService
+}
+
+func (init *ServiceInitializer) InitializeDragLockService() draglocks.DragLockService {
+	dragLockService := draglocks.NewDragLockService(init.cache, init.rt)
+
+	return dragLockService
 }

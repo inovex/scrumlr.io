@@ -59,7 +59,7 @@ type Server struct {
 	boardReactions  boardreactions.BoardReactionService
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
-	dragLocks       draglocks.DragLockService
+	dragLocks       *draglocks.DragLockMessageHandler
 
 	upgrader websocket.Upgrader
 
@@ -92,7 +92,7 @@ func New(
 	boardReactions boardreactions.BoardReactionService,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
-	dragLocks draglocks.DragLockService,
+	dragLocks *draglocks.DragLockMessageHandler,
 
 	verbose bool,
 	checkOrigin bool,
