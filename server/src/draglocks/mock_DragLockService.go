@@ -108,7 +108,7 @@ func (_c *MockDragLockService_AcquireLock_Call) RunAndReturn(run func(ctx contex
 }
 
 // GetLock provides a mock function for the type MockDragLockService
-func (_mock *MockDragLockService) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock {
+func (_mock *MockDragLockService) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error) {
 	ret := _mock.Called(ctx, noteID)
 
 	if len(ret) == 0 {
@@ -116,6 +116,10 @@ func (_mock *MockDragLockService) GetLock(ctx context.Context, noteID uuid.UUID)
 	}
 
 	var r0 *DragLock
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*DragLock, error)); ok {
+		return returnFunc(ctx, noteID)
+	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) *DragLock); ok {
 		r0 = returnFunc(ctx, noteID)
 	} else {
@@ -123,7 +127,12 @@ func (_mock *MockDragLockService) GetLock(ctx context.Context, noteID uuid.UUID)
 			r0 = ret.Get(0).(*DragLock)
 		}
 	}
-	return r0
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, noteID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
 }
 
 // MockDragLockService_GetLock_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLock'
@@ -156,12 +165,12 @@ func (_c *MockDragLockService_GetLock_Call) Run(run func(ctx context.Context, no
 	return _c
 }
 
-func (_c *MockDragLockService_GetLock_Call) Return(dragLock *DragLock) *MockDragLockService_GetLock_Call {
-	_c.Call.Return(dragLock)
+func (_c *MockDragLockService_GetLock_Call) Return(dragLock *DragLock, err error) *MockDragLockService_GetLock_Call {
+	_c.Call.Return(dragLock, err)
 	return _c
 }
 
-func (_c *MockDragLockService_GetLock_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID) *DragLock) *MockDragLockService_GetLock_Call {
+func (_c *MockDragLockService_GetLock_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID) (*DragLock, error)) *MockDragLockService_GetLock_Call {
 	_c.Call.Return(run)
 	return _c
 }
