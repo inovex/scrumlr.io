@@ -145,8 +145,8 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	return votingService
 }
 
-func (init *ServiceInitializer) InitializeDragLockService() draglocks.DragLockService {
-	dragLockService := draglocks.NewDragLockService(init.cache, init.broker)
+func (init *ServiceInitializer) InitializeDragLockService(noteService notes.NotesService) draglocks.DragLockService {
+	dragLockService := draglocks.NewDragLockService(noteService, init.cache, init.broker)
 
 	return dragLockService
 }

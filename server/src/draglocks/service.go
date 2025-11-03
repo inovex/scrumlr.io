@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/nats-io/nats.go/jetstream"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
@@ -21,14 +21,16 @@ const DefaultTTL = 10 * time.Second
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/cache")
 
 type Service struct {
-	cache    *cache.Cache
-	realtime *realtime.Broker
+	cache       *cache.Cache
+	realtime    *realtime.Broker
+	noteService notes.NotesService
 }
 
-func NewDragLockService(cache *cache.Cache, rt *realtime.Broker) DragLockService {
+func NewDragLockService(noteService notes.NotesService, cache *cache.Cache, rt *realtime.Broker) DragLockService {
 	service := new(Service)
 	service.cache = cache
 	service.realtime = rt
+	service.noteService = noteService
 
 	return service
 }
@@ -43,10 +45,20 @@ func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userI
 		attribute.String("scrumlr.draglock.service.acquire.userid", userID.String()),
 	)
 
-	err := service.cache.Con.Create(ctx, noteID.String(), userID.String(), DefaultTTL)
+	notes, err := service.noteService.GetStack(ctx, noteID)
 	if err != nil {
-		log.Infow("lock already exists")
+		span.SetStatus(codes.Error, "failed to get stack")
+		span.RecordError(err)
+		log.Errorw("failed to get stack", "err", err)
 		return false
+	}
+
+	for _, note := range notes {
+		err = service.cache.Con.Create(ctx, note.ID.String(), userID.String(), DefaultTTL)
+		if err != nil {
+			log.Infow("lock already exists")
+			return false
+		}
 	}
 
 	service.broadcastAcquireLock(ctx, boardID, noteID, userID)
@@ -62,12 +74,22 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 		attribute.String("scrumlr.draglock.service.acquire.noteid", noteID.String()),
 	)
 
-	err := service.cache.Con.Delete(ctx, noteID.String())
+	notes, err := service.noteService.GetStack(ctx, noteID)
 	if err != nil {
-		log.Errorw("failed to release lock", "note", noteID, "err", err)
-		span.SetStatus(codes.Error, "failed to release lock")
+		span.SetStatus(codes.Error, "failed to get stack")
 		span.RecordError(err)
+		log.Errorw("failed to get stack", "err", err)
 		return false
+	}
+
+	for _, note := range notes {
+		err := service.cache.Con.Delete(ctx, note.ID.String())
+		if err != nil {
+			log.Errorw("failed to release lock", "note", note.ID, "err", err)
+			span.SetStatus(codes.Error, "failed to release lock")
+			span.RecordError(err)
+			return false
+		}
 	}
 
 	service.broadcastReleaseLock(ctx, boardID, noteID, userID)
@@ -85,10 +107,6 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock
 
 	val, err := service.cache.Con.Get(ctx, noteID.String())
 	if err != nil {
-		if err == jetstream.ErrKeyNotFound {
-			return nil
-		}
-
 		span.SetStatus(codes.Error, "failed to get lock")
 		span.RecordError(err)
 		log.Errorw("failed to get lock", "err", err)
@@ -117,10 +135,6 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 
 	_, err := service.cache.Con.Get(ctx, noteID.String())
 	if err != nil {
-		if err == jetstream.ErrKeyNotFound {
-			return false
-		}
-
 		span.SetStatus(codes.Error, "failed to get lock")
 		span.RecordError(err)
 		log.Errorw("failed to get lock", "err", err)
