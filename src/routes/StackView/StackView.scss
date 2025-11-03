@@ -1,6 +1,6 @@
 @import "constants/style";
 
-$stack-view__header-height: 14vh;
+$stack-view__header-height: 164px;
 $stack-view__navigation-height: 14vh;
 $stack-view__min-height: 82px;
 
@@ -11,10 +11,10 @@ $stack-view__min-height: 82px;
 }
 
 .stack-view {
-  display: flex;
+  display: grid;
   height: 100vh;
-  flex-direction: column;
-  align-items: center;
+  grid-template-rows: $stack-view__header-height auto 1fr;
+  justify-items: center;
 
   padding-top: $spacing--xl;
 }
@@ -38,7 +38,8 @@ $stack-view__min-height: 82px;
 .stack-view__content {
   position: relative;
 
-  height: calc(100vh - $stack-view__header-height - $stack-view__navigation-height);
+  // subtracting header, navigation, and spacing from viewport height to limit extendable note
+  height: calc(100vh - ($spacing--xl + $stack-view__header-height + $stack-view__navigation-height + $spacing--xl));
   width: 100vw;
   border-radius: $note__border-radius;
 
