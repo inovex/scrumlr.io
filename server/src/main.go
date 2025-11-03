@@ -454,7 +454,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-	dragLockService := initializer.InitializeDragLockService()
+	dragLockService := initializer.InitializeDragLockService(noteService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
