@@ -33,7 +33,6 @@ type UserService interface {
 type API struct {
 	service                       UserService
 	sessions                      sessions.SessionService
-	basePath                      string
 	allowAnonymousBoardCreation   bool
 	allowAnonymousCustomTemplates bool
 }
@@ -237,7 +236,7 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 	})
 }
 
-func NewUsersAPI(service UserService, sessionService sessions.SessionService, basePath string, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
-	api := &API{service: service, sessions: sessionService, basePath: basePath, allowAnonymousBoardCreation: allowAnonymousBoardCreation, allowAnonymousCustomTemplates: allowAnonymousCustomTemplates}
+func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
+	api := &API{service: service, sessions: sessionService, allowAnonymousBoardCreation: allowAnonymousBoardCreation, allowAnonymousCustomTemplates: allowAnonymousCustomTemplates}
 	return api
 }

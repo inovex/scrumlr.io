@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/technical_helper"
 )
 
 type ColumnTestSuite struct {
@@ -46,7 +47,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			boardID, _ := uuid.NewRandom()
 			userID, _ := uuid.NewRandom()
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(
 				`{"name": "%s", "color": "%s", "visible": %t, "index": %d}`, name, color, visible, index,
 			))).AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.UserIdentifier, userID)
@@ -95,7 +96,7 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 			columnID, _ := uuid.NewRandom()
 			userID, _ := uuid.NewRandom()
 
-			req := NewTestRequestBuilder("DEL", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("DEL", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.UserIdentifier, userID).
 				AddToContext(identifiers.ColumnIdentifier, columnID)
@@ -135,7 +136,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 			visible := false
 			index := 0
 
-			req := NewTestRequestBuilder("PUT", "/", strings.NewReader(
+			req := technical_helper.NewTestRequestBuilder("PUT", "/", strings.NewReader(
 				fmt.Sprintf(`{"name": "%s", "color": "%s", "visible": %v, "index": %d }`, colName, color, visible, index))).
 				AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.ColumnIdentifier, columnID)
@@ -197,7 +198,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 				Index:   index,
 			}
 
-			req := NewTestRequestBuilder("GET", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
@@ -245,7 +246,7 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 				Index:   index,
 			}
 
-			req := NewTestRequestBuilder("GET", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 			rr := httptest.NewRecorder()
 			columnsMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{column}, tt.err)

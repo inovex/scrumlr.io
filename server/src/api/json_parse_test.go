@@ -8,6 +8,7 @@ import (
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/technical_helper"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
@@ -78,7 +79,7 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			s := new(Server)
 
 			mockUUID := uuid.New()
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
 				}`))
 
