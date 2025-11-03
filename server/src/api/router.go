@@ -65,7 +65,7 @@ type Server struct {
 	boardReactions  boardreactions.BoardReactionService
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
-	dragLocks       draglocks.DragLockService
+	dragLocks       *draglocks.DragLockMessageHandler
 
 	checkOrigin bool
 
@@ -103,7 +103,7 @@ func New(
 	boardReactions boardreactions.BoardReactionService,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
-	dragLocks draglocks.DragLockService,
+	dragLocks *draglocks.DragLockMessageHandler,
 
 	verbose bool,
 	checkOrigin bool,

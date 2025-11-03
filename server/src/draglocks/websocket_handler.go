@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/realtime"
 )
 
 // WebSocketConnection interface for testability
@@ -14,40 +14,74 @@ type WebSocketConnection interface {
 	WriteJSON(ctx context.Context, v interface{}) error
 }
 
+type DragLockService interface {
+	AcquireLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
+	ReleaseLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
+	GetLock(ctx context.Context, noteID uuid.UUID) *DragLock
+	IsLocked(ctx context.Context, noteID uuid.UUID) bool
+}
+
+type DragLockMessageHandler struct {
+	service DragLockService
+}
+
+func NewDragLockMessageHandler(draglockService DragLockService) *DragLockMessageHandler {
+	handler := new(DragLockMessageHandler)
+	handler.service = draglockService
+
+	return handler
+}
+
 // HandleWebSocketMessage processes a drag lock WebSocket message
-func HandleWebSocketMessage(ctx context.Context, service DragLockService, realtime *realtime.Broker, boardID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage) {
+func (handler *DragLockMessageHandler) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage) {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.handler.acquire")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
 	var message DragLockMessage
 	if err := json.Unmarshal(data, &message); err != nil {
-		logger.Get().Errorw("failed to unmarshal drag lock message", "error", err, "data", string(data))
-		sendResponse(conn, DragLockResponse{
+		span.SetStatus(codes.Error, "failed to unmarschal lock message")
+		span.RecordError(err)
+		log.Errorw("failed to unmarshal drag lock message", "error", err, "data", string(data))
+		response := DragLockResponse{
 			Type:    WebSocketMessageTypeDragLock,
 			Action:  "ERROR",
 			Success: false,
 			Error:   "Invalid message format",
-		})
+		}
+		if err := conn.WriteJSON(ctx, response); err != nil {
+			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		}
 		return
 	}
 
 	switch message.Action {
 	case DragLockActionAcquire:
-		handleAcquire(ctx, service, realtime, boardID, userID, conn, message.NoteID)
+		handler.handleAcquire(ctx, message.NoteID, boardID, userID, conn)
 	case DragLockActionRelease:
-		handleRelease(ctx, service, realtime, boardID, userID, conn, message.NoteID)
+		handler.handleRelease(ctx, message.NoteID, boardID, userID, conn)
 	default:
-		logger.Get().Warnw("unknown drag lock action", "action", message.Action, "userId", userID)
-		sendResponse(conn, DragLockResponse{
+		log.Warnw("unknown drag lock action", "action", message.Action, "userId", userID)
+		response := DragLockResponse{
 			Type:    WebSocketMessageTypeDragLock,
 			Action:  message.Action,
 			NoteID:  message.NoteID,
 			Success: false,
 			Error:   "Unknown action",
-		})
+		}
+		if err := conn.WriteJSON(ctx, response); err != nil {
+			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		}
 	}
 }
 
 // handleAcquire processes a drag lock acquisition request
-func handleAcquire(ctx context.Context, service DragLockService, rt *realtime.Broker, boardID, userID uuid.UUID, conn WebSocketConnection, noteID uuid.UUID) {
-	success := service.AcquireLock(noteID, userID, boardID)
+func (handler *DragLockMessageHandler) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnection) {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.handler.acquire")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	success := handler.service.AcquireLock(ctx, noteID, userID, boardID)
 
 	response := DragLockResponse{
 		Type:    WebSocketMessageTypeDragLock,
@@ -60,18 +94,18 @@ func handleAcquire(ctx context.Context, service DragLockService, rt *realtime.Br
 		response.Error = "Note is currently being dragged by another user"
 	}
 
-	// Send response to requesting client
-	sendResponse(conn, response)
-
-	// If successful, broadcast to all other clients on the board
-	if success {
-		broadcastLockEvent(rt, boardID, realtime.BoardEventNoteDragStart, noteID, userID)
+	if err := conn.WriteJSON(ctx, response); err != nil {
+		log.Errorw("failed to send drag lock response", "error", err, "response", response)
 	}
 }
 
 // handleRelease processes a drag lock release request
-func handleRelease(ctx context.Context, service DragLockService, rt *realtime.Broker, boardID, userID uuid.UUID, conn WebSocketConnection, noteID uuid.UUID) {
-	success := service.ReleaseLock(noteID, userID)
+func (handler *DragLockMessageHandler) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnection) {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.handler.release")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	success := handler.service.ReleaseLock(ctx, noteID, userID, boardID)
 
 	response := DragLockResponse{
 		Type:    WebSocketMessageTypeDragLock,
@@ -84,51 +118,7 @@ func handleRelease(ctx context.Context, service DragLockService, rt *realtime.Br
 		response.Error = "Lock not owned by user or already released"
 	}
 
-	// Send response to requesting client
-	sendResponse(conn, response)
-
-	// If successful, broadcast to all other clients on the board
-	if success {
-		broadcastLockEvent(rt, boardID, realtime.BoardEventNoteDragEnd, noteID, userID)
-	}
-}
-
-// ReleaseUserLocks releases all locks held by a user (called on disconnect)
-func ReleaseUserLocks(ctx context.Context, service DragLockService, rt *realtime.Broker, boardID, userID uuid.UUID) {
-	// Get all locks for the board to find user's locks
-	locks := service.GetLocksForBoard(boardID)
-
-	for _, lock := range locks {
-		if lock.UserID == userID {
-			success := service.ReleaseLock(lock.NoteID, userID)
-			if success {
-				// Broadcast release to all clients
-				broadcastLockEvent(rt, boardID, realtime.BoardEventNoteDragEnd, lock.NoteID, userID)
-			}
-		}
-	}
-}
-
-// sendResponse sends a response message to a WebSocket connection
-func sendResponse(conn WebSocketConnection, response DragLockResponse) {
-	if err := conn.WriteJSON(context.Background(), response); err != nil {
-		logger.Get().Errorw("failed to send drag lock response", "error", err, "response", response)
-	}
-}
-
-// broadcastLockEvent broadcasts lock events via NATS
-func broadcastLockEvent(rt *realtime.Broker, boardID uuid.UUID, eventType realtime.BoardEventType, noteID, userID uuid.UUID) {
-	ctx := context.Background()
-	event := realtime.BoardEvent{
-		Type: eventType,
-		Data: map[string]string{
-			"noteId": noteID.String(),
-			"userId": userID.String(),
-		},
-	}
-
-	err := rt.BroadcastToBoard(ctx, boardID, event)
-	if err != nil {
-		logger.Get().Errorw("failed to broadcast lock event", "eventType", eventType, "noteId", noteID, "error", err)
+	if err := conn.WriteJSON(ctx, response); err != nil {
+		log.Errorw("failed to send drag lock response", "error", err, "response", response)
 	}
 }

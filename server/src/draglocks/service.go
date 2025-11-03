@@ -1,36 +1,171 @@
 package draglocks
 
 import (
+	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/uptrace/bun"
+	"github.com/nats-io/nats.go/jetstream"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/cache"
+	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
-const (
-	// DefaultCleanupInterval is how often expired locks are cleaned up
-	DefaultCleanupInterval = 10 * time.Second
-)
+const DefaultTTL = 10 * time.Second
 
-// DragLock represents a note being dragged
-type DragLock struct {
-	NoteID    uuid.UUID
-	UserID    uuid.UUID
-	BoardID   uuid.UUID
-	Timestamp time.Time
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/cache")
+
+type Service struct {
+	cache    *cache.Cache
+	realtime *realtime.Broker
 }
 
-// DragLockService interface for dependency injection
-type DragLockService interface {
-	AcquireLock(noteID, userID, boardID uuid.UUID) bool
-	ReleaseLock(noteID, userID uuid.UUID) bool
-	IsLocked(noteID uuid.UUID) (*DragLock, bool)
-	GetLocksForBoard(boardID uuid.UUID) []*DragLock
-	Close()
+func NewDragLockService(cache *cache.Cache, rt *realtime.Broker) DragLockService {
+	service := new(Service)
+	service.cache = cache
+	service.realtime = rt
+
+	return service
 }
 
-// InitializeDatabaseLockService creates a database-backed drag lock service
-func InitializeDatabaseLockService(db *bun.DB, rt *realtime.Broker) DragLockService {
-	return NewDatabaseDragLockService(db, rt)
+func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.acquire")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.acquire.noteid", noteID.String()),
+		attribute.String("scrumlr.draglock.service.acquire.userid", userID.String()),
+	)
+
+	err := service.cache.Con.Create(ctx, noteID.String(), userID.String(), DefaultTTL)
+	if err != nil {
+		log.Infow("lock already exists")
+		return false
+	}
+
+	service.broadcastAcquireLock(ctx, boardID, noteID, userID)
+	return true
+}
+
+func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.release")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.acquire.noteid", noteID.String()),
+	)
+
+	err := service.cache.Con.Delete(ctx, noteID.String())
+	if err != nil {
+		log.Errorw("failed to release lock", "note", noteID, "err", err)
+		span.SetStatus(codes.Error, "failed to release lock")
+		span.RecordError(err)
+		return false
+	}
+
+	service.broadcastReleaseLock(ctx, boardID, noteID, userID)
+	return true
+}
+
+func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.get")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.get.noteid", noteID.String()),
+	)
+
+	val, err := service.cache.Con.Get(ctx, noteID.String())
+	if err != nil {
+		if err == jetstream.ErrKeyNotFound {
+			return nil
+		}
+
+		span.SetStatus(codes.Error, "failed to get lock")
+		span.RecordError(err)
+		log.Errorw("failed to get lock", "err", err)
+		return nil
+	}
+
+	var lock DragLock
+	err = json.Unmarshal(val, &lock)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to unmarschal lock data")
+		span.RecordError(err)
+		return nil
+	}
+
+	return &lock
+}
+
+func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.islocked")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.islocked.noteid", noteID.String()),
+	)
+
+	_, err := service.cache.Con.Get(ctx, noteID.String())
+	if err != nil {
+		if err == jetstream.ErrKeyNotFound {
+			return false
+		}
+
+		span.SetStatus(codes.Error, "failed to get lock")
+		span.RecordError(err)
+		log.Errorw("failed to get lock", "err", err)
+		return false
+	}
+
+	return true
+}
+
+func (service *Service) broadcastAcquireLock(ctx context.Context, boardID uuid.UUID, noteID uuid.UUID, userID uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.broadcast.lock")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragStart,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast acquire lock")
+		span.RecordError(err)
+		log.Errorw("failed to send note drag event", "err", err)
+	}
+}
+
+func (service *Service) broadcastReleaseLock(ctx context.Context, boardID uuid.UUID, noteID uuid.UUID, userID uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.broadcast.lock")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragEnd,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast release lock")
+		span.RecordError(err)
+		log.Errorw("failed to send note drag event", "err", err)
+	}
 }

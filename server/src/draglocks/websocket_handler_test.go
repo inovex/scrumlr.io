@@ -6,10 +6,8 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/suite"
-
-	"scrumlr.io/server/realtime"
 )
 
 // MockWebSocketConn captures messages for testing
@@ -26,235 +24,174 @@ func (m *MockWebSocketConn) GetMessages() []interface{} {
 	return m.messages
 }
 
-type WebSocketHandlerTestSuite struct {
-	suite.Suite
-	mockService  *MockDragLockService
-	mockRealtime *realtime.Broker
-}
-
-func TestWebSocketHandlerTestSuite(t *testing.T) {
-	suite.Run(t, new(WebSocketHandlerTestSuite))
-}
-
-func (suite *WebSocketHandlerTestSuite) SetupTest() {
-	suite.mockService = &MockDragLockService{}
-
-	mockClient := realtime.NewMockClient(suite.T())
-	mockClient.On("Publish", mock.Anything, mock.Anything, mock.Anything).Return(nil).Maybe()
-	suite.mockRealtime = &realtime.Broker{Con: mockClient}
-}
-
-func (suite *WebSocketHandlerTestSuite) TestHandleAcquireMessage() {
+func TestHandleAcquireMessage(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	noteID := uuid.New()
 	mockConn := &MockWebSocketConn{}
 
-	suite.mockService.On("AcquireLock", noteID, userID, boardID).Return(true)
+	mockLockService := NewMockDragLockService(t)
+	mockLockService.EXPECT().AcquireLock(mock.Anything, noteID, userID, boardID).
+		Return(true)
+
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
 
 	message := DragLockMessage{
 		Action: DragLockActionAcquire,
 		NoteID: noteID,
 	}
 	data, err := json.Marshal(message)
-	suite.Require().NoError(err)
+	assert.Nil(t, err)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, data)
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
 
-	// Verify response was sent
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal(DragLockActionAcquire, response.Action)
-	suite.Equal(noteID, response.NoteID)
-	suite.True(response.Success)
-	suite.Empty(response.Error)
-
-	suite.mockService.AssertExpectations(suite.T())
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionAcquire, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.True(t, response.Success)
+	assert.Empty(t, response.Error)
 }
 
-func (suite *WebSocketHandlerTestSuite) TestHandleFailedAcquireMessage() {
+func TestHandleFailedAcquireMessage(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	noteID := uuid.New()
 	mockConn := &MockWebSocketConn{}
 
-	suite.mockService.On("AcquireLock", noteID, userID, boardID).Return(false)
+	mockLockService := NewMockDragLockService(t)
+	mockLockService.EXPECT().AcquireLock(mock.Anything, noteID, userID, boardID).
+		Return(false)
+
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
 
 	message := DragLockMessage{
 		Action: DragLockActionAcquire,
 		NoteID: noteID,
 	}
 	data, err := json.Marshal(message)
-	suite.Require().NoError(err)
+	assert.Nil(t, err)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, data)
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
 
 	// Verify response was sent with error
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal(DragLockActionAcquire, response.Action)
-	suite.Equal(noteID, response.NoteID)
-	suite.False(response.Success)
-	suite.Equal("Note is currently being dragged by another user", response.Error)
-
-	suite.mockService.AssertExpectations(suite.T())
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionAcquire, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Note is currently being dragged by another user", response.Error)
 }
 
-func (suite *WebSocketHandlerTestSuite) TestHandleReleaseMessage() {
+func TestHandleReleaseMessage(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	noteID := uuid.New()
 	mockConn := &MockWebSocketConn{}
 
-	suite.mockService.On("ReleaseLock", noteID, userID).Return(true)
+	mockLockService := NewMockDragLockService(t)
+	mockLockService.EXPECT().ReleaseLock(mock.Anything, noteID, userID, boardID).
+		Return(true)
+
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
 
 	message := DragLockMessage{
 		Action: DragLockActionRelease,
 		NoteID: noteID,
 	}
 	data, err := json.Marshal(message)
-	suite.Require().NoError(err)
+	assert.Nil(t, err)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, data)
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
 
 	// Verify response was sent
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal(DragLockActionRelease, response.Action)
-	suite.Equal(noteID, response.NoteID)
-	suite.True(response.Success)
-	suite.Empty(response.Error)
-
-	suite.mockService.AssertExpectations(suite.T())
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionRelease, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.True(t, response.Success)
+	assert.Empty(t, response.Error)
 }
 
-func (suite *WebSocketHandlerTestSuite) TestHandleFailedReleaseMessage() {
+func TestHandleFailedReleaseMessage(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	noteID := uuid.New()
 	mockConn := &MockWebSocketConn{}
 
-	suite.mockService.On("ReleaseLock", noteID, userID).Return(false)
+	mockLockService := NewMockDragLockService(t)
+	mockLockService.EXPECT().ReleaseLock(mock.Anything, noteID, userID, boardID).
+		Return(false)
+
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
 
 	message := DragLockMessage{
 		Action: DragLockActionRelease,
 		NoteID: noteID,
 	}
 	data, err := json.Marshal(message)
-	suite.Require().NoError(err)
+	assert.Nil(t, err)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, data)
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
 
 	// Verify response was sent with error
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal(DragLockActionRelease, response.Action)
-	suite.Equal(noteID, response.NoteID)
-	suite.False(response.Success)
-	suite.Equal("Lock not owned by user or already released", response.Error)
-
-	suite.mockService.AssertExpectations(suite.T())
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionRelease, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Lock not owned by user or already released", response.Error)
 }
 
-func (suite *WebSocketHandlerTestSuite) TestHandleInvalidJSON() {
+func TestHandleInvalidJSON(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	mockConn := &MockWebSocketConn{}
 
 	invalidJSON := []byte(`{"action": "ACQUIRE", "noteId": "invalid-uuid"}`)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, invalidJSON)
+	mockLockService := NewMockDragLockService(t)
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
+
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, invalidJSON)
 
 	// Verify error response was sent
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal("ERROR", response.Action)
-	suite.False(response.Success)
-	suite.Equal("Invalid message format", response.Error)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, "ERROR", response.Action)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Invalid message format", response.Error)
 }
 
-func (suite *WebSocketHandlerTestSuite) TestHandleUnknownAction() {
+func TestHandleUnknownAction(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	noteID := uuid.New()
 	mockConn := &MockWebSocketConn{}
+
+	mockLockService := NewMockDragLockService(t)
+	lockmessageHandler := NewDragLockMessageHandler(mockLockService)
 
 	message := DragLockMessage{
 		Action: "UNKNOWN_ACTION",
 		NoteID: noteID,
 	}
 	data, err := json.Marshal(message)
-	suite.Require().NoError(err)
+	assert.Nil(t, err)
 
-	HandleWebSocketMessage(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID, mockConn, data)
+	lockmessageHandler.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
 
 	// Verify error response was sent
-	suite.Len(mockConn.messages, 1)
+	assert.Len(t, mockConn.messages, 1)
 	response := mockConn.messages[0].(DragLockResponse)
-	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
-	suite.Equal("UNKNOWN_ACTION", response.Action)
-	suite.Equal(noteID, response.NoteID)
-	suite.False(response.Success)
-	suite.Equal("Unknown action", response.Error)
-}
-
-func (suite *WebSocketHandlerTestSuite) TestReleaseUserLocks() {
-	boardID := uuid.New()
-	userID1 := uuid.New()
-	userID2 := uuid.New()
-	noteID1 := uuid.New()
-	noteID2 := uuid.New()
-	noteID3 := uuid.New()
-
-	// Setup mock locks
-	locks := []*DragLock{
-		{NoteID: noteID1, UserID: userID1, BoardID: boardID},
-		{NoteID: noteID2, UserID: userID2, BoardID: boardID}, // Different user
-		{NoteID: noteID3, UserID: userID1, BoardID: boardID},
-	}
-
-	suite.mockService.On("GetLocksForBoard", boardID).Return(locks)
-	suite.mockService.On("ReleaseLock", noteID1, userID1).Return(true)
-	suite.mockService.On("ReleaseLock", noteID3, userID1).Return(true)
-
-	ReleaseUserLocks(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID1)
-
-	// Verify only the correct user's locks were released
-	suite.mockService.AssertExpectations(suite.T())
-
-	// Verify ReleaseLock was not called for userID2's lock
-	suite.mockService.AssertNotCalled(suite.T(), "ReleaseLock", noteID2, userID2)
-}
-
-func (suite *WebSocketHandlerTestSuite) TestReleaseUserLocksEmptyList() {
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	suite.mockService.On("GetLocksForBoard", boardID).Return([]*DragLock{})
-
-	ReleaseUserLocks(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID)
-
-	suite.mockService.AssertExpectations(suite.T())
-}
-
-func (suite *WebSocketHandlerTestSuite) TestReleaseUserLocksFailedRelease() {
-	boardID := uuid.New()
-	userID := uuid.New()
-	noteID := uuid.New()
-
-	locks := []*DragLock{
-		{NoteID: noteID, UserID: userID, BoardID: boardID},
-	}
-
-	suite.mockService.On("GetLocksForBoard", boardID).Return(locks)
-	suite.mockService.On("ReleaseLock", noteID, userID).Return(false)
-
-	ReleaseUserLocks(context.Background(), suite.mockService, suite.mockRealtime, boardID, userID)
-
-	suite.mockService.AssertExpectations(suite.T())
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, "UNKNOWN_ACTION", response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Unknown action", response.Error)
 }
