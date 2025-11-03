@@ -1,7 +1,7 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SERVER_WEBSOCKET_URL} from "config";
-import {BoardInitEvent, ServerEvent} from "types/websocket";
+import {ServerEvent} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";

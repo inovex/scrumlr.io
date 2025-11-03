@@ -1,6 +1,6 @@
 import {Board} from "../store/features/board/types";
 import {Column} from "../store/features/columns/types";
-import {ParticipantWithUser, ParticipantWithUserId} from "../store/features/participants/types";
+import {ParticipantWithUserId} from "../store/features/participants/types";
 import {Note} from "../store/features/notes/types";
 import {Vote} from "../store/features/votes/types";
 import {Voting} from "../store/features/votings/types";
