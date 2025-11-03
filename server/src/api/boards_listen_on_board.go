@@ -96,10 +96,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
 				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
 				delete(s.boardSubscriptions[id].clients, userID)
-
-				// Release any drag locks held by this user when disconnecting
-				draglocks.ReleaseUserLocks(ctx, s.dragLocks, s.realtime, id, userID)
-
 				err := s.sessions.Disconnect(ctx, id, userID)
 				if err != nil {
 					span.SetStatus(codes.Error, "failed to disconnect session")
@@ -159,7 +155,7 @@ func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uui
 
 	switch message.Type {
 	case draglocks.WebSocketMessageTypeDragLock:
-		draglocks.HandleWebSocketMessage(ctx, s.dragLocks, s.realtime, boardID, userID, conn, message.Data)
+		s.dragLocks.HandleWebSocketMessage(ctx, boardID, userID, conn, message.Data)
 	default:
 		logger.Get().Debugw("unknown websocket message type", "type", message.Type, "user", userID)
 	}
