@@ -17,7 +17,7 @@ type WebSocketConnection interface {
 type DragLockService interface {
 	AcquireLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
 	ReleaseLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
-	GetLock(ctx context.Context, noteID uuid.UUID) *DragLock
+	GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error)
 	IsLocked(ctx context.Context, noteID uuid.UUID) bool
 }
 
