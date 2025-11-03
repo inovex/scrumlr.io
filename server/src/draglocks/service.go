@@ -96,7 +96,7 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 	return true
 }
 
-func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock {
+func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -110,7 +110,7 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock
 		span.SetStatus(codes.Error, "failed to get lock")
 		span.RecordError(err)
 		log.Errorw("failed to get lock", "err", err)
-		return nil
+		return nil, err
 	}
 
 	var lock DragLock
@@ -118,10 +118,10 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) *DragLock
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to unmarschal lock data")
 		span.RecordError(err)
-		return nil
+		return nil, err
 	}
 
-	return &lock
+	return &lock, err
 }
 
 func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
@@ -133,15 +133,24 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 		attribute.String("scrumlr.draglock.service.islocked.noteid", noteID.String()),
 	)
 
-	_, err := service.cache.Con.Get(ctx, noteID.String())
+	notes, err := service.noteService.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get lock")
+		span.SetStatus(codes.Error, "failed to get stack")
 		span.RecordError(err)
-		log.Errorw("failed to get lock", "err", err)
+		log.Errorw("failed to get stack", "err", err)
 		return false
 	}
 
-	return true
+	locked := false
+	for _, note := range notes {
+		// if an error occured the lock is not found -> note not locked
+		_, err := service.cache.Con.Get(ctx, note.ID.String())
+		if err == nil {
+			locked = true
+		}
+	}
+
+	return locked
 }
 
 func (service *Service) broadcastAcquireLock(ctx context.Context, boardID uuid.UUID, noteID uuid.UUID, userID uuid.UUID) {
