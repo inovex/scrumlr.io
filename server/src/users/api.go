@@ -2,8 +2,17 @@ package users
 
 import (
 	"context"
+	"errors"
+	"net/http"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/codes"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessions"
 )
 
 type UserService interface {
@@ -20,4 +29,215 @@ type UserService interface {
 
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)
+}
+type API struct {
+	service                       UserService
+	sessions                      sessions.SessionService
+	basePath                      string
+	allowAnonymousBoardCreation   bool
+	allowAnonymousCustomTemplates bool
+}
+
+func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.get")
+	defer span.End()
+
+	userId := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	user, err := api.service.Get(ctx, userId)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get user")
+		span.RecordError(err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, user)
+}
+
+func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.get")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	userParam := chi.URLParam(r, "user")
+	requestedUserId, err := uuid.Parse(userParam)
+	if err != nil {
+		span.SetStatus(codes.Error, "unable to parse uuid")
+		span.RecordError(err)
+		log.Errorw("unable to parse uuid", "err", err)
+		common.Throw(w, r, err)
+		return
+	}
+	user, err := api.service.Get(ctx, requestedUserId)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get user by id")
+		span.RecordError(err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, user)
+}
+
+func (api *API) GetUsersFromBoard(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.getAll")
+	defer span.End()
+
+	boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	users, err := api.service.GetBoardUsers(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get users")
+		span.RecordError(err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, users)
+}
+
+func (api *API) Update(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.update")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	var body UserUpdateRequest
+	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "unable to decode body")
+		span.RecordError(err)
+		log.Errorw("unable to decode body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	body.ID = user
+
+	updatedUser, err := api.service.Update(ctx, body)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to update user")
+		span.RecordError(err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+
+	// because of a import cycle the boards are updated through the session service
+	// after a user update.
+	updateBoards := sessions.BoardSessionUpdateRequest{
+		User: user,
+	}
+
+	_, err = api.sessions.UpdateUserBoards(ctx, updateBoards)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to update user board")
+		span.RecordError(err)
+		log.Errorw("Unable to update user boards")
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, updatedUser)
+}
+
+func (api *API) Delete(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		user, err := api.service.Get(r.Context(), userID)
+
+		if err != nil {
+			log.Errorw("Could not fetch user", "error", err)
+			common.Throw(w, r, errors.New("could not fetch user"))
+			return
+		}
+
+		if user.AccountType == common.Anonymous {
+			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		userIDValue := r.Context().Value(identifiers.UserIdentifier)
+		userID, ok := userIDValue.(uuid.UUID)
+		if !ok {
+			log.Errorw("invalid or missing user identifier in context")
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		user, err := api.service.Get(r.Context(), userID)
+		if err != nil {
+			log.Errorw("Could not fetch user", "error", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if user.AccountType == common.Anonymous && !api.allowAnonymousBoardCreation {
+			log.Errorw("anonymous board creation not allowed")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		userIDValue := r.Context().Value(identifiers.UserIdentifier)
+		userID, ok := userIDValue.(uuid.UUID)
+		if !ok {
+			log.Errorw("invalid or missing user identifier in context")
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		user, err := api.service.Get(r.Context(), userID)
+		if err != nil {
+			log.Errorw("Could not fetch user", "error", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if user.AccountType == common.Anonymous && !api.allowAnonymousCustomTemplates {
+			log.Errorw("anonymous custom template creation not allowed")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create custom templates anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func NewUsersAPI(service UserService, sessionService sessions.SessionService, basePath string, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
+	api := &API{service: service, sessions: sessionService, basePath: basePath, allowAnonymousBoardCreation: allowAnonymousBoardCreation, allowAnonymousCustomTemplates: allowAnonymousCustomTemplates}
+	return api
 }
