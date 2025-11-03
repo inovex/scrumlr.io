@@ -69,7 +69,7 @@ func (init *ApiInitializer) InitializeSessionRequestApi() {
 }
 
 func (init *ApiInitializer) InitializeUserApi(userService users.UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) users.UsersApi {
-	usersApi := users.NewUsersAPI(userService, sessionService, init.basePath, allowAnonymousBoardCreation, allowAnonymousCustomTemplates)
+	usersApi := users.NewUserApi(userService, sessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates)
 	return usersApi
 }
 
