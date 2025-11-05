@@ -281,7 +281,7 @@ exports[`BoardSettings should match snapshot 1`] = `
       </div>
       <button
         aria-label="Delete Board"
-        class="settings-option-button settings-option-button-reverse-order board-settings__delete-button"
+        class="settings-option-button settings-option-button--reverse-order board-settings__delete-button"
         type="button"
       >
         <span
