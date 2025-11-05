@@ -55,5 +55,5 @@ html[theme="dark"] {
 :root {
   @include colors.set-base-colors(colors.$base-colors);
 }
-@include generate-accent-classes($primary-colors);
-@include generate-accent-classes($secondary-colors);
+@include generate-accent-classes(colors.$primary-colors);
+@include generate-accent-classes(colors.$secondary-colors);
