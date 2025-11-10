@@ -3,7 +3,9 @@ package notes
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
+	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -12,10 +14,13 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/google/uuid"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
+
+const DefaultTTL = 10 * time.Second
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
@@ -23,6 +28,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 type Service struct {
 	database NotesDatabase
 	realtime *realtime.Broker
+	cache    *cache.Cache
 }
 
 type NotesDatabase interface {
@@ -37,10 +43,11 @@ type NotesDatabase interface {
 	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
+func NewNotesService(db NotesDatabase, rt *realtime.Broker, cache *cache.Cache) NotesService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
+	service.cache = cache
 
 	return service
 }
@@ -140,6 +147,26 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		return nil, common.ForbiddenError(err)
 	}
 
+	lock, err := service.GetLock(ctx, body.ID)
+	if err != nil {
+		var keyNotFoundErr *cache.KeyNotFound
+		if !errors.As(err, &keyNotFoundErr) {
+			span.SetStatus(codes.Error, "failed to get lock")
+			span.RecordError(err)
+			return nil, common.InternalServerError
+		}
+	}
+
+	// lock can be nil, if no lock exists and a KeyNotFound error was returned
+	if lock != nil {
+		if lock.UserID != user {
+			err := errors.New("note is currently locked")
+			span.SetStatus(codes.Error, "note is currently locked")
+			span.RecordError(err)
+			return nil, common.ConflictError(err)
+		}
+	}
+
 	var positionUpdate *NoteUpdatePosition
 	edited := body.Text != nil || body.Edited
 	if body.Position != nil {
@@ -217,6 +244,26 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		span.SetStatus(codes.Error, "not allowed to delete note from other user")
 		span.RecordError(err)
 		return common.ForbiddenError(err)
+	}
+
+	lock, err := service.GetLock(ctx, body.ID)
+	if err != nil {
+		var keyNotFoundErr *cache.KeyNotFound
+		if !errors.As(err, &keyNotFoundErr) {
+			span.SetStatus(codes.Error, "failed to get lock")
+			span.RecordError(err)
+			return common.InternalServerError
+		}
+	}
+
+	// lock can be nil, if no lock exists and a KeyNotFound error was returned
+	if lock != nil {
+		if lock.UserID != user {
+			err := errors.New("note is currently locked")
+			span.SetStatus(codes.Error, "note is currently locked")
+			span.RecordError(err)
+			return common.ConflictError(err)
+		}
 	}
 
 	stackIds := []uuid.UUID{body.ID}
@@ -320,6 +367,165 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 	return Notes(notes), err
 }
 
+func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.acquire")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.acquire.noteid", noteID.String()),
+		attribute.String("scrumlr.draglock.service.acquire.userid", userID.String()),
+	)
+
+	notes, err := service.GetStack(ctx, noteID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get stack")
+		span.RecordError(err)
+		log.Errorw("failed to get stack", "err", err)
+		return false
+	}
+
+	for _, note := range notes {
+		err = service.cache.Con.Create(ctx, note.ID.String(), userID.String(), DefaultTTL)
+		if err != nil {
+			log.Infow("lock already exists")
+			return false
+		}
+	}
+
+	service.acquireLock(ctx, boardID, noteID, userID)
+	return true
+}
+
+func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.draglock.service.release")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.draglock.service.acquire.noteid", noteID.String()),
+	)
+
+	notes, err := service.GetStack(ctx, noteID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get stack")
+		span.RecordError(err)
+		log.Errorw("failed to get stack", "err", err)
+		return false
+	}
+
+	for _, note := range notes {
+		err := service.cache.Con.Delete(ctx, note.ID.String())
+		if err != nil {
+			log.Errorw("failed to release lock", "note", note.ID, "err", err)
+			span.SetStatus(codes.Error, "failed to release lock")
+			span.RecordError(err)
+			return false
+		}
+	}
+
+	service.releaseLock(ctx, boardID, noteID, userID)
+	return true
+}
+
+func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get_lock")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get_lock.noteid", noteID.String()),
+	)
+
+	val, err := service.cache.Con.Get(ctx, noteID.String())
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get lock")
+		span.RecordError(err)
+		log.Errorw("failed to get lock", "err", err)
+		return nil, err
+	}
+
+	var lock DragLock
+	err = json.Unmarshal(val, &lock)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to unmarschal lock data")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	return &lock, err
+}
+
+func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.islocked")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.islocked.noteid", noteID.String()),
+	)
+
+	notes, err := service.GetStack(ctx, noteID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get stack")
+		span.RecordError(err)
+		log.Errorw("failed to get stack", "err", err)
+		return false
+	}
+
+	for _, note := range notes {
+		// if an error occured the lock is not found -> note not locked
+		_, err := service.cache.Con.Get(ctx, note.ID.String())
+		if err == nil {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	var message DragLockMessage
+	if err := json.Unmarshal(data, &message); err != nil {
+		span.SetStatus(codes.Error, "failed to unmarschal lock message")
+		span.RecordError(err)
+		log.Errorw("failed to unmarshal drag lock message", "error", err, "data", string(data))
+		response := DragLockResponse{
+			Type:    WebSocketMessageTypeDragLock,
+			Action:  "ERROR",
+			Success: false,
+			Error:   "Invalid message format",
+		}
+		if err := conn.WriteJSON(ctx, response); err != nil {
+			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		}
+		return
+	}
+
+	switch message.Action {
+	case DragLockActionAcquire:
+		service.handleAcquire(ctx, message.NoteID, boardID, userID, conn)
+	case DragLockActionRelease:
+		service.handleRelease(ctx, message.NoteID, boardID, userID, conn)
+	default:
+		log.Warnw("unknown drag lock action", "action", message.Action, "userId", userID)
+		response := DragLockResponse{
+			Type:    WebSocketMessageTypeDragLock,
+			Action:  message.Action,
+			NoteID:  message.NoteID,
+			Success: false,
+			Error:   "Unknown action",
+		}
+		if err := conn.WriteJSON(ctx, response); err != nil {
+			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		}
+	}
+}
+
 func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.update")
 	defer span.End()
@@ -358,4 +564,90 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 		Type: realtime.BoardEventNoteDeleted,
 		Data: notes,
 	})
+}
+
+func (service *Service) acquireLock(ctx context.Context, boardID uuid.UUID, noteID uuid.UUID, userID uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.acquire_lock")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragStart,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast acquire lock")
+		span.RecordError(err)
+		log.Errorw("failed to send note drag event", "err", err)
+	}
+}
+
+func (service *Service) releaseLock(ctx context.Context, boardID uuid.UUID, noteID uuid.UUID, userID uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.release_lock")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDragEnd,
+		Data: map[string]string{
+			"noteId": noteID.String(),
+			"userId": userID.String(),
+		},
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast release lock")
+		span.RecordError(err)
+		log.Errorw("failed to send note drag event", "err", err)
+	}
+}
+
+func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnection) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.acquire")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	success := service.AcquireLock(ctx, noteID, userID, boardID)
+
+	response := DragLockResponse{
+		Type:    WebSocketMessageTypeDragLock,
+		Action:  DragLockActionAcquire,
+		NoteID:  noteID,
+		Success: success,
+	}
+
+	if !success {
+		response.Error = "Note is currently being dragged by another user"
+	}
+
+	if err := conn.WriteJSON(ctx, response); err != nil {
+		log.Errorw("failed to send drag lock response", "error", err, "response", response)
+	}
+}
+
+func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnection) {
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.release")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	success := service.ReleaseLock(ctx, noteID, userID, boardID)
+
+	response := DragLockResponse{
+		Type:    WebSocketMessageTypeDragLock,
+		Action:  DragLockActionRelease,
+		NoteID:  noteID,
+		Success: success,
+	}
+
+	if !success {
+		response.Error = "Lock not owned by user or already released"
+	}
+
+	if err := conn.WriteJSON(ctx, response); err != nil {
+		log.Errorw("failed to send drag lock response", "error", err, "response", response)
+	}
 }

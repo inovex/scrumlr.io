@@ -426,7 +426,6 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,                              // boardReactions
 				mockBoardTemplates,               // boardTemplates
 				mockColumnTemplates,              // columntemplates
-				nil,                              // dragLocks
 				false,                            // verbose
 				true,                             // checkOrigin
 				false,                            // anonymousLoginDisabled

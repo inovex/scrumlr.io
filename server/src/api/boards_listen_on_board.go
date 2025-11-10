@@ -11,7 +11,6 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
@@ -143,15 +142,15 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 
 // handleWebSocketMessage routes incoming WebSocket messages to appropriate handlers
 func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, rawMessage []byte) {
-	var message draglocks.WebSocketMessage
+	var message notes.WebSocketMessage
 	if err := json.Unmarshal(rawMessage, &message); err != nil {
 		logger.Get().Errorw("failed to unmarshal websocket message", "error", err, "message", string(rawMessage))
 		return
 	}
 
 	switch message.Type {
-	case draglocks.WebSocketMessageTypeDragLock:
-		s.dragLocks.HandleWebSocketMessage(ctx, boardID, userID, conn, message.Data)
+	case notes.WebSocketMessageTypeDragLock:
+		s.notes.HandleWebSocketMessage(ctx, boardID, userID, conn, message.Data)
 	default:
 		logger.Get().Debugw("unknown websocket message type", "type", message.Type, "user", userID)
 	}

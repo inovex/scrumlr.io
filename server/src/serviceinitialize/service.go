@@ -5,7 +5,6 @@ import (
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
-	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -133,7 +132,7 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.broker)
+	notesService := notes.NewNotesService(notesDB, init.broker, init.cache)
 
 	return notesService
 }
@@ -143,10 +142,4 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	votingService := votings.NewVotingService(votingDB, init.broker)
 
 	return votingService
-}
-
-func (init *ServiceInitializer) InitializeDragLockService(noteService notes.NotesService) draglocks.DragLockService {
-	dragLockService := draglocks.NewDragLockService(noteService, init.cache, init.broker)
-
-	return dragLockService
 }
