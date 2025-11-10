@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"go.opentelemetry.io/otel"
@@ -15,6 +16,7 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
@@ -225,4 +227,32 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 		Data: new(BoardSessionRequest).From(request),
 	})
 
+}
+
+func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		exists, err := service.Exists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			common.Throw(w, r, common.NotFoundError)
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
 }

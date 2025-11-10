@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -50,10 +51,10 @@ func (suite *VoteTestSuite) TestAddVote() {
 
 			s.votings = votingMock
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"note": "%s"
 				}`, noteId.String())))
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
