@@ -83,8 +83,3 @@ packages:
     interfaces:
       ColumnService:
       ColumnDatabase:
-
-  scrumlr.io/server/draglocks:
-    interfaces:
-      DragLockService:
-      WebSocketConnection:

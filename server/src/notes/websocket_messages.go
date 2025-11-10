@@ -1,4 +1,4 @@
-package draglocks
+package notes
 
 import (
 	"encoding/json"

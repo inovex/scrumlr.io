@@ -11,7 +11,6 @@ import (
 	"go.uber.org/zap"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/serviceinitialize"
 
@@ -448,11 +447,10 @@ func run(ctx *cli.Context) error {
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-	dragLockService := initializer.InitializeDragLockService(noteService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
-	userApi := apiInitializer.InitializeUserApi(userService, sessionService, c.Bool("allow-anonymous-board-creation"), c.Bool("allow-anonymous-custom-templates"))
+	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
@@ -477,7 +475,6 @@ func run(ctx *cli.Context) error {
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,
-		draglocks.NewDragLockMessageHandler(dragLockService),
 
 		logger.GetLogLevel() == zap.DebugLevel || ctx.Bool("verbose"),
 		!ctx.Bool("disable-check-origin"),

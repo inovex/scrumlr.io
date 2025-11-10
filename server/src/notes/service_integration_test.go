@@ -2,7 +2,9 @@ package notes
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"math/rand/v2"
 	"testing"
 
 	"github.com/google/uuid"
@@ -11,6 +13,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/realtime"
@@ -64,10 +67,15 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Create() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	note, err := service.Create(ctx, NoteCreateRequest{Board: boardId, User: authorId, Column: columnId, Text: text})
 
@@ -99,8 +107,13 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Import() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	note, err := service.Import(ctx, NoteImportRequest{User: userId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -126,10 +139,15 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Update() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	note, err := service.Update(ctx, userId, NoteUpdateRequest{
 		ID:     noteId,
@@ -171,10 +189,15 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Delete() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	err = service.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -198,8 +221,13 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	note, err := service.Get(ctx, noteId)
 
@@ -224,8 +252,13 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	note, err := service.Get(ctx, noteId)
 
@@ -246,8 +279,13 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	notes, err := service.GetAll(ctx, boardId, columnId)
 
@@ -282,8 +320,13 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetStack() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	database := NewNotesDatabase(suite.db)
-	service := NewNotesService(database, broker)
+	service := NewNotesService(database, broker, c)
 
 	notes, err := service.GetStack(ctx, noteId)
 
