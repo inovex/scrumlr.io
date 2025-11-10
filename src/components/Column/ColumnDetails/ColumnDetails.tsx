@@ -284,7 +284,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         }}
         onSubmit={updateColumnDetails}
       />
-      <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
+      <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} transparent />
     </>
   );
 
