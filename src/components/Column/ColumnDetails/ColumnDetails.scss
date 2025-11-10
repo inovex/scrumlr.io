@@ -20,6 +20,7 @@ $icon-size: $icon--large;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  min-height: 48px; // to accommodate MiniMenu in opened state
 }
 
 .column-details__name-wrapper {
