@@ -11,7 +11,6 @@ import (
 	"go.uber.org/zap"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/draglocks"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/serviceinitialize"
 
@@ -448,7 +447,6 @@ func run(ctx *cli.Context) error {
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-	dragLockService := initializer.InitializeDragLockService(noteService)
 
 	s := api.New(
 		basePath,
@@ -468,7 +466,6 @@ func run(ctx *cli.Context) error {
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,
-		draglocks.NewDragLockMessageHandler(dragLockService),
 
 		logger.GetLogLevel() == zap.DebugLevel || ctx.Bool("verbose"),
 		!ctx.Bool("disable-check-origin"),
