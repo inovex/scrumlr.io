@@ -8,7 +8,6 @@ import (
   "os"
   "strings"
 
-  "github.com/go-chi/chi/v5"
   "go.uber.org/zap"
   "scrumlr.io/server/common"
   "scrumlr.io/server/initialize"
@@ -398,8 +397,6 @@ func run(c *cli.Context) error {
     return errors.New("you may not start the application without a session secret if an authentication provider is configured")
   }
 
-  r := chi.NewRouter()
-
   bun := initialize.InitializeBun(db, logger.GetLogLevel())
   initializer := serviceinitialize.NewServiceInitializer(bun, rt)
 
@@ -433,11 +430,11 @@ func run(c *cli.Context) error {
 
   middleware := initializer.InitializeContextService(c.Bool("disable-anonymous-login"))
 
-  apiInitializer := serviceinitialize.NewApiInitializer(middleware, r, basePath)
+  apiInitializer := serviceinitialize.NewApiInitializer(middleware, basePath)
   sessionApi := apiInitializer.InitializeSessionApi(sessionService)
   userApi := apiInitializer.InitializeUserApi(userService, sessionService, c.Bool("allow-anonymous-board-creation"), c.Bool("allow-anonymous-custom-templates"))
 
-  routesInitializer := serviceinitialize.NewRoutesInitializer(middleware)
+  routesInitializer := serviceinitialize.NewRoutesInitializer()
   userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
   sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
   s := api.New(
@@ -468,12 +465,6 @@ func run(c *cli.Context) error {
     c.Bool("allow-anonymous-board-creation"),
     c.Bool("auth-enable-experimental-file-system-store"),
   )
-  s.Mount("/v2/", r)
-
-  chi.Walk(s, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-    fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
-    return nil
-  })
 
   port := fmt.Sprintf(":%d", c.Int("port"))
   logger.Get().Infow("starting server", "base-path", basePath, "port", port)

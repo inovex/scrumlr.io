@@ -157,7 +157,15 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
-		userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		userIDValue := r.Context().Value(identifiers.UserIdentifier)
+		userID, ok := userIDValue.(uuid.UUID)
+
+		if !ok {
+			log.Errorw("Invalid user id", "error", err)
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid user id")))
+			return
+		}
 
 		user, err := api.service.Get(r.Context(), userID)
 

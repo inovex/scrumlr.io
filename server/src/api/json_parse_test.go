@@ -65,10 +65,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoard },
 		},
 		{
-			name:    "board_sessions.updateBoardSessions",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoardSessions },
-		},
-		{
 			name:    "board_session_request.updateBoardSessionRequest",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoardSessionRequest },
 		},
@@ -83,7 +79,7 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 				"id": %s
 				}`))
 
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, mockUUID).
 				AddToContext(identifiers.UserIdentifier, mockUUID).
 				AddToContext(identifiers.NoteIdentifier, mockUUID).

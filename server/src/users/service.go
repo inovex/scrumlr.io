@@ -41,11 +41,9 @@ type UserDatabase interface {
 }
 
 type Service struct {
-	database                      UserDatabase
-	sessionService                sessions.SessionService
-	realtime                      *realtime.Broker
-	allowAnonymousBoardCreation   bool
-	allowAnonymousCustomTemplates bool
+	database       UserDatabase
+	sessionService sessions.SessionService
+	realtime       *realtime.Broker
 }
 
 func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService) UserService {

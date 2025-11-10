@@ -1,7 +1,6 @@
 package serviceinitialize
 
 import (
-	"github.com/go-chi/chi/v5"
 	"scrumlr.io/server/middleware"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -9,14 +8,12 @@ import (
 
 type ApiInitializer struct {
 	middleware middleware.ContextService
-	r          chi.Router
 	basePath   string
 }
 
-func NewApiInitializer(middleware middleware.ContextService, r chi.Router, basePath string) ApiInitializer {
+func NewApiInitializer(middleware middleware.ContextService, basePath string) ApiInitializer {
 	initializer := new(ApiInitializer)
 	initializer.middleware = middleware
-	initializer.r = r
 	initializer.basePath = basePath
 	return *initializer
 }
