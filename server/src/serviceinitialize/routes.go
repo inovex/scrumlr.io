@@ -2,18 +2,14 @@ package serviceinitialize
 
 import (
 	"github.com/go-chi/chi/v5"
-	"scrumlr.io/server/middleware"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 
 type RoutesInitializer struct {
-	middleware middleware.ContextService
-	r          chi.Router
-	basePath   string
 }
 
-func NewRoutesInitializer(middleware middleware.ContextService) RoutesInitializer {
+func NewRoutesInitializer() RoutesInitializer {
 	initializer := new(RoutesInitializer)
 
 	return *initializer

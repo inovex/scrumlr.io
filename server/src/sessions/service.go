@@ -447,7 +447,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 			span.SetStatus(codes.Error, "failed to get board sessions of user")
 			span.RecordError(err)
 			log.Errorw("unable to get board session of user", "board", s.Board, "user", s.User, "err", err)
-			return
+			continue
 		}
 
 		err = service.realtime.BroadcastToBoard(ctx, s.Board, realtime.BoardEvent{

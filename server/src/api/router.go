@@ -319,7 +319,7 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 
 			r.Post("/", s.joinBoard) //board
 		})
-
+		r.Mount("/", s.sessionRoutes)
 	})
 }
 
