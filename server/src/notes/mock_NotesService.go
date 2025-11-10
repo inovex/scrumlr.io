@@ -6,6 +6,7 @@ package notes
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
@@ -36,6 +37,75 @@ type MockNotesService_Expecter struct {
 
 func (_m *MockNotesService) EXPECT() *MockNotesService_Expecter {
 	return &MockNotesService_Expecter{mock: &_m.Mock}
+}
+
+// AcquireLock provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) AcquireLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ret := _mock.Called(ctx, noteID, userID, boardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AcquireLock")
+	}
+
+	var r0 bool
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, noteID, userID, boardID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	return r0
+}
+
+// MockNotesService_AcquireLock_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AcquireLock'
+type MockNotesService_AcquireLock_Call struct {
+	*mock.Call
+}
+
+// AcquireLock is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uuid.UUID
+//   - userID uuid.UUID
+//   - boardID uuid.UUID
+func (_e *MockNotesService_Expecter) AcquireLock(ctx interface{}, noteID interface{}, userID interface{}, boardID interface{}) *MockNotesService_AcquireLock_Call {
+	return &MockNotesService_AcquireLock_Call{Call: _e.mock.On("AcquireLock", ctx, noteID, userID, boardID)}
+}
+
+func (_c *MockNotesService_AcquireLock_Call) Run(run func(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID)) *MockNotesService_AcquireLock_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 uuid.UUID
+		if args[3] != nil {
+			arg3 = args[3].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_AcquireLock_Call) Return(b bool) *MockNotesService_AcquireLock_Call {
+	_c.Call.Return(b)
+	return _c
+}
+
+func (_c *MockNotesService_AcquireLock_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool) *MockNotesService_AcquireLock_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // Create provides a mock function for the type MockNotesService
@@ -320,6 +390,74 @@ func (_c *MockNotesService_GetAll_Call) RunAndReturn(run func(ctx context.Contex
 	return _c
 }
 
+// GetLock provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error) {
+	ret := _mock.Called(ctx, noteID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetLock")
+	}
+
+	var r0 *DragLock
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*DragLock, error)); ok {
+		return returnFunc(ctx, noteID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) *DragLock); ok {
+		r0 = returnFunc(ctx, noteID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*DragLock)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, noteID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockNotesService_GetLock_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLock'
+type MockNotesService_GetLock_Call struct {
+	*mock.Call
+}
+
+// GetLock is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uuid.UUID
+func (_e *MockNotesService_Expecter) GetLock(ctx interface{}, noteID interface{}) *MockNotesService_GetLock_Call {
+	return &MockNotesService_GetLock_Call{Call: _e.mock.On("GetLock", ctx, noteID)}
+}
+
+func (_c *MockNotesService_GetLock_Call) Run(run func(ctx context.Context, noteID uuid.UUID)) *MockNotesService_GetLock_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_GetLock_Call) Return(dragLock *DragLock, err error) *MockNotesService_GetLock_Call {
+	_c.Call.Return(dragLock, err)
+	return _c
+}
+
+func (_c *MockNotesService_GetLock_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID) (*DragLock, error)) *MockNotesService_GetLock_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetStack provides a mock function for the type MockNotesService
 func (_mock *MockNotesService) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
 	ret := _mock.Called(ctx, note)
@@ -388,6 +526,70 @@ func (_c *MockNotesService_GetStack_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
+// HandleWebSocketMessage provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage) {
+	_mock.Called(ctx, boardID, userID, conn, data)
+	return
+}
+
+// MockNotesService_HandleWebSocketMessage_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'HandleWebSocketMessage'
+type MockNotesService_HandleWebSocketMessage_Call struct {
+	*mock.Call
+}
+
+// HandleWebSocketMessage is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+//   - conn WebSocketConnection
+//   - data json.RawMessage
+func (_e *MockNotesService_Expecter) HandleWebSocketMessage(ctx interface{}, boardID interface{}, userID interface{}, conn interface{}, data interface{}) *MockNotesService_HandleWebSocketMessage_Call {
+	return &MockNotesService_HandleWebSocketMessage_Call{Call: _e.mock.On("HandleWebSocketMessage", ctx, boardID, userID, conn, data)}
+}
+
+func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 WebSocketConnection
+		if args[3] != nil {
+			arg3 = args[3].(WebSocketConnection)
+		}
+		var arg4 json.RawMessage
+		if args[4] != nil {
+			arg4 = args[4].(json.RawMessage)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_HandleWebSocketMessage_Call) Return() *MockNotesService_HandleWebSocketMessage_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+	_c.Run(run)
+	return _c
+}
+
 // Import provides a mock function for the type MockNotesService
 func (_mock *MockNotesService) Import(ctx context.Context, body NoteImportRequest) (*Note, error) {
 	ret := _mock.Called(ctx, body)
@@ -452,6 +654,132 @@ func (_c *MockNotesService_Import_Call) Return(note *Note, err error) *MockNotes
 }
 
 func (_c *MockNotesService_Import_Call) RunAndReturn(run func(ctx context.Context, body NoteImportRequest) (*Note, error)) *MockNotesService_Import_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// IsLocked provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
+	ret := _mock.Called(ctx, noteID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for IsLocked")
+	}
+
+	var r0 bool
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, noteID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	return r0
+}
+
+// MockNotesService_IsLocked_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsLocked'
+type MockNotesService_IsLocked_Call struct {
+	*mock.Call
+}
+
+// IsLocked is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uuid.UUID
+func (_e *MockNotesService_Expecter) IsLocked(ctx interface{}, noteID interface{}) *MockNotesService_IsLocked_Call {
+	return &MockNotesService_IsLocked_Call{Call: _e.mock.On("IsLocked", ctx, noteID)}
+}
+
+func (_c *MockNotesService_IsLocked_Call) Run(run func(ctx context.Context, noteID uuid.UUID)) *MockNotesService_IsLocked_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_IsLocked_Call) Return(b bool) *MockNotesService_IsLocked_Call {
+	_c.Call.Return(b)
+	return _c
+}
+
+func (_c *MockNotesService_IsLocked_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID) bool) *MockNotesService_IsLocked_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ReleaseLock provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) ReleaseLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
+	ret := _mock.Called(ctx, noteID, userID, boardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ReleaseLock")
+	}
+
+	var r0 bool
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, noteID, userID, boardID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	return r0
+}
+
+// MockNotesService_ReleaseLock_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReleaseLock'
+type MockNotesService_ReleaseLock_Call struct {
+	*mock.Call
+}
+
+// ReleaseLock is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uuid.UUID
+//   - userID uuid.UUID
+//   - boardID uuid.UUID
+func (_e *MockNotesService_Expecter) ReleaseLock(ctx interface{}, noteID interface{}, userID interface{}, boardID interface{}) *MockNotesService_ReleaseLock_Call {
+	return &MockNotesService_ReleaseLock_Call{Call: _e.mock.On("ReleaseLock", ctx, noteID, userID, boardID)}
+}
+
+func (_c *MockNotesService_ReleaseLock_Call) Run(run func(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID)) *MockNotesService_ReleaseLock_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 uuid.UUID
+		if args[3] != nil {
+			arg3 = args[3].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_ReleaseLock_Call) Return(b bool) *MockNotesService_ReleaseLock_Call {
+	_c.Call.Return(b)
+	return _c
+}
+
+func (_c *MockNotesService_ReleaseLock_Call) RunAndReturn(run func(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool) *MockNotesService_ReleaseLock_Call {
 	_c.Call.Return(run)
 	return _c
 }
