@@ -68,7 +68,6 @@ const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<Partici
       ...dto,
     };
   } catch (error) {
-    // console.error("Failed to map participant with user:", error);
     return Promise.reject(error);
   }
 };
@@ -80,14 +79,12 @@ const mapMultipleParticipants = async (dtos: ParticipantWithUserId[], boardID: s
       .map((dto) => {
         const user = users.find((u: Auth) => u.id === dto.id);
         if (!user) {
-          // console.warn(`User not found for participant ${dto.id}`);
           return null;
         }
         return {user, ...dto};
       })
       .filter(Boolean) as ParticipantWithUser[];
   } catch (error) {
-    // console.error("Failed to map participants with users:", error);
     return [];
   }
 };
