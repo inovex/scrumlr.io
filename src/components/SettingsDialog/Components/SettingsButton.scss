@@ -83,3 +83,8 @@ $header-menu-border-bottom-color: #efefef;
     background-color: $navy--500;
   }
 }
+
+.settings-option-button-reverse-order {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
