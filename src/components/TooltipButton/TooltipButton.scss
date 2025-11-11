@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $tooltip-button-size: 46px;
 
@@ -203,7 +204,7 @@ $tooltip-button-size: 46px;
 
   .tooltip-button__icon-container {
     position: static;
-    box-shadow: style.$box-shadow--light;
+    @include mixins.box-shadow-light;
   }
 
   .tooltip-button {

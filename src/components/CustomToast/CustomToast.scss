@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
@@ -16,7 +17,7 @@ $color-close-icon: #bfc1c5;
   width: 460px;
   margin-left: -160px;
   padding: 0px;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   overflow: inherit;
   cursor: default;
   background-color: style.$gray--000;

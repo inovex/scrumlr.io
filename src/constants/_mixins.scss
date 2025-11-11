@@ -158,3 +158,13 @@
     rgba(var(--accent-color--dark-rgb), 0.04) calc(40px + var(--stripe-offset, 0px))
   );
 }
+
+// Mixin for light box shadow
+@mixin box-shadow-light {
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
+}
+
+// Mixin for dark box shadow
+@mixin box-shadow-dark {
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}

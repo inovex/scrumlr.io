@@ -18,7 +18,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   border-radius: style.$rounded--full;
   position: relative;
   border: 2px solid style.$gray--000;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
 
   &:has(:focus-visible) {
     outline: 2px solid style.$blue--500;

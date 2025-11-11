@@ -153,7 +153,7 @@
     color: style.$gray--000;
     background-color: style.$navy--600;
     border-color: style.$pink--500;
-    box-shadow: style.$box-shadow--dark;
+    @include mixins.box-shadow-dark;
   }
 
   .confirmation-dialog__button {
@@ -174,7 +174,7 @@
     color: style.$pink--500;
     background-color: style.$navy--500;
     border-color: style.$pink--500;
-    box-shadow: style.$box-shadow--dark;
+    @include mixins.box-shadow-dark;
     &:hover {
       color: style.$gray--000;
       background-color: style.$pink--500;

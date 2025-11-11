@@ -48,7 +48,7 @@ $menu-mobile__width: 72px;
   width: $menu-mobile__width;
   height: $menu-mobile__width;
   border: none;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   z-index: style.$menu-item-z-index + style.$base-z-index-step;
   transition: all 0.2s ease-out;
 
@@ -195,7 +195,7 @@ $menu-mobile__width: 72px;
 .menu {
   border-radius: calc($menu-mobile__width / 2);
   background-color: style.$gray--000;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   padding: style.$spacing--lg 0;
   width: style.$action-bar__width;
   height: auto;
@@ -228,7 +228,7 @@ $menu-mobile__width: 72px;
 [theme="dark"] {
   .menu {
     background-color: style.$navy--500;
-    box-shadow: style.$box-shadow--light;
+    @include mixins.box-shadow-light;
   }
 }
 
@@ -241,7 +241,7 @@ $menu-mobile__width: 72px;
   border: none;
   border-radius: 100%;
   outline: none;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   color: style.$navy--900;
 }
 @media #{style.$tablet} {

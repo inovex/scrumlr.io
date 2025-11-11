@@ -19,7 +19,7 @@ $timer__progress-bar-color: #6096ff;
   position: relative;
   border: 0;
   background-color: style.$gray--000;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   border-radius: style.$rounded--full;
   height: 42px;
   width: 42px;
@@ -53,7 +53,7 @@ $timer__progress-bar-color: #6096ff;
   border-radius: style.$rounded--full;
   position: relative;
   border: 2px solid style.$gray--000;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
 
   &:has(:focus-visible) {
     outline: 2px solid style.$blue--500;

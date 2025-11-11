@@ -14,7 +14,7 @@
 
     z-index: style.$emoji-suggestions-z-index;
     overflow-y: auto;
-    box-shadow: style.$box-shadow--light;
+    @include mixins.box-shadow-light;
 
     @include mixins.scrollbar();
 

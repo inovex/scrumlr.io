@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $container-height: 64px;
 $reaction-size: 48px;
@@ -17,7 +18,7 @@ $reaction-size: 48px;
   gap: style.$spacing--xs;
   background-color: style.$gray--100;
   border-radius: style.$rounded--large;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   user-select: none;
   z-index: style.$board-reaction-z-index;
 }
@@ -56,7 +57,7 @@ $reaction-size: 48px;
 [theme="dark"] {
   .board-reactions-menu {
     background-color: style.$navy--500;
-    box-shadow: style.$box-shadow--dark;
+    @include mixins.box-shadow-dark;
   }
 
   .board-reactions-menu__close {

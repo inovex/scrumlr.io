@@ -26,7 +26,7 @@
   position: relative;
   border: 0;
   background-color: style.$gray--000;
-  box-shadow: style.$box-shadow--light;
+  @include mixins.box-shadow-light;
   border-radius: style.$rounded--full;
   height: 42px;
   width: 42px;
