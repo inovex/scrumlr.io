@@ -1,11 +1,11 @@
-@import "constants/style";
+@use "constants/style";
 
 .board-header {
   position: absolute;
   left: 30px;
   right: 30px;
-  top: $column__border-width;
-  height: $header__height;
+  top: style.$column__border-width;
+  height: style.$header__height;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -14,7 +14,7 @@
 .board-header__link {
   position: absolute;
   left: 0;
-  padding: $spacing--xs $spacing--xl;
+  padding: style.$spacing--xs style.$spacing--xl;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -24,22 +24,22 @@
   border: none;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
+    box-shadow: 0 0 0 2px rgba(style.$blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($blue--500, 0.06);
+    background-color: rgba(style.$blue--500, 0.06);
   }
 }
 
 [theme="dark"] {
   .board-header__link {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
+      box-shadow: 0 0 0 2px rgba(style.$pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($pink--500, 0.15);
+      background-color: rgba(style.$pink--500, 0.15);
     }
   }
 }
@@ -47,7 +47,7 @@
 .board-header__users {
   position: absolute;
   right: 0;
-  padding: $spacing--xs;
+  padding: style.$spacing--xs;
 
   display: flex;
   flex-direction: row;
@@ -63,7 +63,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  padding: $spacing--xs $spacing--xl;
+  padding: style.$spacing--xs style.$spacing--xl;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 
@@ -74,31 +74,31 @@
   cursor: pointer;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
+    box-shadow: 0 0 0 2px rgba(style.$blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($blue--500, 0.06);
+    background-color: rgba(style.$blue--500, 0.06);
   }
 }
 
 [theme="dark"] {
   .board-header_name-and-settings {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
+      box-shadow: 0 0 0 2px rgba(style.$pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($pink--500, 0.15); // Ask designer for correct color
+      background-color: rgba(style.$pink--500, 0.15); // Ask designer for correct color
     }
   }
 }
 
 .board-header__access-policy-status {
-  color: $gray--700;
-  font-size: $text-size--medium;
+  color: style.$gray--700;
+  font-size: style.$text-size--medium;
   font-weight: bold;
-  letter-spacing: $letter-spacing--small;
+  letter-spacing: style.$letter-spacing--small;
   display: flex;
   align-items: center;
   width: max-content;
@@ -112,10 +112,10 @@
 .board-header__name {
   display: inline-block;
 
-  color: $navy--900;
+  color: style.$navy--900;
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: $letter-spacing--large;
+  letter-spacing: style.$letter-spacing--large;
   line-height: 40px;
   margin: 0;
 
@@ -127,7 +127,7 @@
 
 [theme="dark"] {
   .board-header__name {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
@@ -135,17 +135,17 @@
   display: inline;
   vertical-align: bottom;
 
-  width: $icon--medium;
-  height: $icon--medium;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
   align-self: center;
   margin-right: 2px;
 }
 
 .board-header__access-policy-status-icon * {
-  color: $gray--700;
+  color: style.$gray--700;
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .board-header {
     left: 60px;
     right: 60px;
@@ -157,12 +157,12 @@
   }
 }
 
-@media #{$smartphone} {
+@media #{style.$smartphone} {
   .board-header__users {
     right: 0;
   }
 
   .board-header__link {
-    padding: $spacing--xs;
+    padding: style.$spacing--xs;
   }
 }

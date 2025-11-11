@@ -1,4 +1,6 @@
-@use "constants/colors.scss";
+@use "constants/style";
+
+@use "constants/colors";
 
 @import "~@fontsource/raleway/300.css";
 @import "~@fontsource/raleway/400.css";
@@ -7,8 +9,6 @@
 @import "~@fontsource/raleway/700.css";
 @import "~@fontsource/raleway/800.css";
 
-@import "constants/style.scss";
-
 html,
 body,
 #root {
@@ -16,7 +16,7 @@ body,
   width: 100%;
   box-sizing: border-box;
 
-  background: $gray--000;
+  background: colors.$gray--000;
 }
 *,
 *:before,
@@ -44,16 +44,16 @@ code {
 [theme="dark"] {
   body,
   #root {
-    background: $navy--600;
+    background: colors.$navy--600;
   }
 }
 
 html[theme="dark"] {
-  background: $navy--600;
+  background: colors.$navy--600;
 }
 
 :root {
   @include colors.set-base-colors(colors.$base-colors);
 }
-@include generate-accent-classes(colors.$primary-colors);
-@include generate-accent-classes(colors.$secondary-colors);
+@include colors.generate-accent-classes(colors.$primary-colors);
+@include colors.generate-accent-classes(colors.$secondary-colors);

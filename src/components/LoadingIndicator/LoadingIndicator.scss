@@ -1,10 +1,10 @@
-@import "constants/style";
+@use "constants/style";
 
 .loading-indicator {
   width: 70px;
 
   text-align: center;
-  color: $navy--900;
+  color: style.$navy--900;
 }
 
 .loading-indicator > div {
@@ -54,6 +54,6 @@
 
 [theme="dark"] {
   .loading-indicator {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

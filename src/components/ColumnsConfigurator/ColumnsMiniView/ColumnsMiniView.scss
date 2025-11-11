@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 // magic w/h
 $mini-column-width: 46px;
@@ -46,24 +46,24 @@ $mini-column-height: 91px;
 
   &--hidden {
     // TODO thinner stripes
-    background-image: $column-stripes--light;
+    background-image: style.$column-stripes--light;
   }
 }
 
 .columns-mini-view__column-index {
-  color: $navy--400;
-  font-size: $text--base;
+  color: style.$navy--400;
+  font-size: style.$text--base;
   font-weight: 600;
 }
 
 [theme="dark"] {
   .columns-mini-view__column {
     &--hidden {
-      background-image: $column-stripes--dark;
+      background-image: style.$column-stripes--dark;
     }
   }
 
   .columns-mini-view__column-index {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

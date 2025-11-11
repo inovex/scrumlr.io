@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 .note-dialog__scrollbar {
   display: flex;
@@ -7,7 +7,7 @@
   //border-radius: $note__border-radius;
 
   overflow: hidden;
-  @include scrollbar();
+  @include style.scrollbar();
 }
 
 // inner container preventing scrollbar flowing over border radius
@@ -22,17 +22,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
 }
 
-@media #{$smartphone} {
+@media #{style.$smartphone} {
   .note-dialog__scrollbar {
     padding-left: 0;
   }
 }
 
-@media screen and (max-width: $breakpoint--desktop) {
+@media screen and (max-width: style.$breakpoint--desktop) {
   .note-dialog__scrollbar {
-    padding-bottom: $spacing--xl;
+    padding-bottom: style.$spacing--xl;
   }
 }

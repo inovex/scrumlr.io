@@ -1,15 +1,15 @@
-@import "constants/style";
+@use "constants/style";
 
 $padding--default: 16px;
 $padding--fitted: 8px;
 
-$line-height--default: $line-height--medium;
+$line-height--default: style.$line-height--medium;
 $border-width--default: 2px;
 $border-width--thick: 3px;
 
 .text-area {
   resize: none;
-  @include scrollbar();
+  @include style.scrollbar();
 
   width: 100%;
 
@@ -30,18 +30,18 @@ $border-width--thick: 3px;
     // used with non-embedded textareas to not mess with default state borders
     &-transparent {
       --text-area-border-width: #{$border-width--default};
-      border-radius: $rounded--default;
+      border-radius: style.$rounded--default;
       border-color: transparent;
     }
 
     &-normal {
       --text-area-border-width: #{$border-width--default};
-      border-radius: $rounded--default;
+      border-radius: style.$rounded--default;
     }
 
     &-thick {
       --text-area-border-width: #{$border-width--thick};
-      border-radius: $rounded--default;
+      border-radius: style.$rounded--default;
     }
   }
 
@@ -64,24 +64,24 @@ $border-width--thick: 3px;
   margin: 0;
   outline: none;
 
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 500;
   line-height: $line-height--default;
 
-  color: $navy--400;
-  background-color: $gray--000;
+  color: style.$navy--400;
+  background-color: style.$gray--000;
 
   &::placeholder {
-    color: $gray--800;
+    color: style.$gray--800;
   }
 
   &--text-dim {
-    color: $gray--800;
+    color: style.$gray--800;
     &:hover,
     &:focus-within {
-      color: $navy--400;
+      color: style.$navy--400;
       &::placeholder {
-        color: $gray--800;
+        color: style.$gray--800;
       }
     }
   }
@@ -96,35 +96,35 @@ $border-width--thick: 3px;
   }
 
   &--fitted {
-    font-size: $text--xs;
+    font-size: style.$text--xs;
     padding: $padding--fitted;
     border-radius: 5px;
   }
 
   &:not(&--embedded) {
-    @include default-states($padding: $padding--fitted);
+    @include style.default-states($padding: $padding--fitted);
   }
   &:not(&--embedded):not(&--fitted) {
-    @include default-states($padding: $padding--default);
+    @include style.default-states($padding: $padding--default);
   }
 }
 
 [theme="dark"] {
   .text-area {
-    color: $gray--300;
+    color: style.$gray--300;
     &:not(&--embedded) {
-      background-color: $navy--400;
+      background-color: style.$navy--400;
     }
 
     &::placeholder {
-      color: $gray--800;
+      color: style.$gray--800;
     }
 
     &:hover,
     &:focus-within {
-      color: $gray--300;
+      color: style.$gray--300;
       &::placeholder {
-        color: $gray--300;
+        color: style.$gray--300;
       }
     }
 

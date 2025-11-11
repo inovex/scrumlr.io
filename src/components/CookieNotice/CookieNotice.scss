@@ -1,21 +1,21 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .cookie-notice {
-  background: $gray--000;
-  color: $navy--900;
+  background: style.$gray--000;
+  color: style.$navy--900;
   position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
-  padding: $spacing--base;
-  box-shadow: 0 -4px 16px rgba($blue--500, 0.16);
+  padding: style.$spacing--base;
+  box-shadow: 0 -4px 16px rgba(style.$blue--500, 0.16);
 }
 
 .cookie-notice__buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing--xs;
-  margin-top: $spacing--base;
+  gap: style.$spacing--xs;
+  margin-top: style.$spacing--base;
 
   @media (max-width: 768px) {
     flex-direction: column-reverse;
@@ -24,25 +24,25 @@
 
 .cookie-notice__button {
   border: none;
-  padding: $spacing--xs $spacing--base;
+  padding: style.$spacing--xs style.$spacing--base;
   border-radius: 5px;
-  font-size: $text-size--medium;
+  font-size: style.$text-size--medium;
   cursor: pointer;
 
   &-accept {
     @extend .cookie-notice__button;
-    background: $blue--500;
-    color: $gray--000;
+    background: style.$blue--500;
+    color: style.$gray--000;
   }
   &-decline {
     @extend .cookie-notice__button;
-    background: $gray--300;
-    color: $navy--700;
+    background: style.$gray--300;
+    color: style.$navy--700;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
-    background: $gray--300;
-    color: $navy--700;
+    background: style.$gray--300;
+    color: style.$navy--700;
     flex: 1;
 
     @media (max-width: 768px) {
@@ -58,6 +58,6 @@
 
 [theme="dark"] {
   .cookie-notice {
-    box-shadow: 0 -4px 16px rgba($navy--900, 0.48);
+    box-shadow: 0 -4px 16px rgba(style.$navy--900, 0.48);
   }
 }

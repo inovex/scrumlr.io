@@ -1,6 +1,6 @@
-@import "constants/style";
+@use "constants/style";
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   #portal {
     .timer-dialog {
       top: calc(50% - 105px - 25px + 46px);
@@ -17,7 +17,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $pink--500;
+      border-color: transparent transparent transparent style.$pink--500;
     }
 
     .timer-dialog::after {
@@ -27,28 +27,28 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $gray--100;
+      border-color: transparent transparent transparent style.$gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .timer-dialog::after {
-      border-color: transparent transparent transparent $navy--600;
+      border-color: transparent transparent transparent style.$navy--600;
     }
   }
 }
 
 .timer-dialog__time-button {
-  height: $icon--medium;
-  width: $icon--medium;
-  border: 1px solid $pink--500;
-  border-radius: $rounded--full;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
+  border: 1px solid style.$pink--500;
+  border-radius: style.$rounded--full;
   background-color: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-  color: $pink--500;
+  color: style.$pink--500;
 
   > svg {
     height: 100%;
@@ -72,7 +72,7 @@
 .timer-dialog__time-label {
   text-align: center;
   line-height: normal;
-  font-size: $text-size--medium;
+  font-size: style.$text-size--medium;
   width: 20px;
 }
 [theme="dark"] .timer-dialog__time-label {
@@ -85,14 +85,14 @@
   align-items: center;
   height: 24px;
   width: 24px;
-  border: 1px solid $pink--500;
+  border: 1px solid style.$pink--500;
   border-radius: 999px;
-  color: $pink--500;
+  color: style.$pink--500;
   font-size: 14px;
 }
 
 .timer-dialog__custom-time-controls {
   display: flex;
   align-items: center;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
 }

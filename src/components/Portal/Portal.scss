@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 #portal {
   position: fixed;
@@ -7,7 +7,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  z-index: $backdrop-z-index;
+  z-index: style.$backdrop-z-index;
 }
 
 .portal {
@@ -22,7 +22,7 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  padding-top: $header__height;
+  padding-top: style.$header__height;
 
   // enable scroll of content
   overflow: auto;
@@ -32,7 +32,7 @@
   justify-content: center;
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .portal__frame {
     padding: 128px 128px;
 

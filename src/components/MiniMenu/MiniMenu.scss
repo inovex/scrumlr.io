@@ -1,27 +1,27 @@
-@import "constants/style";
+@use "constants/style";
 
 $height--default: 48px;
 $height--small: 36px;
 
 $icon--default: 40px;
-$icon--small: 24px;
+style.$icon--small: 24px;
 
 .mini-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $spacing--xxs;
+  gap: style.$spacing--xxs;
   justify-content: center;
 
   width: fit-content;
   height: fit-content;
   min-height: $height--default;
-  padding-left: $spacing--xxs 2px;
+  padding-left: style.$spacing--xxs 2px;
 
-  border-radius: $rounded--full;
-  box-shadow: 0 0 20px rgba($navy--400, 0.12);
+  border-radius: style.$rounded--full;
+  box-shadow: 0 0 20px rgba(style.$navy--400, 0.12);
 
-  background-color: $gray--000;
+  background-color: style.$gray--000;
 
   &--transparent {
     background: none;
@@ -44,32 +44,32 @@ $icon--small: 24px;
 
   width: $icon--default;
   height: $icon--default;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
 
-  color: $navy--900;
+  color: style.$navy--900;
   background-color: transparent;
 
   cursor: pointer;
 
   &--small {
-    width: $icon--small;
-    height: $icon--small;
+    width: style.$icon--small;
+    height: style.$icon--small;
   }
 
   &:hover {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
   }
 
   &:focus-visible {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
   }
 
   &--active {
-    color: $gray--000;
-    background-color: $navy--400;
+    color: style.$gray--000;
+    background-color: style.$navy--400;
 
     &:hover {
-      background-color: $navy--600;
+      background-color: style.$navy--600;
     }
   }
 
@@ -82,45 +82,45 @@ $icon--small: 24px;
 }
 
 .mini-menu:first-child {
-  padding-left: $spacing--xxs;
+  padding-left: style.$spacing--xxs;
 }
 
 .mini-menu:last-child {
-  padding-right: $spacing--xxs;
+  padding-right: style.$spacing--xxs;
 }
 
 [theme="dark"] {
   .mini-menu__item {
-    color: $gray--000;
+    color: style.$gray--000;
 
     &:hover {
       // TODO check if designs aligns with the other employed mini menus
-      color: $navy--400;
-      background-color: $gray--000;
+      color: style.$navy--400;
+      background-color: style.$gray--000;
     }
 
     &:focus-visible {
-      background-color: $navy--600;
+      background-color: style.$navy--600;
     }
 
     &--active {
-      color: $gray--000;
-      background-color: $navy--600;
+      color: style.$gray--000;
+      background-color: style.$navy--600;
 
       &:hover {
-        background-color: $navy--600;
+        background-color: style.$navy--600;
       }
     }
 
     &:disabled {
       &:hover {
-        color: $gray--000;
+        color: style.$gray--000;
         background-color: transparent;
       }
     }
   }
   .mini-menu {
-    background-color: $navy--400;
+    background-color: style.$navy--400;
 
     &--transparent {
       background: none; // reset transparent bgc
@@ -133,7 +133,7 @@ $icon--small: 24px;
   display: none;
 }
 
-@media #{$smartphone} {
+@media #{style.$smartphone} {
   .mini-menu {
     &--wrap-to-column {
       // only wrap if activated
@@ -144,7 +144,7 @@ $icon--small: 24px;
       top: 0;
 
       &:first-child {
-        padding: $spacing--xxs;
+        padding: style.$spacing--xxs;
       }
     }
   }

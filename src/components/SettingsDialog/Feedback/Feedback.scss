@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 $FEEDBACK_OPTION_HEIGHT: 96px;
 $FEEDBACK_OPTION_WIDTH: 80px;
@@ -7,7 +7,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: $spacing--lg;
+  gap: style.$spacing--lg;
   height: $FEEDBACK_OPTION_HEIGHT;
 }
 
@@ -25,14 +25,14 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   gap: 4px;
   height: $FEEDBACK_OPTION_HEIGHT;
   width: $FEEDBACK_OPTION_WIDTH;
-  padding: $spacing--xs;
+  padding: style.$spacing--xs;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  font-size: $text-size--small;
+  font-size: style.$text-size--small;
   font-weight: 500;
-  color: $navy--900;
-  background-color: $gray--000;
+  color: style.$navy--900;
+  background-color: style.$gray--000;
   position: relative;
   top: -19px;
   &:hover {
@@ -40,12 +40,12 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
-  color: $gray--000;
+  color: style.$gray--000;
   background-color: var(--accent-color--light);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
-  color: $gray--000;
-  background-color: $navy--500;
+  color: style.$gray--000;
+  background-color: style.$navy--500;
   &:hover {
     background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
@@ -55,14 +55,14 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing--lg;
+  gap: style.$spacing--lg;
 }
 
 .feedback-form__submit-button {
-  padding: $spacing--xs $spacing--lg;
+  padding: style.$spacing--xs style.$spacing--lg;
   border-radius: 32px;
   background-color: var(--accent-color--light);
-  color: $gray--000;
+  color: style.$gray--000;
   border: none;
   width: 260px;
   font-weight: bold;
@@ -81,8 +81,8 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   flex-direction: column;
   align-items: flex-start;
   height: auto;
-  gap: $spacing--xs;
-  padding: $spacing--base $spacing--lg;
+  gap: style.$spacing--xs;
+  padding: style.$spacing--base style.$spacing--lg;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
@@ -110,12 +110,12 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   padding: 0;
 }
 [theme="dark"] .feedback-form__contact-input {
-  color: $gray--000;
+  color: style.$gray--000;
 }
 
 .settings-dialog__error-message {
-  margin-top: $spacing--base;
-  color: $critical-carmine--light;
+  margin-top: style.$spacing--base;
+  color: style.$critical-carmine--light;
   width: 100%;
   text-align: center;
 }

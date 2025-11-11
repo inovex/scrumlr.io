@@ -1,11 +1,11 @@
-@import "constants/style";
+@use "constants/style";
 
 $stable-content-width: 80%;
 
 .template-editor {
   display: flex;
   flex-direction: column;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
 
   min-width: 0;
   width: 100%;
@@ -21,7 +21,7 @@ $stable-content-width: 80%;
   grid-template-areas:
     "name"
     "description";
-  row-gap: $spacing--base;
+  row-gap: style.$spacing--base;
   align-self: center;
 
   min-width: 0;
@@ -41,10 +41,10 @@ $stable-content-width: 80%;
 
 .template-editor__name-input {
   .input__input {
-    color: $navy--600;
+    color: style.$navy--600;
 
     &:focus {
-      color: $navy--600;
+      color: style.$navy--600;
     }
   }
 }
@@ -54,7 +54,7 @@ $stable-content-width: 80%;
 .template-editor__debug {
   grid-area: debug;
   justify-self: center;
-  color: $pink--500;
+  color: style.$pink--500;
 }
 
 // columns, mini view. width extending up to inherited bleeding edges
@@ -63,7 +63,7 @@ $stable-content-width: 80%;
   grid-template-columns: subgrid;
   grid-column: bleed-start / bleed-end; // defined by parent grid
   grid-template-rows: min-content;
-  row-gap: $spacing--base;
+  row-gap: style.$spacing--base;
 
   grid-template-areas: "columns";
 }
@@ -76,7 +76,7 @@ $stable-content-width: 80%;
     "info"
     "buttons";
   align-self: center;
-  row-gap: $spacing--lg;
+  row-gap: style.$spacing--lg;
 
   min-width: 0;
   width: $stable-content-width;
@@ -113,11 +113,11 @@ $stable-content-width: 80%;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
 }
 
 .template-editor__info-text {
-  color: $navy--900;
+  color: style.$navy--900;
   font-weight: 400;
 }
 
@@ -125,12 +125,12 @@ $stable-content-width: 80%;
   grid-area: buttons;
   display: flex;
   justify-content: flex-end;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
 
   width: 100%;
 }
 
-@media (screen and max-width: $breakpoint--smartphone) {
+@media (screen and max-width: style.$breakpoint--smartphone) {
   // on smaller screens, align all content to bleeding edges
   .template-editor__header,
   .template-editor__footer {
@@ -155,15 +155,15 @@ $stable-content-width: 80%;
 [theme="dark"] {
   .template-editor__info,
   .template-editor__info-text {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .template-editor__name-input {
     .input__input {
-      color: $gray--000;
+      color: style.$gray--000;
 
       &:focus {
-        color: $gray--000;
+        color: style.$gray--000;
       }
     }
   }

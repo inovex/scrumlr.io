@@ -1,15 +1,15 @@
-@import "constants/style";
+@use "constants/style";
 
 .settings-input__container {
   position: relative;
   display: flex;
   align-items: center;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
   height: 48px;
-  padding: 0 $spacing--lg;
-  border-radius: $rounded--small;
-  background-color: $gray--000;
-  color: $navy--900;
+  padding: 0 style.$spacing--lg;
+  border-radius: style.$rounded--small;
+  background-color: style.$gray--000;
+  color: style.$navy--900;
 
   &:has(:focus-visible),
   &:hover {
@@ -19,8 +19,8 @@
 
 .settings-input__label {
   position: absolute;
-  margin: $spacing--base 0;
-  line-height: $line-height--small;
+  margin: style.$spacing--base 0;
+  line-height: style.$line-height--small;
   cursor: text;
   transition: all 0.08s ease-out;
 }
@@ -33,13 +33,13 @@
   outline: none;
   padding-top: 10px;
   background-color: transparent;
-  font-size: $text-size--medium;
+  font-size: style.$text-size--medium;
   font-weight: bold;
   color: inherit;
 
   &:disabled {
     cursor: default;
-    background-color: $gray--000;
+    background-color: style.$gray--000;
   }
 
   &:focus-visible ~ label,
@@ -47,8 +47,8 @@
   &:not(:placeholder-shown) ~ label {
     top: 2px;
     margin: 0;
-    font-size: $text-size--small;
-    line-height: $line-height--medium;
+    font-size: style.$text-size--small;
+    line-height: style.$line-height--medium;
   }
 
   &:focus ~ .settings-input__length {
@@ -65,9 +65,9 @@
   position: absolute;
   right: 0;
   top: 2px;
-  margin: 0 $spacing--lg;
-  font-size: $text-size--small;
-  line-height: $line-height--small;
+  margin: 0 style.$spacing--lg;
+  font-size: style.$text-size--small;
+  line-height: style.$line-height--small;
   opacity: 0;
   transition: opacity 100ms;
 }
@@ -78,7 +78,7 @@
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
   background-color: transparent;
   color: inherit;
   cursor: pointer;
@@ -90,11 +90,11 @@
 
 [theme="dark"] {
   .settings-input__container {
-    background-color: $navy--500;
-    color: $gray--000;
+    background-color: style.$navy--500;
+    color: style.$gray--000;
   }
 
   .settings-input__input:disabled {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

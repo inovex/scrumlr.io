@@ -1,27 +1,27 @@
-@import "constants/style";
+@use "constants/style";
 
 .confirmation-dialog__background {
   position: fixed;
-  @include inset-0;
-  background-color: rgba($color: $blue--500, $alpha: 0.1);
+  @include style.inset-0;
+  background-color: rgba($color: style.$blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
 
 .confirmation-dialog__wrapper {
   position: fixed;
-  @include inset-0;
-  @include flex-center;
+  @include style.inset-0;
+  @include style.flex-center;
 }
 
 .confirmation-dialog {
   min-width: 220px;
   max-width: 570px;
-  color: $navy--900;
-  background-color: $gray--000;
-  border-radius: $rounded--medium;
+  color: style.$navy--900;
+  background-color: style.$gray--000;
+  border-radius: style.$rounded--medium;
   padding: 40px 42px 35px 40px;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgba($blue--500, 0.24);
+  box-shadow: 0 16px 32px 0 rgba(style.$blue--500, 0.24);
 }
 
 .confirmation-dialog__icon-content-wrapper {
@@ -46,7 +46,7 @@
 }
 .confirmation-dialog__title {
   margin: 0px;
-  letter-spacing: $letter-spacing--small;
+  letter-spacing: style.$letter-spacing--small;
 }
 
 .confirmation-dialog__warning {
@@ -58,17 +58,17 @@
 }
 .confirmation-dialog__warning > svg {
   color: var(--accent-color--light);
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
   opacity: 0.8;
 }
 .confirmation-dialog__warning > p {
   margin: 0px;
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--small;
+  font-size: style.$text-size--medium;
+  letter-spacing: style.$letter-spacing--small;
 }
 
-@media #{$mini-smartphone} {
+@media #{style.$mini-smartphone} {
   .confirmation-dialog__icon {
     display: none;
   }
@@ -87,10 +87,10 @@
 }
 
 .confirmation-dialog__button {
-  border: 2px solid $blue--500;
-  border-radius: $rounded--full;
-  padding: $spacing--xs $spacing--lg;
-  font-size: $text-size--medium;
+  border: 2px solid style.$blue--500;
+  border-radius: style.$rounded--full;
+  padding: style.$spacing--xs style.$spacing--lg;
+  font-size: style.$text-size--medium;
   font-weight: bold;
   min-height: 48px;
   cursor: pointer;
@@ -99,21 +99,21 @@
     box-shadow 80ms linear;
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 10px 0 rgba($color: $blue--500, $alpha: 0.2);
+    box-shadow: 0 4px 10px 0 rgba($color: style.$blue--500, $alpha: 0.2);
   }
 }
 .confirmation-dialog__button--accept {
-  color: $gray--000;
-  background-color: $blue--500;
+  color: style.$gray--000;
+  background-color: style.$blue--500;
 }
 .confirmation-dialog__button--decline {
-  color: $blue--500;
-  background-color: rgba($color: $blue--500, $alpha: 0.1);
+  color: style.$blue--500;
+  background-color: rgba($color: style.$blue--500, $alpha: 0.1);
 }
 .confirmation-dialog__buttons {
   display: flex;
   justify-content: flex-end;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
 }
 
 .confirmation-dialog__close-button {
@@ -121,22 +121,22 @@
   top: 0;
   right: 0;
   transform: translate(50%, -50%);
-  @include flex-center;
-  color: $blue--500;
-  height: $icon--extralarge;
-  width: $icon--extralarge;
-  border-radius: $rounded--full;
+  @include style.flex-center;
+  color: style.$blue--500;
+  height: style.$icon--extralarge;
+  width: style.$icon--extralarge;
+  border-radius: style.$rounded--full;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgba($blue--500, 0.24);
+  box-shadow: 0 16px 32px 0 rgba(style.$blue--500, 0.24);
   padding: 0;
-  background-color: $gray--000;
+  background-color: style.$gray--000;
   cursor: pointer;
   transition:
     color 80ms linear,
     background-color 80ms linear;
   &:hover {
-    color: $gray--000;
-    background-color: $blue--500;
+    color: style.$gray--000;
+    background-color: style.$blue--500;
   }
 }
 .confirmation-dialog__close-button > svg {
@@ -145,38 +145,38 @@
 }
 [theme="dark"] {
   .confirmation-dialog__background {
-    background-color: rgba($color: $pink--500, $alpha: 0.1);
+    background-color: rgba($color: style.$pink--500, $alpha: 0.1);
   }
 
   .confirmation-dialog {
-    color: $gray--000;
-    background-color: $navy--600;
-    border-color: $pink--500;
-    box-shadow: $box-shadow--dark;
+    color: style.$gray--000;
+    background-color: style.$navy--600;
+    border-color: style.$pink--500;
+    box-shadow: style.$box-shadow--dark;
   }
 
   .confirmation-dialog__button {
-    border-color: $pink--500;
+    border-color: style.$pink--500;
     &:hover {
-      box-shadow: 0 4px 8px rgba($color: $pink--500, $alpha: 0.2);
+      box-shadow: 0 4px 8px rgba($color: style.$pink--500, $alpha: 0.2);
     }
   }
   .confirmation-dialog__button--accept {
-    background-color: $pink--500;
+    background-color: style.$pink--500;
   }
   .confirmation-dialog__button--decline {
-    color: $pink--500;
-    background-color: rgba($color: $pink--500, $alpha: 0.1);
+    color: style.$pink--500;
+    background-color: rgba($color: style.$pink--500, $alpha: 0.1);
   }
 
   .confirmation-dialog__close-button {
-    color: $pink--500;
-    background-color: $navy--500;
-    border-color: $pink--500;
-    box-shadow: $box-shadow--dark;
+    color: style.$pink--500;
+    background-color: style.$navy--500;
+    border-color: style.$pink--500;
+    box-shadow: style.$box-shadow--dark;
     &:hover {
-      color: $gray--000;
-      background-color: $pink--500;
+      color: style.$gray--000;
+      background-color: style.$pink--500;
     }
   }
 }

@@ -1,5 +1,5 @@
 @use "sass:color";
-@import "constants/style.scss";
+@use "constants/style";
 
 $timer-display-width: 114px;
 $timer__content-height: 38px;
@@ -17,9 +17,9 @@ $timer__progress-bar-color: #6096ff;
 .timer__increment-button {
   position: relative;
   border: 0;
-  background-color: $gray--000;
-  box-shadow: $box-shadow--light;
-  border-radius: $rounded--full;
+  background-color: style.$gray--000;
+  box-shadow: style.$box-shadow--light;
+  border-radius: style.$rounded--full;
   height: 42px;
   width: 42px;
   color: white;
@@ -28,42 +28,42 @@ $timer__progress-bar-color: #6096ff;
   place-content: center;
   outline: none;
   transition: background-color 150ms linear;
-  color: $navy--900;
+  color: style.$navy--900;
 
   > svg {
-    height: $icon--medium;
-    width: $icon--medium;
+    height: style.$icon--medium;
+    width: style.$icon--medium;
   }
 
   &:hover {
-    background-color: getLightHoverBackground($gray--000);
+    background-color: style.getLightHoverBackground(style.$gray--000);
   }
 
   &:focus-visible {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 
 .timer {
   height: 100%;
   width: $timer-display-width;
-  color: $navy--500;
-  background-color: $gray--000;
-  border-radius: $rounded--full;
+  color: style.$navy--500;
+  background-color: style.$gray--000;
+  border-radius: style.$rounded--full;
   position: relative;
-  border: 2px solid $gray--000;
-  box-shadow: $box-shadow--light;
+  border: 2px solid style.$gray--000;
+  box-shadow: style.$box-shadow--light;
 
   &:has(:focus-visible) {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 .timer > svg {
   position: absolute;
   height: $timer__content-height;
   width: $timer__content-height;
-  background-color: $navy--500;
-  color: $gray--000;
+  background-color: style.$navy--500;
+  color: style.$gray--000;
   border-radius: 100%;
 }
 
@@ -84,8 +84,8 @@ $timer__progress-bar-color: #6096ff;
   top: 0;
   left: calc($timer__content-height / 2);
   height: $timer__content-height;
-  border-top-right-radius: $rounded--full;
-  border-bottom-right-radius: $rounded--full;
+  border-top-right-radius: style.$rounded--full;
+  border-bottom-right-radius: style.$rounded--full;
   background-color: $timer__progress-bar-color;
   transition: right 250ms linear;
 }
@@ -94,13 +94,13 @@ $timer__progress-bar-color: #6096ff;
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: $rounded--full;
-  background-color: $gray--000;
+  border-radius: style.$rounded--full;
+  background-color: style.$gray--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: $spacing--xs;
-  padding-right: $spacing--xxs;
+  gap: style.$spacing--xs;
+  padding-right: style.$spacing--xxs;
   list-style: none;
   margin: 0;
   opacity: 0;
@@ -115,15 +115,15 @@ $timer__progress-bar-color: #6096ff;
   position: relative;
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
 }
 
 .short-action__button {
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
-  border-radius: $rounded--full;
-  background-color: $gray--300;
-  color: $navy--500;
+  border-radius: style.$rounded--full;
+  background-color: style.$gray--300;
+  color: style.$navy--500;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -133,11 +133,11 @@ $timer__progress-bar-color: #6096ff;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($gray--300);
+    background-color: style.getLightHoverBackground(style.$gray--300);
   }
 
   &:focus-visible {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 
@@ -147,8 +147,8 @@ $timer__progress-bar-color: #6096ff;
   width: 100%;
 }
 .short-action__button > .short-action__flag-icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;
@@ -164,46 +164,46 @@ $timer__progress-bar-color: #6096ff;
 
 [theme="dark"] {
   .timer {
-    color: $gray--000;
-    background-color: $navy--500;
-    border-color: $navy--500;
+    color: style.$gray--000;
+    background-color: style.$navy--500;
+    border-color: style.$navy--500;
 
     &:has(:focus-visible) {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
   .timer > svg {
-    background-color: $gray--000;
-    color: $navy--500;
+    background-color: style.$gray--000;
+    color: style.$navy--500;
   }
 
   .timer__increment-button {
-    color: $gray--000;
-    background-color: $navy--500;
+    color: style.$gray--000;
+    background-color: style.$navy--500;
 
     &:hover {
-      background-color: getDarkHoverBackground($navy--500);
+      background-color: style.getDarkHoverBackground(style.$navy--500);
     }
 
     &:focus-visible {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
 
   .timer__short-actions {
-    background-color: $navy--500;
+    background-color: style.$navy--500;
   }
 
   .short-action__button {
-    background-color: $navy--600;
-    color: $gray--000;
+    background-color: style.$navy--600;
+    color: style.$gray--000;
 
     &:hover {
-      background-color: getDarkHoverBackground($navy--600);
+      background-color: style.getDarkHoverBackground(style.$navy--600);
     }
 
     &:focus-visible {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
 }

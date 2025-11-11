@@ -1,24 +1,24 @@
-@import "constants/style";
+@use "constants/style";
 
 .note-reaction-list__root {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $reaction__gap-size;
+  gap: style.$reaction__gap-size;
 }
 
 .note-reaction-list__reaction-bar-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $reaction__gap-size;
+  gap: style.$reaction__gap-size;
 
-  padding-left: $reaction-list__left-spacing; // line up icon with Note header
+  padding-left: style.$reaction-list__left-spacing; // line up icon with Note header
 
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
 
   &--active {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
   }
 }
 
@@ -28,13 +28,13 @@
   display: grid;
   place-content: center;
 
-  width: $reaction__inner-size;
-  height: $reaction__inner-size;
+  width: style.$reaction__inner-size;
+  height: style.$reaction__inner-size;
 
-  padding: $reaction__padding--inner;
+  padding: style.$reaction__padding--inner;
 
-  border-radius: $rounded--full;
-  background-color: $gray--300;
+  border-radius: style.$rounded--full;
+  background-color: style.$gray--300;
 
   cursor: pointer;
 
@@ -47,16 +47,16 @@
 }
 
 .note-reaction-list__add-reaction-sticker {
-  width: $icon--medium;
-  height: $icon--medium;
-  color: $navy--900;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
+  color: style.$navy--900;
 }
 
 .note-reaction-list__reaction-chips-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $reaction__gap-size;
+  gap: style.$reaction__gap-size;
 
   user-select: none;
 }
@@ -64,19 +64,19 @@
 [theme="dark"] {
   .note-reaction-list__reaction-bar-container {
     &--active {
-      background-color: $navy--600;
+      background-color: style.$navy--600;
     }
   }
 
   .note-reaction-list__add-reaction-sticker-container {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
 
     &:hover {
-      background-color: $navy--300;
+      background-color: style.$navy--300;
     }
   }
 
   .note-reaction-list__add-reaction-sticker {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

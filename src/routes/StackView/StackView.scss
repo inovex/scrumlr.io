@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 $stack-view__header-height: 164px;
 $stack-view__navigation-height: 14vh;
@@ -16,7 +16,7 @@ $stack-view__min-height: 82px;
   grid-template-rows: $stack-view__header-height auto 1fr;
   justify-items: center;
 
-  padding-top: $spacing--xl;
+  padding-top: style.$spacing--xl;
 }
 
 .stack-view__border {
@@ -27,25 +27,25 @@ $stack-view__min-height: 82px;
   left: 0;
   pointer-events: none;
   background: transparent;
-  box-shadow: inset 0 0 0 $column__border-width var(--accent-color--light);
+  box-shadow: inset 0 0 0 style.$column__border-width var(--accent-color--light);
   transition: box-shadow 0.2s ease-out;
 }
 
 .stack-view__border--moderating {
-  box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
+  box-shadow: inset 0 0 0 style.$column__border-width style.$victory-verde--light;
 }
 
 .stack-view__content {
   position: relative;
 
   // subtracting header, navigation, and spacing from viewport height to limit extendable note
-  height: calc(100vh - ($spacing--xl + $stack-view__header-height + $stack-view__navigation-height + $spacing--xl));
+  height: calc(100vh - (style.$spacing--xl + $stack-view__header-height + $stack-view__navigation-height + style.$spacing--xl));
   width: 100vw;
-  border-radius: $note__border-radius;
+  border-radius: style.$note__border-radius;
 
   overflow: visible;
 
-  @include scrollbar();
+  @include style.scrollbar();
 }
 
 // inner container preventing scrollbar flowing over border radius
@@ -66,8 +66,8 @@ $stack-view__min-height: 82px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  max-height: $stack-content-max-height;
-  gap: $spacing--sm;
+  max-height: style.$stack-content-max-height;
+  gap: style.$spacing--sm;
 }
 
 .stack-view__disabled-click {
@@ -79,10 +79,10 @@ $stack-view__min-height: 82px;
   position: absolute;
   top: 0;
   right: 0;
-  margin: $spacing--base;
+  margin: style.$spacing--base;
   cursor: pointer;
   width: 42px;
-  color: $gray--000;
+  color: style.$gray--000;
   transition: all 0.08s ease-out;
 
   > svg {
@@ -106,49 +106,49 @@ $stack-view__min-height: 82px;
 .stack-view__parent-note {
   margin: 0;
   max-width: 700px;
-  font-size: $text-size--large;
+  font-size: style.$text-size--large;
 
   align-self: center;
 
-  z-index: $request-z-index;
+  z-index: style.$request-z-index;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {
-    line-height: $line-height--large;
+    line-height: style.$line-height--large;
   }
 
   .vote-button-add {
-    margin: 0 0 0 $spacing--xs;
+    margin: 0 0 0 style.$spacing--xs;
   }
 }
 
-@media screen and (max-width: $breakpoint--desktop) {
+@media screen and (max-width: style.$breakpoint--desktop) {
   .stack-view__notes {
     flex-direction: column;
     max-height: initial;
   }
 
   .stack-view__parent-note .note-dialog__note-content-text {
-    max-height: $stack-content-max-height--mobile; // initial for full height
+    max-height: style.$stack-content-max-height--mobile; // initial for full height
   }
 
   .stack-view__child-note .note-dialog__note-content-text {
-    max-height: $stack-content-max-height--mobile; // initial for full height
+    max-height: style.$stack-content-max-height--mobile; // initial for full height
   }
 }
 
 [theme="dark"] {
   .stack-view__portal {
     backdrop-filter: blur(10px) brightness(0.24) saturate(0);
-    box-shadow: inset 0 0 0 $column__border-width var(--accent-color--dark);
+    box-shadow: inset 0 0 0 style.$column__border-width var(--accent-color--dark);
     background: rgba(var(--accent-color--light-rgb), 0.1);
   }
 
   .stack-view__border {
-    box-shadow: inset 0 0 0 $column__border-width var(--accent-color--dark);
+    box-shadow: inset 0 0 0 style.$column__border-width var(--accent-color--dark);
   }
 
   .stack-view__border--moderating {
-    box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
+    box-shadow: inset 0 0 0 style.$column__border-width style.$victory-verde--light;
   }
 }

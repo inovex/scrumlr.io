@@ -1,9 +1,9 @@
-@import "constants/style.scss";
-@import "routes/StackView/StackView.scss";
+@use "constants/style";
+@use "routes/StackView/StackView";
 
 .stack-view__navigation {
-  height: $stack-view__navigation-height;
-  min-height: $stack-view__min-height;
+  height: StackView.$stack-view__navigation-height;
+  min-height: StackView.$stack-view__min-height;
   width: 82vw;
   display: flex;
   flex-direction: row;
@@ -21,20 +21,20 @@
   justify-content: center;
   align-items: center;
   opacity: 0.5;
-  background: $gray--000;
+  background: style.$gray--000;
   border: 3px solid transparent;
   border-radius: 100%;
   outline: none;
-  box-shadow: $box-shadow--light;
-  color: $navy--900;
+  box-shadow: style.$box-shadow--light;
+  color: style.$navy--900;
   padding: 0;
   margin: 0;
 
   transition: all 0.08s ease-out;
 
   > svg {
-    height: $icon--large;
-    width: $icon--large;
+    height: style.$icon--large;
+    width: style.$icon--large;
   }
 
   &:enabled {
@@ -47,7 +47,7 @@
 
     &:focus-visible {
       background: var(--accent-color--light);
-      color: $gray--000;
+      color: style.$gray--000;
     }
 
     &:active {
@@ -58,21 +58,21 @@
 
 [theme="dark"] {
   .stack-view__navigation-button {
-    background: $navy--500;
-    color: $gray--000;
+    background: style.$navy--500;
+    color: style.$gray--000;
 
     &:enabled:focus-visible {
       background: var(--accent-color--dark);
-      color: $navy--900;
+      color: style.$navy--900;
     }
 
     &:disabled {
-      color: $navy--700;
+      color: style.$navy--700;
     }
   }
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .stack-view__navigation {
     width: 42vw;
   }

@@ -1,33 +1,33 @@
-@import "constants/style";
+@use "constants/style";
 $header-menu__item-height: 48px;
 
 .board-option-link {
   display: block;
   width: 100%;
-  background: $gray--000;
+  background: style.$gray--000;
   text-decoration: none;
   outline: none;
   height: $header-menu__item-height;
 
   &:hover {
-    filter: $darken--slightly;
+    filter: style.$darken--slightly;
   }
 
   &:focus-visible {
-    background-color: $gray--200;
+    background-color: style.$gray--200;
   }
 }
 
 [theme="dark"] {
   .board-option-link {
-    background-color: $navy--500;
+    background-color: style.$navy--500;
 
     &:hover {
-      filter: $brighten--slightly;
+      filter: style.$brighten--slightly;
     }
 
     &:focus-visible {
-      background-color: $navy--400;
+      background-color: style.$navy--400;
     }
   }
 }
@@ -36,10 +36,10 @@ $header-menu__item-height: 48px;
   margin: 0;
   text-align: center;
   line-height: $header-menu__item-height;
-  color: $blue--500;
+  color: style.$blue--500;
   font-weight: 600;
 }
 
 [theme="dark"] .board-option-link__label {
-  color: $pink--500;
+  color: style.$pink--500;
 }

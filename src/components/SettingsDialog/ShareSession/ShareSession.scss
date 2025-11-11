@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
@@ -20,13 +20,13 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .share-qr-code-option__copy-to-clipboard {
-  padding: $spacing--xs $spacing--lg;
-  margin-top: $spacing--xl;
+  padding: style.$spacing--xs style.$spacing--lg;
+  margin-top: style.$spacing--xl;
   width: 260px;
   border: solid 2px var(--accent-color--light);
   border-radius: 32px;
   background-color: var(--accent-color--light);
-  color: $gray--000;
+  color: style.$gray--000;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.08s ease-out;
@@ -59,7 +59,7 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .share-session__hint {
-  color: $gray--800;
+  color: style.$gray--800;
   text-align: center;
   text-decoration: underline;
 }

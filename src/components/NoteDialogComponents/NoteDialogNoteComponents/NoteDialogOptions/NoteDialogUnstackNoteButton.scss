@@ -1,9 +1,9 @@
-@import "constants/style";
-@import "./NoteDialogNoteOptions.scss";
+@use "constants/style";
+@use "NoteDialogNoteOptions";
 
 .note-dialog__note-option__unstack {
-  height: $icon--large;
-  width: $icon--large;
+  height: style.$icon--large;
+  width: style.$icon--large;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,13 +15,13 @@
 }
 .note-dialog__note-option__unstack:hover {
   background-color: var(--accent-color--light);
-  color: $gray--000;
+  color: style.$gray--000;
 }
 .note-dialog__note-option__unstack:focus-visible {
   outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
 }
 
 .note-dialog__note-option__unstack-icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
 }

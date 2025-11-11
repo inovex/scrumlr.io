@@ -1,12 +1,12 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .tooltip-container .tooltip {
-  background-color: $blue--100;
-  border-radius: $rounded--full;
-  color: $navy--900;
-  font-size: $text--sm;
+  background-color: style.$blue--100;
+  border-radius: style.$rounded--full;
+  color: style.$navy--900;
+  font-size: style.$text--sm;
   font-weight: 600;
-  padding: $spacing--xs $spacing--base;
+  padding: style.$spacing--xs style.$spacing--base;
   z-index: 9999;
   word-wrap: break-word;
   white-space: normal;
@@ -18,6 +18,6 @@
 }
 
 [theme="dark"] .tooltip-container .tooltip {
-  background-color: $navy--300;
-  color: $gray--000;
+  background-color: style.$navy--300;
+  color: style.$gray--000;
 }

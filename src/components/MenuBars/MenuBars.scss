@@ -1,11 +1,11 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 $tooltip-gap: 12px;
 $menu-mobile__width: 72px;
 
 .menu-bars-mobile {
   display: none;
-  z-index: $menu-z-index;
+  z-index: style.$menu-z-index;
   position: fixed;
   transition:
     bottom 0.25s,
@@ -41,66 +41,66 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab {
-  background: $gray--000;
-  border-radius: $rounded--full;
+  background: style.$gray--000;
+  border-radius: style.$rounded--full;
   cursor: pointer;
   width: $menu-mobile__width;
   height: $menu-mobile__width;
   border: none;
-  box-shadow: $box-shadow--light;
-  z-index: $menu-item-z-index + $base-z-index-step;
+  box-shadow: style.$box-shadow--light;
+  z-index: style.$menu-item-z-index + style.$base-z-index-step;
   transition: all 0.2s ease-out;
 
   svg {
     path {
-      fill: $navy--900;
+      fill: style.$navy--900;
     }
   }
 }
 
 .menu-bars-mobile__fab-option {
   .tooltip-button__icon {
-    border-radius: $rounded--full;
+    border-radius: style.$rounded--full;
     margin: 0;
 
     &--active {
-      background-color: $navy--500;
+      background-color: style.$navy--500;
     }
   }
 
   &:nth-child(1) {
-    z-index: $menu-item-z-index;
+    z-index: style.$menu-item-z-index;
   }
 
   &:nth-child(1) {
-    z-index: $menu-item-z-index - 1 * $base-z-index-step;
+    z-index: style.$menu-item-z-index - 1 * style.$base-z-index-step;
   }
 
   &:nth-child(2) {
-    z-index: $menu-item-z-index - 2 * $base-z-index-step;
+    z-index: style.$menu-item-z-index - 2 * style.$base-z-index-step;
   }
 
   &:nth-child(3) {
-    z-index: $menu-item-z-index - 3 * $base-z-index-step;
+    z-index: style.$menu-item-z-index - 3 * style.$base-z-index-step;
   }
 
   &--vertical:first-child {
-    margin-bottom: $spacing--xs;
+    margin-bottom: style.$spacing--xs;
   }
 
   &--horizontal:first-child {
-    margin-right: $spacing--xs;
+    margin-right: style.$spacing--xs;
   }
 }
 
 [theme="dark"] {
   .menu-bars-mobile__fab {
-    background: $navy--500;
+    background: style.$navy--500;
   }
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
     &--active {
-      background-color: $gray--000;
+      background-color: style.$gray--000;
     }
   }
 }
@@ -114,30 +114,30 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab-main--isExpanded {
-  background: $navy--500;
+  background: style.$navy--500;
 
   svg {
-    color: $gray--000;
-    width: $icon--huge;
-    height: $icon--huge;
+    color: style.$gray--000;
+    width: style.$icon--huge;
+    height: style.$icon--huge;
   }
 }
 
 [theme="dark"] {
   .menu-bars-mobile__fab svg path {
-    fill: $gray--000;
+    fill: style.$gray--000;
   }
 
   .menu-bars-mobile__fab-main--isExpanded {
-    background: $gray--000;
+    background: style.$gray--000;
 
     svg {
-      color: $navy--900;
+      color: style.$navy--900;
     }
   }
 }
 
-@media #{$smartphone} {
+@media #{style.$smartphone} {
   $menu-mobile__width: 64px;
 
   .menu-bars .menu {
@@ -148,8 +148,8 @@ $menu-mobile__width: 72px;
     display: grid;
     grid-template-columns: 0 $menu-mobile__width;
     grid-template-rows: 0 $menu-mobile__width;
-    bottom: $spacing--lg;
-    right: $spacing--lg;
+    bottom: style.$spacing--lg;
+    right: style.$spacing--lg;
   }
 
   .menu-bars-mobile__fab {
@@ -158,7 +158,7 @@ $menu-mobile__width: 72px;
   }
 }
 
-@media #{$mini-smartphone} {
+@media #{style.$mini-smartphone} {
   .menu-bars-mobile {
     bottom: 1vw;
     right: 1vw;
@@ -177,7 +177,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu__container {
-  z-index: $menu-z-index;
+  z-index: style.$menu-z-index;
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
@@ -193,10 +193,10 @@ $menu-mobile__width: 72px;
 
 .menu {
   border-radius: calc($menu-mobile__width / 2);
-  background-color: $gray--000;
-  box-shadow: $box-shadow--light;
-  padding: $spacing--lg 0;
-  width: $action-bar__width;
+  background-color: style.$gray--000;
+  box-shadow: style.$box-shadow--light;
+  padding: style.$spacing--lg 0;
+  width: style.$action-bar__width;
   height: auto;
   visibility: visible;
   opacity: 1;
@@ -218,7 +218,7 @@ $menu-mobile__width: 72px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
   height: auto;
   padding: 0;
   margin: 0;
@@ -226,8 +226,8 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu {
-    background-color: $navy--500;
-    box-shadow: $box-shadow--light;
+    background-color: style.$navy--500;
+    box-shadow: style.$box-shadow--light;
   }
 }
 
@@ -236,14 +236,14 @@ $menu-mobile__width: 72px;
   width: 42px;
   height: 42px;
 
-  background: $gray--000;
+  background: style.$gray--000;
   border: none;
   border-radius: 100%;
   outline: none;
-  box-shadow: $box-shadow--light;
-  color: $navy--900;
+  box-shadow: style.$box-shadow--light;
+  color: style.$navy--900;
 }
-@media #{$tablet} {
+@media #{style.$tablet} {
   .menu-bars__navigation {
     position: absolute;
     top: calc(100% + 16px);
@@ -267,33 +267,33 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:focus-visible {
-  outline: 2px solid rgba($navy--900, 0.5);
+  outline: 2px solid rgba(style.$navy--900, 0.5);
 }
 
 .menu-bars__navigation:enabled:hover {
-  background-color: getLightHoverBackground($gray--000);
+  background-color: style.getLightHoverBackground(style.$gray--000);
 }
 
 .menu-bars__navigation:disabled {
-  color: $gray--600;
+  color: style.$gray--600;
 }
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: $navy--500;
-    color: $gray--000;
+    background: style.$navy--500;
+    color: style.$gray--000;
   }
 
   .menu-bars__navigation:focus-visible {
-    outline: 2px solid rgba($gray--000, 0.5);
+    outline: 2px solid rgba(style.$gray--000, 0.5);
   }
 
   .menu-bars__navigation:enabled:hover {
-    background-color: getDarkHoverBackground($navy--500);
+    background-color: style.getDarkHoverBackground(style.$navy--500);
   }
 
   .menu-bars__navigation:disabled {
-    color: $navy--700;
+    color: style.$navy--700;
   }
 }
 
@@ -302,7 +302,7 @@ $menu-mobile__width: 72px;
   width: 100%;
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .menu:first-child:last-child {
     position: fixed;
   }

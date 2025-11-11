@@ -1,5 +1,5 @@
 @use "sass:color";
-@import "constants/style";
+@use "constants/style";
 
 $vote-display-width: 114px;
 $vote-display__content-height: 38px;
@@ -12,15 +12,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .vote-display {
   height: 100%;
   width: $vote-display-width;
-  color: $navy--500;
-  background-color: $gray--000;
-  border-radius: $rounded--full;
+  color: style.$navy--500;
+  background-color: style.$gray--000;
+  border-radius: style.$rounded--full;
   position: relative;
-  border: 2px solid $gray--000;
-  box-shadow: $box-shadow--light;
+  border: 2px solid style.$gray--000;
+  box-shadow: style.$box-shadow--light;
 
   &:has(:focus-visible) {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 
@@ -28,8 +28,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
-  background-color: $navy--500;
-  color: $gray--000;
+  background-color: style.$navy--500;
+  color: style.$gray--000;
   border-radius: 100%;
 }
 
@@ -50,8 +50,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   top: 0;
   left: 19px;
   height: $vote-display__content-height;
-  border-top-right-radius: $rounded--full;
-  border-bottom-right-radius: $rounded--full;
+  border-top-right-radius: style.$rounded--full;
+  border-bottom-right-radius: style.$rounded--full;
   background-color: $vote-display__progress-bar-color;
 }
 
@@ -70,12 +70,12 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: $rounded--full;
-  background-color: $gray--000;
+  border-radius: style.$rounded--full;
+  background-color: style.$gray--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
   padding-right: 4px;
   list-style: none;
   margin: 0;
@@ -91,15 +91,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: relative;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
 }
 
 .short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: $rounded--full;
-  background-color: $gray--300;
-  color: $navy--500;
+  border-radius: style.$rounded--full;
+  background-color: style.$gray--300;
+  color: style.$navy--500;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -109,11 +109,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($gray--300);
+    background-color: style.getLightHoverBackground(style.$gray--300);
   }
 
   &:focus-visible {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 
@@ -123,8 +123,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: 100%;
 }
 .short-action__button > .short-action__flag-icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;
@@ -140,22 +140,22 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 [theme="dark"] {
   .vote-display {
-    color: $gray--000;
-    background-color: $navy--500;
-    border-color: $navy--500;
+    color: style.$gray--000;
+    background-color: style.$navy--500;
+    border-color: style.$navy--500;
 
     &:has(:focus-visible) {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
 
   .vote-display > svg {
-    background-color: $gray--000;
-    color: $navy--500;
+    background-color: style.$gray--000;
+    color: style.$navy--500;
   }
 
   .vote-display__short-actions {
-    background-color: $navy--500;
+    background-color: style.$navy--500;
   }
 
   .vote-display--votes-depleted .vote-display__progress-bar {
@@ -163,15 +163,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .short-action__button {
-    background-color: $navy--600;
-    color: $gray--000;
+    background-color: style.$navy--600;
+    color: style.$gray--000;
 
     &:hover {
-      background-color: getDarkHoverBackground($navy--600);
+      background-color: style.getDarkHoverBackground(style.$navy--600);
     }
 
     &:focus-visible {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
 }

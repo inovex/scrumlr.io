@@ -1,10 +1,10 @@
-@import "constants/style";
+@use "constants/style";
 
 .dot-button {
   border-radius: 100%;
   border: none;
   padding: 0;
-  font-size: $text-size--medium;
+  font-size: style.$text-size--medium;
   line-height: 28px;
   font-weight: 600;
   cursor: pointer;

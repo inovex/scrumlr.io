@@ -1,45 +1,45 @@
-@import "constants/style";
+@use "constants/style";
 
 .column {
-  min-width: $column__min-width;
+  min-width: style.$column__min-width;
   width: 100%;
-  max-width: $column__max-width;
-  @include inset-border($top: true, $bottom: true);
-  padding-top: calc($column__border-width + $header__height + $info-bar__height);
+  max-width: style.$column__max-width;
+  @include style.inset-border($top: true, $bottom: true);
+  padding-top: calc(style.$column__border-width + style.$header__height + style.$info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
-  @include inset-border($top: true, $bottom: true, $color: $victory-verde--light);
+  @include style.inset-border($top: true, $bottom: true, $color: style.$victory-verde--light);
 }
 .column:nth-child(odd) {
-  background-color: $gray--100;
+  background-color: style.$gray--100;
 }
 .column:nth-child(even) {
-  background-color: $gray--200;
+  background-color: style.$gray--200;
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
   }
   .column:nth-child(odd) {
-    background-color: $navy--500;
+    background-color: style.$navy--500;
   }
 }
 .column--hidden {
-  background-image: $column-stripes--light;
+  background-image: style.$column-stripes--light;
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: $column-stripes--dark;
+    background-image: style.$column-stripes--dark;
   }
 }
 
 .column__content {
   max-height: 100%;
   max-width: 100%;
-  padding: 0 0 $column__border-width 0;
+  padding: 0 0 style.$column__border-width 0;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -51,9 +51,9 @@
 .column__header {
   display: flex;
   flex-direction: column;
-  padding: 0 $spacing--xl;
+  padding: 0 style.$spacing--xl;
 
-  z-index: $column-header-z-index;
+  z-index: style.$column-header-z-index;
 }
 
 .column__header-title {
@@ -61,7 +61,7 @@
   word-break: break-word;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing--base;
+  margin-bottom: style.$spacing--base;
   height: 48px;
   position: relative;
 }
@@ -73,7 +73,7 @@
   width: auto;
   height: auto;
   border-bottom: solid 3px var(--accent-color--400);
-  margin: 0 $spacing--xs 0 0;
+  margin: 0 style.$spacing--xs 0 0;
   overflow: hidden;
 }
 
@@ -82,12 +82,12 @@
 }
 
 .column__header-text {
-  font-size: calc(#{$text-size--large} + 0.4vw);
+  font-size: calc(#{style.$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
-  color: $navy--900;
+  letter-spacing: style.$letter-spacing--large;
+  line-height: style.$line-height--large;
+  color: style.$navy--900;
 
   white-space: nowrap;
   overflow: hidden;
@@ -95,25 +95,25 @@
 }
 
 .column__header-text--hidden {
-  color: $gray--700;
+  color: style.$gray--700;
 }
 
 // tooltip requires parent selection because of specificity
 .column__header-text-wrapper .column__tooltip {
-  @include tooltip--light;
+  @include style.tooltip--light;
 }
 
 .column__header-input {
   display: flex;
   align-items: center;
   border: none;
-  font-size: calc(#{$text-size--large} + 0.4vw);
-  color: $navy--900;
+  font-size: calc(#{style.$text-size--large} + 0.4vw);
+  color: style.$navy--900;
   border-bottom: dashed 3px var(--accent-color--400);
   margin: 0 auto 0 0;
   font-weight: bold;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
+  letter-spacing: style.$letter-spacing--large;
+  line-height: style.$line-height--large;
   background-color: transparent;
   padding: 0;
   outline: none;
@@ -122,17 +122,17 @@
 }
 [theme="dark"] {
   .column__header-input {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
 .column__header-card-number {
-  margin-bottom: $spacing--base;
-  font-size: $text-size--medium;
-  color: $gray--700;
+  margin-bottom: style.$spacing--base;
+  font-size: style.$text-size--medium;
+  color: style.$gray--700;
   font-weight: 600;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
+  letter-spacing: style.$letter-spacing--large;
+  line-height: style.$line-height--large;
   flex: 1 0 12px;
 }
 
@@ -145,7 +145,7 @@
   outline: none;
   scrollbar-width: 10px;
 
-  @include scrollbar();
+  @include style.scrollbar();
 }
 
 .column__notes-wrapper.isOver {
@@ -156,7 +156,7 @@
 .column__note-list {
   margin: 0;
   // padding-top of 4px to display note outline focus correctly
-  padding: 4px $spacing--xl $spacing--base $spacing--xl;
+  padding: 4px style.$spacing--xl style.$spacing--base style.$spacing--xl;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;
@@ -167,40 +167,40 @@
 
 [theme="dark"] {
   .column {
-    @include inset-border($top: true, $bottom: true, $color: var(--accent-color--400));
+    @include style.inset-border($top: true, $bottom: true, $color: var(--accent-color--400));
   }
 
   .column__header-text {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .column__header-text--hidden {
-    color: $gray--700;
+    color: style.$gray--700;
   }
 
   .column__header-text-wrapper .column__tooltip {
-    @include tooltip--dark;
+    @include style.tooltip--dark;
   }
 }
 
 .column__header-hidden-icon {
-  height: $icon--large;
-  width: $icon--large;
-  min-width: $icon--medium;
-  min-height: $icon--medium;
-  margin: 0 $spacing--xs 0 0;
-  color: $critical-carmine--light;
+  height: style.$icon--large;
+  width: style.$icon--large;
+  min-width: style.$icon--medium;
+  min-height: style.$icon--medium;
+  margin: 0 style.$spacing--xs 0 0;
+  color: style.$critical-carmine--light;
   cursor: pointer;
   transition: all 0.08s ease-out;
 }
 
 .column__header-hidden-icon:hover {
-  color: $navy--900;
+  color: style.$navy--900;
 }
 
 [theme="dark"] {
   .column__header-hidden-icon:hover {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
@@ -214,7 +214,7 @@
   padding: 0;
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
-  margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
+  margin: auto calc(#{style.$spacing--base} - 2px) auto style.$spacing--base;
 
   &:hover > svg,
   &:focus-visible > svg {
@@ -225,12 +225,12 @@
 }
 
 .column__header-edit-button-icon {
-  color: $navy--900;
+  color: style.$navy--900;
   height: 24px;
   width: 24px;
   transition: all 0.08s ease-out;
 }
 
 [theme="dark"] .column__header-edit-button-icon {
-  color: $gray--000;
+  color: style.$gray--000;
 }

@@ -1,8 +1,8 @@
-@import "constants/style";
+@use "constants/style";
 
 .board-reaction-container__root {
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: $board-reaction-z-index;
+  z-index: style.$board-reaction-z-index;
 }

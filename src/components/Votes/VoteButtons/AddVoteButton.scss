@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "../Votes.scss";
+@use "constants/style";
+@use "../Votes";
 
 .vote-button-add {
   display: flex;
@@ -17,7 +17,7 @@
 
   &:enabled:hover {
     background-color: var(--accent-color--light);
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   &:focus-visible {
@@ -25,14 +25,14 @@
   }
 
   &:disabled {
-    background-color: $gray--200;
-    color: $gray--600;
+    background-color: style.$gray--200;
+    color: style.$gray--600;
   }
 }
 
 .vote-button-add__icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
   color: inherit;
   pointer-events: none;
 }
@@ -51,8 +51,8 @@
     }
 
     &:disabled {
-      background-color: $navy--300;
-      color: $navy--100;
+      background-color: style.$navy--300;
+      color: style.$navy--100;
     }
   }
 }

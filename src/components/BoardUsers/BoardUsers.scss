@@ -1,9 +1,9 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .board-users {
   display: flex;
   flex-direction: row;
-  gap: $spacing--base;
+  gap: style.$spacing--base;
 }
 
 .board-users__button {
@@ -19,11 +19,11 @@
 
   &--others {
     flex-direction: row-reverse;
-    padding-left: $spacing--base;
+    padding-left: style.$spacing--base;
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($blue--500, 0.48);
+    box-shadow: 0 0 0 2px rgba(style.$blue--500, 0.48);
   }
 
   &:hover {
@@ -44,18 +44,18 @@
 
 .rest-users {
   position: relative;
-  font-size: $text-size--medium;
-  height: $icon--extralarge;
-  width: $icon--extralarge;
-  border-radius: $rounded--full;
-  background-color: $navy--500;
+  font-size: style.$text-size--medium;
+  height: style.$icon--extralarge;
+  width: style.$icon--extralarge;
+  border-radius: style.$rounded--full;
+  background-color: style.$navy--500;
   padding: 2px;
-  color: $gray--000;
+  color: style.$gray--000;
   font-weight: 700;
 
   &__readiness {
-    color: $blue--400;
-    border-radius: $rounded--full;
+    color: style.$blue--400;
+    border-radius: style.$rounded--full;
 
     circle {
       transition: stroke-dashoffset 0.45s ease-in-out;
@@ -74,7 +74,7 @@
   }
 
   &__all-ready {
-    color: $gray--000;
+    color: style.$gray--000;
     width: 100%;
     height: 100%;
 
@@ -94,7 +94,7 @@
   }
 }
 
-@media #{$mini-smartphone} {
+@media #{style.$mini-smartphone} {
   .board-users__button--others {
     display: none;
   }
@@ -102,13 +102,13 @@
 
 [theme="dark"] {
   .rest-users {
-    background-color: $blue--200;
-    color: $navy--600;
+    background-color: style.$blue--200;
+    color: style.$navy--600;
   }
 
   .board-users__button {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
+      box-shadow: 0 0 0 2px rgba(style.$pink--500, 0.48);
     }
   }
 }

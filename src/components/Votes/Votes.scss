@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "components/TooltipButton/TooltipButton.scss";
+@use "constants/style";
+@use "components/TooltipButton/TooltipButton";
 
 $votes-button-size: 28px;
 

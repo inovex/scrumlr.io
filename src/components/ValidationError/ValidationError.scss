@@ -1,9 +1,9 @@
-@import "constants/style";
+@use "constants/style";
 
 .validation-error {
   display: block;
-  font-size: $text-size--medium;
-  color: $critical-carmine--light;
+  font-size: style.$text-size--medium;
+  color: style.$critical-carmine--light;
   margin-left: 6px;
   margin-top: 6px;
 }

@@ -1,6 +1,6 @@
-@import "constants/style";
+@use "constants/style";
 
-$padding--default: $spacing--xs;
+$padding--default: style.$spacing--xs;
 $padding--mobile: 6px;
 
 .switch {
@@ -14,25 +14,25 @@ $padding--mobile: 6px;
 
   width: fit-content;
   padding: $padding--default;
-  border-radius: $rounded--large;
+  border-radius: style.$rounded--large;
 
-  background-color: $gray--000;
+  background-color: style.$gray--000;
 
   &:enabled {
     cursor: pointer;
 
-    @include default-states($padding: $padding--default);
+    @include style.default-states($padding: $padding--default);
   }
 
   &:disabled {
-    background-color: $gray--000;
+    background-color: style.$gray--000;
 
     .switch__item {
-      color: $gray--800;
-      background-color: $gray--000;
+      color: style.$gray--800;
+      background-color: style.$gray--000;
 
       &--active {
-        background-color: $gray--400;
+        background-color: style.$gray--400;
       }
     }
   }
@@ -42,67 +42,67 @@ $padding--mobile: 6px;
   display: flex;
   align-items: center;
 
-  padding: 14.5px $spacing--base;
-  border-radius: $rounded--large;
+  padding: 14.5px style.$spacing--base;
+  border-radius: style.$rounded--large;
 
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 600;
 
   color: #292f3b;
-  background-color: $gray--000;
+  background-color: style.$gray--000;
 
   transition:
     background-color 0.3s,
     color 0.3s;
 
   &--active {
-    background-color: $navy--600;
-    color: $gray--000;
+    background-color: style.$navy--600;
+    color: style.$gray--000;
 
     font-weight: 700;
   }
 }
 
-@media screen and (max-width: $breakpoint--smartphone) {
+@media screen and (max-width: style.$breakpoint--smartphone) {
   .switch {
     padding: $padding--mobile;
 
     &:enabled {
-      @include default-states($padding: $padding--mobile);
+      @include style.default-states($padding: $padding--mobile);
     }
   }
 
   .switch__item {
-    font-size: $text--sm;
+    font-size: style.$text--sm;
   }
 }
 
 [theme="dark"] {
   .switch {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
 
     &:disabled {
-      background-color: $navy--700;
+      background-color: style.$navy--700;
 
       .switch__item {
-        color: $navy--300;
-        background-color: $navy--700;
+        color: style.$navy--300;
+        background-color: style.$navy--700;
 
         &--active {
-          color: $navy--300;
-          background-color: $gray--400;
+          color: style.$navy--300;
+          background-color: style.$gray--400;
         }
       }
     }
   }
 
   .switch__item {
-    color: $gray--000;
-    background-color: $navy--400;
+    color: style.$gray--000;
+    background-color: style.$navy--400;
 
     &--active {
-      color: $navy--600;
-      background-color: $gray--000;
+      color: style.$navy--600;
+      background-color: style.$gray--000;
     }
   }
 }

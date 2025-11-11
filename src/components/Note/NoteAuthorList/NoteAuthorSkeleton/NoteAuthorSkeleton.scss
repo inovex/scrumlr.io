@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "../NoteAuthorList.scss";
+@use "constants/style";
+@use "../NoteAuthorList";
 
 $skeleton-name-width: 92px;
 
@@ -11,23 +11,23 @@ $skeleton-name-width: 92px;
 }
 
 .note-author-skeleton__avatar {
-  width: $avatar-size;
-  height: $avatar-size;
+  width: NoteAuthorList.$avatar-size;
+  height: NoteAuthorList.$avatar-size;
   border-radius: 100%;
   overflow: hidden;
-  background-color: $gray--300;
+  background-color: style.$gray--300;
 }
 
 .note-author-skeleton__name {
-  height: $text-size--small;
+  height: style.$text-size--small;
   width: $skeleton-name-width;
   border-radius: 4px;
-  background-color: $gray--300;
+  background-color: style.$gray--300;
 }
 
 [theme="dark"] {
   .note-author-skeleton__avatar {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
 
     img {
       background-blend-mode: luminosity;
@@ -36,6 +36,6 @@ $skeleton-name-width: 92px;
   }
 
   .note-author-skeleton__name {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
   }
 }

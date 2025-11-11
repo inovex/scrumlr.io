@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 .hero-illustration {
   --hero-iilustration-rows: 2;
@@ -36,7 +36,7 @@
   display: none;
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .hero-illustration__grid {
     --hero-iilustration-rows: 4;
   }

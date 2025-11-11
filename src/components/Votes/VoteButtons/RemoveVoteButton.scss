@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "../Votes.scss";
+@use "constants/style";
+@use "../Votes";
 
 .vote-button-remove {
   position: relative;
@@ -31,7 +31,7 @@
     &:hover,
     &:focus-visible {
       background-color: var(--accent-color--light);
-      color: $gray--000;
+      color: style.$gray--000;
 
       .vote-button-remove__count {
         display: none;
@@ -49,8 +49,8 @@
 }
 
 .vote-button-remove__icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
   display: none;
 }
 
@@ -78,13 +78,13 @@
   right: 0;
   border-width: 0;
   border-style: solid;
-  background: rgba($gray--700, 0.5);
+  background: rgba(style.$gray--700, 0.5);
   box-shadow:
-    2px -2px 0px $gray--000,
-    0 1px 1px rgba($navy--900, 0.1),
-    -1px 1px 1px rgba($navy--900, 0.1);
+    2px -2px 0px style.$gray--000,
+    0 1px 1px rgba(style.$navy--900, 0.1),
+    -1px 1px 1px rgba(style.$navy--900, 0.1);
   border-radius: 0 0 0 16px;
-  border-color: $gray--000 $gray--000 transparent transparent;
+  border-color: style.$gray--000 style.$gray--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
 
@@ -104,9 +104,9 @@
 
   .vote-button-remove__folded-corner {
     box-shadow:
-      2px -2px 0px $navy--500,
-      0 1px 1px rgba($navy--900, 0.1),
-      -1px 1px 1px rgba($navy--900, 0.1);
-    border-color: $navy--500 $navy--500 transparent transparent;
+      2px -2px 0px style.$navy--500,
+      0 1px 1px rgba(style.$navy--900, 0.1),
+      -1px 1px 1px rgba(style.$navy--900, 0.1);
+    border-color: style.$navy--500 style.$navy--500 transparent transparent;
   }
 }

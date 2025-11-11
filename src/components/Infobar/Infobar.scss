@@ -1,32 +1,32 @@
 @use "sass:color";
-@import "constants/style.scss";
+@use "constants/style";
 
 .info-bar {
   position: fixed;
   display: flex;
   align-items: center;
   bottom: auto;
-  top: calc($column__border-width + $header__height);
+  top: calc(style.$column__border-width + style.$header__height);
   left: 50%;
   transform: translateX(-50%);
-  height: $info-bar__height;
+  height: style.$info-bar__height;
   justify-content: center;
-  gap: $spacing--xs;
-  z-index: $infobar-z-index;
+  gap: style.$spacing--xs;
+  z-index: style.$infobar-z-index;
 }
 .info-bar__icon {
-  height: $icon--large;
+  height: style.$icon--large;
   display: flex;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
   align-items: center;
 }
 
 .info-bar__return-to-shared-note-button {
   position: relative;
   border: 0;
-  background-color: $gray--000;
-  box-shadow: $box-shadow--light;
-  border-radius: $rounded--full;
+  background-color: style.$gray--000;
+  box-shadow: style.$box-shadow--light;
+  border-radius: style.$rounded--full;
   height: 42px;
   width: 42px;
   cursor: pointer;
@@ -34,37 +34,37 @@
   place-content: center;
   outline: none;
   transition: background-color 150ms linear;
-  color: $navy--900;
+  color: style.$navy--900;
 
   &:hover {
-    background-color: getLightHoverBackground($gray--000);
+    background-color: style.getLightHoverBackground(style.$gray--000);
   }
 
   &:focus-visible {
-    outline: 2px solid $blue--500;
+    outline: 2px solid style.$blue--500;
   }
 }
 [theme="dark"] {
   .info-bar__icon {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .info-bar__return-to-shared-note-button {
-    color: $gray--000;
-    background-color: $navy--500;
+    color: style.$gray--000;
+    background-color: style.$navy--500;
 
     &:hover {
-      background-color: getDarkHoverBackground($navy--500);
+      background-color: style.getDarkHoverBackground(style.$navy--500);
     }
 
     &:focus-visible {
-      outline: 2px solid $pink--500;
+      outline: 2px solid style.$pink--500;
     }
   }
 }
 
 @media (min-width: 400px) {
   .info-bar {
-    gap: $spacing--base;
+    gap: style.$spacing--base;
   }
 }

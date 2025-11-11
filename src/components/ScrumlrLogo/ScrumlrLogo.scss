@@ -1,7 +1,7 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .scrumlr-logo__paths {
-  fill: $blue--500;
+  fill: style.$blue--500;
 
   path {
     transition: all 0.08s ease-out;
@@ -19,7 +19,7 @@
 
 [theme="dark"] {
   .scrumlr-logo__paths {
-    fill: $gray--000;
+    fill: style.$gray--000;
   }
 
   .scrumlr-logo__stop {

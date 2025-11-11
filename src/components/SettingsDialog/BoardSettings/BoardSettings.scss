@@ -1,13 +1,13 @@
-@import "constants/style";
-@import "../SettingsDialog";
+@use "constants/style";
+@use "../SettingsDialog";
 
 .board-settings__container-wrapper {
   overflow-y: auto;
-  padding-right: $spacing--xs;
-  margin-right: calc(-1 * ($spacing--xs + 10px));
-  padding-bottom: $settings-dialog-container--bottom;
+  padding-right: style.$spacing--xs;
+  margin-right: calc(-1 * (style.$spacing--xs + 10px));
+  padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
 
-  @include scrollbar();
+  @include style.scrollbar();
 
   &:focus-visible {
     outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);
@@ -17,8 +17,8 @@
 
 @media screen and (min-width: 920px) {
   .board-settings__container-wrapper {
-    padding-right: $spacing--lg;
-    margin-right: calc(-1 * ($spacing--lg + 10px));
+    padding-right: style.$spacing--lg;
+    margin-right: calc(-1 * (style.$spacing--lg + 10px));
   }
 }
 
@@ -27,19 +27,19 @@
   flex-direction: column;
   gap: 32px;
   width: 100%;
-  max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
-  padding-bottom: $spacing--xs;
+  max-width: calc(100vw - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
+  padding-bottom: style.$spacing--xs;
 }
 
 @media screen and (min-width: 450px) {
   .board-settings__container {
-    max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+    max-width: calc(380px - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
   }
 }
 
 @media screen and (min-width: 920px) {
   .board-settings__container {
-    max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+    max-width: calc(544px - (2 * #{SettingsDialog.$settings-dialog-container--sides-large}));
   }
 }
 
@@ -55,10 +55,10 @@
 .board-settings__board-name-button_input {
   background-color: transparent;
   border: none;
-  padding: $spacing--base $spacing--lg $spacing--base $spacing--base;
+  padding: style.$spacing--base style.$spacing--lg style.$spacing--base style.$spacing--base;
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
+  letter-spacing: style.$letter-spacing--medium;
+  font-size: style.$text-size--medium;
   text-align: right;
   max-width: 150px;
   cursor: inherit;
@@ -71,18 +71,18 @@
 
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
-  color: $navy--800;
+  letter-spacing: style.$letter-spacing--medium;
+  font-size: style.$text-size--medium;
+  color: style.$navy--800;
 }
 
 [theme="dark"] {
   .board-settings__board-name-button_input {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .board-settings__board-name-button_input::placeholder {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
@@ -110,12 +110,12 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: $spacing--base $spacing--lg $spacing--base 4px;
+  padding: style.$spacing--base style.$spacing--lg style.$spacing--base 4px;
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
+  letter-spacing: style.$letter-spacing--medium;
+  font-size: style.$text-size--medium;
   letter-spacing: 0.5px;
-  color: $navy--800;
+  color: style.$navy--800;
 }
 
 @media screen and (max-width: 920px) {
@@ -127,13 +127,13 @@
 
 [theme="dark"] {
   .board-settings__policy-button_value span {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
 .board-settings__policy-button_value svg {
-  width: $icon--medium;
-  height: $icon--medium;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
   color: var(--accent-color--light);
 }
 
@@ -156,8 +156,8 @@
 }
 
 .board-settings__password-button_value svg {
-  width: $icon--medium;
-  height: $icon--medium;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
 }
 
 .board-settings__show-password-button--enabled {
@@ -180,30 +180,30 @@
 }
 
 .board-settings__show-password-button--disabled {
-  color: $navy--800;
+  color: style.$navy--800;
   cursor: default;
 }
 
 [theme="dark"] {
   .board-settings__show-password-button--disabled {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
 .board-settings__password-button_value-input {
   background-color: transparent;
   border: none;
-  padding: $spacing--base;
+  padding: style.$spacing--base;
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
+  letter-spacing: style.$letter-spacing--medium;
+  font-size: style.$text-size--medium;
   text-align: right;
   max-width: 120px;
 }
 
 [theme="dark"] {
   .board-settings__password-button_value-input {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }
 
@@ -215,7 +215,7 @@
 .board-settings__password-input-hint {
   display: flex;
   align-items: center;
-  padding: 0 $spacing--lg;
+  padding: 0 style.$spacing--lg;
   height: 30px;
   border: none;
   background-color: inherit;
@@ -243,38 +243,38 @@
 }
 
 .board-settings__remove-protection-button svg {
-  width: $icon--medium;
-  height: $icon--medium;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
   color: var(--accent-color--light);
 }
 
 .board-settings__generate-password-button svg {
   // TODO remove margin when icon gets updated
-  width: $icon--medium;
-  height: $icon--medium;
+  width: style.$icon--medium;
+  height: style.$icon--medium;
   color: var(--accent-color--light);
 }
 
 .board-settings__password-management-text {
   padding-left: 4px;
   font-weight: bold;
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--medium;
+  font-size: style.$text-size--medium;
+  letter-spacing: style.$letter-spacing--medium;
 }
 
 .board-settings__delete-button span {
-  color: $critical-carmine--light;
+  color: style.$critical-carmine--light;
   font-weight: bold;
 }
 
 [theme="dark"] {
   .board-settings__delete-button span {
-    color: $critical-carmine--light;
+    color: style.$critical-carmine--light;
   }
 }
 
 .board-settings__delete-button svg {
-  color: $critical-carmine--light;
+  color: style.$critical-carmine--light;
 }
 
 .board-settings__confirmation-dialog {
@@ -296,7 +296,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-right: $spacing--lg;
+  padding-right: style.$spacing--lg;
 }
 
 .board-settings__open-cheat-sheet-button {
@@ -304,15 +304,15 @@
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: $gray--800;
-  gap: $spacing--xs;
-  margin: $spacing--xs;
-  padding: $spacing--xs;
+  color: style.$gray--800;
+  gap: style.$spacing--xs;
+  margin: style.$spacing--xs;
+  padding: style.$spacing--xs;
   transition: transform 0.08s ease-in-out;
 
   > svg {
-    width: $icon--medium;
-    height: $icon--medium;
+    width: style.$icon--medium;
+    height: style.$icon--medium;
   }
 
   > p {
@@ -328,14 +328,14 @@
   }
 
   &:focus-visible {
-    border-radius: $rounded--full;
+    border-radius: style.$rounded--full;
     outline: 2px solid var(--accent-color--light);
   }
 }
 
 [theme="dark"] {
   .board-settings__open-cheat-sheet-button {
-    color: $gray--700;
+    color: style.$gray--700;
 
     &:focus-visible {
       outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);

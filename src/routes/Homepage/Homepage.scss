@@ -1,11 +1,11 @@
-@import "constants/style";
+@use "constants/style";
 
 .homepage {
-  background: $gray--300;
+  background: style.$gray--300;
 }
 
 .homepage__hero {
-  background: $gray--000;
+  background: style.$gray--000;
   min-height: 100vh;
 }
 
@@ -14,7 +14,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: $spacing--base;
+  padding: style.$spacing--base;
 
   display: flex;
   justify-content: space-between;
@@ -31,23 +31,23 @@
 }
 
 .homepage__language {
-  background: $gray--600;
-  box-shadow: 0 0 rgba($gray--700, 0);
+  background: style.$gray--600;
+  box-shadow: 0 0 rgba(style.$gray--700, 0);
 
   &:hover {
-    box-shadow: 0 2px 12px 6px rgba($gray--700, 0.2);
+    box-shadow: 0 2px 12px 6px rgba(style.$gray--700, 0.2);
   }
 }
 
 [theme="dark"] {
   .homepage__language {
-    background: $navy--500;
+    background: style.$navy--500;
     box-shadow: none;
   }
 }
 
 .homepage__logout-button {
-  margin-left: $spacing--xs;
+  margin-left: style.$spacing--xs;
 }
 
 .homepage__hero-content-wrapper {
@@ -57,7 +57,7 @@
   min-width: 100%;
   min-height: 100vh;
   padding-top: 86px;
-  padding-bottom: $spacing--xl;
+  padding-bottom: style.$spacing--xl;
 }
 
 .homepage__hero-content {
@@ -67,7 +67,7 @@
   align-items: center;
   gap: 0;
   max-width: 1080px;
-  padding: 0 $spacing--base;
+  padding: 0 style.$spacing--base;
   margin-top: 48px;
   margin-bottom: 48px;
 }
@@ -85,14 +85,14 @@
 }
 
 .homepage__hero-title-team {
-  color: $blue--500;
+  color: style.$blue--500;
   background: linear-gradient(to right, #1955e5, #6592f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .homepage__hero-title-retrospective {
-  color: $pink--500;
+  color: style.$pink--500;
   background: linear-gradient(to right, #ea346b, #b32651);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -109,13 +109,13 @@
 }
 
 .homepage__start-button .homepage__proceed-icon {
-  flex: 0 0 $icon--medium;
-  height: $icon--medium;
-  width: $icon--medium;
+  flex: 0 0 style.$icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
 }
 
 .homepage__proceed-icon {
-  margin-left: $spacing--base;
+  margin-left: style.$spacing--base;
 }
 
 .homepage__illustration {
@@ -130,7 +130,7 @@
   text-align: left;
   max-width: 1280px;
   margin: 0 auto;
-  padding: $spacing--xl;
+  padding: style.$spacing--xl;
 }
 
 .homepage__footer > * {
@@ -145,9 +145,9 @@
   display: flex;
   flex: 2 2 auto;
   gap: 2px;
-  color: $gray--800;
-  font-size: $text-size--medium;
-  line-height: $line-height--small;
+  color: style.$gray--800;
+  font-size: style.$text-size--medium;
+  line-height: style.$line-height--small;
   order: -1;
   justify-content: center;
   align-items: center;
@@ -161,9 +161,9 @@
 
 .homepage__footer-link {
   display: block;
-  color: $gray--800;
-  font-size: $text-size--medium;
-  line-height: $line-height--large;
+  color: style.$gray--800;
+  font-size: style.$text-size--medium;
+  line-height: style.$line-height--large;
 }
 
 .homepage__footer-link a {
@@ -179,38 +179,38 @@
 
 [theme="dark"] {
   .homepage {
-    background: $navy--600;
+    background: style.$navy--600;
   }
 
   .homepage__hero {
-    background: $navy--600;
+    background: style.$navy--600;
   }
 
   .homepage__hero-title {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .homepage__hero-text {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 
   .homepage__footer-link {
-    color: $gray--700;
+    color: style.$gray--700;
 
     a:focus-visible,
     a:hover {
-      color: $gray--000;
+      color: style.$gray--000;
     }
   }
 
   .homepage__footer-developers {
-    color: $gray--700;
+    color: style.$gray--700;
   }
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .homepage__header {
-    padding: $spacing--xl;
+    padding: style.$spacing--xl;
   }
 
   .homepage__hero {
@@ -258,13 +258,13 @@
 
   .homepage__footer-link + .homepage__footer-link::before {
     content: "|";
-    margin-left: $spacing--xs;
-    margin-right: $spacing--xs;
+    margin-left: style.$spacing--xs;
+    margin-right: style.$spacing--xs;
   }
 }
 
 .homepage__logout-button-icon {
-  height: $icon--medium;
-  width: $icon--medium;
-  flex: 0 0 $icon--medium;
+  height: style.$icon--medium;
+  width: style.$icon--medium;
+  flex: 0 0 style.$icon--medium;
 }

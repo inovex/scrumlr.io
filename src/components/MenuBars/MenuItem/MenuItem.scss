@@ -1,4 +1,4 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 $menu-item-size: 42px;
 
@@ -14,11 +14,11 @@ $menu-item-size: 42px;
   pointer-events: auto;
 }
 .menu-item:focus-visible {
-  outline: 2px solid rgba($navy--900, 0.5);
+  outline: 2px solid rgba(style.$navy--900, 0.5);
 }
 [theme="dark"] {
   .menu-item:focus-visible {
-    outline: 2px solid rgba($gray--000, 0.5);
+    outline: 2px solid rgba(style.$gray--000, 0.5);
   }
 }
 
@@ -31,7 +31,7 @@ $menu-item-size: 42px;
   max-width: 0;
   height: $menu-item-size;
   border-radius: calc($menu-item-size / 2);
-  background-color: $blue--100;
+  background-color: style.$blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -45,10 +45,10 @@ $menu-item-size: 42px;
   transform: translateX(-50%);
   border-width: 10px;
   border-style: solid;
-  border-color: $blue--100 transparent transparent transparent;
+  border-color: style.$blue--100 transparent transparent transparent;
 }
 
-@media #{$smartphone} {
+@media #{style.$smartphone} {
   .menu-item .menu-item__tooltip {
     display: none;
   }
@@ -56,10 +56,10 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: $navy--300;
+    background-color: style.$navy--300;
   }
   .menu-item__tooltip::after {
-    border-color: $navy--300 transparent transparent transparent;
+    border-color: style.$navy--300 transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -81,7 +81,7 @@ $menu-item-size: 42px;
   }
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .menu-item:hover .menu-item__tooltip {
     max-width: max-content;
     visibility: visible;
@@ -117,34 +117,34 @@ $menu-item-size: 42px;
 
 .tooltip__text {
   width: 100%;
-  padding: 0 $spacing--base;
+  padding: 0 style.$spacing--base;
   white-space: nowrap;
   font-size: 14px;
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  line-height: $line-height--small;
-  color: $navy--900;
+  letter-spacing: style.$letter-spacing--medium;
+  line-height: style.$line-height--small;
+  color: style.$navy--900;
   border-radius: calc($menu-item-size / 2);
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .menu-item .tooltip__text {
-    color: $navy--900;
-    background-color: $blue--100;
+    color: style.$navy--900;
+    background-color: style.$blue--100;
     height: $menu-item-size;
     line-height: $menu-item-size;
     width: max-content;
     transition: transform 150ms linear 0ms;
   }
   .menu-item.menu-item--left .tooltip__text {
-    padding-right: $menu-item-size + $spacing--xs;
-    padding-left: $spacing--base;
+    padding-right: $menu-item-size + style.$spacing--xs;
+    padding-left: style.$spacing--base;
     transform: translateX(100%);
     transform-origin: right;
   }
   .menu-item.menu-item--right .tooltip__text {
-    padding-left: $menu-item-size + $spacing--xs;
-    padding-right: $spacing--base;
+    padding-left: $menu-item-size + style.$spacing--xs;
+    padding-right: style.$spacing--base;
     transform: translateX(-100%);
     transform-origin: left;
   }
@@ -155,15 +155,15 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .tooltip__text {
-    color: $gray--000 !important;
-    background-color: $navy--300 !important;
+    color: style.$gray--000 !important;
+    background-color: style.$navy--300 !important;
   }
 }
 
 .menu-item__icon {
   background-clip: content-box !important;
-  color: $navy--900;
-  background-color: $gray--000;
+  color: style.$navy--900;
+  background-color: style.$gray--000;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -173,8 +173,8 @@ $menu-item-size: 42px;
   border-radius: $menu-item-size;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $navy--500;
-  color: $gray--000;
+  background-color: style.$navy--500;
+  color: style.$gray--000;
 }
 .menu-item__icon:nth-of-type(2) {
   visibility: hidden;
@@ -189,26 +189,26 @@ $menu-item-size: 42px;
   }
 }
 
-@media #{$tablet} {
+@media #{style.$tablet} {
   .menu-item .menu-item__icon {
     transition: border-color 0ms linear 150ms;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $blue--100;
+    border-color: style.$blue--100;
     transition: border-color 0ms linear 0ms;
   }
 }
 
 [theme="dark"] {
   .menu-item__icon {
-    color: $gray--000;
-    background: $navy--500;
+    color: style.$gray--000;
+    background: style.$navy--500;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $gray--000;
-    color: $navy--900;
+    background-color: style.$gray--000;
+    color: style.$navy--900;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $navy--300 !important;
+    border-color: style.$navy--300 !important;
   }
 }

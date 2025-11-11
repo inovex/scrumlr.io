@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 .note-dialog__note-options {
   all: unset;
@@ -21,7 +21,7 @@
   border: 0;
   color: var(--accent-color--600);
   background-color: transparent;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
   cursor: pointer;
   transition:
     background-color 80ms ease-in-out,

@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 .text-input-adornment {
   display: flex;
@@ -11,13 +11,13 @@
   background: none;
   cursor: pointer;
 
-  color: $navy--900;
+  color: style.$navy--900;
   transition: color 0.15s ease;
 }
 
 .text-input-adornment:focus-visible,
 .text-input-adornment:hover {
-  color: $blue--500;
+  color: style.$blue--500;
 }
 
 .text-input-adornment > * {

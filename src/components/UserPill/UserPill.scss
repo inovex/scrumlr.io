@@ -1,7 +1,7 @@
 @use "sass:color";
-@import "constants/style";
+@use "constants/style";
 
-$padding--default: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+$padding--default: style.$spacing--xxs style.$spacing--md style.$spacing--xxs style.$spacing--xxs;
 $padding--mobile: 0 0 0 0;
 
 $size-mobile: 56px;
@@ -10,25 +10,25 @@ $size-mobile: 56px;
   all: unset;
   user-select: none;
 
-  height: $icon--huge;
+  height: style.$icon--huge;
   padding: $padding--default;
-  border-radius: $rounded--large;
+  border-radius: style.$rounded--large;
 
-  background-color: $gray--000;
+  background-color: style.$gray--000;
 
   &:enabled {
     cursor: pointer;
   }
 
   &:disabled {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
 
     .user-pill__avatar-overlay {
       background-color: color.change(#eeeff1, $alpha: 0.5);
     }
 
     .user-pill__name {
-      color: $gray--800;
+      color: style.$gray--800;
     }
   }
 }
@@ -38,16 +38,16 @@ $size-mobile: 56px;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  gap: $spacing--sm;
+  gap: style.$spacing--sm;
 }
 
 .user-pill__avatar-container {
   position: relative;
 
-  width: $icon--huge;
-  height: $icon--huge;
+  width: style.$icon--huge;
+  height: style.$icon--huge;
   border-radius: 100%;
-  background-color: $blue--100;
+  background-color: style.$blue--100;
 
   user-select: none;
 }
@@ -65,27 +65,27 @@ $size-mobile: 56px;
 }
 
 .user-pill__avatar {
-  width: $icon--huge;
-  height: $icon--huge;
+  width: style.$icon--huge;
+  height: style.$icon--huge;
 }
 
 .user-pill__name {
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 700;
 
-  color: $navy--600;
+  color: style.$navy--600;
 }
 
 // desktop only styles
-@media screen and (min-width: calc($breakpoint--smartphone + 1px)) {
+@media screen and (min-width: calc(style.$breakpoint--smartphone + 1px)) {
   .user-pill:enabled {
     // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
-    @include default-states($padding: $padding--default);
+    @include style.default-states($padding: $padding--default);
   }
 }
 
 // mobile only styles
-@media screen and (max-width: $breakpoint--smartphone) {
+@media screen and (max-width: style.$breakpoint--smartphone) {
   .user-pill {
     height: $size-mobile;
     padding: $padding--mobile;
@@ -104,26 +104,26 @@ $size-mobile: 56px;
 
 [theme="dark"] {
   .user-pill {
-    background-color: $navy--400;
+    background-color: style.$navy--400;
 
     &:disabled {
-      background-color: $navy--400;
+      background-color: style.$navy--400;
 
       .user-pill__avatar-overlay {
-        background-color: color.change($navy--700, $alpha: 0.5);
+        background-color: color.change(style.$navy--700, $alpha: 0.5);
       }
 
       .user-pill__name {
-        color: $navy--700;
+        color: style.$navy--700;
       }
     }
   }
 
   .user-pill__avatar-container {
-    background-color: $navy--700;
+    background-color: style.$navy--700;
   }
 
   .user-pill__name {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

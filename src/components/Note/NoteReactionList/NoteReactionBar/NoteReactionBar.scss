@@ -1,13 +1,13 @@
-@import "constants/style";
+@use "constants/style";
 
 $scale-factor: 120%;
 
 .note-reaction-bar__root {
   display: inline-flex;
   flex-direction: row;
-  gap: $reaction__gap-size;
+  gap: style.$reaction__gap-size;
 
-  padding: $reaction__padding--outer-top-bottom $reaction__padding--outer-left-right $reaction__padding--outer-top-bottom 0; // left padding in NoteReactionList because of icon
+  padding: style.$reaction__padding--outer-top-bottom style.$reaction__padding--outer-left-right style.$reaction__padding--outer-top-bottom 0; // left padding in NoteReactionList because of icon
 }
 
 .note-reaction-bar__reaction {
@@ -17,17 +17,17 @@ $scale-factor: 120%;
   justify-content: center;
   align-items: center;
 
-  width: $reaction__inner-size;
-  height: $reaction__inner-size;
-  padding: $reaction__padding--inner;
+  width: style.$reaction__inner-size;
+  height: style.$reaction__inner-size;
+  padding: style.$reaction__padding--inner;
 
-  border-radius: $rounded--full;
-  font-size: $text--md;
+  border-radius: style.$rounded--full;
+  font-size: style.$text--md;
 
   cursor: pointer;
 
   &:hover {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
     transform: scale($scale-factor);
   }
 
@@ -44,16 +44,16 @@ $scale-factor: 120%;
   }
 }
 
-@container #{$container__note} {
+@container #{style.$container__note} {
   .note-reaction-bar__root {
-    gap: $reaction__gap-size--small;
+    gap: style.$reaction__gap-size--small;
   }
 }
 
 [theme="dark"] {
   .note-reaction-bar__reaction {
     &:hover {
-      background-color: $navy--300;
+      background-color: style.$navy--300;
     }
 
     &--active {

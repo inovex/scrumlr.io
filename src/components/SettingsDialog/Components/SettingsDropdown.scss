@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/style";
 
 .settings-dropdown {
   position: relative;
@@ -7,15 +7,15 @@
 
   &__button {
     width: 100%;
-    background-color: $gray--000;
+    background-color: style.$gray--000;
     border: none;
     border-radius: 8px;
-    padding: $spacing--base $spacing--lg;
+    padding: style.$spacing--base style.$spacing--lg;
     margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: $text-size--medium;
+    font-size: style.$text-size--medium;
     cursor: pointer;
 
     &:focus-visible {
@@ -46,12 +46,12 @@
     }
 
     &-icon {
-      margin-right: $spacing--xs;
-      width: $icon--medium;
-      height: $icon--medium;
+      margin-right: style.$spacing--xs;
+      width: style.$icon--medium;
+      height: style.$icon--medium;
 
       &--dropdown {
-        margin-left: $spacing--xs;
+        margin-left: style.$spacing--xs;
         transform: rotate(0.25turn);
         transition: transform 200ms;
       }
@@ -64,9 +64,9 @@
     position: absolute;
     width: fit-content;
     right: 0;
-    margin: 0 $spacing--base 0 0;
+    margin: 0 style.$spacing--base 0 0;
     padding: 0;
-    background-color: $gray--000;
+    background-color: style.$gray--000;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 8px 0 rgba(var(--accent-color--light-rgb), 0.4);
 
@@ -79,11 +79,11 @@
 [theme="dark"] {
   .settings-dropdown {
     &__button {
-      color: $gray--000;
-      background-color: $navy--500;
+      color: style.$gray--000;
+      background-color: style.$navy--500;
 
       &:hover {
-        background-color: $navy--400;
+        background-color: style.$navy--400;
       }
 
       &:focus-visible {
@@ -92,9 +92,9 @@
     }
 
     &__list {
-      color: $gray--000;
-      background-color: $navy--500;
-      box-shadow: 0 2px 2px 0 rgba($navy--900, 0.3);
+      color: style.$gray--000;
+      background-color: style.$navy--500;
+      box-shadow: 0 2px 2px 0 rgba(style.$navy--900, 0.3);
     }
   }
 }

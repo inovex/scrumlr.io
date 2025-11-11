@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "components/Column/Column";
+@use "constants/style";
+@use "components/Column/Column";
 
 .board {
   --visible-columns: 1;
@@ -7,13 +7,13 @@
   display: grid;
   grid-auto-flow: column;
   grid-template-columns:
-    minmax($board__side-panel-width, 1fr)
-    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{$column__max-width}))
-    minmax($board__side-panel-width, 1fr);
+    minmax(style.$board__side-panel-width, 1fr)
+    repeat(var(--board__columns), Min(calc((100% - #{style.$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{style.$column__max-width}))
+    minmax(style.$board__side-panel-width, 1fr);
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
-  scroll-padding: $board__side-panel-width;
+  scroll-padding: style.$board__side-panel-width;
 
   width: 100vw;
   height: 100%;
@@ -38,69 +38,69 @@
 }
 
 .board__spacer-left {
-  @include inset-border($top: true, $left: true, $bottom: true);
+  @include style.inset-border($top: true, $left: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include inset-border($top: true, $left: true, $bottom: true, $color: $victory-verde--light);
+    @include style.inset-border($top: true, $left: true, $bottom: true, $color: style.$victory-verde--light);
   }
 }
 .board__spacer-right {
-  @include inset-border($top: true, $right: true, $bottom: true);
+  @include style.inset-border($top: true, $right: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include inset-border($top: true, $right: true, $bottom: true, $color: $victory-verde--light);
+    @include style.inset-border($top: true, $right: true, $bottom: true, $color: style.$victory-verde--light);
   }
 }
 
 .board__spacer-left:nth-child(odd),
 .board__spacer-right:nth-child(odd) {
-  background-color: $gray--200;
+  background-color: style.$gray--200;
 }
 
 .board__spacer-left:nth-child(even),
 .board__spacer-right:nth-child(even) {
-  background-color: $gray--100;
+  background-color: style.$gray--100;
 }
 
 .column--hidden + .board__spacer-right,
 .board__spacer-left:has(+ .column--hidden) {
-  background-image: $column-stripes--light;
+  background-image: style.$column-stripes--light;
 }
 
 [theme="dark"] {
   .board__spacer-left {
-    @include inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
+    @include style.inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
   }
   .board__spacer-right {
-    @include inset-border($top: true, $right: true, $bottom: true, $color: var(--accent-color--400));
+    @include style.inset-border($top: true, $right: true, $bottom: true, $color: var(--accent-color--400));
   }
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
-    background-color: $navy--600;
+    background-color: style.$navy--600;
   }
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: $navy--500;
+    background-color: style.$navy--500;
   }
 
   .column--hidden + .board__spacer-right,
   .board__spacer-left:has(+ .column--hidden) {
-    background-image: $column-stripes--dark;
+    background-image: style.$column-stripes--dark;
   }
 }
 
-@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
+@media screen and (max-width: style.$column__min-width+2*style.$board__side-panel-width) {
   .board {
     grid-template-columns:
-      $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width * 2}))
-      $column__border-width;
-    scroll-padding: $column__border-width;
+      style.$column__border-width repeat(var(--board__columns), calc(100% - #{style.$column__border-width * 2}))
+      style.$column__border-width;
+    scroll-padding: style.$column__border-width;
   }
 }
 
 @for $i from 1 through 16 {
-  @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
+  @media screen and (min-width: $i*(style.$column__min-width+2*style.$board__side-panel-width)) {
     .board {
       --visible-columns: #{$i};
     }

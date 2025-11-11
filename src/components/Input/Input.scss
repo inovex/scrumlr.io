@@ -1,12 +1,12 @@
-@import "constants/style";
+@use "constants/style";
 
-$padding--default: $spacing--base;
-$padding--mobile: 12.5px $spacing--base;
+$padding--default: style.$spacing--base;
+$padding--mobile: 12.5px style.$spacing--base;
 
 .input__root {
   display: flex;
   flex-direction: column;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
 
   width: 100%;
 }
@@ -15,13 +15,13 @@ $padding--mobile: 12.5px $spacing--base;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $spacing--xs;
+  gap: style.$spacing--xs;
 
   width: 100%;
   padding: $padding--default;
-  border-radius: $rounded--full;
+  border-radius: style.$rounded--full;
 
-  background-color: $gray--000;
+  background-color: style.$gray--000;
 
   &--height-normal {
     height: 60px;
@@ -33,11 +33,11 @@ $padding--mobile: 12.5px $spacing--base;
 
   &:not(&--disabled) {
     // TODO increase padding-left by 8px if no icon is present
-    @include default-states($padding: $padding--default);
+    @include style.default-states($padding: $padding--default);
 
     .input__icon-container {
       &--error {
-        color: $critical-carmine--light;
+        color: style.$critical-carmine--light;
       }
     }
 
@@ -46,41 +46,41 @@ $padding--mobile: 12.5px $spacing--base;
     &:hover,
     &:focus-within {
       .input__icon-container--search-icon {
-        color: $navy--600;
+        color: style.$navy--600;
       }
 
       .input__input {
-        color: $navy--600;
+        color: style.$navy--600;
 
         &::selection {
-          background-color: $blue--50;
+          background-color: style.$blue--50;
         }
       }
     }
 
     &:has(.input__input--invalid) {
-      @include invalid-state($padding: $padding--default);
+      @include style.invalid-state($padding: $padding--default);
     }
   }
 
   &--disabled {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
 
     .input__icon-container {
       &--search-icon,
       &--clear-icon {
-        color: $gray--800;
+        color: style.$gray--800;
       }
     }
   }
 }
 
 .input__icon-container {
-  width: $icon--large;
-  height: $icon--large;
+  width: style.$icon--large;
+  height: style.$icon--large;
 
   &--search-icon {
-    color: $gray--800;
+    color: style.$gray--800;
   }
 
   &--clear-icon {
@@ -94,15 +94,15 @@ $padding--mobile: 12.5px $spacing--base;
   margin: 0;
   border: none;
 
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 600;
-  line-height: $text--xl;
+  line-height: style.$text--xl;
 
-  color: $gray--800;
-  background-color: $gray--000;
+  color: style.$gray--800;
+  background-color: style.$gray--000;
 
   &[type="password"] {
-    font-size: $text--lg;
+    font-size: style.$text--lg;
     font-weight: 900;
     letter-spacing: 0.125em;
   }
@@ -110,97 +110,97 @@ $padding--mobile: 12.5px $spacing--base;
   &:focus {
     outline: none;
 
-    color: $navy--600;
+    color: style.$navy--600;
   }
 
   &::placeholder {
     opacity: 100%;
-    font-size: $text--base;
+    font-size: style.$text--base;
     font-weight: 600;
     letter-spacing: initial;
   }
 
   &:disabled {
-    background-color: $gray--300;
+    background-color: style.$gray--300;
   }
 }
 
 .input__error {
-  font-size: $text--xs;
+  font-size: style.$text--xs;
   font-weight: 400;
-  line-height: $text--sm;
+  line-height: style.$text--sm;
 
-  color: $critical-carmine--light;
+  color: style.$critical-carmine--light;
 }
 
-@media screen and (max-width: $breakpoint--smartphone) {
+@media screen and (max-width: style.$breakpoint--smartphone) {
   .input {
     padding: $padding--mobile;
 
     &:not(&--disabled) {
-      @include default-states($padding: $padding--mobile);
+      @include style.default-states($padding: $padding--mobile);
     }
   }
 }
 
 [theme="dark"] {
   .input {
-    background-color: $navy--400;
+    background-color: style.$navy--400;
 
     &:not(&--disabled) {
       .input__icon-container {
         &--error {
-          color: $critical-carmine--dark;
+          color: style.$critical-carmine--dark;
         }
       }
 
       &:hover,
       &:focus-within {
         .input__icon-container--search-icon {
-          color: $gray--000;
+          color: style.$gray--000;
         }
 
         .input__input {
-          color: $gray--000;
+          color: style.$gray--000;
         }
       }
     }
 
     &--disabled {
-      background-color: $navy--700;
+      background-color: style.$navy--700;
 
       .input__icon-container {
         &--search-icon,
         &--clear-icon {
-          color: $navy--300;
+          color: style.$navy--300;
         }
       }
     }
   }
 
   .input__input {
-    color: $blue--50;
-    background-color: $navy--400;
+    color: style.$blue--50;
+    background-color: style.$navy--400;
 
     &:disabled {
-      color: $navy--300;
-      background-color: $navy--700;
+      color: style.$navy--300;
+      background-color: style.$navy--700;
     }
   }
 
   .input__icon-container {
     &--search-icon,
     &--clear-icon {
-      color: $blue--50;
+      color: style.$blue--50;
     }
 
     &--password-hidden,
     &--password-visible {
-      color: $gray--000;
+      color: style.$gray--000;
     }
   }
 
   .input__error {
-    color: $critical-carmine--dark;
+    color: style.$critical-carmine--dark;
   }
 }

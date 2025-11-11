@@ -1,31 +1,31 @@
-@import "constants/style";
+@use "constants/style";
 
 .select-option {
   display: grid;
   grid-template-rows: 2px auto auto;
-  grid-template-columns: auto $spacing--sm 1fr $spacing--sm auto;
+  grid-template-columns: auto style.$spacing--sm 1fr style.$spacing--sm auto;
   grid-template-areas:
     "icon . .           . radio"
     "icon . label       . radio"
     ".    . description . . ";
 
-  padding: $spacing--base;
+  padding: style.$spacing--base;
 
   border: 2px solid transparent;
   border-radius: 12px;
 
-  background-color: $gray--100;
+  background-color: style.$gray--100;
 
   cursor: pointer;
   text-align: left;
 
   &--active {
-    border-color: $blue--500;
+    border-color: style.$blue--500;
   }
 
   &--extra {
-    grid-template-rows: 2px auto auto $spacing--sm auto;
-    grid-template-columns: auto $spacing--sm 1fr $spacing--sm auto;
+    grid-template-rows: 2px auto auto style.$spacing--sm auto;
+    grid-template-columns: auto style.$spacing--sm 1fr style.$spacing--sm auto;
     grid-template-areas:
       "icon . .           .     radio"
       "icon . label       .     radio"
@@ -38,28 +38,28 @@
 .select-option__icon-container {
   grid-area: icon;
 
-  width: $icon--large;
-  height: $icon--large;
+  width: style.$icon--large;
+  height: style.$icon--large;
 }
 
 .select-option__label {
   grid-area: label;
 
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 600;
   line-height: normal;
 
-  color: $navy--400;
+  color: style.$navy--400;
 }
 
 .select-option__description {
   grid-area: description;
 
-  font-size: $text--base;
+  font-size: style.$text--base;
   font-weight: 400;
   line-height: 22px;
 
-  color: $navy--500;
+  color: style.$navy--500;
 }
 
 .select-option__radio {
@@ -77,16 +77,16 @@
 
 [theme="dark"] {
   .select-option {
-    background: $navy--500;
+    background: style.$navy--500;
 
     &--active {
-      border-color: $blue--400;
+      border-color: style.$blue--400;
     }
   }
 
   .select-option__label,
   .select-option__description,
   .select-option__icon-container {
-    color: $gray--000;
+    color: style.$gray--000;
   }
 }

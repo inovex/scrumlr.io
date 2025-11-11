@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "sass:color";
 
 // primary
@@ -218,16 +219,16 @@ $base-colors: (
 @mixin set-accent-variables($color-map) {
   @each $shade, $color in $color-map {
     --accent-color--#{$shade}: #{$color};
-    --accent-color--#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+    --accent-color--#{$shade}-rgb: #{color.red($color)}, #{color.green($color)}, #{color.blue($color)};
   }
 
   // shortcut for most commonly used accent colors
-  $shade-light: map-get($color-map, 500);
-  $shade-dark: map-get($color-map, 400);
+  $shade-light: map.get($color-map, 500);
+  $shade-dark: map.get($color-map, 400);
   --accent-color--light: #{$shade-light};
-  --accent-color--light-rgb: #{red($shade-light)}, #{green($shade-light)}, #{blue($shade-light)};
+  --accent-color--light-rgb: #{color.red($shade-light)}, #{color.green($shade-light)}, #{color.blue($shade-light)};
   --accent-color--dark: #{$shade-dark};
-  --accent-color--dark-rgb: #{red($shade-dark)}, #{green($shade-dark)}, #{blue($shade-dark)};
+  --accent-color--dark-rgb: #{color.red($shade-dark)}, #{color.green($shade-dark)}, #{color.blue($shade-dark)};
 }
 
 // set base colors to be used at the root level
@@ -235,7 +236,7 @@ $base-colors: (
   @each $color-name, $shades in $color-map {
     @each $shade, $color in $shades {
       --#{$color-name}--#{$shade}: #{$color};
-      --#{$color-name}--#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+      --#{$color-name}--#{$shade}-rgb: #{color.red($color)}, #{color.green($color)}, #{color.blue($color)};
     }
   }
 }

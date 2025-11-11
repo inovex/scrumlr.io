@@ -1,21 +1,21 @@
-@import "constants/style";
+@use "constants/style";
 
 .emoji-suggestions {
   &__container {
     position: absolute;
-    top: calc(100% + $spacing--xs);
+    top: calc(100% + style.$spacing--xs);
     left: 0;
     width: 100%;
-    border-radius: $rounded--default;
-    background-color: $gray--300;
-    max-height: min($emoji-suggestions__max-height, calc(100vh - var(--top-distance, 0px) - 2 * $spacing--lg));
-    color: $navy--900;
+    border-radius: style.$rounded--default;
+    background-color: style.$gray--300;
+    max-height: min(style.$emoji-suggestions__max-height, calc(100vh - var(--top-distance, 0px) - 2 * style.$spacing--lg));
+    color: style.$navy--900;
 
-    z-index: $emoji-suggestions-z-index;
+    z-index: style.$emoji-suggestions-z-index;
     overflow-y: auto;
-    box-shadow: $box-shadow--light;
+    box-shadow: style.$box-shadow--light;
 
-    @include scrollbar();
+    @include style.scrollbar();
 
     &--empty {
       display: none;
@@ -28,7 +28,7 @@
   }
 
   &__list {
-    padding: $spacing--xs;
+    padding: style.$spacing--xs;
     margin: 0;
     list-style: none;
   }
@@ -38,9 +38,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: $spacing--xs;
-    border-radius: $rounded--small;
-    line-height: $line-height--medium;
+    padding: style.$spacing--xs;
+    border-radius: style.$rounded--small;
+    line-height: style.$line-height--medium;
   }
 
   &__element:hover,
@@ -49,17 +49,17 @@
   }
 
   &__emoji {
-    margin-right: $spacing--xs;
+    margin-right: style.$spacing--xs;
     user-select: none;
-    font-size: $text--md;
+    font-size: style.$text--md;
   }
 }
 
 [theme="dark"] {
   .emoji-suggestions {
     &__container {
-      color: $gray--000;
-      background-color: $navy--500;
+      color: style.$gray--000;
+      background-color: style.$navy--500;
     }
 
     &__element:hover,

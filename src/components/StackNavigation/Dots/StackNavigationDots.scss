@@ -1,4 +1,4 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .stack-view__navigation-dots {
   display: flex;
@@ -24,13 +24,13 @@
     height: 8px;
     opacity: 0.5;
     border-radius: 100%;
-    background: $gray--000;
+    background: style.$gray--000;
     margin: 12px auto;
   }
 
   &:focus-visible::after {
     opacity: 1;
-    outline: 2px solid $gray--000;
+    outline: 2px solid style.$gray--000;
     background: var(--accent-color--light);
     transform: scale(1);
   }

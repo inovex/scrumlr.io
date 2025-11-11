@@ -1,4 +1,4 @@
-@import "constants/style.scss";
+@use "constants/style";
 
 .portal {
   height: 100%;
@@ -10,24 +10,24 @@
 }
 
 .cookie-policy__title {
-  color: $navy--900;
-  background-color: $gray--000;
-  padding: $spacing--xs $spacing--base $spacing--xs $spacing--base;
+  color: style.$navy--900;
+  background-color: style.$gray--000;
+  padding: style.$spacing--xs style.$spacing--base style.$spacing--xs style.$spacing--base;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
 .cookie-policy__body {
-  color: $navy--900;
-  background-color: $gray--000;
-  padding: $spacing--base;
+  color: style.$navy--900;
+  background-color: style.$gray--000;
+  padding: style.$spacing--base;
   height: 375px;
   overflow: auto;
 }
 
 .cookie-policy__footer {
-  background-color: $gray--000;
-  padding: $spacing--base;
+  background-color: style.$gray--000;
+  padding: style.$spacing--base;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   display: flex;
@@ -35,23 +35,23 @@
 
 .cookie-policy__button {
   border: none;
-  padding: $spacing--xs $spacing--base;
+  padding: style.$spacing--xs style.$spacing--base;
   border-radius: 5px;
-  font-size: $text-size--medium;
+  font-size: style.$text-size--medium;
   cursor: pointer;
 
   &-accept {
     @extend .cookie-policy__button;
-    background: $blue--500;
-    color: $gray--000;
-    margin: 0 0 $spacing--base $spacing--base;
+    background: style.$blue--500;
+    color: style.$gray--000;
+    margin: 0 0 style.$spacing--base style.$spacing--base;
   }
 
   &-decline {
     @extend .cookie-policy__button;
-    background: $gray--300;
-    color: $navy--700;
-    margin: 0 0 $spacing--base auto;
+    background: style.$gray--300;
+    color: style.$navy--700;
+    margin: 0 0 style.$spacing--base auto;
   }
 }
 

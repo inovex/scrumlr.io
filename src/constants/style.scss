@@ -1,7 +1,9 @@
 // @use "sass:list";
 @use "sass:color";
 
-@import "./colors";
+@use "sass:list";
+@use "colors";
+@forward "colors";
 
 // TODO put below in files functions.scss and spacings.scss when other tasks are finished (avoid conflicts)
 
@@ -137,16 +139,16 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 // gradients
 $column-stripes--light: repeating-linear-gradient(
   45deg,
-  $gray--100 calc(0px + var(--stripe-offset, 0px)),
-  $gray--100 calc(20px + var(--stripe-offset, 0px)),
+  colors.$gray--100 calc(0px + var(--stripe-offset, 0px)),
+  colors.$gray--100 calc(20px + var(--stripe-offset, 0px)),
   rgba(var(--accent-color--light-rgb), 0.2) calc(20px + var(--stripe-offset, 0px)),
   rgba(var(--accent-color--light-rgb), 0.2) calc(40px + var(--stripe-offset, 0px))
 );
 
 $column-stripes--dark: repeating-linear-gradient(
   45deg,
-  $navy--600 calc(0px + var(--stripe-offset, 0px)),
-  $navy--600 calc(20px + var(--stripe-offset, 0px)),
+  colors.$navy--600 calc(0px + var(--stripe-offset, 0px)),
+  colors.$navy--600 calc(20px + var(--stripe-offset, 0px)),
   rgba(var(--accent-color--dark-rgb), 0.04) calc(20px + var(--stripe-offset, 0px)),
   rgba(var(--accent-color--dark-rgb), 0.04) calc(40px + var(--stripe-offset, 0px))
 );
@@ -154,10 +156,10 @@ $column-stripes--dark: repeating-linear-gradient(
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color--light)) {
   $props: ();
-  $props: append($props, if($left, inset #{2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($right, inset #{-2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($top, inset 0 #{2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($bottom, inset 0 #{-2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($left, inset #{2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($right, inset #{-2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($top, inset 0 #{2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($bottom, inset 0 #{-2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
   @return $props;
 }
 
@@ -198,14 +200,14 @@ $column-stripes--dark: repeating-linear-gradient(
 
 @mixin tooltip--light {
   @include tooltip;
-  color: $navy--900;
-  background-color: $gray--300;
+  color: colors.$navy--900;
+  background-color: colors.$gray--300;
 }
 
 @mixin tooltip--dark {
   @include tooltip;
-  color: $gray--000;
-  background-color: $navy--200;
+  color: colors.$gray--000;
+  background-color: colors.$navy--200;
 }
 
 // this mixin is used to decrease an element's padding,
@@ -213,7 +215,7 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin compensate-padding($padding, $decrement) {
   $new-padding: ();
   @each $value in $padding {
-    $new-padding: append($new-padding, $value - $decrement);
+    $new-padding: list.append($new-padding, $value - $decrement);
   }
   padding: $new-padding;
 }
@@ -221,19 +223,19 @@ $column-stripes--dark: repeating-linear-gradient(
 // add some default css for hover, focus, and active states.
 @mixin default-states($border-size: 1.5px, $padding, $compensate-padding: true) {
   &:hover {
-    box-shadow: 0 3px 12px 0 color.change($navy--700, $alpha: 0.12);
+    box-shadow: 0 3px 12px 0 color.change(colors.$navy--700, $alpha: 0.12);
   }
 
   &:focus,
   &:focus-within {
-    border: $border-size solid $blue--500;
+    border: $border-size solid colors.$blue--500;
     @if $compensate-padding == true {
       @include compensate-padding($padding, $border-size);
     }
   }
 
   &:active {
-    border: $border-size solid $navy--400;
+    border: $border-size solid colors.$navy--400;
     @if $compensate-padding == true {
       @include compensate-padding($padding, $border-size);
     }
@@ -242,14 +244,14 @@ $column-stripes--dark: repeating-linear-gradient(
   [theme="dark"] & {
     &:focus,
     &:focus-within {
-      border: $border-size solid $blue--400;
+      border: $border-size solid colors.$blue--400;
       @if $compensate-padding == true {
         @include compensate-padding($padding, $border-size);
       }
     }
 
     &:active {
-      border: $border-size solid $gray--000;
+      border: $border-size solid colors.$gray--000;
       @if $compensate-padding == true {
         @include compensate-padding($padding, $border-size);
       }
@@ -258,12 +260,12 @@ $column-stripes--dark: repeating-linear-gradient(
 }
 
 @mixin invalid-state($border-size: 1.5px, $padding, $compensate-padding: true) {
-  border: $border-size solid $critical-carmine--light;
+  border: $border-size solid colors.$critical-carmine--light;
   @if $compensate-padding == true {
     @include compensate-padding($padding, $border-size);
   }
 
   [theme="dark"] & {
-    border-color: $critical-carmine--dark;
+    border-color: colors.$critical-carmine--dark;
   }
 }
