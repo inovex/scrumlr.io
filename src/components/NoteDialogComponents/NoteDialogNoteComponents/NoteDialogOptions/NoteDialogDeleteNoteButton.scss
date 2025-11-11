@@ -1,9 +1,9 @@
-@use "constants/style";
+@use "constants/styles";
 @use "NoteDialogNoteOptions";
 
 .note-dialog__note-option__remove {
-  height: style.$icon--large;
-  width: style.$icon--large;
+  height: styles.$icon--large;
+  width: styles.$icon--large;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@
 }
 .note-dialog__note-option__remove:hover {
   background-color: var(--accent-color--light);
-  color: style.$gray--000;
+  color: styles.$gray--000;
 }
 .note-dialog__note-option__remove:focus-visible {
   outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
@@ -22,6 +22,6 @@
 
 .note-dialog__note-option__remove-icon {
   color: inherit;
-  height: style.$icon--medium;
-  width: style.$icon--medium;
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
 }

@@ -1,31 +1,31 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 .column {
-  min-width: style.$column__min-width;
+  min-width: styles.$column__min-width;
   width: 100%;
-  max-width: style.$column__max-width;
+  max-width: styles.$column__max-width;
   @include mixins.inset-border($top: true, $bottom: true);
-  padding-top: calc(style.$column__border-width + style.$header__height + style.$info-bar__height);
+  padding-top: calc(styles.$column__border-width + styles.$header__height + styles.$info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
-  @include mixins.inset-border($top: true, $bottom: true, $color: style.$victory-verde--light);
+  @include mixins.inset-border($top: true, $bottom: true, $color: styles.$victory-verde--light);
 }
 .column:nth-child(odd) {
-  background-color: style.$gray--100;
+  background-color: styles.$gray--100;
 }
 .column:nth-child(even) {
-  background-color: style.$gray--200;
+  background-color: styles.$gray--200;
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
   }
   .column:nth-child(odd) {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
 }
 .column--hidden {
@@ -40,7 +40,7 @@
 .column__content {
   max-height: 100%;
   max-width: 100%;
-  padding: 0 0 style.$column__border-width 0;
+  padding: 0 0 styles.$column__border-width 0;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -52,9 +52,9 @@
 .column__header {
   display: flex;
   flex-direction: column;
-  padding: 0 style.$spacing--xl;
+  padding: 0 styles.$spacing--xl;
 
-  z-index: style.$column-header-z-index;
+  z-index: styles.$column-header-z-index;
 }
 
 .column__header-title {
@@ -62,7 +62,7 @@
   word-break: break-word;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: style.$spacing--base;
+  margin-bottom: styles.$spacing--base;
   height: 48px;
   position: relative;
 }
@@ -74,7 +74,7 @@
   width: auto;
   height: auto;
   border-bottom: solid 3px var(--accent-color--400);
-  margin: 0 style.$spacing--xs 0 0;
+  margin: 0 styles.$spacing--xs 0 0;
   overflow: hidden;
 }
 
@@ -83,12 +83,12 @@
 }
 
 .column__header-text {
-  font-size: calc(#{style.$text-size--large} + 0.4vw);
+  font-size: calc(#{styles.$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--large;
-  line-height: style.$line-height--large;
-  color: style.$navy--900;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
+  color: styles.$navy--900;
 
   white-space: nowrap;
   overflow: hidden;
@@ -96,7 +96,7 @@
 }
 
 .column__header-text--hidden {
-  color: style.$gray--700;
+  color: styles.$gray--700;
 }
 
 // tooltip requires parent selection because of specificity
@@ -108,13 +108,13 @@
   display: flex;
   align-items: center;
   border: none;
-  font-size: calc(#{style.$text-size--large} + 0.4vw);
-  color: style.$navy--900;
+  font-size: calc(#{styles.$text-size--large} + 0.4vw);
+  color: styles.$navy--900;
   border-bottom: dashed 3px var(--accent-color--400);
   margin: 0 auto 0 0;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--large;
-  line-height: style.$line-height--large;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
   background-color: transparent;
   padding: 0;
   outline: none;
@@ -123,17 +123,17 @@
 }
 [theme="dark"] {
   .column__header-input {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }
 
 .column__header-card-number {
-  margin-bottom: style.$spacing--base;
-  font-size: style.$text-size--medium;
-  color: style.$gray--700;
+  margin-bottom: styles.$spacing--base;
+  font-size: styles.$text-size--medium;
+  color: styles.$gray--700;
   font-weight: 600;
-  letter-spacing: style.$letter-spacing--large;
-  line-height: style.$line-height--large;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
   flex: 1 0 12px;
 }
 
@@ -157,7 +157,7 @@
 .column__note-list {
   margin: 0;
   // padding-top of 4px to display note outline focus correctly
-  padding: 4px style.$spacing--xl style.$spacing--base style.$spacing--xl;
+  padding: 4px styles.$spacing--xl styles.$spacing--base styles.$spacing--xl;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;
@@ -172,11 +172,11 @@
   }
 
   .column__header-text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .column__header-text--hidden {
-    color: style.$gray--700;
+    color: styles.$gray--700;
   }
 
   .column__header-text-wrapper .column__tooltip {
@@ -185,23 +185,23 @@
 }
 
 .column__header-hidden-icon {
-  height: style.$icon--large;
-  width: style.$icon--large;
-  min-width: style.$icon--medium;
-  min-height: style.$icon--medium;
-  margin: 0 style.$spacing--xs 0 0;
-  color: style.$critical-carmine--light;
+  height: styles.$icon--large;
+  width: styles.$icon--large;
+  min-width: styles.$icon--medium;
+  min-height: styles.$icon--medium;
+  margin: 0 styles.$spacing--xs 0 0;
+  color: styles.$critical-carmine--light;
   cursor: pointer;
   transition: all 0.08s ease-out;
 }
 
 .column__header-hidden-icon:hover {
-  color: style.$navy--900;
+  color: styles.$navy--900;
 }
 
 [theme="dark"] {
   .column__header-hidden-icon:hover {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }
 
@@ -215,7 +215,7 @@
   padding: 0;
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
-  margin: auto calc(#{style.$spacing--base} - 2px) auto style.$spacing--base;
+  margin: auto calc(#{styles.$spacing--base} - 2px) auto styles.$spacing--base;
 
   &:hover > svg,
   &:focus-visible > svg {
@@ -226,12 +226,12 @@
 }
 
 .column__header-edit-button-icon {
-  color: style.$navy--900;
+  color: styles.$navy--900;
   height: 24px;
   width: 24px;
   transition: all 0.08s ease-out;
 }
 
 [theme="dark"] .column__header-edit-button-icon {
-  color: style.$gray--000;
+  color: styles.$gray--000;
 }

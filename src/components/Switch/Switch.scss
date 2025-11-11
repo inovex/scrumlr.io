@@ -1,7 +1,7 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
-$padding--default: style.$spacing--xs;
+$padding--default: styles.$spacing--xs;
 $padding--mobile: 6px;
 
 .switch {
@@ -15,9 +15,9 @@ $padding--mobile: 6px;
 
   width: fit-content;
   padding: $padding--default;
-  border-radius: style.$rounded--large;
+  border-radius: styles.$rounded--large;
 
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
 
   &:enabled {
     cursor: pointer;
@@ -26,14 +26,14 @@ $padding--mobile: 6px;
   }
 
   &:disabled {
-    background-color: style.$gray--000;
+    background-color: styles.$gray--000;
 
     .switch__item {
-      color: style.$gray--800;
-      background-color: style.$gray--000;
+      color: styles.$gray--800;
+      background-color: styles.$gray--000;
 
       &--active {
-        background-color: style.$gray--400;
+        background-color: styles.$gray--400;
       }
     }
   }
@@ -43,28 +43,28 @@ $padding--mobile: 6px;
   display: flex;
   align-items: center;
 
-  padding: 14.5px style.$spacing--base;
-  border-radius: style.$rounded--large;
+  padding: 14.5px styles.$spacing--base;
+  border-radius: styles.$rounded--large;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
   font-weight: 600;
 
   color: #292f3b;
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
 
   transition:
     background-color 0.3s,
     color 0.3s;
 
   &--active {
-    background-color: style.$navy--600;
-    color: style.$gray--000;
+    background-color: styles.$navy--600;
+    color: styles.$gray--000;
 
     font-weight: 700;
   }
 }
 
-@media screen and (max-width: style.$breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   .switch {
     padding: $padding--mobile;
 
@@ -74,36 +74,36 @@ $padding--mobile: 6px;
   }
 
   .switch__item {
-    font-size: style.$text--sm;
+    font-size: styles.$text--sm;
   }
 }
 
 [theme="dark"] {
   .switch {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
 
     &:disabled {
-      background-color: style.$navy--700;
+      background-color: styles.$navy--700;
 
       .switch__item {
-        color: style.$navy--300;
-        background-color: style.$navy--700;
+        color: styles.$navy--300;
+        background-color: styles.$navy--700;
 
         &--active {
-          color: style.$navy--300;
-          background-color: style.$gray--400;
+          color: styles.$navy--300;
+          background-color: styles.$gray--400;
         }
       }
     }
   }
 
   .switch__item {
-    color: style.$gray--000;
-    background-color: style.$navy--400;
+    color: styles.$gray--000;
+    background-color: styles.$navy--400;
 
     &--active {
-      color: style.$navy--600;
-      background-color: style.$gray--000;
+      color: styles.$navy--600;
+      background-color: styles.$gray--000;
     }
   }
 }

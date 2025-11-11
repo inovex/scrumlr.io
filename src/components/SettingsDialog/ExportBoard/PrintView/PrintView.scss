@@ -1,7 +1,7 @@
 @use "sass:color";
-@use "constants/style";
+@use "constants/styles";
 
-$color-button: style.$purple--500;
+$color-button: styles.$purple--500;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__container {
@@ -33,11 +33,11 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   height: 42px;
   background: color.adjust($color-button, $lightness: 35%);
   border: none;
-  border-radius: style.$rounded--full;
-  margin: style.$spacing--xs;
+  border-radius: styles.$rounded--full;
+  margin: styles.$spacing--xs;
   cursor: pointer;
   font-weight: bold;
-  font-size: style.$text-size--medium;
+  font-size: styles.$text-size--medium;
   box-shadow: 0 4px 7px 1px $color-button-shadow;
   svg {
     color: $color-button;
@@ -47,14 +47,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
     background: $color-button;
     box-shadow: 0 4px 7px 1px color.adjust($color-button-shadow, $lightness: -15%);
     svg {
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
   &:active {
     background: color.adjust($color-button, $lightness: -10%);
     box-shadow: 0 4px 5px 1px color.adjust($color-button-shadow, $lightness: -25%);
     svg {
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
 }
@@ -70,7 +70,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view {
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
   overflow: visible;
   padding-top: 1cm;
   padding-right: 1cm;
@@ -79,7 +79,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   min-height: 29cm;
   max-width: 21cm;
-  margin: style.$spacing--base auto;
+  margin: styles.$spacing--base auto;
   box-shadow:
     0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -104,16 +104,16 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   display: flex;
   align-items: center;
-  gap: style.$spacing--base;
-  margin-bottom: style.$spacing--xl;
+  gap: styles.$spacing--base;
+  margin-bottom: styles.$spacing--xl;
 }
 
 .print-view__title-text {
-  color: style.$navy--900;
+  color: styles.$navy--900;
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--large;
-  line-height: style.$line-height--large;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
   margin: 0;
   flex: 1;
   text-align: center;
@@ -124,8 +124,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: style.$spacing--xs;
-  font-size: style.$text-size--small;
+  gap: styles.$spacing--xs;
+  font-size: styles.$text-size--small;
   p {
     margin: 0;
   }
@@ -134,14 +134,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column-list {
   display: block;
   width: 100%;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
 }
 
 .print-view__column {
   display: block;
   width: 100%;
-  background-color: style.$gray--000;
-  color: style.$navy--900;
+  background-color: styles.$gray--000;
+  color: styles.$navy--900;
 }
 
 .print-view__column-header-wrapper {
@@ -150,42 +150,42 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   justify-content: space-between;
   width: 100%;
   padding: 0;
-  margin: style.$spacing--xs 0 style.$spacing--base 0;
+  margin: styles.$spacing--xs 0 styles.$spacing--base 0;
 }
 
 .print-view__column-header-text {
-  font-size: style.$text-size--large;
-  margin: 0 0 0 style.$spacing--xs;
+  font-size: styles.$text-size--large;
+  margin: 0 0 0 styles.$spacing--xs;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--large;
-  line-height: style.$line-height--large;
-  color: style.$navy--900;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
+  color: styles.$navy--900;
   border-bottom: solid 3px var(--accent-color--light);
 }
 
 .print-view__column-header-card-count {
-  margin: 0 style.$spacing--xs 0 0;
-  color: style.$gray--700;
+  margin: 0 styles.$spacing--xs 0 0;
+  color: styles.$gray--700;
   font-weight: bold;
 }
 
 .print-view__note-stack-wrapper {
-  border-radius: style.$note__border-radius;
-  padding: style.$spacing--xs style.$spacing--xs 0 style.$spacing--xs;
+  border-radius: styles.$note__border-radius;
+  padding: styles.$spacing--xs styles.$spacing--xs 0 styles.$spacing--xs;
   border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   width: 100%;
-  margin-bottom: style.$spacing--base;
+  margin-bottom: styles.$spacing--base;
   background: rgba(var(--accent-color--light-rgb), 0.05);
 }
 
 .print-view__note {
   display: block;
   width: 100%;
-  margin-bottom: style.$spacing--base;
-  padding: calc(#{style.$spacing--xs} + 4px);
+  margin-bottom: styles.$spacing--base;
+  padding: calc(#{styles.$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
-  border-radius: style.$note__border-radius;
-  background: style.$gray--000;
+  border-radius: styles.$note__border-radius;
+  background: styles.$gray--000;
 }
 @media print {
   .print-view__note {
@@ -195,22 +195,22 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note--isChild {
   width: 100%;
-  margin-bottom: style.$spacing--xs;
+  margin-bottom: styles.$spacing--xs;
   border: 2px dashed rgba(var(--accent-color--light-rgb), 0.25);
 }
 
 .print-view__note--isTop {
-  margin-bottom: style.$spacing--xs;
+  margin-bottom: styles.$spacing--xs;
 }
 
 .print-view__note-text {
-  margin: 0 0 style.$spacing--lg 0;
+  margin: 0 0 styles.$spacing--lg 0;
 }
 
 .print-view__note-info-wrapper {
   display: block;
   position: relative;
-  height: style.$line-height--large;
+  height: styles.$line-height--large;
 }
 
 .print-view__note-info--isTop {
@@ -232,14 +232,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: inline;
   width: auto;
   margin-top: auto;
-  color: style.$gray--700;
+  color: styles.$gray--700;
   font-weight: bold;
 }
 
 .print-view__note-info-votes {
   display: inline !important;
   float: right;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   padding: 6px 11px;
   background: rgba(var(--accent-color--light-rgb), 0.25);
   color: var(--accent-color--light);
@@ -251,5 +251,5 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-size: style.$text-size--small;
+  font-size: styles.$text-size--small;
 }

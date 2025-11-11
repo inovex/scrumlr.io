@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 $column-width: 158px;
@@ -7,36 +7,36 @@ $column-height: 340px;
 .columns-configurator-column {
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--md;
+  gap: styles.$spacing--md;
   flex-shrink: 0;
   flex-grow: 1;
 
   width: $column-width;
   height: $column-height;
 
-  padding: style.$spacing--md style.$spacing--base;
+  padding: styles.$spacing--md styles.$spacing--base;
 
-  border: style.$spacing--xxs solid var(--accent-color--light);
+  border: styles.$spacing--xxs solid var(--accent-color--light);
 
-  z-index: style.$base-z-index;
+  z-index: styles.$base-z-index;
 
   &--even {
-    background-color: style.$gray--200;
+    background-color: styles.$gray--200;
   }
   &--odd {
-    background-color: style.$gray--100;
+    background-color: styles.$gray--100;
   }
 
   // not the column that's currently being dragged, but actually where it was
   &--active-drag {
     background-color: rgba(var(--accent-color--100-rgb, 0.5));
-    border: style.$spacing--xxs dashed var(--accent-color--light);
-    z-index: style.$base-z-index + style.$base-z-index-step; // display dragged item above others
+    border: styles.$spacing--xxs dashed var(--accent-color--light);
+    z-index: styles.$base-z-index + styles.$base-z-index-step; // display dragged item above others
   }
 
   &--active-drop {
     background-color: rgba(var(--accent-color--100-rgb, 0.5));
-    border: style.$spacing--xxs dashed var(--accent-color--light);
+    border: styles.$spacing--xxs dashed var(--accent-color--light);
   }
 
   &--hidden {
@@ -62,13 +62,13 @@ $column-height: 340px;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--xl; // TODO proper gaps
+  gap: styles.$spacing--xl; // TODO proper gaps
   align-items: center;
 }
 
 .columns-configurator-column__icon {
-  width: style.$icon--large;
-  height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 
   &--dnd {
     width: 22px;
@@ -109,11 +109,11 @@ $column-height: 340px;
 .columns-configurator-column__button {
   all: unset;
   cursor: pointer;
-  max-width: style.$icon--large;
-  max-height: style.$icon--large;
+  max-width: styles.$icon--large;
+  max-height: styles.$icon--large;
 
   &:disabled {
-    color: style.$gray--800;
+    color: styles.$gray--800;
     cursor: default;
   }
 }
@@ -123,10 +123,10 @@ $column-height: 340px;
     border-color: var(--accent-color--dark);
 
     &--even {
-      background-color: style.$navy--600;
+      background-color: styles.$navy--600;
     }
     &--odd {
-      background-color: style.$navy--400;
+      background-color: styles.$navy--400;
     }
 
     &--active-drag {
@@ -145,6 +145,6 @@ $column-height: 340px;
   }
 
   .columns-configurator-column__icon {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

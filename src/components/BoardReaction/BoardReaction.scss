@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $bottom-start-pos: 10vh;
 $bottom-end-pos: 60vh;
@@ -15,17 +15,17 @@ $name-max-length: 20em;
 
   animation: fly-top 5s linear;
 
-  z-index: style.$board-reaction-z-index;
+  z-index: styles.$board-reaction-z-index;
   pointer-events: none;
 }
 
 .board-reaction__emoji-container {
-  font-size: style.$text--xl;
+  font-size: styles.$text--xl;
 }
 
 .board-reaction__name-container {
-  padding: style.$spacing--xs style.$spacing--base;
-  font-size: style.$text--base;
+  padding: styles.$spacing--xs styles.$spacing--base;
+  font-size: styles.$text--base;
   max-width: $name-max-length;
   max-height: $name-max-height;
   font-weight: 600;
@@ -33,13 +33,13 @@ $name-max-length: 20em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: style.$navy--900;
-  background-color: style.$gray--300;
-  border-radius: style.$rounded--large;
+  color: styles.$navy--900;
+  background-color: styles.$gray--300;
+  border-radius: styles.$rounded--large;
 
   &--self {
-    color: style.$gray--000;
-    background-color: style.$blue--500;
+    color: styles.$gray--000;
+    background-color: styles.$blue--500;
   }
 }
 
@@ -56,11 +56,11 @@ $name-max-length: 20em;
 
 [theme="dark"] {
   .board-reaction__name-container {
-    color: style.$gray--000;
-    background-color: style.$navy--200;
+    color: styles.$gray--000;
+    background-color: styles.$navy--200;
 
     &--self {
-      background-color: style.$blue--300;
+      background-color: styles.$blue--300;
     }
   }
 }

@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $icon-size: 36px;
 
@@ -7,15 +7,15 @@ $icon-size: 36px;
   width: $icon-size;
   height: $icon-size;
   border: 2px solid transparent;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 
-  color: rgba(style.$navy--400, 0.5);
+  color: rgba(styles.$navy--400, 0.5);
 
   cursor: pointer;
 
   &:hover {
-    color: style.$navy--600;
-    background-color: style.$gray--300;
+    color: styles.$navy--600;
+    background-color: styles.$gray--300;
   }
 
   &--active {
@@ -36,11 +36,11 @@ $icon-size: 36px;
 
 [theme="dark"] {
   .favourite-button {
-    color: rgba(style.$gray--000, 0.7);
+    color: rgba(styles.$gray--000, 0.7);
 
     &:hover {
-      color: style.$gray--000;
-      background-color: style.$navy--600;
+      color: styles.$gray--000;
+      background-color: styles.$navy--600;
     }
 
     &--active {

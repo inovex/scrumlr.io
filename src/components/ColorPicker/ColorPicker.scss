@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $item-size--default: 40px;
 $option-size--default: 24px;
@@ -10,13 +10,13 @@ $option-size--small: 18px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: style.$spacing--xxs;
-  box-shadow: 0 0 20px rgba(style.$navy--400, 0.12);
-  background-color: style.$gray--300;
+  padding-bottom: styles.$spacing--xxs;
+  box-shadow: 0 0 20px rgba(styles.$navy--400, 0.12);
+  background-color: styles.$gray--300;
   list-style: none;
   padding-left: 0;
   margin-top: auto;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 
   // TODO make color picker always fitted
   // not sure why this doesn't use gap/padding properly in the first place but i'm just gonna override it
@@ -59,7 +59,7 @@ $option-size--small: 18px;
       }
 
       &:focus-visible {
-        border-radius: style.$rounded--full;
+        border-radius: styles.$rounded--full;
         outline: none;
       }
     }
@@ -68,12 +68,12 @@ $option-size--small: 18px;
 
 [theme="dark"] {
   .color-picker {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
 
     &__item {
       &__button {
         &:focus-visible {
-          border-radius: style.$rounded--full;
+          border-radius: styles.$rounded--full;
           outline: none;
         }
       }
@@ -88,9 +88,9 @@ $option-size--small: 18px;
 .color-picker__color-option {
   width: $option-size--default;
   height: $option-size--default;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   background-color: var(--accent-color--500);
-  border: 3px solid style.$gray--300;
+  border: 3px solid styles.$gray--300;
 
   cursor: pointer;
 
@@ -117,7 +117,7 @@ $option-size--small: 18px;
 
 [theme="dark"] {
   .color-picker__color-option {
-    border: 3px solid style.$navy--600;
+    border: 3px solid styles.$navy--600;
 
     &--selected {
       border: 3px solid var(--accent-color--200);
@@ -135,7 +135,7 @@ $option-size--small: 18px;
   margin-top: auto;
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   .color-picker {
     &--allow-vertical {
       flex-direction: row-reverse;
@@ -143,7 +143,7 @@ $option-size--small: 18px;
       right: 0;
       margin: auto;
       justify-self: center;
-      padding-right: style.$spacing--xxs;
+      padding-right: styles.$spacing--xxs;
     }
   }
 

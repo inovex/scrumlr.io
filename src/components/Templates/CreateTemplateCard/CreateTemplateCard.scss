@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $card-height: 220px;
 $icon-size: 80px;
@@ -14,38 +14,38 @@ $icon-size: 80px;
 
   width: 100%;
   height: $card-height;
-  border-radius: style.$rounded--default;
-  border: 3px dashed style.$blue--500;
+  border-radius: styles.$rounded--default;
+  border: 3px dashed styles.$blue--500;
 
   box-sizing: border-box; // prevent overflow
   padding: 0 40px 14px 40px;
   text-align: center;
 
-  background-color: style.$blue--100;
+  background-color: styles.$blue--100;
 
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 6px 32px 0 rgba(style.$blue--500, 0.26);
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
   }
 
   &:focus {
-    background-color: style.$gray--000;
+    background-color: styles.$gray--000;
   }
 
   &:active {
-    background-color: style.$blue--200;
+    background-color: styles.$blue--200;
   }
 
   &:disabled {
-    background-color: style.$gray--300;
-    border-color: style.$gray--800;
+    background-color: styles.$gray--300;
+    border-color: styles.$gray--800;
     box-shadow: none;
     cursor: unset;
 
     .create-template-card__icon,
     .create-template-card__title {
-      color: style.$gray--800;
+      color: styles.$gray--800;
     }
   }
 }
@@ -53,37 +53,37 @@ $icon-size: 80px;
 .create-template-card__icon {
   width: $icon-size;
   height: $icon-size;
-  color: style.$blue--500;
+  color: styles.$blue--500;
 }
 
 .create-template-card__title {
-  font-size: style.$text--md;
+  font-size: styles.$text--md;
   font-weight: 600;
   line-height: 28px;
 
-  color: style.$blue--500;
+  color: styles.$blue--500;
 }
 
 [theme="dark"] {
   .create-template-card {
-    background-color: rgba(style.$blue--400, 0.08);
-    border-color: style.$blue--400;
+    background-color: rgba(styles.$blue--400, 0.08);
+    border-color: styles.$blue--400;
 
     &:focus {
-      background-color: style.$navy--600;
+      background-color: styles.$navy--600;
     }
 
     &:active {
-      background-color: rgba(style.$blue--400, 0.2);
+      background-color: rgba(styles.$blue--400, 0.2);
     }
 
     &:disabled {
-      background: style.$navy--600;
-      border-color: style.$navy--300;
+      background: styles.$navy--600;
+      border-color: styles.$navy--300;
 
       .create-template-card__icon,
       .create-template-card__title {
-        color: style.$navy--300;
+        color: styles.$navy--300;
       }
     }
   }

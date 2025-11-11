@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "../NoteAuthorList";
 
 $skeleton-name-width: 92px;
@@ -15,19 +15,19 @@ $skeleton-name-width: 92px;
   height: NoteAuthorList.$avatar-size;
   border-radius: 100%;
   overflow: hidden;
-  background-color: style.$gray--300;
+  background-color: styles.$gray--300;
 }
 
 .note-author-skeleton__name {
-  height: style.$text-size--small;
+  height: styles.$text-size--small;
   width: $skeleton-name-width;
   border-radius: 4px;
-  background-color: style.$gray--300;
+  background-color: styles.$gray--300;
 }
 
 [theme="dark"] {
   .note-author-skeleton__avatar {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
 
     img {
       background-blend-mode: luminosity;
@@ -36,6 +36,6 @@ $skeleton-name-width: 92px;
   }
 
   .note-author-skeleton__name {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
   }
 }

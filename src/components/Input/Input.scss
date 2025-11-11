@@ -1,13 +1,13 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
-$padding--default: style.$spacing--base;
-$padding--mobile: 12.5px style.$spacing--base;
+$padding--default: styles.$spacing--base;
+$padding--mobile: 12.5px styles.$spacing--base;
 
 .input__root {
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
 
   width: 100%;
 }
@@ -16,13 +16,13 @@ $padding--mobile: 12.5px style.$spacing--base;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
 
   width: 100%;
   padding: $padding--default;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
 
   &--height-normal {
     height: 60px;
@@ -38,7 +38,7 @@ $padding--mobile: 12.5px style.$spacing--base;
 
     .input__icon-container {
       &--error {
-        color: style.$critical-carmine--light;
+        color: styles.$critical-carmine--light;
       }
     }
 
@@ -47,14 +47,14 @@ $padding--mobile: 12.5px style.$spacing--base;
     &:hover,
     &:focus-within {
       .input__icon-container--search-icon {
-        color: style.$navy--600;
+        color: styles.$navy--600;
       }
 
       .input__input {
-        color: style.$navy--600;
+        color: styles.$navy--600;
 
         &::selection {
-          background-color: style.$blue--50;
+          background-color: styles.$blue--50;
         }
       }
     }
@@ -65,23 +65,23 @@ $padding--mobile: 12.5px style.$spacing--base;
   }
 
   &--disabled {
-    background-color: style.$gray--300;
+    background-color: styles.$gray--300;
 
     .input__icon-container {
       &--search-icon,
       &--clear-icon {
-        color: style.$gray--800;
+        color: styles.$gray--800;
       }
     }
   }
 }
 
 .input__icon-container {
-  width: style.$icon--large;
-  height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 
   &--search-icon {
-    color: style.$gray--800;
+    color: styles.$gray--800;
   }
 
   &--clear-icon {
@@ -95,15 +95,15 @@ $padding--mobile: 12.5px style.$spacing--base;
   margin: 0;
   border: none;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
   font-weight: 600;
-  line-height: style.$text--xl;
+  line-height: styles.$text--xl;
 
-  color: style.$gray--800;
-  background-color: style.$gray--000;
+  color: styles.$gray--800;
+  background-color: styles.$gray--000;
 
   &[type="password"] {
-    font-size: style.$text--lg;
+    font-size: styles.$text--lg;
     font-weight: 900;
     letter-spacing: 0.125em;
   }
@@ -111,30 +111,30 @@ $padding--mobile: 12.5px style.$spacing--base;
   &:focus {
     outline: none;
 
-    color: style.$navy--600;
+    color: styles.$navy--600;
   }
 
   &::placeholder {
     opacity: 100%;
-    font-size: style.$text--base;
+    font-size: styles.$text--base;
     font-weight: 600;
     letter-spacing: initial;
   }
 
   &:disabled {
-    background-color: style.$gray--300;
+    background-color: styles.$gray--300;
   }
 }
 
 .input__error {
-  font-size: style.$text--xs;
+  font-size: styles.$text--xs;
   font-weight: 400;
-  line-height: style.$text--sm;
+  line-height: styles.$text--sm;
 
-  color: style.$critical-carmine--light;
+  color: styles.$critical-carmine--light;
 }
 
-@media screen and (max-width: style.$breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   .input {
     padding: $padding--mobile;
 
@@ -146,62 +146,62 @@ $padding--mobile: 12.5px style.$spacing--base;
 
 [theme="dark"] {
   .input {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
 
     &:not(&--disabled) {
       .input__icon-container {
         &--error {
-          color: style.$critical-carmine--dark;
+          color: styles.$critical-carmine--dark;
         }
       }
 
       &:hover,
       &:focus-within {
         .input__icon-container--search-icon {
-          color: style.$gray--000;
+          color: styles.$gray--000;
         }
 
         .input__input {
-          color: style.$gray--000;
+          color: styles.$gray--000;
         }
       }
     }
 
     &--disabled {
-      background-color: style.$navy--700;
+      background-color: styles.$navy--700;
 
       .input__icon-container {
         &--search-icon,
         &--clear-icon {
-          color: style.$navy--300;
+          color: styles.$navy--300;
         }
       }
     }
   }
 
   .input__input {
-    color: style.$blue--50;
-    background-color: style.$navy--400;
+    color: styles.$blue--50;
+    background-color: styles.$navy--400;
 
     &:disabled {
-      color: style.$navy--300;
-      background-color: style.$navy--700;
+      color: styles.$navy--300;
+      background-color: styles.$navy--700;
     }
   }
 
   .input__icon-container {
     &--search-icon,
     &--clear-icon {
-      color: style.$blue--50;
+      color: styles.$blue--50;
     }
 
     &--password-hidden,
     &--password-visible {
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
 
   .input__error {
-    color: style.$critical-carmine--dark;
+    color: styles.$critical-carmine--dark;
   }
 }

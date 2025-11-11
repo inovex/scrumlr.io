@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $transition-time: 0.2s;
 $transition-time--text: 0.1s;
@@ -15,21 +15,21 @@ $fly-in-time: 0.5s;
   max-width: max(400px, 36vw);
   height: 56px;
 
-  padding: 0 style.$spacing--xs;
+  padding: 0 styles.$spacing--xs;
   border-radius: 28px;
 
   animation: fly-in-right $fly-in-time ease-out;
 
-  background-color: style.$gray--000;
-  box-shadow: 3px 5px 3px rgba(style.$navy--500, 30%);
+  background-color: styles.$gray--000;
+  box-shadow: 3px 5px 3px rgba(styles.$navy--500, 30%);
 
   transition:
     margin-right $transition-time ease-out,
     padding-right $transition-time ease-out;
 
   &:hover {
-    padding-right: style.$spacing--xs;
-    margin-right: style.$spacing--xs;
+    padding-right: styles.$spacing--xs;
+    margin-right: styles.$spacing--xs;
 
     .request__info-container {
       opacity: 0;
@@ -56,13 +56,13 @@ $fly-in-time: 0.5s;
 .request__info-container {
   display: flex;
   flex-direction: column;
-  font-size: style.$text-size--medium;
+  font-size: styles.$text-size--medium;
 
   transition: opacity $transition-time--text ease-out;
 }
 
 .request__participant-name {
-  color: style.$navy--500;
+  color: styles.$navy--500;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -70,7 +70,7 @@ $fly-in-time: 0.5s;
 }
 
 .request__info-text {
-  color: style.$navy--500;
+  color: styles.$navy--500;
   opacity: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,10 +96,10 @@ $fly-in-time: 0.5s;
   width: 100%;
 
   border: none;
-  border-radius: style.$rounded--medium;
+  border-radius: styles.$rounded--medium;
 
   font-weight: bold;
-  font-size: style.$text-size--medium;
+  font-size: styles.$text-size--medium;
 
   opacity: 0;
   transition: opacity $transition-time linear;
@@ -111,8 +111,8 @@ $fly-in-time: 0.5s;
 
 // ICON
 .request__icon-container {
-  width: style.$icon--extralarge;
-  height: style.$icon--extralarge;
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
 
   > svg {
     width: 100%;
@@ -120,7 +120,7 @@ $fly-in-time: 0.5s;
   }
 }
 
-@media #{style.$mini-smartphone} {
+@media #{styles.$mini-smartphone} {
   .request__container {
     max-width: 80vw;
   }
@@ -141,27 +141,27 @@ $fly-in-time: 0.5s;
 // DARK THEME
 [theme="dark"] {
   .request__container {
-    background-color: style.$navy--700;
-    box-shadow: 3px 5px 3px rgba(style.$navy--900, 30%);
+    background-color: styles.$navy--700;
+    box-shadow: 3px 5px 3px rgba(styles.$navy--900, 30%);
   }
 
   .request__participant-name,
   .request__info-text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .request__button {
-    background-color: style.$navy--500;
-    color: style.$gray--000;
+    background-color: styles.$navy--500;
+    color: styles.$gray--000;
 
     &:hover {
-      background-color: style.$navy--400;
+      background-color: styles.$navy--400;
     }
   }
 
   .request__icon-container {
     svg {
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
 }

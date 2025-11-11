@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $header-menu__item-border-width: 1px;
 $header-menu-button-height: 24px;
@@ -8,12 +8,12 @@ $header-menu-border-bottom-color: #efefef;
 .settings-option-button {
   display: flex;
   align-items: center;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
 
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
   border-radius: 8px;
   border: none;
-  padding: 0 style.$spacing--lg;
+  padding: 0 styles.$spacing--lg;
   height: $settings__item-height;
   width: 100%;
   text-align: left;
@@ -34,17 +34,17 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .settings-option-button__label {
-  color: style.$navy--900;
-  font-size: style.$text-size--medium;
-  letter-spacing: style.$letter-spacing--medium;
+  color: styles.$navy--900;
+  font-size: styles.$text-size--medium;
+  letter-spacing: styles.$letter-spacing--medium;
   cursor: pointer;
   hyphens: auto;
   flex-grow: 1;
 }
 
 .settings-option-button__icon {
-  width: style.$icon--large;
-  height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
   flex-shrink: 0;
   color: var(--accent-color--light);
   vertical-align: middle;
@@ -58,29 +58,29 @@ $header-menu-border-bottom-color: #efefef;
 .settings-option-button--disabled:focus-within,
 .settings-option-button--disabled:hover {
   cursor: default;
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
 }
 
 [theme="dark"] {
   .settings-option-button {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
   .settings-option-button:focus-within,
   .settings-option-button:hover {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
   }
 
   .settings-option-button__label {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .settings-option-button--disabled:focus-within,
   .settings-option-button--disabled:hover {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
 
   .settings-option-button--expandable {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
 }
 

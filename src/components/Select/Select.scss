@@ -1,7 +1,7 @@
-@use "constants/style";
+@use "constants/styles";
 
 .select {
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
 }

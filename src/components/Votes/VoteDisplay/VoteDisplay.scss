@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 $vote-display-width: 114px;
@@ -13,15 +13,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .vote-display {
   height: 100%;
   width: $vote-display-width;
-  color: style.$navy--500;
-  background-color: style.$gray--000;
-  border-radius: style.$rounded--full;
+  color: styles.$navy--500;
+  background-color: styles.$gray--000;
+  border-radius: styles.$rounded--full;
   position: relative;
-  border: 2px solid style.$gray--000;
+  border: 2px solid styles.$gray--000;
   @include mixins.box-shadow-light;
 
   &:has(:focus-visible) {
-    outline: 2px solid style.$blue--500;
+    outline: 2px solid styles.$blue--500;
   }
 }
 
@@ -29,8 +29,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
-  background-color: style.$navy--500;
-  color: style.$gray--000;
+  background-color: styles.$navy--500;
+  color: styles.$gray--000;
   border-radius: 100%;
 }
 
@@ -51,8 +51,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   top: 0;
   left: 19px;
   height: $vote-display__content-height;
-  border-top-right-radius: style.$rounded--full;
-  border-bottom-right-radius: style.$rounded--full;
+  border-top-right-radius: styles.$rounded--full;
+  border-bottom-right-radius: styles.$rounded--full;
   background-color: $vote-display__progress-bar-color;
 }
 
@@ -71,12 +71,12 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: style.$rounded--full;
-  background-color: style.$gray--000;
+  border-radius: styles.$rounded--full;
+  background-color: styles.$gray--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
   padding-right: 4px;
   list-style: none;
   margin: 0;
@@ -92,15 +92,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: relative;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 }
 
 .short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: style.$rounded--full;
-  background-color: style.$gray--300;
-  color: style.$navy--500;
+  border-radius: styles.$rounded--full;
+  background-color: styles.$gray--300;
+  color: styles.$navy--500;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -110,11 +110,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: mixins.getLightHoverBackground(style.$gray--300);
+    background-color: mixins.getLightHoverBackground(styles.$gray--300);
   }
 
   &:focus-visible {
-    outline: 2px solid style.$blue--500;
+    outline: 2px solid styles.$blue--500;
   }
 }
 
@@ -124,8 +124,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: 100%;
 }
 .short-action__button > .short-action__flag-icon {
-  height: style.$icon--medium;
-  width: style.$icon--medium;
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;
@@ -141,22 +141,22 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 [theme="dark"] {
   .vote-display {
-    color: style.$gray--000;
-    background-color: style.$navy--500;
-    border-color: style.$navy--500;
+    color: styles.$gray--000;
+    background-color: styles.$navy--500;
+    border-color: styles.$navy--500;
 
     &:has(:focus-visible) {
-      outline: 2px solid style.$pink--500;
+      outline: 2px solid styles.$pink--500;
     }
   }
 
   .vote-display > svg {
-    background-color: style.$gray--000;
-    color: style.$navy--500;
+    background-color: styles.$gray--000;
+    color: styles.$navy--500;
   }
 
   .vote-display__short-actions {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
 
   .vote-display--votes-depleted .vote-display__progress-bar {
@@ -164,15 +164,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .short-action__button {
-    background-color: style.$navy--600;
-    color: style.$gray--000;
+    background-color: styles.$navy--600;
+    color: styles.$gray--000;
 
     &:hover {
-      background-color: mixins.getDarkHoverBackground(style.$navy--600);
+      background-color: mixins.getDarkHoverBackground(styles.$navy--600);
     }
 
     &:focus-visible {
-      outline: 2px solid style.$pink--500;
+      outline: 2px solid styles.$pink--500;
     }
   }
 }

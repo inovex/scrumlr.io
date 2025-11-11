@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .access-settings__wrapper {
   width: 100vw;
@@ -12,17 +12,17 @@
 .access-settings {
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--xl;
+  gap: styles.$spacing--xl;
   overflow-y: auto;
 
   width: 37%;
 
-  padding: 40px style.$spacing--xl style.$spacing--xl style.$spacing--xl;
+  padding: 40px styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
 
-  border-radius: style.$rounded--default;
-  background-color: style.$gray--000;
+  border-radius: styles.$rounded--default;
+  background-color: styles.$gray--000;
 
-  box-shadow: 0 6px 32px 0 rgba(style.$blue--500, 0.26);
+  box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
 }
 
 .access-settings__header {
@@ -31,48 +31,48 @@
 }
 
 .access-settings__title {
-  color: style.$navy--900;
-  font-size: style.$text--lg;
+  color: styles.$navy--900;
+  font-size: styles.$text--lg;
   font-weight: 700;
 
-  padding-bottom: style.$spacing--xxs;
-  border-bottom: 3px solid style.$blue--500;
+  padding-bottom: styles.$spacing--xxs;
+  border-bottom: 3px solid styles.$blue--500;
 }
 
 .access-settings__footer {
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
-  gap: style.$spacing--md;
+  gap: styles.$spacing--md;
 }
 
 .access-settings__hint {
-  color: style.$gray--800;
+  color: styles.$gray--800;
 }
 
-@media screen and (max-width: style.$breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   .access-settings__wrapper {
-    padding: style.$spacing--xs;
+    padding: styles.$spacing--xs;
   }
 
   .access-settings {
     height: 90%;
     width: 85%;
-    gap: style.$spacing--md;
+    gap: styles.$spacing--md;
 
-    padding: style.$spacing--xl style.$spacing--base style.$spacing--base style.$spacing--base;
+    padding: styles.$spacing--xl styles.$spacing--base styles.$spacing--base styles.$spacing--base;
   }
 }
 
 [theme="dark"] {
   .access-settings {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
 
-    box-shadow: 0 6px 32px 0 rgba(style.$blue--400, 0.26);
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--400, 0.26);
   }
 
   .access-settings__title {
-    color: style.$gray--000;
-    border-color: style.$blue--400;
+    color: styles.$gray--000;
+    border-color: styles.$blue--400;
   }
 }

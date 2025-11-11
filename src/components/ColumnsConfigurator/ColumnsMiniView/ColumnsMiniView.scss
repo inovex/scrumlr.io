@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 // magic w/h
@@ -52,8 +52,8 @@ $mini-column-height: 91px;
 }
 
 .columns-mini-view__column-index {
-  color: style.$navy--400;
-  font-size: style.$text--base;
+  color: styles.$navy--400;
+  font-size: styles.$text--base;
   font-weight: 600;
 }
 
@@ -65,6 +65,6 @@ $mini-column-height: 91px;
   }
 
   .columns-mini-view__column-index {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

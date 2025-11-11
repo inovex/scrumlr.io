@@ -1,13 +1,13 @@
-@use "constants/style";
+@use "constants/styles";
 
 .share-button {
   outline: none;
-  border: 2px solid style.$navy--500;
-  color: style.$navy--500;
+  border: 2px solid styles.$navy--500;
+  color: styles.$navy--500;
   border-radius: 100%;
   height: 36px;
   width: 36px;
-  margin-left: style.$spacing--base;
+  margin-left: styles.$spacing--base;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -26,7 +26,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba(style.$navy--500, 0.32);
+    box-shadow: 0 0 0 2px rgba(styles.$navy--500, 0.32);
   }
 }
 
@@ -37,16 +37,16 @@
 
 [theme="dark"] {
   .share-button {
-    border: 2px solid style.$blue--200;
-    color: style.$blue--200;
+    border: 2px solid styles.$blue--200;
+    color: styles.$blue--200;
 
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba(style.$blue--200, 0.48);
+      box-shadow: 0 0 0 2px rgba(styles.$blue--200, 0.48);
     }
   }
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   .share-button {
     display: none;
   }

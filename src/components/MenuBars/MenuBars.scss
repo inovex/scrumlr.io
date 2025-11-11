@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 $tooltip-gap: 12px;
@@ -6,7 +6,7 @@ $menu-mobile__width: 72px;
 
 .menu-bars-mobile {
   display: none;
-  z-index: style.$menu-z-index;
+  z-index: styles.$menu-z-index;
   position: fixed;
   transition:
     bottom 0.25s,
@@ -42,66 +42,66 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab {
-  background: style.$gray--000;
-  border-radius: style.$rounded--full;
+  background: styles.$gray--000;
+  border-radius: styles.$rounded--full;
   cursor: pointer;
   width: $menu-mobile__width;
   height: $menu-mobile__width;
   border: none;
   @include mixins.box-shadow-light;
-  z-index: style.$menu-item-z-index + style.$base-z-index-step;
+  z-index: styles.$menu-item-z-index + styles.$base-z-index-step;
   transition: all 0.2s ease-out;
 
   svg {
     path {
-      fill: style.$navy--900;
+      fill: styles.$navy--900;
     }
   }
 }
 
 .menu-bars-mobile__fab-option {
   .tooltip-button__icon {
-    border-radius: style.$rounded--full;
+    border-radius: styles.$rounded--full;
     margin: 0;
 
     &--active {
-      background-color: style.$navy--500;
+      background-color: styles.$navy--500;
     }
   }
 
   &:nth-child(1) {
-    z-index: style.$menu-item-z-index;
+    z-index: styles.$menu-item-z-index;
   }
 
   &:nth-child(1) {
-    z-index: style.$menu-item-z-index - 1 * style.$base-z-index-step;
+    z-index: styles.$menu-item-z-index - 1 * styles.$base-z-index-step;
   }
 
   &:nth-child(2) {
-    z-index: style.$menu-item-z-index - 2 * style.$base-z-index-step;
+    z-index: styles.$menu-item-z-index - 2 * styles.$base-z-index-step;
   }
 
   &:nth-child(3) {
-    z-index: style.$menu-item-z-index - 3 * style.$base-z-index-step;
+    z-index: styles.$menu-item-z-index - 3 * styles.$base-z-index-step;
   }
 
   &--vertical:first-child {
-    margin-bottom: style.$spacing--xs;
+    margin-bottom: styles.$spacing--xs;
   }
 
   &--horizontal:first-child {
-    margin-right: style.$spacing--xs;
+    margin-right: styles.$spacing--xs;
   }
 }
 
 [theme="dark"] {
   .menu-bars-mobile__fab {
-    background: style.$navy--500;
+    background: styles.$navy--500;
   }
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
     &--active {
-      background-color: style.$gray--000;
+      background-color: styles.$gray--000;
     }
   }
 }
@@ -115,30 +115,30 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab-main--isExpanded {
-  background: style.$navy--500;
+  background: styles.$navy--500;
 
   svg {
-    color: style.$gray--000;
-    width: style.$icon--huge;
-    height: style.$icon--huge;
+    color: styles.$gray--000;
+    width: styles.$icon--huge;
+    height: styles.$icon--huge;
   }
 }
 
 [theme="dark"] {
   .menu-bars-mobile__fab svg path {
-    fill: style.$gray--000;
+    fill: styles.$gray--000;
   }
 
   .menu-bars-mobile__fab-main--isExpanded {
-    background: style.$gray--000;
+    background: styles.$gray--000;
 
     svg {
-      color: style.$navy--900;
+      color: styles.$navy--900;
     }
   }
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   $menu-mobile__width: 64px;
 
   .menu-bars .menu {
@@ -149,8 +149,8 @@ $menu-mobile__width: 72px;
     display: grid;
     grid-template-columns: 0 $menu-mobile__width;
     grid-template-rows: 0 $menu-mobile__width;
-    bottom: style.$spacing--lg;
-    right: style.$spacing--lg;
+    bottom: styles.$spacing--lg;
+    right: styles.$spacing--lg;
   }
 
   .menu-bars-mobile__fab {
@@ -159,7 +159,7 @@ $menu-mobile__width: 72px;
   }
 }
 
-@media #{style.$mini-smartphone} {
+@media #{styles.$mini-smartphone} {
   .menu-bars-mobile {
     bottom: 1vw;
     right: 1vw;
@@ -178,7 +178,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu__container {
-  z-index: style.$menu-z-index;
+  z-index: styles.$menu-z-index;
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
@@ -194,10 +194,10 @@ $menu-mobile__width: 72px;
 
 .menu {
   border-radius: calc($menu-mobile__width / 2);
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
   @include mixins.box-shadow-light;
-  padding: style.$spacing--lg 0;
-  width: style.$action-bar__width;
+  padding: styles.$spacing--lg 0;
+  width: styles.$action-bar__width;
   height: auto;
   visibility: visible;
   opacity: 1;
@@ -219,7 +219,7 @@ $menu-mobile__width: 72px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
   height: auto;
   padding: 0;
   margin: 0;
@@ -227,7 +227,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
     @include mixins.box-shadow-light;
   }
 }
@@ -237,14 +237,14 @@ $menu-mobile__width: 72px;
   width: 42px;
   height: 42px;
 
-  background: style.$gray--000;
+  background: styles.$gray--000;
   border: none;
   border-radius: 100%;
   outline: none;
   @include mixins.box-shadow-light;
-  color: style.$navy--900;
+  color: styles.$navy--900;
 }
-@media #{style.$tablet} {
+@media #{styles.$tablet} {
   .menu-bars__navigation {
     position: absolute;
     top: calc(100% + 16px);
@@ -268,33 +268,33 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:focus-visible {
-  outline: 2px solid rgba(style.$navy--900, 0.5);
+  outline: 2px solid rgba(styles.$navy--900, 0.5);
 }
 
 .menu-bars__navigation:enabled:hover {
-  background-color: mixins.getLightHoverBackground(style.$gray--000);
+  background-color: mixins.getLightHoverBackground(styles.$gray--000);
 }
 
 .menu-bars__navigation:disabled {
-  color: style.$gray--600;
+  color: styles.$gray--600;
 }
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: style.$navy--500;
-    color: style.$gray--000;
+    background: styles.$navy--500;
+    color: styles.$gray--000;
   }
 
   .menu-bars__navigation:focus-visible {
-    outline: 2px solid rgba(style.$gray--000, 0.5);
+    outline: 2px solid rgba(styles.$gray--000, 0.5);
   }
 
   .menu-bars__navigation:enabled:hover {
-    background-color: mixins.getDarkHoverBackground(style.$navy--500);
+    background-color: mixins.getDarkHoverBackground(styles.$navy--500);
   }
 
   .menu-bars__navigation:disabled {
-    color: style.$navy--700;
+    color: styles.$navy--700;
   }
 }
 
@@ -303,7 +303,7 @@ $menu-mobile__width: 72px;
   width: 100%;
 }
 
-@media #{style.$tablet} {
+@media #{styles.$tablet} {
   .menu:first-child:last-child {
     position: fixed;
   }

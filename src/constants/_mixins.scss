@@ -1,15 +1,15 @@
 @use "sass:list";
 @use "sass:color";
 
-@use "constants/style";
+@use "constants/styles";
 @use "constants/colors";
 
 // tooltip
 @mixin tooltip {
-  z-index: style.$request-z-index;
-  border-radius: style.$rounded--large;
+  z-index: styles.$request-z-index;
+  border-radius: styles.$rounded--large;
   max-width: 80%;
-  font-size: style.$text--sm;
+  font-size: styles.$text--sm;
 }
 
 @mixin tooltip--light {
@@ -42,10 +42,10 @@
 // helper function for inset-border mixin
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color--light)) {
   $props: ();
-  $props: list.append($props, if($left, inset #{2 * style.$column__border-width} 0 0 #{- style.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($right, inset #{-2 * style.$column__border-width} 0 0 #{- style.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($top, inset 0 #{2 * style.$column__border-width} 0 #{- style.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($bottom, inset 0 #{-2 * style.$column__border-width} 0 #{- style.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($left, inset #{2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($right, inset #{-2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($top, inset 0 #{2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($bottom, inset 0 #{-2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
   @return $props;
 }
 

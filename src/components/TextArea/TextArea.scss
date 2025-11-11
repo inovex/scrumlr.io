@@ -1,10 +1,10 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 $padding--default: 16px;
 $padding--fitted: 8px;
 
-$line-height--default: style.$line-height--medium;
+$line-height--default: styles.$line-height--medium;
 $border-width--default: 2px;
 $border-width--thick: 3px;
 
@@ -31,18 +31,18 @@ $border-width--thick: 3px;
     // used with non-embedded textareas to not mess with default state borders
     &-transparent {
       --text-area-border-width: #{$border-width--default};
-      border-radius: style.$rounded--default;
+      border-radius: styles.$rounded--default;
       border-color: transparent;
     }
 
     &-normal {
       --text-area-border-width: #{$border-width--default};
-      border-radius: style.$rounded--default;
+      border-radius: styles.$rounded--default;
     }
 
     &-thick {
       --text-area-border-width: #{$border-width--thick};
-      border-radius: style.$rounded--default;
+      border-radius: styles.$rounded--default;
     }
   }
 
@@ -65,24 +65,24 @@ $border-width--thick: 3px;
   margin: 0;
   outline: none;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
   font-weight: 500;
   line-height: $line-height--default;
 
-  color: style.$navy--400;
-  background-color: style.$gray--000;
+  color: styles.$navy--400;
+  background-color: styles.$gray--000;
 
   &::placeholder {
-    color: style.$gray--800;
+    color: styles.$gray--800;
   }
 
   &--text-dim {
-    color: style.$gray--800;
+    color: styles.$gray--800;
     &:hover,
     &:focus-within {
-      color: style.$navy--400;
+      color: styles.$navy--400;
       &::placeholder {
-        color: style.$gray--800;
+        color: styles.$gray--800;
       }
     }
   }
@@ -97,7 +97,7 @@ $border-width--thick: 3px;
   }
 
   &--fitted {
-    font-size: style.$text--xs;
+    font-size: styles.$text--xs;
     padding: $padding--fitted;
     border-radius: 5px;
   }
@@ -112,20 +112,20 @@ $border-width--thick: 3px;
 
 [theme="dark"] {
   .text-area {
-    color: style.$gray--300;
+    color: styles.$gray--300;
     &:not(&--embedded) {
-      background-color: style.$navy--400;
+      background-color: styles.$navy--400;
     }
 
     &::placeholder {
-      color: style.$gray--800;
+      color: styles.$gray--800;
     }
 
     &:hover,
     &:focus-within {
-      color: style.$gray--300;
+      color: styles.$gray--300;
       &::placeholder {
-        color: style.$gray--300;
+        color: styles.$gray--300;
       }
     }
 

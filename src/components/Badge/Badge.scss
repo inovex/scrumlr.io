@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .badge {
   position: absolute;
@@ -17,7 +17,7 @@
   background-color: var(--accent-color--light);
   border-radius: 4px;
   font-size: 8px;
-  color: style.$gray--000;
+  color: styles.$gray--000;
   font-weight: bold;
   text-transform: uppercase;
   padding-left: 5px;

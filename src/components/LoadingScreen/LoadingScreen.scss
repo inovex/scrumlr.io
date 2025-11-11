@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .loading-screen {
   height: 100%;
@@ -10,6 +10,6 @@
 
 [theme="dark"] {
   .loading-screen {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
   }
 }

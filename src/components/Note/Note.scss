@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $note__indicator-height: 34px;
 $note__indicator-width: 3px;
@@ -20,14 +20,14 @@ $note__footer-gap: 42px;
 .note {
   cursor: pointer;
   position: relative;
-  border-radius: style.$note__border-radius;
-  background-color: style.$gray--000;
+  border-radius: styles.$note__border-radius;
+  background-color: styles.$gray--000;
   box-shadow:
-    0 4px 6px -1px rgba(style.$blue--500, 0.1),
-    0 2px 4px -2px rgba(style.$blue--500, 0.1);
+    0 4px 6px -1px rgba(styles.$blue--500, 0.1),
+    0 2px 4px -2px rgba(styles.$blue--500, 0.1);
   transition: all 0.1s ease-in-out;
-  z-index: style.$note-z-index;
-  padding: style.$spacing--base style.$spacing--lg 12px style.$spacing--base;
+  z-index: styles.$note-z-index;
+  padding: styles.$spacing--base styles.$spacing--lg 12px styles.$spacing--base;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
@@ -47,12 +47,12 @@ $note__footer-gap: 42px;
   top: 8px;
   left: 8px;
   opacity: 0.95;
-  border-radius: style.$note__border-radius;
+  border-radius: styles.$note__border-radius;
   box-shadow:
-    0 4px 6px -1px rgba(style.$blue--500, 0.1),
-    0 2px 4px -2px rgba(style.$blue--500, 0.1);
-  background-color: style.$gray--000;
-  z-index: style.$note-z-index - style.$base-z-index-step;
+    0 4px 6px -1px rgba(styles.$blue--500, 0.1),
+    0 2px 4px -2px rgba(styles.$blue--500, 0.1);
+  background-color: styles.$gray--000;
+  z-index: styles.$note-z-index - styles.$base-z-index-step;
   transition: all 0.1s ease-in-out;
 }
 
@@ -68,7 +68,7 @@ $note__footer-gap: 42px;
 .shouldCombine .note {
   transform-origin: center;
   border: 2px solid var(--accent-color--light);
-  border-radius: style.$note__border-radius;
+  border-radius: styles.$note__border-radius;
 
   transform: scale(0.98);
 
@@ -94,11 +94,11 @@ $note__footer-gap: 42px;
 
   &.note--stackBelow {
     transform: translateY(-8px) scale(1.02);
-    z-index: style.$note-z-index + 2 * style.$base-z-index-step;
+    z-index: styles.$note-z-index + 2 * styles.$base-z-index-step;
 
     & ~ .note__in-stack {
       transform: translateY(-8px) scale(1.02);
-      z-index: style.$note-z-index + style.$base-z-index-step;
+      z-index: styles.$note-z-index + styles.$base-z-index-step;
     }
   }
 }
@@ -114,20 +114,20 @@ $note__footer-gap: 42px;
   background: var(--accent-color--light);
 }
 .note__container {
-  margin: $note__text-margin-top 0 style.$spacing--xs;
-  min-height: 3 * style.$line-height--medium;
+  margin: $note__text-margin-top 0 styles.$spacing--xs;
+  min-height: 3 * styles.$line-height--medium;
   width: 100%;
-  color: style.$navy--900;
-  font-size: style.$text-size--medium;
-  letter-spacing: style.$letter-spacing--medium;
-  line-height: style.$line-height--medium;
+  color: styles.$navy--900;
+  font-size: styles.$text-size--medium;
+  letter-spacing: styles.$letter-spacing--medium;
+  line-height: styles.$line-height--medium;
   word-break: keep-all;
   word-wrap: break-word;
   white-space: pre-line;
 
   &--extended {
     // add the difference of note__footer
-    min-height: 3 * style.$line-height--medium + $note__footer-height;
+    min-height: 3 * styles.$line-height--medium + $note__footer-height;
   }
 }
 
@@ -141,8 +141,8 @@ $note__footer-gap: 42px;
 }
 
 .note__marker-edited {
-  color: style.$gray--700;
-  font-size: style.$text--sm;
+  color: styles.$gray--700;
+  font-size: styles.$text--sm;
 }
 
 .note__image-wrapper {
@@ -159,11 +159,11 @@ $note__footer-gap: 42px;
 }
 
 .note__stack-icon {
-  height: style.$icon--huge;
-  width: style.$icon--huge;
+  height: styles.$icon--huge;
+  width: styles.$icon--huge;
   position: absolute;
-  top: calc(50% - (style.$icon--huge / 2));
-  left: calc(50% - (style.$icon--huge / 2));
+  top: calc(50% - (styles.$icon--huge / 2));
+  left: calc(50% - (styles.$icon--huge / 2));
   fill: var(--accent-color--light);
 }
 
@@ -172,9 +172,9 @@ $note__footer-gap: 42px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  gap: style.$spacing--sm;
+  gap: styles.$spacing--sm;
 
-  z-index: style.$note-z-index; // prevent the background image from overlaying it
+  z-index: styles.$note-z-index; // prevent the background image from overlaying it
 }
 
 .note__author-container {
@@ -189,7 +189,7 @@ $note__footer-gap: 42px;
   justify-content: space-between;
 
   height: $note__footer-height;
-  margin-left: -(style.$reaction-list__left-spacing); // a little to the left, the icon in NoteReactionList lines up
+  margin-left: -(styles.$reaction-list__left-spacing); // a little to the left, the icon in NoteReactionList lines up
 
   &--collapsed {
     height: 0;
@@ -219,9 +219,9 @@ $note__footer-gap: 42px;
 }
 
 // change note padding based on note size
-@container #{style.$container__note} {
+@container #{styles.$container__note} {
   .note {
-    padding: 10px style.$spacing--base 5px 10px;
+    padding: 10px styles.$spacing--base 5px 10px;
   }
 
   .note__text {
@@ -232,13 +232,13 @@ $note__footer-gap: 42px;
 [theme="dark"] {
   .note,
   .note__in-stack {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
     box-shadow:
-      0 4px 6px -1px rgba(style.$navy--900, 0.1),
-      0 2px 4px -2px rgba(style.$navy--900, 0.1);
+      0 4px 6px -1px rgba(styles.$navy--900, 0.1),
+      0 2px 4px -2px rgba(styles.$navy--900, 0.1);
   }
 
   .note__text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

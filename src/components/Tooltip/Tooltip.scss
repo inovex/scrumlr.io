@@ -1,12 +1,12 @@
-@use "constants/style";
+@use "constants/styles";
 
 .tooltip-container .tooltip {
-  background-color: style.$blue--100;
-  border-radius: style.$rounded--full;
-  color: style.$navy--900;
-  font-size: style.$text--sm;
+  background-color: styles.$blue--100;
+  border-radius: styles.$rounded--full;
+  color: styles.$navy--900;
+  font-size: styles.$text--sm;
   font-weight: 600;
-  padding: style.$spacing--xs style.$spacing--base;
+  padding: styles.$spacing--xs styles.$spacing--base;
   z-index: 9999;
   word-wrap: break-word;
   white-space: normal;
@@ -18,6 +18,6 @@
 }
 
 [theme="dark"] .tooltip-container .tooltip {
-  background-color: style.$navy--300;
-  color: style.$gray--000;
+  background-color: styles.$navy--300;
+  color: styles.$gray--000;
 }

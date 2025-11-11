@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "components/Note/Note";
 @use "components/TooltipButton/TooltipButton";
 @use "components/Votes/Votes";
@@ -9,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
 
-  margin-left: -(style.$reaction-list__left-spacing); // a little to the left, the icon in NoteReactionList lines up
+  margin-left: -(styles.$reaction-list__left-spacing); // a little to the left, the icon in NoteReactionList lines up
 
   height: var(--note-footer-height);
 

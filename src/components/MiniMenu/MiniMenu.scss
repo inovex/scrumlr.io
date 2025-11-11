@@ -1,27 +1,27 @@
-@use "constants/style";
+@use "constants/styles";
 
 $height--default: 48px;
 $height--small: 36px;
 
 $icon--default: 40px;
-style.$icon--small: 24px;
+styles.$icon--small: 24px;
 
 .mini-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: style.$spacing--xxs;
+  gap: styles.$spacing--xxs;
   justify-content: center;
 
   width: fit-content;
   height: fit-content;
   min-height: $height--default;
-  padding-left: style.$spacing--xxs 2px;
+  padding-left: styles.$spacing--xxs 2px;
 
-  border-radius: style.$rounded--full;
-  box-shadow: 0 0 20px rgba(style.$navy--400, 0.12);
+  border-radius: styles.$rounded--full;
+  box-shadow: 0 0 20px rgba(styles.$navy--400, 0.12);
 
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
 
   &--transparent {
     background: none;
@@ -44,32 +44,32 @@ style.$icon--small: 24px;
 
   width: $icon--default;
   height: $icon--default;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 
-  color: style.$navy--900;
+  color: styles.$navy--900;
   background-color: transparent;
 
   cursor: pointer;
 
   &--small {
-    width: style.$icon--small;
-    height: style.$icon--small;
+    width: styles.$icon--small;
+    height: styles.$icon--small;
   }
 
   &:hover {
-    background-color: style.$gray--300;
+    background-color: styles.$gray--300;
   }
 
   &:focus-visible {
-    background-color: style.$gray--300;
+    background-color: styles.$gray--300;
   }
 
   &--active {
-    color: style.$gray--000;
-    background-color: style.$navy--400;
+    color: styles.$gray--000;
+    background-color: styles.$navy--400;
 
     &:hover {
-      background-color: style.$navy--600;
+      background-color: styles.$navy--600;
     }
   }
 
@@ -82,45 +82,45 @@ style.$icon--small: 24px;
 }
 
 .mini-menu:first-child {
-  padding-left: style.$spacing--xxs;
+  padding-left: styles.$spacing--xxs;
 }
 
 .mini-menu:last-child {
-  padding-right: style.$spacing--xxs;
+  padding-right: styles.$spacing--xxs;
 }
 
 [theme="dark"] {
   .mini-menu__item {
-    color: style.$gray--000;
+    color: styles.$gray--000;
 
     &:hover {
       // TODO check if designs aligns with the other employed mini menus
-      color: style.$navy--400;
-      background-color: style.$gray--000;
+      color: styles.$navy--400;
+      background-color: styles.$gray--000;
     }
 
     &:focus-visible {
-      background-color: style.$navy--600;
+      background-color: styles.$navy--600;
     }
 
     &--active {
-      color: style.$gray--000;
-      background-color: style.$navy--600;
+      color: styles.$gray--000;
+      background-color: styles.$navy--600;
 
       &:hover {
-        background-color: style.$navy--600;
+        background-color: styles.$navy--600;
       }
     }
 
     &:disabled {
       &:hover {
-        color: style.$gray--000;
+        color: styles.$gray--000;
         background-color: transparent;
       }
     }
   }
   .mini-menu {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
 
     &--transparent {
       background: none; // reset transparent bgc
@@ -133,7 +133,7 @@ style.$icon--small: 24px;
   display: none;
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   .mini-menu {
     &--wrap-to-column {
       // only wrap if activated
@@ -144,7 +144,7 @@ style.$icon--small: 24px;
       top: 0;
 
       &:first-child {
-        padding: style.$spacing--xxs;
+        padding: styles.$spacing--xxs;
       }
     }
   }

@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .dialog {
   height: 100%;
@@ -7,8 +7,8 @@
   left: 0;
   box-sizing: border-box;
   position: fixed;
-  border: 3px solid style.$pink--500;
-  background: style.$gray--100;
+  border: 3px solid styles.$pink--500;
+  background: styles.$gray--100;
   box-shadow:
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
     6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
@@ -18,10 +18,10 @@
     100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 [theme="dark"] .dialog {
-  background: style.$navy--600;
+  background: styles.$navy--600;
 }
 
-@media #{style.$tablet} {
+@media #{styles.$tablet} {
   .dialog {
     width: 400px;
     height: auto;
@@ -34,7 +34,7 @@
 }
 
 .dialog__content {
-  padding: style.$spacing--xl;
+  padding: styles.$spacing--xl;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -43,13 +43,13 @@
 }
 
 .dialog__header-text {
-  border-bottom: solid 3px style.$pink--500;
+  border-bottom: solid 3px styles.$pink--500;
   padding-bottom: 8px;
   margin: 0;
 }
 [theme="dark"] {
   .dialog__header-text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }
 
@@ -57,7 +57,7 @@
   position: absolute;
   top: 2px; // some space for the focus border
   right: 2px;
-  color: style.$pink--500;
+  color: styles.$pink--500;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,7 +67,7 @@
   background-color: transparent;
   transform: scale(1);
   transition: all 0.08s ease-in-out;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
 
   &:hover {
     background-color: var(--accent-color--100);
@@ -79,8 +79,8 @@
 }
 
 .dialog__close-icon {
-  width: style.$icon--extralarge;
-  height: style.$icon--extralarge;
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
 }
 
 .dialog__button {
@@ -92,7 +92,7 @@
   border-radius: 8px;
   height: 48px;
   width: 100%;
-  background: style.$gray--000;
+  background: styles.$gray--000;
   cursor: pointer;
   transition: all 0.08s ease-out;
   outline: none;
@@ -106,22 +106,22 @@
   }
 
   > label:first-of-type {
-    font-size: style.$text-size--medium;
-    color: style.$navy--900;
-    letter-spacing: style.$letter-spacing--medium;
+    font-size: styles.$text-size--medium;
+    color: styles.$navy--900;
+    letter-spacing: styles.$letter-spacing--medium;
     cursor: pointer;
   }
 }
 
 [theme="dark"] {
   .dialog__button {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
   .dialog__button:hover {
-    background-color: style.$navy--400;
+    background-color: styles.$navy--400;
   }
   .dialog__button > label {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   .dialog__close-button:hover {
     background-color: rgba(var(--accent-color--dark-rgb), 0.6);

@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 .note-dialog__scrollbar {
@@ -23,17 +23,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   .note-dialog__scrollbar {
     padding-left: 0;
   }
 }
 
-@media screen and (max-width: style.$breakpoint--desktop) {
+@media screen and (max-width: styles.$breakpoint--desktop) {
   .note-dialog__scrollbar {
-    padding-bottom: style.$spacing--xl;
+    padding-bottom: styles.$spacing--xl;
   }
 }

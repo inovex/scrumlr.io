@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 @use "components/Note/Note";
 @use "routes/StackView/StackView";
@@ -18,7 +18,7 @@ $min-lines: 3;
   flex-direction: column;
 
   &:has(&--image) {
-    padding: style.$spacing--xs;
+    padding: styles.$spacing--xs;
   }
 
   &:has(&--image-zoom) {
@@ -30,15 +30,15 @@ $min-lines: 3;
   width: 100%;
   min-height: calc($min-lines * $text-line-height + 2 * $text-border-width); // also include border
   // since the note height limit is defined here, the sibling elements are subtracted (header, footer, margins, and gap)
-  max-height: calc(style.$stack-content-max-height - 36px - 36px - 2 * (style.$spacing--base + style.$spacing--sm));
+  max-height: calc(styles.$stack-content-max-height - 36px - 36px - 2 * (styles.$spacing--base + styles.$spacing--sm));
   margin: 0;
-  padding: 0 style.$spacing--xxs;
+  padding: 0 styles.$spacing--xxs;
   resize: none;
   word-wrap: break-word;
 
-  color: style.$navy--900;
-  letter-spacing: style.$letter-spacing--medium;
-  font-size: style.$text--md;
+  color: styles.$navy--900;
+  letter-spacing: styles.$letter-spacing--medium;
+  font-size: styles.$text--md;
   line-height: $text-line-height;
 
   background: none;
@@ -54,7 +54,7 @@ $min-lines: 3;
 
   // also subtract edited marker
   &--edited {
-    max-height: calc(style.$stack-content-max-height - 20px - 36px - 36px - 2 * (style.$spacing--base + style.$spacing--sm));
+    max-height: calc(styles.$stack-content-max-height - 20px - 36px - 36px - 2 * (styles.$spacing--base + styles.$spacing--sm));
   }
 
   &:not(:disabled) {
@@ -66,9 +66,9 @@ $min-lines: 3;
 }
 
 .note-dialog__marker-edited {
-  color: style.$gray--700;
-  font-size: style.$text--base;
-  padding: 0 style.$spacing--xxs;
+  color: styles.$gray--700;
+  font-size: styles.$text--base;
+  padding: 0 styles.$spacing--xxs;
 }
 
 .note-dialog__note-content--image {
@@ -86,7 +86,7 @@ $min-lines: 3;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
-    z-index: style.$request-z-index;
+    z-index: styles.$request-z-index;
     cursor: zoom-out;
     position: fixed;
 
@@ -118,6 +118,6 @@ $min-lines: 3;
 
 [theme="dark"] {
   .note-dialog__note-content-text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

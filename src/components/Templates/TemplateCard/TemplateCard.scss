@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $card-height: 220px;
 $card-description-height: 4 * 20px;
@@ -6,7 +6,7 @@ $card-description-height: 4 * 20px;
 .template-card {
   display: grid;
   grid-template-rows: 36px auto 10px 46px;
-  grid-template-columns: 36px style.$spacing--xs 1fr auto 36px;
+  grid-template-columns: 36px styles.$spacing--xs 1fr auto 36px;
   grid-template-areas:
     "fav-icon   .  head          head         menu"
     ".          .  description   description   ."
@@ -15,11 +15,11 @@ $card-description-height: 4 * 20px;
 
   width: 100%;
   height: $card-height;
-  border-radius: style.$rounded--default;
-  padding: style.$spacing--base;
+  border-radius: styles.$rounded--default;
+  padding: styles.$spacing--base;
 
-  background-color: style.$gray--000;
-  box-shadow: 0 6px 9px 0 rgba(style.$blue--500, 0.1);
+  background-color: styles.$gray--000;
+  box-shadow: 0 6px 9px 0 rgba(styles.$blue--500, 0.1);
 }
 
 .template-card__favourite {
@@ -32,7 +32,7 @@ $card-description-height: 4 * 20px;
   width: 36px;
   height: 36px;
 
-  color: style.$navy--900;
+  color: styles.$navy--900;
 
   &--menu {
     transform: rotate(90deg);
@@ -52,7 +52,7 @@ $card-description-height: 4 * 20px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: style.$spacing--xxs;
+  gap: styles.$spacing--xxs;
 }
 
 .template-card__title {
@@ -60,11 +60,11 @@ $card-description-height: 4 * 20px;
 
   width: 100%;
 
-  font-size: style.$text--md;
+  font-size: styles.$text--md;
   font-weight: 700;
   line-height: 24px; // decreased line height to change distance to bottom border
 
-  color: style.$navy--900;
+  color: styles.$navy--900;
 
   overflow: hidden;
   white-space: nowrap;
@@ -82,9 +82,9 @@ $card-description-height: 4 * 20px;
 
   &--open {
     // position menu over icon
-    transform: translate(calc(-50% - style.$spacing--xl), 2 * -(style.$spacing--xxs));
+    transform: translate(calc(-50% - styles.$spacing--xl), 2 * -(styles.$spacing--xxs));
 
-    box-shadow: 0 2px 20px 0 rgba(var(style.$navy--400), 0.12);
+    box-shadow: 0 2px 20px 0 rgba(var(styles.$navy--400), 0.12);
   }
 }
 
@@ -92,7 +92,7 @@ $card-description-height: 4 * 20px;
   grid-area: description;
   align-self: start;
 
-  font-size: style.$text--sm;
+  font-size: styles.$text--sm;
   font-weight: 500;
   line-height: 20px;
 
@@ -104,10 +104,10 @@ $card-description-height: 4 * 20px;
 
   background: none;
   border: none;
-  border-radius: style.$rounded--small;
+  border-radius: styles.$rounded--small;
   outline: none;
 
-  color: style.$navy--900;
+  color: styles.$navy--900;
 }
 
 .template-card__columns {
@@ -121,15 +121,15 @@ $card-description-height: 4 * 20px;
 }
 
 .template-card__columns-title {
-  font-size: style.$text--sm;
+  font-size: styles.$text--sm;
   font-weight: 600;
   line-height: 16px;
 
-  color: style.$navy--400;
+  color: styles.$navy--400;
 }
 
 .template-card__columns-subtitle {
-  font-size: style.$text--xs;
+  font-size: styles.$text--xs;
   font-weight: 600;
   line-height: 16px;
 
@@ -137,7 +137,7 @@ $card-description-height: 4 * 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  color: style.$gray--800;
+  color: styles.$gray--800;
 }
 
 .template-card__start-button {
@@ -147,31 +147,31 @@ $card-description-height: 4 * 20px;
 
 [theme="dark"] {
   .template-card {
-    background-color: style.$navy--400;
-    box-shadow: 0 2px 20px 0 rgba(style.$navy--700, 0.5);
+    background-color: styles.$navy--400;
+    box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);
   }
 
   .template-card__title,
   .template-card__access-policy,
   .template-card__description,
   .template-card__columns-title {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .template-card__menu {
     &--open {
-      box-shadow: 0 2px 20px 0 rgba(style.$navy--700, 0.5);
+      box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);
     }
   }
 
   .template-card__columns-subtitle {
-    color: style.$gray--800;
+    color: styles.$gray--800;
   }
 
   .template-card__icon {
     &--menu,
     &--columns {
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
 }

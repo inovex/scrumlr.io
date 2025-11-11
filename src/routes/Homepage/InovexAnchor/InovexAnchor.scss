@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .inovex-anchor {
   color: currentColor;
@@ -22,6 +22,6 @@
 [theme="dark"] {
   .inovex-anchor:focus-visible,
   .inovex-anchor:hover {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

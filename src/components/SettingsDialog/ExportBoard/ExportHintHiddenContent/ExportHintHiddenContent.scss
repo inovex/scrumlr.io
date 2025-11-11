@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $list-style-type: "– ";
 
@@ -11,16 +11,16 @@ $list-style-type: "– ";
   display: grid;
   align-items: center;
 
-  grid-gap: style.$spacing--xs style.$spacing--base;
-  margin-top: style.$spacing--lg;
-  padding: 0 style.$spacing--base;
-  line-height: style.$line-height--medium;
+  grid-gap: styles.$spacing--xs styles.$spacing--base;
+  margin-top: styles.$spacing--lg;
+  padding: 0 styles.$spacing--base;
+  line-height: styles.$line-height--medium;
 }
 
 .hint-hidden-columns__info-icon {
-  width: style.$icon--large;
-  height: style.$icon--large;
-  color: style.$critical-carmine--light;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  color: styles.$critical-carmine--light;
 }
 
 .hint-hidden-columns__info-text {
@@ -33,13 +33,13 @@ $list-style-type: "– ";
 
 .hint-hidden-columns__columns-list {
   margin: 0;
-  padding-left: style.$spacing--lg;
+  padding-left: styles.$spacing--lg;
   list-style-type: $list-style-type;
 }
 
 [theme="dark"] {
   .hint-hidden-columns__info-text,
   .hint-hidden-columns__columns-list {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

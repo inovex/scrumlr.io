@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 @use "../SettingsDialog";
 
@@ -16,34 +16,34 @@
     bottom: -3px;
     left: -3px;
     border: 2px solid var(--accent-color--light);
-    border-radius: style.$rounded--full;
+    border-radius: styles.$rounded--full;
     pointer-events: none;
   }
 }
 .participants__search-input {
   height: 40px;
   width: 100%;
-  padding: 0 calc(style.$spacing--base + style.$icon--medium + style.$spacing--xs) 0 style.$spacing--base;
+  padding: 0 calc(styles.$spacing--base + styles.$icon--medium + styles.$spacing--xs) 0 styles.$spacing--base;
   font-size: 14px;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--medium;
-  color: style.$navy--900;
-  background-color: style.$gray--000;
+  letter-spacing: styles.$letter-spacing--medium;
+  color: styles.$navy--900;
+  background-color: styles.$gray--000;
   border: none;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   outline: none;
 }
 
 .participants__search-icon {
   position: absolute;
   height: 100%;
-  width: style.$icon--medium;
-  color: style.$navy--900;
-  right: style.$spacing--base;
+  width: styles.$icon--medium;
+  color: styles.$navy--900;
+  right: styles.$spacing--base;
 }
 
 .participants__filter-buttons {
-  margin-top: style.$spacing--xs;
+  margin-top: styles.$spacing--xs;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -51,19 +51,19 @@
 
 .participants__permisson-filter-button {
   height: 42px;
-  background-color: style.$gray--000;
-  color: style.$navy--900;
+  background-color: styles.$gray--000;
+  color: styles.$navy--900;
   border: none;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   padding: 0 10px;
   font-weight: bold;
   font-size: 14px;
-  letter-spacing: style.$letter-spacing--medium;
+  letter-spacing: styles.$letter-spacing--medium;
   cursor: pointer;
 
   &--active {
     background-color: var(--accent-color--light);
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color--light);
@@ -72,12 +72,12 @@
 @media (hover: hover) {
   .participants__permisson-filter-button:hover {
     background-color: var(--accent-color--100);
-    color: style.$navy--900;
+    color: styles.$navy--900;
   }
 }
 @media screen and (min-width: 920px) {
   .participants__permisson-filter-button {
-    padding: 0 style.$spacing--base;
+    padding: 0 styles.$spacing--base;
   }
 }
 
@@ -85,41 +85,41 @@
   height: 42px;
   width: 42px;
   border: none;
-  border-radius: style.$rounded--full;
-  background-color: style.$gray--000;
-  color: style.$navy--900;
+  border-radius: styles.$rounded--full;
+  background-color: styles.$gray--000;
+  color: styles.$navy--900;
   padding: 0;
   cursor: pointer;
 
   &--active {
     background-color: var(--accent-color--light);
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color--light);
   }
   > svg {
-    height: style.$icon--large;
-    width: style.$icon--large;
+    height: styles.$icon--large;
+    width: styles.$icon--large;
   }
 }
 @media (hover: hover) {
   .participant__status-filter-button:hover {
     background-color: var(--accent-color--100);
-    color: style.$navy--900;
+    color: styles.$navy--900;
   }
 }
 
 .participants__list-wrapper {
   overflow: auto;
-  margin: style.$spacing--base 0px;
-  border-radius: style.$rounded--default;
+  margin: styles.$spacing--base 0px;
+  border-radius: styles.$rounded--default;
 
   @include mixins.scrollbar();
 }
 
 .participants__list {
-  border-radius: style.$rounded--default;
+  border-radius: styles.$rounded--default;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -127,20 +127,20 @@
 }
 
 .participants__list-scrollable {
-  padding-right: style.$spacing--lg;
+  padding-right: styles.$spacing--lg;
 }
 
 .participants__list-item {
   height: 55px;
-  background-color: style.$gray--000;
-  padding: style.$spacing--xs;
+  background-color: styles.$gray--000;
+  padding: styles.$spacing--xs;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
 
   &:not(:last-child) {
-    border-bottom: 1px solid style.$gray--300;
+    border-bottom: 1px solid styles.$gray--300;
   }
 
   &.banned > *:not(.participant__join-icon) {
@@ -164,9 +164,9 @@
 .participant__name {
   font-size: 14px;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--medium;
+  letter-spacing: styles.$letter-spacing--medium;
   line-height: 18px;
-  color: style.$navy--900;
+  color: styles.$navy--900;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -174,20 +174,20 @@
 
 .participant__role {
   height: 16px;
-  font-size: style.$text-size--small;
-  border-radius: style.$rounded--full;
-  padding: 0 style.$spacing--xs;
+  font-size: styles.$text-size--small;
+  border-radius: styles.$rounded--full;
+  padding: 0 styles.$spacing--xs;
   font-weight: 500;
-  letter-spacing: style.$letter-spacing--medium;
+  letter-spacing: styles.$letter-spacing--medium;
   background-color: var(--accent-color--light);
-  color: style.$gray--000;
+  color: styles.$gray--000;
   width: fit-content;
 
   &:is(button) {
     line-height: 12px;
-    background-color: style.$gray--000;
+    background-color: styles.$gray--000;
     border: 2px solid var(--accent-color--100);
-    color: style.$navy--900;
+    color: styles.$navy--900;
     cursor: pointer;
   }
   &:is(button):hover,
@@ -201,20 +201,20 @@
     cursor: default;
     border-color: var(--accent-color--light);
     background-color: var(--accent-color--light);
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }
 
 .participant__role-buttons {
   display: flex;
   flex-direction: row;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
 }
 
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -(SettingsDialog.$settings-dialog-container--sides-small);
-  padding: style.$spacing--xs style.$spacing--lg; // create some space
+  padding: styles.$spacing--xs styles.$spacing--lg; // create some space
 
   display: flex;
   flex-direction: row;
@@ -223,7 +223,7 @@
 
   width: calc(100% + 2 * SettingsDialog.$settings-dialog-container--sides-small); // overflow over parent margin
 
-  background-color: style.$gray--300;
+  background-color: styles.$gray--300;
 
   visibility: hidden;
   transform: translateY(100%);
@@ -243,51 +243,51 @@
 }
 
 .participants-reset-state-banner__check-icon {
-  width: style.$icon--large;
-  height: style.$icon--large;
-  min-width: style.$icon--large;
-  min-height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  min-width: styles.$icon--large;
+  min-height: styles.$icon--large;
 }
 
 .participants-reset-state-banner__text {
-  color: style.$navy--500;
+  color: styles.$navy--500;
   font-weight: 600;
 }
 
 .participants-reset-state-banner__button {
-  padding: 0 style.$spacing--lg;
+  padding: 0 styles.$spacing--lg;
 
   height: 36px;
-  background-color: style.$navy--500;
-  color: style.$gray--000;
+  background-color: styles.$navy--500;
+  color: styles.$gray--000;
   border: none;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   font-weight: bold;
-  letter-spacing: style.$letter-spacing--medium;
+  letter-spacing: styles.$letter-spacing--medium;
   cursor: pointer;
 
   &:hover {
-    background-color: style.$navy--300;
-    color: style.$gray--000;
+    background-color: styles.$navy--300;
+    color: styles.$gray--000;
   }
 }
 
 .participant__join-icon,
 .participant__kick-icon {
-  width: style.$icon--large;
-  height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
   padding: 0;
   margin-left: auto; // align to the very right
-  border-radius: style.$rounded--default;
+  border-radius: styles.$rounded--default;
   border: none;
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
   flex-shrink: 0;
 
   cursor: pointer;
 
   &--active {
     background-color: var(--accent-color--light);
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color--light);
@@ -313,42 +313,42 @@
 
 [theme="dark"] {
   .participants__search-input {
-    background-color: style.$navy--500;
-    color: style.$gray--000;
+    background-color: styles.$navy--500;
+    color: styles.$gray--000;
   }
   .participants__search-icon {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   .participants__permisson-filter-button,
   .participant__status-filter-button {
-    background-color: style.$navy--500;
-    color: style.$gray--000;
+    background-color: styles.$navy--500;
+    color: styles.$gray--000;
     &--active {
       background-color: var(--accent-color--light);
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
   @media (hover: hover) {
     .participants__permisson-filter-button:hover,
     .participant__status-filter-button:hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.6);
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
   }
   .participants__list-item {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
     &:not(:last-child) {
-      border-bottom: 1px solid style.$navy--600;
+      border-bottom: 1px solid styles.$navy--600;
     }
   }
   .participant__name {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
   .participant__role {
     &:is(button) {
-      background-color: style.$navy--500;
+      background-color: styles.$navy--500;
       border: 2px solid rgba(var(--accent-color--dark-rgb), 0.6);
-      color: style.$gray--000;
+      color: styles.$gray--000;
     }
     &:is(button):hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.6);
@@ -361,26 +361,26 @@
   }
 
   .participants-reset-state-banner__container {
-    background-color: style.$navy--500;
+    background-color: styles.$navy--500;
   }
 
   .participants-reset-state-banner__check-icon,
   .participants-reset-state-banner__text {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .participants-reset-state-banner__button {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
 
     &:hover {
-      background-color: style.$navy--600;
+      background-color: styles.$navy--600;
     }
   }
 
   .participant__join-icon,
   .participant__kick-icon {
-    color: style.$gray--000;
-    background-color: style.$navy--500;
+    color: styles.$gray--000;
+    background-color: styles.$navy--500;
 
     &:hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.6);

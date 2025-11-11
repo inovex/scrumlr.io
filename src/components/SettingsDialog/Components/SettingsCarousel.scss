@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .settings-carousel {
   display: flex;
@@ -12,12 +12,12 @@
     align-items: center;
 
     &-label {
-      font-size: style.$text-size--small;
+      font-size: styles.$text-size--small;
       font-weight: 500;
-      color: rgba(style.$navy--900, 0.5);
+      color: rgba(styles.$navy--900, 0.5);
     }
     &-value {
-      font-size: style.$text-size--medium;
+      font-size: styles.$text-size--medium;
       font-weight: bold;
     }
   }
@@ -43,10 +43,10 @@
     }
 
     svg {
-      border-radius: style.$rounded--full;
-      width: style.$icon--large;
-      height: style.$icon--large;
-      padding: calc(style.$spacing--xs / 2);
+      border-radius: styles.$rounded--full;
+      width: styles.$icon--large;
+      height: styles.$icon--large;
+      padding: calc(styles.$spacing--xs / 2);
     }
   }
 }
@@ -55,7 +55,7 @@
   .settings-carousel {
     &__text {
       &-label {
-        color: rgba(style.$gray--000, 0.65);
+        color: rgba(styles.$gray--000, 0.65);
       }
     }
 

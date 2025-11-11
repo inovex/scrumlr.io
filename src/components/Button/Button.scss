@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 $content-gap: 10px;
@@ -19,27 +19,27 @@ $height--small: 46px;
   height: $height--default;
   box-sizing: border-box;
 
-  @include mixins.compensate-padding(style.$spacing--base style.$spacing--xl, $border-width);
-  border-radius: style.$rounded--full;
+  @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
+  border-radius: styles.$rounded--full;
   border-width: $border-width;
   border-style: solid;
 
-  font-size: style.$text-size--medium;
+  font-size: styles.$text-size--medium;
   font-weight: 700;
 
   &--with-icon {
-    @include mixins.compensate-padding(style.$spacing--base 22px style.$spacing--base 28px, $border-width);
+    @include mixins.compensate-padding(styles.$spacing--base 22px styles.$spacing--base 28px, $border-width);
   }
 
   &--small {
     height: $height--small;
-    gap: style.$spacing--xxs;
+    gap: styles.$spacing--xxs;
 
-    @include mixins.compensate-padding(6px style.$spacing--base, $border-width);
+    @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
 
     &.button--with-icon {
       // both have to be active to apply
-      @include mixins.compensate-padding(6px style.$spacing--sm 6px style.$spacing--base, $border-width);
+      @include mixins.compensate-padding(6px styles.$spacing--sm 6px styles.$spacing--base, $border-width);
     }
   }
 
@@ -52,7 +52,7 @@ $height--small: 46px;
   }
 
   &--primary {
-    color: style.$gray--000;
+    color: styles.$gray--000;
     background-color: var(--accent-color--light);
     border-color: var(--accent-color--light);
 
@@ -66,9 +66,9 @@ $height--small: 46px;
     }
 
     &:disabled {
-      color: style.$gray--800;
-      background-color: style.$gray--300;
-      border-color: style.$gray--300;
+      color: styles.$gray--800;
+      background-color: styles.$gray--300;
+      border-color: styles.$gray--300;
     }
   }
 
@@ -78,7 +78,7 @@ $height--small: 46px;
     border-color: var(--accent-color--light);
 
     &:focus {
-      background-color: style.$gray--000;
+      background-color: styles.$gray--000;
       border-color: var(--accent-color--light);
     }
 
@@ -87,9 +87,9 @@ $height--small: 46px;
     }
 
     &:disabled {
-      color: style.$gray--800;
-      background-color: style.$gray--300;
-      border-color: style.$gray--800;
+      color: styles.$gray--800;
+      background-color: styles.$gray--300;
+      border-color: styles.$gray--800;
     }
   }
 
@@ -112,7 +112,7 @@ $height--small: 46px;
     }
 
     &:disabled {
-      color: style.$gray--800;
+      color: styles.$gray--800;
     }
   }
 }
@@ -120,7 +120,7 @@ $height--small: 46px;
 [theme="dark"] {
   .button {
     &--primary {
-      color: style.$gray--000;
+      color: styles.$gray--000;
       background-color: var(--accent-color--dark);
       border-color: var(--accent-color--dark);
 
@@ -134,9 +134,9 @@ $height--small: 46px;
       }
 
       &:disabled {
-        color: style.$gray--300;
-        background-color: style.$gray--800;
-        border-color: style.$gray--800;
+        color: styles.$gray--300;
+        background-color: styles.$gray--800;
+        border-color: styles.$gray--800;
       }
     }
 
@@ -146,7 +146,7 @@ $height--small: 46px;
       border-color: var(--accent-color--dark);
 
       &:focus {
-        background-color: style.$navy--600;
+        background-color: styles.$navy--600;
       }
 
       &:active {
@@ -154,9 +154,9 @@ $height--small: 46px;
       }
 
       &:disabled {
-        color: style.$gray--800;
-        background-color: style.$gray--300;
-        border-color: style.$gray--800;
+        color: styles.$gray--800;
+        background-color: styles.$gray--300;
+        border-color: styles.$gray--800;
       }
     }
 
@@ -168,7 +168,7 @@ $height--small: 46px;
       }
 
       &:disabled {
-        color: style.$gray--800;
+        color: styles.$gray--800;
       }
     }
   }

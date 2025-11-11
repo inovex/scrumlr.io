@@ -1,31 +1,31 @@
-@use "constants/style";
+@use "constants/styles";
 
 .select-option {
   display: grid;
   grid-template-rows: 2px auto auto;
-  grid-template-columns: auto style.$spacing--sm 1fr style.$spacing--sm auto;
+  grid-template-columns: auto styles.$spacing--sm 1fr styles.$spacing--sm auto;
   grid-template-areas:
     "icon . .           . radio"
     "icon . label       . radio"
     ".    . description . . ";
 
-  padding: style.$spacing--base;
+  padding: styles.$spacing--base;
 
   border: 2px solid transparent;
   border-radius: 12px;
 
-  background-color: style.$gray--100;
+  background-color: styles.$gray--100;
 
   cursor: pointer;
   text-align: left;
 
   &--active {
-    border-color: style.$blue--500;
+    border-color: styles.$blue--500;
   }
 
   &--extra {
-    grid-template-rows: 2px auto auto style.$spacing--sm auto;
-    grid-template-columns: auto style.$spacing--sm 1fr style.$spacing--sm auto;
+    grid-template-rows: 2px auto auto styles.$spacing--sm auto;
+    grid-template-columns: auto styles.$spacing--sm 1fr styles.$spacing--sm auto;
     grid-template-areas:
       "icon . .           .     radio"
       "icon . label       .     radio"
@@ -38,28 +38,28 @@
 .select-option__icon-container {
   grid-area: icon;
 
-  width: style.$icon--large;
-  height: style.$icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 }
 
 .select-option__label {
   grid-area: label;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
   font-weight: 600;
   line-height: normal;
 
-  color: style.$navy--400;
+  color: styles.$navy--400;
 }
 
 .select-option__description {
   grid-area: description;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
   font-weight: 400;
   line-height: 22px;
 
-  color: style.$navy--500;
+  color: styles.$navy--500;
 }
 
 .select-option__radio {
@@ -77,16 +77,16 @@
 
 [theme="dark"] {
   .select-option {
-    background: style.$navy--500;
+    background: styles.$navy--500;
 
     &--active {
-      border-color: style.$blue--400;
+      border-color: styles.$blue--400;
     }
   }
 
   .select-option__label,
   .select-option__description,
   .select-option__icon-container {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

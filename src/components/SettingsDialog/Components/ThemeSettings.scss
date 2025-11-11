@@ -1,15 +1,15 @@
-@use "constants/style";
+@use "constants/styles";
 
 .appearance-settings__theme-container {
-  background-color: style.$gray--000;
-  padding: style.$spacing--base style.$spacing--lg;
+  background-color: styles.$gray--000;
+  padding: styles.$spacing--base styles.$spacing--lg;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
 }
 
 .appearance-settings__theme-title {
-  margin-bottom: style.$spacing--base;
+  margin-bottom: styles.$spacing--base;
 }
 
 .appearance-settings__theme-options {
@@ -43,7 +43,7 @@
       }
       ~ p {
         background-color: var(--accent-color--light);
-        color: style.$gray--000;
+        color: styles.$gray--000;
       }
     }
 
@@ -73,12 +73,12 @@
 
   > p {
     margin-bottom: 0;
-    margin-top: style.$spacing--xs;
+    margin-top: styles.$spacing--xs;
     display: flex;
     max-width: 100%;
-    line-height: style.$line-height--medium;
+    line-height: styles.$line-height--medium;
     font-weight: bold;
-    border-radius: style.$rounded--full;
+    border-radius: styles.$rounded--full;
     gap: 4px;
     align-items: center;
 
@@ -93,15 +93,15 @@
 }
 
 .appearance-settings__theme-icon {
-  height: style.$icon--medium;
-  width: style.$icon--medium;
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
   flex: 0 0 auto;
 }
 
 [theme="dark"] {
   .appearance-settings__theme-container {
-    color: style.$gray--000;
-    background-color: style.$navy--500;
+    color: styles.$gray--000;
+    background-color: styles.$navy--500;
   }
 
   .appearence-settings__theme-option:hover {
@@ -109,7 +109,7 @@
   }
 }
 
-@media #{style.$smartphone} {
+@media #{styles.$smartphone} {
   .appearance-settings__theme-options {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

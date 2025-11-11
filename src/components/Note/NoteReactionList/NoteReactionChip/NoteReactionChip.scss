@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .note-reaction-chip__root {
   all: unset; // remove default buttons styling
@@ -12,28 +12,28 @@
   // total dimensions: 50x28
   height: 18px;
   padding: 5px 8px 5px 7px;
-  border-radius: style.$rounded--full;
-  background-color: style.$gray--300;
+  border-radius: styles.$rounded--full;
+  background-color: styles.$gray--300;
 
-  font-size: style.$text--base;
+  font-size: styles.$text--base;
 
   user-select: none;
   cursor: pointer;
 
   &:hover {
-    background-color: style.$gray--500;
+    background-color: styles.$gray--500;
   }
 }
 
 .note-reaction-chip__reaction {
-  font-size: style.$text--md;
+  font-size: styles.$text--md;
 }
 
 .note-reaction-chip__amount {
-  font-size: style.$text--sm;
+  font-size: styles.$text--sm;
   font-weight: 600;
   line-height: 18px;
-  color: style.$navy--900;
+  color: styles.$navy--900;
 }
 
 .note-reaction-chip__root--self {
@@ -49,7 +49,7 @@
   background-color: var(--accent-color--light);
 
   .note-reaction-chip__amount {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   &:hover {
@@ -59,10 +59,10 @@
 
 [theme="dark"] {
   .note-reaction-chip__root {
-    background-color: style.$navy--600;
+    background-color: styles.$navy--600;
 
     &:hover {
-      background-color: style.$navy--300;
+      background-color: styles.$navy--300;
     }
   }
 
@@ -82,6 +82,6 @@
   }
 
   .note-reaction-chip__amount {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }

@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 $header-menu-icon-width: 40px;
 $header-menu__item-height: 48px;
@@ -39,7 +39,7 @@ $header-menu-toggle-background-color: #c8c8c8;
 }
 .settings-toggle__switch--left::after {
   left: -1px;
-  background-color: style.$gray--700;
+  background-color: styles.$gray--700;
 }
 .settings-toggle__switch--right::after {
   left: $header-menu-toggle-button-width;

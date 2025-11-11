@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 @use "../SettingsDialog";
 
@@ -6,7 +6,7 @@
   &__container {
     display: flex;
     flex-direction: column;
-    gap: style.$spacing--xl;
+    gap: styles.$spacing--xl;
     height: 100%;
     width: 100%;
     max-width: calc(100vw - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
@@ -22,15 +22,15 @@
     &-wrapper {
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: style.$spacing--xs;
-      margin-right: calc(-1 * (#{style.$spacing--xs} + 10px));
+      padding-right: styles.$spacing--xs;
+      margin-right: calc(-1 * (#{styles.$spacing--xs} + 10px));
       padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
 
       @include mixins.scrollbar();
 
       @media screen and (min-width: 920px) {
-        padding-right: style.$spacing--lg;
-        margin-right: calc(-1 * (#{style.$spacing--lg} + 10px));
+        padding-right: styles.$spacing--lg;
+        margin-right: calc(-1 * (#{styles.$spacing--lg} + 10px));
       }
 
       &:focus-visible {

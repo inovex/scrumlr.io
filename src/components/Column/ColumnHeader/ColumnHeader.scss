@@ -1,9 +1,9 @@
-@use "constants/style";
+@use "constants/styles";
 
 .column-header {
   display: flex;
   flex-direction: column;
-  gap: style.$spacing--md;
+  gap: styles.$spacing--md;
 
-  padding: 0 style.$spacing--xl 0 style.$spacing--xl;
+  padding: 0 styles.$spacing--xl 0 styles.$spacing--xl;
 }

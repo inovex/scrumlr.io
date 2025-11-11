@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "constants/style";
+@use "constants/styles";
 @use "constants/mixins";
 
 .info-bar {
@@ -7,27 +7,27 @@
   display: flex;
   align-items: center;
   bottom: auto;
-  top: calc(style.$column__border-width + style.$header__height);
+  top: calc(styles.$column__border-width + styles.$header__height);
   left: 50%;
   transform: translateX(-50%);
-  height: style.$info-bar__height;
+  height: styles.$info-bar__height;
   justify-content: center;
-  gap: style.$spacing--xs;
-  z-index: style.$infobar-z-index;
+  gap: styles.$spacing--xs;
+  z-index: styles.$infobar-z-index;
 }
 .info-bar__icon {
-  height: style.$icon--large;
+  height: styles.$icon--large;
   display: flex;
-  gap: style.$spacing--xs;
+  gap: styles.$spacing--xs;
   align-items: center;
 }
 
 .info-bar__return-to-shared-note-button {
   position: relative;
   border: 0;
-  background-color: style.$gray--000;
+  background-color: styles.$gray--000;
   @include mixins.box-shadow-light;
-  border-radius: style.$rounded--full;
+  border-radius: styles.$rounded--full;
   height: 42px;
   width: 42px;
   cursor: pointer;
@@ -35,37 +35,37 @@
   place-content: center;
   outline: none;
   transition: background-color 150ms linear;
-  color: style.$navy--900;
+  color: styles.$navy--900;
 
   &:hover {
-    background-color: mixins.getLightHoverBackground(style.$gray--000);
+    background-color: mixins.getLightHoverBackground(styles.$gray--000);
   }
 
   &:focus-visible {
-    outline: 2px solid style.$blue--500;
+    outline: 2px solid styles.$blue--500;
   }
 }
 [theme="dark"] {
   .info-bar__icon {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 
   .info-bar__return-to-shared-note-button {
-    color: style.$gray--000;
-    background-color: style.$navy--500;
+    color: styles.$gray--000;
+    background-color: styles.$navy--500;
 
     &:hover {
-      background-color: mixins.getDarkHoverBackground(style.$navy--500);
+      background-color: mixins.getDarkHoverBackground(styles.$navy--500);
     }
 
     &:focus-visible {
-      outline: 2px solid style.$pink--500;
+      outline: 2px solid styles.$pink--500;
     }
   }
 }
 
 @media (min-width: 400px) {
   .info-bar {
-    gap: style.$spacing--base;
+    gap: styles.$spacing--base;
   }
 }

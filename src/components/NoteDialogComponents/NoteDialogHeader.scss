@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 @use "routes/StackView/StackView";
 
 $header-max-width: 80vw;
@@ -9,14 +9,14 @@ $header-max-width: 80vw;
   flex-direction: column;
   flex-shrink: 0;
   align-items: center;
-  gap: style.$spacing--base;
+  gap: styles.$spacing--base;
 
   width: $header-max-width;
   max-width: $header-max-width;
 
-  color: style.$gray--000;
+  color: styles.$gray--000;
 
-  letter-spacing: style.$letter-spacing--large;
+  letter-spacing: styles.$letter-spacing--large;
   text-align: center;
   cursor: initial;
 }
@@ -24,7 +24,7 @@ $header-max-width: 80vw;
 .note-dialog-header__name {
   max-width: 100%;
 
-  font-size: calc(style.$text--2xl + 0.8vw);
+  font-size: calc(styles.$text--2xl + 0.8vw);
   font-weight: 700;
 
   overflow: hidden;
@@ -36,19 +36,19 @@ $header-max-width: 80vw;
 
 .note-dialog-header__description {
   width: 100%;
-  font-size: style.$text--lg;
+  font-size: styles.$text--lg;
   font-weight: 600;
   line-height: 30px;
 
   // i might be abusing our sweet text area component for our purpose here,
   // so i have to override some styles from outside
-  color: style.$gray--000;
+  color: styles.$gray--000;
   &:hover {
-    color: style.$gray--000;
+    color: styles.$gray--000;
   }
 }
 
-@media screen and (max-width: style.$breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   .note-dialog-header {
     max-width: calc(100vw - 60px);
   }

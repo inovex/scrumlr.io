@@ -1,4 +1,4 @@
-@use "constants/style";
+@use "constants/styles";
 
 .portal {
   height: 100%;
@@ -10,24 +10,24 @@
 }
 
 .cookie-policy__title {
-  color: style.$navy--900;
-  background-color: style.$gray--000;
-  padding: style.$spacing--xs style.$spacing--base style.$spacing--xs style.$spacing--base;
+  color: styles.$navy--900;
+  background-color: styles.$gray--000;
+  padding: styles.$spacing--xs styles.$spacing--base styles.$spacing--xs styles.$spacing--base;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
 .cookie-policy__body {
-  color: style.$navy--900;
-  background-color: style.$gray--000;
-  padding: style.$spacing--base;
+  color: styles.$navy--900;
+  background-color: styles.$gray--000;
+  padding: styles.$spacing--base;
   height: 375px;
   overflow: auto;
 }
 
 .cookie-policy__footer {
-  background-color: style.$gray--000;
-  padding: style.$spacing--base;
+  background-color: styles.$gray--000;
+  padding: styles.$spacing--base;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   display: flex;
@@ -35,23 +35,23 @@
 
 .cookie-policy__button {
   border: none;
-  padding: style.$spacing--xs style.$spacing--base;
+  padding: styles.$spacing--xs styles.$spacing--base;
   border-radius: 5px;
-  font-size: style.$text-size--medium;
+  font-size: styles.$text-size--medium;
   cursor: pointer;
 
   &-accept {
     @extend .cookie-policy__button;
-    background: style.$blue--500;
-    color: style.$gray--000;
-    margin: 0 0 style.$spacing--base style.$spacing--base;
+    background: styles.$blue--500;
+    color: styles.$gray--000;
+    margin: 0 0 styles.$spacing--base styles.$spacing--base;
   }
 
   &-decline {
     @extend .cookie-policy__button;
-    background: style.$gray--300;
-    color: style.$navy--700;
-    margin: 0 0 style.$spacing--base auto;
+    background: styles.$gray--300;
+    color: styles.$navy--700;
+    margin: 0 0 styles.$spacing--base auto;
   }
 }
 
