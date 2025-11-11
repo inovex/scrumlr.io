@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 .emoji-suggestions {
   &__container {
@@ -15,7 +16,7 @@
     overflow-y: auto;
     box-shadow: style.$box-shadow--light;
 
-    @include style.scrollbar();
+    @include mixins.scrollbar();
 
     &--empty {
       display: none;

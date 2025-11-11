@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 .note-dialog__scrollbar {
   display: flex;
@@ -7,7 +8,7 @@
   //border-radius: $note__border-radius;
 
   overflow: hidden;
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 }
 
 // inner container preventing scrollbar flowing over border radius

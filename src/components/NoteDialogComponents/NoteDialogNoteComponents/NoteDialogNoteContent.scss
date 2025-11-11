@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 @use "components/Note/Note";
 @use "routes/StackView/StackView";
 
@@ -49,7 +50,7 @@ $min-lines: 3;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
 
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 
   // also subtract edited marker
   &--edited {

@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 @use "../SettingsDialog";
 
 .participants__search-input-wrapper {
@@ -114,7 +115,7 @@
   margin: style.$spacing--base 0px;
   border-radius: style.$rounded--default;
 
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 }
 
 .participants__list {

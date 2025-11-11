@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 @use "../SettingsDialog";
 
 .appearance-container {
@@ -9,7 +10,7 @@
   overflow-y: auto;
   flex-grow: 1;
 
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 }
 
 .appearance-container > button {

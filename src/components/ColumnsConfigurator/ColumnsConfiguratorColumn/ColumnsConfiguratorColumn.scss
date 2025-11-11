@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $column-width: 158px;
 $column-height: 340px;
@@ -39,7 +40,7 @@ $column-height: 340px;
   }
 
   &--hidden {
-    background-image: style.$column-stripes--light;
+    @include mixins.column-stripes-light;
   }
 
   // deactivate borders depending on position
@@ -139,7 +140,7 @@ $column-height: 340px;
     }
 
     &--hidden {
-      background-image: style.$column-stripes--dark;
+      @include mixins.column-stripes-dark;
     }
   }
 

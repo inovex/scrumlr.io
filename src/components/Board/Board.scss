@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 @use "components/Column/Column";
 
 .board {
@@ -38,17 +39,17 @@
 }
 
 .board__spacer-left {
-  @include style.inset-border($top: true, $left: true, $bottom: true);
+  @include mixins.inset-border($top: true, $left: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include style.inset-border($top: true, $left: true, $bottom: true, $color: style.$victory-verde--light);
+    @include mixins.inset-border($top: true, $left: true, $bottom: true, $color: style.$victory-verde--light);
   }
 }
 .board__spacer-right {
-  @include style.inset-border($top: true, $right: true, $bottom: true);
+  @include mixins.inset-border($top: true, $right: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include style.inset-border($top: true, $right: true, $bottom: true, $color: style.$victory-verde--light);
+    @include mixins.inset-border($top: true, $right: true, $bottom: true, $color: style.$victory-verde--light);
   }
 }
 
@@ -64,15 +65,15 @@
 
 .column--hidden + .board__spacer-right,
 .board__spacer-left:has(+ .column--hidden) {
-  background-image: style.$column-stripes--light;
+  @include mixins.column-stripes-light;
 }
 
 [theme="dark"] {
   .board__spacer-left {
-    @include style.inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
+    @include mixins.inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
   }
   .board__spacer-right {
-    @include style.inset-border($top: true, $right: true, $bottom: true, $color: var(--accent-color--400));
+    @include mixins.inset-border($top: true, $right: true, $bottom: true, $color: var(--accent-color--400));
   }
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
@@ -86,7 +87,7 @@
 
   .column--hidden + .board__spacer-right,
   .board__spacer-left:has(+ .column--hidden) {
-    background-image: style.$column-stripes--dark;
+    @include mixins.column-stripes-dark;
   }
 }
 

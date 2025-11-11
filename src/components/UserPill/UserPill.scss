@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "constants/style";
+@use "constants/mixins";
 
 $padding--default: style.$spacing--xxs style.$spacing--md style.$spacing--xxs style.$spacing--xxs;
 $padding--mobile: 0 0 0 0;
@@ -80,7 +81,7 @@ $size-mobile: 56px;
 @media screen and (min-width: calc(style.$breakpoint--smartphone + 1px)) {
   .user-pill:enabled {
     // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
-    @include style.default-states($padding: $padding--default);
+    @include mixins.default-states($padding: $padding--default);
   }
 }
 

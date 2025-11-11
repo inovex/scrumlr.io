@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $padding--default: style.$spacing--base;
 $padding--mobile: 12.5px style.$spacing--base;
@@ -33,7 +34,7 @@ $padding--mobile: 12.5px style.$spacing--base;
 
   &:not(&--disabled) {
     // TODO increase padding-left by 8px if no icon is present
-    @include style.default-states($padding: $padding--default);
+    @include mixins.default-states($padding: $padding--default);
 
     .input__icon-container {
       &--error {
@@ -59,7 +60,7 @@ $padding--mobile: 12.5px style.$spacing--base;
     }
 
     &:has(.input__input--invalid) {
-      @include style.invalid-state($padding: $padding--default);
+      @include mixins.invalid-state($padding: $padding--default);
     }
   }
 
@@ -138,7 +139,7 @@ $padding--mobile: 12.5px style.$spacing--base;
     padding: $padding--mobile;
 
     &:not(&--disabled) {
-      @include style.default-states($padding: $padding--mobile);
+      @include mixins.default-states($padding: $padding--mobile);
     }
   }
 }

@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $content-gap: 10px;
 $border-width: 2px;
@@ -18,7 +19,7 @@ $height--small: 46px;
   height: $height--default;
   box-sizing: border-box;
 
-  @include style.compensate-padding(style.$spacing--base style.$spacing--xl, $border-width);
+  @include mixins.compensate-padding(style.$spacing--base style.$spacing--xl, $border-width);
   border-radius: style.$rounded--full;
   border-width: $border-width;
   border-style: solid;
@@ -27,18 +28,18 @@ $height--small: 46px;
   font-weight: 700;
 
   &--with-icon {
-    @include style.compensate-padding(style.$spacing--base 22px style.$spacing--base 28px, $border-width);
+    @include mixins.compensate-padding(style.$spacing--base 22px style.$spacing--base 28px, $border-width);
   }
 
   &--small {
     height: $height--small;
     gap: style.$spacing--xxs;
 
-    @include style.compensate-padding(6px style.$spacing--base, $border-width);
+    @include mixins.compensate-padding(6px style.$spacing--base, $border-width);
 
     &.button--with-icon {
       // both have to be active to apply
-      @include style.compensate-padding(6px style.$spacing--sm 6px style.$spacing--base, $border-width);
+      @include mixins.compensate-padding(6px style.$spacing--sm 6px style.$spacing--base, $border-width);
     }
   }
 

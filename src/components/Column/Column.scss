@@ -5,14 +5,14 @@
   min-width: style.$column__min-width;
   width: 100%;
   max-width: style.$column__max-width;
-  @include style.inset-border($top: true, $bottom: true);
+  @include mixins.inset-border($top: true, $bottom: true);
   padding-top: calc(style.$column__border-width + style.$header__height + style.$info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
-  @include style.inset-border($top: true, $bottom: true, $color: style.$victory-verde--light);
+  @include mixins.inset-border($top: true, $bottom: true, $color: style.$victory-verde--light);
 }
 .column:nth-child(odd) {
   background-color: style.$gray--100;
@@ -29,11 +29,11 @@
   }
 }
 .column--hidden {
-  background-image: style.$column-stripes--light;
+  @include mixins.column-stripes-light;
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: style.$column-stripes--dark;
+    @include mixins.column-stripes-dark;
   }
 }
 
@@ -146,7 +146,7 @@
   outline: none;
   scrollbar-width: 10px;
 
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 }
 
 .column__notes-wrapper.isOver {
@@ -168,7 +168,7 @@
 
 [theme="dark"] {
   .column {
-    @include style.inset-border($top: true, $bottom: true, $color: var(--accent-color--400));
+    @include mixins.inset-border($top: true, $bottom: true, $color: var(--accent-color--400));
   }
 
   .column__header-text {

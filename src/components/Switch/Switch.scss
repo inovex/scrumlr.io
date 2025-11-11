@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $padding--default: style.$spacing--xs;
 $padding--mobile: 6px;
@@ -21,7 +22,7 @@ $padding--mobile: 6px;
   &:enabled {
     cursor: pointer;
 
-    @include style.default-states($padding: $padding--default);
+    @include mixins.default-states($padding: $padding--default);
   }
 
   &:disabled {
@@ -68,7 +69,7 @@ $padding--mobile: 6px;
     padding: $padding--mobile;
 
     &:enabled {
-      @include style.default-states($padding: $padding--mobile);
+      @include mixins.default-states($padding: $padding--mobile);
     }
   }
 

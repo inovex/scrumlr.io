@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 @use "../SettingsDialog";
 
 .profile-settings {
@@ -25,7 +26,7 @@
       margin-right: calc(-1 * (#{style.$spacing--xs} + 10px));
       padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
 
-      @include style.scrollbar();
+      @include mixins.scrollbar();
 
       @media screen and (min-width: 920px) {
         padding-right: style.$spacing--lg;

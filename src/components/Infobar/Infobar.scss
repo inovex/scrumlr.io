@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "constants/style";
+@use "constants/mixins";
 
 .info-bar {
   position: fixed;
@@ -37,7 +38,7 @@
   color: style.$navy--900;
 
   &:hover {
-    background-color: style.getLightHoverBackground(style.$gray--000);
+    background-color: mixins.getLightHoverBackground(style.$gray--000);
   }
 
   &:focus-visible {
@@ -54,7 +55,7 @@
     background-color: style.$navy--500;
 
     &:hover {
-      background-color: style.getDarkHoverBackground(style.$navy--500);
+      background-color: mixins.getDarkHoverBackground(style.$navy--500);
     }
 
     &:focus-visible {

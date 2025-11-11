@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 .columns-configurator {
   display: flex;
@@ -13,7 +14,7 @@
   max-width: 100%;
   height: 100%;
 
-  @include style.scrollbar();
+  @include mixins.scrollbar();
 }
 
 .columns-configurator__columns-wrapper {

@@ -1,16 +1,17 @@
 @use "constants/style";
+@use "constants/mixins";
 
 .confirmation-dialog__background {
   position: fixed;
-  @include style.inset-0;
+  @include mixins.inset-0;
   background-color: rgba($color: style.$blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
 
 .confirmation-dialog__wrapper {
   position: fixed;
-  @include style.inset-0;
-  @include style.flex-center;
+  @include mixins.inset-0;
+  @include mixins.flex-center;
 }
 
 .confirmation-dialog {
@@ -121,7 +122,7 @@
   top: 0;
   right: 0;
   transform: translate(50%, -50%);
-  @include style.flex-center;
+  @include mixins.flex-center;
   color: style.$blue--500;
   height: style.$icon--extralarge;
   width: style.$icon--extralarge;

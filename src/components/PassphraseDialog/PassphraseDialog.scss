@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $color-backlog-blue--light: style.$blue--500;
 $color-backlog-blue--dark: #5c8fff;
@@ -148,7 +149,7 @@ $color-form-background--dark: #292f3b;
       0 6px 8px -1px rgba($color-backlog-blue--light, 0.2),
       0 4px 6px -2px rgba($color-backlog-blue--light, 0.2);
     transform: scale(1.05);
-    background-color: style.getLightHoverBackground($color-backlog-blue--light);
+    background-color: mixins.getLightHoverBackground($color-backlog-blue--light);
   }
 
   &[aria-disabled="true"] {
@@ -203,7 +204,7 @@ $color-form-background--dark: #292f3b;
     background-color: $color-backlog-blue--dark;
 
     &:hover:not([aria-disabled="true"]) {
-      background-color: style.getDarkHoverBackground($color-backlog-blue--dark);
+      background-color: mixins.getDarkHoverBackground($color-backlog-blue--dark);
     }
   }
   .form__error-message {

@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 $tooltip-gap: 12px;
 $menu-mobile__width: 72px;
@@ -271,7 +272,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:enabled:hover {
-  background-color: style.getLightHoverBackground(style.$gray--000);
+  background-color: mixins.getLightHoverBackground(style.$gray--000);
 }
 
 .menu-bars__navigation:disabled {
@@ -289,7 +290,7 @@ $menu-mobile__width: 72px;
   }
 
   .menu-bars__navigation:enabled:hover {
-    background-color: style.getDarkHoverBackground(style.$navy--500);
+    background-color: mixins.getDarkHoverBackground(style.$navy--500);
   }
 
   .menu-bars__navigation:disabled {

@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "constants/style";
+@use "constants/mixins";
 
 $vote-display-width: 114px;
 $vote-display__content-height: 38px;
@@ -109,7 +110,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: style.getLightHoverBackground(style.$gray--300);
+    background-color: mixins.getLightHoverBackground(style.$gray--300);
   }
 
   &:focus-visible {
@@ -167,7 +168,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
     color: style.$gray--000;
 
     &:hover {
-      background-color: style.getDarkHoverBackground(style.$navy--600);
+      background-color: mixins.getDarkHoverBackground(style.$navy--600);
     }
 
     &:focus-visible {
