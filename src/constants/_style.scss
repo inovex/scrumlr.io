@@ -113,7 +113,6 @@ $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
-$tooltip-z-index: $request-z-index;
 $board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
 // breakpoints
@@ -188,26 +187,6 @@ $column-stripes--dark: repeating-linear-gradient(
   [theme="dark"] & {
     scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
   }
-}
-
-// tooltip
-@mixin tooltip {
-  z-index: $tooltip-z-index;
-  border-radius: $rounded--large;
-  max-width: 80%;
-  font-size: $text--sm;
-}
-
-@mixin tooltip--light {
-  @include tooltip;
-  color: colors.$navy--900;
-  background-color: colors.$gray--300;
-}
-
-@mixin tooltip--dark {
-  @include tooltip;
-  color: colors.$gray--000;
-  background-color: colors.$navy--200;
 }
 
 // this mixin is used to decrease an element's padding,

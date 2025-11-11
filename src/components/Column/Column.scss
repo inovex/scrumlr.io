@@ -1,4 +1,5 @@
 @use "constants/style";
+@use "constants/mixins";
 
 .column {
   min-width: style.$column__min-width;
@@ -100,7 +101,7 @@
 
 // tooltip requires parent selection because of specificity
 .column__header-text-wrapper .column__tooltip {
-  @include style.tooltip--light;
+  @include mixins.tooltip--light;
 }
 
 .column__header-input {
@@ -179,7 +180,7 @@
   }
 
   .column__header-text-wrapper .column__tooltip {
-    @include style.tooltip--dark;
+    @include mixins.tooltip--dark;
   }
 }
 

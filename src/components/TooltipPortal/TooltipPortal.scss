@@ -1,34 +1,12 @@
-@use "constants/style";
-
-$tooltip-max-width: 80%;
-
-// tooltip
-@mixin tooltip {
-  z-index: style.$tooltip-z-index;
-  border-radius: style.$rounded--large;
-  max-width: $tooltip-max-width;
-  font-size: style.$text--sm;
-}
-
-@mixin tooltip--light {
-  @include tooltip;
-  color: style.$navy--900;
-  background-color: style.$gray--300;
-}
-
-@mixin tooltip--dark {
-  @include tooltip;
-  color: style.$gray--000;
-  background-color: style.$navy--300;
-}
+@use "constants/mixins";
 
 // selecting .tooltip-portal directly won't work because of CSS specificity
 .tooltip-portal__root .tooltip-portal {
-  @include tooltip--light;
+  @include mixins.tooltip--light;
 }
 
 [theme="dark"] {
   .tooltip-portal__root .tooltip-portal {
-    @include tooltip--dark;
+    @include mixins.tooltip--dark;
   }
 }

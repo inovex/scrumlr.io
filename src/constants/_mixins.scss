@@ -1,0 +1,22 @@
+@use "constants/style";
+@use "constants/colors";
+
+// tooltip
+@mixin tooltip {
+  z-index: style.$request-z-index;
+  border-radius: style.$rounded--large;
+  max-width: 80%;
+  font-size: style.$text--sm;
+}
+
+@mixin tooltip--light {
+  @include tooltip;
+  color: colors.$navy--900;
+  background-color: colors.$gray--300;
+}
+
+@mixin tooltip--dark {
+  @include tooltip;
+  color: colors.$gray--000;
+  background-color: colors.$navy--200;
+}
