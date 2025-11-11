@@ -59,7 +59,7 @@ html[theme="dark"] {
   @each $color-name, $shades in colors.$base-colors {
     @each $shade, $color in $shades {
       --#{$color-name}--#{$shade}: #{$color};
-      --#{$color-name}--#{$shade}-rgb: #{color.red($color)}, #{color.green($color)}, #{color.blue($color)};
+      --#{$color-name}--#{$shade}-rgb: #{color.channel($color, "red", $space: rgb)}, #{color.channel($color, "green", $space: rgb)}, #{color.channel($color, "blue", $space: rgb)};
     }
   }
 }
@@ -80,16 +80,18 @@ html[theme="dark"] {
 @mixin set-accent-variables($color-map) {
   @each $shade, $color in $color-map {
     --accent-color--#{$shade}: #{$color};
-    --accent-color--#{$shade}-rgb: #{color.red($color)}, #{color.green($color)}, #{color.blue($color)};
+    --accent-color--#{$shade}-rgb: #{color.channel($color, "red", $space: rgb)}, #{color.channel($color, "green", $space: rgb)}, #{color.channel($color, "blue", $space: rgb)};
   }
 
   // shortcut for most commonly used accent colors
   $shade-light: map.get($color-map, 500);
   $shade-dark: map.get($color-map, 400);
   --accent-color--light: #{$shade-light};
-  --accent-color--light-rgb: #{color.red($shade-light)}, #{color.green($shade-light)}, #{color.blue($shade-light)};
+  --accent-color--light-rgb:
+    #{color.channel($shade-light, "red", $space: rgb)}, #{color.channel($shade-light, "green", $space: rgb)}, #{color.channel($shade-light, "blue", $space: rgb)};
   --accent-color--dark: #{$shade-dark};
-  --accent-color--dark-rgb: #{color.red($shade-dark)}, #{color.green($shade-dark)}, #{color.blue($shade-dark)};
+  --accent-color--dark-rgb:
+    #{color.channel($shade-dark, "red", $space: rgb)}, #{color.channel($shade-dark, "green", $space: rgb)}, #{color.channel($shade-dark, "blue", $space: rgb)};
 }
 
 @include generate-accent-classes(colors.$primary-colors);
