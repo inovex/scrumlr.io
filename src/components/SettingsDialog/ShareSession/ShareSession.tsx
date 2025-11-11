@@ -5,7 +5,7 @@ import {useState} from "react";
 import {useAppSelector} from "store";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
-import {useOutletContext} from "react-router";
+import {Link, useOutletContext} from "react-router";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import {getCSSCustomPropertyValue} from "utils/computedStyles";
 import "./ShareSession.scss";
@@ -16,6 +16,7 @@ export const ShareSession = () => {
 
   const boardId = useAppSelector((state) => state.board.data?.id);
   const theme = useAppSelector((state) => state.view.theme);
+  const accessPolicy = useAppSelector((state) => state.board.data?.accessPolicy);
   const autoTheme = useAutoTheme(theme);
 
   const gray000 = getCSSCustomPropertyValue("--gray--000");
@@ -47,6 +48,11 @@ export const ShareSession = () => {
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}
         </button>
+        {accessPolicy === "BY_PASSPHRASE" ? (
+          <Link to="../board">
+            <p className="share-session__hint">{t("ShareQrCodeOption.hint")}</p>
+          </Link>
+        ) : undefined}
       </div>
     </div>
   );
