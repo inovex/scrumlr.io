@@ -12,28 +12,16 @@ export const notesReducer = createReducer(initialState, (builder) =>
     .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.notes)
     .addCase(updatedNotes, (_state, action) => action.payload)
     .addCase(deletedNote, (state, action) => {
-      const note = state.find((n) => n.id === action.payload.noteId);
+      const note = state.find((n) => n.id === action.payload);
 
       if (!note) return state;
 
-      // Delete stack
-      if (action.payload.deleteStack) {
-        const newState = state.filter((n) => {
-          if (n.id === action.payload.noteId) {
-            return false;
-          }
-          return n.position.stack !== action.payload.noteId;
-        });
-        return newState.map((n) => {
-          if (!n.position.stack && n.position.rank > note.position.rank) {
-            const newRank = n.position.rank - 1;
-            return {...n, position: {...n.position, rank: newRank}};
-          }
-          return n;
-        });
-      }
+      // all note deletions are now single operations; so we don't do stack deletions as a whole.
+      // if the note is part of a stack, we only delete itself and reorder the other notes accordingly.
+      // instead of a stack deletion, all notes will be deleted one by one synchronously, eventually deleting the stack.
 
       // Delete parent note
+      // first child note becomes the new parent
       const childrenOfDeletedNote = state.filter((n) => n.position.stack === note.id);
       if (note.position.stack === null && childrenOfDeletedNote.length > 0) {
         // Find the next parent note among its children
@@ -50,7 +38,7 @@ export const notesReducer = createReducer(initialState, (builder) =>
             // The next parent n should now have null stack
             return {...n, position: {...n.position, stack: null, rank: n.position.rank}};
           }
-          if (n.position.stack === n.id) {
+          if (n.position.stack === note.id) {
             // The other children should now have the next parent n's ID as their stack
             return {...n, position: {...n.position, stack: nextParentNote.id}};
           }
@@ -63,7 +51,7 @@ export const notesReducer = createReducer(initialState, (builder) =>
 
       // Delete child note
       if (note.position.stack) {
-        const newState = state.filter((n) => n.id !== action.payload.noteId);
+        const newState = state.filter((n) => n.id !== action.payload);
         return newState.map((n) => {
           if (n.position.stack === note.position.stack) {
             const newRank = n.position.rank - 1;
@@ -73,8 +61,8 @@ export const notesReducer = createReducer(initialState, (builder) =>
         });
       }
 
-      // Delete note
-      const newState = state.filter((n) => n.id !== action.payload.noteId);
+      // Delete a single note
+      const newState = state.filter((n) => n.id !== action.payload);
       return newState.map((n) => {
         if (!n.position.stack && n.position.rank > note.position.rank) {
           const newRank = n.position.rank - 1;
