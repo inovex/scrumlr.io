@@ -19,32 +19,34 @@ describe("noteReducer", () => {
     mockStore = getTestStore({notes: testNotes});
   });
 
-  test("delete nothing", () => {
-    mockStore.dispatch(deletedNote("nothing"));
-    expect(mockStore.getState().notes).toEqual(testNotes);
-  });
+  describe("deletedNote", () => {
+    test("delete nothing", () => {
+      mockStore.dispatch(deletedNote("nothing"));
+      expect(mockStore.getState().notes).toEqual(testNotes);
+    });
 
-  test("delete single note", () => {
-    mockStore.dispatch(deletedNote("note-id-single"));
-    expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-1"})]));
-  });
+    test("delete single note", () => {
+      mockStore.dispatch(deletedNote("note-id-single"));
+      expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-1"})]));
+    });
 
-  // stack should remain, but rank should be adjusted
-  test("delete child note", () => {
-    mockStore.dispatch(deletedNote("note-id-child-1"));
-    expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-child-1"})]));
-    expect(mockStore.getState().notes).toEqual(expect.arrayContaining([expect.objectContaining({id: "note-id-child-2", position: expect.objectContaining({rank: 0})})]));
-  });
+    // stack should remain, but rank should be adjusted
+    test("delete child note", () => {
+      mockStore.dispatch(deletedNote("note-id-child-1"));
+      expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-child-1"})]));
+      expect(mockStore.getState().notes).toEqual(expect.arrayContaining([expect.objectContaining({id: "note-id-child-2", position: expect.objectContaining({rank: 0})})]));
+    });
 
-  // first child note becomes the new parent; stack should be updated accordingly
-  test("delete parent note", () => {
-    mockStore.dispatch(deletedNote("note-id-parent"));
-    expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-parent"})]));
-    expect(mockStore.getState().notes).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({id: "note-id-child-1", position: expect.objectContaining({stack: "note-id-child-2"})}),
-        expect.objectContaining({id: "note-id-child-2", position: expect.objectContaining({stack: null})}),
-      ])
-    );
+    // first child note becomes the new parent; stack should be updated accordingly
+    test("delete parent note", () => {
+      mockStore.dispatch(deletedNote("note-id-parent"));
+      expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({id: "note-id-parent"})]));
+      expect(mockStore.getState().notes).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({id: "note-id-child-1", position: expect.objectContaining({stack: "note-id-child-2"})}),
+          expect.objectContaining({id: "note-id-child-2", position: expect.objectContaining({stack: null})}),
+        ])
+      );
+    });
   });
 });
