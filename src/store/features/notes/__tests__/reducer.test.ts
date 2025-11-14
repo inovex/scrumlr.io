@@ -19,9 +19,8 @@ describe("noteReducer", () => {
     mockStore = getTestStore({notes: testNotes});
   });
 
-  it("should work", () => {
-    expect(mockStore.getState().notes).toHaveLength(4);
+  it("delete single note", () => {
     mockStore.dispatch(deletedNote("note-id-1"));
-    expect(mockStore.getState().notes).toHaveLength(3);
+    expect(mockStore.getState().notes).not.toEqual(expect.arrayContaining([expect.objectContaining({id: "note-id-1"})]));
   });
 });
