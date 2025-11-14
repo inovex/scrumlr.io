@@ -1,6 +1,6 @@
 import {render} from "testUtils";
 import {ColumnDetails, ColumnDetailsProps} from "components/Column/ColumnDetails/ColumnDetails";
-import {Column, Participant, ParticipantRole} from "store/features";
+import {Column, ParticipantWithUser, ParticipantRole} from "store/features";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";
@@ -17,7 +17,7 @@ describe("ColumnDetails", () => {
     };
 
     const props = {...defaultProps, ...overrideProps};
-    const self: Participant = {...getTestApplicationState().participants.self!, role: userRole};
+    const self: ParticipantWithUser = {...getTestApplicationState().participants.self!, role: userRole};
 
     return render(
       <Provider store={getTestStore({participants: {self}})}>

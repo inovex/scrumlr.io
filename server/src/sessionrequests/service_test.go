@@ -11,6 +11,7 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -267,7 +268,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 	userId := uuid.New()
 	role := common.ParticipantRole
 
-	user := sessions.User{
+	user := users.User{
 		ID: userId,
 	}
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
@@ -276,7 +277,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 
 	mockSessionService := sessions.NewMockSessionService(t)
 	mockSessionService.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardId, User: userId, Role: role}).
-		Return(&sessions.BoardSession{Board: boardId, User: user, Role: role}, nil)
+		Return(&sessions.BoardSession{Board: boardId, UserID: user.ID, Role: role}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)

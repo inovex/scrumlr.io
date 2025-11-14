@@ -10,7 +10,7 @@ export const UserAPI = {
    */
   editUser: async (user: Auth) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(user),
@@ -23,6 +23,37 @@ export const UserAPI = {
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to update user: ${error}`);
+    }
+  },
+
+  getUserById: async (userId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.status === 200) {
+        return (await response.json()) as Auth;
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
+    }
+  },
+
+  getUsers: async (boardID: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/board/${boardID}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Auth[];
+      }
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user: ${error}`);
     }
   },
 };

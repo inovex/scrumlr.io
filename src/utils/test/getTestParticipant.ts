@@ -1,6 +1,6 @@
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 
-export default (overwrite?: Partial<Participant>): Participant => ({
+export default (overwrite?: Partial<ParticipantWithUser>): ParticipantWithUser => ({
   user: {
     id: "test-participant-id",
     name: "test-participant-name",

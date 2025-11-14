@@ -1,12 +1,12 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {Participant, ParticipantsState} from "./types";
+import {ParticipantWithUser, ParticipantsState} from "./types";
 import {initializeBoard} from "../board";
 import {clearFocusInitiator, createdParticipant, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
 import {editSelf} from "./thunks";
 
 const initialState: ParticipantsState = {};
 
-const mapParticipantsToState = (participants: Participant[], ownUserId: string): ParticipantsState => {
+const mapParticipantsToState = (participants: ParticipantWithUser[], ownUserId: string): ParticipantsState => {
   const self = participants.find((p) => p.user.id === ownUserId)!;
   const others = participants.filter((p) => p.user.id !== ownUserId);
   const focusInitiator = undefined;

@@ -19,7 +19,7 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 // createValidBoardTemplateRequest creates a valid board template request for testing
@@ -162,8 +162,8 @@ func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create mock user service with test user
-			mockUsers := sessions.NewMockUserService(t)
-			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&sessions.User{
+			mockUsers := users.NewMockUserService(t)
+			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
 				ID:          userID,
 				Name:        "Test User",
 				AccountType: tt.userAccountType,
@@ -209,7 +209,7 @@ func TestAnonymousCustomTemplateCreationContext_UserNotFound(t *testing.T) {
 	userID := uuid.New()
 
 	// Create mock user service that returns error when user not found
-	mockUsers := sessions.NewMockUserService(t)
+	mockUsers := users.NewMockUserService(t)
 	mockUsers.EXPECT().Get(mock.Anything, userID).Return(nil, assert.AnError)
 
 	server := &Server{
@@ -347,8 +347,8 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			userID := uuid.New()
 
 			// Create mock user service
-			mockUsers := sessions.NewMockUserService(t)
-			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&sessions.User{
+			mockUsers := users.NewMockUserService(t)
+			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
 				ID:          userID,
 				Name:        "Test User",
 				AccountType: tt.userAccountType,

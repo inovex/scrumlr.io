@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/boards"
 
@@ -48,7 +49,7 @@ type Server struct {
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
-	users           sessions.UserService
+	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
@@ -80,7 +81,7 @@ func New(
 	boards boards.BoardService,
 	columns columns.ColumnService,
 	votings votings.VotingService,
-	users sessions.UserService,
+	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
@@ -257,9 +258,11 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardReactionResources(r)
 		})
 
-		r.Route("/user", func(r chi.Router) {
+		r.Route("/users", func(r chi.Router) {
 			r.Get("/", s.getUser)
+			r.Get("/{user}", s.getUserByID)
 			r.Put("/", s.updateUser)
+			r.With(s.BoardParticipantContext).Get("/board/{id}", s.getUsers)
 		})
 	})
 }
