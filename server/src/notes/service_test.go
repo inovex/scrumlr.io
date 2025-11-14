@@ -2,7 +2,10 @@ package notes
 
 import (
 	"context"
+	"encoding/json"
+	"time"
 
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/realtime"
 
 	"database/sql"
@@ -35,7 +38,11 @@ func TestCreate(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -60,7 +67,11 @@ func TestCreate_EmptyText(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -84,7 +95,11 @@ func TestCreate_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
 
@@ -110,7 +125,11 @@ func TestImport(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -135,7 +154,11 @@ func TestImport_EmptyText(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -159,7 +182,11 @@ func TestImport_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
 
@@ -197,7 +224,11 @@ func TestUpdate_Text_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -256,7 +287,11 @@ func TestUpdate_Position_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		ID:       noteId,
@@ -304,7 +339,11 @@ func TestUpdate_Text_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -363,7 +402,11 @@ func TestUpdate_Position_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     nil,
@@ -411,7 +454,11 @@ func TestUpdate_Text_Participant(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -454,7 +501,11 @@ func TestUpdate_Text_Participant_NotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -509,7 +560,11 @@ func TestUpdate_Position_Participant(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     nil,
@@ -552,7 +607,11 @@ func TestUpdate_StackingNotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -591,7 +650,11 @@ func TestUpdate_StackOnSelf(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
@@ -643,7 +706,11 @@ func TestUpdate_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &text,
@@ -681,7 +748,11 @@ func TestDeleteNote(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -711,7 +782,11 @@ func TestDeleteNote_Owner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -741,7 +816,11 @@ func TestDeleteNote_Moderator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -766,7 +845,11 @@ func TestDeleteNote_NotAllowed(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
@@ -790,7 +873,11 @@ func TestGet(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -814,7 +901,11 @@ func TestGet_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -835,7 +926,11 @@ func TestGet_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	note, err := service.Get(context.Background(), noteId)
 
@@ -866,7 +961,11 @@ func TestGetAll(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -903,7 +1002,11 @@ func TestGetAll_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -924,7 +1027,11 @@ func TestGetAll_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	notes, err := service.GetAll(context.Background(), boardId)
 
@@ -947,7 +1054,11 @@ func TestGetStack(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	result, err := service.GetStack(context.Background(), noteID)
 
@@ -984,11 +1095,620 @@ func TestGetStack_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewNotesService(mockDB, broker)
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
 
 	result, err := service.GetStack(context.Background(), noteID)
 
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Equal(t, dbError, err)
+}
+
+func TestAcquireLock(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Create(mock.Anything, noteId.String(), userId.String(), 10*time.Second).Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	acuired := service.AcquireLock(context.Background(), noteId, userId, boardId)
+
+	assert.True(t, acuired)
+}
+
+func TestAcquireLockForStack(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Create(mock.Anything, firstNoteId.String(), userId.String(), 10*time.Second).Return(nil)
+	mockCache.EXPECT().Create(mock.Anything, secondNoteId.String(), userId.String(), 10*time.Second).Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	acuired := service.AcquireLock(context.Background(), firstNoteId, userId, boardId)
+
+	assert.True(t, acuired)
+}
+
+func TestAcquireLockFailed(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Create(mock.Anything, firstNoteId.String(), userId.String(), 10*time.Second).Return(nil)
+	mockCache.EXPECT().Create(mock.Anything, secondNoteId.String(), userId.String(), 10*time.Second).Return(errors.New("Key already exists"))
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	acuired := service.AcquireLock(context.Background(), firstNoteId, userId, boardId)
+
+	assert.False(t, acuired)
+}
+
+func TestAcquireLockLockNoteServicefailure(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{}, errors.New("db error"))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	acuired := service.AcquireLock(context.Background(), noteId, userId, boardId)
+
+	assert.False(t, acuired)
+}
+
+func TestReleaseLock(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Delete(mock.Anything, noteId.String()).Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	released := service.ReleaseLock(context.Background(), noteId, userId, boardId)
+
+	assert.True(t, released)
+}
+
+func TestReleaseLockForStack(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Delete(mock.Anything, firstNoteId.String()).Return(nil)
+	mockCache.EXPECT().Delete(mock.Anything, secondNoteId.String()).Return(errors.New("cache error"))
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	released := service.ReleaseLock(context.Background(), firstNoteId, userId, boardId)
+
+	assert.False(t, released)
+}
+
+func TestReleaseLockFailed(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Delete(mock.Anything, firstNoteId.String()).Return(nil)
+	mockCache.EXPECT().Delete(mock.Anything, secondNoteId.String()).Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	released := service.ReleaseLock(context.Background(), firstNoteId, userId, boardId)
+
+	assert.True(t, released)
+}
+
+func TestRealeaseLockNoteServiceFailed(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	boardId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{}, errors.New("db error"))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	released := service.ReleaseLock(context.Background(), noteId, userId, boardId)
+
+	assert.False(t, released)
+}
+
+func TestGetLock(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	lockValue, _ := json.Marshal(DragLock{NoteID: noteId, UserID: userId})
+
+	mockDB := NewMockNotesDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Get(mock.Anything, noteId.String()).Return(lockValue, nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	lock, err := service.GetLock(context.Background(), noteId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, noteId, lock.NoteID)
+	assert.Equal(t, userId, lock.UserID)
+}
+
+func TestIsLocked(t *testing.T) {
+	noteId := uuid.New()
+	userId := uuid.New()
+	lockValue, _ := json.Marshal(DragLock{NoteID: noteId, UserID: userId})
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Get(mock.Anything, noteId.String()).Return(lockValue, nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	locked := service.IsLocked(context.Background(), noteId)
+
+	assert.True(t, locked)
+}
+
+func TestIsLockedStack(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	firstLockValue, _ := json.Marshal(DragLock{NoteID: firstNoteId, UserID: userId})
+	secondLockValue, _ := json.Marshal(DragLock{NoteID: secondNoteId, UserID: userId})
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Get(mock.Anything, firstNoteId.String()).Return(firstLockValue, nil)
+	mockCache.EXPECT().Get(mock.Anything, secondNoteId.String()).Return(secondLockValue, nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	locked := service.IsLocked(context.Background(), firstNoteId)
+
+	assert.True(t, locked)
+}
+
+func TestIsNotLocked(t *testing.T) {
+	noteId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Get(mock.Anything, noteId.String()).Return(nil, errors.New("Key not found"))
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	locked := service.IsLocked(context.Background(), noteId)
+
+	assert.False(t, locked)
+}
+
+func TestIsPartialLockedStack(t *testing.T) {
+	firstNoteId := uuid.New()
+	secondNoteId := uuid.New()
+	userId := uuid.New()
+	secondLockValue, _ := json.Marshal(DragLock{NoteID: secondNoteId, UserID: userId})
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, firstNoteId).
+		Return([]DatabaseNote{{ID: firstNoteId}, {ID: secondNoteId}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Get(mock.Anything, firstNoteId.String()).Return(nil, errors.New("Key not found"))
+	mockCache.EXPECT().Get(mock.Anything, secondNoteId.String()).Return(secondLockValue, nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	locked := service.IsLocked(context.Background(), firstNoteId)
+
+	assert.True(t, locked)
+}
+
+func TestIsLockedNoteServicefailure(t *testing.T) {
+	noteId := uuid.New()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{}, errors.New("db error"))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	locked := service.IsLocked(context.Background(), noteId)
+
+	assert.False(t, locked)
+}
+
+type MockWebSocketConn struct {
+	messages []interface{}
+}
+
+func (m *MockWebSocketConn) WriteJSON(v interface{}) error {
+	m.messages = append(m.messages, v)
+	return nil
+}
+
+func (m *MockWebSocketConn) GetMessages() []interface{} {
+	return m.messages
+}
+
+func TestHandleAcquireMessage(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+		Return([]DatabaseNote{{ID: noteID}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Create(mock.Anything, noteID.String(), userID.String(), time.Second*10).
+		Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	message := DragLockMessage{
+		Action: DragLockActionAcquire,
+		NoteID: noteID,
+	}
+	data, err := json.Marshal(message)
+	assert.Nil(t, err)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
+
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionAcquire, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.True(t, response.Success)
+	assert.Empty(t, response.Error)
+}
+
+func TestHandleFailedAcquireMessage(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+		Return([]DatabaseNote{{ID: noteID}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Create(mock.Anything, noteID.String(), userID.String(), time.Second*10).
+		Return(errors.New("Lock exists"))
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	message := DragLockMessage{
+		Action: DragLockActionAcquire,
+		NoteID: noteID,
+	}
+	data, err := json.Marshal(message)
+	assert.Nil(t, err)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
+
+	// Verify response was sent with error
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionAcquire, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Note is currently being dragged by another user", response.Error)
+}
+
+func TestHandleReleaseMessage(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+		Return([]DatabaseNote{{ID: noteID}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Delete(mock.Anything, noteID.String()).
+		Return(nil)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	message := DragLockMessage{
+		Action: DragLockActionRelease,
+		NoteID: noteID,
+	}
+	data, err := json.Marshal(message)
+	assert.Nil(t, err)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
+
+	// Verify response was sent
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionRelease, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.True(t, response.Success)
+	assert.Empty(t, response.Error)
+}
+
+func TestHandleFailedReleaseMessage(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+		Return([]DatabaseNote{{ID: noteID}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	mockCache.EXPECT().Delete(mock.Anything, noteID.String()).
+		Return(errors.New("Failed to release lock"))
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	message := DragLockMessage{
+		Action: DragLockActionRelease,
+		NoteID: noteID,
+	}
+	data, err := json.Marshal(message)
+	assert.Nil(t, err)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
+
+	// Verify response was sent with error
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, DragLockActionRelease, response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Lock not owned by user or already released", response.Error)
+}
+
+func TestHandleInvalidJSON(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	invalidJSON := []byte(`{"action": "ACQUIRE", "noteId": "invalid-uuid"}`)
+
+	mockDB := NewMockNotesDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, invalidJSON)
+
+	// Verify error response was sent
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, "ERROR", response.Action)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Invalid message format", response.Error)
+}
+
+func TestHandleUnknownAction(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	noteID := uuid.New()
+	mockConn := &MockWebSocketConn{}
+
+	mockDB := NewMockNotesDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockCache := cache.NewMockClient(t)
+	c := new(cache.Cache)
+	c.Con = mockCache
+
+	service := NewNotesService(mockDB, broker, c)
+
+	message := DragLockMessage{
+		Action: "UNKNOWN_ACTION",
+		NoteID: noteID,
+	}
+	data, err := json.Marshal(message)
+	assert.Nil(t, err)
+
+	service.HandleWebSocketMessage(context.Background(), boardID, userID, mockConn, data)
+
+	// Verify error response was sent
+	assert.Len(t, mockConn.messages, 1)
+	response := mockConn.messages[0].(DragLockResponse)
+	assert.Equal(t, WebSocketMessageTypeDragLock, response.Type)
+	assert.Equal(t, "UNKNOWN_ACTION", response.Action)
+	assert.Equal(t, noteID, response.NoteID)
+	assert.False(t, response.Success)
+	assert.Equal(t, "Unknown action", response.Error)
 }
