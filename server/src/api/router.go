@@ -260,6 +260,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Route("/user", func(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Put("/", s.updateUser)
+			r.Delete("/", s.deleteUser)
 		})
 	})
 }
