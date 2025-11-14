@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/styles";
 
 .dropdown {
   position: relative;
@@ -8,25 +8,25 @@
 
   // applying border-radius: $rounded-large leaves some pixels visible, when hovering,
   // but targeting the specific corners seems to work
-  border-top-left-radius: $rounded--large;
-  border-top-right-radius: $rounded--large;
+  border-top-left-radius: styles.$rounded--large;
+  border-top-right-radius: styles.$rounded--large;
 
   &:not(&--open) {
-    border-bottom-left-radius: $rounded--large;
-    border-bottom-right-radius: $rounded--large;
+    border-bottom-left-radius: styles.$rounded--large;
+    border-bottom-right-radius: styles.$rounded--large;
   }
 }
 
 .dropdown__option {
   display: flex;
   flex-direction: row;
-  gap: $spacing--base;
+  gap: styles.$spacing--base;
   align-items: center;
 
   box-sizing: border-box;
-  padding: 14px $spacing--md;
+  padding: 14px styles.$spacing--md;
 
-  font-size: $text--base;
+  font-size: styles.$text--base;
   font-weight: 700;
 
   overflow: hidden;
@@ -34,13 +34,13 @@
   // first item (active) always has top border radius,
   // but only bottom if the menu isn't expanded.
   &--active {
-    border-top-right-radius: $rounded--large;
-    border-top-left-radius: $rounded--large;
+    border-top-right-radius: styles.$rounded--large;
+    border-top-left-radius: styles.$rounded--large;
   }
 
   &:last-child {
-    border-bottom-left-radius: $rounded--large;
-    border-bottom-right-radius: $rounded--large;
+    border-bottom-left-radius: styles.$rounded--large;
+    border-bottom-right-radius: styles.$rounded--large;
   }
 }
 
@@ -50,8 +50,8 @@
   left: 0;
   right: 0;
 
-  border-bottom-left-radius: $rounded--large;
-  border-bottom-right-radius: $rounded--large;
+  border-bottom-left-radius: styles.$rounded--large;
+  border-bottom-right-radius: styles.$rounded--large;
 }
 
 .dropdown__option-icon {
@@ -59,8 +59,8 @@
   justify-content: center;
   align-items: center;
 
-  width: $icon--large;
-  height: $icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 }
 
 .dropdown__option-arrow {
@@ -68,8 +68,8 @@
   justify-content: center;
   align-items: center;
 
-  width: $icon--large;
-  height: $icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 
   margin-left: auto;
 
@@ -87,42 +87,42 @@
 //  default: visible text by default
 //  hover: color & background changes
 .dropdown {
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
 }
 
 // to help with border radius overlap
 .dropdown__options-container {
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
 }
 
 .dropdown__option {
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
 }
 
 .dropdown {
   &--open {
     .dropdown__options-container {
       // clip top of box shadow, since it's absolute and below a different element
-      box-shadow: 0 3px 12px rgba($navy--700, 0.12);
+      box-shadow: 0 3px 12px rgba(styles.$navy--700, 0.12);
       clip-path: inset(0px -10px -10px -10px);
     }
 
     .dropdown__option {
-      color: $navy--500;
+      color: styles.$navy--500;
 
       &:hover {
-        color: $navy--500;
-        background-color: $gray--200;
+        color: styles.$navy--500;
+        background-color: styles.$gray--200;
       }
     }
   }
 
   &:not(&--open) {
     .dropdown__option {
-      color: $gray--800;
+      color: styles.$gray--800;
 
       &:hover {
-        color: $navy--500;
+        color: styles.$navy--500;
       }
     }
   }
@@ -131,35 +131,35 @@
 // same goes for dark mode
 [theme="dark"] {
   .dropdown {
-    background-color: $navy--400;
+    background-color: styles.$navy--400;
   }
 
   .dropdown__options-container {
-    background-color: $navy--400;
+    background-color: styles.$navy--400;
   }
 
   .dropdown__option {
-    background-color: $navy--400;
+    background-color: styles.$navy--400;
   }
 
   .dropdown {
     &--open {
       .dropdown__option {
-        color: $gray--000;
+        color: styles.$gray--000;
 
         &:hover {
-          color: $navy--500;
-          background-color: $gray--800;
+          color: styles.$navy--500;
+          background-color: styles.$gray--800;
         }
       }
     }
 
     &:not(&--open) {
       .dropdown__option {
-        color: $gray--800;
+        color: styles.$gray--800;
 
         &:hover {
-          color: $gray--000;
+          color: styles.$gray--000;
         }
       }
     }

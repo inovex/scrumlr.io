@@ -1,21 +1,21 @@
-@import "constants/style";
+@use "constants/styles";
 
 .legal {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  padding: $spacing--base;
+  padding: styles.$spacing--base;
 }
 
 .legal a {
-  color: $pink--500;
+  color: styles.$pink--500;
   font-weight: bold;
   text-decoration: none;
   transition: all 0.08s ease-out;
   outline: none;
 
   &:hover {
-    filter: $brighten--strongly;
+    filter: styles.$brighten--strongly;
 
     > svg .scrumlr-logo__paths path:first-of-type {
       transform: scale(1.08);
@@ -27,7 +27,7 @@
     text-decoration: underline;
 
     > svg {
-      filter: $brighten--strongly;
+      filter: styles.$brighten--strongly;
     }
   }
 }
@@ -38,12 +38,12 @@
 
 [theme="dark"] {
   .legal {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 }
 
-@media #{$tablet} {
+@media #{styles.$tablet} {
   .legal {
-    padding: $spacing--xl;
+    padding: styles.$spacing--xl;
   }
 }

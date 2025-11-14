@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/styles";
 
 $add-column-width: 144px;
 $add-column-height: 326px;
@@ -17,13 +17,13 @@ $add-column-height: 326px;
 
   &--left {
     border-right: none;
-    border-top-left-radius: $rounded--default;
-    border-bottom-left-radius: $rounded--default;
+    border-top-left-radius: styles.$rounded--default;
+    border-bottom-left-radius: styles.$rounded--default;
   }
   &--right {
     border-left: none;
-    border-top-right-radius: $rounded--default;
-    border-bottom-right-radius: $rounded--default;
+    border-top-right-radius: styles.$rounded--default;
+    border-bottom-right-radius: styles.$rounded--default;
   }
 }
 
@@ -44,7 +44,7 @@ $add-column-height: 326px;
   color: var(--accent-color--light);
 
   &--disabled {
-    color: $gray--800;
+    color: styles.$gray--800;
   }
 
   &:not(&--disabled) {

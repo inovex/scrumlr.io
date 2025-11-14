@@ -1,6 +1,6 @@
-@import "constants/style";
+@use "constants/styles";
 
-@media #{$tablet} {
+@media #{styles.$tablet} {
   #portal {
     .voting-dialog {
       top: calc(50% - 25px);
@@ -16,7 +16,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $pink--500;
+      border-color: transparent transparent transparent styles.$pink--500;
     }
     .voting-dialog::after {
       content: " ";
@@ -25,13 +25,13 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $gray--100;
+      border-color: transparent transparent transparent styles.$gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .voting-dialog::after {
-      border-color: transparent transparent transparent $navy--600;
+      border-color: transparent transparent transparent styles.$navy--600;
     }
   }
 }
@@ -41,7 +41,7 @@
   border-radius: 8px;
   height: 48px;
   width: 80%;
-  background: $pink--500;
+  background: styles.$pink--500;
   cursor: pointer;
   transition: all 0.08s ease-out;
 
@@ -62,23 +62,23 @@
 
 .voting-dialog__start-button > label {
   font-weight: bold;
-  font-size: $text-size--medium;
-  color: $gray--000;
-  letter-spacing: $letter-spacing--medium;
+  font-size: styles.$text-size--medium;
+  color: styles.$gray--000;
+  letter-spacing: styles.$letter-spacing--medium;
   cursor: pointer;
 }
 
 .voting-dialog__vote-button {
-  height: $icon--medium;
-  width: $icon--medium;
-  border: 1px solid $pink--500;
-  border-radius: $rounded--full;
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
+  border: 1px solid styles.$pink--500;
+  border-radius: styles.$rounded--full;
   background-color: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-  color: $pink--500;
+  color: styles.$pink--500;
 
   > svg {
     height: 100%;
@@ -102,7 +102,7 @@
 .voting-dialog__vote-label {
   text-align: center;
   line-height: normal;
-  font-size: $text-size--medium;
+  font-size: styles.$text-size--medium;
   width: 20px;
 }
 [theme="dark"] .voting-dialog__vote-label {
@@ -112,7 +112,7 @@
 .voting-dialog__votes-controls {
   display: flex;
   align-items: center;
-  gap: $spacing--xs;
+  gap: styles.$spacing--xs;
 }
 
 .dialog__button > label {
@@ -121,6 +121,6 @@
 
 [theme="dark"] {
   .voting-dialog__start-button:focus-visible {
-    outline: 2px solid $gray--000;
+    outline: 2px solid styles.$gray--000;
   }
 }

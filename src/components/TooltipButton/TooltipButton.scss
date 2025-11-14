@@ -1,4 +1,5 @@
-@import "constants/style.scss";
+@use "constants/styles";
+@use "constants/mixins";
 
 $tooltip-button-size: 46px;
 
@@ -11,7 +12,7 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    border-color: var(--accent-color--desaturated-light, $blue--100);
+    border-color: var(--accent-color--desaturated-light, styles.$blue--100);
     transition: border-color 0ms linear 0ms;
   }
 
@@ -31,14 +32,14 @@ $tooltip-button-size: 46px;
   cursor: pointer;
   pointer-events: auto;
   box-sizing: border-box;
-  color: $navy--900;
+  color: styles.$navy--900;
 
   &:focus-visible {
-    outline: 2px solid var(--accent-color, rgba($gray--000, 0.5));
+    outline: 2px solid var(--accent-color, rgba(styles.$gray--000, 0.5));
   }
 
   &:disabled {
-    color: $gray--800;
+    color: styles.$gray--800;
     cursor: not-allowed;
   }
 }
@@ -57,8 +58,8 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    background-color: $navy--500;
-    color: $gray--000;
+    background-color: styles.$navy--500;
+    color: styles.$gray--000;
   }
 }
 
@@ -69,7 +70,7 @@ $tooltip-button-size: 46px;
   max-width: 0;
   height: $tooltip-button-size;
   border-radius: calc($tooltip-button-size / 2);
-  background-color: $blue--100;
+  background-color: styles.$blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -83,18 +84,18 @@ $tooltip-button-size: 46px;
     transform: translateX(-50%);
     border-width: 10px;
     border-style: solid;
-    border-color: $blue--100 transparent transparent transparent;
+    border-color: styles.$blue--100 transparent transparent transparent;
   }
 }
 
 .tooltip-button__tooltip-text {
   width: 100%;
-  padding: 0 $spacing--base;
+  padding: 0 styles.$spacing--base;
   white-space: nowrap;
   font-size: 14px;
   font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  line-height: $line-height--small;
+  letter-spacing: styles.$letter-spacing--medium;
+  line-height: styles.$line-height--small;
   border-radius: calc($tooltip-button-size / 2);
   color: var(--accent-color--light);
 }
@@ -103,8 +104,8 @@ $tooltip-button-size: 46px;
   position: relative;
   height: 100%;
   width: 100%;
-  border-radius: $rounded--full;
-  background: $gray--000;
+  border-radius: styles.$rounded--full;
+  background: styles.$gray--000;
   transition: background-color 0.2s ease-out;
 }
 
@@ -116,7 +117,7 @@ $tooltip-button-size: 46px;
   width: $tooltip-button-size;
   height: $tooltip-button-size;
   border-radius: $tooltip-button-size;
-  color: var(--accent-color, $navy--900);
+  color: var(--accent-color, styles.$navy--900);
 
   &:nth-of-type(1) {
     visibility: visible;
@@ -128,10 +129,10 @@ $tooltip-button-size: 46px;
 }
 
 .tooltip-button__hotkey {
-  color: $gray--800;
+  color: styles.$gray--800;
 }
 
-@media #{$tablet} {
+@media #{styles.$tablet} {
   .tooltip-button {
     .tooltip-button__tooltip {
       opacity: 1;
@@ -154,11 +155,11 @@ $tooltip-button-size: 46px;
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($navy--900, 0.5);
+      outline: 2px solid rgba(styles.$navy--900, 0.5);
     }
 
     .tooltip-button__tooltip-text {
-      background: var(--accent-color--desaturated-light, $blue--100);
+      background: var(--accent-color--desaturated-light, styles.$blue--100);
       height: $tooltip-button-size;
       line-height: $tooltip-button-size;
       width: max-content;
@@ -177,8 +178,8 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-right: $tooltip-button-size + $spacing--xs;
-      padding-left: $spacing--base;
+      padding-right: $tooltip-button-size + styles.$spacing--xs;
+      padding-left: styles.$spacing--base;
       transform: translateX(100%);
       transform-origin: right;
     }
@@ -190,27 +191,27 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-left: $tooltip-button-size + $spacing--xs;
-      padding-right: $spacing--base;
+      padding-left: $tooltip-button-size + styles.$spacing--xs;
+      padding-right: styles.$spacing--base;
       transform: translateX(-100%);
       transform-origin: left;
     }
   }
 }
 
-@media #{$smartphone} {
+@media #{styles.$smartphone} {
   $tooltip-button-size--mobile: 52px;
 
   .tooltip-button__icon-container {
     position: static;
-    box-shadow: $box-shadow--light;
+    @include mixins.box-shadow-light;
   }
 
   .tooltip-button {
-    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--base);
+    $clickable-area-size: calc($tooltip-button-size--mobile + styles.$spacing--base);
     height: $clickable-area-size;
     width: $clickable-area-size;
-    padding: $spacing--xs;
+    padding: styles.$spacing--xs;
     background: none;
 
     &--active {
@@ -227,7 +228,7 @@ $tooltip-button-size: 46px;
       }
 
       .tooltip-button__icon-container {
-        background-color: $navy--500;
+        background-color: styles.$navy--500;
       }
     }
   }
@@ -236,9 +237,9 @@ $tooltip-button-size: 46px;
     background: none;
     height: $tooltip-button-size--mobile;
     width: $tooltip-button-size--mobile;
-    padding: $spacing--xxs;
-    top: $spacing--xs;
-    left: $spacing--xs;
+    padding: styles.$spacing--xxs;
+    top: styles.$spacing--xs;
+    left: styles.$spacing--xs;
   }
 
   .tooltip-button .tooltip-button__tooltip {
@@ -250,7 +251,7 @@ $tooltip-button-size: 46px;
   $tooltip-button-size--mobile: 52px;
 
   .tooltip-button {
-    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--xs);
+    $clickable-area-size: calc($tooltip-button-size--mobile + styles.$spacing--xs);
     height: $clickable-area-size;
     width: $clickable-area-size;
   }
@@ -258,8 +259,8 @@ $tooltip-button-size: 46px;
   .tooltip-button__icon {
     height: $tooltip-button-size--mobile;
     width: $tooltip-button-size--mobile;
-    top: $spacing--xxs;
-    left: $spacing--xxs;
+    top: styles.$spacing--xxs;
+    left: styles.$spacing--xxs;
   }
 }
 
@@ -269,37 +270,37 @@ $tooltip-button-size: 46px;
     &:hover {
       .tooltip-button__icon {
         background: none;
-        border-color: var(--accent-color--desaturated-dark, $navy--300);
+        border-color: var(--accent-color--desaturated-dark, styles.$navy--300);
       }
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($gray--000, 0.5);
+      outline: 2px solid rgba(styles.$gray--000, 0.5);
     }
 
     &--active {
       .tooltip-button__icon-container {
-        background-color: $gray--000;
+        background-color: styles.$gray--000;
       }
     }
   }
 
   .tooltip-button__icon-container {
-    background: $navy--500;
+    background: styles.$navy--500;
   }
 
   .tooltip-button__icon {
-    color: var(--accent-color--dark, $gray--000);
+    color: var(--accent-color--dark, styles.$gray--000);
   }
 
   .tooltip-button__tooltip-text {
-    background-color: var(--accent-color--desaturated-dark, $navy--300);
-    color: var(--accent-color--dark, $gray--000);
+    background-color: var(--accent-color--desaturated-dark, styles.$navy--300);
+    color: var(--accent-color--dark, styles.$gray--000);
   }
 
   .tooltip-button--active .tooltip-button__icon {
-    background-color: $gray--000;
-    color: $navy--900;
+    background-color: styles.$gray--000;
+    color: styles.$navy--900;
   }
 }
 

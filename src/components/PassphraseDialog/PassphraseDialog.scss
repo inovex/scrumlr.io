@@ -1,6 +1,7 @@
-@import "constants/style";
+@use "constants/styles";
+@use "constants/mixins";
 
-$color-backlog-blue--light: $blue--500;
+$color-backlog-blue--light: styles.$blue--500;
 $color-backlog-blue--dark: #5c8fff;
 $color-planning-pink--light: #ff0069;
 $color-planning-pink--dark: #ff529a;
@@ -23,13 +24,13 @@ $color-form-background--dark: #292f3b;
 }
 
 .passphrase-dialog__form {
-  background-color: $gray--000;
-  color: $navy--500;
+  background-color: styles.$gray--000;
+  color: styles.$navy--500;
   border-radius: 24px;
   box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
   margin: 0 auto;
 
-  padding: $spacing--xl $spacing--lg;
+  padding: styles.$spacing--xl styles.$spacing--lg;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,35 +41,35 @@ $color-form-background--dark: #292f3b;
 .form__icon {
   display: none;
   color: $color-backlog-blue--dark;
-  height: $icon--huge;
-  width: $icon--huge;
-  margin-right: $spacing--lg;
+  height: styles.$icon--huge;
+  width: styles.$icon--huge;
+  margin-right: styles.$spacing--lg;
   margin-bottom: auto;
 }
 
 .form__label {
-  font-size: $text--md;
+  font-size: styles.$text--md;
   font-weight: bold;
   text-align: center;
-  margin-bottom: $spacing--lg;
+  margin-bottom: styles.$spacing--lg;
 }
 
 .form__input-row {
   display: flex;
-  gap: $spacing--xs;
+  gap: styles.$spacing--xs;
   min-width: 0;
   width: 100%;
 }
 
 .form__password-input {
   border: 0;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   background-color: rgba(0, 87, 255, 0.1);
   display: flex;
   align-items: center;
   min-width: 0;
   flex-grow: 1;
-  color: $navy--900;
+  color: styles.$navy--900;
   transition: box-shadow 80ms ease-in-out;
 
   &:focus-within {
@@ -83,8 +84,8 @@ $color-form-background--dark: #292f3b;
   border: 0;
   background-color: transparent;
   height: 100%;
-  padding: 0 $spacing--base;
-  font-size: $text--base;
+  padding: 0 styles.$spacing--base;
+  font-size: styles.$text--base;
   min-width: 0;
   color: inherit;
   flex-grow: 1;
@@ -105,10 +106,10 @@ $color-form-background--dark: #292f3b;
   background-color: transparent;
   border: 0;
   cursor: pointer;
-  margin-right: $spacing--xs;
+  margin-right: styles.$spacing--xs;
   flex-shrink: 0;
   padding: 2px;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   color: inherit;
 
   &:focus {
@@ -126,9 +127,9 @@ $color-form-background--dark: #292f3b;
   width: 40px;
   padding: 0;
   border: 0;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   background-color: $color-backlog-blue--light;
-  color: $gray--000;
+  color: styles.$gray--000;
   cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
@@ -148,7 +149,7 @@ $color-form-background--dark: #292f3b;
       0 6px 8px -1px rgba($color-backlog-blue--light, 0.2),
       0 4px 6px -2px rgba($color-backlog-blue--light, 0.2);
     transform: scale(1.05);
-    background-color: getLightHoverBackground($color-backlog-blue--light);
+    background-color: mixins.getLightHoverBackground($color-backlog-blue--light);
   }
 
   &[aria-disabled="true"] {
@@ -164,8 +165,8 @@ $color-form-background--dark: #292f3b;
 .form__error-message {
   grid-column-start: 2;
   color: $color-planning-pink--light;
-  font-size: $text--sm;
-  line-height: $line-height--medium;
+  font-size: styles.$text--sm;
+  line-height: styles.$line-height--medium;
 }
 
 @media (min-width: 460px) {
@@ -180,7 +181,7 @@ $color-form-background--dark: #292f3b;
     grid-column-start: 1;
   }
   .form__label {
-    font-size: $text--lg;
+    font-size: styles.$text--lg;
     text-align: left;
   }
   .form__label,
@@ -192,18 +193,18 @@ $color-form-background--dark: #292f3b;
 [theme="dark"] {
   .passphrase-dialog__form {
     background-color: $color-form-background--dark;
-    color: $gray--300;
+    color: styles.$gray--300;
     box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
   }
   .form__password-input {
     background-color: rgba($color-backlog-blue--dark, 0.15);
-    color: $gray--000;
+    color: styles.$gray--000;
   }
   .form__submit-button {
     background-color: $color-backlog-blue--dark;
 
     &:hover:not([aria-disabled="true"]) {
-      background-color: getDarkHoverBackground($color-backlog-blue--dark);
+      background-color: mixins.getDarkHoverBackground($color-backlog-blue--dark);
     }
   }
   .form__error-message {

@@ -1,7 +1,7 @@
-@import "constants/style";
+@use "constants/styles";
 
-$header-menu-color--light: $blue--500;
-$header-menu-color--dark: $pink--500;
+$header-menu-color--light: styles.$blue--500;
+$header-menu-color--dark: styles.$pink--500;
 $header-menu-width: 288px;
 $header-menu__item-height: 48px;
 
@@ -20,7 +20,7 @@ $header-menu__item-height: 48px;
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }
 }
-@media #{$tablet} {
+@media #{styles.$tablet} {
   .header-menu {
     margin-top: -20px;
   }
