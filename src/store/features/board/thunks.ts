@@ -113,7 +113,7 @@ export const permittedBoardAccess = createAsyncThunk<
       if (message.type === "COLUMN_DELETED") {
         const {column, notes} = message.data;
         dispatch(deletedColumn(column));
-        notes.forEach((note) => dispatch(deletedNote({noteId: note, deleteStack: true})));
+        notes.forEach((noteId) => dispatch(deletedNote(noteId)));
       }
 
       if (message.type === "NOTES_UPDATED") {
@@ -121,9 +121,8 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(updatedNotes(notes));
       }
       if (message.type === "NOTE_DELETED") {
-        const noteId = message.data.note;
-        const {deleteStack} = message.data;
-        dispatch(deletedNote({noteId, deleteStack}));
+        const noteIds = message.data;
+        noteIds.forEach((noteId) => dispatch(deletedNote(noteId)));
       }
       if (message.type === "REACTION_ADDED") {
         const reaction = message.data;

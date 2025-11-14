@@ -26,5 +26,5 @@ export const votesReducer = createReducer(initialState, (builder) =>
     })
     .addCase(createdVoting, () => [])
     // delete associated votes when a note is deleted
-    .addCase(deletedNote, (state, action) => state.filter((vote) => vote.note !== action.payload.noteId))
+    .addCase(deletedNote, (state, action) => state.filter((vote) => vote.note !== action.payload))
 );
