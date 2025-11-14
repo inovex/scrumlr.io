@@ -116,7 +116,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             onSubmit={saveChanges}
             onCancel={cancelChanges}
           />
-          <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
+          <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} transparent />
         </div>
       ) : (
         <div
