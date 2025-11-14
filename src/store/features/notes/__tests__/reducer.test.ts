@@ -3,14 +3,16 @@ import {deletedNote} from "store/features/notes/actions";
 import {NotesState} from "store/features/notes/types";
 import {EnhancedStore} from "@reduxjs/toolkit";
 import {ApplicationState} from "store/store";
+import {deletedColumn} from "store/features/columns";
 
 describe("noteReducer", () => {
   // test data: one single note; one note stack consisting of one parent and two children
   const testNotes: NotesState = [
-    {id: "note-id-single", author: "author-id-1", edited: false, position: {column: "column-id-1", rank: 0, stack: null}, text: "single note"},
-    {id: "note-id-parent", author: "author-id-1", edited: false, position: {column: "column-id-1", rank: 0, stack: null}, text: "stack parent"},
-    {id: "note-id-child-1", author: "author-id-1", edited: false, position: {column: "column-id-1", rank: 0, stack: "note-id-parent"}, text: "stack child 1"},
-    {id: "note-id-child-2", author: "author-id-1", edited: false, position: {column: "column-id-1", rank: 1, stack: "note-id-parent"}, text: "stack child 2"},
+    {id: "note-id-single-1", author: "author-id-1", edited: false, position: {column: "test-columns-id-1", rank: 0, stack: null}, text: "single note 1"},
+    {id: "note-id-single-2", author: "author-id-1", edited: false, position: {column: "test-columns-id-2", rank: 0, stack: null}, text: "single note 2"},
+    {id: "note-id-parent", author: "author-id-1", edited: false, position: {column: "test-columns-id-1", rank: 0, stack: null}, text: "stack parent"},
+    {id: "note-id-child-1", author: "author-id-1", edited: false, position: {column: "test-columns-id-1", rank: 0, stack: "note-id-parent"}, text: "stack child 1"},
+    {id: "note-id-child-2", author: "author-id-1", edited: false, position: {column: "test-columns-id-1", rank: 1, stack: "note-id-parent"}, text: "stack child 2"},
   ];
 
   let mockStore: EnhancedStore<ApplicationState>;
@@ -47,6 +49,13 @@ describe("noteReducer", () => {
           expect.objectContaining({id: "note-id-child-2", position: expect.objectContaining({stack: null})}),
         ])
       );
+    });
+  });
+
+  describe("deletedColumn", () => {
+    test("delete column", () => {
+      mockStore.dispatch(deletedColumn("test-columns-id-2"));
+      expect(mockStore.getState().notes).toEqual(expect.not.arrayContaining([expect.objectContaining({position: expect.objectContaining({column: "test-columns-id-2"})})]));
     });
   });
 });
