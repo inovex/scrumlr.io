@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"strings"
 
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/uptrace/bun"
 
@@ -58,7 +58,7 @@ type AuthConfiguration struct {
 	unsafeAuth       *jwtauth.JWTAuth
 	auth             *jwtauth.JWTAuth
 	database         *bun.DB
-	userService      sessions.UserService
+	userService      users.UserService
 }
 
 type UserInformation struct {
@@ -66,7 +66,7 @@ type UserInformation struct {
 	Ident, Name, AvatarURL string
 }
 
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService) (Auth, error) {
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService users.UserService) (Auth, error) {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.unsafePrivateKey = unsafePrivateKey

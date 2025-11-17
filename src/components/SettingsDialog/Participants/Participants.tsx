@@ -8,7 +8,7 @@ import {getColorClassName} from "constants/colors";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import _ from "underscore";
 import {useDebounce} from "utils/hooks/useDebounce";
 import "./Participants.scss";
@@ -32,7 +32,7 @@ export const Participants = () => {
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
   const [showBanParticipantConfirmation, setShowBanParticipantConfirmation] = useState(false);
-  const [selectedParticipant, setSelectedParticipant] = useState<{participant: Participant; banned: boolean}>();
+  const [selectedParticipant, setSelectedParticipant] = useState<{participant: ParticipantWithUser; banned: boolean}>();
 
   useEffect(() => {
     const listWrapperHeight = listWrapperRef.current?.offsetWidth;
@@ -48,7 +48,7 @@ export const Participants = () => {
     participants.forEach((p) => dispatch(setUserReadyStatus({userId: p.user.id, ready: false})));
   };
 
-  const banParticipant = (participant: Participant, banned: boolean) => {
+  const banParticipant = (participant: ParticipantWithUser, banned: boolean) => {
     setSelectedParticipant({participant, banned});
     setShowBanParticipantConfirmation(true);
   };
@@ -58,7 +58,7 @@ export const Participants = () => {
     setShowBanParticipantConfirmation(false);
   };
 
-  const confirmBan = ({user}: Participant, banned: boolean) => {
+  const confirmBan = ({user}: ParticipantWithUser, banned: boolean) => {
     dispatch(setUserBanned({userId: user.id, banned}));
     resetBanProcess();
   };

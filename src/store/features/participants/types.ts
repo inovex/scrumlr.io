@@ -2,7 +2,7 @@ import {Auth} from "../auth";
 
 export type ParticipantRole = "OWNER" | "MODERATOR" | "PARTICIPANT";
 
-export interface Participant {
+export interface ParticipantWithUser {
   user: Auth;
   connected: boolean;
   ready: boolean;
@@ -12,10 +12,20 @@ export interface Participant {
   banned?: boolean;
 }
 
+export interface ParticipantWithUserId {
+  id: string;
+  connected: boolean;
+  ready: boolean;
+  raisedHand: boolean;
+  showHiddenColumns: boolean;
+  role: ParticipantRole;
+  banned?: boolean;
+}
+
 export type ParticipantsState = {
-  self?: Participant;
-  others?: Participant[];
-  focusInitiator?: Participant;
+  self?: ParticipantWithUser;
+  others?: ParticipantWithUser[];
+  focusInitiator?: ParticipantWithUser;
 };
 
-export type ParticipantExtendedInfo = Participant & {displayName: string; isSelf: boolean};
+export type ParticipantExtendedInfo = ParticipantWithUser & {displayName: string; isSelf: boolean};
