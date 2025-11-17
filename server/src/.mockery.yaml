@@ -23,6 +23,10 @@ packages:
     interfaces:
       Client:
 
+  scrumlr.io/server/cache:
+    interfaces:
+      Client:
+
   scrumlr.io/server/reactions:
     interfaces:
       ReactionService:

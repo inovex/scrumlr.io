@@ -1,0 +1,9 @@
+@import "src/constants/style.scss";
+
+.drag-lock-indicator {
+  position: absolute;
+  bottom: -$spacing--sm;
+  right: -$spacing--sm;
+  z-index: $tooltip-z-index + 1;
+  pointer-events: none;
+}
