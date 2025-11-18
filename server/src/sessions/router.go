@@ -32,7 +32,7 @@ func (r *Router) RegisterRoutes() chi.Router {
 }
 
 func NewSessionRouter(sessionApi SessionApi) *Router {
-	return &Router{
-		sessionAPI: sessionApi,
-	}
+	r := new(Router)
+	r.sessionAPI = sessionApi
+	return r
 }

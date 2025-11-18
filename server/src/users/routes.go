@@ -35,8 +35,8 @@ func (r *Router) RegisterRoutes() chi.Router {
 }
 
 func NewUsersRouter(usersApi UsersApi, sessionApi sessions.SessionApi) *Router {
-	return &Router{
-		usersApi:   usersApi,
-		sessionApi: sessionApi,
-	}
+	r := new(Router)
+	r.usersApi = usersApi
+	r.sessionApi = sessionApi
+	return r
 }

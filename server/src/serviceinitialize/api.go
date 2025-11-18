@@ -1,19 +1,16 @@
 package serviceinitialize
 
 import (
-	"scrumlr.io/server/middleware"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 
 type ApiInitializer struct {
-	middleware middleware.ContextService
-	basePath   string
+	basePath string
 }
 
-func NewApiInitializer(middleware middleware.ContextService, basePath string) ApiInitializer {
+func NewApiInitializer(basePath string) ApiInitializer {
 	initializer := new(ApiInitializer)
-	initializer.middleware = middleware
 	initializer.basePath = basePath
 	return *initializer
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
@@ -157,74 +158,106 @@ func (api *API) UpdateBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 func (api *API) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
+		ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.context.participant")
+		defer span.End()
+		log := logger.FromContext(ctx)
+
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to parse board id")
+			span.RecordError(err)
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
 
-		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := api.service.Exists(r.Context(), board, user)
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		span.SetAttributes(
+			attribute.String("scrumlr.sessions.api.context.participant.board", board.String()),
+			attribute.String("scrumlr.sessions.api.context.participant.user", user.String()),
+		)
+
+		exists, err := api.service.Exists(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to check board session")
+			span.RecordError(err)
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
+			span.SetStatus(codes.Error, "user board session not found")
+			span.RecordError(err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
 			return
 		}
 
-		banned, err := api.service.IsParticipantBanned(r.Context(), board, user)
+		banned, err := api.service.IsParticipantBanned(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to check if participant is banned")
+			span.RecordError(err)
 			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if banned {
+			span.SetStatus(codes.Error, "participant is currently banned from this session")
+			span.RecordError(err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
 
 func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
+		ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.context.moderator")
+		defer span.End()
+		log := logger.FromContext(ctx)
 
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to parse board id")
+			span.RecordError(err)
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
-		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-		exists, err := api.service.ModeratorSessionExists(r.Context(), board, user)
+		span.SetAttributes(
+			attribute.String("scrumlr.sessions.api.context.moderator.board", board.String()),
+			attribute.String("scrumlr.sessions.api.context.moderator.user", user.String()),
+		)
+
+		exists, err := api.service.ModeratorSessionExists(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to check board session")
+			span.RecordError(err)
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
+			span.SetStatus(codes.Error, "moderator session does not exist")
+			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
 
 func NewSessionApi(service SessionService) SessionApi {
-	api := &API{service: service}
+	api := new(API)
+	api.service = service
 	return api
 }

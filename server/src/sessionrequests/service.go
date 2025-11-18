@@ -231,28 +231,40 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 
 func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
+		ctx, span := tracer.Start(r.Context(), "scrumlr.sessionrequest.service.context.boardCandidate")
+		defer span.End()
+
+		log := logger.FromContext(ctx)
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to parse uuid")
+			span.RecordError(err)
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
-
-		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		span.SetAttributes(
+			attribute.String("scrumlr.sessionrequest.service.context.boardCandidate.board", board.String()),
+			attribute.String("scrumlr.sessionrequest.service.context.boardCandidate.user", user.String()),
+		)
 		exists, err := service.Exists(r.Context(), board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "unable to check board session")
+			span.RecordError(err)
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
+			span.SetStatus(codes.Error, "board session request not found")
+			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }

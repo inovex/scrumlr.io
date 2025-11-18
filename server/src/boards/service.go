@@ -615,12 +615,22 @@ func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
 
 func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
+		ctx, span := tracer.Start(r.Context(), "scrumlr.boards.service.board.editable")
+		defer span.End()
+		log := logger.FromContext(ctx)
 
-		board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		span.SetAttributes(
+			attribute.String("scrumlr.sessions.service.context.editable.board", board.String()),
+			attribute.String("scrumlr.sessions.service.context.editable.user", user.String()),
+		)
+
 		isMod, err := service.sessionService.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to check session")
+			span.RecordError(err)
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
@@ -628,13 +638,16 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 
 		settings, err := service.Get(r.Context(), board)
 		if err != nil {
-
+			span.SetStatus(codes.Error, "failed to get board settings")
+			span.RecordError(err)
 			log.Errorw("unable to verify board settings", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
 			return
 		}
 
 		if !isMod && settings.IsLocked {
+			span.SetStatus(codes.Error, "not allowed to edit board")
+			span.RecordError(err)
 			log.Errorw("not allowed to edit board", "err", err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
 			return
