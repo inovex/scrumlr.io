@@ -185,14 +185,12 @@ func Test_UpdateUser_api(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
-	sessionArg := sessions.BoardSessionUpdateRequest{User: userID}
 	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: common.Anonymous}
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockUserService.EXPECT().Update(mock.Anything, updateBody).Return(mockUpdatedUser, nil)
-	mockSessionService.EXPECT().UpdateUserBoards(mock.Anything, sessionArg).Return(nil, nil)
 
 	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
@@ -236,14 +234,12 @@ func Test_UpdateUserBoards_ServiceError(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
-	sessionArg := sessions.BoardSessionUpdateRequest{User: userID}
 	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: common.Anonymous}
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockUserService.EXPECT().Update(mock.Anything, updateBody).Return(mockUpdatedUser, nil)
-	mockSessionService.EXPECT().UpdateUserBoards(mock.Anything, sessionArg).Return(nil, errors.New("db error"))
 
 	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()

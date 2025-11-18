@@ -19,7 +19,6 @@ type SessionService interface {
 	Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)
 	Update(ctx context.Context, body BoardSessionUpdateRequest) (*BoardSession, error)
 	UpdateAll(ctx context.Context, body BoardSessionsUpdateRequest) ([]*BoardSession, error)
-	UpdateUserBoards(ctx context.Context, body BoardSessionUpdateRequest) ([]*BoardSession, error)
 	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
 	GetAll(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error)
 	GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)
