@@ -27,7 +27,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.2.15
 	github.com/uptrace/bun/extra/bunotel v1.2.15
 	github.com/urfave/cli/v2 v2.27.7
-	github.com/weppos/publicsuffix-go v0.50.0
+	github.com/weppos/publicsuffix-go v0.50.1
 	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0
 	go.opentelemetry.io/otel v1.38.0
@@ -136,7 +136,7 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.38.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.7.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/net v0.46.1-0.20251013234738-63d1a5100f82 // indirect
+	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/oauth2 v0.32.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
