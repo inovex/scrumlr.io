@@ -1,8 +1,8 @@
 @use "sass:list";
 @use "sass:color";
 
-@use "constants/styles";
-@use "constants/colors";
+@use "styles";
+@use "colors";
 
 // tooltip
 @mixin tooltip {
