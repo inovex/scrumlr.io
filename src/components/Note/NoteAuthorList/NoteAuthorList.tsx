@@ -1,14 +1,14 @@
 import classNames from "classnames";
-import {Participant, ParticipantExtendedInfo} from "store/features/";
+import {ParticipantWithUser, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "components/BoardUsers";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 import "./NoteAuthorList.scss";
 
 type NoteAuthorListProps = {
-  authors: Participant[];
+  authors: ParticipantWithUser[];
   showAuthors: boolean;
-  viewer?: Participant;
+  viewer?: ParticipantWithUser;
   authorID: string;
 };
 
@@ -20,7 +20,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
-  const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
+  const prepareAuthors = (authors: ParticipantWithUser[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
         const isSelf = a?.user.id === props.viewer?.user.id; // assertion: viewer is self
