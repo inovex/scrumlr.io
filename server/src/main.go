@@ -428,11 +428,20 @@ func run(c *cli.Context) error {
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
+	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
+	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
+	userApi := apiInitializer.InitializeUserApi(userService, sessionService, c.Bool("allow-anonymous-board-creation"), c.Bool("allow-anonymous-custom-templates"))
+
+	routesInitializer := serviceinitialize.NewRoutesInitializer()
+	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
+	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	s := api.New(
 		basePath,
 		rt,
 		authConfig,
 
+		userRoutes,
+		sessionRoutes,
 		boardService,
 		columnService,
 		votingService,

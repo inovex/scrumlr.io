@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"go.opentelemetry.io/otel"
@@ -15,6 +16,7 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
@@ -225,4 +227,44 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 		Data: new(BoardSessionRequest).From(request),
 	})
 
+}
+
+func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, span := tracer.Start(r.Context(), "scrumlr.sessionrequest.service.context.boardCandidate")
+		defer span.End()
+
+		log := logger.FromContext(ctx)
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			span.SetStatus(codes.Error, "unable to parse uuid")
+			span.RecordError(err)
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		span.SetAttributes(
+			attribute.String("scrumlr.sessionrequest.service.context.boardCandidate.board", board.String()),
+			attribute.String("scrumlr.sessionrequest.service.context.boardCandidate.user", user.String()),
+		)
+		exists, err := service.Exists(r.Context(), board, user)
+		if err != nil {
+			span.SetStatus(codes.Error, "unable to check board session")
+			span.RecordError(err)
+			log.Errorw("unable to check board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			span.SetStatus(codes.Error, "board session request not found")
+			span.RecordError(err)
+			common.Throw(w, r, common.NotFoundError)
+			return
+		}
+
+		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
 }

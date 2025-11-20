@@ -41,6 +41,7 @@ packages:
     interfaces:
       SessionService:
       SessionDatabase:
+      SessionApi:
 
   scrumlr.io/server/sessionrequests:
     interfaces:
@@ -52,6 +53,7 @@ packages:
     interfaces:
       UserService:
       UserDatabase:
+      UsersApi:
 
   scrumlr.io/server/notes:
     interfaces:
