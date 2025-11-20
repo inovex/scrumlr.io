@@ -1,381 +1,539 @@
 package sessions
 
 import (
-	"context"
-	"database/sql"
-	"errors"
-	"strings"
+  "context"
+  "database/sql"
+  "errors"
+  "fmt"
+  "net/url"
+  "slices"
+  "strconv"
 
-	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/realtime"
+  "go.opentelemetry.io/otel"
+  "go.opentelemetry.io/otel/attribute"
+  "go.opentelemetry.io/otel/codes"
+  "go.opentelemetry.io/otel/metric"
+  "go.opentelemetry.io/otel/trace"
+  "scrumlr.io/server/columns"
+  "scrumlr.io/server/notes"
+
+  "github.com/google/uuid"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/realtime"
 )
 
-var userTracer trace.Tracer = otel.Tracer("scrumlr.io/server/users")
-var userMeter metric.Meter = otel.Meter("scrumlr.io/server/users")
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/sessions")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/sessions")
 
-type UserDatabase interface {
-	CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error)
-	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
-	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
-	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
-
-	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
-	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
-	SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
+type SessionDatabase interface {
+  Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)
+  Update(ctx context.Context, update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)
+  UpdateAll(ctx context.Context, update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)
+  Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
+  ModeratorExists(ctx context.Context, board, user uuid.UUID) (bool, error)
+  IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error)
+  Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
+  GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
+  GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)
 }
 
-type Service struct {
-	database       UserDatabase
-	sessionService SessionService
-	realtime       *realtime.Broker
+type BoardSessionService struct {
+  database      SessionDatabase
+  realtime      *realtime.Broker
+  columnService columns.ColumnService
+  noteService   notes.NotesService
 }
 
-func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService SessionService) UserService {
-	service := new(Service)
-	service.database = db
-	service.realtime = rt
-	service.sessionService = sessionService
+func NewSessionService(db SessionDatabase, rt *realtime.Broker, columnService columns.ColumnService, noteService notes.NotesService) SessionService {
+  service := new(BoardSessionService)
+  service.database = db
+  service.realtime = rt
+  service.columnService = columnService
+  service.noteService = noteService
 
-	return service
+  return service
 }
 
-func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.anonymous")
-	defer span.End()
+func (service *BoardSessionService) Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error) {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.create")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.create.board", body.Board.String()),
+    attribute.String("scrumlr.sessions.service.create.user", body.User.String()),
+    attribute.String("scrumlr.sessions.service.create.role", string(body.Role)),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.anonymous.type", string(common.Anonymous)),
-		attribute.String("scrumlr.users.service.create.anonymous.name", name),
-	)
+  session, err := service.database.Create(ctx, DatabaseBoardSessionInsert{
+    Board: body.Board,
+    User:  body.User,
+    Role:  body.Role,
+  })
 
-	user, err := service.database.CreateAnonymousUser(ctx, name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to create board session")
+    span.RecordError(err)
+    log.Errorw("unable to create board session", "board", body.Board, "user", body.User, "error", err)
+    return nil, err
+  }
 
-	userCreatedCounter.Add(ctx, 1)
-	anonymousUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  service.createdSession(ctx, body.Board, session)
+
+  sessionCreatedCounter.Add(ctx, 1)
+  return new(BoardSession).From(session), err
 }
 
-func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.apple")
-	defer span.End()
+func (service *BoardSessionService) Update(ctx context.Context, body BoardSessionUpdateRequest) (*BoardSession, error) {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.update")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.update.board", body.Board.String()),
+    attribute.String("scrumlr.sessions.service.update.user", body.User.String()),
+    attribute.String("scrumlr.sessions.service.update.caller", body.Caller.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.apple.type", string(common.Apple)),
-		attribute.String("scrumlr.users.service.create.apple.name", name),
-	)
+  sessionOfCaller, err := service.database.Get(ctx, body.Board, body.Caller)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get board session")
+    span.RecordError(err)
+    log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
+    return nil, fmt.Errorf("unable to get session for board: %w", err)
+  }
 
-	user, err := service.database.CreateAppleUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
+  if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
+    span.SetStatus(codes.Error, "not allowed to change user session")
+    span.RecordError(err)
+    return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
+  }
 
-	userCreatedCounter.Add(ctx, 1)
-	appleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get session")
+    span.RecordError(err)
+    log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
+    return nil, fmt.Errorf("unable to get session for board: %w", err)
+  }
+
+  if body.Role != nil {
+    if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
+      err := common.ForbiddenError(errors.New("cannot promote role"))
+      span.SetStatus(codes.Error, "cannot promote role")
+      span.RecordError(err)
+      return nil, err
+    } else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
+      err := common.ForbiddenError(errors.New("not allowed to change owner role"))
+      span.SetStatus(codes.Error, "not allowed to change owner role")
+      span.RecordError(err)
+      return nil, err
+    } else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
+      err := common.ForbiddenError(errors.New("not allowed to promote to owner role"))
+      span.SetStatus(codes.Error, "not allowed to promote to owner role")
+      span.RecordError(err)
+      return nil, err
+    }
+  }
+
+  session, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
+    Board:             body.Board,
+    User:              body.User,
+    Ready:             body.Ready,
+    RaisedHand:        body.RaisedHand,
+    ShowHiddenColumns: body.ShowHiddenColumns,
+    Role:              body.Role,
+    Banned:            body.Banned,
+  })
+
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to update board session")
+    span.RecordError(err)
+    log.Errorw("unable to update board session", "board", body.Board, "error", err)
+    return nil, err
+  }
+
+  service.updatedSession(ctx, body.Board, session)
+
+  if body.Banned != nil {
+    if *body.Banned {
+      bannedSessionsCounter.Add(ctx, 1)
+    }
+  }
+  return new(BoardSession).From(session), err
 }
 
-func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.azuread")
-	defer span.End()
+func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSessionsUpdateRequest) ([]*BoardSession, error) {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.update.all")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.update.all.board", body.Board.String()),
+  )
+  sessions, err := service.database.UpdateAll(ctx, DatabaseBoardSessionUpdate{
+    Board:      body.Board,
+    Ready:      body.Ready,
+    RaisedHand: body.RaisedHand,
+  })
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.azuread.type", string(common.AzureAd)),
-		attribute.String("scrumlr.users.service.create.azuread.name", name),
-	)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to update all sessions")
+    span.RecordError(err)
+    log.Errorw("unable to update all sessions for a board", "board", body.Board, "error", err)
+    return nil, err
+  }
 
-	user, err := service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
+  service.updatedSessions(ctx, body.Board, sessions)
 
-	userCreatedCounter.Add(ctx, 1)
-	azureAdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  return BoardSessions(sessions), err
 }
 
-func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.github")
-	defer span.End()
+func (service *BoardSessionService) UpdateUserBoards(ctx context.Context, body BoardSessionUpdateRequest) ([]*BoardSession, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.update.user.boards")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.update.user.boards.board", body.Board.String()),
+    attribute.String("scrumlr.sessions.service.update.user.boards.user", body.User.String()),
+    attribute.String("scrumlr.sessions.service.update.user.boards.caller", body.Caller.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.github.type", string(common.GitHub)),
-		attribute.String("scrumlr.users.service.create.github.name", name),
-	)
+  connectedBoards, err := service.database.GetUserConnectedBoards(ctx, body.User)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get connected boards")
+    span.RecordError(err)
+    return nil, err
+  }
 
-	user, err := service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
+  for _, session := range connectedBoards {
+    service.updatedSession(ctx, session.Board, session)
+  }
 
-	userCreatedCounter.Add(ctx, 1)
-	githubUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  return BoardSessions(connectedBoards), err
 }
 
-func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.google")
-	defer span.End()
+func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error) {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.get.board", boardID.String()),
+    attribute.String("scrumlr.sessions.service.get.user", userID.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.google.type", string(common.Google)),
-		attribute.String("scrumlr.users.service.create.google.name", name),
-	)
+  session, err := service.database.Get(ctx, boardID, userID)
+  if err != nil {
+    if err == sql.ErrNoRows {
+      span.SetStatus(codes.Error, "session not found")
+      span.RecordError(err)
+      return nil, common.NotFoundError
+    }
 
-	user, err := service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
+    span.SetStatus(codes.Error, "failed to get session")
+    span.RecordError(err)
+    log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
+    return nil, fmt.Errorf("unable to get session for board: %w", err)
+  }
 
-	userCreatedCounter.Add(ctx, 1)
-	googleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  return new(BoardSession).From(session), err
 }
 
-func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.microsoft")
-	defer span.End()
+func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.all")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.get.all.board", boardID.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.microsoft.type", string(common.Microsoft)),
-		attribute.String("scrumlr.users.service.create.microsoft.name", name),
-	)
+  sessions, err := service.database.GetAll(ctx, boardID, filter)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get all session")
+    span.RecordError(err)
+    return nil, err
+  }
 
-	user, err := service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	microsoftUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  return BoardSessions(sessions), err
 }
 
-func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.create.oidc")
-	defer span.End()
+func (service *BoardSessionService) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_connected_boards")
+  defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.get.user_connected_boards.user", user.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.oidc.type", string(common.TypeOIDC)),
-		attribute.String("scrumlr.users.service.create.oidc.name", name),
-	)
+  sessions, err := service.database.GetUserConnectedBoards(ctx, user)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get user connected boards")
+    span.RecordError(err)
+    return nil, err
+  }
 
-	user, err := service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	oicdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+  return BoardSessions(sessions), err
 }
 
-func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.update")
-	defer span.End()
+func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.connect")
+  defer span.End()
 
-	err := validateUsername(body.Name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.connect.board", boardID.String()),
+    attribute.String("scrumlr.sessions.service.connect.user", userID.String()),
+  )
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.update.id", body.ID.String()),
-		attribute.String("scrumlr.users.service.update.name", body.Name),
-	)
+  var connected = true
+  updatedSession, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
+    Board:     boardID,
+    User:      userID,
+    Connected: &connected,
+  })
 
-	user, err := service.database.UpdateUser(ctx, DatabaseUserUpdate{
-		ID:     body.ID,
-		Name:   body.Name,
-		Avatar: body.Avatar,
-	})
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to connect to board session")
+    span.RecordError(err)
+    log.Errorw("unable to connect to board session", "board", boardID, "user", userID, "error", err)
+    return err
+  }
 
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to update user")
-		span.RecordError(err)
-		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, err
-	}
+  service.updatedSession(ctx, boardID, updatedSession)
 
-	service.updatedUser(ctx, user)
-
-	return new(User).From(user), err
+  connectedSessions.Add(ctx, 1)
+  return err
 }
 
-func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.get")
-	defer span.End()
+func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, userID uuid.UUID) error {
+  log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.disconnect")
+  defer span.End()
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.get.id", userID.String()),
-	)
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.disconnect.board", boardID.String()),
+    attribute.String("scrumlr.sessions.service.disconnect.user", userID.String()),
+  )
 
-	user, err := service.database.GetUser(ctx, userID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "user not found")
-			span.RecordError(err)
-			return nil, common.NotFoundError
-		}
+  var connected = false
+  updatedSession, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
+    Board:     boardID,
+    User:      userID,
+    Connected: &connected,
+  })
 
-		span.SetStatus(codes.Error, "failed to get user")
-		span.RecordError(err)
-		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, common.InternalServerError
-	}
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to disconnect from board session")
+    span.RecordError(err)
+    log.Errorw("unable to disconnect from board session", "board", boardID, "user", userID, "error", err)
+    return err
+  }
 
-	return new(User).From(user), err
+  service.updatedSession(ctx, boardID, updatedSession)
+
+  connectedSessions.Add(ctx, -1)
+  return err
 }
 
-func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.available_key_migration")
-	defer span.End()
+func (service *BoardSessionService) Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.exists")
+  defer span.End()
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.available_key_migration.id", id.String()),
-	)
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.exists.baord", boardID.String()),
+    attribute.String("scrumlr.sessions.service.exists.user", userID.String()),
+  )
 
-	return service.database.IsUserAvailableForKeyMigration(ctx, id)
+  return service.database.Exists(ctx, boardID, userID)
 }
 
-func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.set_key_migration")
-	defer span.End()
+func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.exists.moderator")
+  defer span.End()
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.set_key_migration.id", id.String()),
-	)
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.exists.moderator.baord", boardID.String()),
+    attribute.String("scrumlr.sessions.service.exists.moderator.user", userID.String()),
+  )
 
-	user, err := service.database.SetKeyMigration(ctx, id)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to set key migration")
-		span.RecordError(err)
-		return nil, err
-	}
-
-	return new(User).From(user), nil
+  return service.database.ModeratorExists(ctx, boardID, userID)
 }
 
-func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
-	ctx, span := userTracer.Start(ctx, "scrumlr.users.service.update")
-	defer span.End()
+func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.is_banned")
+  defer span.End()
 
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.update.id", user.ID.String()),
-		attribute.String("scrumlr.users.service.update.name", user.Name),
-		attribute.String("scrumlr.users.service.update.type", string(user.AccountType)),
-	)
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.is_banned.baord", boardID.String()),
+    attribute.String("scrumlr.sessions.service.is_banned.user", userID.String()),
+  )
 
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, user.ID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get connected boards")
-		span.RecordError(err)
-		return
-	}
-
-	for _, session := range connectedBoards {
-		userSession, err := service.sessionService.Get(ctx, session.Board, session.User.ID)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to sessions")
-			span.RecordError(err)
-			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID, "err", err)
-		}
-		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
-			Type: realtime.BoardEventParticipantUpdated,
-			Data: session,
-		})
-	}
+  return service.database.IsParticipantBanned(ctx, boardID, userID)
 }
 
-func validateUsername(name string) error {
-	if strings.TrimSpace(name) == "" {
-		return errors.New("name may not be empty")
-	}
+func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {
+  filter := BoardSessionFilter{}
+  connectedFilter := query.Get("connected")
+  if connectedFilter != "" {
+    value, _ := strconv.ParseBool(connectedFilter)
+    filter.Connected = &value
+  }
 
-	if strings.Contains(name, "\n") {
-		return errors.New("name may not contain newline characters")
-	}
+  readyFilter := query.Get("ready")
+  if readyFilter != "" {
+    value, _ := strconv.ParseBool(readyFilter)
+    filter.Ready = &value
+  }
 
-	return nil
+  raisedHandFilter := query.Get("raisedHand")
+  if raisedHandFilter != "" {
+    value, _ := strconv.ParseBool(raisedHandFilter)
+    filter.RaisedHand = &value
+  }
+
+  roleFilter := query.Get("role")
+  if roleFilter != "" {
+    filter.Role = (*common.SessionRole)(&roleFilter)
+  }
+
+  return filter
+}
+
+func (service *BoardSessionService) createdSession(ctx context.Context, board uuid.UUID, session DatabaseBoardSession) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.create")
+  defer span.End()
+  log := logger.FromContext(ctx)
+
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.create.board", board.String()),
+    attribute.String("scrumlr.sessions.service.create.user", session.User.String()),
+  )
+
+  err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+    Type: realtime.BoardEventParticipantCreated,
+    Data: new(BoardSession).From(session),
+  })
+
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to send participant update")
+    span.RecordError(err)
+    log.Errorw("unable to send participant update", "session", session, "error", err)
+  }
+}
+
+func (service *BoardSessionService) updatedSession(ctx context.Context, board uuid.UUID, session DatabaseBoardSession) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.update")
+  defer span.End()
+  log := logger.FromContext(ctx)
+
+  span.SetAttributes(
+    attribute.String("scrumlr.sessions.service.update.board", board.String()),
+    attribute.String("scrumlr.sessions.service.update.user", session.User.String()),
+  )
+
+  connectedBoards, err := service.database.GetUserConnectedBoards(ctx, session.User)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get user connections")
+    span.RecordError(err)
+    log.Errorw("unable to get user connections", "session", session, "error", err)
+    return
+  }
+
+  for _, s := range connectedBoards {
+    userSession, err := service.database.Get(ctx, s.Board, s.User)
+    if err != nil {
+      span.SetStatus(codes.Error, "failed to get board sessions of user")
+      span.RecordError(err)
+      log.Errorw("unable to get board session of user", "board", s.Board, "user", s.User, "err", err)
+      return
+    }
+
+    err = service.realtime.BroadcastToBoard(ctx, s.Board, realtime.BoardEvent{
+      Type: realtime.BoardEventParticipantUpdated,
+      Data: new(BoardSession).From(userSession),
+    })
+
+    if err != nil {
+      span.SetStatus(codes.Error, "failed to send participant update")
+      span.RecordError(err)
+      log.Errorw("unable to send participant update", "board", session.Board, "user", session.User, "err", err)
+    }
+  }
+
+  // Sync columns
+  columns, err := service.columnService.GetAll(ctx, board)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get columns")
+    span.RecordError(err)
+    log.Errorw("unable to get columns", "boardID", board, "err", err)
+  }
+
+  err = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+    Type: realtime.BoardEventColumnsUpdated,
+    Data: columns,
+  })
+
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to send columns update")
+    span.RecordError(err)
+    log.Errorw("unable to send columns update", "board", session.Board, "user", session.User, "err", err)
+  }
+
+  columnIds := make([]uuid.UUID, 0, len(columns))
+  for _, column := range columns {
+    columnIds = append(columnIds, column.ID)
+  }
+  // Sync notes
+  notes, err := service.noteService.GetAll(ctx, board, columnIds...)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to get notes")
+    span.RecordError(err)
+    log.Errorw("unable to get notes on a updatedsession call", "err", err)
+  }
+
+  err = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+    Type: realtime.BoardEventNotesSync,
+    Data: notes,
+  })
+
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to send note sync")
+    span.RecordError(err)
+    log.Errorw("unable to send note sync", "board", session.Board, "user", session.User, "err", err)
+  }
+}
+
+func (service *BoardSessionService) updatedSessions(ctx context.Context, board uuid.UUID, sessions []DatabaseBoardSession) {
+  ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.update")
+  defer span.End()
+  log := logger.FromContext(ctx)
+
+  eventSessions := make([]BoardSession, 0, len(sessions))
+  for _, session := range sessions {
+    eventSessions = append(eventSessions, *new(BoardSession).From(session))
+  }
+
+  err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+    Type: realtime.BoardEventParticipantsUpdated,
+    Data: eventSessions,
+  })
+
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to send participant update")
+    span.RecordError(err)
+    log.Errorw("unable to send participant update", "board", board, "err", err)
+  }
+}
+
+func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []common.SessionRole) bool {
+  for _, session := range sessions {
+    if clientID == session.UserID {
+      if slices.Contains(sessionsRoles, session.Role) {
+        return true
+      }
+    }
+  }
+  return false
 }

@@ -3,7 +3,6 @@ package columntemplates
 import (
 	"context"
 	"fmt"
-	"math"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -25,35 +24,16 @@ func NewColumnTemplateDatabase(database *bun.DB) ColumnTemplateDatabase {
 // CreateColumnTemplate creates a new column template. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
 func (db *DB) Create(ctx context.Context, column DatabaseColumnTemplateInsert) (DatabaseColumnTemplate, error) {
-	maxIndexSelect := db.db.NewSelect().
+	indexUpdate := db.db.NewUpdate().
 		Model((*DatabaseColumnTemplate)(nil)).
-		ColumnExpr("COUNT(*) as index").
+		Set("index = index+1").
+		Where("index >= ?", column.Index).
 		Where("board_template = ?", column.BoardTemplate)
 
-	newIndex := math.MaxInt
-	if column.Index != nil {
-		if *column.Index < 0 {
-			newIndex = 0
-		} else {
-			newIndex = *column.Index
-		}
-	}
-
-	query := db.db.NewInsert()
-	if column.Index != nil {
-		indexUpdate := db.db.NewUpdate().
-			Model((*DatabaseColumnTemplate)(nil)).
-			Set("index = index+1").
-			Where("index >= ?", newIndex).
-			Where("board_template = ?", column.BoardTemplate)
-		query = query.With("indexUpdate", indexUpdate)
-	}
-
 	var c DatabaseColumnTemplate
-	_, err := query.
-		With("maxIndexSelect", maxIndexSelect).
+	_, err := db.db.NewInsert().
 		Model(&column).
-		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
+		With("indexUpdate", indexUpdate).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
@@ -83,13 +63,15 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemp
 	return columns, err
 }
 
+func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
+	return db.db.NewSelect().
+		Model((*DatabaseColumnTemplate)(nil)).
+		Where("board_template = ?", board).
+		Count(ctx)
+}
+
 // UpdateColumnTemplate updates the column template  and re-orders all indices of the column templates if necessary.
 func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplate, error) {
-	newIndex := column.Index
-	if column.Index < 0 {
-		newIndex = 0
-	}
-
 	selectPrevious := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Column("board_template", "index").
@@ -107,8 +89,8 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 		Set("index = index+1").
 		Where("index < (SELECT index FROM \"selectPrevious\")").
 		Where("board_template = ?", column.BoardTemplate).
-		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-		Where("index >= ?", newIndex)
+		Where("(SELECT index FROM \"selectPrevious\") > ?", column.Index).
+		Where("index >= ?", column.Index)
 
 	updateOnGreaterIndex := db.db.NewUpdate().
 		Model((*DatabaseColumnTemplate)(nil)).
@@ -116,8 +98,8 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 		Set("index = index-1").
 		Where("index > (SELECT index FROM \"selectPrevious\")").
 		Where("board_template = ?", column.BoardTemplate).
-		Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-		Where("index <= ?", newIndex)
+		Where("(SELECT index FROM \"selectPrevious\") < ?", column.Index).
+		Where("index <= ?", column.Index)
 
 	var c DatabaseColumnTemplate
 	_, err := db.db.NewUpdate().
@@ -126,7 +108,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 		With("updateOnSmallerIndex", updateOnSmallerIndex).
 		With("updateOnGreaterIndex", updateOnGreaterIndex).
 		Model(&column).
-		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
+		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", column.Index)).
 		Where("id = ?", column.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)

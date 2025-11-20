@@ -28,6 +28,8 @@ type ColumnDatabase interface {
 	Delete(ctx context.Context, board, column uuid.UUID) error
 	Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumn, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, error)
+	GetIndex(ctx context.Context, board uuid.UUID) (int, error)
+	Count(ctx context.Context, board uuid.UUID) (int, error)
 }
 
 type Service struct {
@@ -55,7 +57,33 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 		attribute.String("scrumlr.columns.service.create.user", body.User.String()),
 		attribute.String("scrumlr.columns.service.create.color", string(body.Color)),
 	)
-	column, err := service.database.Create(ctx, DatabaseColumnInsert{Board: body.Board, Name: body.Name, Description: body.Description, Color: body.Color, Visible: body.Visible, Index: body.Index})
+
+	index, err := service.database.GetIndex(ctx, body.Board)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get index")
+		span.RecordError(err)
+		return nil, common.InternalServerError
+	}
+
+	if body.Index == nil {
+		body.Index = &index
+	} else {
+		if *body.Index > index || *body.Index < 0 {
+			body.Index = &index
+		}
+	}
+
+	column, err := service.database.Create(ctx,
+		DatabaseColumnInsert{
+			Board:       body.Board,
+			Name:        body.Name,
+			Description: body.Description,
+			Color:       body.Color,
+			Visible:     body.Visible,
+			Index:       *body.Index,
+		},
+	)
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create column")
 		span.RecordError(err)
@@ -79,9 +107,9 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		attribute.String("scrumlr.columns.service.delete.column", column.String()),
 		attribute.String("scrumlr.columns.service.delete.user", user.String()),
 	)
-	// todo: call services to delete votes and notes
-	// columnService -> calls noteService -> calls votingService delete()
-	toBeDeletedNotes, err := service.noteService.GetAll(ctx, board, column)
+	// notes and votes are deleted cascading from the database
+	// get all notes that are effected to send the delete event
+	notes, err := service.noteService.GetAll(ctx, board, column)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create columnget notes")
 		span.RecordError(err)
@@ -89,14 +117,9 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		return err
 	}
 
-	for _, note := range toBeDeletedNotes {
-		err := service.noteService.Delete(ctx, user, notes.NoteDeleteRequest{ID: note.ID, Board: board, DeleteStack: true})
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to delete notes")
-			span.RecordError(err)
-			log.Errorw("unable to delete note", "err", err)
-			return err
-		}
+	noteIds := make([]uuid.UUID, 0, len(notes))
+	for _, n := range notes {
+		noteIds = append(noteIds, n.ID)
 	}
 
 	err = service.database.Delete(ctx, board, column)
@@ -107,7 +130,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		return err
 	}
 
-	service.deletedColumn(ctx, board, column)
+	service.deletedColumn(ctx, board, column, noteIds)
 	columnsDeletedCounter.Add(ctx, 1)
 	return err
 }
@@ -123,7 +146,23 @@ func (service *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*
 		attribute.String("scrumlr.columns.service.update.color", string(body.Color)),
 		attribute.Bool("scrumlr.columns.service.update.visible", body.Visible),
 	)
-	column, err := service.database.Update(ctx, DatabaseColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name, Description: body.Description, Color: body.Color, Visible: body.Visible, Index: body.Index})
+
+	if body.Index < 0 {
+		body.Index = 0
+	}
+
+	column, err := service.database.Update(ctx,
+		DatabaseColumnUpdate{
+			ID:          body.ID,
+			Board:       body.Board,
+			Name:        body.Name,
+			Description: body.Description,
+			Color:       body.Color,
+			Visible:     body.Visible,
+			Index:       body.Index,
+		},
+	)
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update column")
 		span.RecordError(err)
@@ -167,7 +206,10 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.get.all")
 	defer span.End()
 
-	span.SetAttributes(attribute.String("scrumlr.columns.service.get.all.board", boardID.String()))
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.get.all.board", boardID.String()),
+	)
+
 	columns, err := service.database.GetAll(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
@@ -179,55 +221,67 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 	return Columns(columns), err
 }
 
+func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.get.count")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.get.count.board", boardID.String()),
+	)
+
+	count, err := service.database.Count(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get column count")
+		span.RecordError(err)
+		log.Errorw("failed to get column count", "board", boardID, "error", err)
+		return count, common.InternalServerError
+	}
+
+	return count, err
+}
+
 func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
+	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.update")
 	defer span.End()
 
-	dbColumns, err := service.database.GetAll(ctx, board)
+	columns, err := service.database.GetAll(ctx, board)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		logger.Get().Errorw("unable to retrieve columns in updated notes", "err", err)
+		log.Errorw("unable to retrieve columns in updated notes", "err", err)
 		return
 	}
 
 	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
-		Data: Columns(dbColumns),
+		Data: Columns(columns),
 	})
 
+	columnIds := make([]uuid.UUID, 0, len(columns))
+	for _, column := range columns {
+		columnIds = append(columnIds, column.ID)
+	}
+
 	var err_msg string
-	err_msg, err = service.syncNotesOnColumnChange(ctx, board)
+	err_msg, err = service.syncNotesOnColumnChange(ctx, board, columnIds)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to sync columns")
 		span.RecordError(err)
-		logger.Get().Errorw(err_msg, "err", err)
+		log.Errorw(err_msg, "err", err)
 	}
 }
 
-func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uuid.UUID) (string, error) {
+func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uuid.UUID, columnIds []uuid.UUID) (string, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.sync")
 	defer span.End()
 
-	var err_msg string
-	columns, err := service.database.GetAll(ctx, boardID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
-		span.RecordError(err)
-		err_msg = "unable to retrieve columns, following a updated columns call"
-		return err_msg, err
-	}
-
-	var columnsID []uuid.UUID
-	for _, column := range columns {
-		columnsID = append(columnsID, column.ID)
-	}
-
-	notes, err := service.noteService.GetAll(ctx, boardID, columnsID...)
+	notes, err := service.noteService.GetAll(ctx, boardID, columnIds...)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		err_msg = "unable to retrieve notes, following a updated columns call"
+		err_msg := "unable to retrieve notes, following a updated columns call"
 		return err_msg, err
 	}
 
@@ -239,33 +293,25 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		err_msg = "unable to broadcast notes, following a updated columns call"
+		err_msg := "unable to broadcast notes, following a updated columns call"
 		return err_msg, err
 	}
 
 	return "", err
 }
 
-func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID) {
+func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID, notes []uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
 	defer span.End()
 
 	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
-		Data: column,
+		Data: struct {
+			Column uuid.UUID   `json:"column"`
+			Notes  []uuid.UUID `json:"notes"`
+		}{
+			Column: column,
+			Notes:  notes,
+		},
 	})
-
-	eventNotes, err := service.noteService.GetAll(ctx, board, column)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
-		logger.Get().Errorw("unable to retrieve notes in deleted column", "err", err)
-		return
-	}
-
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventNotesUpdated,
-		Data: eventNotes,
-	})
-
 }

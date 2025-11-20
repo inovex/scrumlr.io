@@ -12,7 +12,7 @@ import {joinBoard, leaveBoard} from "store/features";
 import {Board} from "./Board";
 
 interface BoardGuardProps {
-  printViewEnabled: boolean;
+  printViewEnabled?: boolean;
 }
 
 export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {

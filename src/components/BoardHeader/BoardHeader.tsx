@@ -1,5 +1,5 @@
 import {useState, VFC} from "react";
-import {LockClosed, Open as Globe, KeyProtected, Share} from "components/Icon";
+import {LockClosed, Open as Globe, KeyProtected, Logout} from "components/Icon";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppDispatch, useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -41,7 +41,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             window.location.pathname = "/";
           }}
           onDecline={() => setShowConfirmationDialog(false)}
-          icon={Share}
+          icon={Logout}
         />
       )}
       <header className="board-header">

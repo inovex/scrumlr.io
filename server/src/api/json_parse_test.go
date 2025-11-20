@@ -3,10 +3,11 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
@@ -33,10 +34,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 		{
 			name:    "votes.removeVote",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.removeVote },
-		},
-		{
-			name:    "votings.updateVoting",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateVoting },
 		},
 		{
 			name:    "notes.createNote",

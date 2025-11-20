@@ -62,7 +62,9 @@
         },
         "By_Passphrase": {
           "title": "Password Protected",
-          "description": "Access is only possible with a set password – ensuring a high level of security."
+          "description": "Access is only possible with a set password – ensuring a high level of security.",
+          "inputPlaceholder": "Enter password here",
+          "hint": "The password can be changed in the settings later."
         }
       },
       "Buttons": {
@@ -187,7 +189,8 @@
     "title": "Share Session",
     "button": "Share board",
     "copyInviteURL": "Copy Invite URL",
-    "inviteUrlCopied": "Invite URL copied"
+    "inviteUrlCopied": "Invite URL copied",
+    "hint": "The password can be changed in the board settings."
   },
   "Column": {
     "settings": "Settings",
@@ -393,7 +396,8 @@
   },
   "Language": {
     "german": "German",
-    "english": "English"
+    "english": "English",
+    "french": "French"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, provided by <inovex>inovex</inovex> with ❤️",

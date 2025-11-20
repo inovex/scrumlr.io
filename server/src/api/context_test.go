@@ -11,54 +11,54 @@ import (
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 func TestAnonymousBoardCreationContext(t *testing.T) {
 	userID := uuid.New()
 
 	tests := []struct {
-		name                          string
-		allowAnonymousBoardCreation   bool
-		userAccountType               common.AccountType
-		expectedStatus                int
-		expectedToCallNext            bool
+		name                        string
+		allowAnonymousBoardCreation bool
+		userAccountType             common.AccountType
+		expectedStatus              int
+		expectedToCallNext          bool
 	}{
 		{
-			name:                          "authenticated user can create boards when flag is disabled",
-			allowAnonymousBoardCreation:   false,
-			userAccountType:               common.Google,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
+			name:                        "authenticated user can create boards when flag is disabled",
+			allowAnonymousBoardCreation: false,
+			userAccountType:             common.Google,
+			expectedStatus:              http.StatusOK,
+			expectedToCallNext:          true,
 		},
 		{
-			name:                          "authenticated user can create boards when flag is enabled",
-			allowAnonymousBoardCreation:   true,
-			userAccountType:               common.Google,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
+			name:                        "authenticated user can create boards when flag is enabled",
+			allowAnonymousBoardCreation: true,
+			userAccountType:             common.Google,
+			expectedStatus:              http.StatusOK,
+			expectedToCallNext:          true,
 		},
 		{
-			name:                          "anonymous user can create boards when flag is enabled",
-			allowAnonymousBoardCreation:   true,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
+			name:                        "anonymous user can create boards when flag is enabled",
+			allowAnonymousBoardCreation: true,
+			userAccountType:             common.Anonymous,
+			expectedStatus:              http.StatusOK,
+			expectedToCallNext:          true,
 		},
 		{
-			name:                          "anonymous user receives 403 forbidden when allowAnonymousBoardCreation is false",
-			allowAnonymousBoardCreation:   false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-			expectedToCallNext:            false,
+			name:                        "anonymous user receives 403 forbidden when allowAnonymousBoardCreation is false",
+			allowAnonymousBoardCreation: false,
+			userAccountType:             common.Anonymous,
+			expectedStatus:              http.StatusForbidden,
+			expectedToCallNext:          false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create mock user service with test user
-			mockUsers := sessions.NewMockUserService(t)
-			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&sessions.User{
+			mockUsers := users.NewMockUserService(t)
+			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
 				ID:          userID,
 				Name:        "Test User",
 				AccountType: tt.userAccountType,
@@ -104,7 +104,7 @@ func TestAnonymousBoardCreationContext_UserNotFound(t *testing.T) {
 	userID := uuid.New()
 
 	// Create mock user service that returns error when user not found
-	mockUsers := sessions.NewMockUserService(t)
+	mockUsers := users.NewMockUserService(t)
 	mockUsers.EXPECT().Get(mock.Anything, userID).Return(nil, assert.AnError)
 
 	server := &Server{

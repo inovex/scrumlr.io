@@ -2,15 +2,12 @@ package boards
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 )
@@ -26,38 +23,12 @@ func NewBoardDatabase(database *bun.DB) BoardDatabase {
 	return db
 }
 
-func (d *DB) CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
-	boardInsert := d.db.NewInsert().
-		Model(&board).
-		Returning("*")
-
-	if board.AccessPolicy == ByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
-		return DatabaseBoard{}, errors.New("passphrase or salt may not be empty")
-	} else if board.AccessPolicy != ByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
-		return DatabaseBoard{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
-	}
-
-	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: common.OwnerRole}
-
+func (d *DB) CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error) {
 	var b DatabaseBoard
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
-
-		query = query.With("createdColumns", d.db.NewInsert().
-			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
-	}
-	err := query.
-		With("createdSession", d.db.NewInsert().
-			Model(&session).
-			Value("board", "(SELECT id FROM \"createdBoard\")")).
-		Table("createdBoard").
-		Column("*").
-		Scan(ctx, &b)
+	_, err := d.db.NewInsert().
+		Model(&board).
+		Returning("*").
+		Exec(ctx, &b)
 
 	return b, err
 }
@@ -86,18 +57,6 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
-		if *update.AccessPolicy == ByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
-			return DatabaseBoard{}, errors.New("passphrase and salt should be set when access policy is updated")
-		} else if *update.AccessPolicy != ByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
-			return DatabaseBoard{}, errors.New("passphrase and salt should not be set if access policy is defined as 'BY_PASSPHRASE'")
-		}
-
-		if *update.AccessPolicy == ByInvite {
-			query.Where("access_policy = ?", ByInvite)
-		} else {
-			query.Where("access_policy <> ?", ByInvite)
-		}
-
 		query.Column("access_policy", "passphrase", "salt")
 	}
 	if update.ShowAuthors != nil {

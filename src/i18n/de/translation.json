@@ -63,7 +63,9 @@
         },
         "By_Passphrase": {
           "title": "Passwortgeschützt",
-          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit."
+          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit.",
+          "inputPlaceholder": "Passwort eingeben",
+          "hint": "Das Passwort kann später in den Einstellungen geändert werden."
         }
       },
       "Buttons": {
@@ -188,7 +190,8 @@
     "title": "Sitzung teilen",
     "button": "Sitzung teilen",
     "copyInviteURL": "URL kopieren",
-    "inviteUrlCopied": "URL wurde kopiert"
+    "inviteUrlCopied": "URL wurde kopiert",
+    "hint": "Das Passwort kann in den Board Einstellungen geändert werden."
   },
   "Column": {
     "settings": "Einstellungen",
@@ -394,7 +397,8 @@
   },
   "Language": {
     "german": "Deutsch",
-    "english": "Englisch"
+    "english": "Englisch",
+    "french": "Französisch"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, mit ❤️ von <inovex>inovex</inovex>",

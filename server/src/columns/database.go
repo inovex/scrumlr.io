@@ -3,7 +3,6 @@ package columns
 import (
 	"context"
 	"fmt"
-	"math"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -25,36 +24,16 @@ func NewColumnsDatabase(database *bun.DB) ColumnDatabase {
 // Create creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
 func (db *DB) Create(ctx context.Context, column DatabaseColumnInsert) (DatabaseColumn, error) {
-	maxIndexSelect := db.db.NewSelect().
-		Model((*Column)(nil)).
-		ColumnExpr("COUNT(*) as index").
+	indexUpdate := db.db.NewUpdate().
+		Model((*DatabaseColumn)(nil)).
+		Set("index = index+1").
+		Where("index >= ?", column.Index).
 		Where("board = ?", column.Board)
 
-	newIndex := math.MaxInt
-	if column.Index != nil {
-		if *column.Index < 0 {
-			newIndex = 0
-		} else {
-			newIndex = *column.Index
-		}
-	}
-
-	query := db.db.NewInsert()
-	if column.Index != nil {
-		indexUpdate := db.db.NewUpdate().
-			Model((*DatabaseColumn)(nil)).
-			Set("index = index+1").
-			Where("index >= ?", newIndex).
-			Where("board = ?", column.Board)
-
-		query = query.With("indexUpdate", indexUpdate)
-	}
-
 	var c DatabaseColumn
-	_, err := query.
-		With("maxIndexSelect", maxIndexSelect).
+	_, err := db.db.NewInsert().
 		Model(&column).
-		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
+		With("indexUpdate", indexUpdate).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, column.Board), &c)
 
@@ -63,11 +42,6 @@ func (db *DB) Create(ctx context.Context, column DatabaseColumnInsert) (Database
 
 // Update updates the column and re-orders all indices of the columns if necessary.
 func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (DatabaseColumn, error) {
-	newIndex := column.Index
-	if column.Index < 0 {
-		newIndex = 0
-	}
-
 	selectPrevious := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
 		Column("board", "index").
@@ -85,8 +59,8 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 		Set("index = index+1").
 		Where("index < (SELECT index FROM \"selectPrevious\")").
 		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-		Where("index >= ?", newIndex)
+		Where("(SELECT index FROM \"selectPrevious\") > ?", column.Index).
+		Where("index >= ?", column.Index)
 
 	updateOnGreaterIndex := db.db.NewUpdate().
 		Model((*DatabaseColumn)(nil)).
@@ -94,8 +68,8 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 		Set("index = index-1").
 		Where("index > (SELECT index FROM \"selectPrevious\")").
 		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-		Where("index <= ?", newIndex)
+		Where("(SELECT index FROM \"selectPrevious\") < ?", column.Index).
+		Where("index <= ?", column.Index)
 
 	var c DatabaseColumn
 	_, err := db.db.NewUpdate().
@@ -104,7 +78,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 		With("updateOnSmallerIndex", updateOnSmallerIndex).
 		With("updateOnGreaterIndex", updateOnGreaterIndex).
 		Model(&column).
-		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
+		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", column.Index)).
 		Where("id = ?", column.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, column.Board), &c)
@@ -164,4 +138,20 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, er
 		Scan(ctx)
 
 	return columns, err
+}
+
+func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
+	return db.db.NewSelect().
+		Model((*DatabaseColumn)(nil)).
+		Where("board = ?", board).
+		Count(ctx)
+}
+
+func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
+	count, err := db.db.NewSelect().
+		Model((*DatabaseColumn)(nil)).
+		Where("board = ?", board).
+		Count(ctx)
+
+	return count, err
 }

@@ -3,6 +3,7 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
+import {ReactComponent as French} from "assets/flags/FR.svg";
 import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router";
 import {AppInfo} from "components/AppInfo";
@@ -34,11 +35,19 @@ export const Homepage = withTranslation()(() => {
   };
 
   useEffect(() => {
-    const boardDeleted = new URLSearchParams(window.location.search).get("boardDeleted");
+    const searchParams = new URLSearchParams(window.location.search);
+    const boardDeleted = searchParams.get("boardDeleted");
 
     if (boardDeleted) {
       Toast.info({
         title: i18n.t("Error.boardDeleted"),
+      });
+
+      queueMicrotask(() => {
+        searchParams.delete("boardDeleted");
+        const newSearch = searchParams.toString();
+        const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : "");
+        window.history.replaceState({}, document.title, newUrl);
       });
     }
   }, [i18n]);
@@ -58,6 +67,11 @@ export const Homepage = withTranslation()(() => {
             <li>
               <LegacyButton leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
                 English
+              </LegacyButton>
+            </li>
+            <li>
+              <LegacyButton leftIcon={<French />} className="homepage__language" hideLabel onClick={changeLanguage("fr")}>
+                Français
               </LegacyButton>
             </li>
 

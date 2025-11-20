@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
@@ -215,7 +216,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, board, user)
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
@@ -249,9 +250,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
-		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
+		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, board, user)
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
@@ -477,8 +478,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User.ID == note.Author {
-					user, _ := s.users.Get(ctx, session.User.ID) // TODO handle error
+				if session.UserID == note.Author {
+					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
 					author = user.Name
 				}
 			}

@@ -2,13 +2,14 @@ package sessionrequests
 
 import (
 	"net/http"
-	"scrumlr.io/server/sessions"
+
+	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
 )
 
 type BoardSessionRequest struct {
-	User   sessions.User `json:"user"`
+	User   users.User    `json:"user"`
 	Status RequestStatus `json:"status"`
 }
 
@@ -19,7 +20,7 @@ type BoardSessionRequestUpdate struct {
 }
 
 func (r *BoardSessionRequest) From(request DatabaseBoardSessionRequest) *BoardSessionRequest {
-	r.User = sessions.User{
+	r.User = users.User{
 		ID:   request.User,
 		Name: request.Name,
 	}
