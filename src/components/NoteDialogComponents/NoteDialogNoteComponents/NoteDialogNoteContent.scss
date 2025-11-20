@@ -1,6 +1,7 @@
-@import "constants/style";
-@import "components/Note/Note.scss";
-@import "routes/StackView/StackView.scss";
+@use "constants/styles";
+@use "constants/mixins";
+@use "components/Note/Note";
+@use "routes/StackView/StackView";
 
 $text-line-height: 1.5rem;
 $text-border-width: 2px;
@@ -17,7 +18,7 @@ $min-lines: 3;
   flex-direction: column;
 
   &:has(&--image) {
-    padding: $spacing--xs;
+    padding: styles.$spacing--xs;
   }
 
   &:has(&--image-zoom) {
@@ -29,15 +30,15 @@ $min-lines: 3;
   width: 100%;
   min-height: calc($min-lines * $text-line-height + 2 * $text-border-width); // also include border
   // since the note height limit is defined here, the sibling elements are subtracted (header, footer, margins, and gap)
-  max-height: calc($stack-content-max-height - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
+  max-height: calc(styles.$stack-content-max-height - 36px - 36px - 2 * (styles.$spacing--base + styles.$spacing--sm));
   margin: 0;
-  padding: 0 $spacing--xxs;
+  padding: 0 styles.$spacing--xxs;
   resize: none;
   word-wrap: break-word;
 
-  color: $navy--900;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text--md;
+  color: styles.$navy--900;
+  letter-spacing: styles.$letter-spacing--medium;
+  font-size: styles.$text--md;
   line-height: $text-line-height;
 
   background: none;
@@ -49,11 +50,11 @@ $min-lines: 3;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
 
-  @include scrollbar();
+  @include mixins.scrollbar();
 
   // also subtract edited marker
   &--edited {
-    max-height: calc($stack-content-max-height - 20px - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
+    max-height: calc(styles.$stack-content-max-height - 20px - 36px - 36px - 2 * (styles.$spacing--base + styles.$spacing--sm));
   }
 
   &:not(:disabled) {
@@ -65,9 +66,9 @@ $min-lines: 3;
 }
 
 .note-dialog__marker-edited {
-  color: $gray--700;
-  font-size: $text--base;
-  padding: 0 $spacing--xxs;
+  color: styles.$gray--700;
+  font-size: styles.$text--base;
+  padding: 0 styles.$spacing--xxs;
 }
 
 .note-dialog__note-content--image {
@@ -85,7 +86,7 @@ $min-lines: 3;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
-    z-index: $request-z-index;
+    z-index: styles.$request-z-index;
     cursor: zoom-out;
     position: fixed;
 
@@ -117,6 +118,6 @@ $min-lines: 3;
 
 [theme="dark"] {
   .note-dialog__note-content-text {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 }

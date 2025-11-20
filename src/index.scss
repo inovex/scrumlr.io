@@ -1,4 +1,8 @@
-@use "constants/colors.scss";
+@use "sass:map";
+@use "sass:color";
+
+@use "constants/styles";
+@use "constants/colors";
 
 @import "~@fontsource/raleway/300.css";
 @import "~@fontsource/raleway/400.css";
@@ -7,8 +11,6 @@
 @import "~@fontsource/raleway/700.css";
 @import "~@fontsource/raleway/800.css";
 
-@import "constants/style.scss";
-
 html,
 body,
 #root {
@@ -16,7 +18,7 @@ body,
   width: 100%;
   box-sizing: border-box;
 
-  background: $gray--000;
+  background: colors.$gray--000;
 }
 *,
 *:before,
@@ -44,16 +46,53 @@ code {
 [theme="dark"] {
   body,
   #root {
-    background: $navy--600;
+    background: colors.$navy--600;
   }
 }
 
 html[theme="dark"] {
-  background: $navy--600;
+  background: colors.$navy--600;
 }
 
 :root {
-  @include colors.set-base-colors(colors.$base-colors);
+  // set base colors to be used at the root level
+  @each $color-name, $shades in colors.$base-colors {
+    @each $shade, $color in $shades {
+      --#{$color-name}--#{$shade}: #{$color};
+      --#{$color-name}--#{$shade}-rgb: #{color.channel($color, "red", $space: rgb)}, #{color.channel($color, "green", $space: rgb)}, #{color.channel($color, "blue", $space: rgb)};
+    }
+  }
 }
+
+// generates css classes which can be included in an element
+// to use their different accent color shades
+// e.g. .accent-color__backlog-blue
+@mixin generate-accent-classes($colors) {
+  @each $color-name, $color-values in $colors {
+    .accent-color__#{$color-name} {
+      @include set-accent-variables($color-values);
+    }
+  }
+}
+
+// sets css variables to be used for the accent colors
+// e.g. var(--accent-color--500)
+@mixin set-accent-variables($color-map) {
+  @each $shade, $color in $color-map {
+    --accent-color--#{$shade}: #{$color};
+    --accent-color--#{$shade}-rgb: #{color.channel($color, "red", $space: rgb)}, #{color.channel($color, "green", $space: rgb)}, #{color.channel($color, "blue", $space: rgb)};
+  }
+
+  // shortcut for most commonly used accent colors
+  $shade-light: map.get($color-map, 500);
+  $shade-dark: map.get($color-map, 400);
+  --accent-color--light: #{$shade-light};
+  --accent-color--light-rgb:
+    #{color.channel($shade-light, "red", $space: rgb)}, #{color.channel($shade-light, "green", $space: rgb)}, #{color.channel($shade-light, "blue", $space: rgb)};
+  --accent-color--dark: #{$shade-dark};
+  --accent-color--dark-rgb:
+    #{color.channel($shade-dark, "red", $space: rgb)}, #{color.channel($shade-dark, "green", $space: rgb)}, #{color.channel($shade-dark, "blue", $space: rgb)};
+}
+
 @include generate-accent-classes(colors.$primary-colors);
 @include generate-accent-classes(colors.$secondary-colors);

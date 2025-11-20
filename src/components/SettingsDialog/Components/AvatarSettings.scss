@@ -1,5 +1,6 @@
-@import "constants/style";
-@import "../SettingsDialog";
+@use "sass:color";
+@use "constants/styles";
+@use "../SettingsDialog";
 
 .avatar-settings {
   &__avatar {
@@ -23,14 +24,14 @@
       padding: 4px;
       border: 0;
       border-radius: 20px;
-      background-color: $gray--000;
+      background-color: styles.$gray--000;
       box-shadow: 0 8px 16px rgba(var(--accent-color--light-rgb), 0.3);
       align-items: center;
       justify-content: center;
       transition: all 0.08s ease-out;
 
       &:hover {
-        background-color: mix($gray--000, $purple--500, 92%);
+        background-color: color.mix(styles.$gray--000, styles.$purple--500, 92%);
         transform: scale(1.06);
         box-shadow: 0 12px 20px rgba(var(--accent-color--light-rgb), 0.2);
       }
@@ -40,31 +41,31 @@
       }
 
       > svg {
-        width: $icon--large;
-        height: $icon--large;
-        color: $purple--500;
+        width: styles.$icon--large;
+        height: styles.$icon--large;
+        color: styles.$purple--500;
       }
     }
   }
 
   &__settings {
-    background-color: $gray--000;
+    background-color: styles.$gray--000;
     border-radius: 8px;
-    max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+    max-width: calc(544px - (2 * #{SettingsDialog.$settings-dialog-container--sides-large}));
 
     &-wrapper {
-      padding-right: $spacing--xs;
-      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
+      padding-right: styles.$spacing--xs;
+      margin-right: calc(-1 * (#{styles.$spacing--xs} + 10px));
 
       @media screen and (min-width: 920px) {
-        padding-right: $spacing--lg;
-        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
+        padding-right: styles.$spacing--lg;
+        margin-right: calc(-1 * (#{styles.$spacing--lg} + 10px));
       }
     }
 
     &-group {
       &:last-child {
-        padding: calc(#{$spacing--xs} / 2) 0;
+        padding: calc(#{styles.$spacing--xs} / 2) 0;
       }
 
       &-header {
@@ -77,7 +78,7 @@
       }
 
       &-item {
-        padding: $spacing--xs 0;
+        padding: styles.$spacing--xs 0;
         width: 90%;
         margin: 0 auto;
 
@@ -98,7 +99,7 @@
           margin-left: 10%;
           width: 80%;
           border: 0;
-          border-top: 0.5px solid $gray--300;
+          border-top: 0.5px solid styles.$gray--300;
         }
       }
 
@@ -107,7 +108,7 @@
         margin-left: 5%;
         width: 90%;
         border: 0;
-        border-top: 0.5px solid $gray--300;
+        border-top: 0.5px solid styles.$gray--300;
       }
     }
   }
@@ -116,38 +117,38 @@
 [theme="dark"] {
   .avatar-settings {
     &__avatar-shuffle {
-      background-color: $navy--500;
-      box-shadow: 0 16px 32px rgba($navy--700, 0.8);
+      background-color: styles.$navy--500;
+      box-shadow: 0 16px 32px rgba(styles.$navy--700, 0.8);
 
       &:hover {
-        background-color: $navy--400;
+        background-color: styles.$navy--400;
       }
     }
 
     &__settings {
-      background-color: $navy--500;
+      background-color: styles.$navy--500;
 
       &-group {
         &-header {
           &:hover {
-            background-color: $navy--400;
+            background-color: styles.$navy--400;
           }
         }
 
         &-item {
-          color: $gray--000;
+          color: styles.$gray--000;
 
           &:hover:not(.disabled) {
-            background-color: $navy--400;
+            background-color: styles.$navy--400;
           }
 
           &-seperator {
-            border-top: 0.5px solid $navy--600;
+            border-top: 0.5px solid styles.$navy--600;
           }
         }
 
         &-seperator {
-          border-top: 0.5px solid $navy--600;
+          border-top: 0.5px solid styles.$navy--600;
         }
       }
     }

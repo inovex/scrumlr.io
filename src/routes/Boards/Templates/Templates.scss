@@ -1,11 +1,11 @@
-@import "constants/style";
+@use "constants/styles";
 
 $stan-height: 70vh;
 $max-card-width: 500px;
 
 .templates__portal {
   backdrop-filter: blur(10px);
-  background: rgba($blue--500, 0.1);
+  background: rgba(styles.$blue--500, 0.1);
   transition: background 0.2s ease-out;
 }
 
@@ -19,13 +19,13 @@ $max-card-width: 500px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: $spacing--lg;
+  gap: styles.$spacing--lg;
 
-  border-radius: $rounded--default;
-  background-color: $blue--50;
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
 
   &--saved {
-    margin-left: $spacing--md; // instead of gap, see above
+    margin-left: styles.$spacing--md; // instead of gap, see above
   }
 }
 
@@ -35,16 +35,16 @@ $max-card-width: 500px;
   justify-content: flex-start;
   align-items: center;
   gap: 0;
-  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
+  padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
 }
 
 .templates__container-title {
   word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
-  font-size: $text--lg;
+  font-size: styles.$text--lg;
   font-weight: 700;
   line-height: 32px; // TODO use constant
 
-  color: $navy--600;
+  color: styles.$navy--600;
 }
 
 .templates__container-arrow-button {
@@ -55,7 +55,7 @@ $max-card-width: 500px;
   display: none;
 
   &--disabled {
-    color: $gray--800;
+    color: styles.$gray--800;
   }
 }
 
@@ -63,10 +63,10 @@ $max-card-width: 500px;
   display: grid;
   // place cards next to each other if width limit is exceeded
   grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
-  gap: $spacing--md;
+  gap: styles.$spacing--md;
   overflow-y: scroll;
   scrollbar-width: none;
-  padding: 0 $spacing--xl $spacing--xl $spacing--xl;
+  padding: 0 styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
 }
 
 .templates__stan-container {
@@ -89,13 +89,13 @@ $max-card-width: 500px;
   }
 }
 
-@media screen and (max-width: $breakpoint--desktop) {
+@media screen and (max-width: styles.$breakpoint--desktop) {
   .templates__stan-container {
     display: none;
   }
 }
 
-@media screen and (max-width: $breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
   .templates {
     overflow-x: scroll;
@@ -109,11 +109,11 @@ $max-card-width: 500px;
 
   .templates__container-header {
     justify-content: center;
-    gap: $spacing--md;
+    gap: styles.$spacing--md;
   }
 
   .templates__container-title {
-    font-size: $text--md;
+    font-size: styles.$text--md;
     line-height: 24px; // TODO use constant
   }
 
@@ -126,11 +126,11 @@ $max-card-width: 500px;
 
 [theme="dark"] {
   .templates__container {
-    background-color: $navy--700;
+    background-color: styles.$navy--700;
   }
 
   .templates__container-title {
-    color: $blue--50;
+    color: styles.$blue--50;
   }
 
   .templates__stan {
@@ -144,10 +144,10 @@ $max-card-width: 500px;
   }
 
   .templates__container-arrow {
-    color: $blue--50;
+    color: styles.$blue--50;
 
     &--disabled {
-      color: $navy--300;
+      color: styles.$navy--300;
     }
   }
 }

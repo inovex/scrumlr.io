@@ -1,12 +1,12 @@
 @use "sass:color";
-@import "constants/style";
+@use "constants/styles";
 
 $side-padding--desktop: 14vw;
 
 .boards {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, color.change($blue--500, $alpha: 0.075), color.change($gray--000, $alpha: 0.2));
+  background: linear-gradient(180deg, color.change(styles.$blue--500, $alpha: 0.075), color.change(styles.$gray--000, $alpha: 0.2));
 }
 
 .boards__grid {
@@ -23,7 +23,7 @@ $side-padding--desktop: 14vw;
     auto [bleed-end] // user
     $side-padding--desktop;
 
-  grid-template-rows: $spacing--lg 56px 48px 1fr $spacing--lg;
+  grid-template-rows: styles.$spacing--lg 56px 48px 1fr styles.$spacing--lg;
 
   grid-template-areas:
     ".  .      .      .      .      .     ."
@@ -35,8 +35,8 @@ $side-padding--desktop: 14vw;
   height: 100vh;
 
   &--view-type-overview {
-    grid-template-columns: $side-padding--desktop auto auto $spacing--base 1fr auto auto $side-padding--desktop;
-    grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+    grid-template-columns: $side-padding--desktop auto auto styles.$spacing--base 1fr auto auto $side-padding--desktop;
+    grid-template-rows: styles.$spacing--lg 56px 48px 64px 1fr styles.$spacing--lg; // using the actual component heights seems to yield the best results
     grid-template-areas:
       ".  .    .       .       .       .       .      ."
       ".  logo title   title   title   title   user   ."
@@ -61,10 +61,10 @@ $side-padding--desktop: 14vw;
   align-self: center;
   justify-self: center;
 
-  font-size: $text--2xl;
+  font-size: styles.$text--2xl;
   font-weight: 700;
   line-height: 48px; // TODO use constant
-  color: $navy--900;
+  color: styles.$navy--900;
 }
 
 .boards__switch {
@@ -86,23 +86,23 @@ $side-padding--desktop: 14vw;
 }
 
 .boards__search-button-icon-container {
-  width: $icon--large;
-  height: $icon--large;
-  padding: $spacing--sm;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  padding: styles.$spacing--sm;
   border-radius: 100%;
 
-  color: $navy--600;
-  background-color: $gray--000;
+  color: styles.$navy--600;
+  background-color: styles.$gray--000;
 
   &--active {
-    color: $gray--000;
-    background-color: $navy--600;
+    color: styles.$gray--000;
+    background-color: styles.$navy--600;
   }
 }
 
 .boards--search-button-logo {
-  width: $icon--large;
-  height: $icon--large;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 }
 
 .boards__mobile-search-bar {
@@ -117,13 +117,13 @@ $side-padding--desktop: 14vw;
   overflow-y: auto;
 
   &--extended-top {
-    margin-top: $spacing--xl;
+    margin-top: styles.$spacing--xl;
   }
 }
 
-@media (max-width: $breakpoint--desktop) {
+@media (max-width: styles.$breakpoint--desktop) {
   .boards__grid {
-    grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-columns: styles.$spacing--2xl auto auto styles.$spacing--base 1fr auto auto styles.$spacing--2xl;
     grid-template-areas:
       ".  .      .       .       .       .       .      ."
       ".  logo   title   title   title   title   user   ."
@@ -133,8 +133,8 @@ $side-padding--desktop: 14vw;
       ".  .      .       .       .       .       .      .";
 
     &--view-type-edit {
-      grid-template-rows: $spacing--lg 56px 48px 1fr $spacing--lg;
-      grid-template-columns: $spacing--2xl auto 1fr auto $spacing--2xl;
+      grid-template-rows: styles.$spacing--lg 56px 48px 1fr styles.$spacing--lg;
+      grid-template-columns: styles.$spacing--2xl auto 1fr auto styles.$spacing--2xl;
       grid-template-areas:
         ".  .      .      .     ."
         ".  logo   title  user  ."
@@ -145,12 +145,12 @@ $side-padding--desktop: 14vw;
   }
 }
 
-@media screen and (max-width: $breakpoint--smartphone) {
+@media screen and (max-width: styles.$breakpoint--smartphone) {
   .boards__grid {
     // stretch main to full width
-    grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
+    grid-template-columns: styles.$spacing--md auto auto 1fr auto auto styles.$spacing--md;
     // adds a row where the mobile search bar resides,
-    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 57px auto 1fr;
+    grid-template-rows: styles.$spacing--md 56px styles.$spacing--sm 32px styles.$spacing--md 57px auto 1fr;
     grid-template-areas:
       ".    .        .       .       .       .        ."
       ".    logo     .       .       .       user     ."
@@ -162,8 +162,8 @@ $side-padding--desktop: 14vw;
       "main main     main    main    main    main     main";
 
     &--view-type-edit {
-      grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
-      grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 1fr $spacing--md;
+      grid-template-columns: styles.$spacing--md auto auto 1fr auto auto styles.$spacing--md;
+      grid-template-rows: styles.$spacing--md 56px styles.$spacing--sm 32px styles.$spacing--md 1fr styles.$spacing--md;
       grid-template-areas:
         ".    .        .       .       .       .        ."
         ".    logo     .       .       .       user     ."
@@ -176,13 +176,13 @@ $side-padding--desktop: 14vw;
   }
 
   .boards__title {
-    font-size: $text--lg;
+    font-size: styles.$text--lg;
     line-height: 32px; // TODO use constant
   }
 
   .boards__search-button {
     display: inline-block;
-    margin-right: $spacing--sm;
+    margin-right: styles.$spacing--sm;
   }
 
   .boards__search-bar {
@@ -197,20 +197,20 @@ $side-padding--desktop: 14vw;
 
 [theme="dark"] {
   .boards {
-    background: linear-gradient(161deg, $navy--600 16.78%, $navy--700 49.35%, $navy--800 81.65%);
+    background: linear-gradient(161deg, styles.$navy--600 16.78%, styles.$navy--700 49.35%, styles.$navy--800 81.65%);
   }
 
   .boards__title {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 
   .boards__search-button-icon-container {
-    color: $gray--000;
-    background-color: $navy--400;
+    color: styles.$gray--000;
+    background-color: styles.$navy--400;
 
     &--active {
-      color: $navy--400;
-      background-color: $gray--000;
+      color: styles.$navy--400;
+      background-color: styles.$gray--000;
     }
   }
 }

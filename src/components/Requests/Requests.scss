@@ -1,4 +1,4 @@
-@import "src/constants/style";
+@use "constants/styles";
 
 $wrapper-position__top: 110px;
 $wrapper-position__right: 30px;
@@ -10,7 +10,7 @@ $wrapper-limit__bottom: 150px; // start overflowing with a scrollbar after excee
   position: fixed;
   top: $wrapper-position__top;
   right: $wrapper-position__right;
-  z-index: $request-z-index;
+  z-index: styles.$request-z-index;
 
   display: flex;
   flex-direction: column;

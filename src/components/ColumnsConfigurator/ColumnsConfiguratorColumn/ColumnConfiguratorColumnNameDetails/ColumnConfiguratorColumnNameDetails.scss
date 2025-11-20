@@ -1,15 +1,15 @@
-@import "constants/style";
+@use "constants/styles";
 
 .column-configurator-column-name-details__name-wrapper {
   display: flex;
   flex-direction: column;
-  gap: $spacing--xs;
+  gap: styles.$spacing--xs;
 
   &:hover {
     // affect both with prio
     .column-configurator-column-name-details__name,
     .column-configurator-column-name-details__inline-description {
-      color: $navy--400;
+      color: styles.$navy--400;
     }
   }
 }
@@ -20,12 +20,12 @@
 
   align-self: flex-start; // only take as much space as needed
   // extend border to bottom and right
-  padding: 0 $spacing--xs $spacing--xs 0;
+  padding: 0 styles.$spacing--xs styles.$spacing--xs 0;
   max-width: 100%;
 
-  font-size: $text--base;
+  font-size: styles.$text--base;
   font-weight: 600;
-  color: $navy--600;
+  color: styles.$navy--600;
   border-bottom: 2px solid var(--accent-color--light);
 
   overflow: hidden;
@@ -33,12 +33,12 @@
   text-overflow: ellipsis;
 
   &:focus {
-    color: $navy--600;
+    color: styles.$navy--600;
     outline: none;
   }
 
   &::placeholder {
-    color: $gray--800;
+    color: styles.$gray--800;
   }
 
   // not only when focused, but also when description is being edited
@@ -48,8 +48,8 @@
 }
 
 .column-configurator-column-name-details__inline-description {
-  color: $gray--800;
-  font-size: $text--xs;
+  color: styles.$gray--800;
+  font-size: styles.$text--xs;
   font-weight: 500;
 
   // if in visual feedback mode, show as multiline, else in one line
@@ -62,7 +62,7 @@
   &--has-content {
     font-size: 12px;
     font-weight: 500;
-    color: $navy--900;
+    color: styles.$navy--900;
   }
 }
 
@@ -81,24 +81,24 @@
       // affect both with prio
       .column-configurator-column-name-details__name,
       .column-configurator-column-name-details__inline-description {
-        color: $gray--000;
+        color: styles.$gray--000;
       }
     }
   }
 
   .column-configurator-column-name-details__name {
-    color: $gray--000;
+    color: styles.$gray--000;
 
     border-bottom-color: var(--accent-color--dark);
   }
 
   .column-configurator-column-name-details__inline-description {
-    color: $gray--700;
+    color: styles.$gray--700;
 
     &--has-content {
       font-size: 12px;
       font-weight: 500;
-      color: $gray--000;
+      color: styles.$gray--000;
     }
   }
 }
