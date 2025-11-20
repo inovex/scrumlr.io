@@ -1,15 +1,16 @@
 import {fireEvent, waitFor} from "@testing-library/dom";
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
 import {ShareSession} from "../ShareSession";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {I18nextProvider} from "react-i18next";
 import i18nTest from "i18nTest";
+import {ApplicationState} from "store";
 
-const renderSettingsDialog = () =>
+const renderSettingsDialog = (overwrite?: Partial<ApplicationState>) =>
   render(
     <I18nextProvider i18n={i18nTest}>
-      <Provider store={getTestStore()}>
+      <Provider store={getTestStore(overwrite)}>
         <ShareSession />
       </Provider>
     </I18nextProvider>
@@ -41,5 +42,27 @@ describe("ShareQrCode Tests", () => {
     await waitFor(() => {
       expect(button).toHaveClass("--copied");
     });
+  });
+
+  test("should render password hint (with link) if access policy is passphrase", () => {
+    const shareDialog = renderSettingsDialog({
+      board: {
+        data: {
+          accessPolicy: "BY_PASSPHRASE",
+          id: "",
+          showAuthors: false,
+          showNotesOfOtherUsers: false,
+          showNoteReactions: false,
+          allowStacking: false,
+          isLocked: false,
+        },
+        status: "pending",
+      },
+    });
+
+    // const hintElement = await shareDialog.findByTestId("share-session-hint");
+    const hintElement = shareDialog.getByRole("link");
+
+    expect(hintElement).toBeVisible();
   });
 });

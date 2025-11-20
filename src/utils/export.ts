@@ -4,13 +4,13 @@ import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {Board} from "store/features/board/types";
 import {Column} from "store/features/columns/types";
 import {Note} from "store/features/notes/types";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {Voting} from "store/features/votings/types";
 import {API} from "../api";
 
 const {t} = i18n;
 
-export type ExportBoardDataType = {board: Board; columns: Column[]; notes: Note[]; participants: Participant[]; votings: Voting[]};
+export type ExportBoardDataType = {board: Board; columns: Column[]; notes: Note[]; participants: ParticipantWithUser[]; votings: Voting[]};
 
 export const fileName = (name?: string) => {
   const date = new Date().toJSON().slice(0, 10);
@@ -41,13 +41,13 @@ export const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: 
 
 export const getChildNotes = (notes: Note[], votings: Voting[], noteId: string) => notes.filter((n) => n.position.stack === noteId).sort((a, b) => compareNotes(a, b, votings));
 
-export const getAuthorName = (authorId: string, participants: Participant[]) => participants.filter((p: Participant) => p.user?.id === authorId)[0].user?.name;
+export const getAuthorName = (authorId: string, participants: ParticipantWithUser[]) => participants.filter((p: ParticipantWithUser) => p.user?.id === authorId)[0].user?.name;
 
 const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
 
 const mdBoardHeader = (boardName: string) => `# ${boardName}\n\n`;
 
-const mdBoardProperties = (board: Board, participants: Participant[]) => {
+const mdBoardProperties = (board: Board, participants: ParticipantWithUser[]) => {
   const linkToBoard = `- [${t("MarkdownExport.linkToBoard")}](${window.location.href.replace("/settings/export", "")})\n`;
   const participantsNumber = `- ${t("MarkdownExport.participants")}: ${participants.length}\n`;
   const authorsHidden = !board.showAuthors ? `- ${t("MarkdownExport.showAuthorsDisabled")}\n` : "";

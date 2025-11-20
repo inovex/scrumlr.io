@@ -17,7 +17,7 @@ import {
   votingsReducer,
 } from "./features";
 
-const rootReducer = {
+export const rootReducer = {
   auth: authReducer,
   templates: templatesReducer,
   templateColumns: templateColumnsReducer,
