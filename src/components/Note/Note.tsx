@@ -6,7 +6,7 @@ import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
 import {useAppDispatch, useAppSelector} from "store";
 import {shareNote} from "store/features";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";
@@ -18,7 +18,7 @@ import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
-  viewer?: Participant;
+  viewer?: ParticipantWithUser;
   setItems?: (items: string[]) => void;
   colorClassName?: string;
 }
@@ -52,7 +52,7 @@ export const Note = (props: NoteProps) => {
       .map((c) => allUsers?.find((p) => p.user.id === c.author));
 
     // remove undefined values (could exist if a author is not in the list of participants or hidden)
-    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[];
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as ParticipantWithUser[];
   }, isEqual);
 
   /* eslint-disable */
