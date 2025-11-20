@@ -30,7 +30,18 @@
     "downlevelIteration": true,
     "ignoreDeprecations": "5.0",
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "paths": {
+      "api/*": ["api/*"],
+      "assets/*": ["assets/*"],
+      "components/*": ["components/*"],
+      "constants/*": ["constants/*"],
+      "i18n/*": ["i18n/*"],
+      "routes/*": ["routes/*"],
+      "store/*": ["store/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"]
+    }
   },
   "include": ["src"]
 }
