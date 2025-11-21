@@ -262,6 +262,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Get("/{user}", s.getUserByID)
 			r.Put("/", s.updateUser)
+			r.Delete("/", s.deleteUser)
 			r.With(s.BoardParticipantContext).Get("/board/{id}", s.getUsers)
 		})
 	})

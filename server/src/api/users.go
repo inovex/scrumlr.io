@@ -121,3 +121,23 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, updatedUser)
 }
+
+func (s *Server) deleteUser(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	err := s.users.Delete(ctx, user)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete user")
+		span.RecordError(err)
+		log.Errorw("failed to delete user", "user", user, "err", err)
+		http.Error(w, "unable to delete user", http.StatusInternalServerError)
+		return
+	}
+
+	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, err)
+}

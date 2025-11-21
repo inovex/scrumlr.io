@@ -167,6 +167,17 @@ func (suite *DatabaseUserTestSuite) Test_Database_UpdateUser() {
 	assert.NotNil(t, dbUser.CreatedAt)
 }
 
+func (suite *DatabaseUserTestSuite) Test_Database_DeleteUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := suite.users["Delete"].ID
+
+	err := database.Delete(context.Background(), userId)
+
+	assert.Nil(t, err)
+}
+
 func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
@@ -296,11 +307,12 @@ func (suite *DatabaseUserTestSuite) Test_Database_SetKeyMigration() {
 
 func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
 	// test users
-	suite.users = make(map[string]DatabaseUser, 4)
+	suite.users = make(map[string]DatabaseUser, 5)
 	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
 	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
 	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
 	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
+	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 1)

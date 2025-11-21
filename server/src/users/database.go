@@ -69,6 +69,15 @@ func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (Databa
 	return user, err
 }
 
+func (db *DB) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := db.db.NewDelete().
+		Model((*DatabaseUser)(nil)).
+		Where("id = ?", id).
+		Exec(ctx)
+
+	return err
+}
+
 func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	err := db.db.NewSelect().

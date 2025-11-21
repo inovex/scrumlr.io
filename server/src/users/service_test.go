@@ -835,6 +835,48 @@ func TestUpdateUser_NewLineUsername(t *testing.T) {
 	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
+func TestDeleteUser(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().Delete(mock.Anything, userId).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	err := userService.Delete(context.Background(), userId)
+
+	assert.Nil(t, err)
+}
+
+func TestDeleteUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	dbError := errors.New("database error")
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().Delete(mock.Anything, userId).
+		Return(dbError)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	err := userService.Delete(context.Background(), userId)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, common.InternalServerError, err)
+}
+
 func TestAvailableForKeyMigration(t *testing.T) {
 	userId := uuid.New()
 
