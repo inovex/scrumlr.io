@@ -22,7 +22,7 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/nats v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.40.0
-	github.com/uptrace/bun v1.2.15
+	github.com/uptrace/bun v1.2.16
 	github.com/uptrace/bun/dialect/pgdialect v1.2.15
 	github.com/uptrace/bun/extra/bundebug v1.2.15
 	github.com/uptrace/bun/extra/bunotel v1.2.15
