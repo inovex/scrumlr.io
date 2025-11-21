@@ -23,11 +23,12 @@ func (reaction *ReactionType) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	unmarshalledReaction := ReactionType(s)
-	switch unmarshalledReaction {
-	case Thinking, Heart, Like, Dislike, Joy, Celebration, Poop:
-		*reaction = unmarshalledReaction
-		return nil
+	
+	// Basic validation: non-empty, max 50 characters
+	if len(s) == 0 || len(s) > 50 {
+		return errors.New("invalid reaction: must be 1-50 characters")
 	}
-	return errors.New("invalid reaction")
+	
+	*reaction = ReactionType(s)
+	return nil
 }
