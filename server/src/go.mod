@@ -22,10 +22,10 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/nats v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.40.0
-	github.com/uptrace/bun v1.2.15
-	github.com/uptrace/bun/dialect/pgdialect v1.2.15
-	github.com/uptrace/bun/extra/bundebug v1.2.15
-	github.com/uptrace/bun/extra/bunotel v1.2.15
+	github.com/uptrace/bun v1.2.16
+	github.com/uptrace/bun/dialect/pgdialect v1.2.16
+	github.com/uptrace/bun/extra/bundebug v1.2.16
+	github.com/uptrace/bun/extra/bunotel v1.2.16
 	github.com/urfave/cli/v2 v2.27.7
 	github.com/weppos/publicsuffix-go v0.50.1
 	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0
