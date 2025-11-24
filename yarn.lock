@@ -1136,10 +1136,10 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.13", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.23.2", "@babel/runtime@^7.27.6", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
-  version "7.27.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.6.tgz#ec4070a04d76bae8ddbb10770ba55714a417b7c6"
-  integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.13", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.23.2", "@babel/runtime@^7.27.6", "@babel/runtime@^7.28.4", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+  version "7.28.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.4.tgz#a70226016fabe25c5783b2f22d3e1c9bc5ca3326"
+  integrity sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==
 
 "@babel/template@^7.22.15":
   version "7.22.15"
@@ -4277,10 +4277,10 @@ commander@2.x.x, commander@^2.20.0, commander@^2.7.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-commander@^14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-14.0.1.tgz#2f9225c19e6ebd0dc4404dd45821b2caa17ea09b"
-  integrity sha512-2JkV3gUZUVrbNA+1sjBOYLsMZ5cEEl8GTFP2a4AVz5hvasAMCQ1D2l2le/cX+pV4N6ZU17zjUahLpIXRrnWL8A==
+commander@^14.0.2:
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-14.0.2.tgz#b71fd37fe4069e4c3c7c13925252ada4eba14e8e"
+  integrity sha512-TywoWNNRbhoD0BXs1P3ZEScW8W5iKrnbithIl0YH+uCmBd0QpPOA8yc82DS3BIE5Ma6FnBVUsJ7wVUDz4dvOWQ==
 
 commander@^4.0.0:
   version "4.1.1"
@@ -4678,10 +4678,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-cypress@^15.6.0:
-  version "15.6.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.6.0.tgz#bde57b8ae9fbe6473a3324bb1d583437c299230d"
-  integrity sha512-Vqo66GG1vpxZ7H1oDX9umfmzA3nF7Wy80QAc3VjwPREO5zTY4d1xfQFNPpOWleQl9vpdmR2z1liliOcYlRX6rQ==
+cypress@^15.7.0:
+  version "15.7.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.7.0.tgz#4d2a317766360232920f63c7d11ea8f5d83bc358"
+  integrity sha512-1C81zKxnQckYm2XGi37rPV4rN0bzUoWhydhKdOyshJn5gJKszEx5as9VLSZI0jp0ye49QxmnbU4TtMpcD+OmGQ==
   dependencies:
     "@cypress/request" "^3.0.9"
     "@cypress/xvfb" "^1.2.4"
@@ -4719,7 +4719,6 @@ cypress@^15.6.0:
     process "^0.11.10"
     proxy-from-env "1.0.0"
     request-progress "^3.0.0"
-    semver "^7.7.1"
     supports-color "^8.1.1"
     systeminformation "5.27.7"
     tmp "~0.2.4"
@@ -5791,10 +5790,10 @@ eslint-plugin-jest@^25.3.0:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-jest@^29.1.0:
-  version "29.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-29.1.0.tgz#ba59f94bb303fe72417d54232842148f305ab6be"
-  integrity sha512-LabxXbASXVjguqL+kBHTPMf3gUeSqwH4fsrEyHTY/MCs42I/p9+ctg09SJpYiD8eGaIsP6GwYr5xW6xWS9XgZg==
+eslint-plugin-jest@^29.2.0:
+  version "29.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-29.2.0.tgz#284859d7a9650c823fe91a13cf2e707ca34dee1b"
+  integrity sha512-IeRNZN5FTRfWwxPuUlAeShUisPVHTQ+xqHRswxiiRjdH8o44xrwp2eluPjPWEwEE3UeLcsgihAB40ZOrzbudAg==
   dependencies:
     "@typescript-eslint/utils" "^8.0.0"
 
@@ -7136,12 +7135,12 @@ i18next-fs-backend@*, i18next-fs-backend@^2.6.1:
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.6.1.tgz#bb352278136f47599783308df29f0a1b6a0d08b6"
   integrity sha512-eYWTX7QT7kJ0sZyCPK6x1q+R63zvNKv2D6UdbMf15A8vNb2ZLyw4NNNZxPFwXlIv/U+oUtg8SakW6ZgJZcoqHQ==
 
-i18next@^25.6.2:
-  version "25.6.2"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.6.2.tgz#d6de1a4be58242c7f0f1436ab2fa66c8f87b2e29"
-  integrity sha512-0GawNyVUw0yvJoOEBq1VHMAsqdM23XrHkMtl2gKEjviJQSLVXsrPqsoYAxBEugW5AB96I2pZkwRxyl8WZVoWdw==
+i18next@^25.6.3:
+  version "25.6.3"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.6.3.tgz#984dc1cf305fe10392e4db9ba5c56406eb4f27ad"
+  integrity sha512-AEQvoPDljhp67a1+NsnG/Wb1Nh6YoSvtrmeEd24sfGn3uujCtXCF3cXpr7ulhMywKNFF7p3TX1u2j7y+caLOJg==
   dependencies:
-    "@babel/runtime" "^7.27.6"
+    "@babel/runtime" "^7.28.4"
 
 iconv-lite@0.4.24:
   version "0.4.24"
@@ -8581,12 +8580,12 @@ linkifyjs@^4.3.2:
   resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.3.2.tgz#d97eb45419aabf97ceb4b05a7adeb7b8c8ade2b1"
   integrity sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==
 
-lint-staged@^16.2.6:
-  version "16.2.6"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-16.2.6.tgz#760675e80f4b53337083d3f8bdecdd1f88079bf5"
-  integrity sha512-s1gphtDbV4bmW1eylXpVMk2u7is7YsrLl8hzrtvC70h4ByhcMLZFY01Fx05ZUDNuv1H8HO4E+e2zgejV1jVwNw==
+lint-staged@^16.2.7:
+  version "16.2.7"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-16.2.7.tgz#c4a635960c17b52fe774f1f40aee8ce1bd86531f"
+  integrity sha512-lDIj4RnYmK7/kXMya+qJsmkRFkGolciXjrsZ6PC25GdTfWOAWetR0ZbsNXRAj1EHHImRSalc+whZFg56F5DVow==
   dependencies:
-    commander "^14.0.1"
+    commander "^14.0.2"
     listr2 "^9.0.5"
     micromatch "^4.0.8"
     nano-spawn "^2.0.0"
@@ -10374,10 +10373,10 @@ react-hotkeys-hook@^4.6.1:
   resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.6.1.tgz#db9066c07377a1c8be067a238ab16e328266345a"
   integrity sha512-XlZpbKUj9tkfgPgT9gA+1p7Ey6vFIZHttUjPqpTdyT5nqQ8mHL7elxvSbaC+dpSiHUSmr21Ya1mDxBZG3aje4Q==
 
-react-i18next@^16.3.3:
-  version "16.3.3"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-16.3.3.tgz#098ff5443d0436a78692ca76303b2219aca32989"
-  integrity sha512-IaY2W+ueVd/fe7H6Wj2S4bTuLNChnajFUlZFfCTrTHWzGcOrUHlVzW55oXRSl+J51U8Onn6EvIhQ+Bar9FUcjw==
+react-i18next@^16.3.5:
+  version "16.3.5"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-16.3.5.tgz#3a129dd05236cc979343b2870872d48cd48878f6"
+  integrity sha512-F7Kglc+T0aE6W2rO5eCAFBEuWRpNb5IFmXOYEgztjZEuiuSLTe/xBIEG6Q3S0fbl8GXMNo+Q7gF8bpokFNWJww==
   dependencies:
     "@babel/runtime" "^7.27.6"
     html-parse-stringify "^3.0.1"
@@ -10993,10 +10992,10 @@ sass-loader@^12.3.0:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.94.1:
-  version "1.94.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.94.1.tgz#79f726f2bdc347a387a954d4c967ac73efdb6676"
-  integrity sha512-/YVm5FRQaRlr3oNh2LLFYne1PdPlRZGyKnHh1sLleOqLcohTR4eUUvBjBIqkl1fEXd1MGOHgzJGJh+LgTtV4KQ==
+sass@^1.94.2:
+  version "1.94.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.94.2.tgz#198511fc6fdd2fc0a71b8d1261735c12608d4ef3"
+  integrity sha512-N+7WK20/wOr7CzA2snJcUSSNTCzeCGUTFY3OgeQP3mZ1aj9NMQ0mSTXwlrnd89j33zzQJGqIN52GIOmYrfq46A==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"

@@ -15,17 +15,17 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/markbates/goth v1.82.0
 	github.com/nats-io/nats.go v1.47.0
-	github.com/redis/go-redis/extra/redisotel/v9 v9.16.0
-	github.com/redis/go-redis/v9 v9.16.0
+	github.com/redis/go-redis/extra/redisotel/v9 v9.17.0
+	github.com/redis/go-redis/v9 v9.17.0
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/nats v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.40.0
-	github.com/uptrace/bun v1.2.15
-	github.com/uptrace/bun/dialect/pgdialect v1.2.15
-	github.com/uptrace/bun/extra/bundebug v1.2.15
-	github.com/uptrace/bun/extra/bunotel v1.2.15
+	github.com/uptrace/bun v1.2.16
+	github.com/uptrace/bun/dialect/pgdialect v1.2.16
+	github.com/uptrace/bun/extra/bundebug v1.2.16
+	github.com/uptrace/bun/extra/bunotel v1.2.16
 	github.com/urfave/cli/v2 v2.27.7
 	github.com/weppos/publicsuffix-go v0.50.1
 	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0
@@ -43,8 +43,8 @@ require (
 	go.opentelemetry.io/otel/sdk/log v0.14.0
 	go.opentelemetry.io/otel/sdk/metric v1.38.0
 	go.opentelemetry.io/otel/trace v1.38.0
-	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.44.0
+	go.uber.org/zap v1.27.1
+	golang.org/x/crypto v0.45.0
 	google.golang.org/grpc v1.77.0
 )
 
@@ -117,7 +117,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
-	github.com/redis/go-redis/extra/rediscmd/v9 v9.16.0 // indirect
+	github.com/redis/go-redis/extra/rediscmd/v9 v9.17.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.6 // indirect
