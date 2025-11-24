@@ -627,7 +627,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			attribute.String("scrumlr.sessions.service.context.editable.user", user.String()),
 		)
 
-		isMod, err := service.sessionService.ModeratorSessionExists(r.Context(), board, user)
+		isMod, err := service.sessionService.ModeratorSessionExists(ctx, board, user)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check session")
 			span.RecordError(err)
@@ -636,7 +636,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			return
 		}
 
-		settings, err := service.Get(r.Context(), board)
+		settings, err := service.Get(ctx, board)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get board settings")
 			span.RecordError(err)
@@ -653,7 +653,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			return
 		}
 
-		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.IsLocked)
+		boardEditable := context.WithValue(ctx, identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
 }
