@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Database} from "emoji-picker-element";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
@@ -34,6 +34,7 @@ declare global {
 
 const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   const ref = useRef<HTMLElement>(null);
+  const [isReady, setIsReady] = useState(false);
   const {i18n} = useTranslation();
   const dispatch = useAppDispatch();
   const currentSkinTone = useAppSelector((state) => state.skinTone.name);
@@ -41,21 +42,20 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   const lang = i18n.language.split("-")[0];
   const dataSourceUrl = `/emoji-data/${lang}.json`;
 
+  const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
+  const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
+
   useEffect(() => {
-    const element = ref.current as unknown as {skinTone: number};
-    const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
-    const skinToneIndex = skinToneMapping.indexOf(currentSkinTone);
+    // Update the internal database so the picker loads the correct skin tone on initialization
+    const database = new Database({dataSource: dataSourceUrl});
+    database.setPreferredSkinTone(skinToneIndex).then(() => {
+      setIsReady(true);
+    });
 
-    if (skinToneIndex !== -1) {
-      // Update the internal database so the picker loads the correct skin tone on initialization
-      const database = new Database({dataSource: dataSourceUrl});
-      database.setPreferredSkinTone(skinToneIndex);
-
-      if (element) {
-        element.skinTone = skinToneIndex;
-      }
-    }
-  }, [currentSkinTone, dataSourceUrl]);
+    return () => {
+      database.close();
+    };
+  }, [skinToneIndex, dataSourceUrl]);
 
   useEffect(() => {
     const element = ref.current;
@@ -69,11 +69,11 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
 
     const handleSkinToneChange = (event: Event) => {
       const customEvent = event as CustomEvent<SkinToneChangeData>;
-      const skinToneIndex = customEvent.detail.skinTone;
-      const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
+      const newSkinToneIndex = customEvent.detail.skinTone;
+      const mapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
 
-      if (skinToneIndex >= 0 && skinToneIndex < skinToneMapping.length) {
-        dispatch(setSkinTone(skinToneMapping[skinToneIndex]));
+      if (newSkinToneIndex >= 0 && newSkinToneIndex < mapping.length) {
+        dispatch(setSkinTone(mapping[newSkinToneIndex]));
       }
     };
 
@@ -88,7 +88,11 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
         element.removeEventListener("skin-tone-change", handleSkinToneChange);
       }
     };
-  }, [onEmojiClick, dispatch]);
+  }, [onEmojiClick, dispatch, isReady]);
+
+  if (!isReady) {
+    return undefined;
+  }
 
   return <emoji-picker ref={ref} data-source={dataSourceUrl} {...props} />;
 };
