@@ -27,7 +27,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string}, HTMLElement>;
+      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string; locale?: string}, HTMLElement>;
     }
   }
 }
@@ -47,7 +47,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
 
   useEffect(() => {
     // Update the internal database so the picker loads the correct skin tone on initialization
-    const database = new Database({dataSource: dataSourceUrl});
+    const database = new Database({dataSource: dataSourceUrl, locale: lang});
     database.setPreferredSkinTone(skinToneIndex).then(() => {
       setIsReady(true);
     });
@@ -55,10 +55,30 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
     return () => {
       database.close();
     };
-  }, [skinToneIndex, dataSourceUrl]);
+  }, [skinToneIndex, dataSourceUrl, lang]);
 
   useEffect(() => {
     const element = ref.current;
+
+    if (element && lang !== "en") {
+      let i18nPromise;
+      if (lang === "de") {
+        i18nPromise = import("emoji-picker-element/i18n/de");
+      } else if (lang === "fr") {
+        i18nPromise = import("emoji-picker-element/i18n/fr");
+      }
+
+      if (i18nPromise) {
+        i18nPromise
+          .then((module) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (element as any).i18n = module.default;
+          })
+          .catch(() => {
+            // Fallback to English if translation is missing
+          });
+      }
+    }
 
     const handleEmojiClick = (event: Event) => {
       const customEvent = event as CustomEvent<EmojiClickData>;
@@ -88,13 +108,13 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
         element.removeEventListener("skin-tone-change", handleSkinToneChange);
       }
     };
-  }, [onEmojiClick, dispatch, isReady]);
+  }, [onEmojiClick, dispatch, isReady, lang]);
 
   if (!isReady) {
-    return undefined;
+    return null;
   }
 
-  return <emoji-picker ref={ref} data-source={dataSourceUrl} {...props} />;
+  return <emoji-picker ref={ref} data-source={dataSourceUrl} locale={lang} {...props} />;
 };
 
 export default EmojiPicker;
