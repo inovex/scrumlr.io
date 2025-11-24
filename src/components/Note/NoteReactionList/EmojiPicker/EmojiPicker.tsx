@@ -1,10 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import "emoji-picker-element";
+import {useTranslation} from "react-i18next";
 
-/**
- * 1. Define the shape of the data returned by the emoji picker.
- * Based on emoji-picker-element documentation.
- */
 export interface EmojiClickData {
   annotation: string;
   order: number;
@@ -14,68 +11,65 @@ export interface EmojiClickData {
   unicode: string;
 }
 
-/**
- * 2. Define the Props for the React Wrapper.
- * We extend HTMLAttributes to allow passing styles, classNames, and ids.
- */
-interface EmojiPickerProps extends React.HTMLAttributes<HTMLElement> {
-  onEmojiClick?: (emoji: EmojiClickData) => void;
-  /** Optional: 'light' | 'dark' | 'auto' */
-  theme?: string;
+export interface SkinToneChangeData {
+  skinTone: number;
 }
 
-/**
- * 3. Global Augmentation
- * This tells TypeScript that <emoji-picker> is a valid HTML tag.
- */
+interface EmojiPickerProps extends React.HTMLAttributes<HTMLElement> {
+  onEmojiClick?: (emoji: EmojiClickData) => void;
+  onSkinToneChange?: (skinTone: number) => void;
+}
+
+// This tells TypeScript that <emoji-picker> is a valid HTML tag.
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string}, HTMLElement>;
     }
   }
 }
 
-/**
- * 4. The Component Implementation
- */
-const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, theme, ...props}) => {
+const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, onSkinToneChange, ...props}) => {
   const ref = useRef<HTMLElement>(null);
+  const {i18n} = useTranslation();
+
+  const lang = i18n.language.split("-")[0];
+  const dataSourceUrl = `/emoji-data/${lang}.json`;
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
 
-    // Event Handler
     const handleEmojiClick = (event: Event) => {
-      // We must cast the event to CustomEvent to access .detail
       const customEvent = event as CustomEvent<EmojiClickData>;
-
+      console.log(customEvent.detail.unicode);
       if (onEmojiClick) {
         onEmojiClick(customEvent.detail);
       }
     };
 
-    // Attach Listener
-    element.addEventListener("emoji-click", handleEmojiClick);
-
-    // Cleanup
-    return () => {
-      element.removeEventListener("emoji-click", handleEmojiClick);
+    const handleSkinToneChange = (event: Event) => {
+      const customEvent = event as CustomEvent<SkinToneChangeData>;
+      console.log(customEvent.detail.skinTone);
+      if (onSkinToneChange) {
+        onSkinToneChange(customEvent.detail.skinTone);
+      }
     };
-  }, [onEmojiClick]);
 
-  // Apply the theme if provided, otherwise default behavior
-  useEffect(() => {
-    const element = ref.current;
-    if (element && theme) {
-      // Many web components use class manipulation for theming
-      if (theme === "dark") element.classList.add("dark");
-      else element.classList.remove("dark");
+    if (element) {
+      element.addEventListener("emoji-click", handleEmojiClick);
+      element.addEventListener("skin-tone-change", handleSkinToneChange);
     }
-  }, [theme]);
 
-  return <emoji-picker ref={ref} {...props} />;
+    return () => {
+      if (element) {
+        element.removeEventListener("emoji-click", handleEmojiClick);
+        element.removeEventListener("skin-tone-change", handleSkinToneChange);
+      }
+    };
+  }, [onEmojiClick, onSkinToneChange]);
+
+  return <emoji-picker ref={ref} data-source={dataSourceUrl} {...props} />;
 };
 
 export default EmojiPicker;
