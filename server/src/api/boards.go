@@ -16,7 +16,6 @@ import (
   "scrumlr.io/server/boards"
   "scrumlr.io/server/votings"
 
-  "scrumlr.io/server/"
   "scrumlr.io/server/notes"
 
   "scrumlr.io/server/identifiers"
