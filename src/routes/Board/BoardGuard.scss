@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/styles";
 
 .board-guard {
   height: 100%;
@@ -9,7 +9,7 @@
 }
 
 .board-guard__denied-link {
-  color: $pink--500;
+  color: styles.$pink--500;
   transition: all 0.08s ease-out;
 
   &:hover {
@@ -19,15 +19,15 @@
 }
 
 .board-guard__info {
-  font-size: $text-size--large;
+  font-size: styles.$text-size--large;
 }
 
 [theme="dark"] {
   .board-guard {
-    background-color: $navy--600;
+    background-color: styles.$navy--600;
   }
 
   .board-guard__info {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 }

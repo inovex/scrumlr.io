@@ -1,4 +1,4 @@
-@import "src/constants/style";
+@use "constants/styles";
 
 .login-providers {
   display: flex;
@@ -16,21 +16,21 @@
   width: 48px;
   min-width: auto;
   padding: 0;
-  background: $gray--300;
-  border-radius: $rounded--full;
+  background: styles.$gray--300;
+  border-radius: styles.$rounded--full;
 }
 .login-providers__button:not(:first-child) > span {
   display: none;
 }
 
 .login-providers__icon {
-  height: $icon--medium;
-  width: $icon--medium;
-  flex: 0 0 $icon--medium;
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
+  flex: 0 0 styles.$icon--medium;
 }
 
 [theme="dark"] {
   .login-providers__button:not(:first-child) {
-    background: $gray--700;
+    background: styles.$gray--700;
   }
 }

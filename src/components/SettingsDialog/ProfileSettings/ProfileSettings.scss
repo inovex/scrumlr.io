@@ -1,35 +1,36 @@
-@import "src/constants/style";
-@import "../SettingsDialog";
+@use "constants/styles";
+@use "constants/mixins";
+@use "../SettingsDialog";
 
 .profile-settings {
   &__container {
     display: flex;
     flex-direction: column;
-    gap: $spacing--xl;
+    gap: styles.$spacing--xl;
     height: 100%;
     width: 100%;
-    max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
+    max-width: calc(100vw - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
 
     @media screen and (min-width: 450px) {
-      max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+      max-width: calc(380px - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
     }
 
     @media screen and (min-width: 920px) {
-      max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+      max-width: calc(544px - (2 * #{SettingsDialog.$settings-dialog-container--sides-large}));
     }
 
     &-wrapper {
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: $spacing--xs;
-      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
-      padding-bottom: $settings-dialog-container--bottom;
+      padding-right: styles.$spacing--xs;
+      margin-right: calc(-1 * (#{styles.$spacing--xs} + 10px));
+      padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
 
-      @include scrollbar();
+      @include mixins.scrollbar();
 
       @media screen and (min-width: 920px) {
-        padding-right: $spacing--lg;
-        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
+        padding-right: styles.$spacing--lg;
+        margin-right: calc(-1 * (#{styles.$spacing--lg} + 10px));
       }
 
       &:focus-visible {

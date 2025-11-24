@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/styles";
 
 .new-board__wrapper {
   display: flex;
@@ -12,8 +12,8 @@
 
 .new-board {
   position: relative;
-  color: $navy--900;
-  padding: $spacing--base;
+  color: styles.$navy--900;
+  padding: styles.$spacing--base;
 
   a {
     outline: none;
@@ -25,11 +25,11 @@
     }
 
     &:hover svg {
-      filter: $brighten--strongly;
+      filter: styles.$brighten--strongly;
     }
 
     &:focus-visible > svg {
-      border: 1px solid $blue--500;
+      border: 1px solid styles.$blue--500;
     }
   }
 }
@@ -64,16 +64,16 @@
   width: 1px;
 
   &:focus-visible + .new-board__mode-label {
-    box-shadow: 0 0 0 2px $gray--700;
+    box-shadow: 0 0 0 2px styles.$gray--700;
   }
 }
 
 .new-board__mode-input:checked + .new-board__mode-label {
-  border: 1px solid $blue--500;
+  border: 1px solid styles.$blue--500;
 }
 
 .new-board__mode-input + .new-board__mode-label:hover {
-  box-shadow: 0 4px 8px 2px rgba($blue--500, 0.3);
+  box-shadow: 0 4px 8px 2px rgba(styles.$blue--500, 0.3);
   transform: scale(1.02);
 }
 
@@ -83,20 +83,20 @@
   align-items: center;
   cursor: pointer;
 
-  color: $navy--900;
-  background: $gray--000;
+  color: styles.$navy--900;
+  background: styles.$gray--000;
   border-radius: 16px;
   border: 1px solid transparent;
   transition: all 0.08s ease-out;
   min-height: 76px;
 
-  padding: $spacing--base;
+  padding: styles.$spacing--base;
 
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 
-  box-shadow: 0 2px 6px 4px rgba($navy--900, 0.1);
+  box-shadow: 0 2px 6px 4px rgba(styles.$navy--900, 0.1);
 }
 
 .new-board__mode-name {
@@ -107,7 +107,7 @@
 .new-board__mode-description {
   margin-top: 0.4em;
 
-  font-size: $text-size--small;
+  font-size: styles.$text-size--small;
   text-align: center;
 
   text-overflow: ellipsis;
@@ -122,39 +122,39 @@
   justify-content: center;
   width: 100%;
   bottom: 0;
-  padding: $spacing--base;
-  background: linear-gradient(0deg, $gray--000 0%, $gray--000 80%, rgba(0, 0, 0, 0) 100%);
+  padding: styles.$spacing--base;
+  background: linear-gradient(0deg, styles.$gray--000 0%, styles.$gray--000 80%, rgba(0, 0, 0, 0) 100%);
 }
 
 .new-board__action + .new-board__action {
-  margin-left: $spacing--base;
+  margin-left: styles.$spacing--base;
 }
 
 [theme="dark"] {
   .new-board {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 
   .new-board__mode-label {
-    color: $gray--000;
-    background: $navy--500;
-    box-shadow: 0 2px 6px 4px rgba($navy--900, 0.2);
+    color: styles.$gray--000;
+    background: styles.$navy--500;
+    box-shadow: 0 2px 6px 4px rgba(styles.$navy--900, 0.2);
   }
 
   .new-board__mode-input:focus-visible + .new-board__mode-label {
-    box-shadow: 0 0 0 2px $gray--000;
+    box-shadow: 0 0 0 2px styles.$gray--000;
   }
 
   .new-board__mode-input + .new-board__mode-label:hover {
-    box-shadow: 0 4px 8px 2px rgba($blue--500, 0.1);
+    box-shadow: 0 4px 8px 2px rgba(styles.$blue--500, 0.1);
   }
 
   .new-board__actions {
-    background: linear-gradient(0deg, $navy--600 0%, $navy--600 80%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(0deg, styles.$navy--600 0%, styles.$navy--600 80%, rgba(0, 0, 0, 0) 100%);
   }
 }
 
-@media #{$tablet} {
+@media #{styles.$tablet} {
   .new-board__mode-selection {
     grid-template-columns: 1fr 1fr;
   }

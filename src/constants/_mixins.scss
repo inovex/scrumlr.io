@@ -1,0 +1,170 @@
+@use "sass:list";
+@use "sass:color";
+
+@use "styles";
+@use "colors";
+
+// tooltip
+@mixin tooltip {
+  z-index: styles.$request-z-index;
+  border-radius: styles.$rounded--large;
+  max-width: 80%;
+  font-size: styles.$text--sm;
+}
+
+@mixin tooltip--light {
+  @include tooltip;
+  color: colors.$navy--900;
+  background-color: colors.$gray--300;
+}
+
+@mixin tooltip--dark {
+  @include tooltip;
+  color: colors.$gray--000;
+  background-color: colors.$navy--200;
+}
+
+// flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// positioning
+@mixin inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+// helper function for inset-border mixin
+@function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color--light)) {
+  $props: ();
+  $props: list.append($props, if($left, inset #{2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($right, inset #{-2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($top, inset 0 #{2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  $props: list.append($props, if($bottom, inset 0 #{-2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  @return $props;
+}
+
+@mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color--light)) {
+  box-shadow: inset-border($left, $right, $top, $bottom, $color);
+}
+
+// scrollbar
+@mixin scrollbar() {
+  scrollbar-width: auto;
+
+  scrollbar-color: var(--accent-color--200) transparent;
+
+  ::-webkit-scrollbar {
+    background-color: transparent;
+  }
+
+  // ampersand to correctly scope the rule
+  [theme="dark"] & {
+    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
+  }
+}
+
+// this mixin is used to decrease an element's padding,
+// in order to keep it the same size if the borders change.
+@mixin compensate-padding($padding, $decrement) {
+  $new-padding: ();
+  @each $value in $padding {
+    $new-padding: list.append($new-padding, $value - $decrement);
+  }
+  padding: $new-padding;
+}
+
+// add some default css for hover, focus, and active states.
+@mixin default-states($border-size: 1.5px, $padding, $compensate-padding: true) {
+  &:hover {
+    box-shadow: 0 3px 12px 0 color.change(colors.$navy--700, $alpha: 0.12);
+  }
+
+  &:focus,
+  &:focus-within {
+    border: $border-size solid colors.$blue--500;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  &:active {
+    border: $border-size solid colors.$navy--400;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  [theme="dark"] & {
+    &:focus,
+    &:focus-within {
+      border: $border-size solid colors.$blue--400;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+
+    &:active {
+      border: $border-size solid colors.$gray--000;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+  }
+}
+
+@mixin invalid-state($border-size: 1.5px, $padding, $compensate-padding: true) {
+  border: $border-size solid colors.$critical-carmine--light;
+  @if $compensate-padding == true {
+    @include compensate-padding($padding, $border-size);
+  }
+
+  [theme="dark"] & {
+    border-color: colors.$critical-carmine--dark;
+  }
+}
+
+@function getLightHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: -10%);
+}
+
+@function getDarkHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: 10%);
+}
+
+// Mixin for light column stripes
+@mixin column-stripes-light {
+  background-image: repeating-linear-gradient(
+    45deg,
+    colors.$gray--100 calc(0px + var(--stripe-offset, 0px)),
+    colors.$gray--100 calc(20px + var(--stripe-offset, 0px)),
+    rgba(var(--accent-color--light-rgb), 0.2) calc(20px + var(--stripe-offset, 0px)),
+    rgba(var(--accent-color--light-rgb), 0.2) calc(40px + var(--stripe-offset, 0px))
+  );
+}
+
+// Mixin for dark column stripes
+@mixin column-stripes-dark {
+  background-image: repeating-linear-gradient(
+    45deg,
+    colors.$navy--600 calc(0px + var(--stripe-offset, 0px)),
+    colors.$navy--600 calc(20px + var(--stripe-offset, 0px)),
+    rgba(var(--accent-color--dark-rgb), 0.04) calc(20px + var(--stripe-offset, 0px)),
+    rgba(var(--accent-color--dark-rgb), 0.04) calc(40px + var(--stripe-offset, 0px))
+  );
+}
+
+// Mixin for light box shadow
+@mixin box-shadow-light {
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
+}
+
+// Mixin for dark box shadow
+@mixin box-shadow-dark {
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}

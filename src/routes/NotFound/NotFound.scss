@@ -1,12 +1,12 @@
 @use "sass:color";
-@import "src/constants/style";
+@use "constants/styles";
 
 .not-found__root {
   height: 100%;
   width: 100%;
-  padding: $spacing--xs 0 0 $spacing--lg;
+  padding: styles.$spacing--xs 0 0 styles.$spacing--lg;
   overflow-x: hidden;
-  background: linear-gradient(320deg, color.change($blue--500, $alpha: 0.2), color.change($gray--000, $alpha: 0.3));
+  background: linear-gradient(320deg, color.change(styles.$blue--500, $alpha: 0.2), color.change(styles.$gray--000, $alpha: 0.3));
 }
 
 .not-found__background {
@@ -48,38 +48,38 @@
   flex-direction: column;
   align-items: center;
 
-  padding: 0 $spacing--base;
+  padding: 0 styles.$spacing--base;
 
-  z-index: $base-z-index; // layer content over background, using any z-index works
+  z-index: styles.$base-z-index; // layer content over background, using any z-index works
 }
 
 .not-found__title {
   font-weight: 700;
-  font-size: $text--2xl;
+  font-size: styles.$text--2xl;
 }
 
 .not-found__description {
   margin-top: 12px;
 
   font-weight: 400;
-  font-size: $text--md;
-  line-height: $line-height--large;
+  font-size: styles.$text--md;
+  line-height: styles.$line-height--large;
 }
 
 .not-found__return-button {
-  margin-top: $spacing--base;
+  margin-top: styles.$spacing--base;
 
-  padding: $spacing--base $spacing--xl;
-  color: $gray--000;
+  padding: styles.$spacing--base styles.$spacing--xl;
+  color: styles.$gray--000;
   background: #ff0069;
 
   font-weight: 700;
-  font-size: $text--base;
-  letter-spacing: $letter-spacing--medium;
+  font-size: styles.$text--base;
+  letter-spacing: styles.$letter-spacing--medium;
 
   border: none;
-  border-radius: $rounded--full;
-  box-shadow: 0 5px 4px color.change($pink--500, $alpha: 0.25);
+  border-radius: styles.$rounded--full;
+  box-shadow: 0 5px 4px color.change(styles.$pink--500, $alpha: 0.25);
 
   cursor: pointer;
 }
@@ -98,17 +98,17 @@
 // default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
 @media screen and (min-height: 600px) {
   .not-found__description {
-    margin-top: $spacing--base;
+    margin-top: styles.$spacing--base;
   }
 
   .not-found__return-button {
-    margin-top: $spacing--xl + $spacing--xs; // 40px
+    margin-top: styles.$spacing--xl + styles.$spacing--xs; // 40px
   }
 }
 
 @media screen and (min-width: 450px) {
   .not-found__root {
-    padding: $spacing--base;
+    padding: styles.$spacing--base;
   }
 
   .not-found__background-form {
@@ -117,15 +117,15 @@
   }
 
   .not-found__main {
-    gap: $spacing--lg;
+    gap: styles.$spacing--lg;
   }
 
   .not-found__title {
-    font-size: $text--3xl;
+    font-size: styles.$text--3xl;
   }
 
   .not-found__description {
-    font-size: $text--lg;
+    font-size: styles.$text--lg;
     line-height: 40px;
   }
 }
@@ -179,14 +179,14 @@
   .not-found__root {
     background: linear-gradient(
       320deg,
-      color.change($blue--500, $lightness: 12%, $saturation: 25%) 6%,
-      color.change($blue--500, $lightness: 14%, $saturation: 35%) 30%,
-      color.change($blue--500, $lightness: 37%, $saturation: 23%) 60%,
-      color.change($blue--500, $lightness: 56%, $saturation: 28%) 80%
+      color.change(styles.$blue--500, $lightness: 12%, $saturation: 25%) 6%,
+      color.change(styles.$blue--500, $lightness: 14%, $saturation: 35%) 30%,
+      color.change(styles.$blue--500, $lightness: 37%, $saturation: 23%) 60%,
+      color.change(styles.$blue--500, $lightness: 56%, $saturation: 28%) 80%
     );
   }
 
   .not-found__content {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 }

@@ -1,4 +1,4 @@
-@import "constants/style";
+@use "constants/styles";
 
 .password-modal {
   position: absolute;
@@ -17,10 +17,10 @@
 }
 
 .password-modal__container {
-  padding: $spacing--lg;
-  background: $gray--000;
+  padding: styles.$spacing--lg;
+  background: styles.$gray--000;
   border-radius: 0.5em;
-  box-shadow: 0 10px 20px rgba($navy--900, 0.2);
+  box-shadow: 0 10px 20px rgba(styles.$navy--900, 0.2);
   width: 30em;
 }
 
@@ -28,7 +28,7 @@
   position: relative;
 }
 .password-modal__close {
-  width: $icon--large;
+  width: styles.$icon--large;
 }
 
 .password-modal__close:hover {
@@ -41,7 +41,7 @@
 
 [theme="dark"] {
   .password-modal__container {
-    background: $navy--600;
+    background: styles.$navy--600;
     color: white;
   }
 }
