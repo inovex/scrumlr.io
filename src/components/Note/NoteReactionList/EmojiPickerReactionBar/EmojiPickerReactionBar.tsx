@@ -1,14 +1,12 @@
 import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
-import EmojiPicker, {EmojiClickData, EmojiStyle, Emoji, Theme as EmojiPickerTheme} from "emoji-picker-react";
 import classNames from "classnames";
 import {buildQuickReactions, isDefaultEmoji, ReactionType, EmojiData} from "store/features/reactions/types";
-import {useAppSelector} from "store";
-import {Theme} from "store/features/view/types";
 import {ReactionModeled} from "../NoteReactionList";
 import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
 import "./EmojiPickerReactionBar.scss";
+import "emoji-picker-element";
 
 interface EmojiPickerReactionBarProps {
   closeReactionBar: () => void;
@@ -26,11 +24,6 @@ const getPickerPosition = (buttonRect: DOMRect) => {
     left: Math.max(margin, Math.min(buttonRect.left + window.scrollX, window.innerWidth - width - margin)),
   };
 };
-
-const convertToEmojiPickerTheme = (appTheme: Theme): EmojiPickerTheme =>
-  // emoji-picker-react supports "light", "dark", and "auto"
-  // Our app uses the same values, so we can directly cast
-  appTheme as EmojiPickerTheme;
 
 const RECENT_EMOJIS_KEY = "scrumlr-recent-emojis";
 const MAX_RECENT_EMOJIS = 3;
@@ -60,7 +53,6 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
   const [recentEmojis, setRecentEmojis] = useState<string[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const theme = useAppSelector((state) => state.view.theme);
 
   // Load recent emojis on component mount
   useEffect(() => {
@@ -73,6 +65,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
 
     // Add to recent emojis if it's not a default emoji
     if (!isDefaultEmoji(reactionType)) {
+      console.log(reactionType);
       addRecentEmoji(reactionType);
       setRecentEmojis(getRecentEmojis());
     }
@@ -81,15 +74,12 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     props.handleClickReaction(e, reactionType);
   };
 
-  const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
+  const handleEmojiClick = (event: MouseEvent, emoji: string) => {
     event.preventDefault();
     event.stopPropagation(); // Prevent note modal from opening
 
-    // Use the actual emoji character as the reaction type
-    const reactionType = emojiData.emoji;
-
     // Add to recent emojis
-    addRecentEmoji(reactionType);
+    addRecentEmoji(emoji);
     setRecentEmojis(getRecentEmojis());
 
     props.closeReactionBar();
@@ -100,7 +90,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
       stopPropagation: () => {},
     } as React.MouseEvent<HTMLButtonElement>;
 
-    props.handleClickReaction(syntheticEvent, reactionType);
+    props.handleClickReaction(syntheticEvent, emoji);
   };
 
   // Build quick reactions using clean utility function
@@ -153,7 +143,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
                 onClick={(e) => handleClickQuickReaction(e, reaction.type)}
               >
-                {reaction.unified ? <Emoji unified={reaction.unified} size={20} emojiStyle={EmojiStyle.NATIVE} /> : <span style={{fontSize: "20px"}}>{reaction.emoji}</span>}
+                {reaction.emoji}
               </button>
             );
           })}
@@ -183,10 +173,11 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
                 left: `${pickerPosition.left}px`,
-                zIndex: 10000,
+                zIndex: 100,
               }}
             >
-              <EmojiPicker
+              <emoji-picker />
+              {/* <EmojiPicker
                 onEmojiClick={handleEmojiClick}
                 width={320}
                 height={350}
@@ -196,7 +187,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 lazyLoadEmojis
                 emojiStyle={EmojiStyle.NATIVE}
                 theme={convertToEmojiPickerTheme(theme)}
-              />
+              /> */}
             </div>
           </ReactFocusLock>,
           document.body

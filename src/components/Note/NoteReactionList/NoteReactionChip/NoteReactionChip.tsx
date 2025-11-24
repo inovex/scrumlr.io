@@ -5,7 +5,6 @@ import {uniqueId} from "underscore";
 import {getEmojiDisplay, ReactionType, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import {Emoji, EmojiStyle} from "emoji-picker-react";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
@@ -51,7 +50,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{legacyReaction ? <Emoji unified={legacyReaction.unified} size={16} emojiStyle={EmojiStyle.NATIVE} /> : reactionDisplay}</div>
+        <div className="note-reaction-chip__reaction">{legacyReaction?.emoji}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>

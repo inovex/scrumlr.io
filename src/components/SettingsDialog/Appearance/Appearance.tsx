@@ -10,6 +10,7 @@ import {NotificationSettings} from "../Components/NotificationSettings";
 import {BoardReactionsSettings} from "../Components/BoardReactionsSettings";
 import "./Appearance.scss";
 import {SnowfallSettings} from "../Components/SnowfallSettings";
+import {SkinToneSelector} from "../Components/SkinToneSelector";
 
 export const Appearance = () => {
   const {t} = useTranslation();
@@ -30,6 +31,7 @@ export const Appearance = () => {
         {isDecemberOrJanuary && <SnowfallSettings />}
         <NotificationSettings />
         <BoardReactionsSettings />
+        <SkinToneSelector />
         <LanguageSettingsDropdown />
       </div>
     </div>
