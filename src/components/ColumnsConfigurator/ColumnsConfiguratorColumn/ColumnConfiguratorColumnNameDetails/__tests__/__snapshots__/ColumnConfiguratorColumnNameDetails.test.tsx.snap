@@ -47,11 +47,11 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
         Default Description
       </textarea>
       <div
-        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
+        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--transparent"
       >
         <button
           aria-label="Cancel"
-          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--cancel mini-menu__item"
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
@@ -63,7 +63,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
         </button>
         <button
           aria-label="Save"
-          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--save mini-menu__item"
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
@@ -104,11 +104,11 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
         Default Description
       </textarea>
       <div
-        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
+        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--transparent"
       >
         <button
           aria-label="Cancel"
-          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--cancel mini-menu__item"
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
@@ -120,7 +120,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
         </button>
         <button
           aria-label="Save"
-          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--save mini-menu__item"
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"

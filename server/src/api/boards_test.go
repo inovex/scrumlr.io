@@ -11,6 +11,7 @@ import (
 
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 
 	"scrumlr.io/server/boards"
 
@@ -75,7 +76,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 			color := columns.Color("backlog-blue")
 			ownerID := uuid.New()
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(` {
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(` {
        "accessPolicy": "%s",
        "columns": [
          {
@@ -133,7 +134,7 @@ func (suite *BoardTestSuite) TestDeleteBoard() {
 			s.boards = boardMock
 			boardID := uuid.New()
 
-			req := NewTestRequestBuilder("POST", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 			boardMock.EXPECT().Delete(mock.Anything, boardID).Return(te.err)
 
@@ -174,7 +175,7 @@ func (suite *BoardTestSuite) TestGetBoards() {
 			secondBoard := suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)
 			boardIDs := []uuid.UUID{firstBoard.ID, secondBoard.ID}
 
-			req := NewTestRequestBuilder("POST", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.UserIdentifier, userID)
 
 			boardMock.EXPECT().GetBoards(mock.Anything, userID).Return(boardIDs, te.err)
@@ -226,7 +227,7 @@ func (suite *BoardTestSuite) TestGetBoard() {
 			boardDescription := "Test Description"
 			board := suite.createBoard(&boardName, &boardDescription, "", nil, nil)
 
-			req := NewTestRequestBuilder("POST", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
 			boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, te.err)
@@ -273,7 +274,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			boardID := uuid.New()
 			userID := uuid.New()
 
-			req := NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), strings.NewReader(`{"passphrase": "123"}`)).
+			req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), strings.NewReader(`{"passphrase": "123"}`)).
 				AddToContext(identifiers.UserIdentifier, userID)
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
@@ -339,7 +340,7 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 				ID:           boardID,
 			}
 
-			req := NewTestRequestBuilder("PUT", fmt.Sprintf("/%s", boardID), strings.NewReader(fmt.Sprintf(`{
+			req := technical_helper.NewTestRequestBuilder("PUT", fmt.Sprintf("/%s", boardID), strings.NewReader(fmt.Sprintf(`{
         "id": "%s",
         "name": "%s",
         "description": "%s",
@@ -379,7 +380,7 @@ func (suite *BoardTestSuite) TestSetTimer() {
 
 			minutes := uint8(4)
 
-			req := NewTestRequestBuilder("PUT", "/timer", strings.NewReader(fmt.Sprintf(`{"minutes": %d}`, minutes))).
+			req := technical_helper.NewTestRequestBuilder("PUT", "/timer", strings.NewReader(fmt.Sprintf(`{"minutes": %d}`, minutes))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
 			boardMock.EXPECT().SetTimer(mock.Anything, boardID, minutes).Return(new(boards.Board), te.err)
@@ -412,7 +413,7 @@ func (suite *BoardTestSuite) TestDeleteTimer() {
 			s.boards = boardMock
 			boardID := uuid.New()
 
-			req := NewTestRequestBuilder("DEL", "/timer", nil).
+			req := technical_helper.NewTestRequestBuilder("DEL", "/timer", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
 			boardMock.EXPECT().DeleteTimer(mock.Anything, boardID).Return(new(boards.Board), tt.err)
@@ -445,7 +446,7 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 			s.boards = boardMock
 			boardID := uuid.New()
 
-			req := NewTestRequestBuilder("POST", "/timer/increment", nil).
+			req := technical_helper.NewTestRequestBuilder("POST", "/timer/increment", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
 			boardMock.EXPECT().IncrementTimer(mock.Anything, boardID).Return(new(boards.Board), tt.err)

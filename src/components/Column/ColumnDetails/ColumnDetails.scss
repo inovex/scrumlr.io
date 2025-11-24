@@ -20,6 +20,7 @@ $icon-size: styles.$icon--large;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  min-height: 48px; // to accommodate MiniMenu in opened state
 }
 
 .column-details__name-wrapper {
@@ -68,14 +69,18 @@ $icon-size: styles.$icon--large;
 }
 
 .column-details__edit-icon {
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
   opacity: 0;
   transition: opacity 0.2s ease;
   cursor: pointer;
   align-self: center;
   margin-left: 8px;
   margin-right: 8px;
+
+  &:hover {
+    color: styles.$gray--800;
+  }
 }
 
 .column-details__settings-icon-container {
@@ -211,6 +216,10 @@ $icon-size: styles.$icon--large;
 
   .column-details__edit-icon {
     color: styles.$gray--000;
+
+    &:hover {
+      color: styles.$gray--800;
+    }
   }
 
   .column-details__settings-icon-container {

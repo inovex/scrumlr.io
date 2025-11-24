@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/technical_helper"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
@@ -43,11 +44,11 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			boardId, _ := uuid.NewRandom()
 			s.votings = votingMock
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"voteLimit": 4,
 				"allowMultipleVotes": false
 				}`))
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId)
 
 			votingMock.EXPECT().Create(mock.Anything, votings.VotingCreateRequest{
@@ -87,8 +88,8 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 			s.votings = votingMock
 			s.notes = notesMock
 
-			req := NewTestRequestBuilder("PUT", "/", nil)
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req := technical_helper.NewTestRequestBuilder("PUT", "/", nil)
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.VotingIdentifier, votingId)
 			rr := httptest.NewRecorder()
@@ -114,7 +115,7 @@ func (suite *VotingTestSuite) TestGetVoting() {
 	boardId, _ := uuid.NewRandom()
 	votingId, _ := uuid.NewRandom()
 
-	req := NewTestRequestBuilder("GET", "/", nil).
+	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.BoardIdentifier, boardId).
 		AddToContext(identifiers.VotingIdentifier, votingId)
 	rr := httptest.NewRecorder()

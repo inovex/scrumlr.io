@@ -46,6 +46,9 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
+	userRoutes    chi.Router
+	sessionRoutes chi.Router
+
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
@@ -75,8 +78,12 @@ type Server struct {
 
 func New(
 	basePath string,
+
 	rt *realtime.Broker,
 	auth auth.Auth,
+
+	userRoutes chi.Router,
+	sessionRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -126,6 +133,8 @@ func New(
 	s := Server{
 		basePath:                         basePath,
 		realtime:                         rt,
+		userRoutes:                       userRoutes,
+		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
@@ -258,12 +267,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardReactionResources(r)
 		})
 
-		r.Route("/users", func(r chi.Router) {
-			r.Get("/", s.getUser)
-			r.Get("/{user}", s.getUserByID)
-			r.Put("/", s.updateUser)
-			r.With(s.BoardParticipantContext).Get("/board/{id}", s.getUsers)
-		})
+		r.Mount("/", s.userRoutes)
 	})
 }
 
@@ -313,16 +317,9 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 				}),
 			))
 
-			r.Post("/", s.joinBoard)
+			r.Post("/", s.joinBoard) //board
 		})
-		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
-		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
-
-		r.Route("/{session}", func(r chi.Router) {
-			r.Use(s.BoardParticipantContext)
-			r.Get("/", s.getBoardSession)
-			r.Put("/", s.updateBoardSession)
-		})
+		r.Mount("/", s.sessionRoutes)
 	})
 }
 

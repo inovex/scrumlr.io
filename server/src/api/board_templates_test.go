@@ -19,6 +19,8 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/serviceinitialize"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 
@@ -388,11 +390,28 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			mockBoardTemplates.EXPECT().Update(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
 			mockBoardTemplates.EXPECT().Delete(mock.Anything, mock.Anything).Return(nil).Maybe()
 
+			sessionApiMock := sessions.NewMockSessionApi(t)
+			next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+			})
+
+			sessionApiMock.EXPECT().BoardParticipantContext(mock.Anything).Return(next)
+			sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
+			sessionServiceMock := sessions.NewMockSessionService(t)
+
+			apiInitializer := serviceinitialize.NewApiInitializer("/")
+			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
+			routesInitializer := serviceinitialize.NewRoutesInitializer()
+			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
+			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
+
 			// Use the actual router from router.go with minimal mocked dependencies
-			r := New(
-				"/",                              // basePath
-				nil,                              // realtime (not needed for templates)
-				mockAuth,                         // auth
+			s := New(
+				"/",      // basePath
+				nil,      // realtime (not needed for templates)
+				mockAuth, // auth
+				userRoutes,
+				sessionRoutes,
 				nil,                              // boards
 				nil,                              // columns
 				nil,                              // votings
@@ -439,7 +458,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			rr := httptest.NewRecorder()
 
 			// Execute request
-			r.ServeHTTP(rr, req)
+			s.ServeHTTP(rr, req)
 
 			// Verify status
 			assert.Equal(t, tt.expectedStatus, rr.Code, "Expected status %d for %s %s, got %d", tt.expectedStatus, tt.method, tt.path, rr.Code)
