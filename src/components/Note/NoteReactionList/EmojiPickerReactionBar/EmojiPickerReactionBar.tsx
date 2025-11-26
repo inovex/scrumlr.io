@@ -173,7 +173,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
                 left: `${pickerPosition.left}px`,
-                zIndex: 1000,
+                zIndex: 150,
               }}
             >
               <EmojiPicker />
