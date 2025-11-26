@@ -6,7 +6,7 @@ import {buildQuickReactions, isDefaultEmoji, ReactionType, EmojiData} from "stor
 import {ReactionModeled} from "../NoteReactionList";
 import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
 import "./EmojiPickerReactionBar.scss";
-import "emoji-picker-element";
+import EmojiPicker from "../EmojiPicker/EmojiPicker";
 
 interface EmojiPickerReactionBarProps {
   closeReactionBar: () => void;
@@ -173,21 +173,10 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
                 left: `${pickerPosition.left}px`,
-                zIndex: 100,
+                zIndex: 1000,
               }}
             >
-              <emoji-picker />
-              {/* <EmojiPicker
-                onEmojiClick={handleEmojiClick}
-                width={320}
-                height={350}
-                previewConfig={{showPreview: false}}
-                skinTonesDisabled={false}
-                searchDisabled={false}
-                lazyLoadEmojis
-                emojiStyle={EmojiStyle.NATIVE}
-                theme={convertToEmojiPickerTheme(theme)}
-              /> */}
+              <EmojiPicker />
             </div>
           </ReactFocusLock>,
           document.body
