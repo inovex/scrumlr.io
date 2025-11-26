@@ -1,15 +1,16 @@
-@import "constants/style";
-@import "../SettingsDialog";
+@use "constants/styles";
+@use "constants/mixins";
+@use "../SettingsDialog";
 
 .appearance-container {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding-bottom: $settings-dialog-container--bottom;
+  padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
   overflow-y: auto;
   flex-grow: 1;
 
-  @include scrollbar();
+  @include mixins.scrollbar();
 }
 
 .appearance-container > button {

@@ -128,7 +128,6 @@ func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
 	userDb := users.NewUserDatabase(init.db)
 	userService := users.NewUserService(userDb, init.rt, sessionService)
-
 	return userService
 }
 

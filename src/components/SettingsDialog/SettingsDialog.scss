@@ -1,19 +1,20 @@
-@import "src/constants/style";
+@use "constants/styles";
+@use "constants/mixins";
 
 .settings-dialog__background {
   position: fixed;
-  @include inset-0;
-  background-color: rgba($color: $blue--500, $alpha: 0.1);
+  @include mixins.inset-0;
+  background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
 [theme="dark"] .settings-dialog__background {
-  background-color: rgba($color: $pink--500, $alpha: 0.1);
+  background-color: rgba($color: styles.$pink--500, $alpha: 0.1);
 }
 
 .settings-dialog__wrapper {
   position: fixed;
-  @include inset-0;
-  @include flex-center;
+  @include mixins.inset-0;
+  @include mixins.flex-center;
 }
 
 // settings-dialog container
@@ -33,7 +34,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog {
     height: 616px;
     width: auto;
-    border-radius: $rounded--small;
+    border-radius: styles.$rounded--small;
     box-shadow: 0 16px 32px #0057ff29;
   }
   [theme="dark"] .settings-dialog {
@@ -43,13 +44,13 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__content {
   display: none;
-  background: $gray--100;
+  background: styles.$gray--100;
   width: 100%;
   padding-top: 50px;
   overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
-  background: $navy--600;
+  background: styles.$navy--600;
 }
 .settings-dialog--selected .settings-dialog__content {
   display: block;
@@ -58,7 +59,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__content {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: $rounded--small;
+    border-radius: styles.$rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -66,7 +67,7 @@ $settings-dialog-container--bottom: 62px;
     display: block;
     width: 544px;
     height: 100%;
-    border-radius: 0 $rounded--small $rounded--small 0;
+    border-radius: 0 styles.$rounded--small styles.$rounded--small 0;
     padding-top: 0;
   }
 }
@@ -76,11 +77,11 @@ $settings-dialog-container--bottom: 62px;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
 }
 
 [theme="dark"] .settings-dialog__sidebar {
-  background-color: $navy--500;
+  background-color: styles.$navy--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -90,7 +91,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: $rounded--small;
+    border-radius: styles.$rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -100,13 +101,13 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 318px;
     height: 100%;
-    border-radius: $rounded--small 0 0 $rounded--small;
+    border-radius: styles.$rounded--small 0 0 styles.$rounded--small;
   }
 }
 
 .settings-dialog__scrumlr-logo {
   height: 40px;
-  margin: $spacing--xl;
+  margin: styles.$spacing--xl;
 }
 
 .settings-dialog__navigation {
@@ -120,20 +121,20 @@ $settings-dialog-container--bottom: 62px;
   position: absolute;
   top: 6px;
   right: 6px;
-  color: $blue--500;
+  color: styles.$blue--500;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: $icon--extralarge;
-  height: $icon--extralarge;
-  border-radius: $rounded--full;
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
+  border-radius: styles.$rounded--full;
   transition: all 0.08s ease-out;
   border: 2px solid transparent;
   outline: none;
 
   &:hover {
-    background-color: $blue--500;
-    color: $gray--000;
+    background-color: styles.$blue--500;
+    color: styles.$gray--000;
     transform: scale(1.04);
   }
 
@@ -142,7 +143,7 @@ $settings-dialog-container--bottom: 62px;
   }
 
   &:focus-visible {
-    border: 2px solid $blue--500;
+    border: 2px solid styles.$blue--500;
   }
 }
 .settings-dialog__close-button > svg {
@@ -150,27 +151,27 @@ $settings-dialog-container--bottom: 62px;
   width: 100%;
 }
 [theme="dark"] .settings-dialog__close-button {
-  color: $pink--500;
+  color: styles.$pink--500;
 
   &:hover {
-    background-color: $pink--500;
-    color: $gray--000;
+    background-color: styles.$pink--500;
+    color: styles.$gray--000;
   }
 
   &:focus-visible {
-    border: 2px solid $pink--500;
+    border: 2px solid styles.$pink--500;
   }
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__close-button {
     top: -22px;
     right: -22px;
-    background-color: $gray--000;
+    background-color: styles.$gray--000;
     box-shadow: 0 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-    background: $navy--500;
+    background: styles.$navy--500;
   }
 }
 
@@ -186,26 +187,26 @@ $settings-dialog-container--bottom: 62px;
     position: absolute;
     top: 12px;
     left: 9px;
-    color: $blue--500;
+    color: styles.$blue--500;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: $icon--huge;
-    height: $icon--huge;
-    border-radius: $rounded--full;
+    width: styles.$icon--huge;
+    height: styles.$icon--huge;
+    border-radius: styles.$rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {
-    color: $pink--500;
+    color: styles.$pink--500;
   }
 }
 
 .navigation__item {
   height: 56px;
   width: 252px;
-  margin: 0 $spacing--xl;
-  border-radius: $rounded--full;
+  margin: 0 styles.$spacing--xl;
+  border-radius: styles.$rounded--full;
   text-decoration: none;
-  color: $navy--900;
+  color: styles.$navy--900;
   outline: none;
   display: flex;
   flex-direction: row;
@@ -215,7 +216,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background: rgba(var(--accent-color--light-rgb), 0.8);
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 
   &:focus-visible {
@@ -223,17 +224,17 @@ $settings-dialog-container--bottom: 62px;
   }
 
   &--logout {
-    margin-bottom: $spacing--xl;
+    margin-bottom: styles.$spacing--xl;
     border: none;
     background-color: transparent;
 
     &:hover {
-      background-color: $navy--200;
+      background-color: styles.$navy--200;
     }
 
     .navigation-item__icon {
-      background: $navy--400;
-      color: $gray--000;
+      background: styles.$navy--400;
+      color: styles.$gray--000;
     }
   }
 }
@@ -248,8 +249,8 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .navigation-item__name {
-  font-size: $text--base;
-  line-height: $text--md;
+  font-size: styles.$text--base;
+  line-height: styles.$text--md;
   font-weight: 700;
   margin: 0;
   text-overflow: ellipsis;
@@ -258,20 +259,20 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .navigation-item__description {
-  font-size: $text--xs;
-  line-height: $text--base;
+  font-size: styles.$text--xs;
+  line-height: styles.$text--base;
   font-weight: 500;
   margin: 0;
   width: max-content;
 }
 
 [theme="dark"] .navigation__item {
-  color: $gray--000;
+  color: styles.$gray--000;
 
   &--logout {
     .navigation-item__icon {
-      background: $gray--000;
-      color: $navy--400;
+      background: styles.$gray--000;
+      color: styles.$navy--400;
     }
   }
 }
@@ -279,15 +280,15 @@ $settings-dialog-container--bottom: 62px;
 .navigation__item--active {
   outline: none;
   background: var(--accent-color--light);
-  color: $gray--000;
+  color: styles.$gray--000;
 }
 
 .navigation-item__icon {
   width: 40px;
   height: 40px;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   background: var(--accent-color--light);
-  color: $gray--000;
+  color: styles.$gray--000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -309,12 +310,12 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__header {
   display: flex;
   justify-content: center;
-  margin: $spacing--xl 0;
+  margin: styles.$spacing--xl 0;
 }
 
 @media screen and (min-width: 920px) {
   .settings-dialog__header {
-    margin: $spacing--xl 0;
+    margin: styles.$spacing--xl 0;
   }
 }
 
@@ -328,26 +329,26 @@ $settings-dialog-container--bottom: 62px;
   margin: 0 0 0 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid $gray--300;
+  border-top: 0.5px solid styles.$gray--300;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
-  border-radius: $rounded--small;
-  background-color: $gray--000;
+  border-radius: styles.$rounded--small;
+  background-color: styles.$gray--000;
 }
 
 [theme="dark"] {
   .settings-dialog__header-text {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 
   .settings-dialog__separator {
-    border-top: 0.5px solid $navy--600;
+    border-top: 0.5px solid styles.$navy--600;
   }
 
   .settings-dialog__group {
-    background-color: $navy--500;
+    background-color: styles.$navy--500;
   }
 }

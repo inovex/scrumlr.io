@@ -1,4 +1,4 @@
-@import "src/constants/style";
+@use "constants/styles";
 
 .text-input-label {
   display: block;
@@ -12,5 +12,5 @@
   margin-bottom: 4px;
 
   font-weight: bold;
-  font-size: $text-size--medium;
+  font-size: styles.$text-size--medium;
 }

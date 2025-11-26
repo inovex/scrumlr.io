@@ -1,18 +1,18 @@
-@import "constants/style";
+@use "constants/styles";
 
 .app-info {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: $text-size--medium;
+  font-size: styles.$text-size--medium;
 
   text-decoration: none;
-  color: $gray--800;
+  color: styles.$gray--800;
 
   transition: all 0.08s ease-out;
 
   &:hover {
-    color: $gray--700;
+    color: styles.$gray--700;
   }
 
   &:focus-visible {
@@ -28,14 +28,14 @@
 
 [theme="dark"] {
   .app-info {
-    color: $gray--700;
+    color: styles.$gray--700;
 
     &:focus-visible,
     &:hover {
-      color: $gray--000;
+      color: styles.$gray--000;
     }
   }
   .app-info__icon path {
-    fill: $gray--000;
+    fill: styles.$gray--000;
   }
 }

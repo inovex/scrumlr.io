@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 
 	"scrumlr.io/server/boards"
 
@@ -57,11 +58,11 @@ func (suite *NotesTestSuite) TestCreateNote() {
 
 			s.notes = noteMock
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
 				"text" : "%s"
 				}`, colId.String(), testText)))
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
@@ -103,7 +104,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 
 			noteID, _ := uuid.NewRandom()
 
-			req := NewTestRequestBuilder("GET", "/", nil).
+			req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.NoteIdentifier, noteID)
 
 			noteMock.EXPECT().Get(mock.Anything, noteID).Return(&notes.Note{
@@ -163,8 +164,8 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			r := chi.NewRouter()
 			s.initNoteResources(r)
 
-			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req := technical_helper.NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
@@ -225,9 +226,9 @@ func (suite *NotesTestSuite) TestEditNote() {
 
 			s.notes = noteMock
 
-			req := NewTestRequestBuilder("PUT", fmt.Sprintf("/notes/%s", noteId.String()), strings.NewReader(fmt.Sprintf(`{
+			req := technical_helper.NewTestRequestBuilder("PUT", fmt.Sprintf("/notes/%s", noteId.String()), strings.NewReader(fmt.Sprintf(`{
 				"text": "%s"}`, updatedText)))
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.NoteIdentifier, noteId).
 				AddToContext(identifiers.UserIdentifier, userId)

@@ -1,4 +1,4 @@
-package api
+package technical_helper
 
 import (
 	"context"
@@ -8,23 +8,23 @@ import (
 )
 
 type TestRequestBuilder struct {
-	req *http.Request
+	Req *http.Request
 }
 
 func NewTestRequestBuilder(method string, target string, body io.Reader) *TestRequestBuilder {
 	r := new(TestRequestBuilder)
-	r.req = httptest.NewRequest(method, target, body)
-	r.req.Header.Set("Accept", "application/json")
-	r.req.Header.Set("Content-Type", "application/json")
+	r.Req = httptest.NewRequest(method, target, body)
+	r.Req.Header.Set("Accept", "application/json")
+	r.Req.Header.Set("Content-Type", "application/json")
 	return r
 }
 
 func (b *TestRequestBuilder) AddToContext(key, val interface{}) *TestRequestBuilder {
-	ctx := context.WithValue(b.req.Context(), key, val)
-	b.req = b.req.WithContext(ctx)
+	ctx := context.WithValue(b.Req.Context(), key, val)
+	b.Req = b.Req.WithContext(ctx)
 	return b
 }
 
 func (b *TestRequestBuilder) Request() *http.Request {
-	return b.req.Clone(b.req.Context())
+	return b.Req.Clone(b.Req.Context())
 }

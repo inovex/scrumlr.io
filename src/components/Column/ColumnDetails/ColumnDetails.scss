@@ -1,14 +1,14 @@
-@import "constants/style";
+@use "constants/styles";
 
-$description-line-height: $line-height--medium;
+$description-line-height: styles.$line-height--medium;
 $description-target-height: 2 * $description-line-height;
 
-$icon-size: $icon--large;
+$icon-size: styles.$icon--large;
 
 .column-details {
   display: flex;
   flex-direction: column;
-  gap: $spacing--sm;
+  gap: styles.$spacing--sm;
 
   &--moderator-view:hover .column-details__edit-icon {
     opacity: 1;
@@ -20,6 +20,7 @@ $icon-size: $icon--large;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  min-height: 48px; // to accommodate MiniMenu in opened state
 }
 
 .column-details__name-wrapper {
@@ -35,12 +36,12 @@ $icon-size: $icon--large;
 
   align-self: flex-start; // only take as much space as needed
 
-  padding: 0 $spacing--xxs $spacing--xxs 0; // extend border space to bottom, and also slightly to the right
+  padding: 0 styles.$spacing--xxs styles.$spacing--xxs 0; // extend border space to bottom, and also slightly to the right
 
-  font-size: $text--lg;
+  font-size: styles.$text--lg;
   font-weight: 700;
 
-  color: $navy--900;
+  color: styles.$navy--900;
 
   border-bottom: 3px solid var(--accent-color--light);
 
@@ -55,27 +56,31 @@ $icon-size: $icon--large;
 
   &--moderator {
     &:hover {
-      color: $navy--300;
+      color: styles.$navy--300;
       cursor: pointer;
     }
   }
 }
 
 .column-details__notes-count {
-  color: $gray--800;
-  font-size: $text--base;
+  color: styles.$gray--800;
+  font-size: styles.$text--base;
   font-weight: 600;
 }
 
 .column-details__edit-icon {
-  width: 18px;
-  height: 18px;
+  width: 32px;
+  height: 32px;
   opacity: 0;
   transition: opacity 0.2s ease;
   cursor: pointer;
   align-self: center;
   margin-left: 8px;
   margin-right: 8px;
+
+  &:hover {
+    color: styles.$gray--800;
+  }
 }
 
 .column-details__settings-icon-container {
@@ -117,8 +122,8 @@ $icon-size: $icon--large;
 
 .column-details__description {
   flex-grow: 1;
-  color: $navy--900;
-  font-size: $text--base;
+  color: styles.$navy--900;
+  font-size: styles.$text--base;
   font-weight: 600;
   line-height: $description-line-height;
   max-height: $description-target-height;
@@ -129,12 +134,12 @@ $icon-size: $icon--large;
   }
 
   &--placeholder {
-    color: $gray--800;
+    color: styles.$gray--800;
 
     &-moderator {
       &:hover {
         cursor: pointer;
-        color: $navy--200;
+        color: styles.$navy--200;
       }
     }
   }
@@ -142,7 +147,7 @@ $icon-size: $icon--large;
   &--moderator {
     &:hover {
       cursor: pointer;
-      color: $navy--200 !important;
+      color: styles.$navy--200 !important;
     }
   }
 }
@@ -173,18 +178,18 @@ $icon-size: $icon--large;
 .text-area.column-details__description--moderator {
   &:hover {
     cursor: pointer !important;
-    color: $navy--200 !important;
+    color: styles.$navy--200 !important;
   }
 }
 
 [theme="dark"] {
   .column-details__name {
-    color: $gray--000;
+    color: styles.$gray--000;
     border-bottom-color: var(--accent-color--dark);
 
     &--moderator {
       &:hover {
-        color: $gray--800;
+        color: styles.$gray--800;
         cursor: pointer;
       }
     }
@@ -192,11 +197,11 @@ $icon-size: $icon--large;
 
   .column-details__description {
     &--placeholder {
-      color: $gray--700;
+      color: styles.$gray--700;
       &-moderator {
         &:hover {
           cursor: pointer;
-          color: $navy--200;
+          color: styles.$navy--200;
         }
       }
     }
@@ -204,20 +209,24 @@ $icon-size: $icon--large;
     &--moderator {
       &:hover {
         cursor: pointer;
-        color: $navy--200 !important;
+        color: styles.$navy--200 !important;
       }
     }
   }
 
   .column-details__edit-icon {
-    color: $gray--000;
+    color: styles.$gray--000;
+
+    &:hover {
+      color: styles.$gray--800;
+    }
   }
 
   .column-details__settings-icon-container {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 
   .column-details__description-expand-icon {
-    color: rgba($gray--000, 0.7);
+    color: rgba(styles.$gray--000, 0.7);
   }
 }

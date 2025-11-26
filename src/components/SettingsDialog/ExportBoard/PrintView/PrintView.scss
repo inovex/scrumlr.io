@@ -1,6 +1,7 @@
-@import "src/constants/style.scss";
+@use "sass:color";
+@use "constants/styles";
 
-$color-button: $purple--500;
+$color-button: styles.$purple--500;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__container {
@@ -30,13 +31,13 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   align-items: center;
   width: 42px;
   height: 42px;
-  background: lighten($color-button, 35%);
+  background: color.adjust($color-button, $lightness: 35%);
   border: none;
-  border-radius: $rounded--full;
-  margin: $spacing--xs;
+  border-radius: styles.$rounded--full;
+  margin: styles.$spacing--xs;
   cursor: pointer;
   font-weight: bold;
-  font-size: $text-size--medium;
+  font-size: styles.$text-size--medium;
   box-shadow: 0 4px 7px 1px $color-button-shadow;
   svg {
     color: $color-button;
@@ -44,16 +45,16 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
   &:hover {
     background: $color-button;
-    box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
+    box-shadow: 0 4px 7px 1px color.adjust($color-button-shadow, $lightness: -15%);
     svg {
-      color: $gray--000;
+      color: styles.$gray--000;
     }
   }
   &:active {
-    background: darken($color-button, 10%);
-    box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
+    background: color.adjust($color-button, $lightness: -10%);
+    box-shadow: 0 4px 5px 1px color.adjust($color-button-shadow, $lightness: -25%);
     svg {
-      color: $gray--000;
+      color: styles.$gray--000;
     }
   }
 }
@@ -69,7 +70,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view {
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
   overflow: visible;
   padding-top: 1cm;
   padding-right: 1cm;
@@ -78,7 +79,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   min-height: 29cm;
   max-width: 21cm;
-  margin: $spacing--base auto;
+  margin: styles.$spacing--base auto;
   box-shadow:
     0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -103,16 +104,16 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   display: flex;
   align-items: center;
-  gap: $spacing--base;
-  margin-bottom: $spacing--xl;
+  gap: styles.$spacing--base;
+  margin-bottom: styles.$spacing--xl;
 }
 
 .print-view__title-text {
-  color: $navy--900;
+  color: styles.$navy--900;
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
   margin: 0;
   flex: 1;
   text-align: center;
@@ -123,8 +124,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: $spacing--xs;
-  font-size: $text-size--small;
+  gap: styles.$spacing--xs;
+  font-size: styles.$text-size--small;
   p {
     margin: 0;
   }
@@ -133,14 +134,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column-list {
   display: block;
   width: 100%;
-  gap: $spacing--base;
+  gap: styles.$spacing--base;
 }
 
 .print-view__column {
   display: block;
   width: 100%;
-  background-color: $gray--000;
-  color: $navy--900;
+  background-color: styles.$gray--000;
+  color: styles.$navy--900;
 }
 
 .print-view__column-header-wrapper {
@@ -149,42 +150,42 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   justify-content: space-between;
   width: 100%;
   padding: 0;
-  margin: $spacing--xs 0 $spacing--base 0;
+  margin: styles.$spacing--xs 0 styles.$spacing--base 0;
 }
 
 .print-view__column-header-text {
-  font-size: $text-size--large;
-  margin: 0 0 0 $spacing--xs;
+  font-size: styles.$text-size--large;
+  margin: 0 0 0 styles.$spacing--xs;
   font-weight: bold;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
-  color: $navy--900;
+  letter-spacing: styles.$letter-spacing--large;
+  line-height: styles.$line-height--large;
+  color: styles.$navy--900;
   border-bottom: solid 3px var(--accent-color--light);
 }
 
 .print-view__column-header-card-count {
-  margin: 0 $spacing--xs 0 0;
-  color: $gray--700;
+  margin: 0 styles.$spacing--xs 0 0;
+  color: styles.$gray--700;
   font-weight: bold;
 }
 
 .print-view__note-stack-wrapper {
-  border-radius: $note__border-radius;
-  padding: $spacing--xs $spacing--xs 0 $spacing--xs;
+  border-radius: styles.$note__border-radius;
+  padding: styles.$spacing--xs styles.$spacing--xs 0 styles.$spacing--xs;
   border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   width: 100%;
-  margin-bottom: $spacing--base;
+  margin-bottom: styles.$spacing--base;
   background: rgba(var(--accent-color--light-rgb), 0.05);
 }
 
 .print-view__note {
   display: block;
   width: 100%;
-  margin-bottom: $spacing--base;
-  padding: calc(#{$spacing--xs} + 4px);
+  margin-bottom: styles.$spacing--base;
+  padding: calc(#{styles.$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
-  border-radius: $note__border-radius;
-  background: $gray--000;
+  border-radius: styles.$note__border-radius;
+  background: styles.$gray--000;
 }
 @media print {
   .print-view__note {
@@ -194,22 +195,22 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note--isChild {
   width: 100%;
-  margin-bottom: $spacing--xs;
+  margin-bottom: styles.$spacing--xs;
   border: 2px dashed rgba(var(--accent-color--light-rgb), 0.25);
 }
 
 .print-view__note--isTop {
-  margin-bottom: $spacing--xs;
+  margin-bottom: styles.$spacing--xs;
 }
 
 .print-view__note-text {
-  margin: 0 0 $spacing--lg 0;
+  margin: 0 0 styles.$spacing--lg 0;
 }
 
 .print-view__note-info-wrapper {
   display: block;
   position: relative;
-  height: $line-height--large;
+  height: styles.$line-height--large;
 }
 
 .print-view__note-info--isTop {
@@ -231,14 +232,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: inline;
   width: auto;
   margin-top: auto;
-  color: $gray--700;
+  color: styles.$gray--700;
   font-weight: bold;
 }
 
 .print-view__note-info-votes {
   display: inline !important;
   float: right;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   padding: 6px 11px;
   background: rgba(var(--accent-color--light-rgb), 0.25);
   color: var(--accent-color--light);
@@ -250,5 +251,5 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-size: $text-size--small;
+  font-size: styles.$text-size--small;
 }

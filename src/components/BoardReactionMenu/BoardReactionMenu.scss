@@ -1,4 +1,5 @@
-@import "src/constants/style";
+@use "constants/styles";
+@use "constants/mixins";
 
 $container-height: 64px;
 $reaction-size: 48px;
@@ -8,18 +9,18 @@ $reaction-size: 48px;
   height: $container-height;
   left: 0;
   right: 0;
-  bottom: $column__border-width;
+  bottom: styles.$column__border-width;
   width: fit-content;
   margin-inline: auto;
-  padding: 0 $spacing--xs;
+  padding: 0 styles.$spacing--xs;
   display: flex;
   align-items: center;
-  gap: $spacing--xs;
-  background-color: $gray--100;
-  border-radius: $rounded--large;
-  box-shadow: $box-shadow--light;
+  gap: styles.$spacing--xs;
+  background-color: styles.$gray--100;
+  border-radius: styles.$rounded--large;
+  @include mixins.box-shadow-light;
   user-select: none;
-  z-index: $board-reaction-z-index;
+  z-index: styles.$board-reaction-z-index;
 }
 
 .board-reactions-menu__item {
@@ -30,11 +31,11 @@ $reaction-size: 48px;
   height: $reaction-size;
   padding: 0;
   border: none;
-  border-radius: $rounded--full;
+  border-radius: styles.$rounded--full;
   background-color: transparent;
   cursor: pointer;
   transition: backdrop-filter 80ms ease-in-out;
-  font-size: $text--lg;
+  font-size: styles.$text--lg;
 
   &:enabled:hover {
     backdrop-filter: brightness(90%);
@@ -44,7 +45,7 @@ $reaction-size: 48px;
   }
   &:focus-visible {
     // lose focus after click
-    outline: 2px solid $blue--500;
+    outline: 2px solid styles.$blue--500;
     outline-offset: 2px;
   }
   &:disabled {
@@ -55,25 +56,25 @@ $reaction-size: 48px;
 
 [theme="dark"] {
   .board-reactions-menu {
-    background-color: $navy--500;
-    box-shadow: $box-shadow--dark;
+    background-color: styles.$navy--500;
+    @include mixins.box-shadow-dark;
   }
 
   .board-reactions-menu__close {
-    color: $gray--000;
+    color: styles.$gray--000;
   }
 }
 
-@media #{$smartphone} {
+@media #{styles.$smartphone} {
   .board-reactions-menu {
-    bottom: $column__border-width + $spacing--lg + 72px;
+    bottom: styles.$column__border-width + styles.$spacing--lg + 72px;
   }
 }
 
-@media #{$mini-smartphone} {
+@media #{styles.$mini-smartphone} {
   .board-reactions-menu {
-    bottom: $column__border-width + $spacing--lg + 48px;
-    padding: 0 $spacing--xs;
-    gap: $spacing--xxs;
+    bottom: styles.$column__border-width + styles.$spacing--lg + 48px;
+    padding: 0 styles.$spacing--xs;
+    gap: styles.$spacing--xxs;
   }
 }

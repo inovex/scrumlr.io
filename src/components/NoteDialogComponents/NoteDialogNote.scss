@@ -1,4 +1,4 @@
-@import "src/constants/style";
+@use "constants/styles";
 
 $header-height: 36px;
 $footer-height: 36px;
@@ -14,17 +14,17 @@ $footer-height: 36px;
     "foot options";
   grid-template-columns: 1fr 32px;
   grid-template-rows: $header-height 1fr $footer-height;
-  gap: $spacing--sm;
+  gap: styles.$spacing--sm;
 
-  padding: $spacing--base;
+  padding: styles.$spacing--base;
   position: relative;
-  border-radius: $note__border-radius;
-  background-color: $gray--000;
+  border-radius: styles.$note__border-radius;
+  background-color: styles.$gray--000;
   transition:
     transform 0.3s ease-in-out,
     box-shadow 0.3s ease-in-out;
   list-style-type: none;
-  z-index: $note-dialog-z-index;
+  z-index: styles.$note-dialog-z-index;
   min-width: calc(240px);
   width: 100vw;
   max-width: 380px;
@@ -50,27 +50,27 @@ $footer-height: 36px;
   grid-area: foot;
 }
 
-@media #{$tablet} {
+@media #{styles.$tablet} {
   .note-dialog__note {
     max-width: 415px;
   }
 }
 
-@media #{$smartphone} {
+@media #{styles.$smartphone} {
   .note-dialog__note {
-    width: calc(100vw - 5 * $column__border-width);
+    width: calc(100vw - 5 * styles.$column__border-width);
   }
 }
 
-@media #{$mini-smartphone} {
+@media #{styles.$mini-smartphone} {
   .note-dialog__note {
-    padding: $spacing--base $spacing--base $spacing--base $spacing--xs;
+    padding: styles.$spacing--base styles.$spacing--base styles.$spacing--base styles.$spacing--xs;
   }
 }
 
 [theme="dark"] {
   .note-dialog__note {
-    background-color: $navy--500;
-    box-shadow: 0 6px 9px 0 $navy--900;
+    background-color: styles.$navy--500;
+    box-shadow: 0 6px 9px 0 styles.$navy--900;
   }
 }
