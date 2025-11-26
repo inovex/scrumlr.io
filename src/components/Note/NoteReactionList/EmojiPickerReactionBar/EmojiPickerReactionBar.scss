@@ -1,17 +1,16 @@
-@import "src/constants/style";
+@use "constants/styles";
 
 .emoji-picker-reaction-bar__root {
   position: relative;
-  background: $gray--000;
-  border-radius: $rounded--default;
+  background: styles.$gray--000;
+  border-radius: styles.$rounded--default;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid $gray--300;
-  padding: $reaction__padding--outer-top-bottom $reaction__padding--outer-left-right;
+  padding: styles.$reaction__padding--outer-top-bottom styles.$reaction__padding--outer-left-right;
 }
 
 .emoji-picker-reaction-bar__quick-reactions {
   display: flex;
-  gap: $reaction__gap-size;
+  gap: styles.$reaction__gap-size;
   align-items: center;
 }
 
@@ -20,16 +19,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: $reaction__inner-size;
-  height: $reaction__inner-size;
-  padding: $reaction__padding--inner;
-  border-radius: $rounded--full;
+  width: styles.$reaction__inner-size;
+  height: styles.$reaction__inner-size;
+  padding: styles.$reaction__padding--inner;
+  border-radius: styles.$rounded--full;
   cursor: pointer;
-  font-size: $text--md;
+  font-size: styles.$text--md;
   transition: all 0.2s ease;
 
   &:hover {
-    background: $gray--300;
+    background: styles.$gray--300;
   }
 
   &--active {
@@ -45,20 +44,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: $reaction__inner-size;
-  height: $reaction__inner-size;
-  border: 1px solid $gray--300;
-  background: $gray--000;
-  border-radius: $rounded--full;
+  width: styles.$reaction__inner-size;
+  height: styles.$reaction__inner-size;
+  border: 1px solid styles.$gray--300;
+  background: styles.$gray--000;
+  border-radius: styles.$rounded--full;
   cursor: pointer;
-  font-size: $text--sm;
+  font-size: styles.$text--sm;
   transition: all 0.2s ease;
-  color: $gray--600;
+  color: styles.$gray--600;
   line-height: 1;
   padding: 0;
 
   &:hover {
-    background: $gray--300;
+    background: styles.$gray--300;
   }
 
   &--active {
@@ -76,42 +75,20 @@
   top: 100%;
   left: 0;
   z-index: 1000;
-  margin-top: $reaction__gap-size;
-  border-radius: $rounded--default;
+  margin-top: styles.$reaction__gap-size;
+  border-radius: styles.$rounded--default;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: $gray--000;
-  border: 1px solid $gray--300;
-
-  // Override emoji picker styles to match our theme
-  :global(.epr-main) {
-    border: none;
-    background: transparent;
-  }
-
-  :global(.epr-header) {
-    background: $gray--000;
-    border-bottom: 1px solid $gray--300;
-  }
-
-  :global(.epr-body) {
-    background: $gray--000;
-  }
-
-  :global(.epr-category-nav) {
-    background: $gray--000;
-    border-top: 1px solid $gray--300;
-  }
+  background: styles.$gray--000;
 }
 
 [theme="dark"] {
   .emoji-picker-reaction-bar__root {
-    background: $navy--600;
-    border-color: $navy--300;
+    background: styles.$navy--600;
   }
 
   .emoji-picker-reaction-bar__reaction {
     &:hover {
-      background: $navy--300;
+      background: styles.$navy--300;
     }
 
     &--active {
@@ -123,12 +100,12 @@
   }
 
   .emoji-picker-reaction-bar__more {
-    background: $navy--600;
-    border-color: $navy--300;
-    color: $gray--300;
+    background: styles.$navy--600;
+    border-color: styles.$navy--300;
+    color: styles.$gray--300;
 
     &:hover {
-      background: $navy--300;
+      background: styles.$navy--300;
     }
 
     &--active {
@@ -142,69 +119,18 @@
   }
 
   .emoji-picker-reaction-bar__picker {
-    background: $navy--600;
-    border-color: $navy--300;
-
-    :global(.epr-header) {
-      background: $navy--600;
-      border-bottom-color: $navy--300;
-    }
-
-    :global(.epr-body) {
-      background: $navy--600;
-    }
-
-    :global(.epr-category-nav) {
-      background: $navy--600;
-      border-top-color: $navy--300;
-    }
+    background: styles.$navy--600;
   }
 }
 
 .emoji-picker-reaction-bar__picker-portal {
-  border-radius: $rounded--default;
+  border-radius: styles.$rounded--default;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: $gray--000;
-  border: 1px solid $gray--300;
-
-  // Override emoji picker styles to match our theme
-  :global(.epr-main) {
-    border: none;
-    background: transparent;
-  }
-
-  :global(.epr-header) {
-    background: $gray--000;
-    border-bottom: 1px solid $gray--300;
-  }
-
-  :global(.epr-body) {
-    background: $gray--000;
-  }
-
-  :global(.epr-category-nav) {
-    background: $gray--000;
-    border-top: 1px solid $gray--300;
-  }
+  background: styles.$gray--000;
 }
 
 [theme="dark"] {
   .emoji-picker-reaction-bar__picker-portal {
-    background: $navy--600;
-    border-color: $navy--300;
-
-    :global(.epr-header) {
-      background: $navy--600;
-      border-bottom-color: $navy--300;
-    }
-
-    :global(.epr-body) {
-      background: $navy--600;
-    }
-
-    :global(.epr-category-nav) {
-      background: $navy--600;
-      border-top-color: $navy--300;
-    }
+    background: styles.$navy--600;
   }
 }
