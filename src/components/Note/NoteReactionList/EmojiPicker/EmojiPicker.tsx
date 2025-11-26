@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {setSkinTone} from "store/features";
 import {SkinToneName} from "store/features/skinTone/types";
+import "./EmojiPicker.scss";
 
 export interface EmojiClickData {
   annotation: string;
