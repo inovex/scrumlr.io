@@ -1870,10 +1870,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@microsoft/clarity@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/clarity/-/clarity-1.0.0.tgz#e5f6c87d4aac9bac0cedeaa94158a3fd32fbcd5e"
-  integrity sha512-2QY6SmXnqRj6dWhNY8NYCN3e53j4zCFebH4wGnNhdGV1mqAsQwql2fT0w8TISxCvwwfVp8idsWLIdrRHOms1PQ==
+"@microsoft/clarity@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/clarity/-/clarity-1.0.1.tgz#9db95d0e5be69fd612ae79909ac8ea61467c1be3"
+  integrity sha512-z/UCSbEvDzQgCvpwnqtGHgBRGcbO+id7463wDTJXU38Lj4uuewaKLhHt11D1oq1RsO1CFDTHDPbQUXu6k0fD9g==
 
 "@napi-rs/wasm-runtime@^0.2.10":
   version "0.2.10"
