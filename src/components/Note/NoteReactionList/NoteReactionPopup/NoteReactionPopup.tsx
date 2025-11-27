@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {getEmojiDisplay, ReactionType, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
+import {getEmojiDisplay, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {useAppDispatch, useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useTranslation} from "react-i18next";
@@ -30,7 +30,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const viewer = useAppSelector((state) => state.participants!.self!);
 
   // activeTab === undefined -> all are active
-  const [activeTab, setActiveTab] = useState<ReactionType>();
+  const [activeTab, setActiveTab] = useState<string>();
 
   // after scrolling has stopped, divide the scroll offset by the main container width
   // to get which inner container is currently visible.
@@ -52,7 +52,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     current.scrollTo({left: offset, behavior: "smooth"});
   };
 
-  const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: ReactionType) => {
+  const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: string) => {
     e.stopPropagation();
     const index = reactionType ? props.reactionsReduced.findIndex((r) => r.reactionType === reactionType) + 1 : 0;
     setActiveTab(reactionType);

@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {getEmojiDisplay, ReactionType, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
+import {getEmojiDisplay, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
@@ -10,7 +10,7 @@ import "./NoteReactionChip.scss";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
-  handleClickReaction?: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
+  handleClickReaction?: (e: React.MouseEvent<HTMLButtonElement>, reactionType: string) => void;
   handleLongPressReaction?: (e: LongPressReactEvents) => void;
   showTooltip?: boolean;
   overrideActive?: boolean; // if this is set, the chip will be highlighted no matter if yourself reacted to it
@@ -50,7 +50,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{legacyReaction?.emoji}</div>
+        <div className="note-reaction-chip__reaction">{props.reaction.reactionType}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>

@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
-import {Reaction, ReactionType} from "store/features/reactions/types";
+import {Reaction} from "store/features/reactions/types";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
 import {useAppDispatch, useAppSelector} from "../../../store";
@@ -22,7 +22,7 @@ interface NoteReactionListProps {
 }
 
 export interface ReactionModeled {
-  reactionType: ReactionType;
+  reactionType: string;
   amount: number;
   users: ParticipantWithUser[];
   // since we reduce the reactions, we still need to know what out specific reaction id is (if it exists) so that we can operate on it (e.g. remove)
@@ -135,41 +135,29 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [rootRef]);
 
-  const dispatchAddReaction = (noteId: string, reactionType: ReactionType) => {
-    dispatch(addReaction({noteId, reactionType}));
-  };
-
-  const dispatchDeleteReaction = (reactionId: string) => {
-    dispatch(
-      deleteReaction(reactionId) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
-    );
-  };
-
-  const dispatchReplaceReaction = (reactionId: string, reactionType: ReactionType) => {
-    dispatch(updateReaction({reactionId, reactionType}));
-  };
-
-  const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+  const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
 
     if (showReactionPopup) return;
 
-    const isSameReaction = reactionMadeByUser?.reactionType === reactionType;
+    const isSameReaction = reactionMadeByUser?.reactionType === emoji;
 
     // no reaction exists -> add
     if (!reactionMadeByUser) {
-      dispatchAddReaction(props.noteId, reactionType);
+      dispatch(addReaction({noteId: props.noteId, emoji}));
       return;
     }
 
     // same reaction -> remove
     if (isSameReaction) {
-      dispatchDeleteReaction(reactionMadeByUser.myReactionId!);
+      dispatch(
+        deleteReaction(reactionMadeByUser.myReactionId!) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
+      );
     }
     // other reaction -> replace
     else {
-      dispatchReplaceReaction(reactionMadeByUser.myReactionId!, reactionType);
+      dispatch(updateReaction({reactionId: reactionMadeByUser.myReactionId!, emoji}));
     }
   };
 

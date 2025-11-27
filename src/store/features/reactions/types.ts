@@ -2,12 +2,10 @@ export type Reaction = {
   id: string;
   note: string;
   user: string;
-  reactionType: ReactionType;
+  reactionType: string;
 };
 
 export type ReactionState = Reaction[];
-
-export type ReactionType = string;
 
 // Emoji data structure for consistent emoji handling
 export type EmojiData = {

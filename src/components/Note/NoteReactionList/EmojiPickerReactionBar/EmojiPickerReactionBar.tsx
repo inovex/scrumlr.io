@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import classNames from "classnames";
-import {buildQuickReactions, isDefaultEmoji, ReactionType, EmojiData} from "store/features/reactions/types";
+import {buildQuickReactions, isDefaultEmoji, EmojiData} from "store/features/reactions/types";
 import {ReactionModeled} from "../NoteReactionList";
 import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
 import "./EmojiPickerReactionBar.scss";
@@ -11,7 +11,7 @@ import EmojiPicker from "../EmojiPicker/EmojiPicker";
 interface EmojiPickerReactionBarProps {
   closeReactionBar: () => void;
   reactions: ReactionModeled[];
-  handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
+  handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => void;
 }
 
 const getPickerPosition = (buttonRect: DOMRect) => {
@@ -59,25 +59,22 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     setRecentEmojis(getRecentEmojis());
   }, []);
 
-  const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+  const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent note modal from opening
 
     // Add to recent emojis if it's not a default emoji
-    if (!isDefaultEmoji(reactionType)) {
-      console.log(reactionType);
-      addRecentEmoji(reactionType);
+    if (!isDefaultEmoji(emoji)) {
+      console.log(emoji);
+      addRecentEmoji(emoji);
       setRecentEmojis(getRecentEmojis());
     }
 
     props.closeReactionBar();
-    props.handleClickReaction(e, reactionType);
+    props.handleClickReaction(e, emoji);
   };
 
-  const handleEmojiClick = (event: MouseEvent, emoji: string) => {
-    event.preventDefault();
-    event.stopPropagation(); // Prevent note modal from opening
-
+  const handleEmojiClick = (emoji: string) => {
     // Add to recent emojis
     addRecentEmoji(emoji);
     setRecentEmojis(getRecentEmojis());
@@ -176,7 +173,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 zIndex: 150,
               }}
             >
-              <EmojiPicker />
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
             </div>
           </ReactFocusLock>,
           document.body

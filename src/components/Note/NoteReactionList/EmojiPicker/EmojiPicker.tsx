@@ -20,7 +20,7 @@ export interface SkinToneChangeData {
 }
 
 interface EmojiPickerProps extends React.HTMLAttributes<HTMLElement> {
-  onEmojiClick?: (emoji: EmojiClickData) => void;
+  onEmojiClick?: (emoji: string) => void;
 }
 
 // This tells TypeScript that <emoji-picker> is a valid HTML tag.
@@ -83,8 +83,9 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
 
     const handleEmojiClick = (event: Event) => {
       const customEvent = event as CustomEvent<EmojiClickData>;
+      console.log(customEvent.detail);
       if (onEmojiClick) {
-        onEmojiClick(customEvent.detail);
+        onEmojiClick(customEvent.detail.unicode);
       }
     };
 

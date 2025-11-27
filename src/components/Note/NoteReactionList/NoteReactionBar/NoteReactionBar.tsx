@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import ReactFocusLock from "react-focus-lock";
 import classNames from "classnames";
-import {LEGACY_REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import "./NoteReactionBar.scss";
 import {useAppSelector} from "store";
 import {getEmojiWithSkinTone} from "utils/reactions";
@@ -10,11 +10,11 @@ import {ReactionModeled} from "../NoteReactionList";
 interface NoteReactionBarProps {
   closeReactionBar: () => void;
   reactions: ReactionModeled[];
-  handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
+  handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: string) => void;
 }
 
 export const NoteReactionBar = (props: NoteReactionBarProps) => {
-  const handleClickBar = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+  const handleClickBar = (e: React.MouseEvent<HTMLButtonElement>, reactionType: string) => {
     e.preventDefault();
     props.closeReactionBar();
     props.handleClickReaction(e, reactionType);

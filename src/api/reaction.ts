@@ -1,8 +1,8 @@
 import {SERVER_HTTP_URL} from "../config";
-import {Reaction, ReactionType} from "../store/features/reactions/types";
+import {Reaction} from "../store/features/reactions/types";
 
 export const ReactionAPI = {
-  addReaction: async (board: string, note: string, reactionType: ReactionType) => {
+  addReaction: async (board: string, note: string, reactionType: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions`, {
         method: "POST",
@@ -39,7 +39,7 @@ export const ReactionAPI = {
       throw new Error(`unable to remove reaction with error: ${error}`);
     }
   },
-  updateReaction: async (board: string, reaction: string, reactionType: ReactionType) => {
+  updateReaction: async (board: string, reaction: string, reactionType: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {
         method: "PUT",
