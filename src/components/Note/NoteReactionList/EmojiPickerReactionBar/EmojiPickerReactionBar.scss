@@ -70,17 +70,6 @@
   }
 }
 
-.emoji-picker-reaction-bar__picker {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000;
-  margin-top: styles.$reaction__gap-size;
-  border-radius: styles.$rounded--default;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background: styles.$gray--000;
-}
-
 [theme="dark"] {
   .emoji-picker-reaction-bar__root {
     background: styles.$navy--600;
@@ -116,10 +105,6 @@
         background: rgba(var(--accent-color--dark-rgb), 0.8);
       }
     }
-  }
-
-  .emoji-picker-reaction-bar__picker {
-    background: styles.$navy--600;
   }
 }
 
