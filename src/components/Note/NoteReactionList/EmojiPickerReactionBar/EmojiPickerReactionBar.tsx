@@ -47,25 +47,10 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     }
   }, [location, props]);
 
-  const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
-    dispatch(addRecentEmoji({unicode: emoji}));
+  const handleEmojiClick = (unicode: string) => {
+    dispatch(addRecentEmoji({unicode}));
 
     props.closeReactionBar();
-    props.handleClickReaction(e, emoji);
-  };
-
-  const handleEmojiClick = (emoji: string) => {
-    dispatch(addRecentEmoji({unicode: emoji}));
-
-    props.closeReactionBar();
-
-    // Create a synthetic mouse event for consistency with existing API
-    const syntheticEvent = {
-      preventDefault: () => {},
-      stopPropagation: () => {},
-    } as React.MouseEvent<HTMLButtonElement>;
-
-    props.handleClickReaction(syntheticEvent, emoji);
   };
 
   const togglePicker = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -113,7 +98,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
               <button
                 key={reaction.unicode}
                 className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
-                onClick={(e) => handleClickQuickReaction(e, reaction.unicode)}
+                onClick={() => handleEmojiClick(reaction.unicode)}
               >
                 {reaction.unicode}
               </button>
