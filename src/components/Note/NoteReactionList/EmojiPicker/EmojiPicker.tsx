@@ -7,11 +7,16 @@ import {SkinToneName} from "store/features/skinTone/types";
 import "./EmojiPicker.scss";
 
 export interface EmojiClickData {
-  annotation: string;
-  order: number;
-  shortcodes: string[];
+  emoji: {
+    annotation: string;
+    group: number;
+    order: number;
+    shortcodes: string[];
+    tags: string[];
+    unicode: string;
+    version: number;
+  };
   skinTone: number;
-  tags: string[];
   unicode: string;
 }
 
@@ -85,7 +90,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
       const customEvent = event as CustomEvent<EmojiClickData>;
       console.log(customEvent.detail);
       if (onEmojiClick) {
-        onEmojiClick(customEvent.detail.unicode);
+        onEmojiClick(customEvent.detail.emoji.unicode); // this is the unstyled/default emoji
       }
     };
 
