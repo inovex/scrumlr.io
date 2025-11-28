@@ -12,8 +12,7 @@ import {MAX_RECENT_EMOJIS} from "./types";
  * - Permanent emojis are ignored
  */
 export const addRecentEmoji = createAsyncThunk<EmojiData[], EmojiData>("recentEmojis/addRecentEmoji", async (emojiData, {getState}) => {
-  console.log(emojiData);
-  if (isPermanentEmoji(emojiData.unicode)) {
+  if (isPermanentEmoji(emojiData.reactionType)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (getState() as any).recentEmojis.emojis;
   }
@@ -22,7 +21,7 @@ export const addRecentEmoji = createAsyncThunk<EmojiData[], EmojiData>("recentEm
   const currentEmojis: EmojiData[] = (getState() as any).recentEmojis.emojis;
 
   // Remove duplicate if exists (based on emoji character)
-  const filtered = currentEmojis.filter((e) => e.unicode !== emojiData.unicode);
+  const filtered = currentEmojis.filter((e) => e.reactionType !== emojiData.reactionType);
 
   // Add new emoji at the front (most recent)
   const updated = [emojiData, ...filtered].slice(0, MAX_RECENT_EMOJIS);

@@ -56,7 +56,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     if (!participant) throw new Error("participant must exist");
 
     return {
-      reactionType: reaction.emoji,
+      reactionType: reaction.reactionType,
       amount: 1,
       users: [participant],
       myReactionId,
@@ -136,6 +136,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   }, [rootRef]);
 
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
+    console.log("emoji", emoji);
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
 

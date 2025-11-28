@@ -4,7 +4,7 @@ import {createPortal} from "react-dom";
 import {useLocation} from "react-router";
 import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
-import {PERMANENT_EMOJIS, isPermanentEmoji, EmojiData} from "store/features/reactions/types";
+import {PERMANENT_EMOJIS, EmojiData} from "store/features/reactions/types";
 import {addRecentEmoji} from "store/features/recentEmojis/thunks";
 import {ReactionModeled} from "../NoteReactionList";
 import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
@@ -47,8 +47,9 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     }
   }, [location, props]);
 
-  const handleEmojiClick = (unicode: string) => {
-    dispatch(addRecentEmoji({unicode}));
+  const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement>, unicode: string) => {
+    dispatch(addRecentEmoji({reactionType: unicode}));
+    props.handleClickReaction(e, unicode);
 
     props.closeReactionBar();
   };
@@ -93,14 +94,14 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
         {/* Quick reactions: 3 permanent + 3 recent */}
         <div className="emoji-picker-reaction-bar__quick-reactions">
           {quickReactions.map((reaction) => {
-            const active = !!props.reactions.find((r) => r.reactionType === reaction.unicode && !!r.myReactionId);
+            const active = !!props.reactions.find((r) => r.reactionType === reaction.reactionType && !!r.myReactionId);
             return (
               <button
-                key={reaction.unicode}
+                key={reaction.reactionType}
                 className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
-                onClick={() => handleEmojiClick(reaction.unicode)}
+                onClick={(e) => handleEmojiClick(e, reaction.reactionType)}
               >
-                {reaction.unicode}
+                {reaction.reactionType}
               </button>
             );
           })}

@@ -132,19 +132,19 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       id: "test-reactions-id-1",
       note: "test-notes-id-1",
       user: "test-participants-self-user-id",
-      emoji: "like",
+      reactionType: "👍",
     },
     {
       id: "test-reactions-id-2",
       note: "test-notes-id-2",
       user: "test-participants-self-user-id",
-      emoji: "like",
+      reactionType: "👍",
     },
     {
       id: "test-reactions-id-3",
       note: "test-notes-id-1",
       user: "test-participants-self-user-id",
-      emoji: "heart",
+      reactionType: "💖",
     },
   ],
   votes: [
@@ -199,7 +199,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     component: "",
   },
   recentEmojis: {
-    emojis: [{unicode: "🥳"}, {unicode: "😂"}, {unicode: "🤔"}],
+    emojis: [{reactionType: "🥳"}, {reactionType: "😂"}, {reactionType: "🤔"}],
   },
   templates: [
     // Default and two custom templates for tests
