@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
+import {useLocation} from "react-router";
 import classNames from "classnames";
 import {buildQuickReactions, isDefaultEmoji, EmojiData} from "store/features/reactions/types";
 import {ReactionModeled} from "../NoteReactionList";
@@ -53,11 +54,20 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
   const [recentEmojis, setRecentEmojis] = useState<string[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
+  const locationRef = useRef(location);
 
   // Load recent emojis on component mount
   useEffect(() => {
     setRecentEmojis(getRecentEmojis());
   }, []);
+
+  useEffect(() => {
+    if (location !== locationRef.current) {
+      setShowPicker(false);
+      props.closeReactionBar();
+    }
+  }, [location, props]);
 
   const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
     e.preventDefault();
@@ -170,7 +180,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
                 left: `${pickerPosition.left}px`,
-                zIndex: 150,
+                zIndex: 190,
               }}
             >
               <EmojiPicker onEmojiClick={handleEmojiClick} />
