@@ -198,6 +198,9 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     name: "default",
     component: "",
   },
+  recentEmojis: {
+    emojis: [{unicode: "🥳"}, {unicode: "😂"}, {unicode: "🤔"}],
+  },
   templates: [
     // Default and two custom templates for tests
     {...DEFAULT_TEMPLATE.template, type: "CUSTOM"},

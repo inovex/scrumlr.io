@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {getEmojiDisplay, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {useAppDispatch, useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useTranslation} from "react-i18next";
@@ -89,7 +88,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}
               >
-                {LEGACY_REACTION_EMOJI_MAP.get(r.reactionType) ? LEGACY_REACTION_EMOJI_MAP.get(r.reactionType)!.emoji : getEmojiDisplay(r.reactionType)}
+                {r.reactionType}
               </button>
             </div>
             <div className="note-reaction-popup__row-divider" />

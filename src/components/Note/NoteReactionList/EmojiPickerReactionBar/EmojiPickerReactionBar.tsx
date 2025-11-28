@@ -3,7 +3,9 @@ import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import {useLocation} from "react-router";
 import classNames from "classnames";
-import {buildQuickReactions, isDefaultEmoji, EmojiData} from "store/features/reactions/types";
+import {useAppDispatch, useAppSelector} from "store";
+import {PERMANENT_EMOJIS, isPermanentEmoji, EmojiData} from "store/features/reactions/types";
+import {addRecentEmoji} from "store/features/recentEmojis/thunks";
 import {ReactionModeled} from "../NoteReactionList";
 import {ShowMoreEmojiesIcon} from "./ShowMoreEmojiesIcon";
 import "./EmojiPickerReactionBar.scss";
@@ -26,42 +28,18 @@ const getPickerPosition = (buttonRect: DOMRect) => {
   };
 };
 
-const RECENT_EMOJIS_KEY = "scrumlr-recent-emojis";
-const MAX_RECENT_EMOJIS = 3;
-
-const getRecentEmojis = (): string[] => {
-  try {
-    const stored = localStorage.getItem(RECENT_EMOJIS_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
-};
-
-const addRecentEmoji = (emoji: string): void => {
-  try {
-    const recent = getRecentEmojis();
-    const filtered = recent.filter((e) => e !== emoji);
-    const updated = [emoji, ...filtered].slice(0, MAX_RECENT_EMOJIS);
-    localStorage.setItem(RECENT_EMOJIS_KEY, JSON.stringify(updated));
-  } catch {
-    // Silently fail if localStorage is not available
-  }
-};
-
 export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
-  const [recentEmojis, setRecentEmojis] = useState<string[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const locationRef = useRef(location);
+  const dispatch = useAppDispatch();
 
-  // Load recent emojis on component mount
-  useEffect(() => {
-    setRecentEmojis(getRecentEmojis());
-  }, []);
+  const recentEmojis = useAppSelector((state) => state.recentEmojis.emojis);
+  const quickReactions: EmojiData[] = [...PERMANENT_EMOJIS, ...recentEmojis];
 
+  // Closes emoji picker if for example SettingsDialog is being opened via keyboard shortcut
   useEffect(() => {
     if (location !== locationRef.current) {
       setShowPicker(false);
@@ -70,24 +48,14 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   }, [location, props]);
 
   const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
-    e.preventDefault();
-    e.stopPropagation(); // Prevent note modal from opening
-
-    // Add to recent emojis if it's not a default emoji
-    if (!isDefaultEmoji(emoji)) {
-      console.log(emoji);
-      addRecentEmoji(emoji);
-      setRecentEmojis(getRecentEmojis());
-    }
+    dispatch(addRecentEmoji({unicode: emoji}));
 
     props.closeReactionBar();
     props.handleClickReaction(e, emoji);
   };
 
   const handleEmojiClick = (emoji: string) => {
-    // Add to recent emojis
-    addRecentEmoji(emoji);
-    setRecentEmojis(getRecentEmojis());
+    dispatch(addRecentEmoji({unicode: emoji}));
 
     props.closeReactionBar();
 
@@ -99,9 +67,6 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
 
     props.handleClickReaction(syntheticEvent, emoji);
   };
-
-  // Build quick reactions using clean utility function
-  const quickReactions: EmojiData[] = buildQuickReactions(recentEmojis);
 
   const togglePicker = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -140,17 +105,17 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
         role="toolbar"
         aria-label="Emoji reaction picker"
       >
-        {/* Quick reactions (built using clean utility function) */}
+        {/* Quick reactions: 3 permanent + 3 recent */}
         <div className="emoji-picker-reaction-bar__quick-reactions">
           {quickReactions.map((reaction) => {
-            const active = !!props.reactions.find((r) => r.reactionType === reaction.type && !!r.myReactionId);
+            const active = !!props.reactions.find((r) => r.reactionType === reaction.unicode && !!r.myReactionId);
             return (
               <button
-                key={reaction.type}
+                key={reaction.unicode}
                 className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
-                onClick={(e) => handleClickQuickReaction(e, reaction.type)}
+                onClick={(e) => handleClickQuickReaction(e, reaction.unicode)}
               >
-                {reaction.emoji}
+                {reaction.unicode}
               </button>
             );
           })}

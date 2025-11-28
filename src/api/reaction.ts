@@ -2,14 +2,14 @@ import {SERVER_HTTP_URL} from "../config";
 import {Reaction} from "../store/features/reactions/types";
 
 export const ReactionAPI = {
-  addReaction: async (board: string, note: string, reactionType: string) => {
+  addReaction: async (board: string, note: string, emoji: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
           note,
-          reactionType,
+          reactionType: emoji,
         }),
       });
 
