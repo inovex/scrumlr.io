@@ -56,7 +56,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     if (!participant) throw new Error("participant must exist");
 
     return {
-      reactionType: reaction.reactionType,
+      reactionType: reaction.emoji,
       amount: 1,
       users: [participant],
       myReactionId,

@@ -2,7 +2,8 @@ export type Reaction = {
   id: string;
   note: string;
   user: string;
-  reactionType: string;
+  emoji: string; // default emoji (e.g., "👍")
+  skinTone?: number; // 0 (default) to 5 (dark) according to Fitzpatrick scale https://en.wikipedia.org/wiki/Fitzpatrick_scale
 };
 
 export type ReactionState = Reaction[];
