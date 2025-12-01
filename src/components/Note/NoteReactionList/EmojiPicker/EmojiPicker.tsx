@@ -147,6 +147,27 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
         :host(.dark) #search {
           background-color: #373e4f; /* $navy--400 */
         }
+
+        @media screen and (min-width: 768px) {
+          .pad-top {
+            height: 20px;
+          }
+          .search-row {
+            padding: 0 20px;
+          }
+          div.nav {
+            padding: 0 20px;
+          }
+          div.indicator-wrapper {
+            padding: 0 20px;
+          }
+          div[role="tabpanel"] {
+            padding: 0 7px 0 20px;
+          }
+          section.picker {
+            padding: 0 0 40px;
+          }
+        }
       `;
       picker.shadowRoot.appendChild(style);
     }
