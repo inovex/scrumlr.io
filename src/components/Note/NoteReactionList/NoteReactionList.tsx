@@ -124,7 +124,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
       const isInsideNote = rootRef.current?.contains(target);
-      const isInsideEmojiPicker = target && (target as Element).closest?.(".emoji-picker-reaction-bar__picker-portal");
+      const isInsideEmojiPicker = target && (target as Element).closest?.(".note-reaction-picker__picker-portal");
 
       if (!isInsideNote && !isInsideEmojiPicker) {
         // click not inside note or emoji picker -> close bar
