@@ -47,9 +47,9 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
     }
   }, [location, props]);
 
-  const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement>, unicode: string) => {
+  const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement> | Event, unicode: string) => {
     dispatch(addRecentEmoji({reactionType: unicode}));
-    props.handleClickReaction(e, unicode);
+    props.handleClickReaction(e as React.MouseEvent<HTMLButtonElement>, unicode);
 
     props.closeReactionBar();
   };

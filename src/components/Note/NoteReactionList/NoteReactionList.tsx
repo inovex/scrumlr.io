@@ -136,7 +136,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   }, [rootRef]);
 
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
-    console.log("emoji", emoji);
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
 
