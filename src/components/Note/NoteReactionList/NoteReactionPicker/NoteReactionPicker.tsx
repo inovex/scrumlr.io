@@ -8,10 +8,10 @@ import {PERMANENT_EMOJIS, EmojiData} from "store/features/reactions/types";
 import {addRecentEmoji} from "store/features/recentEmojis/thunks";
 import {Plus} from "components/Icon";
 import {ReactionModeled} from "../NoteReactionList";
-import "./EmojiPickerReactionBar.scss";
+import "./NoteReactionPicker.scss";
 import EmojiPicker from "../EmojiPicker/EmojiPicker";
 
-interface EmojiPickerReactionBarProps {
+interface NoteReactionPickerProps {
   closeReactionBar: () => void;
   reactions: ReactionModeled[];
   handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => void;
@@ -28,7 +28,7 @@ const getPickerPosition = (buttonRect: DOMRect) => {
   };
 };
 
-export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
+export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -86,19 +86,19 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   return (
     <>
       <div
-        className="emoji-picker-reaction-bar__root"
+        className="note-reaction-picker__root"
         onClick={(e) => e.stopPropagation()} // Prevent all clicks from bubbling up
         role="toolbar"
         aria-label="Emoji reaction picker"
       >
         {/* Quick reactions: 3 permanent + 3 recent */}
-        <div className="emoji-picker-reaction-bar__quick-reactions">
+        <div className="note-reaction-picker__quick-reactions">
           {quickReactions.map((reaction) => {
             const active = !!props.reactions.find((r) => r.reactionType === reaction.reactionType && !!r.myReactionId);
             return (
               <button
                 key={reaction.reactionType}
-                className={classNames("emoji-picker-reaction-bar__reaction", {"emoji-picker-reaction-bar__reaction--active": active})}
+                className={classNames("note-reaction-picker__reaction", {"note-reaction-picker__reaction--active": active})}
                 onClick={(e) => handleEmojiClick(e, reaction.reactionType)}
               >
                 {reaction.reactionType}
@@ -109,7 +109,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
           {/* More emojis button */}
           <button
             ref={buttonRef}
-            className={classNames("emoji-picker-reaction-bar__more", {"emoji-picker-reaction-bar__more--active": showPicker})}
+            className={classNames("note-reaction-picker__more", {"note-reaction-picker__more--active": showPicker})}
             onClick={togglePicker}
             aria-label="More emojis"
           >
@@ -123,7 +123,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
         createPortal(
           <ReactFocusLock autoFocus={false}>
             <div
-              className="emoji-picker-reaction-bar__picker-portal"
+              className="note-reaction-picker__picker-portal"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-label="Emoji picker"

@@ -1,18 +1,18 @@
 @use "constants/styles";
 
-.emoji-picker-reaction-bar__root {
+.note-reaction-picker__root {
   position: relative;
   border-radius: styles.$rounded--default;
   padding: styles.$reaction__padding--outer-top-bottom styles.$reaction__padding--outer-left-right;
 }
 
-.emoji-picker-reaction-bar__quick-reactions {
+.note-reaction-picker__quick-reactions {
   display: flex;
   gap: styles.$reaction__gap-size;
   align-items: center;
 }
 
-.emoji-picker-reaction-bar__reaction {
+.note-reaction-picker__reaction {
   all: unset;
   display: flex;
   justify-content: center;
@@ -38,7 +38,7 @@
   }
 }
 
-.emoji-picker-reaction-bar__more {
+.note-reaction-picker__more {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,11 +60,11 @@
 }
 
 [theme="dark"] {
-  .emoji-picker-reaction-bar__root {
+  .note-reaction-picker__root {
     background: styles.$navy--600;
   }
 
-  .emoji-picker-reaction-bar__reaction {
+  .note-reaction-picker__reaction {
     &:hover {
       background: styles.$navy--300;
     }
@@ -77,7 +77,7 @@
     }
   }
 
-  .emoji-picker-reaction-bar__more {
+  .note-reaction-picker__more {
     background: styles.$navy--600;
     border-color: styles.$navy--300;
     color: styles.$gray--300;
@@ -88,14 +88,14 @@
   }
 }
 
-.emoji-picker-reaction-bar__picker-portal {
+.note-reaction-picker__picker-portal {
   border-radius: styles.$rounded--default;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: styles.$gray--000;
 }
 
 [theme="dark"] {
-  .emoji-picker-reaction-bar__picker-portal {
+  .note-reaction-picker__picker-portal {
     background: styles.$navy--600;
   }
 }

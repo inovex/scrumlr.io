@@ -9,7 +9,7 @@ import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
 import {useAppDispatch, useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
-import {EmojiPickerReactionBar} from "./EmojiPickerReactionBar/EmojiPickerReactionBar";
+import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import "./NoteReactionList.scss";
@@ -201,7 +201,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           >
             <AddEmoji className="note-reaction-list__add-reaction-sticker" />
           </button>
-          {showReactionBar && <EmojiPickerReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+          {showReactionBar && <NoteReactionPicker closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
         </div>
       )}
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
