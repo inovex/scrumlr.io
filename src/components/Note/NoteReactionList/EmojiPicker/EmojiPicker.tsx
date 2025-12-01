@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {setSkinTone} from "store/features";
 import {SkinToneName} from "store/features/skinTone/types";
+import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import "./EmojiPicker.scss";
 
 export interface EmojiClickData {
@@ -33,7 +34,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string; locale?: string}, HTMLElement>;
+      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string; locale?: string; class?: string}, HTMLElement>;
     }
   }
 }
@@ -44,6 +45,8 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   const {i18n} = useTranslation();
   const dispatch = useAppDispatch();
   const currentSkinTone = useAppSelector((state) => state.skinTone.name);
+  const theme = useAppSelector((state) => state.view.theme);
+  const autoTheme = useAutoTheme(theme);
 
   const lang = i18n.language.split("-")[0];
   const dataSourceUrl = `/emoji-data/${lang}.json`;
@@ -114,11 +117,45 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
     };
   }, [onEmojiClick, dispatch, isReady, lang]);
 
+  // Manually overriding the emoji-picker base styles (via shadow dom)
+  useEffect(() => {
+    const picker = ref.current;
+    if (!picker || !picker?.shadowRoot) return;
+
+    // Remove the favorites bar at the bottom
+    const menuElement = picker.shadowRoot.querySelector('div[role="menu"]');
+    if (menuElement) {
+      menuElement.remove();
+    }
+
+    // Inject custom styles into the shadow DOM
+    const styleId = "custom-emoji-picker-styles";
+    if (!picker.shadowRoot.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        #search {
+          border: 1px solid transparent;
+        }
+        #search:hover {
+          border: 1px solid #586073; /* $navy--200 */
+        }
+        :host(.light) #search {
+          background-color: #F4F4F6; /* $gray--200 */
+        }
+        :host(.dark) #search {
+          background-color: #373e4f; /* $navy--400 */
+        }
+      `;
+      picker.shadowRoot.appendChild(style);
+    }
+  }, [isReady]);
+
   if (!isReady) {
     return null;
   }
 
-  return <emoji-picker ref={ref} data-source={dataSourceUrl} locale={lang} {...props} />;
+  return <emoji-picker ref={ref} class={(theme === "auto" ? autoTheme : theme) as string} data-source={dataSourceUrl} locale={lang} {...props} />;
 };
 
 export default EmojiPicker;
