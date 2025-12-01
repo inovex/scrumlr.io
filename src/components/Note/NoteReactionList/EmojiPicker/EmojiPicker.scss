@@ -10,6 +10,6 @@ emoji-picker {
 
 [theme="dark"] {
   emoji-picker {
-    // TODO
+    --indicator-color: #{colors.$blue--400};
   }
 }
