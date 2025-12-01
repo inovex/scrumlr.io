@@ -91,7 +91,8 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
 
     const handleEmojiClick = (event: Event) => {
       const customEvent = event as CustomEvent<EmojiClickData>;
-      onEmojiClick(event, customEvent.detail.unicode); // this is the unstyled/default emoji
+      // this is the styled emoji unicode (with skin Tone included), TODO(#5638): access customEvent.detail.emoji.unicode for unstyled/default unicode character
+      onEmojiClick(event, customEvent.detail.unicode);
     };
 
     const handleSkinToneChange = (event: Event) => {
