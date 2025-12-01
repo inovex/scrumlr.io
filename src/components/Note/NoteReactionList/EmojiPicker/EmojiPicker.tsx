@@ -164,9 +164,6 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
           div[role="tabpanel"] {
             padding: 0 7px 0 20px;
           }
-          section.picker {
-            padding: 0 0 40px;
-          }
         }
       `;
       picker.shadowRoot.appendChild(style);
