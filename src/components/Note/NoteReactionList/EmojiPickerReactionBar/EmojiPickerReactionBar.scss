@@ -26,7 +26,7 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background: styles.$gray--600;
+    background: styles.$gray--500;
   }
 
   &--active {
@@ -44,27 +44,18 @@
   align-items: center;
   width: styles.$reaction__inner-size;
   height: styles.$reaction__inner-size;
-  border: 1px solid styles.$gray--300;
-  background: styles.$gray--000;
+  border: none;
+  background: styles.$gray--300;
   border-radius: styles.$rounded--full;
   cursor: pointer;
   font-size: styles.$text--sm;
   transition: all 0.2s ease;
-  color: styles.$gray--600;
+  color: styles.$navy--900;
   line-height: 1;
   padding: 0;
 
   &:hover {
-    background: styles.$gray--300;
-  }
-
-  &--active {
-    background: var(--accent-color--100);
-    border-color: var(--accent-color--100);
-
-    &:hover {
-      background: var(--accent-color--200);
-    }
+    background: styles.$gray--500;
   }
 }
 
@@ -93,15 +84,6 @@
 
     &:hover {
       background: styles.$navy--300;
-    }
-
-    &--active {
-      background: rgba(var(--accent-color--dark-rgb), 0.6);
-      border-color: rgba(var(--accent-color--dark-rgb), 0.6);
-
-      &:hover {
-        background: rgba(var(--accent-color--dark-rgb), 0.8);
-      }
     }
   }
 }
