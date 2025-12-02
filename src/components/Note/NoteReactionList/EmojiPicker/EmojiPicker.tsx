@@ -49,7 +49,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   const autoTheme = useAutoTheme(theme);
 
   const lang = i18n.language.split("-")[0];
-  const dataSourceUrl = `/emoji-data/${lang}.json`;
+  const dataSourceUrl = `assets/emoji-data/${lang}.json`;
 
   const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
   const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
