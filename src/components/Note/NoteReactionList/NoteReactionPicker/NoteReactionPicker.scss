@@ -23,7 +23,7 @@
   border-radius: styles.$rounded--full;
   cursor: pointer;
   font-size: styles.$text--md;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 
   &:hover {
     background: styles.$gray--500;
@@ -53,7 +53,7 @@
   border-radius: styles.$rounded--full;
   cursor: pointer;
   font-size: styles.$text--sm;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
   color: styles.$navy--900;
   line-height: 1;
   padding: 0;
