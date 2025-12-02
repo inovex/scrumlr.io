@@ -36,6 +36,10 @@
       background: var(--accent-color--200);
     }
   }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
+  }
 }
 
 .note-reaction-picker__more {
@@ -79,11 +83,14 @@
 
   .note-reaction-picker__more {
     background: styles.$navy--600;
-    border-color: styles.$navy--300;
     color: styles.$gray--300;
 
     &:hover {
       background: styles.$navy--300;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
     }
   }
 }
