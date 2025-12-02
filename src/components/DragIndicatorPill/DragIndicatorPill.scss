@@ -1,19 +1,19 @@
-@import "src/constants/style.scss";
+@use "constants/styles";
 
 .drag-indicator-pill {
   display: flex;
   align-items: center;
-  gap: $spacing--xs;
+  gap: styles.$spacing--xs;
 
   background-color: rgba(var(--accent-color--light-rgb), 0.95);
-  color: $gray--000;
-  padding: $spacing--xxs $spacing--xs;
-  border-radius: $spacing--lg;
-  font-size: $text--xs;
+  color: styles.$gray--000;
+  padding: styles.$spacing--xxs styles.$spacing--xs;
+  border-radius: styles.$spacing--lg;
+  font-size: styles.$text--xs;
   font-weight: 600;
   white-space: nowrap;
-  box-shadow: 0 $spacing--xxs $spacing--sm rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba($gray--000, 0.2);
+  box-shadow: 0 styles.$spacing--xxs styles.$spacing--sm rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(styles.$gray--000, 0.2);
 
   pointer-events: none;
 
@@ -21,19 +21,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: $icon--medium;
-    height: $icon--medium;
-    border-radius: $rounded--full;
-    border: 2px solid $gray--000;
-    background-color: $gray--000;
+    width: styles.$icon--medium;
+    height: styles.$icon--medium;
+    border-radius: styles.$rounded--full;
+    border: 2px solid styles.$gray--000;
+    background-color: styles.$gray--000;
     overflow: hidden;
     flex-shrink: 0;
-    margin-left: -$spacing--xxs;
+    margin-left: -(styles.$spacing--xxs);
   }
 
   &__avatar-image {
-    width: $icon--medium;
-    height: $icon--medium;
+    width: styles.$icon--medium;
+    height: styles.$icon--medium;
   }
 
   &__text {
@@ -44,12 +44,12 @@
 [theme="dark"] {
   .drag-indicator-pill {
     background-color: rgba(var(--accent-color--dark-rgb), 0.95);
-    border: 1px solid rgba($navy--900, 0.3);
-    box-shadow: 0 $spacing--xxs $spacing--sm rgba($navy--900, 0.4);
+    border: 1px solid rgba(styles.$navy--900, 0.3);
+    box-shadow: 0 styles.$spacing--xxs styles.$spacing--sm rgba(styles.$navy--900, 0.4);
 
     &__avatar {
-      border: 2px solid $navy--400;
-      background-color: $navy--400;
+      border: 2px solid styles.$navy--400;
+      background-color: styles.$navy--400;
     }
   }
 }
