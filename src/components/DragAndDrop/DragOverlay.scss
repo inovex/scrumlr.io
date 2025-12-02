@@ -1,17 +1,17 @@
-@import "src/constants/style.scss";
+@use "constants/styles";
 
 .drag-overlay {
   .note {
     background-color: rgba(var(--accent-color--light-rgb), 0.5);
     border: 1px solid rgba(var(--accent-color--light-rgb), 0.5);
     box-shadow:
-      0 $spacing--xxs $spacing--xs rgba(var(--accent-color--light-rgb), 0.1),
-      $box-shadow--light;
+      0 styles.$spacing--xxs styles.$spacing--xs rgba(var(--accent-color--light-rgb), 0.1),
+      styles.$box-shadow--light;
   }
 
   .note__in-stack {
     background-color: rgba(var(--accent-color--light-rgb), 0.03);
-    box-shadow: 0 $spacing--xxs $spacing--xs rgba(var(--accent-color--light-rgb), 0.08);
+    box-shadow: 0 styles.$spacing--xxs styles.$spacing--xs rgba(var(--accent-color--light-rgb), 0.08);
   }
 }
 
@@ -21,13 +21,13 @@
       background-color: rgba(var(--accent-color--dark-rgb), 0.5);
       border: 1px solid rgba(var(--accent-color--dark-rgb), 0.5);
       box-shadow:
-        0 $spacing--xxs $spacing--xs rgba(var(--accent-color--dark-rgb), 0.15),
-        $box-shadow--dark;
+        0 styles.$spacing--xxs styles.$spacing--xs rgba(var(--accent-color--dark-rgb), 0.15),
+        styles.$box-shadow--dark;
     }
 
     .note__in-stack {
       background-color: rgba(var(--accent-color--dark-rgb), 0.05);
-      box-shadow: 0 $spacing--xxs $spacing--xs rgba(var(--accent-color--dark-rgb), 0.12);
+      box-shadow: 0 styles.$spacing--xxs styles.$spacing--xs rgba(var(--accent-color--dark-rgb), 0.12);
     }
   }
 }
