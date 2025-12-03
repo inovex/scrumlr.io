@@ -14,6 +14,7 @@ type UsersApi interface {
 	Update(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
 
+	isAuthorizedUser(next http.Handler) http.Handler
 	BoardAuthenticatedContext(next http.Handler) http.Handler
 	AnonymousBoardCreationContext(next http.Handler) http.Handler
 	AnonymousCustomTemplateCreationContext(next http.Handler) http.Handler
@@ -29,6 +30,7 @@ func (r *Router) RegisterRoutes() chi.Router {
 		router.Get("/", r.usersApi.GetUser)
 		router.Get("/{user}", r.usersApi.GetUserByID)
 		router.Put("/", r.usersApi.Update)
+		router.With(r.usersApi.isAuthorizedUser).Delete("/{user}", r.usersApi.Delete)
 		router.With(r.sessionApi.BoardParticipantContext).Get("/board/{id}", r.usersApi.GetUsersFromBoard)
 	})
 	return router

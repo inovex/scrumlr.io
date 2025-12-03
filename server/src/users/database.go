@@ -189,3 +189,12 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 
 	return user, err
 }
+
+func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	_, err := db.db.NewDelete().
+		Model((*DatabaseUser)(nil)).
+		Where("id = ?", id).
+		Exec(ctx)
+
+	return err
+}
