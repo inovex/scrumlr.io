@@ -931,7 +931,7 @@ func TestDeleteUser(t *testing.T) {
   broker.Con = mockBroker
 
   mockSessionService := sessions.NewMockSessionService(t)
-
+  mockSessionService.EXPECT().GetUserConnectedBoards(mock.Anything, userId).Return([]*sessions.BoardSession{}, nil)
   userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
   err := userService.Delete(context.Background(), userId)
@@ -952,6 +952,7 @@ func TestDeleteUser_DatabaseError(t *testing.T) {
   broker.Con = mockBroker
 
   mockSessionService := sessions.NewMockSessionService(t)
+  mockSessionService.EXPECT().GetUserConnectedBoards(mock.Anything, userId).Return([]*sessions.BoardSession{}, nil)
 
   userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
