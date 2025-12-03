@@ -302,8 +302,13 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.delete.id", id.String()),
 	)
-
-	err := service.database.DeleteUser(ctx, id)
+	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get connected boards")
+		span.RecordError(err)
+		return err
+	}
+	err = service.database.DeleteUser(ctx, id)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete user")
 		span.RecordError(err)
@@ -312,7 +317,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 
 	deletedUserCounter.Add(ctx, 1)
-	//BoardEventUserDeleted
+	service.deletedUser(ctx, id, connectedBoards)
 	return err
 }
 
@@ -418,7 +423,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 	}
 }
 
-func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID) {
+func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID, connectedBoards []*sessions.BoardSession) {
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.update")
 	defer span.End()
 
@@ -426,12 +431,6 @@ func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID) {
 		attribute.String("scrumlr.users.service.update.id", userId.String()),
 	)
 
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, userId)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get connected boards")
-		span.RecordError(err)
-		return
-	}
 	for _, session := range connectedBoards {
 		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventUserDeleted,
