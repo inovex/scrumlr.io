@@ -4,9 +4,10 @@ import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {Board} from "store/features/board/types";
 import {Column} from "store/features/columns/types";
 import {Note} from "store/features/notes/types";
-import {ParticipantWithUser} from "store/features/participants/types";
+import {ParticipantWithUser, ParticipantWithUserId} from "store/features/participants/types";
 import {Voting} from "store/features/votings/types";
 import {API} from "../api";
+import {Auth} from "../store/features";
 
 const {t} = i18n;
 
@@ -110,6 +111,20 @@ const mdTemplate = (boardData: ExportBoardDataType) =>
 
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
-  const json: ExportBoardDataType = await response.json();
+  const jsonResponse = await response.json();
+  const userWithUser = await API.getUsers(jsonResponse.board.id);
+  jsonResponse.participants = jsonResponse.participants.map((participant: ParticipantWithUserId) => {
+    const user = userWithUser.find((u: Auth) => u.id === participant.id);
+    return {
+      user: {...user},
+      connected: participant.connected,
+      ready: participant.ready,
+      raisedHand: participant.raisedHand,
+      showHiddenColumns: participant.showHiddenColumns,
+      role: participant.role,
+      banned: participant.banned,
+    };
+  });
+  const json: ExportBoardDataType = jsonResponse;
   return `${mdTemplate(json)}`;
 };

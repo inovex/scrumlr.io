@@ -7,9 +7,10 @@ import {Close, Printer} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
-import {ExportBoardDataType, compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
+import {compareNotes, ExportBoardDataType, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
 import {DEFAULT_URL} from "constants/misc";
 import "./PrintView.scss";
+import {Auth, ParticipantWithUserId} from "../../../../store/features";
 
 interface PrintViewProps {
   boardId: string;
@@ -36,7 +37,21 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
 
   const getBoardData = async () => {
     const response = await API.exportBoard(boardId, "application/json");
-    return response.json();
+    const jsonResponse = await response.json();
+    const userWithUser = await API.getUsers(jsonResponse.board.id);
+    jsonResponse.participants = jsonResponse.participants.map((participant: ParticipantWithUserId) => {
+      const user = userWithUser.find((u: Auth) => u.id === participant.id);
+      return {
+        user: {...user},
+        connected: participant.connected,
+        ready: participant.ready,
+        raisedHand: participant.raisedHand,
+        showHiddenColumns: participant.showHiddenColumns,
+        role: participant.role,
+        banned: participant.banned,
+      };
+    });
+    return jsonResponse;
   };
 
   useEffect(() => {
@@ -65,11 +80,24 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   };
 
   const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
-    <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
+    <div
+      key={id}
+      className={classNames("print-view__note", {
+        "print-view__note--isChild": isChild,
+        "print-view__note--isTop": isTop,
+      })}
+    >
       <p className="print-view__note-text">{text}</p>
       <div className="print-view__note-info-wrapper">
         <span className="print-view__note-info-author">{boardData?.board.showAuthors ? getAuthorName(authorId, boardData?.participants) : ""}</span>
-        <span className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>{voteLabel(id)}</span>
+        <span
+          className={classNames({
+            "print-view__note-info--isTop": isTop,
+            "print-view__note-info--isChild": isChild,
+          })}
+        >
+          {voteLabel(id)}
+        </span>
       </div>
     </div>
   );
