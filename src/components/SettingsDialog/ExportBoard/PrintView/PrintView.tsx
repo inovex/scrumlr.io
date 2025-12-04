@@ -10,7 +10,7 @@ import {getColorClassName} from "constants/colors";
 import {compareNotes, ExportBoardDataType, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
 import {DEFAULT_URL} from "constants/misc";
 import "./PrintView.scss";
-import {Auth, ParticipantWithUserId} from "../../../../store/features";
+import {mapMultipleParticipants} from "utils/participant";
 
 interface PrintViewProps {
   boardId: string;
@@ -38,19 +38,8 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const getBoardData = async () => {
     const response = await API.exportBoard(boardId, "application/json");
     const jsonResponse = await response.json();
-    const userWithUser = await API.getUsers(jsonResponse.board.id);
-    jsonResponse.participants = jsonResponse.participants.map((participant: ParticipantWithUserId) => {
-      const user = userWithUser.find((u: Auth) => u.id === participant.id);
-      return {
-        user: {...user},
-        connected: participant.connected,
-        ready: participant.ready,
-        raisedHand: participant.raisedHand,
-        showHiddenColumns: participant.showHiddenColumns,
-        role: participant.role,
-        banned: participant.banned,
-      };
-    });
+    const userData = await API.getUsers(jsonResponse.board.id);
+    jsonResponse.participants = mapMultipleParticipants(jsonResponse.participants, userData);
     return jsonResponse;
   };
 

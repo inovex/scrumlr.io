@@ -4,14 +4,20 @@ import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {Board} from "store/features/board/types";
 import {Column} from "store/features/columns/types";
 import {Note} from "store/features/notes/types";
-import {ParticipantWithUser, ParticipantWithUserId} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {Voting} from "store/features/votings/types";
 import {API} from "../api";
-import {Auth} from "../store/features";
+import {mapMultipleParticipants} from "./participant";
 
 const {t} = i18n;
 
-export type ExportBoardDataType = {board: Board; columns: Column[]; notes: Note[]; participants: ParticipantWithUser[]; votings: Voting[]};
+export type ExportBoardDataType = {
+  board: Board;
+  columns: Column[];
+  notes: Note[];
+  participants: ParticipantWithUser[];
+  votings: Voting[];
+};
 
 export const fileName = (name?: string) => {
   const date = new Date().toJSON().slice(0, 10);
@@ -33,7 +39,14 @@ export const exportAsJSON = async (id: string, name?: string) => {
 
 export const getNoteVotes = (noteId: string, votings: Voting[]) => votings[0].votes?.votesPerNote[noteId]?.total ?? 0;
 
-export const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: string; position: {rank: number}}, votings: Voting[]) => {
+export const compareNotes = (
+  a: {id: string; position: {rank: number}},
+  b: {
+    id: string;
+    position: {rank: number};
+  },
+  votings: Voting[]
+) => {
   if (votings && getNoteVotes(a.id, votings) !== getNoteVotes(b.id, votings)) {
     return getNoteVotes(a.id, votings) > getNoteVotes(b.id, votings) ? -1 : 1;
   }
@@ -112,19 +125,8 @@ const mdTemplate = (boardData: ExportBoardDataType) =>
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
   const jsonResponse = await response.json();
-  const userWithUser = await API.getUsers(jsonResponse.board.id);
-  jsonResponse.participants = jsonResponse.participants.map((participant: ParticipantWithUserId) => {
-    const user = userWithUser.find((u: Auth) => u.id === participant.id);
-    return {
-      user: {...user},
-      connected: participant.connected,
-      ready: participant.ready,
-      raisedHand: participant.raisedHand,
-      showHiddenColumns: participant.showHiddenColumns,
-      role: participant.role,
-      banned: participant.banned,
-    };
-  });
+  const userData = await API.getUsers(jsonResponse.board.id);
+  jsonResponse.participants = mapMultipleParticipants(jsonResponse.participants, userData);
   const json: ExportBoardDataType = jsonResponse;
   return `${mdTemplate(json)}`;
 };
