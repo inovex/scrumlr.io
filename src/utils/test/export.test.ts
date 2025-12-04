@@ -1,7 +1,7 @@
 import {API} from "api";
 import {Auth} from "store/features";
 import {getMarkdownExport} from "../export";
-import dummyBoardData from "./updated-dummy-board-data.json";
+import dummyBoardData from "./dummy-board-data.json";
 
 const userData: Auth[] = [
   {
