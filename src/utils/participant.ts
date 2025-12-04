@@ -19,7 +19,7 @@ export const mapMultipleParticipants = (participants: ParticipantWithUserId[], u
   return mappedParticipants;
 };
 
-export const mapSingleParticipant = (participant: ParticipantWithUserId, userAuth: Auth): ParticipantWithUser => ({
-    ...participant,
-    user: {...userAuth},
-  });
+export const mapSingleParticipant = (participant: ParticipantWithUserId, userData: Auth): ParticipantWithUser => ({
+  ...participant,
+  user: {...userData},
+});
