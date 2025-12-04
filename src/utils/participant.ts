@@ -7,12 +7,7 @@ export const mapMultipleParticipants = (participants: ParticipantWithUserId[], u
 
     return {
       user: {...user},
-      connected: participant.connected,
-      ready: participant.ready,
-      raisedHand: participant.raisedHand,
-      showHiddenColumns: participant.showHiddenColumns,
-      role: participant.role,
-      banned: participant.banned,
+      ...participant,
     };
   });
 

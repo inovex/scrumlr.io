@@ -39,8 +39,11 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     const response = await API.exportBoard(boardId, "application/json");
     const jsonResponse = await response.json();
     const userData = await API.getUsers(jsonResponse.board.id);
-    jsonResponse.participants = mapMultipleParticipants(jsonResponse.participants, userData);
-    return jsonResponse;
+    const exportData: ExportBoardDataType = {
+      ...jsonResponse,
+      participants: mapMultipleParticipants(jsonResponse.participants, userData),
+    };
+    return exportData;
   };
 
   useEffect(() => {

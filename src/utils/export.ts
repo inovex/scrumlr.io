@@ -4,7 +4,7 @@ import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {Board} from "store/features/board/types";
 import {Column} from "store/features/columns/types";
 import {Note} from "store/features/notes/types";
-import {ParticipantWithUser} from "store/features/participants/types";
+import {ParticipantWithUser, ParticipantWithUserId} from "store/features/participants/types";
 import {Voting} from "store/features/votings/types";
 import {API} from "../api";
 import {mapMultipleParticipants} from "./participant";
@@ -16,6 +16,14 @@ export type ExportBoardDataType = {
   columns: Column[];
   notes: Note[];
   participants: ParticipantWithUser[];
+  votings: Voting[];
+};
+
+export type ExportBoardDataTypeWithUserId = {
+  board: Board;
+  columns: Column[];
+  notes: Note[];
+  participants: ParticipantWithUserId[];
   votings: Voting[];
 };
 
@@ -124,9 +132,11 @@ const mdTemplate = (boardData: ExportBoardDataType) =>
 
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
-  const jsonResponse = await response.json();
+  const jsonResponse: ExportBoardDataTypeWithUserId = await response.json();
   const userData = await API.getUsers(jsonResponse.board.id);
-  jsonResponse.participants = mapMultipleParticipants(jsonResponse.participants, userData);
-  const json: ExportBoardDataType = jsonResponse;
-  return `${mdTemplate(json)}`;
+  const exportData: ExportBoardDataType = {
+    ...jsonResponse,
+    participants: mapMultipleParticipants(jsonResponse.participants, userData),
+  };
+  return `${mdTemplate(exportData)}`;
 };
