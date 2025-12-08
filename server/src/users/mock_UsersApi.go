@@ -426,12 +426,12 @@ func (_c *MockUsersApi_Update_Call) RunAndReturn(run func(w http.ResponseWriter,
 	return _c
 }
 
-// isAuthorizedUser provides a mock function for the type MockUsersApi
-func (_mock *MockUsersApi) isAuthorizedUser(next http.Handler) http.Handler {
+// isAccountOwner provides a mock function for the type MockUsersApi
+func (_mock *MockUsersApi) isAccountOwner(next http.Handler) http.Handler {
 	ret := _mock.Called(next)
 
 	if len(ret) == 0 {
-		panic("no return value specified for isAuthorizedUser")
+		panic("no return value specified for isAccountOwner")
 	}
 
 	var r0 http.Handler
@@ -445,18 +445,18 @@ func (_mock *MockUsersApi) isAuthorizedUser(next http.Handler) http.Handler {
 	return r0
 }
 
-// MockUsersApi_isAuthorizedUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'isAuthorizedUser'
-type MockUsersApi_isAuthorizedUser_Call struct {
+// MockUsersApi_isAccountOwner_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'isAccountOwner'
+type MockUsersApi_isAccountOwner_Call struct {
 	*mock.Call
 }
 
-// isAuthorizedUser is a helper method to define mock.On call
+// isAccountOwner is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockUsersApi_Expecter) isAuthorizedUser(next interface{}) *MockUsersApi_isAuthorizedUser_Call {
-	return &MockUsersApi_isAuthorizedUser_Call{Call: _e.mock.On("isAuthorizedUser", next)}
+func (_e *MockUsersApi_Expecter) isAccountOwner(next interface{}) *MockUsersApi_isAccountOwner_Call {
+	return &MockUsersApi_isAccountOwner_Call{Call: _e.mock.On("isAccountOwner", next)}
 }
 
-func (_c *MockUsersApi_isAuthorizedUser_Call) Run(run func(next http.Handler)) *MockUsersApi_isAuthorizedUser_Call {
+func (_c *MockUsersApi_isAccountOwner_Call) Run(run func(next http.Handler)) *MockUsersApi_isAccountOwner_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 http.Handler
 		if args[0] != nil {
@@ -469,12 +469,12 @@ func (_c *MockUsersApi_isAuthorizedUser_Call) Run(run func(next http.Handler)) *
 	return _c
 }
 
-func (_c *MockUsersApi_isAuthorizedUser_Call) Return(handler http.Handler) *MockUsersApi_isAuthorizedUser_Call {
+func (_c *MockUsersApi_isAccountOwner_Call) Return(handler http.Handler) *MockUsersApi_isAccountOwner_Call {
 	_c.Call.Return(handler)
 	return _c
 }
 
-func (_c *MockUsersApi_isAuthorizedUser_Call) RunAndReturn(run func(next http.Handler) http.Handler) *MockUsersApi_isAuthorizedUser_Call {
+func (_c *MockUsersApi_isAccountOwner_Call) RunAndReturn(run func(next http.Handler) http.Handler) *MockUsersApi_isAccountOwner_Call {
 	_c.Call.Return(run)
 	return _c
 }
