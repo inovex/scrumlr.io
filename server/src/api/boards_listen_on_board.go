@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"go.opentelemetry.io/otel/codes"
@@ -102,6 +103,8 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		log.Debugw("received message", "message", message)
+		// Handle incoming WebSocket messages
+		s.handleWebSocketMessage(ctx, id, userID, conn, message)
 	}
 }
 
@@ -136,6 +139,22 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 				logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 			}
 		}
+	}
+}
+
+// handleWebSocketMessage routes incoming WebSocket messages to appropriate handlers
+func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn *websocket.Conn, rawMessage []byte) {
+	var message notes.WebSocketMessage
+	if err := json.Unmarshal(rawMessage, &message); err != nil {
+		logger.Get().Errorw("failed to unmarshal websocket message", "error", err, "message", string(rawMessage))
+		return
+	}
+
+	switch message.Type {
+	case notes.WebSocketMessageTypeDragLock:
+		s.notes.HandleWebSocketMessage(ctx, boardID, userID, conn, message.Data)
+	default:
+		logger.Get().Debugw("unknown websocket message type", "type", message.Type, "user", userID)
 	}
 }
 

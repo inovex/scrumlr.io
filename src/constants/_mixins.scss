@@ -6,7 +6,7 @@
 
 // tooltip
 @mixin tooltip {
-  z-index: styles.$request-z-index;
+  z-index: styles.$tooltip-z-index;
   border-radius: styles.$rounded--large;
   max-width: 80%;
   font-size: styles.$text--sm;
