@@ -32,6 +32,7 @@ type UserDatabase interface {
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
+	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
 	GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
 
@@ -293,6 +294,33 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	return new(User).From(user), err
 }
 
+func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.delete.id", id.String()),
+	)
+	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get connected boards")
+		span.RecordError(err)
+		return err
+	}
+	err = service.database.DeleteUser(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete user")
+		span.RecordError(err)
+		log.Errorw("failed to delete user", "user", id, "err", err)
+		return common.InternalServerError
+	}
+
+	deletedUserCounter.Add(ctx, 1)
+	service.deletedUser(ctx, id, connectedBoards)
+	return err
+}
+
 func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get")
@@ -391,6 +419,22 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
 			Data: session,
+		})
+	}
+}
+
+func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID, connectedBoards []*sessions.BoardSession) {
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.update.id", userId.String()),
+	)
+
+	for _, session := range connectedBoards {
+		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
+			Type: realtime.BoardEventUserDeleted,
+			Data: userId,
 		})
 	}
 }

@@ -572,6 +572,63 @@ func (_c *MockUserDatabase_CreateOIDCUser_Call) RunAndReturn(run func(ctx contex
 	return _c
 }
 
+// DeleteUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	ret := _mock.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUser")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockUserDatabase_DeleteUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteUser'
+type MockUserDatabase_DeleteUser_Call struct {
+	*mock.Call
+}
+
+// DeleteUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+func (_e *MockUserDatabase_Expecter) DeleteUser(ctx interface{}, id interface{}) *MockUserDatabase_DeleteUser_Call {
+	return &MockUserDatabase_DeleteUser_Call{Call: _e.mock.On("DeleteUser", ctx, id)}
+}
+
+func (_c *MockUserDatabase_DeleteUser_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserDatabase_DeleteUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_DeleteUser_Call) Return(err error) *MockUserDatabase_DeleteUser_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockUserDatabase_DeleteUser_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) error) *MockUserDatabase_DeleteUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetUser provides a mock function for the type MockUserDatabase
 func (_mock *MockUserDatabase) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	ret := _mock.Called(ctx, id)
