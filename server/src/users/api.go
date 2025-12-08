@@ -286,7 +286,7 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 
 func (api *API) isAccountOwner(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx, span := tracer.Start(r.Context(), "scrumlr.user.api.context.is_authorized_user")
+		ctx, span := tracer.Start(r.Context(), "scrumlr.user.api.context.is_account_owner")
 		defer span.End()
 		log := logger.FromContext(ctx)
 
