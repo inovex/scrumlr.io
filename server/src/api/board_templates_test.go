@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/go-chi/jwtauth/v5"
+	auth2 "github.com/go-pkgz/auth/v2"
+	"github.com/go-pkgz/auth/v2/token"
 	"github.com/google/uuid"
 	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
@@ -69,6 +71,15 @@ func createTestAuth() auth.Auth {
 
 // testAuthService implements auth.Auth interface for testing purposes
 type testAuthService struct{}
+
+func (t *testAuthService) GetAuthService() *auth2.Service {
+	return auth2.NewService(auth2.Opts{})
+}
+
+func (t *testAuthService) GetTokenService() *token.Service {
+	//TODO implement me
+	panic("implement me")
+}
 
 func (t *testAuthService) Sign(_ map[string]interface{}) (string, error) {
 	return "test-token", nil
