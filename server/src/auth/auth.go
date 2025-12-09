@@ -334,14 +334,15 @@ func (a *AuthConfiguration) initializeOpts() (auth.Opts, error) {
 	return options, nil
 }
 
-func (a *AuthConfiguration) initializeTokenOpts() (token.Opts, error) {
-	options := token.Opts{
-		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
-			if a.privateKey != "" {
-				return a.privateKey, nil
-			}
-			return a.unsafePrivateKey, nil
-		}),
-	}
-	return options, nil
-}
+//
+//func (a *AuthConfiguration) initializeTokenOpts() (token.Opts, error) {
+//	options := token.Opts{
+//		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
+//			if a.privateKey != "" {
+//				return a.privateKey, nil
+//			}
+//			return a.unsafePrivateKey, nil
+//		}),
+//	}
+//	return options, nil
+//}
