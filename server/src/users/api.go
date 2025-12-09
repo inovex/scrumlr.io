@@ -25,6 +25,7 @@ type UserService interface {
   CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error)
   CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error)
   Update(ctx context.Context, body UserUpdateRequest) (*User, error)
+  Delete(ctx context.Context, id uuid.UUID) error
   Get(ctx context.Context, id uuid.UUID) (*User, error)
   GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
 
@@ -131,8 +132,23 @@ func (api *API) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *API) Delete(w http.ResponseWriter, r *http.Request) {
-  //TODO implement me
-  panic("implement me")
+  ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.delete")
+  defer span.End()
+  log := logger.FromContext(ctx)
+
+  user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+  err := api.service.Delete(ctx, user)
+  if err != nil {
+    span.SetStatus(codes.Error, "failed to delete user")
+    span.RecordError(err)
+    log.Errorw("failed to delete user", "user", user, "err", err)
+    http.Error(w, "unable to delete user", http.StatusInternalServerError)
+    return
+  }
+
+  render.Status(r, http.StatusNoContent)
+  render.Respond(w, r, err)
 }
 
 func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
@@ -264,6 +280,47 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
       return
     }
 
+    next.ServeHTTP(w, r)
+  })
+}
+
+func (api *API) isAccountOwner(next http.Handler) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    ctx, span := tracer.Start(r.Context(), "scrumlr.user.api.context.is_account_owner")
+    defer span.End()
+    log := logger.FromContext(ctx)
+
+    userIDValue := ctx.Value(identifiers.UserIdentifier)
+    userID, ok := userIDValue.(uuid.UUID)
+    if !ok {
+      span.SetStatus(codes.Error, "invalid or missing user identifier in context")
+      span.RecordError(errors.New("invalid or missing user identifier in context"))
+      log.Errorw("invalid or missing user identifier in context")
+      common.Throw(w, r, common.InternalServerError)
+      return
+    }
+
+    requestID := chi.URLParam(r, "user")
+    requestedUserID, err := uuid.Parse(requestID)
+    if err != nil {
+      span.SetStatus(codes.Error, "unable to parse uuid")
+      span.RecordError(err)
+      log.Errorw("unable to parse uuid", "err", err)
+      common.Throw(w, r, common.BadRequestError(err))
+      return
+    }
+
+    span.SetAttributes(
+      attribute.String("scrumlr.user.api.context.is_account_owner.userId", userID.String()),
+      attribute.String("scrumlr.user.api.context.is_account_owner.requestedUserId", requestedUserID.String()),
+    )
+    if userID != requestedUserID {
+      span.SetStatus(codes.Error, "requested user does not match authenticated user")
+      span.RecordError(err)
+      log.Errorw("requested user does not match authenticated user", "requestedUserId", requestedUserID.String(), "userId", userID.String())
+      common.Throw(w, r, common.BadRequestError(err))
+      return
+    }
     next.ServeHTTP(w, r)
   })
 }
