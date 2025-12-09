@@ -34,7 +34,7 @@
     "query-string": "^9.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-focus-lock": "^2.13.6",
+    "react-focus-lock": "^2.13.7",
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.6.1",
     "react-i18next": "^16.3.5",
