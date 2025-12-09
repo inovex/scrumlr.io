@@ -10,7 +10,10 @@ import (
 	"math"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/go-pkgz/auth/v2"
+	"github.com/go-pkgz/auth/v2/token"
 	"scrumlr.io/server/users"
 
 	"github.com/uptrace/bun"
@@ -39,6 +42,8 @@ type Auth interface {
 	Authenticator() func(http.Handler) http.Handler
 	Exists(accountType common.AccountType) bool
 	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
+	GetAuthService() *auth.Service
+	GetTokenService() *token.Service
 }
 
 type AuthProviderConfiguration struct {
@@ -59,6 +64,16 @@ type AuthConfiguration struct {
 	auth             *jwtauth.JWTAuth
 	database         *bun.DB
 	userService      users.UserService
+	authService      *auth.Service
+	tokenService     *token.Service
+}
+
+func (a *AuthConfiguration) GetTokenService() *token.Service {
+	return a.tokenService
+}
+
+func (a *AuthConfiguration) GetAuthService() *auth.Service {
+	return a.authService
 }
 
 type UserInformation struct {
@@ -73,13 +88,19 @@ func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafe
 	a.database = database
 	a.userService = userService
 	a.privateKey = privateKey
+
 	if err := a.initializeProviders(); err != nil {
 		return nil, err
 	}
 	if err := a.initializeJWTAuth(); err != nil {
 		return nil, err
 	}
-
+	authOpts, err := a.initializeOpts()
+	if err != nil {
+		return nil, err
+	}
+	a.authService = auth.NewService(authOpts)
+	a.authService.AddProvider("google", providers[(string)(common.Google)].ClientId, providers[(string)(common.Google)].ClientSecret) // add github provider
 	return a, nil
 }
 
@@ -295,4 +316,32 @@ func (a *AuthConfiguration) initializeJWTAuth() error {
 
 	a.auth = jwtauth.New("ES512", privateKey, privateKey.PublicKey)
 	return nil
+}
+
+func (a *AuthConfiguration) initializeOpts() (auth.Opts, error) {
+	options := auth.Opts{
+		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
+			if a.privateKey != "" {
+				return a.privateKey, nil
+			}
+			return a.unsafePrivateKey, nil
+		}),
+		TokenDuration:  time.Minute * 5,      // token expires in 5 minutes
+		CookieDuration: time.Hour * 24 * 400, // cookie expires in 1 day and will enforce re-login
+		Issuer:         "scrumlr.io",
+		URL:            "https://scrumlr.io",
+	}
+	return options, nil
+}
+
+func (a *AuthConfiguration) initializeTokenOpts() (token.Opts, error) {
+	options := token.Opts{
+		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
+			if a.privateKey != "" {
+				return a.privateKey, nil
+			}
+			return a.unsafePrivateKey, nil
+		}),
+	}
+	return options, nil
 }
