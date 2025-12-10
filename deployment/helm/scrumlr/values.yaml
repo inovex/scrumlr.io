@@ -155,6 +155,9 @@ backend:
   ## @param backend.secretRef Name of existing secret. If set override the secrets and extra secret.
   ##
   secretRef: ""
+  ## @param backend.env Additional env entries (e.g. configMapRef/secretRef)
+  ##
+  env: []
   ## @param backend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
