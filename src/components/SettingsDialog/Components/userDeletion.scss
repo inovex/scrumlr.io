@@ -1,0 +1,15 @@
+@use "constants/styles";
+
+.user-deletion-button {
+  .settings-option-button__label {
+    color: styles.$critical-carmine--light; // Change text color to red
+  }
+
+  .settings-option-button__icon {
+    color: styles.$critical-carmine--light; // Change icon color to red
+  }
+
+  &:hover {
+    background-color: rgba(styles.$critical-carmine--light, 0.1);
+  }
+}
