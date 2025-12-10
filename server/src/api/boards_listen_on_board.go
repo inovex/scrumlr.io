@@ -3,6 +3,8 @@ package api
 import (
 	"context"
 	"net/http"
+  "time"
+
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boards"
@@ -53,6 +55,20 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+
+  // new possition
+	// Set user as connected BEFORE fetching board data to avoid race condition
+	// where the INIT event contains stale connected status
+
+  err = s.sessions.Connect(ctx, id, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to connect session")
+		span.RecordError(err)
+		log.Warnw("failed to connect session", "board", id, "user", userID, "err", err)
+	}
+	defer s.closeBoardSocket(context.Background(), id, userID, conn)
+
+
 	fullBoard, err := s.boards.FullBoard(ctx, id)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get full board")
@@ -67,6 +83,11 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	initEvent = eventInitFilter(initEvent, userID)
+
+  // TODO remove sleep after testing
+  time.Sleep(100 * time.Millisecond)
+
+
 	err = conn.WriteJSON(initEvent)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to send init message")
@@ -76,13 +97,10 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = s.sessions.Connect(ctx, id, userID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to connect session")
-		span.RecordError(err)
-		log.Warnw("failed to connect session", "board", id, "user", userID, "err", err)
-	}
-	defer s.closeBoardSocket(context.Background(), id, userID, conn)
+
+  // old possition
+
+
 
 	s.listenOnBoard(ctx, id, userID, conn, initEvent.Data)
 
