@@ -518,7 +518,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nom d'utilisateur"
+    "UserName": "Nom d'utilisateur",
+    "deleteAccount": "Supprimer le compte"
   },
   "Error": {
     "editBoard": "Désolé, mais nous avons des difficultés à mettre à jour le tableau. Veuillez réessayer.",

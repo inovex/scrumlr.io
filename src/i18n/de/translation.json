@@ -519,7 +519,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nutzername"
+    "UserName": "Nutzername",
+    "deleteAccount": "Konto löschen"
   },
   "Error": {
     "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",

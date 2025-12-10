@@ -518,7 +518,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profile",
-    "UserName": "User Name"
+    "UserName": "User Name",
+    "deleteAccount": "Delete account"
   },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
