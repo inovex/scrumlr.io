@@ -26,6 +26,8 @@ export const resources = {
   },
 };
 
+export type AppLanguage = keyof typeof resources;
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)

@@ -1,10 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Database} from "emoji-picker-element";
+import {Database, Picker} from "emoji-picker-element";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {setSkinTone} from "store/features";
 import {SkinToneName} from "store/features/skinTone/types";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
+import {AppLanguage} from "i18n";
+import {I18n} from "emoji-picker-element/shared";
 import "./EmojiPicker.scss";
 
 export interface EmojiClickData {
@@ -29,18 +31,8 @@ interface EmojiPickerProps extends React.HTMLAttributes<HTMLElement> {
   onEmojiClick: (e: Event, unicode: string) => void;
 }
 
-// This tells TypeScript that <emoji-picker> is a valid HTML tag.
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      "emoji-picker": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {"data-source"?: string; locale?: string; class?: string}, HTMLElement>;
-    }
-  }
-}
-
 const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<Picker>(null);
   const [isReady, setIsReady] = useState(false);
   const {i18n} = useTranslation();
   const dispatch = useAppDispatch();
@@ -48,9 +40,8 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   const theme = useAppSelector((state) => state.view.theme);
   const autoTheme = useAutoTheme(theme);
 
-  const lang = i18n.language.split("-")[0];
+  const lang = i18n.resolvedLanguage as AppLanguage;
   const dataSourceUrl = `${process.env.PUBLIC_URL}/emoji-data/${lang}.json`;
-
   const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
   const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
 
@@ -69,24 +60,11 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
   useEffect(() => {
     const element = ref.current;
 
-    if (element && lang !== "en") {
-      let i18nPromise;
-      if (lang === "de") {
-        i18nPromise = import("emoji-picker-element/i18n/de");
-      } else if (lang === "fr") {
-        i18nPromise = import("emoji-picker-element/i18n/fr");
-      }
-
-      if (i18nPromise) {
-        i18nPromise
-          .then((module) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (element as any).i18n = module.default;
-          })
-          .catch(() => {
-            // Fallback to English if translation is missing
-          });
-      }
+    if (element) {
+      import(`emoji-picker-element/i18n/${lang}.js`) // .js suffix required because of bundling of dynamic import resolution
+        .then(({default: i18ndefault}: {default: I18n}) => {
+          element.i18n = i18ndefault;
+        });
     }
 
     const handleEmojiClick = (event: Event) => {
