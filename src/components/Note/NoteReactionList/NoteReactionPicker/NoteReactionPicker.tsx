@@ -17,14 +17,18 @@ interface NoteReactionPickerProps {
   handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => void;
 }
 
+// note: the position is _not_ resolved dynamically, would need to add a resize observer for that purpose.
 const getPickerPosition = (buttonRect: DOMRect) => {
   const [width, height, gap, margin] = [320, 350, 5, 20];
   const spaceBelow = window.innerHeight - buttonRect.bottom;
   const showAbove = spaceBelow < height + gap + margin;
 
+  const spaceRight = window.innerWidth - buttonRect.left;
+  const showLeft = spaceRight < width + margin;
+
   return {
     top: showAbove ? Math.max(buttonRect.top + window.scrollY - height - gap, window.scrollY + 10) : buttonRect.bottom + window.scrollY + gap,
-    left: Math.max(margin, Math.min(buttonRect.left + window.scrollX, window.innerWidth - width - margin)),
+    left: showLeft ? Math.max(margin, buttonRect.right + window.scrollX - width) : Math.max(margin, Math.min(buttonRect.left + window.scrollX, window.innerWidth - width - margin)),
   };
 };
 
