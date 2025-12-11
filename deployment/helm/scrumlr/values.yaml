@@ -45,6 +45,9 @@ frontend:
   ## @param frontend.secretRef Name of existing secret. If set override the secrets.
   ##
   secretRef: ""
+  ## @param frontend.env Additional env entries (e.g. configMapRef/secretRef)
+  ##
+  env: []
   ## @param frontend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}

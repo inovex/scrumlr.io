@@ -205,6 +205,37 @@ tests:
           value: My-Scrumlr-Secrets
         template: /frontend/deployment.yaml
 
+  - it: should add env vars from secret key refs
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.env:
+        - name: SCRUMLR_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: scrumlr-config
+              key: url
+              optional: false
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: SCRUMLR_SERVER_URL
+        template: /frontend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.name
+          value: scrumlr-config
+        template: /frontend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.key
+          value: url
+        template: /frontend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.optional
+          value: false
+        template: /frontend/deployment.yaml
+
+
   - it: should not set resources
     release:
       name: scrumlr

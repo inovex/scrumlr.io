@@ -22,6 +22,7 @@
 | `frontend.extraConfig`                        | Extra configuration values as a map                                                         | `{}`                                         |
 | `frontend.secrets`                            | Extra secrets values as a map                                                               | `{}`                                         |
 | `frontend.secretRef`                          | Name of existing secret. If set override the secrets.                                       | `""`                                         |
+| `frontend.env`                                | Additional environment variables for the frontend container                                 | `[]`                                       |
 | `frontend.resources`                          | Set container requests and limits for different resources like CPU or memory                | `{}`                                         |
 | `frontend.startupProbe.enabled`               | Enable/disable the startup probe                                                            | `true`                                       |
 | `frontend.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated                                                     | `10`                                         |
