@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Database, Picker} from "emoji-picker-element";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
-import {setSkinTone} from "store/features";
+import {setSkinTone, skinTones} from "store/features";
 import {SkinToneName} from "store/features/skinTone/types";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import {AppLanguage} from "i18n";
@@ -42,7 +42,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
 
   const lang = i18n.resolvedLanguage as AppLanguage;
   const dataSourceUrl = `${process.env.PUBLIC_URL}/emoji-data/${lang}.json`;
-  const skinToneMapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
+  const skinToneMapping = Object.keys(skinTones) as SkinToneName[];
   const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
 
   useEffect(() => {
@@ -76,10 +76,9 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
     const handleSkinToneChange = (event: Event) => {
       const customEvent = event as CustomEvent<SkinToneChangeData>;
       const newSkinToneIndex = customEvent.detail.skinTone;
-      const mapping: SkinToneName[] = ["default", "light", "medium_light", "medium", "medium_dark", "dark"];
 
-      if (newSkinToneIndex >= 0 && newSkinToneIndex < mapping.length) {
-        dispatch(setSkinTone(mapping[newSkinToneIndex]));
+      if (newSkinToneIndex >= 0 && newSkinToneIndex < skinToneMapping.length) {
+        dispatch(setSkinTone(skinToneMapping[newSkinToneIndex]));
       }
     };
 
@@ -94,7 +93,7 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
         element.removeEventListener("skin-tone-change", handleSkinToneChange);
       }
     };
-  }, [onEmojiClick, dispatch, isReady, lang]);
+  }, [onEmojiClick, dispatch, isReady, lang, skinToneMapping]);
 
   // Manually overriding the emoji-picker base styles (via shadow dom)
   useEffect(() => {
