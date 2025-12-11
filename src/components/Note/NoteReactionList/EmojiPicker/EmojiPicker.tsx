@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import {HTMLAttributes, useEffect, useRef, useState} from "react";
 import {Database, Picker} from "emoji-picker-element";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
@@ -6,32 +6,14 @@ import {setSkinTone, skinTones} from "store/features";
 import {SkinToneName} from "store/features/skinTone/types";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import {AppLanguage} from "i18n";
-import {I18n} from "emoji-picker-element/shared";
+import type {EmojiClickEvent, I18n, SkinToneChangeEvent} from "emoji-picker-element/shared";
 import "./EmojiPicker.scss";
 
-export interface EmojiClickData {
-  emoji: {
-    annotation: string;
-    group: number;
-    order: number;
-    shortcodes: string[];
-    tags: string[];
-    unicode: string;
-    version: number;
-  };
-  skinTone: number;
-  unicode: string;
+interface EmojiPickerProps extends HTMLAttributes<Picker> {
+  onEmojiClick: (e: EmojiClickEvent, unicode: string) => void;
 }
 
-export interface SkinToneChangeData {
-  skinTone: number;
-}
-
-interface EmojiPickerProps extends React.HTMLAttributes<HTMLElement> {
-  onEmojiClick: (e: Event, unicode: string) => void;
-}
-
-const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
+const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
   const ref = useRef<Picker>(null);
   const [isReady, setIsReady] = useState(false);
   const {i18n} = useTranslation();
@@ -67,15 +49,14 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({onEmojiClick, ...props}) => {
         });
     }
 
-    const handleEmojiClick = (event: Event) => {
-      const customEvent = event as CustomEvent<EmojiClickData>;
+    const handleEmojiClick = (event: EmojiClickEvent) => {
       // this is the styled emoji unicode (with skin Tone included), TODO(#5638): access customEvent.detail.emoji.unicode for unstyled/default unicode character
-      onEmojiClick(event, customEvent.detail.unicode);
+      const unicode = event.detail.unicode!;
+      onEmojiClick(event, unicode);
     };
 
-    const handleSkinToneChange = (event: Event) => {
-      const customEvent = event as CustomEvent<SkinToneChangeData>;
-      const newSkinToneIndex = customEvent.detail.skinTone;
+    const handleSkinToneChange = (event: SkinToneChangeEvent) => {
+      const newSkinToneIndex = event.detail.skinTone;
 
       if (newSkinToneIndex >= 0 && newSkinToneIndex < skinToneMapping.length) {
         dispatch(setSkinTone(skinToneMapping[newSkinToneIndex]));
