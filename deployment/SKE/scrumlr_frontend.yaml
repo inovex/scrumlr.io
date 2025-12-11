@@ -110,7 +110,7 @@ spec:
           port: 8080
       middlewares:
         - name: scrumlr-ratelimit
-    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/manifest.json`) || PathPrefix(`/service-worker.js`))
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/manifest.json`) || PathPrefix(`/service-worker.js`) || PathPrefix(`/emoji-data/`))
       kind: Rule
       services:
         - name: scrumlr-frontend

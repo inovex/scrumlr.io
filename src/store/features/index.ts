@@ -5,6 +5,7 @@ export * from "./columns";
 export * from "./notes";
 export * from "./participants";
 export * from "./reactions";
+export * from "./recentEmojis";
 export * from "./requests";
 export * from "./skinTone";
 export * from "./view";

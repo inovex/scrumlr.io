@@ -1,0 +1,20 @@
+@use "constants/colors";
+@use "constants/styles";
+
+// Styling the emoji-picker-element via css variables, see here: https://www.webcomponents.org/element/@@npm/emoji-picker-element#css-variables
+emoji-picker {
+  --num-columns: 6;
+  --border-radius: 16px;
+  --indicator-color: #{colors.$blue--500};
+  --input-border-color: #{colors.$gray--600};
+
+  @media #{styles.$tablet} {
+    --num-columns: 9;
+  }
+}
+
+[theme="dark"] {
+  emoji-picker {
+    --indicator-color: #{colors.$blue--400};
+  }
+}

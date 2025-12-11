@@ -1,9 +1,8 @@
 import {SERVER_HTTP_URL} from "config";
-import {ReactionType} from "store/features/reactions/types";
 import {BoardReactionType} from "store/features/boardReactions/types";
 
 export const BoardReactionAPI = {
-  addBoardReaction: async (boardId: string, reactionType: ReactionType) => {
+  addBoardReaction: async (boardId: string, reactionType: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/board-reactions`, {
         method: "POST",

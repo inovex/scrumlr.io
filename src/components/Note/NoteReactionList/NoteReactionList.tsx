@@ -4,12 +4,12 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
-import {Reaction, ReactionType} from "store/features/reactions/types";
+import {Reaction} from "store/features/reactions/types";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
 import {useAppDispatch, useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
-import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
+import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import "./NoteReactionList.scss";
@@ -22,7 +22,7 @@ interface NoteReactionListProps {
 }
 
 export interface ReactionModeled {
-  reactionType: ReactionType;
+  reactionType: string;
   amount: number;
   users: ParticipantWithUser[];
   // since we reduce the reactions, we still need to know what out specific reaction id is (if it exists) so that we can operate on it (e.g. remove)
@@ -44,6 +44,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
@@ -118,11 +119,15 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionBar(false);
   };
 
-  // on clicking anywhere but the note, close the reaction bar
+  // on clicking anywhere but the note or emoji picker, close the reaction bar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) {
-        // click not inside note -> close bar
+      const target = e.target as Node;
+      const isInsideNote = rootRef.current?.contains(target);
+      const isInsideEmojiPicker = target && (target as Element).closest?.(".note-reaction-picker__picker-portal");
+
+      if (!isInsideNote && !isInsideEmojiPicker) {
+        // click not inside note or emoji picker -> close bar
         setShowReactionBar(false);
       }
     };
@@ -130,41 +135,29 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [rootRef]);
 
-  const dispatchAddReaction = (noteId: string, reactionType: ReactionType) => {
-    dispatch(addReaction({noteId, reactionType}));
-  };
-
-  const dispatchDeleteReaction = (reactionId: string) => {
-    dispatch(
-      deleteReaction(reactionId) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
-    );
-  };
-
-  const dispatchReplaceReaction = (reactionId: string, reactionType: ReactionType) => {
-    dispatch(updateReaction({reactionId, reactionType}));
-  };
-
-  const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+  const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, emoji: string) => {
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
 
     if (showReactionPopup) return;
 
-    const isSameReaction = reactionMadeByUser?.reactionType === reactionType;
+    const isSameReaction = reactionMadeByUser?.reactionType === emoji;
 
     // no reaction exists -> add
     if (!reactionMadeByUser) {
-      dispatchAddReaction(props.noteId, reactionType);
+      dispatch(addReaction({noteId: props.noteId, emoji}));
       return;
     }
 
     // same reaction -> remove
     if (isSameReaction) {
-      dispatchDeleteReaction(reactionMadeByUser.myReactionId!);
+      dispatch(
+        deleteReaction(reactionMadeByUser.myReactionId!) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
+      );
     }
     // other reaction -> replace
     else {
-      dispatchReplaceReaction(reactionMadeByUser.myReactionId!, reactionType);
+      dispatch(updateReaction({reactionId: reactionMadeByUser.myReactionId!, emoji}));
     }
   };
 
@@ -180,7 +173,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionPopup(false);
   };
 
-  if (!props.show) return null;
+  if (!props.show || !showBoardReactions) return null;
 
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
@@ -208,7 +201,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           >
             <AddEmoji className="note-reaction-list__add-reaction-sticker" />
           </button>
-          {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+          {showReactionBar && <NoteReactionPicker closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
         </div>
       )}
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
