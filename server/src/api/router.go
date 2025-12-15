@@ -186,22 +186,22 @@ func New(
 }
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
-  return r.Group(func(r chi.Router) {
-    r.Get("/info", s.getServerInfo)
-    r.Get("/health", s.healthCheck)
-    r.Post("/feedback", s.createFeedback)
-    authHandler, _ := s.auth.GetAuthService().Handlers()
-    r.Mount("/login", authHandler)
-    //r.Route("/login", func(r chi.Router) {
-    //	r.Delete("/", s.logout)
-    //	r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
-    //
-    //	r.Route("/{provider}", func(r chi.Router) {
-    //
-    //		r.Get("/callback", s.verifyAuthProviderCallback)
-    //	})
-    //})
-  })
+	return r.Group(func(r chi.Router) {
+		r.Get("/info", s.getServerInfo)
+		r.Get("/health", s.healthCheck)
+		r.Post("/feedback", s.createFeedback)
+		authHandler, _ := s.auth.GetAuthService().Handlers()
+		r.Mount("/login", authHandler)
+		//r.Route("/login", func(r chi.Router) {
+		//	r.Delete("/", s.logout)
+		//	r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
+		//
+		//	r.Route("/{provider}", func(r chi.Router) {
+		//
+		//		r.Get("/callback", s.verifyAuthProviderCallback)
+		//	})
+		//})
+	})
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
