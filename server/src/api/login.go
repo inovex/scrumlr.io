@@ -35,21 +35,21 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  user, err := s.users.CreateAnonymous(ctx, body.Name)
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to create anonyoums user")
-    span.RecordError(err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
-  tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to generate token string")
-    span.RecordError(err)
-    log.Errorw("unable to generate token string", "err", err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create anonyoums user")
+		span.RecordError(err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to generate token string")
+		span.RecordError(err)
+		log.Errorw("unable to generate token string", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
 
   cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
   common.SealCookie(r, &cookie)

@@ -18,32 +18,32 @@ import (
 
 	"github.com/uptrace/bun"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/jwtauth/v5"
-	"github.com/google/uuid"
-	"github.com/lestrrat-go/jwx/v3/jwt"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/apple"
-	"github.com/markbates/goth/providers/azureadv2"
-	"github.com/markbates/goth/providers/github"
-	"github.com/markbates/goth/providers/google"
-	"github.com/markbates/goth/providers/microsoftonline"
-	oidc "github.com/markbates/goth/providers/openidConnect"
-	"golang.org/x/crypto/ssh"
-	"scrumlr.io/server/auth/devkeys"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/logger"
+  "github.com/go-chi/chi/v5"
+  "github.com/go-chi/jwtauth/v5"
+  "github.com/google/uuid"
+  "github.com/lestrrat-go/jwx/v3/jwt"
+  "github.com/markbates/goth"
+  "github.com/markbates/goth/gothic"
+  "github.com/markbates/goth/providers/apple"
+  "github.com/markbates/goth/providers/azureadv2"
+  "github.com/markbates/goth/providers/github"
+  "github.com/markbates/goth/providers/google"
+  "github.com/markbates/goth/providers/microsoftonline"
+  oidc "github.com/markbates/goth/providers/openidConnect"
+  "golang.org/x/crypto/ssh"
+  "scrumlr.io/server/auth/devkeys"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/logger"
 )
 
 type Auth interface {
-	Sign(map[string]any) (string, error)
-	Verifier() func(http.Handler) http.Handler
-	Authenticator() func(http.Handler) http.Handler
-	Exists(accountType common.AccountType) bool
-	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
-	GetAuthService() *auth.Service
-	GetTokenService() *token.Service
+  Sign(map[string]any) (string, error)
+  Verifier() func(http.Handler) http.Handler
+  Authenticator() func(http.Handler) http.Handler
+  Exists(accountType common.AccountType) bool
+  ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
+  GetAuthService() *auth.Service
+  GetTokenService() *token.Service
 }
 
 type AuthProviderConfiguration struct {
@@ -105,73 +105,73 @@ func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafe
 }
 
 func (a *AuthConfiguration) initializeProviders() error {
-	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(common.Google)]; ok {
-		p := google.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"openid",
-			"profile",
-		)
-		p.SetName(strings.ToLower((string)(common.Google)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.GitHub)]; ok {
-		p := github.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"user",
-		)
-		p.SetName(strings.ToLower((string)(common.GitHub)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.Microsoft)]; ok {
-		p := microsoftonline.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"User.Read",
-		)
-		p.SetName(strings.ToLower((string)(common.Microsoft)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.AzureAd)]; ok {
-		p := azureadv2.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			azureadv2.ProviderOptions{
-				Tenant: azureadv2.TenantType(provider.TenantId),
-				Scopes: []azureadv2.ScopeType{"User.Read"},
-			},
-		)
-		p.SetName(strings.ToLower((string)(common.AzureAd)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.Apple)]; ok {
-		providers = append(providers, apple.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			nil,
-			apple.ScopeName,
-			apple.ScopeEmail,
-		))
-	}
-	if provider, ok := a.providers[(string)(common.TypeOIDC)]; ok {
-		p, err := oidc.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			provider.DiscoveryUri,
-			provider.UserIdentScope,
-			provider.UserNameScope,
-		)
-		if err != nil {
-			logger.Get().Errorw("OIDC provider setup failed", "error", err)
-		}
+  providers := []goth.Provider{}
+  if provider, ok := a.providers[(string)(common.Google)]; ok {
+    p := google.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      "openid",
+      "profile",
+    )
+    p.SetName(strings.ToLower((string)(common.Google)))
+    providers = append(providers, p)
+  }
+  if provider, ok := a.providers[(string)(common.GitHub)]; ok {
+    p := github.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      "user",
+    )
+    p.SetName(strings.ToLower((string)(common.GitHub)))
+    providers = append(providers, p)
+  }
+  if provider, ok := a.providers[(string)(common.Microsoft)]; ok {
+    p := microsoftonline.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      "User.Read",
+    )
+    p.SetName(strings.ToLower((string)(common.Microsoft)))
+    providers = append(providers, p)
+  }
+  if provider, ok := a.providers[(string)(common.AzureAd)]; ok {
+    p := azureadv2.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      azureadv2.ProviderOptions{
+        Tenant: azureadv2.TenantType(provider.TenantId),
+        Scopes: []azureadv2.ScopeType{"User.Read"},
+      },
+    )
+    p.SetName(strings.ToLower((string)(common.AzureAd)))
+    providers = append(providers, p)
+  }
+  if provider, ok := a.providers[(string)(common.Apple)]; ok {
+    providers = append(providers, apple.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      nil,
+      apple.ScopeName,
+      apple.ScopeEmail,
+    ))
+  }
+  if provider, ok := a.providers[(string)(common.TypeOIDC)]; ok {
+    p, err := oidc.New(
+      provider.ClientId,
+      provider.ClientSecret,
+      provider.RedirectUri,
+      provider.DiscoveryUri,
+      provider.UserIdentScope,
+      provider.UserNameScope,
+    )
+    if err != nil {
+      logger.Get().Errorw("OIDC provider setup failed", "error", err)
+    }
 
 		p.SetName(strings.ToLower((string)(common.TypeOIDC)))
 		providers = append(providers, p)
@@ -200,38 +200,34 @@ func (a *AuthConfiguration) initializeProviders() error {
 }
 
 func (a *AuthConfiguration) Sign(claims map[string]any) (string, error) {
-	_, token, err := a.auth.Encode(claims)
-	return token, err
+  _, token, err := a.auth.Encode(claims)
+  return token, err
 }
 
 func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
-	if a.unsafeAuth != nil {
-		return func(next http.Handler) http.Handler {
-			hfn := func(w http.ResponseWriter, r *http.Request) {
-				ctx := r.Context()
+  if a.unsafeAuth != nil {
+    return func(next http.Handler) http.Handler {
+      hfn := func(w http.ResponseWriter, r *http.Request) {
+        ctx := r.Context()
 				log := logger.FromContext(ctx)
-				var token jwt.Token
-				var err error
+        var token jwt.Token
+        var err error
 
-				if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
-					// check if user tries to authenticate by a prior authentication key
-					// attempt to migrate JWT to new key
-					var userID string
-					err = token.Get("id", &userID)
-					if err != nil {
-						log.Errorw("Error getting user ID", "error", err)
-					}
-					var user uuid.UUID
-					user, err = uuid.Parse(userID)
+        if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
+          // check if user tries to authenticate by a prior authentication key
+          // attempt to migrate JWT to new key
+          userID := token.PrivateClaims()["id"].(string)
+          var user uuid.UUID
+          user, err = uuid.Parse(userID)
 
-					if err == nil {
-						var ok bool
-						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
-							// prepare new JWT
-							tokenString, _ := a.Sign(map[string]any{"id": user})
-							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
-							common.SealCookie(r, &cookie)
-							http.SetCookie(w, &cookie)
+          if err == nil {
+            var ok bool
+            if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
+              // prepare new JWT
+              tokenString, _ := a.Sign(map[string]any{"id": user})
+              cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
+              common.SealCookie(r, &cookie)
+              http.SetCookie(w, &cookie)
 
 							// update rotation flag in database for user, ignore errors
 							_, _ = a.userService.SetKeyMigration(ctx, user)
@@ -323,19 +319,20 @@ func (a *AuthConfiguration) initializeJWTAuth() error {
 }
 
 func (a *AuthConfiguration) initializeOpts() (auth.Opts, error) {
-	options := auth.Opts{
-		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
-			if a.privateKey != "" {
-				return a.privateKey, nil
-			}
-			return a.unsafePrivateKey, nil
-		}),
-		TokenDuration:  time.Minute * 5,      // token expires in 5 minutes
-		CookieDuration: time.Hour * 24 * 400, // cookie expires in 1 day and will enforce re-login
-		Issuer:         "scrumlr.io",
-		URL:            "https://scrumlr.io",
-	}
-	return options, nil
+  options := auth.Opts{
+    SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
+      if a.privateKey != "" {
+        return a.privateKey, nil
+      }
+      return a.unsafePrivateKey, nil
+    }),
+    TokenDuration:  time.Minute * 5,      // token expires in 5 minutes
+    CookieDuration: time.Hour * 24 * 400, // cookie expires in 1 day and will enforce re-login
+    Issuer:         "scrumlr.io",
+    URL:            "https://5653.development.scrumlr.fra.ics.inovex.io",
+    SecureCookies:  true,
+  }
+  return options, nil
 }
 
 //
