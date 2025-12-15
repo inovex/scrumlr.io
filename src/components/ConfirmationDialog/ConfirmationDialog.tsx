@@ -17,7 +17,12 @@ type ConfirmationDialogProps = {
   onExtraOptionLabel?: string;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   warning?: boolean;
+  text?: string;
   className?: string;
+  // checkbox
+  checkboxLabel?: string;
+  checkboxChecked?: boolean;
+  onCheckboxChange?: (checked: boolean) => void;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -43,6 +48,22 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                         <Warning />
                         <p>{t("ConfirmationDialog.warning")}</p>
                       </div>
+                    )}
+                    {props.text && (
+                      <div className="confirmation-dialog__text">
+                        <p>{t(props.text)}</p>
+                      </div>
+                    )}
+                    {props.checkboxLabel && (
+                      <label className="confirmation-dialog__checkbox-wrapper">
+                        <input
+                          type="checkbox"
+                          className="confirmation-dialog__checkbox"
+                          checked={props.checkboxChecked}
+                          onChange={(e) => props.onCheckboxChange?.(e.target.checked)}
+                        />
+                        <span className="confirmation-dialog__checkbox-label">{props.checkboxLabel}</span>
+                      </label>
                     )}
                   </div>
                   <div className="confirmation-dialog__buttons">
