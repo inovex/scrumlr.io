@@ -4712,10 +4712,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-cypress@^15.7.0:
-  version "15.7.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.7.0.tgz#4d2a317766360232920f63c7d11ea8f5d83bc358"
-  integrity sha512-1C81zKxnQckYm2XGi37rPV4rN0bzUoWhydhKdOyshJn5gJKszEx5as9VLSZI0jp0ye49QxmnbU4TtMpcD+OmGQ==
+cypress@^15.7.1:
+  version "15.7.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.7.1.tgz#5ff5101a07b2627809adbaba86a66ff0dc499e88"
+  integrity sha512-U3sYnJ+Cnpgr6IPycxsznTg//mGVXfPGeGV+om7VQCyp5XyVkhG4oPr3X3hTq1+OB0Om0O5DxusYmt7cbvwqMQ==
   dependencies:
     "@cypress/request" "^3.0.9"
     "@cypress/xvfb" "^1.2.4"
@@ -7176,10 +7176,10 @@ i18next-fs-backend@*, i18next-fs-backend@^2.6.1:
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.6.1.tgz#bb352278136f47599783308df29f0a1b6a0d08b6"
   integrity sha512-eYWTX7QT7kJ0sZyCPK6x1q+R63zvNKv2D6UdbMf15A8vNb2ZLyw4NNNZxPFwXlIv/U+oUtg8SakW6ZgJZcoqHQ==
 
-i18next@^25.6.3:
-  version "25.6.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.6.3.tgz#984dc1cf305fe10392e4db9ba5c56406eb4f27ad"
-  integrity sha512-AEQvoPDljhp67a1+NsnG/Wb1Nh6YoSvtrmeEd24sfGn3uujCtXCF3cXpr7ulhMywKNFF7p3TX1u2j7y+caLOJg==
+i18next@^25.7.1:
+  version "25.7.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.7.1.tgz#e6a666a1b618e834c8d6f158babfd5796e61c075"
+  integrity sha512-XbTnkh1yCZWSAZGnA9xcQfHcYNgZs2cNxm+c6v1Ma9UAUGCeJPplRe1ILia6xnDvXBjk0uXU+Z8FYWhA19SKFw==
   dependencies:
     "@babel/runtime" "^7.28.4"
 
@@ -10118,10 +10118,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.2.tgz#7b393a865f9dd97bc244215db9aac8e04dc1841b"
-  integrity sha512-n3HV2J6QhItCXndGa3oMWvWFAgN1ibnS7R9mt6iokScBOC0Ul9/iZORmU2IWUMcyAQaMPjTlY3uT34TqocUxMA==
+prettier@^3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.4.tgz#d2f8335d4b1cec47e1c8098645411b0c9dff9c0f"
+  integrity sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==
 
 pretty-bytes@^5.3.0, pretty-bytes@^5.4.1, pretty-bytes@^5.6.0:
   version "5.6.0"
@@ -10463,10 +10463,10 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-router@^7.9.6:
-  version "7.9.6"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.9.6.tgz#003c8de335fdd7390286a478dcfd9579c1826137"
-  integrity sha512-Y1tUp8clYRXpfPITyuifmSoE2vncSME18uVLgaqyxh9H35JWpIfzHo+9y3Fzh5odk/jxPW29IgLgzcdwxGqyNA==
+react-router@^7.10.1:
+  version "7.10.1"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.10.1.tgz#e973146ed5f10a80783fdb3f27dbe37679557a7c"
+  integrity sha512-gHL89dRa3kwlUYtRQ+m8NmxGI6CgqN+k4XyGjwcFoQwwCWF6xXpOCUlDovkXClS0d0XJN/5q7kc5W3kiFEd0Yw==
   dependencies:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
@@ -10531,10 +10531,10 @@ react-side-effect@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-2.1.2.tgz#dc6345b9e8f9906dc2eeb68700b615e0b4fe752a"
   integrity sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==
 
-react-snowfall@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-snowfall/-/react-snowfall-2.3.0.tgz#3c7af4fa8c3786d3d3b7ccdc36ddb73108d23b07"
-  integrity sha512-+ms0lEWz30GqfGdFGFIk5YNBya2lvFA9SWWJa6di0xVpgU7qnvLbMXrh0qzfge1xDxw+Gh0FZ1IVG3YEJ+vRNQ==
+react-snowfall@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-snowfall/-/react-snowfall-2.4.0.tgz#79ad34431f2353e842a87be1af3f1f5355e25806"
+  integrity sha512-KAPMiGnxt11PEgC2pTVrTQsvk5jt1kLUtG+ZamiKLphTZ7GiYT1Aa5kX6jp4jKWq1kqJHchnGT9CDm4g86A5Gg==
   dependencies:
     react-fast-compare "^3.2.2"
 
@@ -12238,10 +12238,10 @@ ts-interface-checker@^0.1.9:
   resolved "https://registry.yarnpkg.com/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz#784fd3d679722bc103b1b4b8030bcddb5db2a699"
   integrity sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==
 
-ts-jest@^29.4.5:
-  version "29.4.5"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.5.tgz#a6b0dc401e521515d5342234be87f1ca96390a6f"
-  integrity sha512-HO3GyiWn2qvTQA4kTgjDcXiMwYQt68a1Y8+JuLRVpdIzm+UOLSHgl/XqR4c6nzJkq5rOkjc02O2I7P7l/Yof0Q==
+ts-jest@^29.4.6:
+  version "29.4.6"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.6.tgz#51cb7c133f227396818b71297ad7409bb77106e9"
+  integrity sha512-fSpWtOO/1AjSNQguk43hb/JCo16oJDnMJf3CdEGNkqsEX3t0KX96xvyX1D7PfLCpVoKu4MfVrqUkFyblYoY4lA==
   dependencies:
     bs-logger "^0.2.6"
     fast-json-stable-stringify "^2.1.0"
