@@ -145,6 +145,7 @@
     "deleteAccount": "Êtes-vous sûr de vouloir supprimer votre compte?",
     "deleteAccountText": "Si vous supprimez votre compte, toutes les données associées seront également supprimées de manière définitive, notamment : \n\n• les modèles que vous avez créés \n• vos notes et votes sur d'autres tableaux \n\nCette action ne peut pas être annulée.",
     "deleteAccountCheck": "Je comprends et j'accepte la suppression définitive.",
+    "deleteAccountWarning": "Vous devez confirmer la suppression.",
     "deleteAccountButton": "Supprimer le compte",
     "banParticipant": "Êtes-vous sûr de vouloir retirer le participant '{{user}}' de la session ?",
     "unbanParticipant": "Êtes-vous sûr de vouloir autoriser le participant '{{user}}' à rejoindre la session à nouveau ?",

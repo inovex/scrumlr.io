@@ -146,6 +146,7 @@
     "deleteAccount": "Bist du sicher, dass du dein Konto löschen möchtest?",
     "deleteAccountText": "Wenn du dein Konto löschst, werden alle damit verbundenen Daten ebenfalls dauerhaft entfernt, einschließlich: \n\n• deiner eigenen erstellten Vorlagen \n• deiner Notizen & Stimmen auf anderen Sitzungen \n\nDiese Aktion kann nicht rückgängig gemacht werden.",
     "deleteAccountCheck": "Ich verstehe und stimme der dauerhaften Löschung zu.",
+    "deleteAccountWarning": "Du musst die Löschung bestätigen.",
     "deleteAccountButton": "Konto löschen",
     "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
     "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",

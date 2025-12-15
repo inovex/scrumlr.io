@@ -23,6 +23,7 @@ type ConfirmationDialogProps = {
   checkboxLabel?: string;
   checkboxChecked?: boolean;
   onCheckboxChange?: (checked: boolean) => void;
+  noCheckboxError?: boolean;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -66,6 +67,18 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                       </label>
                     )}
                   </div>
+                  {props.checkboxLabel && (
+                    <label className="confirmation-dialog__checkbox-wrapper">
+                      <div className="confirmation-dialog__error-message">
+                        {props.noCheckboxError && (
+                          <>
+                            <Warning className="" />
+                            <p>{t("ConfirmationDialog.deleteAccountWarning")}</p>
+                          </>
+                        )}
+                      </div>
+                    </label>
+                  )}
                   <div className="confirmation-dialog__buttons">
                     <button
                       aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}

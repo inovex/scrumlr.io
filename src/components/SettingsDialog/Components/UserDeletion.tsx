@@ -5,7 +5,6 @@ import {useAppDispatch, useAppSelector} from "store";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "./SettingsButton";
 import "./userDeletion.scss";
-import {on} from "events";
 
 export interface UserDeletionProps {
   id?: string;
@@ -18,6 +17,7 @@ export const UserDeletion = (props: UserDeletionProps) => {
 
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [deleteAccountCheck, setDeleteAccountCheck] = useState(false);
+  const [showCheckboxError, setShowCheckboxError] = useState(false);
 
   const onDeleteAccount = (id?: string) => {
     // Dispatch user deletion action here
@@ -25,14 +25,17 @@ export const UserDeletion = (props: UserDeletionProps) => {
       console.log("User account deletion initiated for ID:", id);
       setShowDialog(false);
       setDeleteAccountCheck(false); // Reset checkbox after successful deletion
+      setShowCheckboxError(false);
       return;
     }
-    console.log("checkbox need to be checked before account deletion");
+    // Show error if checkbox not checked
+    setShowCheckboxError(true);
   };
 
   const onCancel = () => {
     setShowDialog(false);
     setDeleteAccountCheck(false); // Reset checkbox when canceling
+    setShowCheckboxError(false);
   };
 
   return (
@@ -60,6 +63,7 @@ export const UserDeletion = (props: UserDeletionProps) => {
           checkboxLabel={t("ConfirmationDialog.deleteAccountCheck")}
           checkboxChecked={deleteAccountCheck}
           onCheckboxChange={setDeleteAccountCheck}
+          noCheckboxError={showCheckboxError}
         />
       )}
     </>

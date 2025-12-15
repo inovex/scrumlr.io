@@ -43,7 +43,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 5px;
 }
 .confirmation-dialog__title {
   margin: 0px;
@@ -69,6 +69,32 @@
   letter-spacing: styles.$letter-spacing--small;
 }
 
+.confirmation-dialog__error-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0px 8px 0px;
+  padding-left: 0;
+  min-height: 28px;
+  visibility: visible;
+  color: styles.$critical-carmine--light;
+}
+.confirmation-dialog__error-message:empty {
+  visibility: hidden;
+}
+.confirmation-dialog__error-message > svg {
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
+  opacity: 0.8;
+  margin-left: calc(0.5em - (styles.$icon--medium / 2));
+  flex-shrink: 0;
+}
+.confirmation-dialog__error-message > p {
+  margin: 0px;
+  font-size: styles.$text-size--medium;
+  letter-spacing: styles.$letter-spacing--small;
+}
+
 .confirmation-dialog__text {
   margin: 0px;
   font-size: styles.$text-size--medium;
@@ -88,8 +114,6 @@
 .confirmation-dialog__checkbox {
   opacity: 0;
   z-index: -1;
-  height: 1px;
-  width: 1px;
 }
 
 .confirmation-dialog__checkbox-label {
@@ -102,8 +126,8 @@
 .confirmation-dialog__checkbox + .confirmation-dialog__checkbox-label::before {
   display: block;
   content: "";
-  width: 1em;
-  height: 1em;
+  width: styles.$icon--small;
+  height: styles.$icon--small;
   position: absolute;
   top: 0.1em;
   left: 0;
@@ -152,6 +176,9 @@
     width: 100%;
   }
   .confirmation-dialog__warning {
+    align-items: start;
+  }
+  .confirmation-dialog__error-message {
     align-items: start;
   }
   .confirmation-dialog {
@@ -268,5 +295,9 @@
 
   .confirmation-dialog__checkbox + .confirmation-dialog__checkbox-label::after {
     background-color: rgba(styles.$pink--500, 0.75);
+  }
+
+  .confirmation-dialog__error-message {
+    color: styles.$critical-carmine--dark;
   }
 }
