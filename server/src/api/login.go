@@ -19,66 +19,66 @@ import (
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
 type AnonymousSignUpRequest struct {
-	// The display name of the user.
-	Name string
+  // The display name of the user.
+  Name string
 }
 
 // signInAnonymously create a new anonymous user
 func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
-	var body AnonymousSignUpRequest
-	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
+  var body AnonymousSignUpRequest
+  if err := render.Decode(r, &body); err != nil {
+    span.SetStatus(codes.Error, "unable to decode body")
+    span.RecordError(err)
+    log.Errorw("unable to decode body", "err", err)
+    w.WriteHeader(http.StatusBadRequest)
+    return
+  }
+
+	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create anonyoums user")
 		span.RecordError(err)
-		log.Errorw("unable to decode body", "err", err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to generate token string")
+		span.RecordError(err)
+		log.Errorw("unable to generate token string", "err", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
-  user, err := s.users.CreateAnonymous(ctx, body.Name)
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to create anonyoums user")
-    span.RecordError(err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
-  tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to generate token string")
-    span.RecordError(err)
-    log.Errorw("unable to generate token string", "err", err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+  cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
+  common.SealCookie(r, &cookie)
+  http.SetCookie(w, &cookie)
 
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
-	common.SealCookie(r, &cookie)
-	http.SetCookie(w, &cookie)
-
-	render.Status(r, http.StatusCreated)
-	render.Respond(w, r, user)
+  render.Status(r, http.StatusCreated)
+  render.Respond(w, r, user)
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-	_, span := tracer.Start(r.Context(), "scrumlr.login.api.logout")
-	defer span.End()
+  _, span := tracer.Start(r.Context(), "scrumlr.login.api.logout")
+  defer span.End()
 
-	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-	common.SealCookie(r, &cookie)
-	http.SetCookie(w, &cookie)
+  cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+  common.SealCookie(r, &cookie)
+  http.SetCookie(w, &cookie)
 
-	if common.GetHostWithoutPort(r) != common.GetTopLevelHost(r) {
-		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-		common.SealCookie(r, &cookieWithSubdomain)
-		cookieWithSubdomain.Domain = common.GetHostWithoutPort(r)
-		http.SetCookie(w, &cookieWithSubdomain)
-	}
+  if common.GetHostWithoutPort(r) != common.GetTopLevelHost(r) {
+    cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+    common.SealCookie(r, &cookieWithSubdomain)
+    cookieWithSubdomain.Domain = common.GetHostWithoutPort(r)
+    http.SetCookie(w, &cookieWithSubdomain)
+  }
 
-	render.Status(r, http.StatusNoContent)
-	render.Respond(w, r, nil)
+  render.Status(r, http.StatusNoContent)
+  render.Respond(w, r, nil)
 }
 
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
@@ -141,10 +141,10 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
     return
   }
 
-  tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
-  cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
-  common.SealCookie(r, &cookie)
-  http.SetCookie(w, &cookie)
+	tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
+	common.SealCookie(r, &cookie)
+	http.SetCookie(w, &cookie)
 
   state := gothic.GetState(r)
   stateSplit := strings.Split(state, "__")

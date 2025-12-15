@@ -335,7 +335,7 @@ func (a *AuthConfiguration) initializeOpts() (auth.Opts, error) {
   return options, nil
 }
 
-//
+//a
 //func (a *AuthConfiguration) initializeTokenOpts() (token.Opts, error) {
 //	options := token.Opts{
 //		SecretReader: token.SecretFunc(func(id string) (string, error) { // secret key for JWT
