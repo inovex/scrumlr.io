@@ -192,10 +192,13 @@ func New(
     })
   }
 
-  chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+  err := chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
     fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
     return nil
   })
+  if err != nil {
+    return nil
+  }
   return r
 }
 
