@@ -1,10 +1,8 @@
 package api
 
 import (
-  "fmt"
   "math"
   "net/http"
-  "strings"
   "time"
 
   "github.com/go-chi/render"
@@ -12,7 +10,6 @@ import (
   "go.opentelemetry.io/otel/codes"
   "scrumlr.io/server/common"
   "scrumlr.io/server/logger"
-  "scrumlr.io/server/users"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
