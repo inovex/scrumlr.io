@@ -1,6 +1,7 @@
 package api
 
 import (
+  "fmt"
   "net/http"
   "os"
   "time"
@@ -190,6 +191,11 @@ func New(
       s.protectedRoutes(router)
     })
   }
+
+  chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+    fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
+    return nil
+  })
   return r
 }
 
@@ -198,15 +204,17 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
     r.Get("/info", s.getServerInfo)
     r.Get("/health", s.healthCheck)
     r.Post("/feedback", s.createFeedback)
-    r.Route("/login", func(r chi.Router) {
-      r.Delete("/", s.logout)
-      r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
-      authHandler, _ := s.auth.GetAuthService().Handlers()
-      r.Mount("/", authHandler)
-      r.Route("/{provider}", func(r chi.Router) {
-        r.Get("/callback", s.verifyAuthProviderCallback)
-      })
-    })
+    authHandler, _ := s.auth.GetAuthService().Handlers()
+    r.Mount("/login", authHandler)
+    //r.Route("/login", func(r chi.Router) {
+    //	r.Delete("/", s.logout)
+    //	r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
+    //
+    //	r.Route("/{provider}", func(r chi.Router) {
+    //
+    //		r.Get("/callback", s.verifyAuthProviderCallback)
+    //	})
+    //})
   })
 }
 
