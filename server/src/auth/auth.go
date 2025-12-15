@@ -329,7 +329,7 @@ func (a *AuthConfiguration) initializeOpts() (auth.Opts, error) {
     TokenDuration:  time.Minute * 5,      // token expires in 5 minutes
     CookieDuration: time.Hour * 24 * 400, // cookie expires in 1 day and will enforce re-login
     URL:            "https://5653.development.scrumlr.fra.ics.inovex.io",
-    SecureCookies:  true,
+    SecureCookies:  false,
     Logger:         logger.GetTmpLogger(),
   }
   return options, nil
