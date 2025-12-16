@@ -1,0 +1,54 @@
+---
+version: 2
+updates:
+  # Client
+  - package-ecosystem: npm
+    allow:
+      - dependency-type: "direct"
+    directory: "/"
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    versioning-strategy: increase
+    commit-message:
+      prefix: "yarn"
+      include: "scope"
+
+  # Server
+  - package-ecosystem: "gomod"
+    allow:
+      - dependency-type: "direct"
+    directory: "/server/src"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    commit-message:
+      prefix: "go"
+      include: "scope"
+    groups:
+      redis:
+        patterns:
+          - "github.com/redis/go-redis/v9"
+          - "github.com/redis/go-redis/extra/redisotel/v9"
+      bun:
+        patterns:
+          - "github.com/uptrace/bun"
+          - "github.com/uptrace/bun/dialect/pgdialect"
+          - "github.com/uptrace/bun/extra/bundebug"
+          - "github.com/uptrace/bun/extra/bunotel"
+      testcontainers:
+        patterns:
+          - "github.com/testcontainers/testcontainers-go"
+          - "github.com/testcontainers/testcontainers-go/modules/nats"
+          - "github.com/testcontainers/testcontainers-go/modules/postgres"
+          - "github.com/testcontainers/testcontainers-go/modules/redis"

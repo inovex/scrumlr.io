@@ -46,7 +46,7 @@ tests:
         template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-backend:4.3.0
+          value: scrumlr/scrumlr-backend:4.3.1
         template: /backend/deployment.yaml
 
   - it: should set image tag
@@ -159,6 +159,36 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].envFrom[1].secretRef.name
           value: My-Scrumlr-Secrets
+        template: /backend/deployment.yaml
+
+  - it: should add env vars from secret key refs
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.env:
+        - name: SCRUMLR_SERVER_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: scrumlr-db
+              key: uri
+              optional: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: SCRUMLR_SERVER_DATABASE_URL
+        template: /backend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.name
+          value: scrumlr-db
+        template: /backend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.key
+          value: uri
+        template: /backend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].env[0].valueFrom.secretKeyRef.optional
+          value: true
         template: /backend/deployment.yaml
 
   - it: should not set resources
