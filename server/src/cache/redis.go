@@ -104,9 +104,8 @@ func (r *redisClient) Get(ctx context.Context, key string) ([]byte, error) {
 	val, err := r.store.Get(ctx, key).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
-			span.SetStatus(codes.Error, "key does not exists")
+			span.SetStatus(codes.Ok, "key does not exists")
 			span.RecordError(err)
-			log.Errorw("key does not exist", "key", key, "error", err)
 			return nil, &KeyNotFound{err}
 		}
 
