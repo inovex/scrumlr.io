@@ -1,0 +1,108 @@
+@use "constants/styles";
+
+.note-reaction-picker__root {
+  position: relative;
+  border-radius: styles.$rounded--default;
+  padding: styles.$reaction__padding--outer-top-bottom styles.$reaction__padding--outer-left-right;
+}
+
+.note-reaction-picker__quick-reactions {
+  display: flex;
+  gap: styles.$reaction__gap-size;
+  align-items: center;
+}
+
+.note-reaction-picker__reaction {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: styles.$reaction__inner-size;
+  height: styles.$reaction__inner-size;
+  padding: styles.$reaction__padding--inner;
+  border-radius: styles.$rounded--full;
+  cursor: pointer;
+  font-size: styles.$text--md;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: styles.$gray--500;
+  }
+
+  &--active {
+    background: var(--accent-color--100);
+
+    &:hover {
+      background: var(--accent-color--200);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
+  }
+}
+
+.note-reaction-picker__more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: styles.$reaction__inner-size;
+  height: styles.$reaction__inner-size;
+  border: none;
+  background: styles.$gray--300;
+  border-radius: styles.$rounded--full;
+  cursor: pointer;
+  font-size: styles.$text--sm;
+  transition: background 0.2s ease;
+  color: styles.$navy--900;
+  line-height: 1;
+  padding: 0;
+
+  &:hover {
+    background: styles.$gray--500;
+  }
+}
+
+[theme="dark"] {
+  .note-reaction-picker__root {
+    background: styles.$navy--600;
+  }
+
+  .note-reaction-picker__reaction {
+    &:hover {
+      background: styles.$navy--300;
+    }
+
+    &--active {
+      background: rgba(var(--accent-color--dark-rgb), 0.6);
+      &:hover {
+        background: rgba(var(--accent-color--dark-rgb), 0.8);
+      }
+    }
+  }
+
+  .note-reaction-picker__more {
+    background: styles.$navy--600;
+    color: styles.$gray--300;
+
+    &:hover {
+      background: styles.$navy--300;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
+    }
+  }
+}
+
+.note-reaction-picker__picker-portal {
+  border-radius: styles.$rounded--default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: styles.$gray--000;
+}
+
+[theme="dark"] {
+  .note-reaction-picker__picker-portal {
+    background: styles.$navy--600;
+  }
+}

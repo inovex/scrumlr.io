@@ -1,15 +1,13 @@
-import {ReactionType} from "store/features/reactions/types";
-
 /**
  * representation of a board reaction on the server side
  */
 export type BoardReactionType = {
   id: string;
   user: string;
-  reactionType: ReactionType;
+  reactionType: string;
 };
 
-export const BOARD_REACTION_EMOJI_MAP = new Map<ReactionType, {emoji: string; skinToneSupported: boolean}>([
+export const BOARD_REACTION_EMOJI_MAP = new Map<string, {emoji: string; skinToneSupported: boolean}>([
   ["tada", {emoji: "🎉", skinToneSupported: false}],
   ["applause", {emoji: "👏", skinToneSupported: true}],
   ["heart", {emoji: "💖", skinToneSupported: false}],

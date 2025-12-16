@@ -1,6 +1,5 @@
 import {ForwardedRef, forwardRef, MouseEvent} from "react";
 import {Close} from "components/Icon";
-import {ReactionType} from "store/features/reactions/types";
 import {BOARD_REACTION_EMOJI_MAP} from "store/features/boardReactions/types";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useAppDispatch, useAppSelector} from "store";
@@ -30,7 +29,7 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
 
   const [debounce, resetDebounce] = useDelayedReset<boolean>(false, true, REACTION_DEBOUNCE_TIME);
 
-  const onClickReaction = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: ReactionType) => {
+  const onClickReaction = (e: MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: string) => {
     e.stopPropagation();
     if (!showBoardReactions) {
       Toast.info({

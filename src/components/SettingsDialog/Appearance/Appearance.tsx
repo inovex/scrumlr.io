@@ -8,9 +8,9 @@ import "../SettingsDialog.scss";
 import {ThemeSettings} from "../Components/ThemeSettings";
 import {NotificationSettings} from "../Components/NotificationSettings";
 import {BoardReactionsSettings} from "../Components/BoardReactionsSettings";
-import {SkinToneSelector} from "../Components/SkinToneSelector";
 import "./Appearance.scss";
 import {SnowfallSettings} from "../Components/SnowfallSettings";
+import {SkinToneSelector} from "../Components/SkinToneSelector";
 
 export const Appearance = () => {
   const {t} = useTranslation();
