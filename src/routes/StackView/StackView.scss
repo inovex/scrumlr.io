@@ -111,7 +111,7 @@ $stack-view__min-height: 82px;
 
   align-self: center;
 
-  z-index: styles.$request-z-index;
+  z-index: styles.$note-dialog-z-index;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {

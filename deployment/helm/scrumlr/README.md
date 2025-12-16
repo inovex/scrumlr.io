@@ -22,6 +22,7 @@
 | `frontend.extraConfig`                        | Extra configuration values as a map                                                         | `{}`                                         |
 | `frontend.secrets`                            | Extra secrets values as a map                                                               | `{}`                                         |
 | `frontend.secretRef`                          | Name of existing secret. If set override the secrets.                                       | `""`                                         |
+| `frontend.env`                                | Additional environment variables for the frontend container                                 | `[]`                                       |
 | `frontend.resources`                          | Set container requests and limits for different resources like CPU or memory                | `{}`                                         |
 | `frontend.startupProbe.enabled`               | Enable/disable the startup probe                                                            | `true`                                       |
 | `frontend.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated                                                     | `10`                                         |
@@ -68,6 +69,7 @@
 | `backend.secrets.databaseUrl`                | Url to the postgres database                                                                | `""`                                       |
 | `backend.extraSecrets`                       | Extra secrets values as a map                                                               | `{}`                                       |
 | `backend.secretRef`                          | Name of existing secret. If set override the secrets and extra secret.                      | `""`                                       |
+| `backend.env`                                | Additional environment variables for the backend container                                  | `[]`                                       |
 | `backend.resources`                          | Set container requests and limits for different resources like CPU or memory                | `{}`                                       |
 | `backend.startupProbe.enabled`               | Enable/disable the startup probe                                                            | `true`                                     |
 | `backend.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated                                                     | `10`                                       |

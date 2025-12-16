@@ -44,6 +44,10 @@ spec:
             - secretRef:
                 name: {{ .Release.Name }}-frontend-secrets
             {{- end}}
+          {{- with .Values.frontend.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.frontend.resources }}
           resources:
             {{- toYaml .Values.frontend.resources | nindent 12 }}

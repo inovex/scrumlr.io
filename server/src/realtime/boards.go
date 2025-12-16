@@ -30,6 +30,7 @@ const (
 	BoardEventParticipantCreated    BoardEventType = "PARTICIPANT_CREATED"
 	BoardEventParticipantUpdated    BoardEventType = "PARTICIPANT_UPDATED"
 	BoardEventParticipantsUpdated   BoardEventType = "PARTICIPANTS_UPDATED"
+	BoardEventUserDeleted           BoardEventType = "USER_DELETED"
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"

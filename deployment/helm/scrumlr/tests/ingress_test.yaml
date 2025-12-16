@@ -16,6 +16,19 @@ tests:
           name: scrumlr-ingress
           namespace: scrumlr
 
+  - it: should use release namespace for ingress
+    release:
+      name: scrumlr
+      namespace: another-namespace
+    set:
+      ingress.enabled: true
+    asserts:
+      - containsDocument:
+          kind: Ingress
+          apiVersion: networking.k8s.io/v1
+          name: scrumlr-ingress
+          namespace: another-namespace
+
   - it: should not set ingress if not enabled
     release:
       name: scrumlr

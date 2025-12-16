@@ -1,6 +1,16 @@
 import {API} from "api";
+import {Auth} from "store/features";
 import {getMarkdownExport} from "../export";
 import dummyBoardData from "./dummy-board-data.json";
+
+const userData: Auth[] = [
+  {
+    id: "1a536773-7159-4c33-b92f-1d510547170d",
+    name: "Happy Hornet",
+    isAnonymous: false,
+    avatar: undefined,
+  },
+];
 
 describe("the board export functions", () => {
   it("returns the board data in markdown format", async () => {
@@ -17,7 +27,7 @@ describe("the board export functions", () => {
       window.location = new URL(`https://scrumlr.io/board/${boardData.board.id}/settings/export`);
 
       API.exportBoard = jest.fn((): Promise<Response> => Promise.resolve(new Response(JSON.stringify(boardData))));
-
+      API.getUsers = jest.fn((): Promise<Auth[]> => Promise.resolve(userData));
       const mdExport = await getMarkdownExport(boardData.board.id);
 
       expect(API.exportBoard).toHaveBeenCalledTimes(1);

@@ -6,11 +6,12 @@ import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
+import {mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
-import {createdParticipant, ParticipantWithUser, ParticipantWithUserId, setParticipants, updatedParticipant} from "../participants";
+import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
@@ -18,7 +19,6 @@ import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {noteDragStarted, noteDragEnded} from "../dragLocks";
 import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
-import {Auth} from "../auth";
 
 // helper function to handle board deletion redirects
 const redirectToBoardDeletedPage = () => {
@@ -68,35 +68,6 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   }
 });
 
-const mapSingleParticipant = async (dto: ParticipantWithUserId): Promise<ParticipantWithUser> => {
-  try {
-    const user: Auth = await API.getUserById(dto.id);
-    return {
-      user,
-      ...dto,
-    };
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-const mapMultipleParticipants = async (dtos: ParticipantWithUserId[], boardID: string): Promise<ParticipantWithUser[]> => {
-  try {
-    const users = await API.getUsers(boardID);
-    return dtos
-      .map((dto) => {
-        const user = users.find((u: Auth) => u.id === dto.id);
-        if (!user) {
-          return null;
-        }
-        return {user, ...dto};
-      })
-      .filter(Boolean) as ParticipantWithUser[];
-  } catch (error) {
-    return [];
-  }
-};
-
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
 export const permittedBoardAccess = createAsyncThunk<
   void,
@@ -115,7 +86,8 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "INIT") {
         const {board, columns, notes, reactions, votes, votings, requests} = message.data;
-        const newParticipants = await mapMultipleParticipants(message.data.participants, message.data.board.id);
+        const userAuth = await API.getUsers(message.data.board.id);
+        const newParticipants = mapMultipleParticipants(message.data.participants, userAuth);
         dispatch(
           initializeBoard({
             fullBoard: {
@@ -183,11 +155,13 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        const participant = await mapSingleParticipant(message.data);
+        const user = await API.getUserById(message.data.id);
+        const participant = mapSingleParticipant(message.data, user);
         dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        const participant = await mapSingleParticipant(message.data);
+        const user = await API.getUserById(message.data.id);
+        const participant = mapSingleParticipant(message.data, user);
         dispatch(
           updatedParticipant({
             participant,
@@ -197,8 +171,8 @@ export const permittedBoardAccess = createAsyncThunk<
       }
 
       if (message.type === "PARTICIPANTS_UPDATED") {
-        const boardID = getState().board.data!.id;
-        const participants = await mapMultipleParticipants(message.data, boardID);
+        const userAuth = await API.getUsers(getState().board.data!.id);
+        const participants = mapMultipleParticipants(message.data, userAuth);
         dispatch(
           setParticipants({
             participants,
