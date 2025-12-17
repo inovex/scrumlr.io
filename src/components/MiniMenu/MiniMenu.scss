@@ -3,9 +3,6 @@
 $height--default: 48px;
 $height--small: 36px;
 
-$icon--default: 40px;
-styles.$icon--small: 24px;
-
 .mini-menu {
   display: flex;
   flex-direction: row;
@@ -42,8 +39,8 @@ styles.$icon--small: 24px;
   justify-content: center;
   align-items: center;
 
-  width: $icon--default;
-  height: $icon--default;
+  width: styles.$icon--default;
+  height: styles.$icon--default;
   border-radius: styles.$rounded--full;
 
   color: styles.$navy--900;
