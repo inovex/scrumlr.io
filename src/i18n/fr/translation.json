@@ -557,7 +557,8 @@
     "createVoting": "Désolé, mais nous avons des difficultés à démarrer un nouveau vote. Veuillez réessayer.",
     "closeVoting": "Désolé, mais nous avons des difficultés à terminer le vote. Veuillez réessayer.",
     "abortVoting": "Désolé, mais nous avons des difficultés à annuler le vote. Veuillez réessayer.",
-    "editSelf": "Désolé, mais nous avons des difficultés à mettre à jour vos informations. Veuillez réessayer."
+    "editSelf": "Désolé, mais nous avons des difficultés à mettre à jour vos informations. Veuillez réessayer.",
+    "deleteAccount": "Désolé, mais nous avons des difficultés à supprimer votre compte. Veuillez réessayer."
   },
   "Validation": {
     "REQUIRED": "requis",

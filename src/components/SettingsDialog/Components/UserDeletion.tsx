@@ -2,9 +2,10 @@ import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {useAppDispatch, useAppSelector} from "store";
+import {deleteAccount} from "store/features/auth/thunks";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "./SettingsButton";
-import "./userDeletion.scss";
+import "./UserDeletion.scss";
 
 export interface UserDeletionProps {
   id?: string;
@@ -20,11 +21,10 @@ export const UserDeletion = (props: UserDeletionProps) => {
   const [showCheckboxError, setShowCheckboxError] = useState(false);
 
   const onDeleteAccount = (id?: string) => {
-    // Dispatch user deletion action here
-    if (deleteAccountCheck) {
-      console.log("User account deletion initiated for ID:", id);
+    if (deleteAccountCheck && id) {
+      dispatch(deleteAccount(id));
       setShowDialog(false);
-      setDeleteAccountCheck(false); // Reset checkbox after successful deletion
+      setDeleteAccountCheck(false);
       setShowCheckboxError(false);
       return;
     }
