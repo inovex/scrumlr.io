@@ -1,4 +1,4 @@
-/* convert legacy reaction type identifiers to their unicode emoji counterparts. */
+-- convert legacy reaction type identifiers to their unicode emoji counterparts
 BEGIN;
 
 UPDATE reactions
