@@ -75,6 +75,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/coverage-v8": "^4.0.16",
     "cross-env": "^10.1.0",
     "cypress": "^15.10.0",
     "eslint": "^8.57.1",
@@ -93,6 +94,7 @@
     "hash-files": "^1.1.1",
     "husky": "^9.1.7",
     "i18next-fs-backend": "^2.6.1",
+    "jsdom": "^27.3.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "react-dnd-test-backend": "^15.1.2",
@@ -106,7 +108,8 @@
     "typescript": "^5.8.3",
     "vite": "^7.2.2",
     "vite-plugin-svgr": "^4.5.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.16"
   },
   "scripts": {
     "start": "vite",
