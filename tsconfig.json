@@ -43,5 +43,5 @@
       "utils/*": ["utils/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "./vite-env-override.d.ts"]
 }
