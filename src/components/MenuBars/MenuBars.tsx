@@ -1,7 +1,7 @@
 import {animated, useSpring} from "@react-spring/web";
 import classNames from "classnames";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
-import {AddStickerReaction, ArrowLeft, ArrowRight, Close, GeneralSettings, MarkAsDone, Menu, PresenterMode, RaiseHand, Timer, Voting} from "components/Icon";
+import {AddStickerReactionIcon, ArrowLeftIcon, ArrowRightIcon, CloseIcon, GeneralSettings, MarkAsDone, Menu, PresenterMode, RaiseHand, Timer, Voting} from "components/Icon";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -255,7 +255,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   direction="right"
                   label={t("MenuBars.openBoardReactionMenu")}
-                  icon={AddStickerReaction}
+                  icon={AddStickerReactionIcon}
                   onClick={toggleBoardReactionsMenu}
                   active={showBoardReactionsMenu}
                   hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
@@ -268,7 +268,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </section>
 
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
-            <ArrowLeft className="menu-bars__navigation-icon" />
+            <ArrowLeftIcon className="menu-bars__navigation-icon" />
           </button>
         </div>
 
@@ -304,7 +304,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             )}
           </section>
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn} aria-hidden>
-            <ArrowRight className="menu-bars__navigation-icon" />
+            <ArrowRightIcon className="menu-bars__navigation-icon" />
           </button>
         </div>
       </aside>
@@ -319,7 +319,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           }}
           aria-label={t("MenuBars.openMenu")}
         >
-          {fabIsExpanded ? <Close aria-hidden /> : <Menu aria-hidden />}
+          {fabIsExpanded ? <CloseIcon aria-hidden /> : <Menu aria-hidden />}
         </button>
 
         {/* role=any: toggle ready, toggle raise hand, options */}
@@ -343,7 +343,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               active={showBoardReactionsMenu}
               direction="left"
               label={t("MenuBars.openBoardReactionMenu")}
-              icon={AddStickerReaction}
+              icon={AddStickerReactionIcon}
               onClick={toggleBoardReactionsMenu}
             />
           </animated.li>

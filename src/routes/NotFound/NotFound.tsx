@@ -1,13 +1,13 @@
 import "./NotFound.scss";
-import {ReactComponent as StanWebLight} from "assets/stan/Stan_404_Web_Light.svg";
-import {ReactComponent as StanWebDark} from "assets/stan/Stan_404_Web_Dark.svg";
+import {default as StanWebLight} from "assets/stan/Stan_404_Web_Light.svg?react";
+import {default as StanWebDark} from "assets/stan/Stan_404_Web_Dark.svg?react";
 
-import {ReactComponent as StanMobileLight} from "assets/stan/Stan_404_Mobile_Light.svg";
-import {ReactComponent as StanMobileDark} from "assets/stan/Stan_404_Mobile_Dark.svg";
+import {default as StanMobileLight} from "assets/stan/Stan_404_Mobile_Light.svg?react";
+import {default as StanMobileDark} from "assets/stan/Stan_404_Mobile_Dark.svg?react";
 
-import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
-import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
-import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
+import {default as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg?react";
+import {default as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg?react";
+import {default as BackgroundDetails} from "assets/pages/404/Details.svg?react";
 
 import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";

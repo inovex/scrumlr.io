@@ -31,40 +31,40 @@ export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
         <img src={ActionbarModerator} className="hero-illustration__actionbar-moderator" alt="" />
 
         <div className="hero-illustration__tile">
-          <img src={Panel01} className="hero-illustration__tile-image" alt="" />
+          <Panel01 />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel02} className="hero-illustration__tile-image" alt="" />
+          <Panel02  />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel03} className="hero-illustration__tile-image" alt="" />
+          <Panel03   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel04} className="hero-illustration__tile-image" alt="" />
+          <Panel04   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel05} className="hero-illustration__tile-image" alt="" />
+          <Panel05   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel06} className="hero-illustration__tile-image" alt="" />
+          <Panel06   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel07} className="hero-illustration__tile-image" alt="" />
+          <Panel07   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel08} className="hero-illustration__tile-image" alt="" />
+          <Panel08   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel09} className="hero-illustration__tile-image" alt="" />
+          <Panel09   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel10} className="hero-illustration__tile-image" alt="" />
+          <Panel10   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel11} className="hero-illustration__tile-image" alt="" />
+          <Panel11   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel12} className="hero-illustration__tile-image" alt="" />
+          <Panel12   />
         </div>
       </div>
     </div>

@@ -1,11 +1,7 @@
 import {Dispatch, FormEvent, SetStateAction, useRef, useState, type KeyboardEventHandler} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {ReactComponent as IconSearch} from "assets/icons/search.svg";
-import {ReactComponent as IconClear} from "assets/icons/close.svg";
-import {ReactComponent as IconVisible} from "assets/icons/visible.svg";
-import {ReactComponent as IconHidden} from "assets/icons/hidden.svg";
-import {ReactComponent as IconError} from "assets/icons/warning.svg";
+import {CloseIcon as ClearIcon, Hidden as HiddenIcon, Search as SearchIcon, Visible as VisibleIcon, Warning as WarningIcon} from "components/Icon";
 import {useInputValidation, ValidationErrorType} from "utils/hooks/useInputValidation";
 import "./Input.scss";
 
@@ -68,7 +64,7 @@ export const Input = (props: SearchBarProps) => {
     if (errorType)
       return (
         <div className="input__icon-container input__icon-container--error">
-          <IconError className="input__icon" aria-label="validation error" />
+          <WarningIcon className="input__icon" aria-label="validation error"/>
         </div>
       );
     if (!props.input) return null;
@@ -76,19 +72,19 @@ export const Input = (props: SearchBarProps) => {
       if (passwordHidden) {
         return (
           <div className="input__icon-container input__icon-container--password-hidden" role="button" tabIndex={0} onClick={togglePasswordHidden}>
-            <IconHidden className="input__icon" aria-label="password is hidden" />
+            <HiddenIcon className="input__icon" aria-label="password is hidden"/>
           </div>
         );
       }
       return (
         <div className="input__icon-container input__icon-container--password-visible" role="button" tabIndex={0} onClick={togglePasswordHidden}>
-          <IconVisible className="input__icon" aria-label="password is visible" />
+          <VisibleIcon className="input__icon" aria-label="password is visible"/>
         </div>
       );
     }
     return (
       <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
-        <IconClear className="input__icon" aria-label="clear input" />
+        <ClearIcon className="input__icon" aria-label="clear input"/>
       </div>
     );
   };
@@ -110,7 +106,7 @@ export const Input = (props: SearchBarProps) => {
       >
         {props.type === "search" && (
           <div className="input__icon-container input__icon-container--search-icon">
-            <IconSearch className="input__icon" aria-label="logo of magnifying glass" />
+            <SearchIcon className="input__icon" aria-label="logo of magnifying glass"/>
           </div>
         )}
         <input

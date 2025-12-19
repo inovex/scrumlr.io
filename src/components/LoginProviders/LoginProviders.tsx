@@ -1,6 +1,6 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
-import {Apple, Azure, GitHub, Google, Microsoft, OpenID} from "components/Icon";
+import {AppleIcon, AzureIcon, GitHub, Google, Microsoft, OpenID} from "components/Icon";
 import {useState, useRef, ReactNode, useEffect} from "react";
 import {useSize} from "utils/hooks/useSize";
 import {useAppSelector} from "store";

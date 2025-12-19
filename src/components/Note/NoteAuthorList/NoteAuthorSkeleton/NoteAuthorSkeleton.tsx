@@ -1,5 +1,5 @@
 import "./NoteAuthorSkeleton.scss";
-import stanAvatar from "assets/stan/Stan_Avatar.png";
+import {default as stanAvatar} from "assets/stan/Stan_Avatar.png";
 import {getRandomNameWithSeed} from "utils/random";
 import classNames from "classnames";
 

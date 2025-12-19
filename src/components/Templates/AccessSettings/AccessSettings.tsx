@@ -1,8 +1,6 @@
 import {Select} from "components/Select/Select";
 import {SelectOption} from "components/Select/SelectOption/SelectOption";
-import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
-import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
-import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
+import {Open as GlobeIcon, LockClosed as LockIcon, KeyProtected as KeyIcon} from "components/Icon";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
