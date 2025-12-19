@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import {AddImage, LockClosed, Plus, Star} from "components/Icon";
+import {AddImageIcon, LockClosed, Plus, Star} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
@@ -110,7 +110,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
       <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
-          <AddImage className="note-input__icon--image" />
+          <AddImageIcon className="note-input__icon--image" />
           <Star className="note-input__icon--star star-1" />
           <Star className="note-input__icon--star star-2" />
           <Star className="note-input__icon--star star-3" />

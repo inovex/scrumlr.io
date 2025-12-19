@@ -1,10 +1,10 @@
 import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {ReactComponent as StanLight} from "assets/stan/Stan_Toilette_Light.svg";
-import {ReactComponent as StanDark} from "assets/stan/Stan_Toilette_Dark.svg";
-import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
-import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
-import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
+import {default as StanLight} from "assets/stan/Stan_Toilette_Light.svg?react";
+import {default as StanDark} from "assets/stan/Stan_Toilette_Dark.svg?react";
+import {default as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg?react";
+import {default as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg?react";
+import {default as BackgroundDetails} from "assets/pages/404/Details.svg?react";
 import "./RejectionPage.scss";
 
 type RejectionPageProps = {

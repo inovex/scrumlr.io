@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {useTranslation} from "react-i18next";
-import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
+import {CloseIcon, CheckDoneIcon} from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState} from "react";

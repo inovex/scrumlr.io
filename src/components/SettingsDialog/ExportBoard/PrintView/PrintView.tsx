@@ -2,8 +2,8 @@ import {ReactElement, useEffect, useRef, useState} from "react";
 import {API} from "api";
 import {useNavigate} from "react-router";
 import {useReactToPrint} from "react-to-print";
-import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
-import {Close, Printer} from "components/Icon";
+import {default as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
+import {CloseIcon, Printer} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
@@ -112,7 +112,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
           <Printer className="print-view__icon-print" />
         </button>
         <button className="print-view__button" onClick={handleClose} aria-label={t("PrintView.Close")}>
-          <Close className="print-view__icon-close" />
+          <CloseIcon className="print-view__icon-close" />
         </button>
       </div>
       <div ref={printRef} className="print-view">

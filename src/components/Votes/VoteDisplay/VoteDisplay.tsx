@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
-import {Voting, Close, FlagFinish, MarkAsDone} from "components/Icon";
+import {Voting, CloseIcon, FlagFinish, MarkAsDone} from "components/Icon";
 import "./VoteDisplay.scss";
 import {closeVoting, setUserReadyStatus} from "store/features";
 
@@ -47,7 +47,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             onClick={() => dispatch(setUserReadyStatus({userId: me.user.id, ready: !isReady}))}
           >
             <MarkAsDone className="short-action__check-icon" />
-            <Close className="short-action__cancel-icon" />
+            <CloseIcon className="short-action__cancel-icon" />
           </button>
         </li>
       </ul>
