@@ -19,7 +19,7 @@ import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} 
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
-const APP_VERSION = process.env.REACT_APP_VERSION;
+const APP_VERSION = import.meta.env.VITE_VERSION;
 if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
 }
