@@ -52,3 +52,7 @@ updates:
           - "github.com/testcontainers/testcontainers-go/modules/nats"
           - "github.com/testcontainers/testcontainers-go/modules/postgres"
           - "github.com/testcontainers/testcontainers-go/modules/redis"
+      go/opentelemetry:
+        patterns:
+          - "go.opentelemetry.io/otel"
+          - "go.opentelemetry.io/otel/*"
