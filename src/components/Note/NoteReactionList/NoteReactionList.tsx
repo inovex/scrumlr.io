@@ -1,4 +1,4 @@
-import {AddEmoji} from "components/Icon";
+import {AddEmojiIcon} from "components/Icon";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -199,7 +199,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
               }
             }}
           >
-            <AddEmoji className="note-reaction-list__add-reaction-sticker" />
+            <AddEmojiIcon className="note-reaction-list__add-reaction-sticker" />
           </button>
           {showReactionBar && <NoteReactionPicker closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
         </div>
