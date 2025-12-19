@@ -17,8 +17,7 @@ import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
 import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {ColumnsMiniView} from "components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
-import {ReactComponent as AddIcon} from "assets/icons/plus.svg";
-import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
+import {Plus as AddIcon, Info as InfoIcon} from "components/Icon";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";

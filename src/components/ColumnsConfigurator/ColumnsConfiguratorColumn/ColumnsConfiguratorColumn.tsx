@@ -1,9 +1,6 @@
 import classNames from "classnames";
 import {EditableTemplateColumn} from "store/features";
-import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
-import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
-import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
-import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
+import {Visible as VisibleIcon, Hidden as HiddenIcon, Trash as DeleteIcon, DragAndDrop as DnDIcon} from "components/Icon";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
