@@ -6,7 +6,6 @@ interface ImportMetaEnv {
   readonly VITE_SERVER_HTTP_URL: string;
   readonly VITE_SERVER_WEBSOCKET_URL: string;
   readonly VITE_VERSION: string;
-  readonly VITE_PUBLIC_URL: string;
   readonly VITE_LEGACY_CREATE_BOARD: string;
   // Add other env variables here if needed
 }
