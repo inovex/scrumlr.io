@@ -1,7 +1,7 @@
 import {useState, VFC} from "react";
-import {default as German} from "assets/flags/DE.svg?react";
-import {default as English} from "assets/flags/US.svg?react";
-import {default as French} from "assets/flags/FR.svg?react";
+import {default as German} from "assets/flags/DE.svg";
+import {default as English} from "assets/flags/US.svg";
+import {default as French} from "assets/flags/FR.svg";
 import {useTranslation} from "react-i18next";
 import i18n from "i18n";
 import {SettingsDropdown} from "./SettingsDropdown";
