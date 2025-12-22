@@ -5,7 +5,15 @@ import svgr from 'vite-plugin-svgr';
 import * as path from "node:path";
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), svgr()] as ViteUserConfig['plugins'],
+  plugins: [react(), tsconfigPaths(), svgr({
+    svgrOptions: {
+      exportType: 'default',
+      ref: true,
+      svgo: false,
+      titleProp: true,
+    },
+    include: '**/*.svg',
+  })] as ViteUserConfig['plugins'],
   css: {
     preprocessorOptions: {
       scss: {
