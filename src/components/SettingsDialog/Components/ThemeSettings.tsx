@@ -2,8 +2,8 @@ import {useAppDispatch, useAppSelector} from "store";
 import {Theme} from "store/features/view/types";
 import {t} from "i18next";
 import {SettingsDarkMode, SettingsLightMode, GeneralSettings} from "components/Icon";
-import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
-import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
+import ThemePreviewDark from "assets/themes/theme-preview-dark.svg?url";
+import ThemePreviewLight from "assets/themes/theme-preview-light.svg?url";
 import "./ThemeSettings.scss";
 import {setTheme} from "store/features";
 
