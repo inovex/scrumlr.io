@@ -38,17 +38,15 @@ updates:
     groups:
       redis:
         patterns:
-          - "github.com/redis/go-redis/v9"
-          - "github.com/redis/go-redis/extra/redisotel/v9"
+          - "github.com/redis/go-redis/*"
       bun:
         patterns:
           - "github.com/uptrace/bun"
-          - "github.com/uptrace/bun/dialect/pgdialect"
-          - "github.com/uptrace/bun/extra/bundebug"
-          - "github.com/uptrace/bun/extra/bunotel"
+          - "github.com/uptrace/bun/*"
       testcontainers:
         patterns:
-          - "github.com/testcontainers/testcontainers-go"
-          - "github.com/testcontainers/testcontainers-go/modules/nats"
-          - "github.com/testcontainers/testcontainers-go/modules/postgres"
-          - "github.com/testcontainers/testcontainers-go/modules/redis"
+          - "github.com/testcontainers/*"
+      go/opentelemetry:
+        patterns:
+          - "go.opentelemetry.io/otel"
+          - "go.opentelemetry.io/otel/*"
