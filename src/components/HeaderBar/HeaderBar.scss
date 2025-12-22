@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "constants/styles";
+
+$side-padding--desktop: 14vw;
+
+.headerBar__grid {
+  display: flex;
+  flex-direction: column;
+  padding: styles.$spacing--lg $side-padding--desktop;
+}
+
+.headerBar__top-row {
+  display: flex;
+  align-items: flex-end;
+  gap: styles.$spacing--base;
+}
+
+.headerBar__scrumlr-logo-container {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.headerBar__user-pill {
+  flex-shrink: 0;
+}
+
+.headerBar__title {
+  flex-grow: 1;
+  text-align: center;
+  margin-bottom: calc(var(--title-line-height, 48px) / -2);
+
+  font-size: styles.$text--2xl;
+  font-weight: 700;
+  line-height: 48px; // TODO use constant
+  --title-line-height: 48px;
+  color: styles.$navy--900;
+}
+
+@media (max-width: styles.$breakpoint--desktop) {
+  .headerBar__grid {
+    padding: styles.$spacing--lg styles.$spacing--2xl;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .headerBar__grid {
+    padding: styles.$spacing--md styles.$spacing--md;
+  }
+
+  .headerBar__top-row {
+    flex-wrap: wrap;
+  }
+
+  .headerBar__title {
+    flex-basis: 100%;
+    order: 3;
+    margin-top: styles.$spacing--sm;
+    font-size: styles.$text--lg;
+    line-height: 32px;
+  }
+}
+
+[theme="dark"] {
+  .headerBar__title {
+    color: styles.$gray--000;
+  }
+}
