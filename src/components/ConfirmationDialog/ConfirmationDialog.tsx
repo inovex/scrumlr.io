@@ -7,6 +7,13 @@ import {Close, Warning} from "components/Icon";
 import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
+type CheckboxConfig = {
+  label: string;
+  checked?: boolean;
+  onChange?: (checked: boolean) => void;
+  showError?: boolean;
+};
+
 type ConfirmationDialogProps = {
   title: string;
   onAccept: () => void;
@@ -18,12 +25,10 @@ type ConfirmationDialogProps = {
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   warning?: boolean;
   text?: string;
+  items?: string;
+  textAfterItems?: string;
   className?: string;
-  // checkbox
-  checkboxLabel?: string;
-  checkboxChecked?: boolean;
-  onCheckboxChange?: (checked: boolean) => void;
-  noCheckboxError?: boolean;
+  checkbox?: CheckboxConfig;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -55,29 +60,39 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                         <p>{t(props.text)}</p>
                       </div>
                     )}
-                    {props.checkboxLabel && (
+                    {props.items && (
+                      <ul className="confirmation-dialog__items">
+                        {props.items.split("\n").map((item, index) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {props.textAfterItems && (
+                      <div className="confirmation-dialog__text">
+                        <p>{t(props.textAfterItems)}</p>
+                      </div>
+                    )}
+                    {props.checkbox && (
                       <label className="confirmation-dialog__checkbox-wrapper">
                         <input
                           type="checkbox"
                           className="confirmation-dialog__checkbox"
-                          checked={props.checkboxChecked}
-                          onChange={(e) => props.onCheckboxChange?.(e.target.checked)}
+                          checked={props.checkbox.checked}
+                          onChange={(e) => props.checkbox?.onChange?.(e.target.checked)}
                         />
-                        <span className="confirmation-dialog__checkbox-label">{props.checkboxLabel}</span>
+                        <span className="confirmation-dialog__checkbox-label">{props.checkbox.label}</span>
                       </label>
                     )}
                   </div>
-                  {props.checkboxLabel && (
-                    <label className="confirmation-dialog__checkbox-wrapper">
-                      <div className="confirmation-dialog__error-message">
-                        {props.noCheckboxError && (
-                          <>
-                            <Warning className="" />
-                            <p>{t("ConfirmationDialog.deleteAccountWarning")}</p>
-                          </>
-                        )}
-                      </div>
-                    </label>
+                  {props.checkbox && (
+                    <div className="confirmation-dialog__error-message">
+                      {props.checkbox.showError && (
+                        <>
+                          <Warning className="" />
+                          <p>{t("ConfirmationDialog.deleteAccountWarning")}</p>
+                        </>
+                      )}
+                    </div>
                   )}
                   <div className="confirmation-dialog__buttons">
                     <button

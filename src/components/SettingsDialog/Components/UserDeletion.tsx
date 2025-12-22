@@ -60,10 +60,14 @@ export const UserDeletion = (props: UserDeletionProps) => {
           onDeclineLabel={t("ConfirmationDialog.cancel")}
           icon={DeleteIcon}
           text={t("ConfirmationDialog.deleteAccountText")}
-          checkboxLabel={t("ConfirmationDialog.deleteAccountCheck")}
-          checkboxChecked={deleteAccountCheck}
-          onCheckboxChange={setDeleteAccountCheck}
-          noCheckboxError={showCheckboxError}
+          items={t("ConfirmationDialog.deleteAccountItems")}
+          textAfterItems={t("ConfirmationDialog.deleteAccountTextAfterItems")}
+          checkbox={{
+            label: t("ConfirmationDialog.deleteAccountCheck"),
+            checked: deleteAccountCheck,
+            onChange: setDeleteAccountCheck,
+            showError: showCheckboxError,
+          }}
         />
       )}
     </>
