@@ -8,6 +8,7 @@ $header-max-width: 80vw;
   min-height: StackView.$stack-view__min-height;
   flex-direction: column;
   flex-shrink: 0;
+  justify-content: center;
   align-items: center;
   gap: styles.$spacing--base;
 
