@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -32,16 +33,18 @@ type ServiceInitializer struct {
 	hash   hash.Hash
 	db     *bun.DB
 	rt     *realtime.Broker
+	cache  *cache.Cache
 	ws     websocket.Upgrader
 	client *http.Client
 }
 
-func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, rt *realtime.Broker, cache *cache.Cache) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.clock = timeprovider.NewClock()
 	initializer.hash = hash.NewHashSha512()
 	initializer.db = db
 	initializer.rt = rt
+	initializer.cache = cache
 	initializer.ws = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -133,7 +136,7 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.rt)
+	notesService := notes.NewNotesService(notesDB, init.rt, init.cache)
 
 	return notesService
 }

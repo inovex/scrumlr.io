@@ -3,7 +3,9 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"math/rand/v2"
 	"testing"
 
 	"github.com/google/uuid"
@@ -13,6 +15,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
@@ -72,6 +75,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -79,7 +87,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -128,6 +136,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -135,7 +148,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -190,6 +203,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -199,7 +217,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -271,6 +289,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -280,7 +303,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -346,6 +369,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -355,7 +383,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -420,6 +448,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -429,7 +462,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -494,6 +527,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -503,7 +541,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -568,6 +606,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -577,7 +620,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -643,6 +686,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	events := broker.GetBoardChannel(ctx, boardId)
 
 	clock := timeprovider.NewClock()
@@ -652,7 +700,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -717,6 +765,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -724,7 +777,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -752,6 +805,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -759,7 +817,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -792,6 +850,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -799,7 +862,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -829,6 +892,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -836,7 +904,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -870,6 +938,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -877,7 +950,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -917,6 +990,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -924,7 +1002,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -955,6 +1033,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -962,7 +1045,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -1004,6 +1087,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -1011,7 +1099,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -1041,6 +1129,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -1048,7 +1141,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
@@ -1080,6 +1173,11 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	clock := timeprovider.NewClock()
 	hash := hash.NewHashSha512()
 	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
@@ -1087,7 +1185,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	votingDatabase := votings.NewVotingDatabase(suite.db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
