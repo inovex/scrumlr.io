@@ -203,8 +203,8 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
 
 			r.Route("/{provider}", func(r chi.Router) {
-				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
+				r.Get("/", s.BeginAuth)
+				r.Get("/callback", s.Callback)
 			})
 		})
 	})
