@@ -81,85 +81,6 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
   render.Respond(w, r, nil)
 }
 
-// beginAuthProviderVerification will redirect the user to the specified auth provider consent page
-//func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
-//	gothic.BeginAuthHandler(w, r)
-//}
-
-//verifyAuthProviderCallback will verify the auth provider call, create or update a user and redirect to the page provider with the state
-
-//	func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
-//		ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_auth_provider")
-//		defer span.End()
-//		log := logger.FromContext(ctx)
-//		externalUser, err := gothic.CompleteUserAuth(w, r)
-//		if err != nil {
-//			span.SetStatus(codes.Error, "failed to complete user auth")
-//			span.RecordError(err)
-//			w.WriteHeader(http.StatusInternalServerError)
-//			log.Errorw("could not complete user auth", "err", err)
-//			return
-//		}
-//
-//		provider, err := common.NewAccountType(externalUser.Provider)
-//		if err != nil {
-//			span.SetStatus(codes.Error, "user provider not supported")
-//			span.RecordError(err)
-//			w.WriteHeader(http.StatusInternalServerError)
-//			log.Errorw("unsupported user provider", "err", err)
-//			return
-//		}
-//
-//		userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
-//		if err != nil {
-//			span.SetStatus(codes.Error, "insufficient user information from external auth source")
-//			span.RecordError(err)
-//			w.WriteHeader(http.StatusInternalServerError)
-//			log.Errorw("insufficient user information from external auth source", "err", err)
-//			return
-//		}
-//
-//		var internalUser *users.User
-//		switch provider {
-//		case common.Google:
-//			internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		case common.GitHub:
-//			internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		case common.Microsoft:
-//			internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		case common.AzureAd:
-//			internalUser, err = s.users.CreateAzureAdUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		case common.Apple:
-//			internalUser, err = s.users.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		case common.TypeOIDC:
-//			internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-//		}
-//		if err != nil {
-//			span.SetStatus(codes.Error, "failed to create user")
-//			span.RecordError(err)
-//			w.WriteHeader(http.StatusInternalServerError)
-//			log.Errorw("could not create user", "err", err)
-//			return
-//		}
-//
-//		tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
-//		cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
-//		common.SealCookie(r, &cookie)
-//		http.SetCookie(w, &cookie)
-//
-//		state := gothic.GetState(r)
-//		stateSplit := strings.Split(state, "__")
-//		if len(stateSplit) > 1 {
-//			w.Header().Set("Location", stateSplit[1])
-//			w.WriteHeader(http.StatusSeeOther)
-//		}
-//		if s.basePath == "/" {
-//			w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
-//		} else {
-//			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
-//		}
-//		w.WriteHeader(http.StatusSeeOther)
-//	}
 func (s *Server) BeginAuth(w http.ResponseWriter, r *http.Request) {
   s.auth.BeginAuth(w, r)
 }
@@ -169,7 +90,6 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
   defer span.End()
   log := logger.FromContext(ctx)
 
-  // 1. Get Provider from URL (chi param)
   providerStr := chi.URLParam(r, "provider")
   config := s.auth.GetConfig(string(common.Google))
   if config == nil {
@@ -177,11 +97,8 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // 2. Validate State (CRITICAL: Gothic did this for you, now we do it manually)
   state := r.FormValue("state")
-  // Note: You should compare 'state' against a value saved in a cookie/session here
 
-  // 3. Exchange Code for Token
   code := r.FormValue("code")
 
   token, err := config.Exchange(ctx, code)
@@ -192,7 +109,6 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // 4. Fetch User Info (This replaces Gothic's internal logic)
   userInfo, err := s.auth.FetchExternalUser(ctx, providerStr, token)
   if err != nil {
     span.SetStatus(codes.Error, "failed to fetch user info")
@@ -201,14 +117,13 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // 5. Create Internal User (Your existing logic)
+  //todo: implement for other providers
   var internalUser *users.User
   switch userInfo.Provider {
   case "google":
     internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
   case common.GitHub:
     internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-    // ... repeat for other cases ...
   }
 
   if err != nil {
@@ -217,7 +132,6 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // 6. Sign JWT and Set Cookie
   tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
   cookie := http.Cookie{
     Name:     "jwt",
@@ -229,7 +143,6 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
   common.SealCookie(r, &cookie)
   http.SetCookie(w, &cookie)
 
-  // 7. Handle Redirect (Parsing the state __ separator)
   targetURL := s.basePath
   stateSplit := strings.Split(state, "__")
   if len(stateSplit) > 1 {
