@@ -5829,10 +5829,10 @@ eslint-plugin-jest@^25.3.0:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-jest@^29.5.0:
-  version "29.5.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-29.5.0.tgz#f2d8e52ff1c023a69c22192838faccdf7adfdfe9"
-  integrity sha512-DAi9H8xN/TUuNOt+xDP1RqpCJLsSxBb5u1zXSpCyp0VAWGL8MBAg5t7/Dk+76iX7d1LhWu4DDH77IQNUolLDyg==
+eslint-plugin-jest@^29.9.0:
+  version "29.9.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-29.9.0.tgz#80c3b4a7ef70927016127b5d67792403d1ddfb4d"
+  integrity sha512-1H2VNoEkJEO3CzfoSvAIBRaiywXmLU7FesYct/yI4YPnzkM91bNFBMVKqNjT2C7mPGvKAkCQV14oi5rgFCqPdQ==
   dependencies:
     "@typescript-eslint/utils" "^8.0.0"
 
