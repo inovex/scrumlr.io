@@ -2,17 +2,17 @@ package api
 
 import (
 	"fmt"
-  "math"
-  "net/http"
-  "strings"
-  "time"
+	"math"
+	"net/http"
+	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
-  "github.com/go-chi/render"
+	"github.com/go-chi/render"
 	"go.opentelemetry.io/otel/codes"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/users"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/users"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -38,21 +38,21 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  user, err := s.users.CreateAnonymous(ctx, body.Name)
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to create anonyoums user")
-    span.RecordError(err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
-  tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to generate token string")
-    span.RecordError(err)
-    log.Errorw("unable to generate token string", "err", err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create anonyoums user")
+		span.RecordError(err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to generate token string")
+		span.RecordError(err)
+		log.Errorw("unable to generate token string", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
 
   cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
   common.SealCookie(r, &cookie)
@@ -90,12 +90,12 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
   defer span.End()
   log := logger.FromContext(ctx)
 
-  providerStr := chi.URLParam(r, "provider")
-  config := s.auth.GetConfig(string(common.Google))
-  if config == nil {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
+	providerStr := strings.ToUpper(chi.URLParam(r, "provider"))
+	config := s.auth.GetConfig(providerStr)
+	if config == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
   state := r.FormValue("state")
 
@@ -109,22 +109,22 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  userInfo, err := s.auth.FetchExternalUser(ctx, providerStr, token)
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to fetch user info")
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Errorw("failed to fetch external user info", "err", err)
-    return
-  }
+	userInfo, err := s.auth.FetchExternalUser(ctx, providerStr, token)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to fetch user info")
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("failed to fetch external user info", "err", err)
+		return
+	}
 
-  //todo: implement for other providers
-  var internalUser *users.User
-  switch userInfo.Provider {
-  case "google":
-    internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case common.GitHub:
-    internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  }
+	//todo: implement for other providers
+	var internalUser *users.User
+	switch userInfo.Provider {
+	case common.Google:
+		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case common.GitHub:
+		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	}
 
   if err != nil {
     span.SetStatus(codes.Error, "failed to create user")
