@@ -1,6 +1,74 @@
 @use "constants/styles";
 
-.login-board__dialog {
+$stan-height: 70vh;
+
+.login-boardN {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.login-boardN__content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.login-boardN__stan-container {
+  position: absolute;
+  height: $stan-height;
+  // Anchor to left edge of content, vertically centered
+  top: 50%;
+  pointer-events: none;
+
+  &--left {
+    left: 0;
+    transform: translate(-100%, -50%);
+  }
+
+  &--right {
+    right: 0;
+    transform: translate(100%, -50%);
+  }
+}
+
+.login-boardN__stan {
+  height: 100%;
+
+  &--dark {
+    display: initial;
+  }
+
+  &--light {
+    display: none;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--desktop) {
+  .login-boardN__stan-container {
+    display: none;
+  }
+}
+
+.login-boardN__form {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  max-width: 990px;
+  max-height: 920px;
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+´ .login-board__dialog {
   color: styles.$navy--900;
   min-height: 100vh;
 }

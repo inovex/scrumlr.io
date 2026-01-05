@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {getRandomName} from "utils/random";
 import {Auth} from "utils/auth";
 import {Toast} from "utils/Toast";
@@ -5,7 +6,10 @@ import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {Trans, useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router";
-import {ScrumlrLogo} from "components/ScrumlrLogo";
+import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
+import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
+import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
+import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
 import {Refresh} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
 import {LegacyButton} from "components/Button";
@@ -55,83 +59,86 @@ export const LoginBoard = () => {
   // https://dribbble.com/shots/7757250-Sign-up-revamp
   return (
     <Background>
-      <HeaderBar renderTitle={() => t("LoginBoard.title")} />
-      <div className="login-board">
-        <div className="login-board__dialog">
-          <div className="login-board__form-wrapper">
-            <div className="login-board__form">
-              <a href="/" aria-label="Homepage">
-                <ScrumlrLogo className="login-board__logo" />
-              </a>
-
-              <h1>{t("LoginBoard.title")}</h1>
-
-              <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
-
-              <hr className="login-board__divider" data-label="or" />
-
-              <fieldset className="login-board__fieldset">
-                <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
-
-                <div className="login-board__username">
-                  <TextInputLabel label={t("LoginBoard.username")} htmlFor="login-board__username" />
-                  <TextInput
-                    id="login-board__username"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") {
-                        handleLogin();
-                      }
-                    }}
-                    maxLength={64}
-                    aria-invalid={!displayName}
-                    actions={
-                      <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
-                        <Refresh />
-                      </TextInputAction>
-                    }
-                    data-cy="login-board__username"
-                  />
-                </div>
-                {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
-
-                {SHOW_LEGAL_DOCUMENTS && (
-                  <label className="login-board__form-element login-board__terms">
-                    <input
-                      type="checkbox"
-                      className="login-board__checkbox"
-                      defaultChecked={termsAccepted}
-                      onChange={() => setTermsAccepted(!termsAccepted)}
-                      data-cy="login-board__checkbox"
-                    />
-                    <span className="login-board__terms-label">
-                      <Trans
-                        i18nKey="LoginBoard.acceptTerms"
-                        components={{
-                          terms: <Link to="/legal/termsAndConditions" target="_blank" />,
-                          privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
-                        }}
-                      />
-                    </span>
-                  </label>
-                )}
-              </fieldset>
-              {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
-
-              <LegacyButton
-                className="login-board__anonymous-login-button"
-                color="primary"
-                onClick={handleLogin}
-                disabled={anonymousLoginDisabled}
-                data-cy="login-board__anonymous-login-button"
-              >
-                {t("LoginBoard.login")}
-              </LegacyButton>
-              {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
-              {/* admin messed something up */}
-              {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
+      <div className="login-boardN">
+        <HeaderBar renderTitle={() => t("LoginBoard.title")} loginBoard />
+        <div className="login-boardN__content">
+          <div className="login-boardN__form">
+            <div className={classNames("login-boardN__stan-container", "login-boardN__stan-container--left")}>
+              <img className={classNames("login-boardN__stan", "login-boardN__stan--dark")} src={StanCoffeeDark} alt="Stan just hanging there with a coffee" />
+              <img className={classNames("login-boardN__stan", "login-boardN__stan--light")} src={StanCoffeeLight} alt="Stan just hanging there with a coffee" />
             </div>
+            <div className={classNames("login-boardN__stan-container", "login-boardN__stan-container--right")}>
+              <img className={classNames("login-boardN__stan", "login-boardN__stan--dark")} src={StanOkayDark} alt="Stan showing okay sign" />
+              <img className={classNames("login-boardN__stan", "login-boardN__stan--light")} src={StanOkayLight} alt="Stan showing okay sign" />
+            </div>
+
+            <h1>{t("LoginBoard.subtitle")}</h1>
+
+            <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
+
+            <hr className="login-board__divider" data-label="or" />
+
+            <fieldset className="login-board__fieldset">
+              <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
+
+              <div className="login-board__username">
+                <TextInputLabel label={t("LoginBoard.username")} htmlFor="login-board__username" />
+                <TextInput
+                  id="login-board__username"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
+                  maxLength={64}
+                  aria-invalid={!displayName}
+                  actions={
+                    <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
+                      <Refresh />
+                    </TextInputAction>
+                  }
+                  data-cy="login-board__username"
+                />
+              </div>
+              {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
+
+              {SHOW_LEGAL_DOCUMENTS && (
+                <label className="login-board__form-element login-board__terms">
+                  <input
+                    type="checkbox"
+                    className="login-board__checkbox"
+                    defaultChecked={termsAccepted}
+                    onChange={() => setTermsAccepted(!termsAccepted)}
+                    data-cy="login-board__checkbox"
+                  />
+                  <span className="login-board__terms-label">
+                    <Trans
+                      i18nKey="LoginBoard.acceptTerms"
+                      components={{
+                        terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+                        privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+                      }}
+                    />
+                  </span>
+                </label>
+              )}
+            </fieldset>
+            {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
+
+            <LegacyButton
+              className="login-board__anonymous-login-button"
+              color="primary"
+              onClick={handleLogin}
+              disabled={anonymousLoginDisabled}
+              data-cy="login-board__anonymous-login-button"
+            >
+              {t("LoginBoard.login")}
+            </LegacyButton>
+            {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+            {/* admin messed something up */}
+            {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
           </div>
         </div>
       </div>
