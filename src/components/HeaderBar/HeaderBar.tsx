@@ -13,7 +13,7 @@ export const HeaderBar = (props: HeaderBarProps) => {
   const {t} = useTranslation();
 
   return (
-    <div className="headerBar__grid">
+    <div className="headerBar">
       <div className="headerBar__top-row">
         {/* logo - - - profile */}
         <div className="headerBar__scrumlr-logo-container">
@@ -30,4 +30,4 @@ export const HeaderBar = (props: HeaderBarProps) => {
       </div>
     </div>
   );
-}
+};

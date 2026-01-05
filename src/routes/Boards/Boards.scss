@@ -63,6 +63,10 @@ $side-padding--desktop: 14vw;
 
   .boards__outlet {
     padding: 0;
+
+    &--extended-top {
+      margin-top: styles.$spacing--sm;
+    }
   }
 }
 
