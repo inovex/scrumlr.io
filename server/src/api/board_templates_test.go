@@ -15,6 +15,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"golang.org/x/oauth2"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
@@ -71,6 +72,21 @@ func createTestAuth() auth.Auth {
 
 // testAuthService implements auth.Auth interface for testing purposes
 type testAuthService struct{}
+
+func (t *testAuthService) BeginAuth(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (t *testAuthService) GetConfig(provider string) *oauth2.Config {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (t *testAuthService) FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*auth.UserInformation, error) {
+	//TODO implement me
+	panic("implement me")
+}
 
 func (t *testAuthService) GetAuthService() *auth2.Service {
 	return auth2.NewService(auth2.Opts{})

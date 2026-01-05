@@ -265,6 +265,7 @@ func (a *AuthConfiguration) BeginAuth(w http.ResponseWriter, r *http.Request) {
   http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error) {
+  log := logger.Get()
   client := a.oauthConfigs[provider].Client(ctx, token)
 
   var url string
@@ -281,7 +282,12 @@ func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider stri
   if err != nil {
     return nil, err
   }
-  defer resp.Body.Close()
+  defer func(Body io.ReadCloser) {
+    err := Body.Close()
+    if err != nil {
+      log.Errorw("failed to close response body", "error", err)
+    }
+  }(resp.Body)
 
   var data map[string]interface{}
   if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
