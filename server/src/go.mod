@@ -15,7 +15,7 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/lestrrat-go/jwx/v3 v3.0.12
 	github.com/markbates/goth v1.82.0
-	github.com/nats-io/nats.go v1.47.0
+	github.com/nats-io/nats.go v1.48.0
 	github.com/redis/go-redis/extra/redisotel/v9 v9.17.2
 	github.com/redis/go-redis/v9 v9.17.2
 	github.com/stretchr/testify v1.11.1
@@ -46,7 +46,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.39.0
 	go.uber.org/zap v1.27.1
 	golang.org/x/crypto v0.46.0
-	google.golang.org/grpc v1.77.0
+	google.golang.org/grpc v1.78.0
 )
 
 require (
