@@ -89,7 +89,7 @@
     }
   },
   "LoginBoard": {
-    "title": "Se connecter à scrumlr.io",
+    "title": "Se connecter",
     "anonymousLogin": "Rejoindre le tableau de manière anonyme",
     "usernameValidationError": "Le nom d'utilisateur ne peut pas être vide",
     "termsValidationError": "Vous devez accepter les conditions et la politique de confidentialité",

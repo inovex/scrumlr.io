@@ -89,7 +89,7 @@
     }
   },
   "LoginBoard": {
-    "title": "Sign in to scrumlr.io",
+    "title": "Sign in",
     "anonymousLogin": "Join board anonymously",
     "usernameValidationError": "Username may not be empty",
     "termsValidationError": "You must accept the terms and privacy policy",
