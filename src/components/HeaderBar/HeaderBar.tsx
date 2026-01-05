@@ -7,10 +7,12 @@ import "./HeaderBar.scss";
 type HeaderBarProps = {
   renderTitle: () => string;
   locationPrefix?: string;
+  loginBoard?: boolean;
 };
 
 export const HeaderBar = (props: HeaderBarProps) => {
   const {t} = useTranslation();
+  const {loginBoard = false} = props;
 
   return (
     <div className="headerBar">
@@ -26,7 +28,7 @@ export const HeaderBar = (props: HeaderBarProps) => {
         {/* - - title - - */}
         <div className="headerBar__title">{props.renderTitle()}</div>
 
-        <UserPill className="headerBar__user-pill" locationPrefix={props.locationPrefix} />
+        <UserPill className="headerBar__user-pill" locationPrefix={props.locationPrefix} disabled={loginBoard} />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ $side-padding--desktop: 14vw;
   align-items: flex-end;
   gap: styles.$spacing--sm;
   padding-bottom: styles.$spacing--xl;
+  position: relative;
 }
 
 .headerBar__scrumlr-logo-container {
@@ -28,14 +29,15 @@ $side-padding--desktop: 14vw;
 }
 
 .headerBar__title {
-  flex-grow: 1;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  bottom: styles.$spacing--xl;
   text-align: center;
-  margin-bottom: calc(var(--title-line-height) * -0.5);
 
   font-size: styles.$text--2xl;
   font-weight: 700;
   line-height: styles.$spacing--2xl;
-  --title-line-height: 48px;
   color: styles.$navy--900;
 }
 
