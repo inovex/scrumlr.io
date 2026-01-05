@@ -11,6 +11,7 @@ import (
   "io"
   "math"
   "net/http"
+  "strings"
 
   "github.com/go-chi/chi/v5"
   "github.com/go-chi/jwtauth/v5"
@@ -116,7 +117,6 @@ func (a *AuthConfiguration) initializeProviders() error {
       Scopes:       []string{"User.Read"},
     }
   }
-  fmt.Println()
   return nil
 }
 
@@ -240,9 +240,9 @@ func (a *AuthConfiguration) initializeJWTAuth() error {
 }
 
 func (a *AuthConfiguration) BeginAuth(w http.ResponseWriter, r *http.Request) {
-  _ = chi.URLParam(r, "provider")
+  provider := strings.ToUpper(chi.URLParam(r, "provider"))
   //todo: make generic
-  config, ok := a.oauthConfigs[string(common.Google)]
+  config, ok := a.oauthConfigs[provider]
   if !ok {
     http.Error(w, "Provider not found", http.StatusNotFound)
     return
@@ -269,9 +269,9 @@ func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider stri
 
   var url string
   switch provider {
-  case "google":
+  case string(common.Google):
     url = "https://www.googleapis.com/oauth2/v3/userinfo"
-  case "github":
+  case string(common.GitHub):
     url = "https://api.github.com/user"
   default:
     return nil, fmt.Errorf("unsupported provider info fetch: %s", provider)
@@ -291,14 +291,28 @@ func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider stri
   // Map fields to UserInformation struct
   //todo: expand for other providers
   res := &UserInformation{Provider: common.AccountType(provider)}
-  if provider == "google" {
+  switch provider {
+  case string(common.Google):
     res.Ident = fmt.Sprint(data["sub"])
     res.Name = fmt.Sprint(data["name"])
     res.AvatarURL = fmt.Sprint(data["picture"])
-  } else if provider == "github" {
+  case string(common.GitHub):
     res.Ident = fmt.Sprint(data["id"])
     res.Name = fmt.Sprint(data["login"])
     res.AvatarURL = fmt.Sprint(data["avatar_url"])
+  case string(common.AzureAd):
+    res.Ident = fmt.Sprint(data["id"])
+    res.Name = fmt.Sprint(data["login"])
+    res.AvatarURL = fmt.Sprint(data["avatar_url"])
+  case string(common.Microsoft):
+    res.Ident = fmt.Sprint(data["id"])
+    res.Name = fmt.Sprint(data["login"])
+    res.AvatarURL = fmt.Sprint(data["avatar_url"])
+  case string(common.Apple):
+    panic("not implemented")
+  case string(common.TypeOIDC):
+    panic("not implemented")
+
   }
 
   return res, nil
