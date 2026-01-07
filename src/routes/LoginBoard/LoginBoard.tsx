@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import {getRandomName} from "utils/random";
 import {Auth} from "utils/auth";
-import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {Trans, useTranslation} from "react-i18next";
@@ -11,11 +10,8 @@ import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.
 import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
 import {Refresh, MarkAsDone2} from "components/Icon";
-import {TextInputAction} from "components/TextInputAction";
-import {Button, LegacyButton} from "components/Button";
-import {TextInput} from "components/TextInput";
+import {Button} from "components/Button";
 import {Input} from "components/Input/Input";
-import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
 import {useAppSelector} from "store";
 import {Background} from "components/Background";
@@ -42,8 +38,6 @@ export const LoginBoard = () => {
   if (location.state) {
     redirectPath = (location.state as State).from.pathname;
   }
-
-  function showAnonymousLogin() {}
 
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
