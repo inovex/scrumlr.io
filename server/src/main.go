@@ -38,6 +38,12 @@ func main() {
 				Value:   8080,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "address",
+				EnvVars: []string{"SCRUMLR_SERVER_LISTEN_ADDRESS"},
+				Usage:   "the `address` on which the server listens",
+				Value:   "",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "nats",
 				Aliases: []string{"n"},
 				EnvVars: []string{"SCRUMLR_SERVER_NATS_URL"},
@@ -464,7 +470,7 @@ func run(c *cli.Context) error {
 		c.Bool("auth-enable-experimental-file-system-store"),
 	)
 
-	port := fmt.Sprintf(":%d", c.Int("port"))
-	logger.Get().Infow("starting server", "base-path", basePath, "port", port)
-	return http.ListenAndServe(port, s)
+	listen := fmt.Sprintf("%s:%d", c.String("address"), c.Int("port"))
+	logger.Get().Infow("starting server", "base-path", basePath, "listen", listen)
+	return http.ListenAndServe(listen, s)
 }
