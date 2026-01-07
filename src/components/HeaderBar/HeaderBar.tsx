@@ -1,5 +1,4 @@
 import {useTranslation} from "react-i18next";
-import classNames from "classnames";
 import {ScrumlrLogo} from "components/ScrumlrLogo/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import "./HeaderBar.scss";
