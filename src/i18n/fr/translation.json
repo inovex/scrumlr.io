@@ -90,6 +90,8 @@
   },
   "LoginBoard": {
     "title": "Se connecter",
+    "subtitleLogin": "Connectez-vous et profitez des avantages",
+    "subtitleAnonymous": "Connexion anonyme",
     "anonymousLogin": "Rejoindre le tableau de manière anonyme",
     "usernameValidationError": "Le nom d'utilisateur ne peut pas être vide",
     "termsValidationError": "Vous devez accepter les conditions et la politique de confidentialité",

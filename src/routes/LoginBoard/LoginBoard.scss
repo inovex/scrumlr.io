@@ -8,7 +8,7 @@ $stan-height: 70vh;
   min-height: 100vh;
 }
 
-.login-boardN__content {
+.login-boardN__wrapper {
   width: 100%;
   flex: 1;
   display: flex;
@@ -54,21 +54,55 @@ $stan-height: 70vh;
   }
 }
 
-.login-boardN__form {
+.login-boardN__card {
   position: relative;
   width: 100%;
   flex: 1;
-  max-width: 990px;
+  max-width: 920px;
   max-height: 920px;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
 
+  padding: styles.$spacing--base;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  & h1 {
+    font-size: styles.$line-height--large;
+  }
 }
 
-´ .login-board__dialog {
+login-boardN__form {
+  width: 100%;
+  min-width: styles.$column__min-width;
+  max-width: styles.$column__max-width;
+
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--md;
+}
+
+.login-boardN__features {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--md;
+}
+
+.login-boardN__feature {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--sm;
+}
+
+.login-boardN__feature-icon {
+  width: styles.$icon--medium;
+  height: styles.$icon--medium;
+  flex-shrink: 0;
+}
+
+.login-boardN__dialog {
   color: styles.$navy--900;
   min-height: 100vh;
 }
@@ -105,7 +139,6 @@ $stan-height: 70vh;
 }
 
 .login-board__divider {
-  display: none;
   margin-top: styles.$spacing--xl;
   margin-bottom: styles.$spacing--base;
   padding: 0;
@@ -116,17 +149,13 @@ $stan-height: 70vh;
   text-align: center;
 }
 
-.login-providers + .login-board__divider {
-  display: block;
-}
-
 .login-board__divider::after {
   content: attr(data-label);
   display: inline-block;
   position: relative;
   top: -0.625em;
   padding: 0 styles.$spacing--base;
-  background: styles.$gray--000;
+  background: styles.$blue--50;
 }
 
 .login-board__fieldset {

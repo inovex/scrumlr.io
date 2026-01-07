@@ -36,6 +36,7 @@ export {ReactComponent as KeyProtected} from "assets/icons/key-protected.svg";
 export {ReactComponent as LockClosed} from "assets/icons/lock-closed.svg";
 export {ReactComponent as LockOpen} from "assets/icons/lock-open.svg";
 export {ReactComponent as MarkAsDone} from "assets/icons/mark-as-done.svg";
+export {ReactComponent as MarkAsDone2} from "assets/icons/mark-as-done2.svg";
 export {ReactComponent as MenuPlus} from "assets/icons/menu-plus.svg";
 export {ReactComponent as MenuSettings} from "assets/icons/menu-settings.svg";
 export {ReactComponent as Microsoft} from "assets/icons/microsoft.svg";

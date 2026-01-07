@@ -90,6 +90,8 @@
   },
   "LoginBoard": {
     "title": "Sign in",
+    "subtitleLogin": "Log in and enjoy the benefits",
+    "subtitleAnonymous": "Log in anonymously",
     "anonymousLogin": "Join board anonymously",
     "usernameValidationError": "Username may not be empty",
     "termsValidationError": "You must accept the terms and privacy policy",

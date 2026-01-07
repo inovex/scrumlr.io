@@ -91,7 +91,8 @@
   },
   "LoginBoard": {
     "title": "Login",
-    "subtitle": "Einloggen und Vorteile nutzen",
+    "subtitleLogin": "Einloggen und Vorteile nutzen",
+    "subtitleAnonymous": "Anonym Einloggen",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
     "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
