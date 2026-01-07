@@ -92,11 +92,6 @@ $stan-height: 70vh;
   flex-shrink: 0;
 }
 
-.login-boardN__dialog {
-  color: styles.$navy--900;
-  min-height: 100vh;
-}
-
 .login-board__divider {
   margin-top: styles.$spacing--xl;
   margin-bottom: styles.$spacing--base;
@@ -145,11 +140,6 @@ $stan-height: 70vh;
   }
 }
 
-.ogin-boardN__providers-section {
-  display: flex;
-  align-items: center;
-}
-
 .login-boardN__anonymous-toggle {
   text-align: center;
   cursor: pointer;
@@ -165,6 +155,7 @@ $stan-height: 70vh;
   }
 }
 
+//todo probably remove but need to check first
 .login-providers__button {
   display: flex;
   justify-content: center;
@@ -183,13 +174,6 @@ $stan-height: 70vh;
   height: styles.$icon--medium;
   width: styles.$icon--medium;
   flex: 0 0 styles.$icon--medium;
-}
-
-.login-board__checkbox {
-  opacity: 0;
-  z-index: -1;
-  height: 1px;
-  width: 1px;
 }
 
 .login-board__terms a {
@@ -214,51 +198,8 @@ $stan-height: 70vh;
   }
 }
 
-// checkbox border
-.login-board__checkbox + .login-board__terms-label::before {
-  display: block;
-  content: "";
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-  border: 1px solid styles.$blue--500;
-  background: styles.$gray--000;
-  cursor: pointer;
-  border-radius: 100%;
-  transition: all 0.16s ease-out;
-}
-
 .login-board__terms:hover .login-board__terms-label::before {
   box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.2);
-}
-
-.login-board__checkbox:focus-visible + .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.4);
-}
-
-// checkbox checkmark
-.login-board__checkbox + .login-board__terms-label::after {
-  content: "";
-  width: 0.5em;
-  height: 0.5em;
-  position: absolute;
-  top: 0.25em;
-  left: 0.25em;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(styles.$blue--500, 0.75);
-  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
-  transform: scale(0);
-  border-radius: 100%;
-}
-
-.login-board__checkbox:checked + .login-board__terms-label::after {
-  transform: scale(1);
 }
 
 .login-board__anonymous-login-button {
