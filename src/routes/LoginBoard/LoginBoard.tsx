@@ -10,7 +10,7 @@ import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.pn
 import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
-import {Refresh, MarkAsDone2, Refresh2} from "components/Icon";
+import {Refresh, MarkAsDone2} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
 import {Button, LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
@@ -127,8 +127,8 @@ export const LoginBoard = () => {
                         onClick={() => setDisplayName(getRandomName())}
                         aria-label={t("LoginBoard.generateRandomName")}
                         // todo fix icon so that there are no 2 refreshs
-                        icon={<Refresh2 />}
-                       />
+                        icon={<Refresh />}
+                      />
                     </div>
 
                     {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
