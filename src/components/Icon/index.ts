@@ -73,7 +73,6 @@ export {ReactComponent as PlusOne} from "assets/icons/plus-one.svg";
 export {ReactComponent as Logout} from "assets/icons/logout.svg";
 export {ReactComponent as Warning} from "assets/icons/warning.svg";
 export {ReactComponent as Refresh} from "assets/icons/refresh.svg";
-export {ReactComponent as Refresh2} from "assets/icons/refresh2.svg";
 export {ReactComponent as Printer} from "assets/icons/printer.svg";
 export {ReactComponent as ThreeDots} from "assets/icons/three-dots.svg";
 export {ReactComponent as Menu} from "assets/icons/menu.svg";
