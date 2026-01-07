@@ -91,6 +91,8 @@
   "LoginBoard": {
     "title": "Se connecter",
     "subtitleLogin": "Connectez-vous et profitez des avantages",
+    "loginFeature1": "Créer et sauvegarder des modèles personnalisés",
+    "loginFeature2": "Les paramètres personnalisés sont sauvegardés dans le profil",
     "subtitleAnonymous": "Connexion anonyme",
     "anonymousLogin": "Rejoindre le tableau de manière anonyme",
     "usernameValidationError": "Le nom d'utilisateur ne peut pas être vide",

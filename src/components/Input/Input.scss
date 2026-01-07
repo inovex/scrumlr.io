@@ -32,6 +32,10 @@ $padding--mobile: 12.5px styles.$spacing--base;
     height: 64px;
   }
 
+  &--height-small {
+    height: 48px;
+  }
+
   &:not(&--disabled) {
     // TODO increase padding-left by 8px if no icon is present
     @include mixins.default-states($padding: $padding--default);

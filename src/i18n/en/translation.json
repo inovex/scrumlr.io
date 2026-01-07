@@ -91,6 +91,8 @@
   "LoginBoard": {
     "title": "Sign in",
     "subtitleLogin": "Log in and enjoy the benefits",
+    "loginFeature1": "Create and save custom templates",
+    "loginFeature2": "Custom settings are saved in your profile",
     "subtitleAnonymous": "Log in anonymously",
     "anonymousLogin": "Join board anonymously",
     "usernameValidationError": "Username may not be empty",

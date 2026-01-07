@@ -74,16 +74,6 @@ $stan-height: 70vh;
   }
 }
 
-login-boardN__form {
-  width: 100%;
-  min-width: styles.$column__min-width;
-  max-width: styles.$column__max-width;
-
-  display: flex;
-  flex-direction: column;
-  gap: styles.$spacing--md;
-}
-
 .login-boardN__features {
   display: flex;
   flex-direction: column;
@@ -107,37 +97,6 @@ login-boardN__form {
   min-height: 100vh;
 }
 
-.login-board__illustration {
-  display: none;
-}
-
-.login-board__form-wrapper {
-  padding: styles.$spacing--base;
-}
-
-.login-board__form a {
-  outline: none;
-
-  svg {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 2px;
-  }
-
-  &:focus-visible svg {
-    border: 1px solid styles.$blue--500;
-  }
-}
-
-.login-board__logo {
-  margin-bottom: 1.5em;
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    filter: styles.$brighten--strongly;
-  }
-}
-
 .login-board__divider {
   margin-top: styles.$spacing--xl;
   margin-bottom: styles.$spacing--base;
@@ -158,20 +117,72 @@ login-boardN__form {
   background: styles.$blue--50;
 }
 
-.login-board__fieldset {
-  border: none;
-  outline: none;
-  margin: 0;
-  padding: 0;
+.login-boardN__input-wrapper {
+  display: flex;
+  gap: styles.$spacing--sm; // or 8px, 12px, etc.
+  align-items: center;
+  width: 100%;
 }
 
-.login-board__fieldset-legend {
-  position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+.login-boardN__input-wrapper .input__root {
+  flex: 1; // input takes all available space
+}
+
+.login-boardN__refreshButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: unset; // override any min-width from Button
+  background-color: styles.$gray--000;
+  border: none;
+
+  &:active {
+    background-color: styles.$gray--200;
+  }
+}
+
+.ogin-boardN__providers-section {
+  display: flex;
+  align-items: center;
+}
+
+.login-boardN__anonymous-toggle {
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover:not(.login-boardN__anonymous-toggle--active) {
+    text-decoration: underline;
+  }
+
+  &--active {
+    cursor: default;
+    text-decoration: none;
+  }
+}
+
+.login-providers__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  min-width: auto;
+  padding: 0;
+  background: styles.$gray--300;
+  border-radius: styles.$rounded--full;
+}
+.login-providers__button > span {
+  display: none;
+}
+
+.login-providers__icon {
+  height: styles.$icon--medium;
+  width: styles.$icon--medium;
+  flex: 0 0 styles.$icon--medium;
 }
 
 .login-board__checkbox {
@@ -252,6 +263,8 @@ login-boardN__form {
 
 .login-board__anonymous-login-button {
   margin-top: 2em;
+  width: 100%;
+  height: 48px; //todo fix that with button height constant
 }
 
 [theme="dark"] {

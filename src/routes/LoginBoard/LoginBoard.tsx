@@ -10,10 +10,11 @@ import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.pn
 import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
-import {Refresh,MarkAsDone2} from "components/Icon";
+import {Refresh, MarkAsDone2, Refresh2} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
-import {LegacyButton} from "components/Button";
+import {Button, LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
+import {Input} from "components/Input/Input";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
 import {useAppSelector} from "store";
@@ -35,26 +36,26 @@ export const LoginBoard = () => {
   const location = useLocation();
 
   const [displayName, setDisplayName] = useState(getRandomName());
-  const [termsAccepted, setTermsAccepted] = useState(!SHOW_LEGAL_DOCUMENTS);
-  const [submitted, setSubmitted] = useState(false);
+  const [showAnonymousContent, setShowAnonymousContent] = useState(false);
 
   let redirectPath = "/";
   if (location.state) {
     redirectPath = (location.state as State).from.pathname;
   }
 
+  function showAnonymousLogin() {}
+
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
-    if (termsAccepted) {
-      try {
-        await Auth.signInAnonymously(displayName);
-        window.location.pathname = redirectPath;
-      } catch (err) {
-        Toast.error({title: t("LoginBoard.errorOnRedirect")});
-      }
-    }
-    setSubmitted(true);
+    await Auth.signInAnonymously(displayName);
+    window.location.pathname = redirectPath;
   }
+
+  const FEATURE_KEYS = [
+    "LoginBoard.loginFeature1",
+    "LoginBoard.loginFeature2",
+    // ...
+  ];
 
   // TODO delete variable and replace with providersAvailable later everywhere
   const providerAvailableDev = true; // set to false or
@@ -81,15 +82,12 @@ export const LoginBoard = () => {
                     <h1>{t("LoginBoard.subtitleLogin")}</h1>
 
                     <div className="login-boardN__features">
-                      <div className="login-boardN__feature">
-                        <MarkAsDone2 className="login-boardN__feature-icon" />
-                        <span>Eigene Vorlagen erstellen und dauerhaft speichern</span>
-                      </div>
-                      <div className="login-boardN__feature">
-                        <MarkAsDone2 className="login-boardN__feature-icon" />
-                        <span>blubbiblubb</span>
-                      </div>
-                      {/* ... */}
+                      {FEATURE_KEYS.map((key) => (
+                        <div key={key} className="login-boardN__feature">
+                          <MarkAsDone2 className="login-boardN__feature-icon" />
+                          <span>{t(key)}</span>
+                        </div>
+                      ))}
                     </div>
 
                     <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
@@ -101,67 +99,59 @@ export const LoginBoard = () => {
                 )}
               </div>
 
-              <fieldset className="login-board__fieldset">
-                <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
-
-                <div className="login-board__username">
-                  <TextInputLabel label={t("LoginBoard.username")} htmlFor="login-board__username" />
-                  <TextInput
-                    id="login-board__username"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") {
-                        handleLogin();
-                      }
-                    }}
-                    maxLength={64}
-                    aria-invalid={!displayName}
-                    actions={
-                      <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
-                        <Refresh />
-                      </TextInputAction>
-                    }
-                    data-cy="login-board__username"
-                  />
-                </div>
-                {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
-
-                {SHOW_LEGAL_DOCUMENTS && (
-                  <label className="login-board__form-element login-board__terms">
-                    <input
-                      type="checkbox"
-                      className="login-board__checkbox"
-                      defaultChecked={termsAccepted}
-                      onChange={() => setTermsAccepted(!termsAccepted)}
-                      data-cy="login-board__checkbox"
-                    />
-                    <span className="login-board__terms-label">
-                      <Trans
-                        i18nKey="LoginBoard.acceptTerms"
-                        components={{
-                          terms: <Link to="/legal/termsAndConditions" target="_blank" />,
-                          privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+              <div className="login-boardN__anonymous-section">
+                <p
+                  className={classNames("login-boardN__anonymous-toggle", {"login-boardN__anonymous-toggle--active": showAnonymousContent})}
+                  onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
+                  style={{cursor: showAnonymousContent ? "default" : "pointer"}}
+                >
+                  {t("LoginBoard.anonymousLogin")}
+                </p>
+                {showAnonymousContent && (
+                  <div className="login-boardN__anonymous-content">
+                    <div className="login-boardN__input-wrapper">
+                      <Input
+                        type="text"
+                        height="small"
+                        input={displayName}
+                        setInput={setDisplayName}
+                        maxLength={64}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                          if (e.key === "Enter") handleLogin();
                         }}
                       />
-                    </span>
-                  </label>
-                )}
-              </fieldset>
-              {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
+                      <Button
+                        className="login-boardN__refreshButton"
+                        color="backlog-blue"
+                        type="secondary"
+                        onClick={() => setDisplayName(getRandomName())}
+                        aria-label={t("LoginBoard.generateRandomName")}
+                        // todo fix icon so that there are no 2 refreshs
+                        icon={<Refresh2 />}
+                       />
+                    </div>
 
-              <LegacyButton
-                className="login-board__anonymous-login-button"
-                color="primary"
-                onClick={handleLogin}
-                disabled={anonymousLoginDisabled}
-                data-cy="login-board__anonymous-login-button"
-              >
-                {t("LoginBoard.login")}
-              </LegacyButton>
-              {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
-              {/* admin messed something up */}
-              {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
+                    {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
+
+                    <Button className="login-board__anonymous-login-button" onClick={handleLogin} disabled={anonymousLoginDisabled} data-cy="login-board__anonymous-login-button">
+                      {t("LoginBoard.login")}
+                    </Button>
+                    {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+                    {/* admin messed something up */}
+                    {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
+                  </div>
+                )}
+              </div>
+
+              <span className="login-board__terms-label">
+                <Trans
+                  i18nKey="LoginBoard.acceptTerms"
+                  components={{
+                    terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+                    privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+                  }}
+                />
+              </span>
             </div>
           </div>
         </div>
