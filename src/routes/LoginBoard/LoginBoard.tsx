@@ -16,6 +16,7 @@ import {ValidationError} from "components/ValidationError";
 import {useAppSelector} from "store";
 import {Background} from "components/Background";
 import {HeaderBar} from "components/HeaderBar";
+// todo remove when legal documents are always shown
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 import "./LoginBoard.scss";
