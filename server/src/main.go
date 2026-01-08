@@ -259,12 +259,6 @@ func main() {
 				Value:    "INFO",
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:    "verbose",
-				Aliases: []string{"v"},
-				Usage:   "enable verbose logging",
-				Value:   false,
-			}),
-			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:  "disable-check-origin",
 				Usage: "disable check origin (strongly suggestion to only use this for development)",
 				Value: false,
@@ -292,10 +286,6 @@ func main() {
 
 func run(c *cli.Context) error {
 	logger.SetLogLevel(c.String("log-level"))
-	if c.Bool("verbose") {
-		logger.SetLogLevel("DEBUG")
-		logger.Get().Warnln("Verbose logging is set through the verbose flag. This will be deprecated. Use the SCRUMLR_LOG_LEVEL environment variable")
-	}
 
 	otelShutdown, err := initialize.SetupOTelSDK(c.Context, c.String("otel-grpc"), c.String("otel-http"))
 	if err != nil {
