@@ -336,8 +336,13 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
+	c, err := cache.NewNats(suite.natsConnectionString, fmt.Sprintf("scrumlr-%d", rand.Int()))
+	if err != nil {
+		log.Fatalf("Failed to connect to nats server %s", err)
+	}
+
 	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, c)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
