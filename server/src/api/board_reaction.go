@@ -16,7 +16,7 @@ import (
 
 // createBoardReaction creates a new board reaction
 func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_reactions.api.create")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_reactions.api.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
