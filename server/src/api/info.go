@@ -27,22 +27,22 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 
 	info.AllowAnonymousBoardCreation = s.allowAnonymousBoardCreation
 
-	if s.auth.Exists(common.Google) {
+	if s.authService.Exists(common.Google) {
 		info.AuthProvider = append(info.AuthProvider, common.Google)
 	}
-	if s.auth.Exists(common.GitHub) {
+	if s.authService.Exists(common.GitHub) {
 		info.AuthProvider = append(info.AuthProvider, common.GitHub)
 	}
-	if s.auth.Exists(common.Microsoft) {
+	if s.authService.Exists(common.Microsoft) {
 		info.AuthProvider = append(info.AuthProvider, common.Microsoft)
 	}
-	if s.auth.Exists(common.AzureAd) {
+	if s.authService.Exists(common.AzureAd) {
 		info.AuthProvider = append(info.AuthProvider, common.AzureAd)
 	}
-	if s.auth.Exists(common.Apple) {
+	if s.authService.Exists(common.Apple) {
 		info.AuthProvider = append(info.AuthProvider, common.Apple)
 	}
-	if s.auth.Exists(common.TypeOIDC) {
+	if s.authService.Exists(common.TypeOIDC) {
 		info.AuthProvider = append(info.AuthProvider, common.TypeOIDC)
 	}
 

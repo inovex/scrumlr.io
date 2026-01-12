@@ -1,7 +1,10 @@
-package api
+package auth
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"strings"
@@ -15,7 +18,11 @@ import (
 	"scrumlr.io/server/users"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+type API struct {
+	service     AuthService
+	userService users.UserService
+	basePath    string
+}
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
 type AnonymousSignUpRequest struct {
@@ -24,8 +31,8 @@ type AnonymousSignUpRequest struct {
 }
 
 // signInAnonymously create a new anonymous user
-func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
+func (api *API) SignInAnonymously(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.auth.api.signin.anonymous")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -38,14 +45,14 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	user, err := api.userService.CreateAnonymous(ctx, body.Name)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create anonyoums user")
 		span.RecordError(err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	tokenString, err := s.auth.Sign(map[string]interface{}{"id": user.ID})
+	tokenString, err := api.service.Sign(map[string]interface{}{"id": user.ID})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to generate token string")
 		span.RecordError(err)
@@ -62,7 +69,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
-func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
+func (api *API) Logout(w http.ResponseWriter, r *http.Request) {
 	_, span := tracer.Start(r.Context(), "scrumlr.login.api.logout")
 	defer span.End()
 
@@ -81,82 +88,73 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-func (s *Server) BeginAuth(w http.ResponseWriter, r *http.Request) {
-	s.auth.BeginAuth(w, r)
+func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
+	provider := strings.ToUpper(chi.URLParam(r, "provider"))
+	config := api.service.GetConfig(provider)
+
+	//get redirect url from query param
+	nonceBytes := make([]byte, 64)
+	if _, err := io.ReadFull(rand.Reader, nonceBytes); err != nil {
+		http.Error(w, "Internal error", http.StatusInternalServerError)
+		return
+	}
+	nonce := base64.URLEncoding.EncodeToString(nonceBytes)
+	returnURL := r.URL.Query().Get("state")
+
+	state := nonce
+	if returnURL != "" {
+		state = fmt.Sprintf("%s__%s", nonce, returnURL)
+	}
+
+	url := config.AuthCodeURL(state)
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_auth_provider")
+func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromContext(r.Context())
+	ctx, span := tracer.Start(r.Context(), "scrumlr.auth.service.handle_callback")
 	defer span.End()
-	log := logger.FromContext(ctx)
+
+	//span.SetAttributes(
+	//  attribute.String("scrumlr.auth.service.handle_callback.board", ),
+	//)
 
 	providerStr := strings.ToUpper(chi.URLParam(r, "provider"))
-	config := s.auth.GetConfig(providerStr)
-	if config == nil {
+	exists := api.service.Exists(common.AccountType(providerStr))
+	if !exists {
+		log.Errorw("provider does not exist", "provider", providerStr)
+		span.SetStatus(codes.Error, "provider does not exist")
+		span.RecordError(fmt.Errorf("provider %s does not exist", providerStr))
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
 	state := r.FormValue("state")
 
 	code := r.FormValue("code")
-
-	token, err := config.Exchange(ctx, code)
+	cookie, err := api.service.HandleCallback(ctx, providerStr, code)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to exchange code")
-		w.WriteHeader(http.StatusUnauthorized)
-		log.Errorw("could not exchange oauth2 code", "err", err)
+
 		return
 	}
 
-	userInfo, err := s.auth.FetchExternalUser(ctx, providerStr, token)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to fetch user info")
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("failed to fetch external user info", "err", err)
-		return
-	}
+	common.SealCookie(r, cookie)
+	http.SetCookie(w, cookie)
 
-	//todo: implement for other providers
-	var internalUser *users.User
-	switch userInfo.Provider {
-	case common.Google:
-		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.GitHub:
-		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.TypeOIDC:
-		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Microsoft:
-		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-
-	}
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
-	cookie := http.Cookie{
-		Name:     "jwt",
-		Value:    tokenString,
-		Path:     "/",
-		Expires:  time.Now().AddDate(0, 0, 21),
-		HttpOnly: true,
-	}
-	common.SealCookie(r, &cookie)
-	http.SetCookie(w, &cookie)
-
-	targetURL := s.basePath
+	targetURL := api.basePath
 	stateSplit := strings.Split(state, "__")
 	if len(stateSplit) > 1 {
 		targetURL = stateSplit[1]
 	}
-	if s.basePath == "/" {
+	if api.basePath == "/" {
 		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
 	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
+		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, api.basePath))
 	}
 	http.Redirect(w, r, targetURL, http.StatusSeeOther)
+}
+
+func NewAuthApi(service AuthService) AuthApi {
+	api := new(API)
+	api.service = service
+	return api
 }
