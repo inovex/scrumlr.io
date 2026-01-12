@@ -124,6 +124,11 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	case common.GitHub:
 		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case common.TypeOIDC:
+		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case common.Microsoft:
+		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+
 	}
 
 	if err != nil {

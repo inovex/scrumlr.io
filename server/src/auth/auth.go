@@ -5,7 +5,6 @@ import (
   "crypto/ecdsa"
   "crypto/rand"
   "encoding/base64"
-  "encoding/json"
   "errors"
   "fmt"
   "io"
@@ -15,8 +14,8 @@ import (
 
   "github.com/go-chi/chi/v5"
   "github.com/go-chi/jwtauth/v5"
+  "github.com/golang-jwt/jwt/v5"
   "github.com/google/uuid"
-  "github.com/lestrrat-go/jwx/v2/jwt"
   "github.com/markbates/goth"
   "github.com/uptrace/bun"
   "golang.org/x/crypto/ssh"
@@ -28,6 +27,8 @@ import (
   "scrumlr.io/server/common"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/users"
+
+  jwx "github.com/lestrrat-go/jwx/v2/jwt"
 )
 
 type Auth interface {
@@ -117,6 +118,22 @@ func (a *AuthConfiguration) initializeProviders() error {
       Scopes:       []string{"User.Read"},
     }
   }
+  //todo ?????
+  if p, ok := a.providers[string(common.TypeOIDC)]; ok {
+    endpoint := oauth2.Endpoint{
+      AuthURL:       "http://127.0.0.1:5556/dex/auth",
+      DeviceAuthURL: "",
+      TokenURL:      "http://127.0.0.1:5556/dex/token",
+      AuthStyle:     0,
+    }
+    a.oauthConfigs[string(common.TypeOIDC)] = &oauth2.Config{
+      ClientID:     p.ClientId,
+      ClientSecret: p.ClientSecret,
+      Endpoint:     endpoint,
+      RedirectURL:  p.RedirectUri,
+      Scopes:       []string{"openid", "profile", "email"},
+    }
+  }
   return nil
 }
 
@@ -131,13 +148,13 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
       hfn := func(w http.ResponseWriter, r *http.Request) {
         ctx := r.Context()
 
-        var token jwt.Token
+        var authToken jwx.Token
         var err error
 
-        if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
+        if authToken, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
           // check if user tries to authenticate by a prior authentication key
           // attempt to migrate JWT to new key
-          userID := token.PrivateClaims()["id"].(string)
+          userID := authToken.PrivateClaims()["id"].(string)
           var user uuid.UUID
           user, err = uuid.Parse(userID)
 
@@ -158,10 +175,10 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
           }
         } else {
           // attempt to verify request by new key
-          token, err = jwtauth.VerifyRequest(a.auth, r, jwtauth.TokenFromCookie)
+          authToken, err = jwtauth.VerifyRequest(a.auth, r, jwtauth.TokenFromCookie)
         }
 
-        ctx = jwtauth.NewContext(ctx, token, err)
+        ctx = jwtauth.NewContext(ctx, authToken, err)
         next.ServeHTTP(w, r.WithContext(ctx))
       }
       return http.HandlerFunc(hfn)
@@ -266,58 +283,54 @@ func (a *AuthConfiguration) BeginAuth(w http.ResponseWriter, r *http.Request) {
 }
 func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error) {
   log := logger.Get()
-  client := a.oauthConfigs[provider].Client(ctx, token)
 
-  var url string
-  switch provider {
-  case string(common.Google):
-    url = "https://www.googleapis.com/oauth2/v3/userinfo"
-  case string(common.GitHub):
-    url = "https://api.github.com/user"
-  default:
-    return nil, fmt.Errorf("unsupported provider info fetch: %s", provider)
+  rawIDToken, ok := token.Extra("id_token").(string)
+  if !ok {
+    log.Error("no id_token found in response")
+    return nil, errors.New("no id_token found in response")
   }
 
-  resp, err := client.Get(url)
+  // 3. Now parse the rawIDToken
+  parser := jwt.NewParser()
+  parsedToken, _, err := parser.ParseUnverified(rawIDToken, jwt.MapClaims{})
   if err != nil {
-    return nil, err
-  }
-  defer func(Body io.ReadCloser) {
-    err := Body.Close()
-    if err != nil {
-      log.Errorw("failed to close response body", "error", err)
-    }
-  }(resp.Body)
-
-  var data map[string]interface{}
-  if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-    return nil, err
+    log.Errorf("failed to parse id_token: %v", err)
+    //w.WriteHeader(http.StatusInternalServerError)
+    return nil, errors.New("failed to parse id_token")
   }
 
+  // 4. Access user info
+  var claims jwt.MapClaims
+  if claims, ok = parsedToken.Claims.(jwt.MapClaims); ok {
+    email := claims["email"]
+    groups := claims["groups"]
+    log.Infof("User logged in: %v with groups %v", email, groups)
+  }
   // Map fields to UserInformation struct
   //todo: expand for other providers
   res := &UserInformation{Provider: common.AccountType(provider)}
   switch provider {
   case string(common.Google):
-    res.Ident = fmt.Sprint(data["sub"])
-    res.Name = fmt.Sprint(data["name"])
-    res.AvatarURL = fmt.Sprint(data["picture"])
+    res.Ident = fmt.Sprint(claims["sub"])
+    res.Name = fmt.Sprint(claims["name"])
+    res.AvatarURL = fmt.Sprint(claims["picture"])
   case string(common.GitHub):
-    res.Ident = fmt.Sprint(data["id"])
-    res.Name = fmt.Sprint(data["login"])
-    res.AvatarURL = fmt.Sprint(data["avatar_url"])
+    res.Ident = fmt.Sprint(claims["id"])
+    res.Name = fmt.Sprint(claims["login"])
+    res.AvatarURL = fmt.Sprint(claims["avatar_url"])
   case string(common.AzureAd):
-    res.Ident = fmt.Sprint(data["id"])
-    res.Name = fmt.Sprint(data["login"])
-    res.AvatarURL = fmt.Sprint(data["avatar_url"])
+    res.Ident = fmt.Sprint(claims["id"])
+    res.Name = fmt.Sprint(claims["login"])
+    res.AvatarURL = fmt.Sprint(claims["avatar_url"])
   case string(common.Microsoft):
-    res.Ident = fmt.Sprint(data["id"])
-    res.Name = fmt.Sprint(data["login"])
-    res.AvatarURL = fmt.Sprint(data["avatar_url"])
+    res.Ident = fmt.Sprint(claims["id"])
+    res.Name = fmt.Sprint(claims["login"])
+    res.AvatarURL = fmt.Sprint(claims["avatar_url"])
   case string(common.Apple):
     panic("not implemented")
   case string(common.TypeOIDC):
-    panic("not implemented")
+    res.Ident = fmt.Sprint(claims["sub"])
+    res.Name = fmt.Sprint(claims["name"])
 
   }
 
