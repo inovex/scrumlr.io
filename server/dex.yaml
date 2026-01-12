@@ -1,0 +1,26 @@
+---
+
+issuer: 'http://oidc.localhost:5556/dex'
+
+storage:
+  type: memory
+
+web:
+  http: '0.0.0.0:5556'
+
+staticClients:
+  - id: pub-client
+    redirectURIs:
+      - 'http://localhost:8080/login/oidc/callback'
+    name: 'Public Client'
+    secret: app-secret
+
+enablePasswordDB: true
+staticPasswords:
+  - email: 'admin@scrumlr.de'
+    # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
+    hash: '$2a$12$/MpkW8Kuy23fv7OVU7th5umxydDpHwTS0weocXkxEMsNme9ybGvxS'
+    username: 'admin'
+    userID: '94e6289e-b53e-4569-861f-014b9c581348'
+
+
