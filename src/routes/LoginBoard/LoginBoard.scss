@@ -16,6 +16,26 @@ $stan-height: 70vh;
   gap: styles.$spacing--lg;
   justify-content: flex-start;
   align-items: center;
+  padding-bottom: styles.$spacing--md;
+}
+
+.login-boardN__card {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  max-width: 920px;
+  max-height: 920px;
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
+  padding: styles.$spacing--base;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & h1 {
+    font-size: styles.$line-height--large;
+  }
 }
 
 .login-boardN__stan-container {
@@ -36,6 +56,12 @@ $stan-height: 70vh;
   }
 }
 
+@media screen and (max-width: styles.$breakpoint--desktop) {
+  .login-boardN__stan-container {
+    display: none;
+  }
+}
+
 .login-boardN__stan {
   height: 100%;
 
@@ -48,36 +74,11 @@ $stan-height: 70vh;
   }
 }
 
-@media screen and (max-width: styles.$breakpoint--desktop) {
-  .login-boardN__stan-container {
-    display: none;
-  }
-}
-
-.login-boardN__card {
-  position: relative;
-  width: 100%;
-  flex: 1;
-  max-width: 920px;
-  max-height: 920px;
-  border-radius: styles.$rounded--default;
-  background-color: styles.$blue--50;
-
-  padding: styles.$spacing--base;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  & h1 {
-    font-size: styles.$line-height--large;
-  }
-}
-
 .login-boardN__features {
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--md;
+  padding-bottom: styles.$spacing--xl;
 }
 
 .login-boardN__feature {
@@ -112,6 +113,21 @@ $stan-height: 70vh;
   background: styles.$blue--50;
 }
 
+.login-boardN__anonymous-toggle {
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+
+  &:hover:not(.login-boardN__anonymous-toggle--active) {
+    text-decoration: underline;
+  }
+
+  &--active {
+    cursor: default;
+    text-decoration: none;
+  }
+}
+
 .login-boardN__input-wrapper {
   display: flex;
   gap: styles.$spacing--sm; // or 8px, 12px, etc.
@@ -140,52 +156,10 @@ $stan-height: 70vh;
   }
 }
 
-.login-boardN__anonymous-toggle {
-  text-align: center;
-  cursor: pointer;
-  text-decoration: underline;
-
-  &:hover:not(.login-boardN__anonymous-toggle--active) {
-    text-decoration: underline;
-  }
-
-  &--active {
-    cursor: default;
-    text-decoration: none;
-  }
-}
-
-//todo probably remove but need to check first
-.login-providers__button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  min-width: auto;
-  padding: 0;
-  background: styles.$gray--300;
-  border-radius: styles.$rounded--full;
-}
-.login-providers__button > span {
-  display: none;
-}
-
-.login-providers__icon {
-  height: styles.$icon--medium;
-  width: styles.$icon--medium;
-  flex: 0 0 styles.$icon--medium;
-}
-
-.login-board__terms a {
-  color: styles.$pink--500;
-  font-weight: bold;
-  text-decoration: none;
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    filter: brightness(1.4);
-    text-decoration: underline;
-  }
+.login-board__anonymous-login-button {
+  margin-top: 2em;
+  width: 100%;
+  height: 48px; //todo fix that with button height constant
 }
 
 .login-board__terms-label {
@@ -198,22 +172,7 @@ $stan-height: 70vh;
   }
 }
 
-.login-board__terms:hover .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.2);
-}
-
-.login-board__anonymous-login-button {
-  margin-top: 2em;
-  width: 100%;
-  height: 48px; //todo fix that with button height constant
-}
-
 [theme="dark"] {
-  .login-board__dialog {
-    color: styles.$gray--000;
-    background: #1a2232;
-  }
-
   .login-board__divider {
     border-color: styles.$gray--700;
     color: styles.$gray--700;
@@ -224,49 +183,23 @@ $stan-height: 70vh;
     background: #1a2232;
   }
 
-  .login-board__terms:hover .login-board__terms-label::before {
+  .login-board__terms-label::before {
     box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.2);
   }
 
-  .login-board__terms:focus-visible.login-board__terms-label::before {
+  .login-board__terms-label::before {
     box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.4);
   }
 
   @media #{styles.$tablet} {
-    .login-board__form-wrapper,
     .login-board__divider::after {
       background: styles.$navy--600;
     }
   }
 }
 
+//todo adjust to new naming or remove
 @media #{styles.$tablet} {
-  .login-board {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    min-height: 100vh;
-  }
-
-  .login-board__dialog {
-    width: 100vw;
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    overflow: hidden;
-  }
-
-  .login-board__illustration {
-    display: initial;
-    flex: 0 1 640px;
-
-    padding: 64px;
-  }
-
   .login-board__form-wrapper {
     height: 100vh;
     padding: 64px;
