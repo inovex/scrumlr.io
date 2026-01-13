@@ -155,16 +155,14 @@ $stan-height: 70%;
   text-align: center;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: bold;
   color: styles.$navy--700;
   margin: 0;
-
-  &:hover:not(.login-board__anonymous-toggle--active) {
-    text-decoration: underline;
-  }
 
   &--active {
     cursor: default;
     text-decoration: none;
+    font-weight: normal;
   }
 }
 
