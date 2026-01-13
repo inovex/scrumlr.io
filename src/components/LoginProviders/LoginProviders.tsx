@@ -9,54 +9,96 @@ export interface LoginProvidersProps {
   originURL?: string;
 }
 
-export const LoginProviders = ({originURL = window.location.href}) => {
+export const LoginProviders = ({originURL = window.location.href}: LoginProvidersProps) => {
   const {t} = useTranslation();
   const providers = useAppSelector((state) => state.view.enabledAuthProvider);
-
-  if (providers.length === 0) {
-    return null;
-  }
 
   const signIn = (provider: string) => async () => {
     await Auth.signInWithAuthProvider(provider, originURL);
   };
 
-  let isFirstButton = true;
-  const getButtonProps = () => {
-    if (isFirstButton) {
-      isFirstButton = false;
-      return {hideLabel: false, type: undefined};
-    }
-    return {hideLabel: true, type: "ghost" as const};
-  };
+  const providerConfig = {
+    GOOGLE: {
+      label: t("LoginProviders.signInWithGoogle"),
+      icon: <Google className="login-providers__icon" />,
+      signInKey: "google",
+    },
+    MICROSOFT: {
+      label: t("LoginProviders.signInWithMicrosoft"),
+      icon: <Microsoft className="login-providers__icon" />,
+      signInKey: "microsoft",
+    },
+    AZURE_AD: {
+      label: t("LoginProviders.signInWithAzureAd"),
+      icon: <Azure className="login-providers__icon" />,
+      signInKey: "azure_ad",
+    },
+    APPLE: {
+      label: t("LoginProviders.signInWithApple"),
+      icon: <Apple className="login-providers__icon" />,
+      signInKey: "apple",
+    },
+    OIDC: {
+      label: t("LoginProviders.signInWithOIDC"),
+      icon: <OpenID className="login-providers__icon" />,
+      signInKey: "oidc",
+    },
+  } as const;
+
+  type ProviderKey = keyof typeof providerConfig;
+  const enabledProviders = providers.filter((provider): provider is ProviderKey => provider in providerConfig);
+
+  if (enabledProviders.length === 0) {
+    return null;
+  }
+
+  const [primaryProvider, ...secondaryProviders] = enabledProviders;
 
   return (
     <div className="login-providers">
-      {providers.some((provider) => provider === "GOOGLE") && (
-        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("google")} icon={<Google className="login-providers__icon" />} {...getButtonProps()}>
-          {t("LoginProviders.signInWithGoogle")}
-        </Button>
+      {primaryProvider && (
+        <>
+          <div className="buttonWrapper">
+            <Button key={`${primaryProvider}-full`} className="login-providers__button" color="backlog-blue" onClick={signIn(providerConfig[primaryProvider].signInKey)}>
+              {providerConfig[primaryProvider].label}
+            </Button>
+            <Button
+              key={`${primaryProvider}-icon`}
+              className="login-providers__button"
+              color="backlog-blue"
+              onClick={signIn(providerConfig[primaryProvider].signInKey)}
+              icon={providerConfig[primaryProvider].icon}
+              hideLabel
+              type="ghost"
+            >
+              {providerConfig[primaryProvider].label}
+            </Button>
+          </div>
+          <Button
+            key={`${primaryProvider}-icon-replacement`}
+            className="login-providers__button login-providers__button--icon-replacement"
+            color="backlog-blue"
+            onClick={signIn(providerConfig[primaryProvider].signInKey)}
+            icon={providerConfig[primaryProvider].icon}
+            hideLabel
+          >
+            {providerConfig[primaryProvider].label}
+          </Button>
+        </>
       )}
-      {providers.some((provider) => provider === "MICROSOFT") && (
-        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("microsoft")} icon={<Microsoft className="login-providers__icon" />} {...getButtonProps()}>
-          {t("LoginProviders.signInWithMicrosoft")}
+      {secondaryProviders.map((provider) => (
+        <Button
+          key={provider}
+          className="login-providers__button"
+          color="backlog-blue"
+          onClick={signIn(providerConfig[provider].signInKey)}
+          icon={providerConfig[provider].icon}
+          hideLabel
+          type="ghost"
+        >
+          {providerConfig[provider].label}
         </Button>
-      )}
-      {providers.some((provider) => provider === "AZURE_AD") && (
-        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("azure_ad")} icon={<Azure className="login-providers__icon" />} {...getButtonProps()}>
-          {t("LoginProviders.signInWithAzureAd")}
-        </Button>
-      )}
-      {providers.some((provider) => provider === "APPLE") && (
-        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("apple")} icon={<Apple className="login-providers__icon" />} {...getButtonProps()}>
-          {t("LoginProviders.signInWithApple")}
-        </Button>
-      )}
-      {providers.some((provider) => provider === "OIDC") && (
-        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("oidc")} icon={<OpenID className="login-providers__icon" />} {...getButtonProps()}>
-          {t("LoginProviders.signInWithOIDC")}
-        </Button>
-      )}
+      ))}
     </div>
   );
 };
