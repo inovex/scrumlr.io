@@ -101,8 +101,9 @@
     "anonymousLoginDisabledError": "Anonyme Accounts sind deaktiviert; bitte nutze eine der offiziellen Loginmöglichkeiten oberhalb",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
+    "dividerWord": "oder",
     "login": "Anonym fortfahren",
-    "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
+    "acceptTerms": "Mit deiner Anmeldung stimmst du unseren <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu.",
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
   },

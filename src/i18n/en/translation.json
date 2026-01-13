@@ -100,8 +100,9 @@
     "anonymousLoginDisabledError": "Anonymous accounts are disabled; please use one of the providers above",
     "noLoginAvailable": "There isn't any valid login available",
     "errorOnRedirect": "An error occurred while redirecting you",
+    "dividerWord": "or",
     "login": "Sign in",
-    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
+    "acceptTerms": "By signing up, you agree to our <terms>Terms and Conditions</terms> and <privacy>Privacy Policy</privacy>.",
     "generateRandomName": "Generate random name",
     "username": "Username"
   },

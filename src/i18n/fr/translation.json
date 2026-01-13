@@ -100,8 +100,9 @@
     "anonymousLoginDisabledError": "Les comptes anonymes sont désactivés ; veuillez utiliser l'un des fournisseurs ci-dessus",
     "noLoginAvailable": "Aucune connexion valide n'est disponible",
     "errorOnRedirect": "Une erreur s'est produite lors de votre redirection",
+    "dividerWord": "ou",
     "login": "Se connecter",
-    "acceptTerms": "J'accepte les <terms>conditions</terms> et la <privacy>politique de confidentialité</privacy>",
+    "acceptTerms": "En vous inscrivant, vous acceptez nos <terms>Conditions générales</terms> et notre <privacy>Politique de confidentialité</privacy>.",
     "generateRandomName": "Générer un nom aléatoire",
     "username": "Nom d'utilisateur"
   },
