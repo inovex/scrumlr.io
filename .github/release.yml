@@ -9,8 +9,9 @@ changelog:
         - "feat"
     - title: "🐛 Fixes"
       labels:
-        - "fix"
-        - "Bug"
+        - "Bug (HIGH)"
+        - "Bug (MEDIUM)"
+        - "Bug (LOW)"
     - title: "🔄 Refactoring"
       labels:
         - "refactor"
@@ -22,7 +23,7 @@ changelog:
         - "feat(i18n)"
     - title: "⚙️ Chores"
       labels:
-        - "chore"
+        - "Chore"
     - title: "📚 Docs"
       labels:
         - "docs"
