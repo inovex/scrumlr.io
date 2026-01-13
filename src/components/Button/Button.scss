@@ -141,7 +141,7 @@ $height--small: 46px;
     }
 
     &:active {
-      border-color: var(--accent-color--light);
+      background-color: styles.$gray--200;
     }
 
     &:disabled {
@@ -208,7 +208,8 @@ $height--small: 46px;
 
     &--ghost {
       color: var(--accent-color--dark);
-      background-color: styles.$navy--700;
+      background-color: styles.$navy--400;
+      border-color: transparent;
 
       &:enabled:hover {
         box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
@@ -219,8 +220,7 @@ $height--small: 46px;
       }
 
       &:active {
-        background-color: rgba(var(--accent-color--light-rgb), 0.28);
-        border-color: var(--accent-color--dark);
+        background-color: styles.$navy--500;
       }
 
       &:disabled {
