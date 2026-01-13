@@ -432,7 +432,7 @@ func run(c *cli.Context) error {
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, c.Bool("allow-anonymous-board-creation"), c.Bool("allow-anonymous-custom-templates"))
-	authApi := apiInitializer.InitializeAuthApi(authService)
+	authApi := apiInitializer.InitializeAuthApi(authService, userService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)

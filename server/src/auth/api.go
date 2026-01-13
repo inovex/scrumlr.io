@@ -115,11 +115,8 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.auth.service.handle_callback")
 	defer span.End()
 
-	//span.SetAttributes(
-	//  attribute.String("scrumlr.auth.service.handle_callback.board", ),
-	//)
-
 	providerStr := strings.ToUpper(chi.URLParam(r, "provider"))
+
 	exists := api.service.Exists(common.AccountType(providerStr))
 	if !exists {
 		log.Errorw("provider does not exist", "provider", providerStr)
@@ -129,11 +126,12 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	state := r.FormValue("state")
-
 	code := r.FormValue("code")
 	cookie, err := api.service.HandleCallback(ctx, providerStr, code)
 	if err != nil {
-
+		span.SetStatus(codes.Error, "failed to handle callback")
+		span.RecordError(err)
+		log.Errorw("failed to handle callback", "err", err)
 		return
 	}
 
@@ -153,8 +151,9 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, targetURL, http.StatusSeeOther)
 }
 
-func NewAuthApi(service AuthService) AuthApi {
+func NewAuthApi(service AuthService, userService users.UserService) AuthApi {
 	api := new(API)
 	api.service = service
+	api.userService = userService
 	return api
 }

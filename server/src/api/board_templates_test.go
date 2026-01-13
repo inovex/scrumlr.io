@@ -9,13 +9,9 @@ import (
 	"testing"
 
 	"github.com/go-chi/jwtauth/v5"
-	auth2 "github.com/go-pkgz/auth/v2"
-	"github.com/go-pkgz/auth/v2/token"
 	"github.com/google/uuid"
-	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"golang.org/x/oauth2"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
@@ -64,44 +60,7 @@ func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateR
 	}
 }
 
-// createTestAuth creates a minimal auth implementation for testing
-// This allows requests to pass through without actual authentication
-func createTestAuth() auth.Auth {
-	return &testAuthService{}
-}
-
-// testAuthService implements auth.Auth interface for testing purposes
-type testAuthService struct{}
-
-func (t *testAuthService) BeginAuth(w http.ResponseWriter, r *http.Request) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *testAuthService) GetConfig(provider string) *oauth2.Config {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *testAuthService) FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*auth.UserInformation, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *testAuthService) GetAuthService() *auth2.Service {
-	return auth2.NewService(auth2.Opts{})
-}
-
-func (t *testAuthService) GetTokenService() *token.Service {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *testAuthService) Sign(_ map[string]interface{}) (string, error) {
-	return "test-token", nil
-}
-
-func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
+func Verifier() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// Create proper JWT context using jwtauth library
@@ -125,26 +84,13 @@ func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
 	}
 }
 
-func (t *testAuthService) Authenticator() func(http.Handler) http.Handler {
+func Authenticator() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// Pass through without authentication for testing
 			next.ServeHTTP(w, r)
 		})
 	}
-}
-
-func (t *testAuthService) Exists(_ common.AccountType) bool {
-	return true
-}
-
-func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
-	return &auth.UserInformation{
-		Provider:  accountType,
-		Ident:     "test-user",
-		Name:      "Test User",
-		AvatarURL: "",
-	}, nil
 }
 
 // Test suite for AnonymousCustomTemplateCreationContext middleware
@@ -382,14 +328,14 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				Name:        "Test User",
 				AccountType: tt.userAccountType,
 			}, nil)
-
 			// Create mock services for dependencies required by the actual router
 			mockBoardTemplates := boardtemplates.NewMockBoardTemplateService(t)
 			mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
 
 			// Create a simple auth mock that allows all requests to pass
-			mockAuth := createTestAuth()
-
+			mockAuth := auth.NewMockAuthService(t)
+			mockAuth.EXPECT().Verifier().Return(Verifier())
+			mockAuth.EXPECT().Authenticator().Return(Authenticator())
 			// Create mock handlers that return proper template objects
 			templateID := uuid.New()
 			templateName := "Test Template"
@@ -425,20 +371,24 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionApiMock.EXPECT().BoardParticipantContext(mock.Anything).Return(next)
 			sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
 			sessionServiceMock := sessions.NewMockSessionService(t)
+			userSessionMock := users.NewMockUserService(t)
 
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
+			authApi := apiInitializer.InitializeAuthApi(mockAuth, userSessionMock)
 			routesInitializer := serviceinitialize.NewRoutesInitializer()
 			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
+			authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
 
 			// Use the actual router from router.go with minimal mocked dependencies
 			s := New(
-				"/",      // basePath
-				nil,      // realtime (not needed for templates)
-				mockAuth, // auth
+				"/",        // basePath
+				nil,        // realtime (not needed for templates)
+				authRoutes, // auth
 				userRoutes,
 				sessionRoutes,
+				mockAuth,
 				nil,                              // boards
 				nil,                              // columns
 				nil,                              // votings
