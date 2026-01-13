@@ -45,10 +45,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateNote },
 		},
 		{
-			name:    "users.signInAnonymously",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.signInAnonymously },
-		},
-		{
 			name:    "columns.createColumn",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.createColumn },
 		},

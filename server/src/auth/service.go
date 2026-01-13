@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"crypto/ecdsa"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -40,7 +41,8 @@ type AuthService interface {
 	Exists(accountType common.AccountType) bool
 	HandleCallback(ctx context.Context, provider, code string) (*http.Cookie, *common.APIError)
 	GetConfig(provider string) *oauth2.Config
-	FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error)
+	fetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error)
+	fetchGithubUser(ctx context.Context, config *oauth2.Config, token *oauth2.Token) (*UserInformation, error)
 }
 
 type AuthProviderConfiguration struct {
@@ -64,8 +66,16 @@ type AuthConfiguration struct {
 }
 
 type UserInformation struct {
-	Provider               common.AccountType
-	Ident, Name, AvatarURL string
+	Provider  common.AccountType
+	Ident     string `json:"id"`
+	Name      string `json:"login"`
+	AvatarURL string
+}
+
+type GithubUserInformation struct {
+	Provider common.AccountType
+	Ident    int64  `json:"id"`
+	Name     string `json:"login"`
 }
 
 func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, userService users.UserService) AuthService {
@@ -120,10 +130,9 @@ func (a *AuthConfiguration) initializeProviders() error {
 	}
 	if p, ok := a.providers[string(common.TypeOIDC)]; ok {
 		endpoint := oauth2.Endpoint{
-			AuthURL:       "http://127.0.0.1:5556/dex/auth",
-			DeviceAuthURL: "",
-			TokenURL:      "http://127.0.0.1:5556/dex/token",
-			AuthStyle:     0,
+			AuthURL:   "http://127.0.0.1:5556/dex/auth",
+			TokenURL:  "http://127.0.0.1:5556/dex/token",
+			AuthStyle: 0, //auto-detect
 		}
 		a.oauthConfigs[string(common.TypeOIDC)] = &oauth2.Config{
 			ClientID:     p.ClientId,
@@ -246,7 +255,13 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 		return nil, common.UnauthorizedError
 	}
 
-	userInfo, err := a.FetchExternalUser(ctx, provider, token)
+	var userInfo *UserInformation
+	if provider == string(common.GitHub) {
+		userInfo, err = a.fetchGithubUser(ctx, config, token)
+	} else {
+		userInfo, err = a.fetchExternalUser(ctx, provider, token)
+	}
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to fetch user info")
 		span.RecordError(err)
@@ -285,7 +300,7 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 	return &cookie, nil
 }
 
-func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error) {
+func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.auth.service.fetch_external_user")
 	log := logger.FromContext(ctx)
 	defer span.End()
@@ -326,8 +341,6 @@ func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider stri
 		res.Ident = fmt.Sprint(claims["sub"])
 		res.Name = fmt.Sprint(claims["name"])
 		res.AvatarURL = fmt.Sprint(claims["picture"])
-	case string(common.GitHub):
-		panic("not implemented")
 	case string(common.AzureAd):
 		res.Ident = fmt.Sprint(claims["id"])
 		res.Name = fmt.Sprint(claims["login"])
@@ -345,4 +358,35 @@ func (a *AuthConfiguration) FetchExternalUser(ctx context.Context, provider stri
 	}
 
 	return res, nil
+}
+
+func (a *AuthConfiguration) fetchGithubUser(ctx context.Context, config *oauth2.Config, token *oauth2.Token) (*UserInformation, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.auth.service.fetch_github_user")
+	log := logger.FromContext(ctx)
+	var user GithubUserInformation
+	client := config.Client(ctx, token)
+	resp, err := client.Get("https://api.github.com/user")
+	if err != nil {
+		span.RecordError(err)
+		log.Errorw("failed to fetch github user", "err", err)
+		return nil, common.UnauthorizedError
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		log.Errorw("github api returned non-200", "status", resp.Status)
+		return nil, common.UnauthorizedError
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+		span.RecordError(err)
+		log.Errorw("failed to decode github user json", "err", err)
+		return nil, common.UnauthorizedError
+	}
+
+	return &UserInformation{
+		Provider: common.GitHub,
+		Ident:    fmt.Sprint(user.Ident),
+		Name:     user.Name,
+	}, nil
 }

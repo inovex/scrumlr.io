@@ -434,9 +434,10 @@ func run(ctx *cli.Context) error {
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
 	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 
-	userService := initializer.InitializeUserService(sessionService, noteService)
+	userService := auth.NewAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
 
-	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
+
+  keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
   authService := auth.NewAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
 	if err != nil {
@@ -448,7 +449,7 @@ func run(ctx *cli.Context) error {
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
-  authApi := apiInitializer.InitializeAuthApi(authService)
+  authApi := apiInitializer.InitializeAuthApi(authService, userService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)

@@ -8,6 +8,11 @@ packages:
     interfaces:
       TimeProvider:
 
+  scrumlr.io/server/auth:
+    interfaces:
+      AuthService:
+      AuthApi:
+
   scrumlr.io/server/boards:
     config:
       dir: boards
