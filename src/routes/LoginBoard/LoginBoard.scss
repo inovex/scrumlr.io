@@ -1,25 +1,25 @@
 @use "constants/styles";
 
-$stan-height: 70vh;
+$stan-height: 70%;
 
-.login-boardN {
+.login-board {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.login-boardN__wrapper {
+.login-board__wrapper {
   width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--lg;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding-bottom: styles.$spacing--md;
 }
 
-.login-boardN__card {
+.login-board__card {
   position: relative;
   width: 100%;
   flex: 1;
@@ -28,6 +28,7 @@ $stan-height: 70vh;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
   padding: styles.$spacing--base;
+  padding-top: styles.$spacing--xl;
 
   display: flex;
   flex-direction: column;
@@ -35,13 +36,14 @@ $stan-height: 70vh;
 
   & h1 {
     font-size: styles.$line-height--large;
+    text-align: center;
+    margin: 0;
   }
 }
 
-.login-boardN__stan-container {
+.login-board__stan-container {
   position: absolute;
   height: $stan-height;
-  // Anchor to left edge of content, vertically centered
   top: 50%;
   pointer-events: none;
 
@@ -57,12 +59,12 @@ $stan-height: 70vh;
 }
 
 @media screen and (max-width: styles.$breakpoint--desktop) {
-  .login-boardN__stan-container {
+  .login-board__stan-container {
     display: none;
   }
 }
 
-.login-boardN__stan {
+.login-board__stan {
   height: 100%;
 
   &--dark {
@@ -74,28 +76,64 @@ $stan-height: 70vh;
   }
 }
 
-.login-boardN__features {
+.login-board__form-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: fit-content;
+  flex: 1;
+}
+
+.login-board__form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: styles.$spacing--lg;
+}
+
+.login-board__providers-section {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
+.login-board__anonymous-section {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
+.login-board__anonymous-content {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
+.login-board__features {
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--md;
-  padding-bottom: styles.$spacing--xl;
 }
 
-.login-boardN__feature {
+.login-board__feature {
   display: flex;
   align-items: center;
   gap: styles.$spacing--sm;
 }
 
-.login-boardN__feature-icon {
+.login-board__feature-icon {
   width: styles.$icon--medium;
   height: styles.$icon--medium;
   flex-shrink: 0;
 }
 
 .login-board__divider {
-  margin-top: styles.$spacing--xl;
-  margin-bottom: styles.$spacing--base;
+  margin: 0;
+  margin-top: 1.1em; // to center the line with the text
+  margin-bottom: 0px;
+
   padding: 0;
   overflow: visible;
   border: none;
@@ -113,12 +151,14 @@ $stan-height: 70vh;
   background: styles.$blue--50;
 }
 
-.login-boardN__anonymous-toggle {
+.login-board__anonymous-toggle {
   text-align: center;
   cursor: pointer;
   text-decoration: underline;
+  color: styles.$navy--600;
+  margin: 0;
 
-  &:hover:not(.login-boardN__anonymous-toggle--active) {
+  &:hover:not(.login-board__anonymous-toggle--active) {
     text-decoration: underline;
   }
 
@@ -128,47 +168,39 @@ $stan-height: 70vh;
   }
 }
 
-.login-boardN__input-wrapper {
+.login-board__input-wrapper {
   display: flex;
-  gap: styles.$spacing--sm; // or 8px, 12px, etc.
+  gap: styles.$spacing--xs;
   align-items: center;
   width: 100%;
 }
 
-.login-boardN__input-wrapper .input__root {
-  flex: 1; // input takes all available space
-}
-
-.login-boardN__refreshButton {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: unset; // override any min-width from Button
-  background-color: styles.$gray--000;
-  border: none;
-
-  &:active {
-    background-color: styles.$gray--200;
-  }
+.login-board__input-wrapper .input__root {
+  flex: 1;
 }
 
 .login-board__anonymous-login-button {
-  margin-top: 2em;
   width: 100%;
-  height: 48px; //todo fix that with button height constant
 }
 
 .login-board__terms-label {
+  width: 0;
+  min-width: 100%;
   position: relative;
-  display: block;
-  padding-left: 1.5em;
+  bottom: auto;
+  padding-bottom: 0;
+  text-align: center;
+  color: styles.$navy--700;
+  font-size: styles.$text--sm;
 
-  a:focus-visible {
+  & a {
+    font-weight: bold;
     text-decoration: underline;
+    color: inherit;
+
+    &:visited {
+      color: inherit;
+    }
   }
 }
 
@@ -183,14 +215,6 @@ $stan-height: 70vh;
     background: #1a2232;
   }
 
-  .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.2);
-  }
-
-  .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.4);
-  }
-
   @media #{styles.$tablet} {
     .login-board__divider::after {
       background: styles.$navy--600;
@@ -198,22 +222,32 @@ $stan-height: 70vh;
   }
 }
 
-//todo adjust to new naming or remove
+@media screen and (max-width: 1020px) {
+  .login-board__card {
+    width: 90%;
+    max-width: 920px;
+  }
+}
+
 @media #{styles.$tablet} {
-  .login-board__form-wrapper {
-    height: 100vh;
-    padding: 64px;
+  .login-board__card {
+    width: 90%;
+    max-width: 640px;
+  }
+}
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    flex: 1 1 100%;
-    box-shadow: 0 2px 16px 8px rgba(styles.$navy--900, 0.2);
-    overflow: auto;
+@media screen and (min-width: styles.$breakpoint--desktop) {
+  .login-board__card {
+    min-width: 920px;
   }
 
   .login-board__form {
-    max-width: 640px;
+    width: 505px;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--desktop) and (min-width: 1021px) {
+  .login-board__card {
+    width: 920px;
   }
 }

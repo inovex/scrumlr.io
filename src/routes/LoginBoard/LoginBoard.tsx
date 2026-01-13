@@ -16,8 +16,6 @@ import {ValidationError} from "components/ValidationError";
 import {useAppSelector} from "store";
 import {Background} from "components/Background";
 import {HeaderBar} from "components/HeaderBar";
-// todo remove when legal documents are always shown
-import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 import "./LoginBoard.scss";
 
@@ -55,89 +53,87 @@ export const LoginBoard = () => {
   // TODO delete variable and replace with providersAvailable later everywhere
   const providerAvailableDev = true; // set to false or
 
-  // https://dribbble.com/shots/7757250-Sign-up-revamp
   return (
     <Background>
-      <div className="login-boardN">
+      <div className="login-board">
         <HeaderBar renderTitle={() => t("LoginBoard.title")} loginBoard />
-        <div className="login-boardN__wrapper">
-          <div className="login-boardN__card">
-            <div className={classNames("login-boardN__stan-container", "login-boardN__stan-container--left")}>
-              <img className={classNames("login-boardN__stan", "login-boardN__stan--dark")} src={StanCoffeeDark} alt="Stan just hanging there with a coffee" />
-              <img className={classNames("login-boardN__stan", "login-boardN__stan--light")} src={StanCoffeeLight} alt="Stan just hanging there with a coffee" />
+        <div className="login-board__wrapper">
+          <div className="login-board__card">
+            <div className={classNames("login-board__stan-container", "login-board__stan-container--left")}>
+              <img className={classNames("login-board__stan", "login-board__stan--dark")} src={StanCoffeeDark} alt="Stan just hanging there with a coffee" />
+              <img className={classNames("login-board__stan", "login-board__stan--light")} src={StanCoffeeLight} alt="Stan just hanging there with a coffee" />
             </div>
-            <div className={classNames("login-boardN__stan-container", "login-boardN__stan-container--right")}>
-              <img className={classNames("login-boardN__stan", "login-boardN__stan--dark")} src={StanOkayDark} alt="Stan showing okay sign" />
-              <img className={classNames("login-boardN__stan", "login-boardN__stan--light")} src={StanOkayLight} alt="Stan showing okay sign" />
+            <div className={classNames("login-board__stan-container", "login-board__stan-container--right")}>
+              <img className={classNames("login-board__stan", "login-board__stan--dark")} src={StanOkayDark} alt="Stan showing okay sign" />
+              <img className={classNames("login-board__stan", "login-board__stan--light")} src={StanOkayLight} alt="Stan showing okay sign" />
             </div>
-            <div className="login-boardN__form">
-              <div className="login-boardN__providers-section">
-                {providerAvailableDev ? (
-                  <>
-                    <h1>{t("LoginBoard.subtitleLogin")}</h1>
+            <div className="login-board__form-wrapper">
+              <div className="login-board__form">
+                <div className="login-board__providers-section">
+                  {providerAvailableDev ? (
+                    <>
+                      <h1>{t("LoginBoard.subtitleLogin")}</h1>
 
-                    <div className="login-boardN__features">
-                      {FEATURE_KEYS.map((key) => (
-                        <div key={key} className="login-boardN__feature">
-                          <MarkAsDone2 className="login-boardN__feature-icon" />
-                          <span>{t(key)}</span>
-                        </div>
-                      ))}
+                      <div className="login-board__features">
+                        {FEATURE_KEYS.map((key) => (
+                          <div key={key} className="login-board__feature">
+                            <MarkAsDone2 className="login-board__feature-icon" />
+                            <span>{t(key)}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
+
+                      <hr className="login-board__divider" data-label={t("LoginBoard.dividerWord")} />
+                    </>
+                  ) : (
+                    <h1>{t("LoginBoard.subtitleAnonymous")}</h1>
+                  )}
+                </div>
+                <div className="login-board__anonymous-section">
+                  <p
+                    className={classNames("login-board__anonymous-toggle", {"login-board__anonymous-toggle--active": showAnonymousContent})}
+                    onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
+                    style={{cursor: showAnonymousContent ? "default" : "pointer"}}
+                  >
+                    {t("LoginBoard.anonymousLogin")}
+                  </p>
+                  {showAnonymousContent && (
+                    <div className="login-board__anonymous-content">
+                      <div className="login-board__input-wrapper">
+                        <Input
+                          type="text"
+                          height="small"
+                          input={displayName}
+                          setInput={setDisplayName}
+                          maxLength={64}
+                          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key === "Enter") handleLogin();
+                          }}
+                        />
+                        <Button
+                          type="ghost"
+                          color="backlog-blue"
+                          onClick={() => setDisplayName(getRandomName())}
+                          title={t("LoginBoard.generateRandomName")}
+                          icon={<Refresh />}
+                          hideLabel
+                        />
+                      </div>
+
+                      {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
+
+                      <Button className="login-board__anonymous-login-button" onClick={handleLogin} disabled={anonymousLoginDisabled} data-cy="login-board__anonymous-login-button">
+                        {t("LoginBoard.login")}
+                      </Button>
+                      {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+                      {/* admin messed something up */}
+                      {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
                     </div>
-
-                    <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
-
-                    <hr className="login-board__divider" data-label="or" />
-                  </>
-                ) : (
-                  <h1>{t("LoginBoard.subtitleAnonymous")}</h1>
-                )}
+                  )}
+                </div>
               </div>
-
-              <div className="login-boardN__anonymous-section">
-                <p
-                  className={classNames("login-boardN__anonymous-toggle", {"login-boardN__anonymous-toggle--active": showAnonymousContent})}
-                  onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
-                  style={{cursor: showAnonymousContent ? "default" : "pointer"}}
-                >
-                  {t("LoginBoard.anonymousLogin")}
-                </p>
-                {showAnonymousContent && (
-                  <div className="login-boardN__anonymous-content">
-                    <div className="login-boardN__input-wrapper">
-                      <Input
-                        type="text"
-                        height="small"
-                        input={displayName}
-                        setInput={setDisplayName}
-                        maxLength={64}
-                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                          if (e.key === "Enter") handleLogin();
-                        }}
-                      />
-                      <Button
-                        className="login-boardN__refreshButton"
-                        color="backlog-blue"
-                        type="secondary"
-                        onClick={() => setDisplayName(getRandomName())}
-                        aria-label={t("LoginBoard.generateRandomName")}
-                        // todo fix icon so that there are no 2 refreshs
-                        icon={<Refresh />}
-                      />
-                    </div>
-
-                    {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
-
-                    <Button className="login-board__anonymous-login-button" onClick={handleLogin} disabled={anonymousLoginDisabled} data-cy="login-board__anonymous-login-button">
-                      {t("LoginBoard.login")}
-                    </Button>
-                    {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
-                    {/* admin messed something up */}
-                    {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
-                  </div>
-                )}
-              </div>
-
               <span className="login-board__terms-label">
                 <Trans
                   i18nKey="LoginBoard.acceptTerms"
