@@ -155,7 +155,7 @@ $stan-height: 70%;
   text-align: center;
   cursor: pointer;
   text-decoration: underline;
-  color: styles.$navy--600;
+  color: styles.$navy--700;
   margin: 0;
 
   &:hover:not(.login-board__anonymous-toggle--active) {
@@ -188,6 +188,7 @@ $stan-height: 70%;
   min-width: 100%;
   position: relative;
   bottom: auto;
+  padding-top: styles.$spacing--lg;
   padding-bottom: 0;
   text-align: center;
   color: styles.$navy--700;
@@ -212,12 +213,28 @@ $stan-height: 70%;
 
   .login-board__divider::after {
     color: styles.$gray--700;
-    background: #1a2232;
+    background: styles.$orange--100;
+  }
+
+  .login-board__card {
+    background-color: styles.$navy--700;
+  }
+
+  .login-board__providers-section {
+    color: styles.$gray--000;
+  }
+
+  .login-board__anonymous-toggle {
+    color: styles.$gray--800;
+  }
+
+  .login-board__terms-label {
+    color: styles.$gray--000;
   }
 
   @media #{styles.$tablet} {
     .login-board__divider::after {
-      background: styles.$navy--600;
+      background: styles.$navy--700;
     }
   }
 }

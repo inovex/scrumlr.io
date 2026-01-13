@@ -9,7 +9,7 @@ import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.pn
 import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
-import {Refresh, MarkAsDone2} from "components/Icon";
+import {Refresh, MarkAsDone} from "components/Icon";
 import {Button} from "components/Button";
 import {Input} from "components/Input/Input";
 import {ValidationError} from "components/ValidationError";
@@ -77,7 +77,7 @@ export const LoginBoard = () => {
                       <div className="login-board__features">
                         {FEATURE_KEYS.map((key) => (
                           <div key={key} className="login-board__feature">
-                            <MarkAsDone2 className="login-board__feature-icon" />
+                            <MarkAsDone className="login-board__feature-icon" />
                             <span>{t(key)}</span>
                           </div>
                         ))}
