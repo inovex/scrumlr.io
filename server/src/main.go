@@ -427,7 +427,8 @@ func run(c *cli.Context) error {
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+	authService := auth.NewAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
+
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -437,17 +438,21 @@ func run(c *cli.Context) error {
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, c.Bool("allow-anonymous-board-creation"), c.Bool("allow-anonymous-custom-templates"))
+	authApi := apiInitializer.InitializeAuthApi(authService, userService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
+	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
+
 	s := api.New(
 		basePath,
 		rt,
-		authConfig,
 
+		authRoutes,
 		userRoutes,
 		sessionRoutes,
+		authService,
 		boardService,
 		columnService,
 		votingService,

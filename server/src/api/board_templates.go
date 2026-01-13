@@ -16,7 +16,7 @@ import (
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_templates.api.create")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_templates.api.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -48,7 +48,7 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_templates.api.get")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_templates.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -73,7 +73,7 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_templates.api.get.all")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_templates.api.get.all")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -100,7 +100,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_templates.api.update")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_templates.api.update")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -129,7 +129,7 @@ func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteBoardTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.board_templates.api.delete")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.board_templates.api.delete")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
