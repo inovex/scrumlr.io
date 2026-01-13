@@ -9,28 +9,8 @@
   flex: 1 1 auto;
 }
 
-.login-providers__button:not(:first-child) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  min-width: auto;
-  padding: 0;
-  background: styles.$gray--300;
-  border-radius: styles.$rounded--full;
-}
-.login-providers__button:not(:first-child) > span {
-  display: none;
-}
-
 .login-providers__icon {
   height: styles.$icon--medium;
   width: styles.$icon--medium;
   flex: 0 0 styles.$icon--medium;
-}
-
-[theme="dark"] {
-  .login-providers__button:not(:first-child) {
-    background: styles.$gray--700;
-  }
 }

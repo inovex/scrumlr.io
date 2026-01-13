@@ -2,7 +2,7 @@ import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {Apple, Azure, Google, Microsoft, OpenID} from "components/Icon";
 import {useAppSelector} from "store";
-import {LegacyButton} from "../Button";
+import {Button} from "../Button";
 import "./LoginProviders.scss";
 
 export interface LoginProvidersProps {
@@ -21,32 +21,41 @@ export const LoginProviders = ({originURL = window.location.href}) => {
     await Auth.signInWithAuthProvider(provider, originURL);
   };
 
+  let isFirstButton = true;
+  const getButtonProps = () => {
+    if (isFirstButton) {
+      isFirstButton = false;
+      return {hideLabel: false, type: undefined};
+    }
+    return {hideLabel: true, type: "ghost" as const};
+  };
+
   return (
     <div className="login-providers">
       {providers.some((provider) => provider === "GOOGLE") && (
-        <LegacyButton id="google" className="login-providers__button" onClick={signIn("google")} leftIcon={<Google className="login-providers__icon" />}>
+        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("google")} icon={<Google className="login-providers__icon" />} {...getButtonProps()}>
           {t("LoginProviders.signInWithGoogle")}
-        </LegacyButton>
+        </Button>
       )}
       {providers.some((provider) => provider === "MICROSOFT") && (
-        <LegacyButton id="microsoft" className="login-providers__button" onClick={signIn("microsoft")} leftIcon={<Microsoft className="login-providers__icon" />}>
+        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("microsoft")} icon={<Microsoft className="login-providers__icon" />} {...getButtonProps()}>
           {t("LoginProviders.signInWithMicrosoft")}
-        </LegacyButton>
+        </Button>
       )}
       {providers.some((provider) => provider === "AZURE_AD") && (
-        <LegacyButton id="azure-ad" className="login-providers__button" onClick={signIn("azure_ad")} leftIcon={<Azure className="login-providers__icon" />}>
+        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("azure_ad")} icon={<Azure className="login-providers__icon" />} {...getButtonProps()}>
           {t("LoginProviders.signInWithAzureAd")}
-        </LegacyButton>
+        </Button>
       )}
       {providers.some((provider) => provider === "APPLE") && (
-        <LegacyButton id="apple" className="login-providers__button" onClick={signIn("apple")} leftIcon={<Apple className="login-providers__icon" />}>
+        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("apple")} icon={<Apple className="login-providers__icon" />} {...getButtonProps()}>
           {t("LoginProviders.signInWithApple")}
-        </LegacyButton>
+        </Button>
       )}
       {providers.some((provider) => provider === "OIDC") && (
-        <LegacyButton id="oidc" className="login-providers__button" onClick={signIn("oidc")} leftIcon={<OpenID className="login-providers__icon" />}>
+        <Button className="login-providers__button" color="backlog-blue" onClick={signIn("oidc")} icon={<OpenID className="login-providers__icon" />} {...getButtonProps()}>
           {t("LoginProviders.signInWithOIDC")}
-        </LegacyButton>
+        </Button>
       )}
     </div>
   );
