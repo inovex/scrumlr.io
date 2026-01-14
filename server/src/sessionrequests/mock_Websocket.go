@@ -7,8 +7,8 @@ package sessionrequests
 import (
 	"net/http"
 
+	"github.com/coder/websocket"
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	mock "github.com/stretchr/testify/mock"
 )
 

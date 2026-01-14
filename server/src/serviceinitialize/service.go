@@ -16,8 +16,6 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
-	"github.com/gorilla/websocket"
-
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/feedback"
@@ -28,12 +26,12 @@ import (
 )
 
 type ServiceInitializer struct {
-	clock  timeprovider.TimeProvider
-	hash   hash.Hash
-	db     *bun.DB
-	rt     *realtime.Broker
-	ws     websocket.Upgrader
-	client *http.Client
+	clock       timeprovider.TimeProvider
+	hash        hash.Hash
+	db          *bun.DB
+	rt          *realtime.Broker
+	checkOrigin bool
+	client      *http.Client
 }
 
 func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
@@ -42,10 +40,7 @@ func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer.hash = hash.NewHashSha512()
 	initializer.db = db
 	initializer.rt = rt
-	initializer.ws = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
+	initializer.checkOrigin = false
 	initializer.client = &http.Client{}
 
 	return *initializer
@@ -120,9 +115,9 @@ func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessio
 }
 
 func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket {
-	websocket := sessionrequests.NewWebsocket(init.ws, init.rt)
+	ws := sessionrequests.NewWebsocket(init.checkOrigin, init.rt)
 
-	return websocket
+	return ws
 }
 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {

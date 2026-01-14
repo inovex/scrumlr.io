@@ -8,7 +8,6 @@ import (
 	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
@@ -68,11 +67,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
+	checkOrigin := false
+	websocket := NewWebsocket(checkOrigin, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -110,21 +106,11 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	checkOrigin := false
+	websocket := NewWebsocket(checkOrigin, broker)
+	services := setupTestServices(suite.db, broker, websocket)
 
-	request, err := sessionRequestService.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
+	request, err := services.SessionRequestService.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, request.User.ID)
@@ -158,11 +144,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
+	checkOrigin := false
+	websocket := NewWebsocket(checkOrigin, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -190,11 +173,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
+	checkOrigin := false
+	websocket := NewWebsocket(checkOrigin, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -222,21 +202,11 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
+	checkOrigin := false
+	websocket := NewWebsocket(checkOrigin, broker)
+	services := setupTestServices(suite.db, broker, websocket)
 
-	exists, err := sessionRequestService.Exists(ctx, boardId, userId)
+	exists, err := services.SessionRequestService.Exists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
