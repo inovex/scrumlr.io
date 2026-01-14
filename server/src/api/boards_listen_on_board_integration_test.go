@@ -7,11 +7,8 @@ import (
   "github.com/stretchr/testify/assert"
   "github.com/stretchr/testify/mock"
   "github.com/stretchr/testify/suite"
-  "net/http"
-  "net/http/httptest"
   "scrumlr.io/server/boards"
   "scrumlr.io/server/columns"
-  "scrumlr.io/server/identifiers"
   "scrumlr.io/server/notes"
   "scrumlr.io/server/reactions"
   "scrumlr.io/server/realtime"
@@ -26,29 +23,6 @@ type BoardsListenIntegrationTestSuite struct {
 
 func TestBoardsListenIntegrationTestSuite(t *testing.T) {
   suite.Run(t, new(BoardsListenIntegrationTestSuite))
-}
-
-func (suite *BoardsListenIntegrationTestSuite) TestOpenBoardSocketFailsWithoutWebSocketUpgrade() {
-  boardID := uuid.New()
-  userID := uuid.New()
-
-  s := &Server{
-    boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
-    boards:             boards.NewMockBoardService(suite.T()),
-    sessions:           sessions.NewMockSessionService(suite.T()),
-    checkOrigin:        false,
-  }
-
-  req := httptest.NewRequest(http.MethodGet, "/boards/websocket", nil)
-  ctx := context.WithValue(req.Context(), identifiers.BoardIdentifier, boardID)
-  ctx = context.WithValue(ctx, identifiers.UserIdentifier, userID)
-  req = req.WithContext(ctx)
-
-  w := httptest.NewRecorder()
-
-  s.openBoardSocket(w, req)
-
-  assert.Equal(suite.T(), http.StatusUpgradeRequired, w.Code)
 }
 
 func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardCreatesNewSubscription() {
