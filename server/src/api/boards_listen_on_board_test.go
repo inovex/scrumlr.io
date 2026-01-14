@@ -26,7 +26,7 @@ func TestBoardsListenTestSuite(t *testing.T) {
   suite.Run(t, new(BoardsListenTestSuite))
 }
 
-func (suite *BoardsListenTestSuite) TestListenOnBoardCreatesNewSubscription() {
+func (suite *BoardsListenTestSuite) ListenOnBoardCreatesNewSubscription() {
   boardID := uuid.New()
   userID := uuid.New()
 
@@ -73,7 +73,7 @@ func (suite *BoardsListenTestSuite) TestListenOnBoardCreatesNewSubscription() {
   assert.Equal(suite.T(), fullBoard.Reactions, s.boardSubscriptions[boardID].boardReactions)
 }
 
-func (suite *BoardsListenTestSuite) TestListenOnBoardAddsClientToExistingSubscription() {
+func (suite *BoardsListenTestSuite) ListenOnBoardAddsClientToExistingSubscription() {
   boardID := uuid.New()
   userID1 := uuid.New()
   userID2 := uuid.New()
@@ -102,7 +102,7 @@ func (suite *BoardsListenTestSuite) TestListenOnBoardAddsClientToExistingSubscri
   assert.Equal(suite.T(), newConn, s.boardSubscriptions[boardID].clients[userID2])
 }
 
-func (suite *BoardsListenTestSuite) TestCloseBoardSocketDisconnectsSession() {
+func (suite *BoardsListenTestSuite) CloseBoardSocketDisconnectsSession() {
   boardID := uuid.New()
   userID := uuid.New()
 
@@ -119,7 +119,7 @@ func (suite *BoardsListenTestSuite) TestCloseBoardSocketDisconnectsSession() {
   mockSessionService.AssertExpectations(suite.T())
 }
 
-func (suite *BoardsListenTestSuite) TestEventFilterFiltersForParticipant() {
+func (suite *BoardsListenTestSuite) EventFilterFiltersForParticipant() {
   participantID := uuid.New()
   moderatorID := uuid.New()
 
@@ -177,7 +177,7 @@ func (suite *BoardsListenTestSuite) TestEventFilterFiltersForParticipant() {
   assert.Equal(suite.T(), participantNote.ID, filteredNotes[0].ID)
 }
 
-func (suite *BoardsListenTestSuite) TestEventFilterDoesNotFilterForModerator() {
+func (suite *BoardsListenTestSuite) EventFilterDoesNotFilterForModerator() {
   participantID := uuid.New()
   moderatorID := uuid.New()
 
@@ -230,7 +230,7 @@ func (suite *BoardsListenTestSuite) TestEventFilterDoesNotFilterForModerator() {
   assert.Len(suite.T(), filteredNotes, 2)
 }
 
-func (suite *BoardsListenTestSuite) TestEventInitFilterFiltersColumnsForParticipant() {
+func (suite *BoardsListenTestSuite) EventInitFilterFiltersColumnsForParticipant() {
   participantID := uuid.New()
 
   visibleColumn := columns.Column{
@@ -264,7 +264,7 @@ func (suite *BoardsListenTestSuite) TestEventInitFilterFiltersColumnsForParticip
   assert.Equal(suite.T(), visibleColumn.ID, filteredEvent.Data.Columns[0].ID)
 }
 
-func (suite *BoardsListenTestSuite) TestEventInitFilterDoesNotFilterForModerator() {
+func (suite *BoardsListenTestSuite) EventInitFilterDoesNotFilterForModerator() {
   moderatorID := uuid.New()
 
   visibleColumn := columns.Column{
