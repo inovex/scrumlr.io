@@ -2,13 +2,12 @@ package initialize
 
 import (
 	"context"
-	"log"
-
 	"github.com/google/uuid"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"go.uber.org/zap/zapcore"
+	"log"
 )
 
 const POSTGRES_IMAGE = "postgres:17.5-alpine"
@@ -54,6 +53,11 @@ func StopTestDatabase(container *postgres.PostgresContainer) {
 
 func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string) error {
 	_, err := db.Exec("INSERT INTO users (\"id\", \"name\", \"account_type\") VALUES (?, ?, ?);", id.String(), name, accountType)
+	return err
+}
+
+func InsertGoogleUser(db *bun.DB, userID uuid.UUID, googleID string, name string, avatarUrl string) error {
+	_, err := db.Exec("INSERT INTO google_users (\"user\", id, name, \"avatar_url\") VALUES (?, ?, ?, ?)", userID, googleID, name, avatarUrl)
 	return err
 }
 
