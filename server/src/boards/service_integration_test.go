@@ -57,7 +57,7 @@ func (suite *BoardServiceIntegrationTestSuite) TearDownSuite() {
 	initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *BoardServiceIntegrationTestSuite) setupBoardService() BoardService {
+func (suite *BoardServiceIntegrationTestSuite) setupBoardService() (BoardService, *realtime.Broker) {
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
 		log.Fatalf("Failed to connect to nats server %s", err)
@@ -81,7 +81,30 @@ func (suite *BoardServiceIntegrationTestSuite) setupBoardService() BoardService 
 	database := NewBoardDatabase(suite.db)
 	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
 
-	return service
+	return service, broker
+}
+
+func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(t *testing.T, events chan *realtime.BoardEvent, expectedName, expectedDescription string, expectedAccessPolicy AccessPolicy, expectedAllowStacking, expectedIsLocked, expectedShowAuthors, expectedShowNoteReactions, expectedShowNotesOfOtherUsers bool) {
+	boardMsg := <-events
+	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedName, *boardData.Name)
+	assert.Equal(t, expectedDescription, *boardData.Description)
+	assert.Equal(t, expectedAccessPolicy, boardData.AccessPolicy)
+	assert.Equal(t, expectedAllowStacking, boardData.AllowStacking)
+	assert.Equal(t, expectedIsLocked, boardData.IsLocked)
+	assert.Equal(t, expectedShowAuthors, boardData.ShowAuthors)
+	assert.Equal(t, expectedShowNoteReactions, boardData.ShowNoteReactions)
+	assert.Equal(t, expectedShowNotesOfOtherUsers, boardData.ShowNotesOfOtherUsers)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) assertNoteSyncEvent(t *testing.T, events chan *realtime.BoardEvent) {
+	noteMsg := <-events
+	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
+	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
+	assert.Nil(t, err)
+	assert.Nil(t, notesData)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
@@ -93,7 +116,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	description := "This board was inserted"
 	accessPolicy := Public
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -127,7 +150,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	accessPolicy := ByPassphrase
 	passphrase := "This is a super strong passphrase"
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 
 	board, err := service.Create(ctx, CreateBoardRequest{
 		Name:         &name,
@@ -167,14 +190,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	allowStacking := false
 	isLocked := true
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -203,24 +220,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	assert.Equal(t, showNoteReactions, board.ShowNoteReactions)
 	assert.Equal(t, showNotesOfOtherUsers, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, &name, boardData.Name)
-	assert.Equal(t, &description, boardData.Description)
-	assert.Equal(t, Public, boardData.AccessPolicy)
-	assert.Equal(t, allowStacking, boardData.AllowStacking)
-	assert.Equal(t, isLocked, boardData.IsLocked)
-	assert.Equal(t, showAuthors, boardData.ShowAuthors)
-	assert.Equal(t, showNoteReactions, boardData.ShowNoteReactions)
-	assert.Equal(t, showNotesOfOtherUsers, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, name, description, Public, allowStacking, isLocked, showAuthors, showNoteReactions, showNotesOfOtherUsers)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
@@ -231,14 +232,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	passphrase := "SuperSecret"
 	accessPolicy := ByPassphrase
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -260,26 +255,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToPassphrase", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToPassphrase", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
@@ -289,14 +266,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	boardId := suite.boards["UpdatePublicToInvite"].ID
 	accessPolicy := ByInvite
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -317,26 +288,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToInvite", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToInvite", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
@@ -346,14 +299,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	boardId := suite.boards["UpdatePassphraseToPublic"].ID
 	accessPolicy := Public
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -374,26 +321,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToPublic", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToPublic", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
@@ -403,14 +332,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	boardId := suite.boards["UpdatePassphraseToInvite"].ID
 	accessPolicy := ByInvite
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -431,26 +354,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToInvite", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToInvite", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
@@ -460,14 +365,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	boardId := suite.boards["UpdateInviteToPublic"].ID
 	accessPolicy := Public
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -488,26 +387,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToPublic", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToPublic", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
@@ -518,14 +399,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	accessPolicy := ByPassphrase
 	passphrase := "SuperStrongPassword"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
+	service, broker := suite.setupBoardService()
 	events := broker.GetBoardChannel(ctx, boardId)
-
-	service := suite.setupBoardService()
 
 	board, err := service.Update(
 		ctx,
@@ -547,26 +422,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
 
-	boardMsg := <-events
-	assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
-	boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, "UpdateToPassphrase", *boardData.Name)
-	assert.Equal(t, "This is a board to update", *boardData.Description)
-	assert.Equal(t, accessPolicy, boardData.AccessPolicy)
-	assert.Nil(t, boardData.Passphrase)
-	assert.Nil(t, boardData.Salt)
-	assert.True(t, boardData.AllowStacking)
-	assert.False(t, boardData.IsLocked)
-	assert.True(t, boardData.ShowAuthors)
-	assert.True(t, boardData.ShowNoteReactions)
-	assert.True(t, boardData.ShowNotesOfOtherUsers)
-
-	noteMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
-	notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.assertBoardEventAndData(t, events, "UpdateToPassphrase", "This is a board to update", accessPolicy, true, false, true, true, true)
+	suite.assertNoteSyncEvent(t, events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
@@ -575,7 +432,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
 
 	boardId := suite.boards["Delete"].ID
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 
 	err := service.Delete(ctx, boardId)
 
@@ -588,7 +445,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get() {
 
 	boardId := suite.boards["Read1"].ID
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 
 	board, err := service.Get(ctx, boardId)
 
@@ -606,7 +463,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	boardId := uuid.New()
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	board, err := service.Get(ctx, boardId)
 
 	assert.Nil(t, board)
@@ -620,7 +477,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 
 	userId := suite.users["Stan"].id
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	boards, err := service.GetBoards(ctx, userId)
 
 	assert.Nil(t, err)
@@ -638,7 +495,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 
 	boardId := suite.boards["Read1"].ID
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	board, err := service.FullBoard(ctx, boardId)
 
 	assert.Nil(t, err)
@@ -662,7 +519,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 
 	boardId := uuid.New()
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	board, err := service.FullBoard(ctx, boardId)
 
 	assert.Nil(t, board)
@@ -670,14 +527,14 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverwiev() {
+func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {
 	t := suite.T()
 	ctx := context.Background()
 
 	boardIds := []uuid.UUID{suite.boards["Read1"].ID, suite.boards["Read2"].ID}
 	userId := suite.users["Stan"].id
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	boards, err := service.BoardOverview(ctx, boardIds, userId)
 
 	assert.Nil(t, err)
@@ -703,7 +560,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
 	boardId := suite.boards["Read1"].ID
 	minutes := uint8(2)
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	board, err := service.SetTimer(ctx, boardId, minutes)
 
 	assert.Nil(t, err)
@@ -717,7 +574,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_DeleteTimer() {
 
 	boardId := suite.boards["Read1"].ID
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 	board, err := service.DeleteTimer(ctx, boardId)
 
 	assert.Nil(t, err)
@@ -733,7 +590,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	boardId := suite.boards["Timer"].ID
 	minutes := uint8(2)
 
-	service := suite.setupBoardService()
+	service, _ := suite.setupBoardService()
 
 	_, err := service.SetTimer(ctx, boardId, minutes)
 	assert.Nil(t, err)
