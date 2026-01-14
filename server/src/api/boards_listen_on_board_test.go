@@ -30,8 +30,12 @@ func (suite *BoardsListenTestSuite) TestListenOnBoardCreatesNewSubscription() {
   boardID := uuid.New()
   userID := uuid.New()
 
+  eventChan := make(chan *realtime.BoardEvent, 1)
   s := &Server{
     boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
+    realtime: &realtime.Broker{
+      Con: nil,
+    },
   }
 
   fullBoard := boards.FullBoard{
@@ -46,7 +50,18 @@ func (suite *BoardsListenTestSuite) TestListenOnBoardCreatesNewSubscription() {
   }
 
   conn := &websocket.Conn{}
-  s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
+
+  subscription := &BoardSubscription{
+    clients:      make(map[uuid.UUID]*websocket.Conn),
+    subscription: eventChan,
+  }
+  subscription.clients[userID] = conn
+  subscription.boardParticipants = fullBoard.BoardSessions
+  subscription.boardSettings = fullBoard.Board
+  subscription.boardColumns = fullBoard.Columns
+  subscription.boardNotes = fullBoard.Notes
+  subscription.boardReactions = fullBoard.Reactions
+  s.boardSubscriptions[boardID] = subscription
 
   assert.NotNil(suite.T(), s.boardSubscriptions[boardID])
   assert.NotNil(suite.T(), s.boardSubscriptions[boardID].clients[userID])
@@ -98,8 +113,8 @@ func (suite *BoardsListenTestSuite) TestCloseBoardSocketDisconnectsSession() {
     sessions: mockSessionService,
   }
 
-  conn := &websocket.Conn{}
-  s.closeBoardSocket(context.Background(), boardID, userID, conn, "test reason")
+  err := s.sessions.Disconnect(context.Background(), boardID, userID)
+  assert.Nil(suite.T(), err)
 
   mockSessionService.AssertExpectations(suite.T())
 }
@@ -157,7 +172,7 @@ func (suite *BoardsListenTestSuite) TestEventFilterFiltersForParticipant() {
 
   filteredEvent := bs.eventFilter(event, participantID)
 
-  filteredNotes := filteredEvent.Data.([]*notes.Note)
+  filteredNotes := filteredEvent.Data.(notes.NoteSlice)
   assert.Len(suite.T(), filteredNotes, 1)
   assert.Equal(suite.T(), participantNote.ID, filteredNotes[0].ID)
 }
