@@ -2,12 +2,13 @@ package initialize
 
 import (
 	"context"
+	"log"
+
 	"github.com/google/uuid"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"go.uber.org/zap/zapcore"
-	"log"
 )
 
 const POSTGRES_IMAGE = "postgres:17.5-alpine"
