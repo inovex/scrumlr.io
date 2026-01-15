@@ -57,6 +57,11 @@ func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string) error
 	return err
 }
 
+func InsertGoogleUser(db *bun.DB, userID uuid.UUID, googleID string, name string, avatarUrl string) error {
+	_, err := db.Exec("INSERT INTO google_users (\"user\", id, name, \"avatar_url\") VALUES (?, ?, ?, ?)", userID, googleID, name, avatarUrl)
+	return err
+}
+
 func InsertBoard(db *bun.DB, id uuid.UUID, name string, description string, passhphrase *string, salt *string, accessPolicy string, showAuthors bool, showOtherNotes bool, showReactions bool, stacking bool, locked bool) error {
 	_, err := db.Exec("INSERT INTO boards (\"id\", \"name\", \"description\", \"passphrase\", \"salt\", \"access_policy\", \"show_authors\", \"show_notes_of_other_users\", \"show_note_reactions\", \"allow_stacking\", \"is_locked\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
 		id.String(), name, description, passhphrase, salt, accessPolicy, showAuthors, showOtherNotes, showReactions, stacking, locked)

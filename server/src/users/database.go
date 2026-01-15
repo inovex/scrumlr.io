@@ -2,6 +2,8 @@ package users
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -139,53 +141,57 @@ func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, 
 
 func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
-	existingUser := db.db.NewSelect().
-		TableExpr(table).
-		ColumnExpr("*").
-		Where("id = ?", id)
-
-	existsCheck := db.db.NewSelect().
-		ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
-
-	updateName := db.db.NewUpdate().
-		Model((*DatabaseUser)(nil)).
-		Column("name").Set("name = ?", name).
-		Where("(SELECT user_exists FROM exists_check)").
-		Where("id=(SELECT \"user\" FROM \"existing_user\")").
-		Where("name=(SELECT name FROM \"existing_user\")")
-
-	createNewUser := db.db.NewInsert().
-		Model((*DatabaseUser)(nil)).
-		ColumnExpr("name, account_type").
-		TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).
-		Returning("*")
-
-	selectUser := db.db.NewSelect().
-		ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
-
-	insertExternalUser := db.db.NewInsert().
-		TableExpr(table).
-		ColumnExpr("\"user\", id, name, avatar_url").
-		TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).
-		On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
-
-	selectExistingUser := db.db.NewSelect().
-		Model((*DatabaseUser)(nil)).
-		Where("id=(SELECT id FROM select_user)")
 
 	var user DatabaseUser
-	_, err := db.db.NewSelect().
-		With("existing_user", existingUser).
-		With("exists_check", existsCheck).
-		With("update_name", updateName).
-		With("create_new_user", createNewUser).
-		With("select_user", selectUser).
-		With("insert_external_user", insertExternalUser).
-		With("select_existing_user", selectExistingUser).
-		TableExpr("select_existing_user").
-		ColumnExpr("*").
-		Join("FULL JOIN \"create_new_user\" ON true").
-		Exec(ctx, &user)
+	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
+		var extUserID uuid.UUID
+		err := tx.NewSelect().
+			Table(table).
+			Column("user").
+			Where("id = ?", id).
+			Scan(ctx, &extUserID)
+
+		if err == nil {
+			_, err = tx.NewUpdate().
+				Model(&DatabaseUserUpdate{
+					ID:   extUserID,
+					Name: name,
+				}).
+				Where("id = ?", extUserID).
+				Returning("*").
+				Exec(ctx, &user)
+			if err != nil {
+				return err
+			}
+
+			_, err = tx.NewUpdate().
+				Table(table).
+				Set("name = ?", name).
+				Set("avatar_url = ?", avatarUrl).
+				Where("id = ?", id).
+				Exec(ctx)
+			return err
+		}
+
+		if !errors.Is(err, sql.ErrNoRows) {
+			return err
+		}
+
+		insert := DatabaseUserInsert{Name: name, AccountType: accountType}
+		_, err = tx.NewInsert().
+			Model(&insert).
+			Returning("*").
+			Exec(ctx, &user)
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewRaw(
+			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
+			user.ID, id, name, avatarUrl,
+		).Exec(ctx)
+		return err
+	})
 
 	return user, err
 }
