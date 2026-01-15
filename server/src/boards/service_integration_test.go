@@ -86,7 +86,7 @@ func (suite *BoardServiceIntegrationTestSuite) setupBoardService() {
   suite.service, suite.broker = service, broker
 }
 
-func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(events chan *realtime.BoardEvent, expectedName, expectedAccessPolicy AccessPolicy) {
+func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(events chan *realtime.BoardEvent, expectedName string, expectedAccessPolicy AccessPolicy) {
   t := suite.T()
   select {
   case boardMsg := <-events:
@@ -235,7 +235,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
   assert.Equal(t, &name, board.Name)
   assert.Equal(t, &description, board.Description)
   assert.Equal(t, Public, board.AccessPolicy)
-  assert.Nil(t, board)
+  assert.NotNil(t, board)
   assert.Nil(t, board.Salt)
   assert.Equal(t, allowStacking, board.AllowStacking)
   assert.Equal(t, isLocked, board.IsLocked)
