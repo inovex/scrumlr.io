@@ -9,7 +9,7 @@ COPY ./ .
 RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main
 
 # Start application
-FROM alpine:3.22
+FROM alpine:3.23
 
 RUN mkdir /app
 WORKDIR /app
