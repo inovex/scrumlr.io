@@ -28,7 +28,7 @@ $stan-height: 70%;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
   padding: styles.$spacing--base;
-  padding-top: styles.$spacing--xl;
+  padding-top: styles.$spacing--2xl;
 
   display: flex;
   flex-direction: column;
@@ -83,6 +83,7 @@ $stan-height: 70%;
   height: 100%;
   width: fit-content;
   flex: 1;
+  max-width: 440px;
 }
 
 .login-board__form {
@@ -97,6 +98,10 @@ $stan-height: 70%;
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--lg;
+
+  & h1 {
+    font-size: styles.$text--lg;
+  }
 }
 
 .login-board__anonymous-section {
@@ -241,6 +246,7 @@ $stan-height: 70%;
   .login-board__card {
     width: 90%;
     max-width: 920px;
+    padding-top: styles.$spacing--xl;
   }
 }
 
@@ -249,20 +255,28 @@ $stan-height: 70%;
     width: 90%;
     max-width: 640px;
   }
+
+  .login-board__providers-section {
+    & h1 {
+      font-size: styles.$text--xl;
+    }
+  }
 }
 
 @media screen and (min-width: styles.$breakpoint--desktop) {
   .login-board__card {
-    min-width: 920px;
+    padding-bottom: styles.$spacing--base;
+    padding-left: styles.$spacing--3xl;
+    padding-right: styles.$spacing--3xl;
   }
 
   .login-board__form {
-    width: 505px;
+    width: 500px;
   }
-}
 
-@media screen and (max-width: styles.$breakpoint--desktop) and (min-width: 1021px) {
-  .login-board__card {
-    width: 920px;
+  .login-board__providers-section {
+    & h1 {
+      font-size: styles.$text--xl;
+    }
   }
 }
