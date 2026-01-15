@@ -86,7 +86,28 @@ func (suite *BoardServiceIntegrationTestSuite) setupBoardService() {
   suite.service, suite.broker = service, broker
 }
 
-func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(t *testing.T, events chan *realtime.BoardEvent, expectedName, expectedDescription string, expectedAccessPolicy AccessPolicy, expectedAllowStacking, expectedIsLocked, expectedShowAuthors, expectedShowNoteReactions, expectedShowNotesOfOtherUsers bool) {
+func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(events chan *realtime.BoardEvent, expectedName, expectedAccessPolicy AccessPolicy) {
+  t := suite.T()
+  select {
+  case boardMsg := <-events:
+    assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
+    boardData, err := technical_helper.Unmarshal[Board](boardMsg.Data)
+    assert.Nil(t, err)
+    assert.Equal(t, expectedName, *boardData.Name)
+    assert.Equal(t, "This is a board to update", *boardData.Description)
+    assert.Equal(t, expectedAccessPolicy, boardData.AccessPolicy)
+    assert.Equal(t, true, boardData.AllowStacking)
+    assert.Equal(t, false, boardData.IsLocked)
+    assert.Equal(t, true, boardData.ShowAuthors)
+    assert.Equal(t, true, boardData.ShowNoteReactions)
+    assert.Equal(t, true, boardData.ShowNotesOfOtherUsers)
+  case <-time.After(10 * time.Second):
+    assert.Fail(t, "timeout waiting for board event")
+  }
+}
+
+func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndDataAndExpectFalse(events chan *realtime.BoardEvent, expectedName, expectedDescription string, expectedAccessPolicy AccessPolicy) {
+  t := suite.T()
   select {
   case boardMsg := <-events:
     assert.Equal(t, realtime.BoardEventBoardUpdated, boardMsg.Type)
@@ -95,17 +116,18 @@ func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(t *testin
     assert.Equal(t, expectedName, *boardData.Name)
     assert.Equal(t, expectedDescription, *boardData.Description)
     assert.Equal(t, expectedAccessPolicy, boardData.AccessPolicy)
-    assert.Equal(t, expectedAllowStacking, boardData.AllowStacking)
-    assert.Equal(t, expectedIsLocked, boardData.IsLocked)
-    assert.Equal(t, expectedShowAuthors, boardData.ShowAuthors)
-    assert.Equal(t, expectedShowNoteReactions, boardData.ShowNoteReactions)
-    assert.Equal(t, expectedShowNotesOfOtherUsers, boardData.ShowNotesOfOtherUsers)
+    assert.Equal(t, false, boardData.AllowStacking)
+    assert.Equal(t, true, boardData.IsLocked)
+    assert.Equal(t, false, boardData.ShowAuthors)
+    assert.Equal(t, false, boardData.ShowNoteReactions)
+    assert.Equal(t, false, boardData.ShowNotesOfOtherUsers)
   case <-time.After(10 * time.Second):
     assert.Fail(t, "timeout waiting for board event")
   }
 }
 
-func (suite *BoardServiceIntegrationTestSuite) assertNoteSyncEvent(t *testing.T, events chan *realtime.BoardEvent) {
+func (suite *BoardServiceIntegrationTestSuite) assertNoteSyncEvent(events chan *realtime.BoardEvent) {
+  t := suite.T()
   noteMsg := <-events
   assert.Equal(t, realtime.BoardEventNotesSync, noteMsg.Type)
   notesData, err := technical_helper.Unmarshal[[]notes.Note](noteMsg.Data)
@@ -213,7 +235,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
   assert.Equal(t, &name, board.Name)
   assert.Equal(t, &description, board.Description)
   assert.Equal(t, Public, board.AccessPolicy)
-  assert.Nil(t, board.Passphrase)
+  assert.Nil(t, board)
   assert.Nil(t, board.Salt)
   assert.Equal(t, allowStacking, board.AllowStacking)
   assert.Equal(t, isLocked, board.IsLocked)
@@ -221,8 +243,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
   assert.Equal(t, showNoteReactions, board.ShowNoteReactions)
   assert.Equal(t, showNotesOfOtherUsers, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, name, description, Public, allowStacking, isLocked, showAuthors, showNoteReactions, showNotesOfOtherUsers)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndDataAndExpectFalse(events, name, description, Public)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
@@ -255,8 +277,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToPassphrase", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToPassphrase", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
@@ -287,8 +309,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToInvite", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToInvite", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
@@ -319,8 +341,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToPublic", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToPublic", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
@@ -351,8 +373,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToInvite", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToInvite", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
@@ -383,8 +405,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToPublic", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToPublic", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
@@ -417,8 +439,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
   assert.True(t, board.ShowNoteReactions)
   assert.True(t, board.ShowNotesOfOtherUsers)
 
-  suite.assertBoardEventAndData(t, events, "UpdateToPassphrase", "This is a board to update", accessPolicy, true, false, true, true, true)
-  suite.assertNoteSyncEvent(t, events)
+  suite.assertBoardEventAndData(events, "UpdateToPassphrase", accessPolicy)
+  suite.assertNoteSyncEvent(events)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Delete() {
