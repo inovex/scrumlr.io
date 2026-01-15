@@ -27,7 +27,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
-	"github.com/gorilla/websocket"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
@@ -63,7 +62,7 @@ type Server struct {
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
-	upgrader websocket.Upgrader
+	checkOrigin bool
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
@@ -156,12 +155,7 @@ func New(
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
-	}
-
-	// initialize websocket upgrader with origin check depending on options
-	s.upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		checkOrigin:                   checkOrigin,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -174,13 +168,6 @@ func New(
 		gothic.Store = store
 	}
 
-	if checkOrigin {
-		s.upgrader.CheckOrigin = nil
-	} else {
-		s.upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true
-		}
-	}
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
