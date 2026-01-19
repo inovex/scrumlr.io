@@ -1,8 +1,9 @@
-package initialize
+package testDbTemplates
 
 import (
   "context"
   "log"
+  "scrumlr.io/server/initialize"
   "sync"
   "testing"
 
@@ -29,10 +30,10 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
     ctx := context.Background()
     container, err := postgres.Run(
       ctx,
-      POSTGRES_IMAGE,
-      postgres.WithDatabase(DATABASE_NAME),
-      postgres.WithUsername(DATABASE_USERNAME),
-      postgres.WithPassword(DATABASE_PASSWORD),
+      initialize.POSTGRES_IMAGE,
+      postgres.WithDatabase(initialize.DATABASE_NAME),
+      postgres.WithUsername(initialize.DATABASE_USERNAME),
+      postgres.WithPassword(initialize.DATABASE_PASSWORD),
       postgres.BasicWaitStrategies(),
     )
     if err != nil {
@@ -54,11 +55,11 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
 
     testDBConfig = pgtestdb.Config{
       DriverName: "postgres",
-      User:       DATABASE_USERNAME,
-      Password:   DATABASE_PASSWORD,
+      User:       initialize.DATABASE_USERNAME,
+      Password:   initialize.DATABASE_PASSWORD,
       Host:       host,
       Port:       mappedPort.Port(),
-      Database:   DATABASE_NAME,
+      Database:   initialize.DATABASE_NAME,
       Options:    "sslmode=disable",
     }
   })
@@ -70,6 +71,9 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
   return testDBConfig
 }
 
+// Returns a new db instance that is either created new
+// or if the wanted seed is already there copied from the existing instance (done with a lock).
+// To be used in tests only.
 func NewSeededTestDB(t *testing.T, seedFunc func(*bun.DB), seedHash string) *bun.DB {
   t.Helper()
 
@@ -77,8 +81,8 @@ func NewSeededTestDB(t *testing.T, seedFunc func(*bun.DB), seedHash string) *bun
 
   migratorMutex.Lock()
   migrator, exists := migratorCache[seedHash]
+  // only initialize the db with the seed function if there isn't a db with the wanted seed yet
   if !exists {
-    // only start a new seed migration if it didn't happen already
     migrator = NewSeededMigrator(seedFunc, seedHash)
     migratorCache[seedHash] = migrator
   }
@@ -86,5 +90,5 @@ func NewSeededTestDB(t *testing.T, seedFunc func(*bun.DB), seedHash string) *bun
 
   sqlDB := pgtestdb.New(t, conf, migrator)
 
-  return InitializeBun(sqlDB, zapcore.DebugLevel)
+  return initialize.InitializeBun(sqlDB, zapcore.DebugLevel)
 }
