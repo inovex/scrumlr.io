@@ -2,12 +2,17 @@
 name: scrumlr-dev
 services:
   nats:
-    image: nats:2.11.6-alpine
+    image: nats:2.12.3-alpine
     ports:
       - "4222:4222"
 
+  redis:
+    image: redis:8.4.0
+    ports:
+      - "6379:6379"
+
   database:
-    image: postgres:17.5
+    image: postgres:18.1
     ports:
       - "5432:5432"
     environment:
@@ -17,7 +22,7 @@ services:
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
 
   lgtm-stack:
-    image: grafana/otel-lgtm:0.11.7
+    image: grafana/otel-lgtm:0.13.0
     ports:
       - "4317:4317"
       - "4318:4318"

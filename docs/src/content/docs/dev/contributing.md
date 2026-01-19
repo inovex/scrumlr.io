@@ -45,7 +45,7 @@ $ docker compose --project-directory server/ --profile build up -d
 #### Option 2: Run the Back-end from your CLI & the Database with Docker
 ```bash
 $ docker compose --project-directory server/ --profile dev up -d
-$ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
+$ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" --disable-check-origin --insecure
 ```
 ## Testing
 ### Frontend Testing

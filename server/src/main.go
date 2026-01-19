@@ -38,6 +38,12 @@ func main() {
 				Value:   8080,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "address",
+				EnvVars: []string{"SCRUMLR_SERVER_LISTEN_ADDRESS"},
+				Usage:   "the `address` on which the server listens",
+				Value:   "",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "nats",
 				Aliases: []string{"n"},
 				EnvVars: []string{"SCRUMLR_SERVER_NATS_URL"},
@@ -253,12 +259,6 @@ func main() {
 				Value:    "INFO",
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:    "verbose",
-				Aliases: []string{"v"},
-				Usage:   "enable verbose logging",
-				Value:   false,
-			}),
-			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:  "disable-check-origin",
 				Usage: "disable check origin (strongly suggestion to only use this for development)",
 				Value: false,
@@ -286,10 +286,6 @@ func main() {
 
 func run(c *cli.Context) error {
 	logger.SetLogLevel(c.String("log-level"))
-	if c.Bool("verbose") {
-		logger.SetLogLevel("DEBUG")
-		logger.Get().Warnln("Verbose logging is set through the verbose flag. This will be deprecated. Use the SCRUMLR_LOG_LEVEL environment variable")
-	}
 
 	otelShutdown, err := initialize.SetupOTelSDK(c.Context, c.String("otel-grpc"), c.String("otel-http"))
 	if err != nil {
@@ -469,7 +465,7 @@ func run(c *cli.Context) error {
 		c.Bool("auth-enable-experimental-file-system-store"),
 	)
 
-	port := fmt.Sprintf(":%d", c.Int("port"))
-	logger.Get().Infow("starting server", "base-path", basePath, "port", port)
-	return http.ListenAndServe(port, s)
+	listen := fmt.Sprintf("%s:%d", c.String("address"), c.Int("port"))
+	logger.Get().Infow("starting server", "base-path", basePath, "listen", listen)
+	return http.ListenAndServe(listen, s)
 }
