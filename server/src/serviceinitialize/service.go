@@ -2,7 +2,6 @@ package serviceinitialize
 
 import (
 	"net/http"
-
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"

@@ -3,7 +3,6 @@ package sessionrequests
 import (
 	"context"
 	"github.com/coder/websocket"
-	"github.com/coder/websocket/wsjson"
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/identifiers"
@@ -36,7 +35,7 @@ func (session *BoardSessionRequestSubscription) startListeningOnBoardSessionRequ
 	msg := <-session.subscriptions[userId]
 	logger.Get().Debugw("message received", "message", msg)
 	conn := session.clients[userId]
-	err := wsjson.Write(context.Background(), conn, msg)
+	err := technical_helper.WriteJSON(context.Background(), conn, msg)
 	if err != nil {
 		logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 	}
@@ -61,7 +60,7 @@ func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
 	socket.listenOnBoardSessionRequest(id, userID, conn)
 
 	for {
-		_, _, err := conn.Read(ctx)
+		_, _, err := technical_helper.ReadWebSocket(ctx, conn)
 		if err != nil {
 			if technical_helper.IsNormalClose(err) {
 				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
@@ -91,6 +90,6 @@ func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *w
 }
 
 func (socket *WS) closeSocket(conn *websocket.Conn) {
-	_ = conn.Close(websocket.StatusNormalClosure, "")
+	_ = technical_helper.CloseWebSocket(conn, "")
 	websocketClosedCounter.Add(context.Background(), 1)
 }
