@@ -41,7 +41,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
     const container = containerRef.current;
     const ghost = ghostRef.current;
 
-    if (!container || !ghost) return;
+    if (!container || !ghost) return undefined;
 
     const checkFit = () => {
       const availableWidth = container.offsetWidth;

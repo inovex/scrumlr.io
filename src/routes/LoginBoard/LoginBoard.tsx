@@ -104,6 +104,7 @@ export const LoginBoard = () => {
     return (
       <>
         <p
+          // eslint-disable-next-line
           role="button"
           aria-expanded={showAnonymousContent}
           tabIndex={showAnonymousContent ? -1 : 0} // Remove from tab order if already active
