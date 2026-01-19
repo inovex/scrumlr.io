@@ -3,8 +3,6 @@
 
 $content-gap: 10px;
 $border-width: 2px;
-$height--default: 52px;
-$height--small: 46px;
 
 .button {
   all: unset;
@@ -16,7 +14,7 @@ $height--small: 46px;
   align-items: center;
   gap: $content-gap;
 
-  height: $height--default;
+  height: styles.$button-height--default;
   box-sizing: border-box;
 
   @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
@@ -27,12 +25,16 @@ $height--small: 46px;
   font-size: styles.$text-size--medium;
   font-weight: 700;
 
+  & > * {
+    pointer-events: none;
+  }
+
   &--with-icon {
     @include mixins.compensate-padding(styles.$spacing--base 22px styles.$spacing--base 28px, $border-width);
   }
 
   &--small {
-    height: $height--small;
+    height: styles.$button-height--small;
     gap: styles.$spacing--xxs;
 
     @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
@@ -44,13 +46,13 @@ $height--small: 46px;
   }
 
   &--icon-only {
-    width: $height--default;
+    width: styles.$button-height--default;
     min-width: unset;
     padding: 0;
     gap: 0;
 
     &.button--small {
-      width: $height--small;
+      width: styles.$button-height--small;
     }
   }
 
