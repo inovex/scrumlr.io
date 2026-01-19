@@ -11,8 +11,6 @@ import (
   "github.com/testcontainers/testcontainers-go/modules/postgres"
   "github.com/uptrace/bun"
   "go.uber.org/zap/zapcore"
-
-  _ "github.com/lib/pq"
 )
 
 var (
