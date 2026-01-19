@@ -23,6 +23,7 @@ func Test_NewAuthService(t *testing.T) {
     "GOOGLE":    {ClientId: "google-id", ClientSecret: "google-secret"},
     "MICROSOFT": {ClientId: "ms-id", ClientSecret: "ms-secret"},
     "OIDC":      {ClientId: "oidc-id", ClientSecret: "oidc-secret"},
+    "GITHUB":    {ClientId: "github-id", ClientSecret: "github-secret"},
   }
 
   service := NewAuthService(providers, "", "", mockUserService)
@@ -31,6 +32,7 @@ func Test_NewAuthService(t *testing.T) {
   assert.True(t, service.Exists(common.Google))
   assert.True(t, service.Exists(common.Microsoft))
   assert.True(t, service.Exists(common.TypeOIDC))
+  assert.True(t, service.Exists(common.GitHub))
 
   assert.False(t, service.Exists(common.Apple))
 
@@ -200,7 +202,6 @@ func Test_Verifier(t *testing.T) {
     userService: mockUserService,
   }
 
-  // Define the final handler to check the context
   handlerCalled := false
   nextHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     handlerCalled = true
@@ -212,17 +213,13 @@ func Test_Verifier(t *testing.T) {
   mockUserService.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userID).Return(true, nil)
   mockUserService.EXPECT().SetKeyMigration(mock.Anything, userID).Return(&users.User{}, nil)
 
-  // Create request
   req := httptest.NewRequest("GET", "/", nil)
   req.AddCookie(setupCookie(oldAuth, userID))
   rr := httptest.NewRecorder()
 
-  // Execute middleware
   service.Verifier()(nextHandler).ServeHTTP(rr, req)
 
-  // Assertions
   assert.True(t, handlerCalled)
-  // Check if Set-Cookie header exists with a new value
   cookies := rr.Result().Cookies()
   assert.NotEmpty(t, cookies)
   assert.Equal(t, "jwt", cookies[0].Name)
