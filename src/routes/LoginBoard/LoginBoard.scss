@@ -2,6 +2,12 @@
 
 $stan-height: 70%;
 
+//todo creat a couple (1-3) variables with different spaces and thing about which space should be the same or not and use the variables there then
+$space--within: styles.$spacing--lg;
+$space--between: styles.$spacing--lg;
+
+// todo: think aboud the width of the forms thing
+
 .login-board {
   display: flex;
   flex-direction: column;
@@ -13,7 +19,6 @@ $stan-height: 70%;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--lg;
   justify-content: center;
   align-items: center;
   padding-bottom: styles.$spacing--md;
@@ -88,13 +93,13 @@ $stan-height: 70%;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: styles.$spacing--lg;
+  gap: $space--between; // space between seperator line and text for anonymus line
 }
 
 .login-board__providers-section {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--lg;
+  gap: $space--within; //space above and below bullet points for login providers
 
   & h1 {
     font-size: styles.$text--lg;
@@ -104,25 +109,25 @@ $stan-height: 70%;
 .login-board__anonymous-section {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--lg;
+  gap: $space--within; //space between text for anonymus login and name choosing for anonymus
 }
 
 .login-board__anonymous-content {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--lg;
+  gap: $space--within; // space between name anonymous and button to submit
 }
 
 .login-board__features {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--md;
+  gap: $space--within; // between the points of login provider
 }
 
 .login-board__feature {
   display: flex;
   align-items: center;
-  gap: styles.$spacing--sm;
+  gap: styles.$spacing--sm; // space between bullet point point and its content
 }
 
 .login-board__feature-icon {
@@ -170,7 +175,7 @@ $stan-height: 70%;
 
 .login-board__input-wrapper {
   display: flex;
-  gap: styles.$spacing--xs;
+  gap: styles.$spacing--xs; // space between anonymous name and the refresh button
   align-items: center;
   width: 100%;
 }
@@ -188,7 +193,7 @@ $stan-height: 70%;
   min-width: 100%;
   position: relative;
   bottom: auto;
-  padding-top: styles.$spacing--lg;
+  padding-top: styles.$spacing--lg; // spacing above the terms
   padding-bottom: 0;
   text-align: center;
   color: styles.$navy--700;
