@@ -66,13 +66,10 @@ $stan-height: 70%;
 
 .login-board__stan {
   height: 100%;
+  display: none;
 
   &--dark {
-    display: initial;
-  }
-
-  &--light {
-    display: none;
+    display: inline;
   }
 }
 
@@ -233,6 +230,14 @@ $stan-height: 70%;
 
   .login-board__terms-label {
     color: styles.$gray--000;
+  }
+
+  .login-board__stan--dark {
+    display: none;
+  }
+
+  .login-board__stan--light {
+    display: inline;
   }
 
   @media #{styles.$tablet} {
