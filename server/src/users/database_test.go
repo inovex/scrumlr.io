@@ -31,19 +31,19 @@ func TestDatabaseUserTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseUserTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
+	container, dbBun := initialize.StartTestDatabase()
 
-	suite.SeedDatabase(bun)
+	suite.SeedDatabase(dbBun)
 
 	suite.container = container
-	suite.db = bun
+	suite.db = dbBun
 }
 
 func (suite *DatabaseUserTestSuite) TearDownSuite() {
 	initialize.StopTestDatabase(suite.container)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_AnonymousUser() {
+func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -58,7 +58,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AnonymousUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_AppleUser() {
+func (suite *DatabaseUserTestSuite) TesDatabaseCreatAppleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -73,7 +73,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AppleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_AzureAdUser() {
+func (suite *DatabaseUserTestSuite) TesDatabaseCreatAzureAdUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -88,7 +88,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AzureAdUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_GitHubUser() {
+func (suite *DatabaseUserTestSuite) TesDatabaseCreatGitHubUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -103,7 +103,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_GitHubUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_GoogleUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateGoogleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -118,7 +118,42 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_GoogleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_MicrosoftUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseUpdateGoogleUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	existingUserID := suite.users["ExistingGoogleUser"].ID
+	googleID := "existingGoogleId"
+	updatedName := "UpdatedName"
+	updatedAvatarUrl := "https://example.com/avatar.jpg"
+
+	dbUser, err := database.CreateGoogleUser(context.Background(), googleID, updatedName, updatedAvatarUrl)
+
+	// check that the existing user was updated in the main users table
+	assert.Nil(t, err)
+	assert.Equal(t, existingUserID, dbUser.ID)
+	assert.Equal(t, updatedName, dbUser.Name)
+	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Nil(t, dbUser.KeyMigration)
+	assert.NotNil(t, dbUser.CreatedAt)
+
+	// check the same for the external google_users table
+	var externalUser struct {
+		Name      string
+		AvatarUrl string
+	}
+	err = suite.db.NewSelect().
+		Table("google_users").
+		Column("name", "avatar_url").
+		Where("id = ?", googleID).
+		Scan(context.Background(), &externalUser)
+
+	assert.Nil(t, err)
+	assert.Equal(t, updatedName, externalUser.Name)
+	assert.Equal(t, updatedAvatarUrl, externalUser.AvatarUrl)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateMicrosoftUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -133,7 +168,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_MicrosoftUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_Create_OIDCUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateOIDCUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -148,26 +183,26 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_OIDCUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_UpdateUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseUpdateUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
 	userId := suite.users["Update"].ID
 	userName := "Stan"
-	avatar := common.Avatar{ClotheColor: avatar.ClotheColorBlack, ClotheType: avatar.ClotheTypeCollarSweater}
+	userAvatar := common.Avatar{ClotheColor: avatar.ClotheColorBlack, ClotheType: avatar.ClotheTypeCollarSweater}
 
-	dbUser, err := database.UpdateUser(context.Background(), DatabaseUserUpdate{ID: userId, Name: userName, Avatar: &avatar})
+	dbUser, err := database.UpdateUser(context.Background(), DatabaseUserUpdate{ID: userId, Name: userName, Avatar: &userAvatar})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbUser.ID)
 	assert.Equal(t, userName, dbUser.Name)
 	assert.Equal(t, common.Anonymous, dbUser.AccountType)
-	assert.Equal(t, &avatar, dbUser.Avatar)
+	assert.Equal(t, &userAvatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_DeleteUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseDeleteUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -178,7 +213,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_DeleteUser() {
 	assert.Nil(t, err)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseGetUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -194,7 +229,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
 	assert.Equal(t, suite.users["Stan"].Avatar, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_GetBoardUsers_WithSessions() {
+func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersWithSessions() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -217,7 +252,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetBoardUsers_WithSessions() {
 
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_GetBoardUsers_Empty() {
+func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersEmpty() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	boardID := uuid.New()
@@ -228,7 +263,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetBoardUsers_Empty() {
 	assert.Empty(t, dbUser)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_GetUser_NotFound() {
+func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -241,7 +276,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetUser_NotFound() {
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_True() {
+func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -253,7 +288,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_True() {
 	assert.True(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_False() {
+func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -265,7 +300,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_False() {
 	assert.False(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_True() {
+func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -277,7 +312,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_Tru
 	assert.True(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_False() {
+func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -289,7 +324,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_Fal
 	assert.False(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) Test_Database_SetKeyMigration() {
+func (suite *DatabaseUserTestSuite) TesDatabasSetKeyMigration() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -307,12 +342,13 @@ func (suite *DatabaseUserTestSuite) Test_Database_SetKeyMigration() {
 
 func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
 	// test users
-	suite.users = make(map[string]DatabaseUser, 5)
+	suite.users = make(map[string]DatabaseUser, 6)
 	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
 	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
 	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
 	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
 	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
+	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 1)
@@ -329,6 +365,11 @@ func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
+	}
+
+	err := initialize.InsertGoogleUser(db, suite.users["ExistingGoogleUser"].ID, "existingGoogleId", "OldName", "")
+	if err != nil {
+		log.Fatalf("Failed to insert google_users entry %s", err)
 	}
 
 	for _, board := range suite.boards {
