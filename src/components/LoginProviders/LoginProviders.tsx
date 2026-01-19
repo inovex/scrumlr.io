@@ -16,9 +16,10 @@ export const LoginProviders = ({originURL = window.location.href}) => {
   if (providers.length === 0) {
     return null;
   }
-
+  // Don't open settings page after login
+  const cleanUrl = originURL.split("/settings/")[0];
   const signIn = (provider: string) => async () => {
-    await Auth.signInWithAuthProvider(provider, originURL);
+    await Auth.signInWithAuthProvider(provider, cleanUrl);
   };
 
   return (
