@@ -36,6 +36,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
   const primaryKey = enabledProviders[0];
   const primaryData = primaryKey ? providerConfig[primaryKey] : null;
 
+  // useLayoutEffect prevents visual flickering by calculating width before paint
   useLayoutEffect(() => {
     const container = containerRef.current;
     const ghost = ghostRef.current;
@@ -73,7 +74,6 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
           {!isCompact ? (
             /* --- FULL MODE --- */
             <div className="full-stack-wrapper">
-              {/* 1. Background Button (Blue Pill with Text) */}
               <Button
                 key={`${primaryProvider}-text`}
                 className="login-providers__button text-button"
@@ -82,16 +82,15 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
               >
                 {providerConfig[primaryProvider].label}
               </Button>
-
-              {/* 2. Overlay Icon (White Circle) */}
               <Button
                 key={`${primaryProvider}-overlay`}
                 className="login-providers__button overlay-icon-button"
                 color="backlog-blue"
-                onClick={signIn(providerConfig[primaryProvider].signInKey)}
                 icon={providerConfig[primaryProvider].icon}
                 hideLabel
                 type="ghost"
+                aria-hidden="true"
+                tabIndex={-1}
               >
                 {providerConfig[primaryProvider].label}
               </Button>

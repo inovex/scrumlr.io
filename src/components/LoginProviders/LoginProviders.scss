@@ -1,13 +1,11 @@
 @use "constants/styles";
 
-// 1. Main Container
 .login-providers {
   display: flex;
   gap: styles.$spacing--xs;
   width: 100%;
 }
 
-// 2. The Smart Wrapper (Container for Primary Button)
 .primary-provider-wrapper {
   flex: 1 1 auto;
   display: flex;
@@ -15,7 +13,7 @@
   min-width: 0;
 }
 
-// 3. Ghost Element
+// Used by to calculate dynamic width of full-width buttons
 .ghost-measurer {
   position: absolute;
   visibility: hidden;
@@ -37,18 +35,18 @@
 .overlay-icon-button {
   pointer-events: none;
   position: absolute;
-  left: 3px; // manual tweak to center it visually
+  left: 4px; // manual tweak to center it visually
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
 
   background-color: styles.$gray--000;
   border-radius: 50%;
-  width: calc(#{styles.$button-height--default} * 0.9);
-  height: calc(#{styles.$button-height--default} * 0.9);
+  width: calc(#{styles.$button-height--default} * 0.85);
+  height: calc(#{styles.$button-height--default} * 0.85);
   padding: 0;
   min-width: unset;
-  flex: 0 0 calc(#{styles.$button-height--default} * 0.9);
+  flex: 0 0 calc(#{styles.$button-height--default} * 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,8 +67,7 @@
   justify-content: center;
 }
 
-//Only the buttons inside the primary wrapper SHOULD expand...
-//BUT exclude the overlay icon button!
+//Only the buttons inside the primary wrapper should expand, excluding the overlay icon button
 .primary-provider-wrapper .login-providers__button:not(.overlay-icon-button) {
   width: 100%;
 }
@@ -84,9 +81,9 @@
 
 // Icon Sizing
 .login-providers__icon {
-  height: styles.$icon--medium;
-  width: styles.$icon--medium;
-  flex: 0 0 styles.$icon--medium;
+  height: styles.$icon--large;
+  width: styles.$icon--large;
+  flex: 0 0 styles.$icon--large;
 }
 
 .login-providers__button svg {
