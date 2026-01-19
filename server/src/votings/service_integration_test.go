@@ -1,588 +1,475 @@
 package votings
 
 import (
-	"context"
-	"errors"
-	"log"
-	"testing"
+  "context"
+  "errors"
+  "github.com/stretchr/testify/require"
+  "log"
+  "testing"
 
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/technical_helper"
+  "github.com/google/uuid"
+  "github.com/stretchr/testify/assert"
+  "github.com/stretchr/testify/suite"
+  "github.com/testcontainers/testcontainers-go/modules/nats"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/initialize"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/technical_helper"
 )
 
 type VotingServiceIntegrationTestSuite struct {
-	suite.Suite
-	dbContainer          *postgres.PostgresContainer
-	natsContainer        *nats.NATSContainer
-	db                   *bun.DB
-	natsConnectionString string
-	users                map[string]TestUser
-	boards               map[string]TestBoard
-	columns              map[string]TestColumn
-	notes                map[string]TestNote
-	votings              map[string]DatabaseVoting
-	votes                map[string]DatabaseVote
+  suite.Suite
+  natsContainer        *nats.NATSContainer
+  natsConnectionString string
+  votingService        VotingService
+  broker               *realtime.Broker
 }
 
+type TestData struct {
+  users   map[string]TestUser
+  boards  map[string]TestBoard
+  columns map[string]TestColumn
+  notes   map[string]TestNote
+  votings map[string]DatabaseVoting
+  votes   map[string]DatabaseVote
+}
+
+const votingTestSeedHash = "v1"
+
+var testData = createTestData()
+
 func TestVotingServiceIntegrationTestSuite(t *testing.T) {
-	suite.Run(t, new(VotingServiceIntegrationTestSuite))
+  suite.Run(t, new(VotingServiceIntegrationTestSuite))
 }
 
 func (suite *VotingServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
-	natsContainer, connectionString := initialize.StartTestNats()
+  natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.dbContainer = dbContainer
-	suite.natsContainer = natsContainer
-	suite.db = bun
-	suite.natsConnectionString = connectionString
+  suite.natsContainer = natsContainer
+  suite.natsConnectionString = connectionString
+}
+
+func (suite *VotingServiceIntegrationTestSuite) SetupTest() {
+  votingDB := NewVotingDatabase(initialize.NewSeededTestDB(suite.T(), seedDatabaseForVoting, votingTestSeedHash))
+  broker, err := realtime.NewNats(suite.natsConnectionString)
+  if err != nil {
+    log.Fatalf("Faild to connect to nats server %s", err)
+  }
+  suite.broker = broker
+  suite.votingService = NewVotingService(votingDB, broker)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) TeardownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
-	initialize.StopTestNats(suite.natsContainer)
+  initialize.StopTestNats(suite.natsContainer)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_AddVote() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Santa"].id
-	noteId := suite.notes["WriteAdd"].id
+  boardId := testData.boards["Write"].id
+  userId := testData.users["Santa"].id
+  noteId := testData.notes["WriteAdd"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  vote, err := suite.votingService.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	vote, err := service.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
-
-	assert.Nil(t, err)
-	assert.Equal(t, noteId, vote.Note)
-	assert.Equal(t, userId, vote.User)
+  require.NoError(t, err)
+  assert.Equal(t, noteId, vote.Note)
+  assert.Equal(t, userId, vote.User)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_AddVote_ClosedVoting() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["WriteClosed"].id
-	userId := suite.users["Santa"].id
-	noteId := suite.notes["WriteClosed"].id
+  boardId := testData.boards["WriteClosed"].id
+  userId := testData.users["Santa"].id
+  noteId := testData.notes["WriteClosed"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  vote, err := suite.votingService.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	vote, err := service.AddVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
-
-	assert.Nil(t, vote)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
+  assert.Nil(t, vote)
+  assert.NotNil(t, err)
+  assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["Delete"].id
+  boardId := testData.boards["Write"].id
+  userId := testData.users["Stan"].id
+  noteId := testData.notes["WriteRemove"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  err := suite.votingService.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	err = service.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
-
-	assert.Nil(t, err)
+  require.NoError(t, err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote_ClosedVoting() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["WriteClosed"].id
-	userId := suite.users["Stan"].id
-	noteId := suite.notes["WriteClosed"].id
+  boardId := testData.boards["WriteClosed"].id
+  userId := testData.users["Stan"].id
+  noteId := testData.notes["WriteClosed"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  err := suite.votingService.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	err = service.RemoveVote(ctx, VoteRequest{Board: boardId, Note: noteId, User: userId})
-
-	assert.Nil(t, err)
+  require.NoError(t, err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetVotes() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
+  boardId := testData.boards["Read"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  votes, err := suite.votingService.GetVotes(ctx, boardId, VoteFilter{})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	votes, err := service.GetVotes(ctx, boardId, VoteFilter{})
-
-	assert.Nil(t, err)
-	assert.Len(t, votes, 18)
+  require.NoError(t, err)
+  assert.Len(t, votes, 18)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Create"].id
-	voteLimit := 10
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
-	status := Open
+  boardId := testData.boards["Create"].id
+  voteLimit := 10
+  allowMultiple := true
+  showOfOthers := false
+  anonymous := false
+  status := Open
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
+  voting, err := suite.votingService.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
+  require.NoError(t, err)
+  assert.Equal(t, status, voting.Status)
+  assert.Equal(t, voteLimit, voting.VoteLimit)
+  assert.Equal(t, allowMultiple, voting.AllowMultipleVotes)
+  assert.Equal(t, showOfOthers, voting.ShowVotesOfOthers)
+  assert.Equal(t, anonymous, voting.IsAnonymous)
+  assert.Nil(t, voting.VotingResults)
 
-	voting, err := service.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
-
-	assert.Nil(t, err)
-	assert.Equal(t, status, voting.Status)
-	assert.Equal(t, voteLimit, voting.VoteLimit)
-	assert.Equal(t, allowMultiple, voting.AllowMultipleVotes)
-	assert.Equal(t, showOfOthers, voting.ShowVotesOfOthers)
-	assert.Equal(t, anonymous, voting.IsAnonymous)
-	assert.Nil(t, voting.VotingResults)
-
-	msg := <-events
-	assert.Equal(t, realtime.BoardEventVotingCreated, msg.Type)
-	votingData, err := technical_helper.Unmarshal[Voting](msg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, status, votingData.Status)
-	assert.Equal(t, voteLimit, votingData.VoteLimit)
-	assert.Equal(t, allowMultiple, votingData.AllowMultipleVotes)
-	assert.Equal(t, showOfOthers, votingData.ShowVotesOfOthers)
-	assert.Equal(t, anonymous, votingData.IsAnonymous)
-	assert.Nil(t, voting.VotingResults)
+  msg := <-events
+  assert.Equal(t, realtime.BoardEventVotingCreated, msg.Type)
+  votingData, err := technical_helper.Unmarshal[Voting](msg.Data)
+  require.NoError(t, err)
+  assert.Equal(t, status, votingData.Status)
+  assert.Equal(t, voteLimit, votingData.VoteLimit)
+  assert.Equal(t, allowMultiple, votingData.AllowMultipleVotes)
+  assert.Equal(t, showOfOthers, votingData.ShowVotesOfOthers)
+  assert.Equal(t, anonymous, votingData.IsAnonymous)
+  assert.Nil(t, voting.VotingResults)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["CreateDuplicate"].id
-	voteLimit := 10
-	allowMultiple := true
-	showOfOthers := false
-	anonymous := false
+  boardId := testData.boards["CreateDuplicate"].id
+  voteLimit := 10
+  allowMultiple := true
+  showOfOthers := false
+  anonymous := false
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  voting, err := suite.votingService.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	voting, err := service.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
-
-	assert.Nil(t, voting)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
+  assert.Nil(t, voting)
+  assert.NotNil(t, err)
+  assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	votingId := suite.votings["Update"].ID
-	boardId := suite.boards["Update"].id
+  votingId := testData.votings["Update"].ID
+  boardId := testData.boards["Update"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
+  affectedNotes := []Note{
+    {ID: testData.notes["Update1"].id, Author: testData.notes["Update1"].authorId, Text: testData.notes["Update1"].text, Position: NotePosition{Column: testData.notes["Update1"].columnId}},
+    {ID: testData.notes["Update2"].id, Author: testData.notes["Update2"].authorId, Text: testData.notes["Update2"].text, Position: NotePosition{Column: testData.notes["Update2"].columnId}},
+    {ID: testData.notes["Update3"].id, Author: testData.notes["Update3"].authorId, Text: testData.notes["Update3"].text, Position: NotePosition{Column: testData.notes["Update3"].columnId}},
+  }
+  voting, err := suite.votingService.Close(ctx, votingId, boardId, affectedNotes)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
+  require.NoError(t, err)
+  assert.Equal(t, votingId, voting.ID)
+  assert.Equal(t, Closed, voting.Status)
+  assert.NotNil(t, voting.VotingResults)
+  assert.Equal(t, 6, voting.VotingResults.Total)
 
-	affectedNotes := []Note{
-		{ID: suite.notes["Update1"].id, Author: suite.notes["Update1"].authorId, Text: suite.notes["Update1"].text, Position: NotePosition{Column: suite.notes["Update1"].columnId}},
-		{ID: suite.notes["Update2"].id, Author: suite.notes["Update2"].authorId, Text: suite.notes["Update2"].text, Position: NotePosition{Column: suite.notes["Update2"].columnId}},
-		{ID: suite.notes["Update3"].id, Author: suite.notes["Update3"].authorId, Text: suite.notes["Update3"].text, Position: NotePosition{Column: suite.notes["Update3"].columnId}},
-	}
-	voting, err := service.Close(ctx, votingId, boardId, affectedNotes)
-
-	assert.Nil(t, err)
-	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, Closed, voting.Status)
-	assert.NotNil(t, voting.VotingResults)
-	assert.Equal(t, 6, voting.VotingResults.Total)
-
-	msg := <-events
-	assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
-	type UpdateVoting struct {
-		Voting *Voting
-		Notes  []Note
-	}
-	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, Closed, votingData.Voting.Status)
-	assert.NotNil(t, votingData.Voting.VotingResults)
-	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
-
+  msg := <-events
+  assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
+  type UpdateVoting struct {
+    Voting *Voting
+    Notes  []Note
+  }
+  votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
+  require.NoError(t, err)
+  assert.Equal(t, Closed, votingData.Voting.Status)
+  assert.NotNil(t, votingData.Voting.VotingResults)
+  assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	votingId := suite.votings["SortedUpdate"].ID
-	boardId := suite.boards["SortedUpdate"].id
+  votingId := testData.votings["SortedUpdate"].ID
+  boardId := testData.boards["SortedUpdate"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
+  affectedNotes := []Note{
+    {ID: testData.notes["SortedUpdate1"].id, Author: testData.notes["SortedUpdate1"].authorId, Text: testData.notes["SortedUpdate1"].text, Position: NotePosition{Column: testData.notes["SortedUpdate1"].columnId}},
+    {ID: testData.notes["SortedUpdate2"].id, Author: testData.notes["SortedUpdate2"].authorId, Text: testData.notes["SortedUpdate2"].text, Position: NotePosition{Column: testData.notes["SortedUpdate2"].columnId}},
+    {ID: testData.notes["SortedUpdate3"].id, Author: testData.notes["SortedUpdate3"].authorId, Text: testData.notes["SortedUpdate3"].text, Position: NotePosition{Column: testData.notes["SortedUpdate3"].columnId}},
+  }
+  voting, err := suite.votingService.Close(ctx, votingId, boardId, affectedNotes)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
+  require.NoError(t, err)
+  assert.Equal(t, votingId, voting.ID)
+  assert.Equal(t, Closed, voting.Status)
+  assert.NotNil(t, voting.VotingResults)
+  assert.Equal(t, 6, voting.VotingResults.Total)
 
-	affectedNotes := []Note{
-		{ID: suite.notes["SortedUpdate1"].id, Author: suite.notes["SortedUpdate1"].authorId, Text: suite.notes["SortedUpdate1"].text, Position: NotePosition{Column: suite.notes["SortedUpdate1"].columnId}},
-		{ID: suite.notes["SortedUpdate2"].id, Author: suite.notes["SortedUpdate2"].authorId, Text: suite.notes["SortedUpdate2"].text, Position: NotePosition{Column: suite.notes["SortedUpdate2"].columnId}},
-		{ID: suite.notes["SortedUpdate3"].id, Author: suite.notes["SortedUpdate3"].authorId, Text: suite.notes["SortedUpdate3"].text, Position: NotePosition{Column: suite.notes["SortedUpdate3"].columnId}},
-	}
-	voting, err := service.Close(ctx, votingId, boardId, affectedNotes)
+  msg := <-events
+  assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
+  type UpdateVoting struct {
+    Voting *Voting
+    Notes  []Note
+  }
+  votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
+  require.NoError(t, err)
+  assert.Equal(t, Closed, votingData.Voting.Status)
+  assert.NotNil(t, votingData.Voting.VotingResults)
+  assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
+  assert.Len(t, votingData.Notes, 3)
 
-	assert.Nil(t, err)
-	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, Closed, voting.Status)
-	assert.NotNil(t, voting.VotingResults)
-	assert.Equal(t, 6, voting.VotingResults.Total)
-
-	msg := <-events
-	assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
-	type UpdateVoting struct {
-		Voting *Voting
-		Notes  []Note
-	}
-	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, Closed, votingData.Voting.Status)
-	assert.NotNil(t, votingData.Voting.VotingResults)
-	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
-	assert.Len(t, votingData.Notes, 3)
-
-	got := []uuid.UUID{
-		votingData.Notes[0].ID,
-		votingData.Notes[1].ID,
-		votingData.Notes[2].ID,
-	}
-	want := []uuid.UUID{
-		suite.notes["SortedUpdate3"].id, // 3 votes
-		suite.notes["SortedUpdate1"].id, // 2 votes
-		suite.notes["SortedUpdate2"].id, // 1 vote
-	}
-	assert.Equal(t, got, want, "notes should be ordered by vote count DESC")
+  got := []uuid.UUID{
+    votingData.Notes[0].ID,
+    votingData.Notes[1].ID,
+    votingData.Notes[2].ID,
+  }
+  want := []uuid.UUID{
+    testData.notes["SortedUpdate3"].id,
+    testData.notes["SortedUpdate1"].id,
+    testData.notes["SortedUpdate2"].id,
+  }
+  assert.Equal(t, got, want, "notes should be ordered by vote count DESC")
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetVoting_Open() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	votingId := suite.votings["ReadOpen"].ID
+  boardId := testData.boards["Read"].id
+  votingId := testData.votings["ReadOpen"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  voting, err := suite.votingService.Get(ctx, boardId, votingId)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	voting, err := service.Get(ctx, boardId, votingId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
-	assert.Equal(t, suite.votings["ReadOpen"].Status, voting.Status)
-	assert.Nil(t, voting.VotingResults)
+  require.NoError(t, err)
+  assert.Equal(t, votingId, voting.ID)
+  assert.Equal(t, testData.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
+  assert.Equal(t, testData.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
+  assert.Equal(t, testData.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+  assert.Equal(t, testData.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
+  assert.Equal(t, testData.votings["ReadOpen"].Status, voting.Status)
+  assert.Nil(t, voting.VotingResults)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetVoting_Close() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	votingId := suite.votings["ReadClosed"].ID
+  boardId := testData.boards["Read"].id
+  votingId := testData.votings["ReadClosed"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  voting, err := suite.votingService.Get(ctx, boardId, votingId)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	voting, err := service.Get(ctx, boardId, votingId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, suite.votings["ReadClosed"].VoteLimit, voting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadClosed"].AllowMultipleVotes, voting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadClosed"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadClosed"].IsAnonymous, voting.IsAnonymous)
-	assert.Equal(t, suite.votings["ReadClosed"].Status, voting.Status)
-	assert.NotNil(t, voting.VotingResults)
+  require.NoError(t, err)
+  assert.Equal(t, votingId, voting.ID)
+  assert.Equal(t, testData.votings["ReadClosed"].VoteLimit, voting.VoteLimit)
+  assert.Equal(t, testData.votings["ReadClosed"].AllowMultipleVotes, voting.AllowMultipleVotes)
+  assert.Equal(t, testData.votings["ReadClosed"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+  assert.Equal(t, testData.votings["ReadClosed"].IsAnonymous, voting.IsAnonymous)
+  assert.Equal(t, testData.votings["ReadClosed"].Status, voting.Status)
+  assert.NotNil(t, voting.VotingResults)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetAllVotings() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
+  boardId := testData.boards["Read"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  votings, err := suite.votingService.GetAll(ctx, boardId)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	votings, err := service.GetAll(ctx, boardId)
-
-	assert.Nil(t, err)
-	assert.Len(t, votings, 2)
+  require.NoError(t, err)
+  assert.Len(t, votings, 2)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_GetOpenVoting() {
-	t := suite.T()
-	ctx := context.Background()
+  t := suite.T()
+  ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
+  boardId := testData.boards["Read"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+  voting, err := suite.votingService.GetOpen(ctx, boardId)
 
-	database := NewVotingDatabase(suite.db)
-	service := NewVotingService(database, broker)
-
-	voting, err := service.GetOpen(ctx, boardId)
-
-	assert.Nil(t, err)
-	assert.Equal(t, suite.votings["ReadOpen"].ID, voting.ID)
-	assert.Equal(t, suite.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
-	assert.Equal(t, suite.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
-	assert.Equal(t, suite.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
-	assert.Equal(t, suite.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
-	assert.Equal(t, Open, voting.Status)
+  require.NoError(t, err)
+  assert.Equal(t, testData.votings["ReadOpen"].ID, voting.ID)
+  assert.Equal(t, testData.votings["ReadOpen"].VoteLimit, voting.VoteLimit)
+  assert.Equal(t, testData.votings["ReadOpen"].AllowMultipleVotes, voting.AllowMultipleVotes)
+  assert.Equal(t, testData.votings["ReadOpen"].ShowVotesOfOthers, voting.ShowVotesOfOthers)
+  assert.Equal(t, testData.votings["ReadOpen"].IsAnonymous, voting.IsAnonymous)
+  assert.Equal(t, Open, voting.Status)
 }
 
-func (suite *VotingServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
-	// tests users
-	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
+func createTestData() *TestData {
+  data := &TestData{
+    users:   make(map[string]TestUser, 2),
+    boards:  make(map[string]TestBoard, 11),
+    columns: make(map[string]TestColumn, 10),
+    notes:   make(map[string]TestNote, 16),
+    votings: make(map[string]DatabaseVoting, 10),
+    votes:   make(map[string]DatabaseVote, 35),
+  }
 
-	// test board
-	suite.boards = make(map[string]TestBoard, 8)
-	// test boards for creating, updating and reading votings
-	suite.boards["Create"] = TestBoard{id: uuid.New(), name: "Create Board"}
-	suite.boards["CreateEmpty"] = TestBoard{id: uuid.New(), name: "Create Board"}
-	suite.boards["CreateDuplicate"] = TestBoard{id: uuid.New(), name: "Create Duplicate Board"}
-	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update Board"}
-	suite.boards["ClosedUpdate"] = TestBoard{id: uuid.New(), name: "Closed update Board"}
-	suite.boards["Read"] = TestBoard{id: uuid.New(), name: "Read Board"}
-	suite.boards["SortedUpdate"] = TestBoard{id: uuid.New(), name: "Sorted Cards after update"}
-	// test boards for adding and removing votes
-	suite.boards["Write"] = TestBoard{id: uuid.New(), name: "Write Board"}
-	suite.boards["WriteClosed"] = TestBoard{id: uuid.New(), name: "Write Board with closed voting"}
-	suite.boards["WriteLimit"] = TestBoard{id: uuid.New(), name: "Write Board with low voting limit"}
-	suite.boards["WriteMultiple"] = TestBoard{id: uuid.New(), name: "Write Board with multiple disabled"}
+  data.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
+  data.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
 
-	// test columns
-	suite.columns = make(map[string]TestColumn, 7)
-	suite.columns["Create"] = TestColumn{id: uuid.New(), boardId: suite.boards["Create"].id, name: "Create Column", index: 0}
-	suite.columns["CreateEmpty"] = TestColumn{id: uuid.New(), boardId: suite.boards["Create"].id, name: "Create Column", index: 0}
-	suite.columns["Update"] = TestColumn{id: uuid.New(), boardId: suite.boards["Update"].id, name: "Update Column", index: 0}
-	suite.columns["ClosedUpdate"] = TestColumn{id: uuid.New(), boardId: suite.boards["ClosedUpdate"].id, name: "Closed update Column", index: 0}
-	suite.columns["Read"] = TestColumn{id: uuid.New(), boardId: suite.boards["Read"].id, name: "Read Column", index: 0}
-	suite.columns["SortedUpdate"] = TestColumn{id: uuid.New(), boardId: suite.boards["SortedUpdate"].id, name: "Update Column", index: 0}
+  data.boards["Create"] = TestBoard{id: uuid.New(), name: "Create Board"}
+  data.boards["CreateEmpty"] = TestBoard{id: uuid.New(), name: "Create Board"}
+  data.boards["CreateDuplicate"] = TestBoard{id: uuid.New(), name: "Create Duplicate Board"}
+  data.boards["Update"] = TestBoard{id: uuid.New(), name: "Update Board"}
+  data.boards["ClosedUpdate"] = TestBoard{id: uuid.New(), name: "Closed update Board"}
+  data.boards["Read"] = TestBoard{id: uuid.New(), name: "Read Board"}
+  data.boards["SortedUpdate"] = TestBoard{id: uuid.New(), name: "Sorted Cards after update"}
+  data.boards["Write"] = TestBoard{id: uuid.New(), name: "Write Board"}
+  data.boards["WriteClosed"] = TestBoard{id: uuid.New(), name: "Write Board with closed voting"}
+  data.boards["WriteLimit"] = TestBoard{id: uuid.New(), name: "Write Board with low voting limit"}
+  data.boards["WriteMultiple"] = TestBoard{id: uuid.New(), name: "Write Board with multiple disabled"}
 
-	// test columns for adding and removing votes
-	suite.columns["Write"] = TestColumn{id: uuid.New(), boardId: suite.boards["Write"].id, name: "Write Column", index: 0}
-	suite.columns["WriteClosed"] = TestColumn{id: uuid.New(), boardId: suite.boards["WriteClosed"].id, name: "Write Column Closed", index: 0}
-	suite.columns["WriteLimit"] = TestColumn{id: uuid.New(), boardId: suite.boards["WriteLimit"].id, name: "Write Column Limit", index: 0}
-	suite.columns["WriteMultiple"] = TestColumn{id: uuid.New(), boardId: suite.boards["WriteMultiple"].id, name: "Write Column multiple", index: 0}
+  data.columns["Create"] = TestColumn{id: uuid.New(), boardId: data.boards["Create"].id, name: "Create Column", index: 0}
+  data.columns["CreateEmpty"] = TestColumn{id: uuid.New(), boardId: data.boards["Create"].id, name: "Create Column", index: 0}
+  data.columns["Update"] = TestColumn{id: uuid.New(), boardId: data.boards["Update"].id, name: "Update Column", index: 0}
+  data.columns["ClosedUpdate"] = TestColumn{id: uuid.New(), boardId: data.boards["ClosedUpdate"].id, name: "Closed update Column", index: 0}
+  data.columns["Read"] = TestColumn{id: uuid.New(), boardId: data.boards["Read"].id, name: "Read Column", index: 0}
+  data.columns["SortedUpdate"] = TestColumn{id: uuid.New(), boardId: data.boards["SortedUpdate"].id, name: "Update Column", index: 0}
+  data.columns["Write"] = TestColumn{id: uuid.New(), boardId: data.boards["Write"].id, name: "Write Column", index: 0}
+  data.columns["WriteClosed"] = TestColumn{id: uuid.New(), boardId: data.boards["WriteClosed"].id, name: "Write Column Closed", index: 0}
+  data.columns["WriteLimit"] = TestColumn{id: uuid.New(), boardId: data.boards["WriteLimit"].id, name: "Write Column Limit", index: 0}
+  data.columns["WriteMultiple"] = TestColumn{id: uuid.New(), boardId: data.boards["WriteMultiple"].id, name: "Write Column multiple", index: 0}
 
-	// test notes
-	suite.notes = make(map[string]TestNote, 9)
-	// notes for creating, updating and reading votings
-	suite.notes["Create"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Create"].id, columnId: suite.columns["Create"].id, text: "Create voting note"}
-	suite.notes["CreateEmpty"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["CreateEmpty"].id, columnId: suite.columns["CreateEmpty"].id, text: "Create voting note"}
-	suite.notes["Update1"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Update"].id, columnId: suite.columns["Update"].id, text: "Update voting note one"}
-	suite.notes["Update2"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Update"].id, columnId: suite.columns["Update"].id, text: "Update voting note two"}
-	suite.notes["Update3"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Update"].id, columnId: suite.columns["Update"].id, text: "Update voting note three"}
-	suite.notes["SortedUpdate1"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["SortedUpdate"].id, columnId: suite.columns["SortedUpdate"].id, text: "Update voting note one"}
-	suite.notes["SortedUpdate2"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["SortedUpdate"].id, columnId: suite.columns["SortedUpdate"].id, text: "Update voting note two"}
-	suite.notes["SortedUpdate3"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["SortedUpdate"].id, columnId: suite.columns["SortedUpdate"].id, text: "Update voting note three"}
-	suite.notes["ClosedUpdate"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["ClosedUpdate"].id, columnId: suite.columns["ClosedUpdate"].id, text: "Closed update voting note"}
-	suite.notes["Read1"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Read"].id, columnId: suite.columns["Read"].id, text: "Get votes note"}
-	suite.notes["Read2"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Read"].id, columnId: suite.columns["Read"].id, text: "Get votes note"}
-	// notes for adding and removing votes
-	suite.notes["WriteAdd"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Write"].id, columnId: suite.columns["Write"].id, text: "Insert vote note"}
-	suite.notes["WriteRemove"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["Write"].id, columnId: suite.columns["Write"].id, text: "Delete vote note"}
-	suite.notes["WriteClosed"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["WriteClosed"].id, columnId: suite.columns["WriteClosed"].id, text: "Note for closed voting"}
-	suite.notes["WriteLimit"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["WriteLimit"].id, columnId: suite.columns["WriteLimit"].id, text: "Note for vote limit"}
-	suite.notes["WriteMultiple"] = TestNote{id: uuid.New(), authorId: suite.users["Stan"].id, boardId: suite.boards["WriteMultiple"].id, columnId: suite.columns["WriteMultiple"].id, text: "Note for multiple votes"}
+  data.notes["Create"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Create"].id, columnId: data.columns["Create"].id, text: "Create voting note"}
+  data.notes["CreateEmpty"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["CreateEmpty"].id, columnId: data.columns["CreateEmpty"].id, text: "Create voting note"}
+  data.notes["Update1"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Update"].id, columnId: data.columns["Update"].id, text: "Update voting note one"}
+  data.notes["Update2"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Update"].id, columnId: data.columns["Update"].id, text: "Update voting note two"}
+  data.notes["Update3"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Update"].id, columnId: data.columns["Update"].id, text: "Update voting note three"}
+  data.notes["SortedUpdate1"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["SortedUpdate"].id, columnId: data.columns["SortedUpdate"].id, text: "Update voting note one"}
+  data.notes["SortedUpdate2"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["SortedUpdate"].id, columnId: data.columns["SortedUpdate"].id, text: "Update voting note two"}
+  data.notes["SortedUpdate3"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["SortedUpdate"].id, columnId: data.columns["SortedUpdate"].id, text: "Update voting note three"}
+  data.notes["ClosedUpdate"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["ClosedUpdate"].id, columnId: data.columns["ClosedUpdate"].id, text: "Closed update voting note"}
+  data.notes["Read1"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Read"].id, columnId: data.columns["Read"].id, text: "Get votes note"}
+  data.notes["Read2"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Read"].id, columnId: data.columns["Read"].id, text: "Get votes note"}
+  data.notes["WriteAdd"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Write"].id, columnId: data.columns["Write"].id, text: "Insert vote note"}
+  data.notes["WriteRemove"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["Write"].id, columnId: data.columns["Write"].id, text: "Delete vote note"}
+  data.notes["WriteClosed"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["WriteClosed"].id, columnId: data.columns["WriteClosed"].id, text: "Note for closed voting"}
+  data.notes["WriteLimit"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["WriteLimit"].id, columnId: data.columns["WriteLimit"].id, text: "Note for vote limit"}
+  data.notes["WriteMultiple"] = TestNote{id: uuid.New(), authorId: data.users["Stan"].id, boardId: data.boards["WriteMultiple"].id, columnId: data.columns["WriteMultiple"].id, text: "Note for multiple votes"}
 
-	// test voting
-	suite.votings = make(map[string]DatabaseVoting, 10)
-	suite.votings["CreateDuplicate"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["CreateDuplicate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["Update"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Update"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["ClosedUpdate"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["ClosedUpdate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
-	suite.votings["ReadOpen"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Read"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["ReadClosed"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Read"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
-	suite.votings["Write"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["Write"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["WriteClosed"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["WriteClosed"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
-	suite.votings["WriteLimit"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["WriteLimit"].id, VoteLimit: 1, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["WriteMultiple"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["WriteMultiple"].id, VoteLimit: 5, AllowMultipleVotes: false, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
-	suite.votings["SortedUpdate"] = DatabaseVoting{ID: uuid.New(), Board: suite.boards["SortedUpdate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["CreateDuplicate"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["CreateDuplicate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["Update"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["Update"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["ClosedUpdate"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["ClosedUpdate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
+  data.votings["ReadOpen"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["Read"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["ReadClosed"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["Read"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
+  data.votings["Write"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["Write"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["WriteClosed"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["WriteClosed"].id, VoteLimit: 5, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Closed}
+  data.votings["WriteLimit"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["WriteLimit"].id, VoteLimit: 1, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["WriteMultiple"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["WriteMultiple"].id, VoteLimit: 5, AllowMultipleVotes: false, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
+  data.votings["SortedUpdate"] = DatabaseVoting{ID: uuid.New(), Board: data.boards["SortedUpdate"].id, VoteLimit: 7, AllowMultipleVotes: true, ShowVotesOfOthers: false, IsAnonymous: false, Status: Open}
 
-	// test votes
-	suite.votes = make(map[string]DatabaseVote, 26)
-	// votes for the voting that is closed
-	suite.votes["Update1"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update3"].id}
-	suite.votes["Update2"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update3"].id}
-	suite.votes["Update3"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update3"].id}
-	suite.votes["Update4"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update1"].id}
-	suite.votes["Update5"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update1"].id}
-	suite.votes["Update6"] = DatabaseVote{Board: suite.boards["Update"].id, Voting: suite.votings["Update"].ID, User: suite.users["Stan"].id, Note: suite.notes["Update2"].id}
-	suite.votes["Sorted1"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate3"].id}
-	suite.votes["Sorted2"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate3"].id}
-	suite.votes["Sorted3"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate3"].id}
+  data.votes["Update1"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update3"].id}
+  data.votes["Update2"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update3"].id}
+  data.votes["Update3"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update3"].id}
+  data.votes["Update4"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update1"].id}
+  data.votes["Update5"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update1"].id}
+  data.votes["Update6"] = DatabaseVote{Board: data.boards["Update"].id, Voting: data.votings["Update"].ID, User: data.users["Stan"].id, Note: data.notes["Update2"].id}
+  data.votes["Sorted1"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate3"].id}
+  data.votes["Sorted2"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate3"].id}
+  data.votes["Sorted3"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate3"].id}
+  data.votes["Sorted4"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate1"].id}
+  data.votes["Sorted5"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate1"].id}
+  data.votes["Sorted6"] = DatabaseVote{Board: data.boards["SortedUpdate"].id, Voting: data.votings["SortedUpdate"].ID, User: data.users["Stan"].id, Note: data.notes["SortedUpdate2"].id}
+  data.votes["Read1"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read2"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read3"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Stan"].id, Note: data.notes["Read2"].id}
+  data.votes["Read4"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Stan"].id, Note: data.notes["Read2"].id}
+  data.votes["Read5"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read6"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Read7"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Santa"].id, Note: data.notes["Read2"].id}
+  data.votes["Read8"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Read9"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadOpen"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Read10"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read11"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read12"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Stan"].id, Note: data.notes["Read2"].id}
+  data.votes["Read13"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Stan"].id, Note: data.notes["Read2"].id}
+  data.votes["Read14"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Stan"].id, Note: data.notes["Read1"].id}
+  data.votes["Read15"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Read16"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Santa"].id, Note: data.notes["Read2"].id}
+  data.votes["Read17"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Read18"] = DatabaseVote{Board: data.boards["Read"].id, Voting: data.votings["ReadClosed"].ID, User: data.users["Santa"].id, Note: data.notes["Read1"].id}
+  data.votes["Delete"] = DatabaseVote{Board: data.boards["Write"].id, Voting: data.votings["Write"].ID, User: data.users["Stan"].id, Note: data.notes["WriteRemove"].id}
+  data.votes["WriteLimit"] = DatabaseVote{Board: data.boards["WriteLimit"].id, Voting: data.votings["WriteLimit"].ID, User: data.users["Stan"].id, Note: data.notes["WriteLimit"].id}
+  data.votes["WriteClosed"] = DatabaseVote{Board: data.boards["WriteClosed"].id, Voting: data.votings["WriteClosed"].ID, User: data.users["Stan"].id, Note: data.notes["WriteClosed"].id}
+  data.votes["WriteMultiple"] = DatabaseVote{Board: data.boards["WriteMultiple"].id, Voting: data.votings["WriteMultiple"].ID, User: data.users["Stan"].id, Note: data.notes["WriteMultiple"].id}
 
-	suite.votes["Sorted4"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate1"].id}
-	suite.votes["Sorted5"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate1"].id}
+  return data
+}
 
-	suite.votes["Sorted6"] = DatabaseVote{Board: suite.boards["SortedUpdate"].id, Voting: suite.votings["SortedUpdate"].ID, User: suite.users["Stan"].id, Note: suite.notes["SortedUpdate2"].id}
+func seedDatabaseForVoting(db *bun.DB) {
+  for _, user := range testData.users {
+    if err := initialize.InsertUser(db, user.id, user.name, string(user.accountType)); err != nil {
+      log.Fatalf("Failed to insert test user %s", err)
+    }
+  }
 
-	// votes for the open voting
-	suite.votes["Read1"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read2"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read3"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read4"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read5"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read6"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read7"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read8"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read9"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadOpen"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
+  for _, board := range testData.boards {
+    if err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+      log.Fatalf("Failed to insert test board %s", err)
+    }
+  }
 
-	// votes for the colsed voting
-	suite.votes["Read10"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read11"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read12"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read13"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read14"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read15"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read16"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read2"].id}
-	suite.votes["Read17"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
-	suite.votes["Read18"] = DatabaseVote{Board: suite.boards["Read"].id, Voting: suite.votings["ReadClosed"].ID, User: suite.users["Santa"].id, Note: suite.notes["Read1"].id}
+  for _, column := range testData.columns {
+    if err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index); err != nil {
+      log.Fatalf("Failed to insert test column %s", err)
+    }
+  }
 
-	// votes for adding and removing votes
-	suite.votes["Delete"] = DatabaseVote{Board: suite.boards["Write"].id, Voting: suite.votings["Write"].ID, User: suite.users["Stan"].id, Note: suite.notes["WriteRemove"].id}
-	suite.votes["WriteLimit"] = DatabaseVote{Board: suite.boards["WriteLimit"].id, Voting: suite.votings["WriteLimit"].ID, User: suite.users["Stan"].id, Note: suite.notes["WriteLimit"].id}
-	suite.votes["WriteClosed"] = DatabaseVote{Board: suite.boards["WriteClosed"].id, Voting: suite.votings["WriteClosed"].ID, User: suite.users["Stan"].id, Note: suite.notes["WriteClosed"].id}
-	suite.votes["WriteMultiple"] = DatabaseVote{Board: suite.boards["WriteMultiple"].id, Voting: suite.votings["WriteMultiple"].ID, User: suite.users["Stan"].id, Note: suite.notes["WriteMultiple"].id}
+  for _, note := range testData.notes {
+    if err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+      log.Fatalf("Failed to insert test note %s", err)
+    }
+  }
 
-	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
-		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
-		}
-	}
+  for _, voting := range testData.votings {
+    if err := initialize.InsertVoting(db, voting.ID, voting.Board, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, string(voting.Status), voting.IsAnonymous); err != nil {
+      log.Fatalf("Failed to insert test voting %s", err)
+    }
+  }
 
-	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
-		if err != nil {
-			log.Fatalf("Failed to insert test board %s", err)
-		}
-	}
-
-	for _, column := range suite.columns {
-		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
-		if err != nil {
-			log.Fatalf("Failed to insert test column %s", err)
-		}
-	}
-
-	for _, note := range suite.notes {
-		err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
-		if err != nil {
-			log.Fatalf("Failed to insert test note %s", err)
-		}
-	}
-
-	for _, voting := range suite.votings {
-		err := initialize.InsertVoting(db, voting.ID, voting.Board, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, string(voting.Status), voting.IsAnonymous)
-		if err != nil {
-			log.Fatalf("Failed to insert test voting %s", err)
-		}
-	}
-
-	for _, vote := range suite.votes {
-		err := initialize.InsertVote(db, vote.Board, vote.Voting, vote.User, vote.Note)
-		if err != nil {
-			log.Fatalf("Failed to insert test vote %s", err)
-		}
-	}
+  for _, vote := range testData.votes {
+    if err := initialize.InsertVote(db, vote.Board, vote.Voting, vote.User, vote.Note); err != nil {
+      log.Fatalf("Failed to insert test vote %s", err)
+    }
+  }
 }

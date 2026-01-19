@@ -12,6 +12,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
 	github.com/gorilla/websocket v1.5.3
+	github.com/peterldowns/pgtestdb v0.1.1
 	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/markbates/goth v1.82.0
 	github.com/nats-io/nats.go v1.48.0
