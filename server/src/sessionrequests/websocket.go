@@ -17,12 +17,12 @@ type BoardSessionRequestSubscription struct {
 }
 
 type sessionRequestWebsocket struct {
-  websocketService                 websocket.WebSocketService
+  websocketService                 websocket.WebSocketInterface
   realtime                         *realtime.Broker
   boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
-func NewSessionRequestWebsocket(webSocketService websocket.WebSocketService, rt *realtime.Broker) SessionRequestWebsocket {
+func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
   websocket := new(sessionRequestWebsocket)
   websocket.websocketService = webSocketService
   websocket.realtime = rt

@@ -114,11 +114,11 @@ func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessio
 	return sessionRequestService
 }
 
-func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocketService {
-	return websocket.NewCoderWebSocketService()
+func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocketInterface {
+	return websocket.NewWebSocketService()
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketService) sessionrequests.SessionRequestWebsocket {
+func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketInterface) sessionrequests.SessionRequestWebsocket {
 	return sessionrequests.NewSessionRequestWebsocket(wsService, init.rt)
 }
 

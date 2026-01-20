@@ -79,7 +79,7 @@ func (suite *BoardServiceIntegrationTestSuite) setupBoardService() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewCoderWebSocketService()
+	wsService := websocket.NewWebSocketService()
 	websocket := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)

@@ -8,30 +8,30 @@ import (
 	"github.com/coder/websocket/wsjson"
 )
 
-type coderConnection struct {
+type webSocketConnection struct {
 	conn *websocket.Conn
 }
 
-func (c *coderConnection) WriteJSON(ctx context.Context, data interface{}) error {
+func (c *webSocketConnection) WriteJSON(ctx context.Context, data interface{}) error {
 	return wsjson.Write(ctx, c.conn, data)
 }
 
-func (c *coderConnection) Read(ctx context.Context) (MessageType, []byte, error) {
+func (c *webSocketConnection) Read(ctx context.Context) (MessageType, []byte, error) {
 	msgType, data, err := c.conn.Read(ctx)
 	return MessageType(msgType), data, err
 }
 
-func (c *coderConnection) Close(reason string) error {
+func (c *webSocketConnection) Close(reason string) error {
 	return c.conn.Close(websocket.StatusNormalClosure, reason)
 }
 
-type coderWebSocketService struct{}
+type webSocketService struct{}
 
-func NewCoderWebSocketService() WebSocketService {
-	return &coderWebSocketService{}
+func NewWebSocketService() WebSocketInterface {
+	return &webSocketService{}
 }
 
-func (c *coderWebSocketService) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
+func (c *webSocketService) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
 	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		InsecureSkipVerify: !checkOrigin,
 		CompressionMode:    websocket.CompressionContextTakeover,
@@ -39,10 +39,10 @@ func (c *coderWebSocketService) Accept(w http.ResponseWriter, r *http.Request, c
 	if err != nil {
 		return nil, err
 	}
-	return &coderConnection{conn: conn}, nil
+	return &webSocketConnection{conn: conn}, nil
 }
 
-func (c *coderWebSocketService) IsNormalClose(err error) bool {
+func (c *webSocketService) IsNormalClose(err error) bool {
 	if err == nil {
 		return false
 	}
