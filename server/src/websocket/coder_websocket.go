@@ -34,6 +34,7 @@ func NewCoderWebSocketService() WebSocketService {
 func (c *coderWebSocketService) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
 	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		InsecureSkipVerify: !checkOrigin,
+		CompressionMode:    websocket.CompressionContextTakeover,
 	})
 	if err != nil {
 		return nil, err
