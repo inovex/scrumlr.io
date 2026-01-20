@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"scrumlr.io/server/websocket"
 	"testing"
 	"time"
 
@@ -78,7 +79,7 @@ func (suite *BoardServiceIntegrationTestSuite) setupBoardService() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(suite.db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)

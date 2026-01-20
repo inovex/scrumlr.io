@@ -3,6 +3,7 @@ package sessionrequests
 import (
 	"context"
 	"log"
+	"scrumlr.io/server/websocket"
 	"testing"
 
 	"scrumlr.io/server/users"
@@ -67,7 +68,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
@@ -106,7 +107,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := NewSessionRequestWebsocket(wsService, broker)
 	services := setupTestServices(suite.db, broker, websocket)
 
@@ -144,7 +145,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
@@ -173,7 +174,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
@@ -202,7 +203,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	wsService := technical_helper.NewCoderWebSocketService()
+	wsService := websocket.NewCoderWebSocketService()
 	websocket := NewSessionRequestWebsocket(wsService, broker)
 	services := setupTestServices(suite.db, broker, websocket)
 

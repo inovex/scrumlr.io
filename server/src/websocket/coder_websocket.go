@@ -1,4 +1,4 @@
-package technical_helper
+package websocket
 
 import (
 	"context"

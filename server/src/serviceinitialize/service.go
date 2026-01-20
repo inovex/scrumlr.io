@@ -5,9 +5,9 @@ import (
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/users"
+	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/votings"
 
@@ -114,11 +114,11 @@ func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessio
 	return sessionRequestService
 }
 
-func (init *ServiceInitializer) InitializeWebSocketService() technical_helper.WebSocketService {
-	return technical_helper.NewCoderWebSocketService()
+func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocketService {
+	return websocket.NewCoderWebSocketService()
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService technical_helper.WebSocketService) sessionrequests.SessionRequestWebsocket {
+func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketService) sessionrequests.SessionRequestWebsocket {
 	return sessionrequests.NewSessionRequestWebsocket(wsService, init.rt)
 }
 

@@ -3,26 +3,26 @@ package sessionrequests
 import (
   "context"
   "net/http"
+  "scrumlr.io/server/websocket"
 
   "github.com/google/uuid"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
-  "scrumlr.io/server/technical_helper"
 )
 
 type BoardSessionRequestSubscription struct {
-  clients       map[uuid.UUID]technical_helper.Connection
+  clients       map[uuid.UUID]websocket.Connection
   subscriptions map[uuid.UUID]chan *realtime.BoardSessionRequestEventType
 }
 
 type sessionRequestWebsocket struct {
-  websocketService                 technical_helper.WebSocketService
+  websocketService                 websocket.WebSocketService
   realtime                         *realtime.Broker
   boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
-func NewSessionRequestWebsocket(webSocketService technical_helper.WebSocketService, rt *realtime.Broker) SessionRequestWebsocket {
+func NewSessionRequestWebsocket(webSocketService websocket.WebSocketService, rt *realtime.Broker) SessionRequestWebsocket {
   websocket := new(sessionRequestWebsocket)
   websocket.websocketService = webSocketService
   websocket.realtime = rt
@@ -71,10 +71,10 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
   }
 }
 
-func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn technical_helper.Connection) {
+func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection) {
   if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
     socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
-      clients:       make(map[uuid.UUID]technical_helper.Connection),
+      clients:       make(map[uuid.UUID]websocket.Connection),
       subscriptions: make(map[uuid.UUID]chan *realtime.BoardSessionRequestEventType),
     }
   }
@@ -89,7 +89,7 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
   }
 }
 
-func (socket *sessionRequestWebsocket) closeSocket(conn technical_helper.Connection) {
+func (socket *sessionRequestWebsocket) closeSocket(conn websocket.Connection) {
   _ = conn.Close("")
   websocketClosedCounter.Add(context.Background(), 1)
 }

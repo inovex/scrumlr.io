@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/websocket"
 	"time"
 
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/boards"
@@ -44,7 +44,7 @@ type Server struct {
 	basePath string
 
 	realtime  *realtime.Broker
-	wsService technical_helper.WebSocketService
+	wsService websocket.WebSocketService
 	auth      auth.Auth
 
 	userRoutes    chi.Router
@@ -81,7 +81,7 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	wsService technical_helper.WebSocketService,
+	wsService websocket.WebSocketService,
 	auth auth.Auth,
 
 	userRoutes chi.Router,

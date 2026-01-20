@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/websocket"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -17,7 +18,6 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/technical_helper"
 )
 
 var tracer = otel.Tracer("scrumlr.io/server/sessionrequests")
@@ -33,8 +33,8 @@ type SessionRequestDatabase interface {
 
 type SessionRequestWebsocket interface {
 	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn technical_helper.Connection)
-	closeSocket(conn technical_helper.Connection)
+	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection)
+	closeSocket(conn websocket.Connection)
 }
 
 type BoardSessionRequestService struct {

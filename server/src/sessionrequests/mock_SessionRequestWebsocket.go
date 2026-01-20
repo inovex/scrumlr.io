@@ -5,11 +5,11 @@
 package sessionrequests
 
 import (
-	"net/http"
+  "net/http"
+  "scrumlr.io/server/websocket"
 
-	"github.com/google/uuid"
-	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/technical_helper"
+  "github.com/google/uuid"
+  mock "github.com/stretchr/testify/mock"
 )
 
 // NewMockSessionRequestWebsocket creates a new instance of MockSessionRequestWebsocket. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -86,7 +86,7 @@ func (_c *MockSessionRequestWebsocket_OpenSocket_Call) RunAndReturn(run func(w h
 }
 
 // closeSocket provides a mock function for the type MockSessionRequestWebsocket
-func (_mock *MockSessionRequestWebsocket) closeSocket(conn technical_helper.Connection) {
+func (_mock *MockSessionRequestWebsocket) closeSocket(conn websocket.Connection) {
 	_mock.Called(conn)
 	return
 }
@@ -102,11 +102,11 @@ func (_e *MockSessionRequestWebsocket_Expecter) closeSocket(conn interface{}) *M
 	return &MockSessionRequestWebsocket_closeSocket_Call{Call: _e.mock.On("closeSocket", conn)}
 }
 
-func (_c *MockSessionRequestWebsocket_closeSocket_Call) Run(run func(conn technical_helper.Connection)) *MockSessionRequestWebsocket_closeSocket_Call {
+func (_c *MockSessionRequestWebsocket_closeSocket_Call) Run(run func(conn websocket.Connection)) *MockSessionRequestWebsocket_closeSocket_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 technical_helper.Connection
+		var arg0 websocket.Connection
 		if args[0] != nil {
-			arg0 = args[0].(technical_helper.Connection)
+			arg0 = args[0].(websocket.Connection)
 		}
 		run(
 			arg0,
@@ -120,13 +120,13 @@ func (_c *MockSessionRequestWebsocket_closeSocket_Call) Return() *MockSessionReq
 	return _c
 }
 
-func (_c *MockSessionRequestWebsocket_closeSocket_Call) RunAndReturn(run func(conn technical_helper.Connection)) *MockSessionRequestWebsocket_closeSocket_Call {
+func (_c *MockSessionRequestWebsocket_closeSocket_Call) RunAndReturn(run func(conn websocket.Connection)) *MockSessionRequestWebsocket_closeSocket_Call {
 	_c.Run(run)
 	return _c
 }
 
 // listenOnBoardSessionRequest provides a mock function for the type MockSessionRequestWebsocket
-func (_mock *MockSessionRequestWebsocket) listenOnBoardSessionRequest(boardID uuid.UUID, userID uuid.UUID, conn technical_helper.Connection) {
+func (_mock *MockSessionRequestWebsocket) listenOnBoardSessionRequest(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection) {
 	_mock.Called(boardID, userID, conn)
 	return
 }
@@ -144,7 +144,7 @@ func (_e *MockSessionRequestWebsocket_Expecter) listenOnBoardSessionRequest(boar
 	return &MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call{Call: _e.mock.On("listenOnBoardSessionRequest", boardID, userID, conn)}
 }
 
-func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run func(boardID uuid.UUID, userID uuid.UUID, conn technical_helper.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
@@ -154,9 +154,9 @@ func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run 
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 technical_helper.Connection
+		var arg2 websocket.Connection
 		if args[2] != nil {
-			arg2 = args[2].(technical_helper.Connection)
+			arg2 = args[2].(websocket.Connection)
 		}
 		run(
 			arg0,
@@ -172,7 +172,7 @@ func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Return()
 	return _c
 }
 
-func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) RunAndReturn(run func(boardID uuid.UUID, userID uuid.UUID, conn technical_helper.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) RunAndReturn(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
 	_c.Run(run)
 	return _c
 }
