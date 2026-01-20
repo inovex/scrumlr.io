@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/boards"
@@ -42,8 +43,9 @@ import (
 type Server struct {
 	basePath string
 
-	realtime *realtime.Broker
-	auth     auth.Auth
+	realtime  *realtime.Broker
+	wsService technical_helper.WebSocketService
+	auth      auth.Auth
 
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
@@ -79,6 +81,7 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
+	wsService technical_helper.WebSocketService,
 	auth auth.Auth,
 
 	userRoutes chi.Router,
@@ -132,6 +135,7 @@ func New(
 	s := Server{
 		basePath:                         basePath,
 		realtime:                         rt,
+		wsService:                        wsService,
 		userRoutes:                       userRoutes,
 		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),

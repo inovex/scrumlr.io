@@ -15,7 +15,7 @@ type TestServices struct {
 	NoteService           notes.NotesService
 }
 
-func setupTestServices(db *bun.DB, broker *realtime.Broker, websocket Websocket) TestServices {
+func setupTestServices(db *bun.DB, broker *realtime.Broker, websocket SessionRequestWebsocket) TestServices {
 	noteDatabase := notes.NewNotesDatabase(db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 

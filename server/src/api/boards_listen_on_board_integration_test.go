@@ -2,7 +2,9 @@ package api
 
 import (
 	"context"
-	"github.com/coder/websocket"
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -13,9 +15,22 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
-	"testing"
-	"time"
+	"scrumlr.io/server/technical_helper"
 )
+
+type mockConnection struct{}
+
+func (m *mockConnection) WriteJSON(ctx context.Context, data interface{}) error {
+	return nil
+}
+
+func (m *mockConnection) Read(ctx context.Context) (technical_helper.MessageType, []byte, error) {
+	return technical_helper.MessageText, nil, nil
+}
+
+func (m *mockConnection) Close(reason string) error {
+	return nil
+}
 
 type BoardsListenIntegrationTestSuite struct {
 	suite.Suite
@@ -44,9 +59,9 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardCreatesNewSubscr
 		Notes:     []*notes.Note{},
 		Reactions: []*reactions.Reaction{},
 	}
-	conn := &websocket.Conn{}
+	conn := &mockConnection{}
 	s.boardSubscriptions[boardID] = &BoardSubscription{
-		clients:      make(map[uuid.UUID]*websocket.Conn),
+		clients:      make(map[uuid.UUID]technical_helper.Connection),
 		subscription: eventChan,
 	}
 	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
@@ -64,11 +79,11 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardAddsClientToExis
 	userID1 := uuid.New()
 	userID2 := uuid.New()
 	eventChan := make(chan *realtime.BoardEvent, 1)
-	conn1 := &websocket.Conn{}
+	conn1 := &mockConnection{}
 	s := &Server{
 		boardSubscriptions: map[uuid.UUID]*BoardSubscription{
 			boardID: {
-				clients:      map[uuid.UUID]*websocket.Conn{userID1: conn1},
+				clients:      map[uuid.UUID]technical_helper.Connection{userID1: conn1},
 				subscription: eventChan,
 			},
 		},
@@ -76,7 +91,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardAddsClientToExis
 	fullBoard := boards.FullBoard{
 		Board: &boards.Board{ID: boardID},
 	}
-	conn2 := &websocket.Conn{}
+	conn2 := &mockConnection{}
 	s.listenOnBoard(context.Background(), boardID, userID2, conn2, fullBoard)
 	assert.Len(suite.T(), s.boardSubscriptions[boardID].clients, 2)
 	assert.Equal(suite.T(), conn1, s.boardSubscriptions[boardID].clients[userID1])
@@ -89,7 +104,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardBroadcas
 	client2ID := uuid.New()
 	bs := &BoardSubscription{
 		subscription: eventChan,
-		clients:      make(map[uuid.UUID]*websocket.Conn),
+		clients:      make(map[uuid.UUID]technical_helper.Connection),
 		boardSettings: &boards.Board{
 			ShowNotesOfOtherUsers: true,
 		},
@@ -129,15 +144,15 @@ func (suite *BoardsListenIntegrationTestSuite) TestCloseBoardSocketCallsSessionD
 
 func (suite *BoardsListenIntegrationTestSuite) TestBoardSubscriptionManagesMultipleClients() {
 	subscription := &BoardSubscription{
-		clients:      make(map[uuid.UUID]*websocket.Conn),
+		clients:      make(map[uuid.UUID]technical_helper.Connection),
 		subscription: make(chan *realtime.BoardEvent, 1),
 	}
 	userID1 := uuid.New()
 	userID2 := uuid.New()
 	userID3 := uuid.New()
-	conn1 := &websocket.Conn{}
-	conn2 := &websocket.Conn{}
-	conn3 := &websocket.Conn{}
+	conn1 := &mockConnection{}
+	conn2 := &mockConnection{}
+	conn3 := &mockConnection{}
 	subscription.clients[userID1] = conn1
 	subscription.clients[userID2] = conn2
 	subscription.clients[userID3] = conn3
@@ -152,7 +167,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestBoardSubscriptionManagesMulti
 func (suite *BoardsListenIntegrationTestSuite) TestBoardSubscriptionStoresFullBoardData() {
 	boardID := uuid.New()
 	subscription := &BoardSubscription{
-		clients: make(map[uuid.UUID]*websocket.Conn),
+		clients: make(map[uuid.UUID]technical_helper.Connection),
 	}
 	testBoard := &boards.Board{
 		ID:                    boardID,

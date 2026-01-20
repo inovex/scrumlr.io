@@ -2,18 +2,16 @@ package api
 
 import (
 	"context"
-	"go.opentelemetry.io/otel/codes"
 	"net/http"
+
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
-
-	"scrumlr.io/server/identifiers"
-
-	"github.com/coder/websocket"
 	"github.com/google/uuid"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
@@ -22,7 +20,7 @@ import (
 
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
-	clients           map[uuid.UUID]*websocket.Conn
+	clients           map[uuid.UUID]technical_helper.Connection
 	boardParticipants []*sessions.BoardSession
 	boardSettings     *boards.Board
 	boardColumns      []*columns.Column
@@ -43,7 +41,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	id := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	conn, err := technical_helper.AcceptWebSocket(w, r, s.checkOrigin)
+	conn, err := s.wsService.Accept(w, r, s.checkOrigin)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to upgrade websocket")
 		span.RecordError(err)
@@ -75,7 +73,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	initEvent = eventInitFilter(initEvent, userID)
 
-	err = technical_helper.WriteJSON(ctx, conn, initEvent)
+	err = conn.WriteJSON(ctx, initEvent)
 	if err != nil {
 		message := "failed to send init message"
 		span.SetStatus(codes.Error, message)
@@ -88,9 +86,9 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	s.listenOnBoard(ctx, id, userID, conn, initEvent.Data)
 
 	for {
-		_, _, err := technical_helper.ReadWebSocket(ctx, conn)
+		_, _, err := conn.Read(ctx)
 		if err != nil {
-			if technical_helper.IsNormalClose(err) {
+			if s.wsService.IsNormalClose(err) {
 				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
 				delete(s.boardSubscriptions[id].clients, userID)
 				err := s.sessions.Disconnect(ctx, id, userID)
@@ -105,10 +103,10 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn *websocket.Conn, initEventData boards.FullBoard) {
+func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn technical_helper.Connection, initEventData boards.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
-			clients: make(map[uuid.UUID]*websocket.Conn),
+			clients: make(map[uuid.UUID]technical_helper.Connection),
 		}
 	}
 
@@ -132,19 +130,19 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 		logger.Get().Debugw("board event received", "boardEvent", boardEvent)
 		for id, conn := range bs.clients {
 			filteredBoardEvent := bs.eventFilter(boardEvent, id)
-			if err := technical_helper.WriteJSON(context.Background(), conn, filteredBoardEvent); err != nil {
+			if err := conn.WriteJSON(context.Background(), filteredBoardEvent); err != nil {
 				logger.Get().Warnw("failed to send board event to client", "filteredBoardEvent", filteredBoardEvent, "err", err)
 			}
 		}
 	}
 }
 
-func (s *Server) closeBoardSocket(ctx context.Context, board, user uuid.UUID, conn *websocket.Conn, reason string) {
+func (s *Server) closeBoardSocket(ctx context.Context, board, user uuid.UUID, conn technical_helper.Connection, reason string) {
 	ctx, span := tracer.Start(ctx, "scrumlr.listen.api.socket.close")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
-	_ = technical_helper.CloseWebSocket(conn, reason)
+	_ = conn.Close(reason)
 	err := s.sessions.Disconnect(ctx, board, user)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to disconnect session")

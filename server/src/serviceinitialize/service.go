@@ -5,6 +5,7 @@ import (
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/users"
 
@@ -106,17 +107,19 @@ func (init *ServiceInitializer) InitializeSessionService(columnService columns.C
 	return sessionService
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessionrequests.Websocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessionrequests.SessionRequestWebsocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
 	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(init.db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.rt, websocket, sessionService)
 
 	return sessionRequestService
 }
 
-func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket {
-	ws := sessionrequests.NewWebsocket(init.checkOrigin, init.rt)
+func (init *ServiceInitializer) InitializeWebSocketService() technical_helper.WebSocketService {
+	return technical_helper.NewCoderWebSocketService()
+}
 
-	return ws
+func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService technical_helper.WebSocketService) sessionrequests.SessionRequestWebsocket {
+	return sessionrequests.NewSessionRequestWebsocket(wsService, init.rt)
 }
 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {

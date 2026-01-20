@@ -67,8 +67,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	checkOrigin := false
-	websocket := NewWebsocket(checkOrigin, broker)
+	wsService := technical_helper.NewCoderWebSocketService()
+	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -106,8 +106,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 
 	events := broker.GetBoardChannel(ctx, boardId)
 
-	checkOrigin := false
-	websocket := NewWebsocket(checkOrigin, broker)
+	wsService := technical_helper.NewCoderWebSocketService()
+	websocket := NewSessionRequestWebsocket(wsService, broker)
 	services := setupTestServices(suite.db, broker, websocket)
 
 	request, err := services.SessionRequestService.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
@@ -144,8 +144,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Get() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	checkOrigin := false
-	websocket := NewWebsocket(checkOrigin, broker)
+	wsService := technical_helper.NewCoderWebSocketService()
+	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -173,8 +173,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_GetAll() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	checkOrigin := false
-	websocket := NewWebsocket(checkOrigin, broker)
+	wsService := technical_helper.NewCoderWebSocketService()
+	websocket := NewSessionRequestWebsocket(wsService, broker)
 	noteDatabase := notes.NewNotesDatabase(suite.db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
 	columnDatabase := columns.NewColumnsDatabase(suite.db)
@@ -202,8 +202,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 		log.Fatalf("Faild to connect to nats server %s", err)
 	}
 
-	checkOrigin := false
-	websocket := NewWebsocket(checkOrigin, broker)
+	wsService := technical_helper.NewCoderWebSocketService()
+	websocket := NewSessionRequestWebsocket(wsService, broker)
 	services := setupTestServices(suite.db, broker, websocket)
 
 	exists, err := services.SessionRequestService.Exists(ctx, boardId, userId)
