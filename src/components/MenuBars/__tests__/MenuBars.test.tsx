@@ -3,10 +3,11 @@ import {Provider} from "react-redux";
 import {MockStoreEnhanced} from "redux-mock-store";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
-import {useTimer} from "../../../utils/hooks/useTimerLeft";
+import {useTimer} from "utils/hooks/useTimerLeft";
 import getTestParticipant from "../../../utils/test/getTestParticipant";
+import {Mock} from "vitest";
 
-jest.mock("../../../utils/hooks/useTimerLeft");
+vi.mock("utils/hooks/useTimerLeft");
 
 const createMenuBars = (store: MockStoreEnhanced) => (
   <Provider store={store}>
@@ -16,11 +17,11 @@ const createMenuBars = (store: MockStoreEnhanced) => (
 
 describe("MenuBars", () => {
   beforeEach(() => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
   });
 
   test("should match snapshot", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
 
     const store = getTestStore({
       participants: {
@@ -33,7 +34,7 @@ describe("MenuBars", () => {
   });
 
   test("should render both user- and admin-menu for moderators", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
 
     const store = getTestStore({
       participants: {
@@ -47,7 +48,7 @@ describe("MenuBars", () => {
   });
 
   test("should only render user-menu for participants", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
 
     const store = getTestStore({
       participants: {
@@ -63,11 +64,11 @@ describe("MenuBars", () => {
 
 describe("Mark me as Done Tooltip Logic", () => {
   beforeEach(() => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
   });
 
   it("Does not expand the tooltip if the timer is not expired", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
     const store = getTestStore({
       participants: {
         self: getTestParticipant(),
@@ -79,7 +80,7 @@ describe("Mark me as Done Tooltip Logic", () => {
   });
 
   it("Does not expand the tooltip if the possibleVotes !== usedVotes", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
     const store = getTestStore({
       participants: {
         self: getTestParticipant(),
@@ -90,7 +91,7 @@ describe("Mark me as Done Tooltip Logic", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   it("Expand the tooltip everytime a potential ready state in voting is fulfilled.", () => {
-    (useTimer as jest.Mock).mockReturnValue({timerExpired: false});
+    (useTimer as Mock).mockReturnValue({timerExpired: false});
     const store = getTestStore({
       participants: {
         self: getTestParticipant(),

@@ -6,7 +6,7 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
   useImageChecker: () => false,
 }));
 

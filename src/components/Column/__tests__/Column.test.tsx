@@ -5,7 +5,7 @@ import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "store";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
   useImageChecker: () => false,
 }));
 
@@ -31,12 +31,12 @@ const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
 
 describe("Column", () => {
   beforeEach(() => {
-    window.ResizeObserver = jest.fn(
+    window.ResizeObserver = vi.fn(
       () =>
         ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-          unobserve: jest.fn(),
+          observe: vi.fn(),
+          disconnect: vi.fn(),
+          unobserve: vi.fn(),
         }) as unknown as ResizeObserver
     );
   });

@@ -1,4 +1,191 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<PassphraseDialog /> > snapshot test 1`] = `
+<div
+  class="password-modal"
+>
+  <div
+    class="password-modal__container"
+  >
+    <div
+      class="password-modal__header"
+    >
+      <label
+        class="text-input-label"
+        for="access-policy-selection__password"
+      >
+        <span
+          class="text-input-label__label"
+        >
+          Passphrase
+        </span>
+      </label>
+      <svg
+        class="password-modal__close"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21.3137 10L10 21.3137"
+          stroke="currentColor"
+          stroke-width="1.75"
+        />
+        <path
+          d="M10 10L21.3137 21.3137"
+          stroke="currentColor"
+          stroke-width="1.75"
+        />
+      </svg>
+    </div>
+    <p>
+      This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.
+    </p>
+    <div>
+      <div
+        class="text-input__container"
+      >
+        <div
+          class="text-input__input-wrapper"
+        >
+          <input
+            class="text-input text-input--adornment-right"
+            data-testid="passphrase-input"
+            id="access-policy-selection__password"
+            placeholder="Password"
+            type="password"
+            value=""
+          />
+          <button
+            aria-label="Show password"
+            class="text-input-adornment text-input__adornment text-input__adornment--right"
+            title="Toggle passphrase visibility"
+            type="button"
+          >
+            <svg
+              class="icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13.519 22.72C14.3326 22.9079 15.165 23.0019 16 23C23 23 28 16 28 16C26.8878 14.5427 25.5887 13.2382 24.136 12.12M21.492 10.4C19.7994 9.50151 17.9162 9.02146 16 9C9 9 4 16 4 16C5.69746 18.2194 7.82868 20.0702 10.264 21.44M16 20.6C17.2838 20.6107 18.5192 20.1109 19.4345 19.2108C20.3499 18.3106 20.8702 17.0838 20.881 15.8M19.458 12.4C18.5335 11.4973 17.2926 10.9919 16.0005 10.9919C14.7084 10.9919 13.4675 11.4973 12.543 12.4C12.0897 12.8426 11.7295 13.3715 11.4835 13.9553C11.2376 14.5392 11.1109 15.1664 11.1109 15.8C11.1109 16.4336 11.2376 17.0608 11.4835 17.6447C11.7295 18.2285 12.0897 18.7574 12.543 19.2"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.7"
+              />
+              <path
+                d="M24 8.5L7.5 24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.7"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="text-input__actions"
+        >
+          <button
+            aria-label="Generate random passphrase"
+            class="text-input-action"
+            data-testid="random-passwort-generator"
+            title="Generate random passphrase"
+            type="button"
+          >
+            <svg
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.986 22.238a8.368 8.368 0 0 1-2.147-3.08c-1.227-3.017-.652-6.604 1.743-9.079l2.21 2.216c.123.122.342.034.371-.146l1.208-7.922a.197.197 0 0 0-.224-.225l-7.908 1.21c-.18.03-.268.25-.146.372l2.215 2.22c-3.657 3.75-4.28 9.372-1.88 13.765a11.708 11.708 0 0 0 2.99 3.549c2.163 1.723 4.821 2.548 7.46 2.494l.497-3.256c-2.274.196-4.611-.507-6.389-2.118Zm14.706 1.955c3.657-3.749 4.28-9.372 1.88-13.765a11.706 11.706 0 0 0-2.99-3.548c-2.163-1.724-4.821-2.548-7.46-2.495l-.497 3.256c2.27-.195 4.611.508 6.389 2.118a8.368 8.368 0 0 1 2.147 3.08c1.227 3.017.652 6.604-1.743 9.08l-2.211-2.217c-.122-.122-.34-.034-.37.146l-1.208 7.922a.197.197 0 0 0 .224.225l7.908-1.21c.18-.03.263-.25.146-.371l-2.215-2.221Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <button
+            aria-label="Copy passphrase to clipboard"
+            class="text-input-action"
+            disabled=""
+            title="Copy passphrase to clipboard"
+            type="button"
+          >
+            <svg
+              class="icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19.4113 26.75H9.58601C9.16537 26.75 8.76197 26.5766 8.46453 26.2679C8.1671 25.9593 8 25.5406 8 25.1041V11.3959C8 10.9594 8.1671 10.5407 8.46453 10.2321C8.76197 9.9234 9.16537 9.75 9.58601 9.75H16.1794C16.2886 9.75007 16.3966 9.77275 16.4973 9.81671C16.5979 9.86067 16.689 9.92504 16.7654 10.006L20.741 14.2121C20.9069 14.3876 20.9999 14.6237 21 14.8696V25.106C20.9998 25.3222 20.9585 25.5362 20.8785 25.7359C20.7985 25.9355 20.6814 26.1169 20.5339 26.2696C20.3864 26.4222 20.2113 26.5432 20.0187 26.6257C19.8261 26.7081 19.6197 26.7504 19.4113 26.75Z"
+                stroke="currentColor"
+                stroke-miterlimit="10"
+                stroke-width="1.5"
+              />
+              <path
+                d="M16 10V14.211C16 14.4203 16.0776 14.621 16.2158 14.7689C16.354 14.9169 16.5414 15 16.7368 15H21"
+                stroke="currentColor"
+                stroke-miterlimit="10"
+                stroke-width="1.5"
+              />
+              <path
+                clip-rule="evenodd"
+                d="M13.9571 6.70281C14.0997 6.5511 14.2831 6.47502 14.464 6.47502H19.8429V9.67198C19.8429 10.0676 20.0001 10.4471 20.2798 10.7268C20.5596 11.0066 20.939 11.1638 21.3347 11.1638H24.275L24.275 20.2843L24.275 20.285V20.285C24.2748 20.4002 24.2533 20.5133 24.2126 20.6175C24.1718 20.7218 24.1132 20.8138 24.0422 20.8892C24.0005 20.9334 23.9551 20.9714 23.9072 21.0028L22.9825 21.0252L23.0176 22.4748L24.1118 22.4483L24.2547 22.4448L24.3856 22.3874C24.6546 22.2693 24.896 22.0974 25.0974 21.8837C25.2987 21.67 25.4563 21.4187 25.5632 21.1451C25.67 20.8715 25.7247 20.5797 25.725 20.2858L25.725 20.285V10.5959V10.5957C25.7249 10.187 25.5746 9.78654 25.294 9.48223L25.2939 9.4821L21.6249 5.50173L21.6247 5.50156C21.4892 5.35417 21.3249 5.23435 21.1401 5.15154C20.9551 5.06864 20.7545 5.02515 20.5507 5.02502H20.5502H14.464C13.8684 5.02502 13.307 5.27722 12.9005 5.70983C12.4954 6.14092 12.275 6.71648 12.275 7.3079V7.75002H13.725V7.3079C13.725 7.07297 13.8131 6.85604 13.9571 6.70281ZM23.6736 9.86377L21.1429 7.11822V9.67198C21.1429 9.72285 21.1631 9.77163 21.1991 9.8076C21.235 9.84356 21.2838 9.86377 21.3347 9.86377H23.6736Z"
+                fill="currentColor"
+                fill-opacity="0.7"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <span
+        class="validation-error"
+        role="alert"
+      >
+        A passphrase must be set
+      </span>
+    </div>
+    <div
+      class="new-board__actions import-board__action"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="Open board"
+        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
+        disabled=""
+      >
+        <span
+          class="legacy-button__label"
+        >
+          Open Board
+        </span>
+      </button>
+      <button
+        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
+      >
+        <span
+          class="legacy-button__label"
+        >
+          Continue without password
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`<PassphraseDialog /> snapshot test 1`] = `
 <div

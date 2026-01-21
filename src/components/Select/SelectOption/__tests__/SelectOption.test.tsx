@@ -1,12 +1,12 @@
 import {render} from "testUtils";
 import {SelectOption} from "components/Select/SelectOption/SelectOption";
-import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
-import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
+import GlobeIcon from "assets/icons/open.svg?react";
+import LockIcon from "assets/icons/lock-closed.svg?react";
 import {SelectContext} from "utils/hooks/useSelect";
 import {fireEvent} from "@testing-library/react";
 
 const renderSelectOption = (override?: {activeIndex?: number; setActiveIndex?: (index: number) => void}) => {
-  const providerContext = {activeIndex: 0, setActiveIndex: jest.fn, ...override};
+  const providerContext = {activeIndex: 0, setActiveIndex: vi.fn(), ...override};
   return render(
     <SelectContext.Provider value={providerContext}>
       <SelectOption label={"test"} description={"another test"} icon={<GlobeIcon />} index={0} />
@@ -15,7 +15,7 @@ const renderSelectOption = (override?: {activeIndex?: number; setActiveIndex?: (
 };
 
 const renderMultipleSelectOptions = (override?: {activeIndex?: number; setActiveIndex?: (index: number) => void}) => {
-  const providerContext = {activeIndex: 0, setActiveIndex: jest.fn, ...override};
+  const providerContext = {activeIndex: 0, setActiveIndex: vi.fn(), ...override};
   return render(
     <SelectContext.Provider value={providerContext}>
       <SelectOption label={"test 1"} description={"another test 1"} icon={<GlobeIcon />} index={0} />
@@ -39,7 +39,7 @@ describe("SelectOption (single)", () => {
   });
 
   it("should call back active index", () => {
-    const setActiveIndexSpy: (index: number) => void = jest.fn();
+    const setActiveIndexSpy: (index: number) => void = vi.fn();
     const {container} = renderSelectOption({setActiveIndex: setActiveIndexSpy});
 
     const selectOption = container.querySelector<HTMLButtonElement>(".select-option")!;
@@ -65,7 +65,7 @@ describe("SelectOption (multiple)", () => {
   });
 
   it("should call back active index", () => {
-    const setActiveIndexSpy: (index: number) => void = jest.fn();
+    const setActiveIndexSpy: (index: number) => void = vi.fn();
     const {container} = renderSelectOption({setActiveIndex: setActiveIndexSpy});
 
     const selectOption = container.querySelector<HTMLButtonElement>(".select-option")!;

@@ -7,7 +7,7 @@ import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
 import getTestParticipant from "utils/test/getTestParticipant";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
 }));
 
@@ -25,11 +25,11 @@ const createNoteInput = (columnId: string) => {
 
 describe("Note Input", () => {
   beforeEach(() => {
-    window.IntersectionObserver = jest.fn(
+    window.IntersectionObserver = vi.fn(
       () =>
         ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
+          observe: vi.fn(),
+          disconnect: vi.fn(),
         }) as unknown as IntersectionObserver
     );
   });

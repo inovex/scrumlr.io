@@ -26,8 +26,8 @@ describe("the board export functions", () => {
       // @ts-ignore
       window.location = new URL(`https://scrumlr.io/board/${boardData.board.id}/settings/export`);
 
-      API.exportBoard = jest.fn((): Promise<Response> => Promise.resolve(new Response(JSON.stringify(boardData))));
-      API.getUsers = jest.fn((): Promise<Auth[]> => Promise.resolve(userData));
+      API.exportBoard = vi.fn((): Promise<Response> => Promise.resolve(new Response(JSON.stringify(boardData))));
+      API.getUsers = vi.fn((): Promise<Auth[]> => Promise.resolve(userData));
       const mdExport = await getMarkdownExport(boardData.board.id);
 
       expect(API.exportBoard).toHaveBeenCalledTimes(1);
