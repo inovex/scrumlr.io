@@ -10,7 +10,7 @@ exports[`Timer > should render correctly 1`] = `
   >
     <div
       class="timer__progress-bar"
-      style="right: calc(24px);"
+      style="right: calc(72px - 0.6666666666666667 * 72px);"
     />
     <span>
       02
@@ -159,81 +159,6 @@ exports[`Timer > should render correctly 1`] = `
         d="M28 23.1V26H17.633v-2.9H21.4V8.28c-.147.235-.394.498-.742.791-.361.296-.738.57-1.128.82-.422.254-.864.47-1.32.645a3.292 3.292 0 0 1-1.21.263V7.812c.495 0 .99-.137 1.485-.41.513-.274.99-.586 1.43-.938a9.85 9.85 0 0 0 1.045-.995L21.4 5h3.108v18.1H28Z"
         fill="currentColor"
       />
-    </svg>
-  </button>
-</div>
-`;
-
-exports[`Timer should render correctly 1`] = `
-<div
-  class="timer__container"
->
-  <div
-    class="timer"
-    id="timer"
-  >
-    <div
-      class="timer__progress-bar"
-      style="right: calc(72px - 0.6666666666666667 * 72px);"
-    />
-    <span>
-      02
-      :
-      00
-    </span>
-    <ul
-      class="timer__short-actions"
-    >
-      <li
-        class="short-actions__short-action"
-      >
-        <button
-          aria-label="End timer"
-          class="short-action__button"
-          data-tooltip-content="End timer"
-          data-tooltip-id="info-bar__tooltip"
-        >
-          <svg
-            class="short-action__flag-icon"
-          >
-            flag-finish.svg
-          </svg>
-        </button>
-      </li>
-      <li
-        class="short-actions__short-action"
-      >
-        <button
-          aria-label="Mark me as done"
-          class="short-action__button"
-          data-tooltip-content="Mark me as done"
-          data-tooltip-id="info-bar__tooltip"
-        >
-          <svg
-            class="short-action__check-icon"
-          >
-            mark-as-done.svg
-          </svg>
-          <svg
-            class="short-action__cancel-icon"
-          >
-            close.svg
-          </svg>
-        </button>
-      </li>
-    </ul>
-    <svg>
-      timer.svg
-    </svg>
-  </div>
-  <button
-    aria-label="Increase timer by one minute"
-    class="timer__increment-button"
-    data-tooltip-content="Increase timer by one minute"
-    data-tooltip-id="info-bar__tooltip"
-  >
-    <svg>
-      plus-one.svg
     </svg>
   </button>
 </div>

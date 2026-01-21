@@ -486,11 +486,11 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
           id="DndDescribedBy-0"
           style="display: none;"
         >
-          
+
     To pick up a draggable item, press the space bar.
     While dragging, use the arrow keys to move the item.
     Press space again to drop the item in its new position, or press escape to cancel.
-  
+
         </div>
         <div
           aria-atomic="true"
@@ -824,11 +824,11 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
           id="DndDescribedBy-0"
           style="display: none;"
         >
-          
+
     To pick up a draggable item, press the space bar.
     While dragging, use the arrow keys to move the item.
     Press space again to drop the item in its new position, or press escape to cancel.
-  
+
         </div>
         <div
           aria-atomic="true"
@@ -1433,11 +1433,11 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
           id="DndDescribedBy-2"
           style="display: none;"
         >
-          
+
     To pick up a draggable item, press the space bar.
     While dragging, use the arrow keys to move the item.
     Press space again to drop the item in its new position, or press escape to cancel.
-  
+
         </div>
         <div
           aria-atomic="true"
@@ -1784,11 +1784,11 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
           id="DndDescribedBy-2"
           style="display: none;"
         >
-          
+
     To pick up a draggable item, press the space bar.
     While dragging, use the arrow keys to move the item.
     Press space again to drop the item in its new position, or press escape to cancel.
-  
+
         </div>
         <div
           aria-atomic="true"
