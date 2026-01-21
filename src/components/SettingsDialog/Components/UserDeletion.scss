@@ -3,6 +3,7 @@
 .user-deletion-button {
   .settings-option-button__label {
     color: styles.$critical-carmine--light; // Change text color to red
+    font-weight: bold;
   }
 
   .settings-option-button__icon {
