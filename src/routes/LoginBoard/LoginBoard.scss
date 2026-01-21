@@ -241,6 +241,12 @@ $space--between: styles.$spacing--xl;
   }
 }
 
+@media screen and (max-width: 1020px) {
+  .login-board__card {
+    width: 90%;
+  }
+}
+
 @media #{styles.$tablet} {
   .login-board__card {
     width: 90%;

@@ -99,11 +99,12 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
             /* --- COMPACT MODE --- */
             <Button
               key={`${primaryProvider}-compact`}
-              className="login-providers__button compact-button"
+              className="login-providers__button"
               color="backlog-blue"
               onClick={signIn(providerConfig[primaryProvider].signInKey)}
               icon={providerConfig[primaryProvider].icon}
               hideLabel
+              type="ghost"
             >
               {providerConfig[primaryProvider].label}
             </Button>
@@ -115,7 +116,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
       {secondaryProviders.map((provider) => (
         <Button
           key={provider}
-          className="login-providers__button secondary-button"
+          className="login-providers__button"
           color="backlog-blue"
           onClick={signIn(providerConfig[provider].signInKey)}
           icon={providerConfig[provider].icon}
