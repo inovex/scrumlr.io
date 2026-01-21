@@ -2,11 +2,8 @@
 
 $stan-height: 70%;
 
-//todo creat a couple (1-3) variables with different spaces and thing about which space should be the same or not and use the variables there then
-$space--within: styles.$spacing--lg;
-$space--between: styles.$spacing--lg;
-
-// todo: think aboud the width of the forms thing
+$space--within: styles.$spacing--xl;
+$space--between: styles.$spacing--xl;
 
 .login-board {
   display: flex;
@@ -15,7 +12,6 @@ $space--between: styles.$spacing--lg;
 }
 
 .login-board__wrapper {
-  width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -26,9 +22,7 @@ $space--between: styles.$spacing--lg;
 
 .login-board__card {
   position: relative;
-  width: 100%;
   flex: 1;
-  max-width: 920px;
   max-height: 920px;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
@@ -85,10 +79,10 @@ $space--between: styles.$spacing--lg;
   height: 100%;
   width: fit-content;
   flex: 1;
-  max-width: 440px;
 }
 
 .login-board__form {
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -121,7 +115,7 @@ $space--between: styles.$spacing--lg;
 .login-board__features {
   display: flex;
   flex-direction: column;
-  gap: $space--within; // between the points of login provider
+  gap: styles.$spacing--sm; // between the points of login provider
 }
 
 .login-board__feature {
@@ -138,7 +132,7 @@ $space--between: styles.$spacing--lg;
 
 .login-board__divider {
   margin: 0;
-  margin-top: 1.1em; // to center the line with the text
+  margin-top: 1.25em; // to center the line with the text
   margin-bottom: 0px;
 
   padding: 0;
@@ -193,7 +187,7 @@ $space--between: styles.$spacing--lg;
   min-width: 100%;
   position: relative;
   bottom: auto;
-  padding-top: styles.$spacing--lg; // spacing above the terms
+  padding-top: $space--between; // spacing above the terms
   padding-bottom: 0;
   text-align: center;
   color: styles.$navy--700;
@@ -244,19 +238,12 @@ $space--between: styles.$spacing--lg;
   .login-board__stan--light {
     display: inline;
   }
-
-  @media #{styles.$tablet} {
-    .login-board__divider::after {
-      background: styles.$navy--700;
-    }
-  }
 }
 
 @media screen and (max-width: 1020px) {
   .login-board__card {
     width: 90%;
     max-width: 920px;
-    padding-top: styles.$spacing--xl;
   }
 }
 
@@ -273,14 +260,14 @@ $space--between: styles.$spacing--lg;
   }
 }
 
-@media screen and (min-width: styles.$breakpoint--desktop) {
+@media screen and (min-width: calc(styles.$breakpoint--desktop + 1px)) {
+  // the 1px is needed here so that the hiding of stand and the adjustment of headder bar is in sync with the size adjustment
   .login-board__card {
+    max-width: 800px;
     padding-bottom: styles.$spacing--base;
-    padding-left: styles.$spacing--3xl;
-    padding-right: styles.$spacing--3xl;
   }
 
-  .login-board__form {
+  .login-board__form-wrapper {
     width: 500px;
   }
 

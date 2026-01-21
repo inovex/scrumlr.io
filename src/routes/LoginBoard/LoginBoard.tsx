@@ -79,7 +79,6 @@ export const LoginBoard = () => {
             ))}
           </div>
           <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
-          {!anonymousLoginDisabled && <hr className="login-board__divider" data-label={t("LoginBoard.dividerWord")} />}
         </>
       );
     }
@@ -89,6 +88,19 @@ export const LoginBoard = () => {
     }
 
     return <h1>{t("LoginBoard.subtitleAnonymous")}</h1>;
+  };
+
+  /**
+   * Logic Section: Divider
+   * Flattened logic:
+   * If provider exist AND anonymous login enabled -> show devider
+   * Else show nothing
+   */
+  const renderDivider = () => {
+    if (providersAvailable && !anonymousLoginDisabled) {
+      return <hr className="login-board__divider" data-label={t("LoginBoard.dividerWord")} />;
+    }
+    return null;
   };
 
   /**
@@ -167,6 +179,9 @@ export const LoginBoard = () => {
               <div className="login-board__form">
                 {/* Providers Section */}
                 <div className="login-board__providers-section">{renderProvidersSectionContent()}</div>
+
+                {/* Divider Section */}
+                <div className="login-board__divider-section">{renderDivider()}</div>
 
                 {/* Anonymous Section */}
                 <div className="login-board__anonymous-section">{renderAnonymousSectionContent()}</div>
