@@ -1,2 +1,2 @@
-export const Database = jest.fn();
-export default jest.fn();
+export const Database = vi.fn();
+export default vi.fn();

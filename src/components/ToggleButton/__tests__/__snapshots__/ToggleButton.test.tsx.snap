@@ -1,4 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ToggleButton > should render correctly 1`] = `
+<button
+  aria-label="Inactive"
+  aria-pressed="false"
+  class="toggle-button"
+>
+  <div
+    class="toggle"
+  />
+</button>
+`;
 
 exports[`ToggleButton should render correctly 1`] = `
 <button

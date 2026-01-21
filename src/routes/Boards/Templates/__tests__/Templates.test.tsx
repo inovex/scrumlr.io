@@ -2,21 +2,22 @@ import {API} from "api";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {mergeTemplateAndColumns} from "components/ColumnsConfigurator/ColumnsConfigurator.utils";
 import {ApplicationState} from "store";
+import {Mock} from "vitest";
 
 const {templates: templatesPreloaded, templateColumns: templatesColumnsPreloaded} = getTestApplicationState();
 const mockedTemplateWithColumns = mergeTemplateAndColumns(templatesPreloaded, templatesColumnsPreloaded);
 
-jest.mock("api", () => ({API: {getTemplates: jest.fn()}}));
+vi.mock("api", () => ({API: {getTemplates: vi.fn()}}));
 
 // thunks are currently not supported within our test utils.
 // wait for https://github.com/inovex/scrumlr.io/issues/5079
 describe.skip("Templates", () => {
   beforeEach(() => {
-    (API.getTemplates as jest.Mock).mockImplementation(() => Promise.resolve(mockedTemplateWithColumns));
+    (API.getTemplates as Mock).mockImplementation(() => Promise.resolve(mockedTemplateWithColumns));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should render correctly", () => {
@@ -27,11 +28,11 @@ describe.skip("Templates", () => {
 
 describe("Templates - Anonymous Board Creation", () => {
   beforeEach(() => {
-    (API.getTemplates as jest.Mock).mockImplementation(() => Promise.resolve(mockedTemplateWithColumns));
+    (API.getTemplates as Mock).mockImplementation(() => Promise.resolve(mockedTemplateWithColumns));
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should enable template cards for authenticated users", () => {
