@@ -21,15 +21,14 @@ describe("Images", () => {
     const urlWithImageExtension = "https://www.example.com/image.jpg";
 
     it("should return true if the url ends with an image extension", async () => {
-      isImageUrl(urlWithImageExtension).then((isImage) => {
-        expect(isImage).toBe(true);
-      });
+      global.fetch = vi.fn().mockImplementation(() => Promise.resolve());
+      const isImage = await isImageUrl(urlWithImageExtension);
+      expect(isImage).toBe(true);
     });
 
     it("should return false it the string is not a URL", async () => {
-      isImageUrl(notURL).then((isImage) => {
-        expect(isImage).toBe(false);
-      });
+      const isImage = await isImageUrl(notURL);
+      expect(isImage).toBe(false);
     });
   });
 });

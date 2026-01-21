@@ -5,10 +5,11 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
 
-Object.assign(navigator, {
-  clipboard: {
-    writeText: () => {},
+Object.defineProperty(navigator, "clipboard", {
+  value: {
+    writeText: vi.fn(),
   },
+  configurable: true,
 });
 
 vi.mock("utils/export", async () => ({

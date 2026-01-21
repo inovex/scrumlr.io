@@ -23,27 +23,3 @@ exports[`DotButton > should render correctly with additional classname 1`] = `
   </button>
 </div>
 `;
-
-exports[`DotButton should render correctly 1`] = `
-<div>
-  <button
-    class="dot-button"
-  >
-    <span>
-      test-text
-    </span>
-  </button>
-</div>
-`;
-
-exports[`DotButton should render correctly with additional classname 1`] = `
-<div>
-  <button
-    class="dot-button test-classname"
-  >
-    <span>
-      test-text
-    </span>
-  </button>
-</div>
-`;

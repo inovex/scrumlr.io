@@ -47,37 +47,3 @@ exports[`Note Input > should render correctly 1`] = `
   </button>
 </form>
 `;
-
-exports[`Note Input should render correctly 1`] = `
-<form
-  class="note-input"
->
-  <textarea
-    class="note-input__input"
-    data-clarity-mask="True"
-    maxlength="1024"
-    placeholder="Add your note..."
-  />
-  <div
-    class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
-    style="--top-distance: 0px;"
-  >
-    <ul
-      class="emoji-suggestions__list"
-    />
-  </div>
-  <button
-    aria-label="Create note"
-    class="note-input__add-button"
-    tabindex="-1"
-    title="Create note"
-    type="submit"
-  >
-    <svg
-      class="note-input__icon--add"
-    >
-      plus.svg
-    </svg>
-  </button>
-</form>
-`;
