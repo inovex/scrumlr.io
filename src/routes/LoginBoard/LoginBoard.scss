@@ -2,8 +2,8 @@
 
 $stan-height: 80%;
 
-$space--within: styles.$spacing--xl;
-$space--between: styles.$spacing--xl;
+// Space constant
+$space--between-parts: styles.$spacing--xl;
 
 .login-board {
   display: flex;
@@ -27,7 +27,7 @@ $space--between: styles.$spacing--xl;
   max-height: 920px;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
-  padding: styles.$spacing--base;
+  padding: styles.$spacing--md;
   padding-top: styles.$spacing--3xl;
 
   display: flex;
@@ -88,13 +88,13 @@ $space--between: styles.$spacing--xl;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: $space--between; // space between seperator line and text for anonymus line
+  gap: $space--between-parts;
 }
 
 .login-board__providers-section {
   display: flex;
   flex-direction: column;
-  gap: $space--within; //space above and below bullet points for login providers
+  gap: $space--between-parts;
 
   & h1 {
     font-size: styles.$text--lg;
@@ -104,25 +104,25 @@ $space--between: styles.$spacing--xl;
 .login-board__anonymous-section {
   display: flex;
   flex-direction: column;
-  gap: $space--within; //space between text for anonymus login and name choosing for anonymus
+  gap: $space--between-parts;
 }
 
 .login-board__anonymous-content {
   display: flex;
   flex-direction: column;
-  gap: $space--within; // space between name anonymous and button to submit
+  gap: $space--between-parts;
 }
 
 .login-board__features {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--lg; // between the points of login provider
+  gap: styles.$spacing--lg;
 }
 
 .login-board__feature {
   display: flex;
   align-items: center;
-  gap: styles.$spacing--sm; // space between bullet point point and its content
+  gap: styles.$spacing--sm;
 }
 
 .login-board__feature-icon {
@@ -133,7 +133,7 @@ $space--between: styles.$spacing--xl;
 
 .login-board__divider {
   margin: 0;
-  margin-top: 1.25em; // to center the line with the text
+  margin-top: 1.25em; //needed to center the line with the text
   margin-bottom: 0px;
 
   padding: 0;
@@ -170,7 +170,7 @@ $space--between: styles.$spacing--xl;
 
 .login-board__input-wrapper {
   display: flex;
-  gap: styles.$spacing--xs; // space between anonymous name and the refresh button
+  gap: styles.$spacing--xs;
   align-items: center;
   width: 100%;
 }
@@ -188,7 +188,7 @@ $space--between: styles.$spacing--xl;
   min-width: 100%;
   position: relative;
   bottom: auto;
-  padding-top: $space--between; // spacing above the terms
+  padding-top: $space--between-parts;
   padding-bottom: styles.$spacing--base;
   text-align: center;
   color: styles.$navy--700;
