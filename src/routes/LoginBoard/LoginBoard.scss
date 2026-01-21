@@ -23,6 +23,7 @@ $space--between: styles.$spacing--xl;
 .login-board__card {
   position: relative;
   flex: 1;
+  max-width: 800px;
   max-height: 920px;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
@@ -240,17 +241,9 @@ $space--between: styles.$spacing--xl;
   }
 }
 
-@media screen and (max-width: 1020px) {
-  .login-board__card {
-    width: 90%;
-    max-width: 920px;
-  }
-}
-
 @media #{styles.$tablet} {
   .login-board__card {
     width: 90%;
-    max-width: 640px;
   }
 
   .login-board__providers-section {
@@ -263,7 +256,6 @@ $space--between: styles.$spacing--xl;
 @media screen and (min-width: calc(styles.$breakpoint--desktop + 1px)) {
   // the 1px is needed here so that the hiding of stand and the adjustment of headder bar is in sync with the size adjustment
   .login-board__card {
-    max-width: 800px;
     padding-bottom: styles.$spacing--base;
   }
 
