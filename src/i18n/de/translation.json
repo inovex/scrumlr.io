@@ -96,16 +96,11 @@
     "loginFeature2": "Individuelle Einstellungen werden im Profil gespeichert",
     "subtitleAnonymous": "Anonym Einloggen",
     "anonymousLogin": "Anonym fortfahren ohne Vorteile",
-    "usernameValidationError": "Der Benutzername darf nicht leer sein",
-    "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
-    "anonymousLoginDisabledError": "Anonyme Accounts sind deaktiviert; bitte nutze eine der offiziellen Loginmöglichkeiten oberhalb",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
-    "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
     "dividerWord": "oder",
     "login": "Anonym fortfahren",
     "acceptTerms": "Mit deiner Anmeldung stimmst du unseren <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu.",
-    "generateRandomName": "Zufälligen Namen erstellen",
-    "username": "Benutzername"
+    "generateRandomName": "Zufälligen Namen erstellen"
   },
   "AccessPolicy": {
     "PUBLIC": "Offen",
