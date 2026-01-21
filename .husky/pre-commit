@@ -1,2 +1,2 @@
 echo "pre-commit: formatting code ..."
-# yarn lint-staged
+lint-staged
