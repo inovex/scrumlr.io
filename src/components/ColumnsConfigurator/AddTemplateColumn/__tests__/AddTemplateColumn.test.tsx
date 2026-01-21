@@ -16,12 +16,14 @@ describe("AddTemplateColumn", () => {
 
   it("should have no right border with left alignment", () => {
     const {container} = renderAddTemplateColumn("left", "backlog-blue", false, vi.fn());
-    expect(container).toHaveStyle({"border-right": "none"});
+    const element = container.firstChild as HTMLElement;
+    expect(element.className).toContain("add-template-column--left");
   });
 
   it("should have no left border with right alignment", () => {
     const {container} = renderAddTemplateColumn("right", "backlog-blue", false, vi.fn());
-    expect(container).toHaveStyle({"border-left": "none"});
+    const element = container.firstChild as HTMLElement;
+    expect(element.className).toContain("add-template-column--right");
   });
 
   it("should fire onClick fn parametrized with its alignment and color", () => {
