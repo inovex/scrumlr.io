@@ -51,6 +51,15 @@ frontend:
   ## @param frontend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
+  ## @param frontend.podSecurityContext Pod-level security context
+  ##
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param frontend.containerSecurityContext Container-level security context
+  ##
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   ## @param frontend.startupProbe.enabled Enable/disable the startup probe
   ## @param frontend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param frontend.startupProbe.periodSeconds How often to perform the probe
@@ -164,6 +173,15 @@ backend:
   ## @param backend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
+  ## @param backend.podSecurityContext Pod-level security context
+  ##
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param backend.containerSecurityContext Container-level security context
+  ##
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   ## @param backend.startupProbe.enabled Enable/disable the startup probe
   ## @param backend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param backend.startupProbe.periodSeconds How often to perform the probe
