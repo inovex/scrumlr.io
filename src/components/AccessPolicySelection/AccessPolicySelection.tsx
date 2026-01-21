@@ -3,7 +3,7 @@ import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "store/features/board/types";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
-import {Visible, Hidden, DuplicateIcon, Refresh} from "components/Icon";
+import {VisibleIcon, HiddenIcon, DuplicateIcon, RefreshIcon} from "components/Icon";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
@@ -38,8 +38,8 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
             onChange={(e) => onPassphraseChange(e.target.value)}
             rightAdornment={
               <TextInputAdornment title={t("AccessPolicySelection.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
-                {visiblePassphrase && <Visible />}
-                {!visiblePassphrase && <Hidden />}
+                {visiblePassphrase && <VisibleIcon />}
+                {!visiblePassphrase && <HiddenIcon />}
               </TextInputAdornment>
             }
             actions={
@@ -49,7 +49,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
                   onClick={() => onPassphraseChange(generateRandomString())}
                   title={t("AccessPolicySelection.generatePassphrase")}
                 >
-                  <Refresh />
+                  <RefreshIcon />
                 </TextInputAction>
                 <TextInputAction onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase} title={t("AccessPolicySelection.copyPassphraseToClipboard")}>
                   <DuplicateIcon />

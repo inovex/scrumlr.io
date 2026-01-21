@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, FormEvent, MouseEvent, useState} from "react";
-import {Hidden, KeyProtected, Visible, ArrowRightIcon} from "components/Icon";
+import {HiddenIcon, KeyProtectedIcon, VisibleIcon, ArrowRightIcon} from "components/Icon";
 import {Background} from "components/Background";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./PassphraseDialog.scss";
@@ -41,7 +41,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
         </a>
 
         <form className="passphrase-dialog__form" onSubmit={submitPassphraseForm}>
-          <KeyProtected className="form__icon" />
+          <KeyProtectedIcon className="form__icon" />
           <label className="form__label">{t("PassphraseDialog.label")}</label>
 
           <div className="form__input-row">
@@ -59,7 +59,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
                 onClick={togglePasswordVisibility}
                 type="button"
               >
-                {passwordVisible ? <Hidden /> : <Visible />}
+                {passwordVisible ? <HiddenIcon /> : <VisibleIcon />}
               </button>
             </div>
             <button aria-disabled={passphrase.length === 0} aria-label={t("PassphraseDialog.submit")} className="form__submit-button" type="submit">

@@ -1,5 +1,5 @@
 import "./Request.scss";
-import {RaiseHand, Join} from "components/Icon";
+import {RaiseHandIcon, JoinIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Auth} from "store/features";
 import {UserAvatar} from "../../BoardUsers";
@@ -49,7 +49,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
         <div className="request__button-container">{renderButtons()}</div>
       </div>
 
-      <div className="request__icon-container">{type === "JOIN" ? <Join className="request-icon" /> : <RaiseHand className="request-icon" />}</div>
+      <div className="request__icon-container">{type === "JOIN" ? <JoinIcon className="request-icon" /> : <RaiseHandIcon className="request-icon" />}</div>
     </div>
   );
 };

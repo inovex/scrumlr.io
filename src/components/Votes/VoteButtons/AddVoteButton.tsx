@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {useTranslation} from "react-i18next";
 import {DotButton} from "components/DotButton";
-import {Plus} from "components/Icon";
+import {PlusIcon} from "components/Icon";
 import "./AddVoteButton.scss";
 import {useAppDispatch} from "store";
 import {addVote} from "store/features";
@@ -26,7 +26,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReaso
       dataTooltipId="scrumlr-tooltip"
       dataTooltipContent={!disabled ? t("Votes.AddVote") : disabledReason}
     >
-      <Plus className="vote-button-add__icon" />
+      <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );
 };

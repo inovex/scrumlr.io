@@ -8,7 +8,7 @@ import {Portal} from "components/Portal";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector, useAppDispatch} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
-import {ArrowLeftIcon, CloseIcon, Logout} from "components/Icon";
+import {ArrowLeftIcon, CloseIcon, LogoutIcon} from "components/Icon";
 import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {signOut} from "store/features/auth/thunks";
@@ -136,7 +136,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
                 <button className="navigation__item navigation__item--logout accent-color__poker-purple" type="button" onClick={handleLogout}>
                   <span className="navigation-item__icon">
-                    <Logout />
+                    <LogoutIcon />
                   </span>
                   <div className="navigation-item__content">
                     <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>

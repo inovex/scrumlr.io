@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {FileCsv, FileJson, DuplicateIcon, Printer} from "components/Icon";
+import {FileCsvIcon, FileJsonIcon, DuplicateIcon, PrinterIcon} from "components/Icon";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
@@ -29,7 +29,7 @@ export const ExportBoard = () => {
       <div className="settings-dialog__group">
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
-          icon={FileJson}
+          icon={FileJsonIcon}
           onClick={() => {
             exportAsJSON(boardId, boardName);
           }}
@@ -39,7 +39,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
-          icon={FileCsv}
+          icon={FileCsvIcon}
           onClick={() => {
             exportAsCSV(boardId, boardName);
           }}
@@ -49,7 +49,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
-          icon={Printer}
+          icon={PrinterIcon}
           className="export-board__button-print-view"
           onClick={() => {
             window.open(`/board/${boardId}/print`, "_blank");

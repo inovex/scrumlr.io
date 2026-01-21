@@ -3,7 +3,7 @@ import {API} from "api";
 import {useNavigate} from "react-router";
 import {useReactToPrint} from "react-to-print";
 import ScrumlrLogo from "assets/scrumlr-logo-light.svg?url";
-import {CloseIcon, Printer} from "components/Icon";
+import {CloseIcon, PrinterIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
@@ -109,7 +109,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     <div className="print-view__container">
       <div className="print-view__button-container">
         <button className="print-view__button" onClick={() => handlePrint(() => printRef.current)} aria-label={t("PrintView.Print")}>
-          <Printer className="print-view__icon-print" />
+          <PrinterIcon className="print-view__icon-print" />
         </button>
         <button className="print-view__button" onClick={handleClose} aria-label={t("PrintView.Close")}>
           <CloseIcon className="print-view__icon-close" />

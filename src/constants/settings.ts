@@ -1,5 +1,5 @@
 import {ComponentType, SVGProps} from "react";
-import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
+import {GeneralSettingsIcon, ParticipantsIcon, SettingsAppearanceIcon, SettingsFeedbackIcon, ShareIcon, FileDefaultIcon} from "components/Icon";
 import {Color} from "./colors";
 
 export const MOBILE_BREAKPOINT = 920;
@@ -24,42 +24,42 @@ const MENU_ITEM_CONFIG: Record<MenuItemKey, MenuItemConfig> = {
     location: "board",
     isModeratorOnly: true,
     color: "backlog-blue",
-    icon: GeneralSettings,
+    icon: GeneralSettingsIcon,
   },
   participants: {
     localizationKey: "Participants",
     location: "participants",
     isModeratorOnly: false,
     color: "value-violet",
-    icon: Participants,
+    icon: ParticipantsIcon,
   },
   appearance: {
     localizationKey: "Appearance",
     location: "appearance",
     isModeratorOnly: false,
     color: "poker-purple",
-    icon: SettingsAppearance,
+    icon: SettingsAppearanceIcon,
   },
   share: {
     localizationKey: "ShareSession",
     location: "share",
     isModeratorOnly: false,
     color: "planning-pink",
-    icon: Share,
+    icon: ShareIcon,
   },
   export: {
     localizationKey: "ExportBoard",
     location: "export",
     isModeratorOnly: false,
     color: "backlog-blue",
-    icon: FileDefault,
+    icon: FileDefaultIcon,
   },
   feedback: {
     localizationKey: "Feedback",
     location: "feedback",
     isModeratorOnly: false,
     color: "value-violet",
-    icon: SettingsFeedback,
+    icon: SettingsFeedbackIcon,
   },
   profile: {
     localizationKey: "Profile",
