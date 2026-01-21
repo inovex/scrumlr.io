@@ -16,10 +16,11 @@ const renderSettingsDialog = (overwrite?: Partial<ApplicationState>) =>
     </I18nextProvider>
   );
 
-Object.assign(navigator, {
-  clipboard: {
-    writeText: () => {},
+Object.defineProperty(navigator, "clipboard", {
+  value: {
+    writeText: vi.fn(),
   },
+  configurable: true,
 });
 
 describe("ShareQrCode Tests", () => {
