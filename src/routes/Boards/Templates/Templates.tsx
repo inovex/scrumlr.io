@@ -6,8 +6,8 @@ import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
-import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
-import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
+import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.svg";
+import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.svg";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";

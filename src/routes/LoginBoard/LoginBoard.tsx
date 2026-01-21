@@ -16,10 +16,10 @@ import {Input} from "components/Input/Input";
 import {LoginProviders} from "components/LoginProviders";
 import {ValidationError} from "components/ValidationError";
 // assets
-import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
-import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
-import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.png";
-import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.png";
+import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.svg";
+import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.svg";
+import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
+import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.svg";
 // styles
 import "./LoginBoard.scss";
 
