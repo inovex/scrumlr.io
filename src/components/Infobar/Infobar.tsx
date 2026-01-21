@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router";
 import _ from "underscore";
-import {Hidden, Share, Visible} from "components/Icon";
+import {HiddenIcon, ShareIcon, VisibleIcon} from "components/Icon";
 import {Timer} from "components/Timer";
 import {Tooltip} from "components/Tooltip";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
@@ -30,12 +30,12 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.activeVoting && state.isVotingAnonymous && (
         <span className="info-bar__icon" data-tooltip-id="info-bar__tooltip" data-tooltip-content={t("InfoBar.VotingIsAnonymous")}>
-          <Hidden />
+          <HiddenIcon />
         </span>
       )}
       {state.activeVoting && !state.isVotingAnonymous && (
         <span className="info-bar__icon" data-tooltip-id="info-bar__tooltip" data-tooltip-content={t("InfoBar.VotingIsNotAnonymous")}>
-          <Visible />
+          <VisibleIcon />
         </span>
       )}
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
@@ -50,7 +50,7 @@ export const InfoBar = () => {
           data-tooltip-content={t("InfoBar.ReturnToPresentedNote")}
           to={`note/${state.sharedNote}/stack`}
         >
-          <Share />
+          <ShareIcon />
         </Link>
       )}
       <Tooltip id="info-bar__tooltip" />
