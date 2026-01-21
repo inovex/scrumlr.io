@@ -1,9 +1,9 @@
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
-import {default as German} from "assets/flags/DE.svg";
-import {default as English} from "assets/flags/US.svg";
-import {default as French} from "assets/flags/FR.svg";
+import German from "assets/flags/DE.svg?react";
+import English from "assets/flags/US.svg?react";
+import French from "assets/flags/FR.svg?react";
 import {ArrowRightIcon, Logout} from "components/Icon";
 import {Link, useHref} from "react-router";
 import {AppInfo} from "components/AppInfo";

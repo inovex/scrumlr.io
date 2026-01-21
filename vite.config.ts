@@ -6,13 +6,7 @@ import * as path from "node:path";
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgr({
-    svgrOptions: {
-      exportType: 'default',
-      ref: true,
-      svgo: false,
-      titleProp: true,
-    },
-    include: '**/*.svg',
+    include: '**/*.svg?react',
   })] as ViteUserConfig['plugins'],
   css: {
     preprocessorOptions: {

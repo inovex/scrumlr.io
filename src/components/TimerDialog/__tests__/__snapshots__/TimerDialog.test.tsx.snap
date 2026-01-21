@@ -1,4 +1,172 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TimerDialog > should match the snapshot 1`] = `
+<div
+  class="portal"
+  role="dialog"
+>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    data-focus-lock-disabled="false"
+  >
+    <div
+      class="portal__frame accent-color__backlog-blue"
+    >
+      <div
+        class="portal__content"
+        role="dialog"
+      >
+        <aside
+          class="dialog timer-dialog accent-color__planning-pink"
+        >
+          <article
+            class="dialog__content"
+          >
+            <h2
+              class="dialog__header-text"
+            >
+              Timer
+            </h2>
+            <button
+              class="dialog__button"
+              data-testid="timer-dialog__1-minute-button"
+            >
+              <label>
+                1 minute
+              </label>
+              <span
+                class="timer-dialog__button-icon"
+              >
+                1
+              </span>
+            </button>
+            <button
+              class="dialog__button"
+              data-testid="timer-dialog__3-minute-button"
+            >
+              <label>
+                3 minutes
+              </label>
+              <span
+                class="timer-dialog__button-icon"
+              >
+                3
+              </span>
+            </button>
+            <button
+              class="dialog__button"
+              data-testid="timer-dialog__5-minute-button"
+            >
+              <label>
+                5 minutes
+              </label>
+              <span
+                class="timer-dialog__button-icon"
+              >
+                5
+              </span>
+            </button>
+            <button
+              class="dialog__button"
+              data-testid="timer-dialog__custom-minute-button"
+            >
+              <label>
+                Custom time
+              </label>
+              <div
+                class="timer-dialog__custom-time-controls"
+              >
+                <button
+                  aria-label="Reduce time"
+                  class="timer-dialog__time-button"
+                  data-testid="timer-dialog__minus-button"
+                >
+                  <svg
+                    fill="none"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    width="32"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M24 16H8"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                    />
+                  </svg>
+                </button>
+                <label
+                  class="timer-dialog__time-label"
+                >
+                  10
+                </label>
+                <button
+                  aria-label="Increase time"
+                  class="timer-dialog__time-button"
+                  data-testid="timer-dialog__plus-button"
+                >
+                  <svg
+                    class="icon"
+                    fill="none"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    width="32"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M24 16L8 16"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                    />
+                    <path
+                      d="M16 8L16 24"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </button>
+          </article>
+          <button
+            aria-label="Close"
+            class="dialog__close-button"
+          >
+            <svg
+              class="dialog__close-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+            </svg>
+          </button>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</div>
+`;
 
 exports[`TimerDialog should match the snapshot 1`] = `
 <div

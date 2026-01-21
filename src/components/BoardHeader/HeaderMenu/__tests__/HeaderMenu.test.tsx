@@ -11,14 +11,13 @@ Object.assign(navigator, {
   },
 });
 
-jest.mock("utils/export", () => ({
-  ...jest.requireActual("utils/export"),
-  exportAsJSON: jest.fn(),
-  exportAsCSV: jest.fn(),
-  exportAsCSVZip: jest.fn(),
-}));
+vi.mock("utils/export", async () => ({
+  exportAsJSON: vi.fn(),
+  exportAsCSV: vi.fn(),
+  exportAsCSVZip: vi.fn(),
+}))
 
-jest.mock("file-saver", () => ({saveAs: jest.fn()}));
+vi.mock("file-saver", async () => ({saveAs: vi.fn()}));
 
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
   return (
