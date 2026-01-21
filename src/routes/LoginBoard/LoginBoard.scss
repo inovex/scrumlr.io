@@ -27,7 +27,7 @@ $space--between: styles.$spacing--xl;
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
   padding: styles.$spacing--base;
-  padding-top: styles.$spacing--2xl;
+  padding-top: styles.$spacing--3xl;
 
   display: flex;
   flex-direction: column;
@@ -115,7 +115,7 @@ $space--between: styles.$spacing--xl;
 .login-board__features {
   display: flex;
   flex-direction: column;
-  gap: styles.$spacing--sm; // between the points of login provider
+  gap: styles.$spacing--lg; // between the points of login provider
 }
 
 .login-board__feature {
@@ -188,13 +188,13 @@ $space--between: styles.$spacing--xl;
   position: relative;
   bottom: auto;
   padding-top: $space--between; // spacing above the terms
-  padding-bottom: 0;
+  padding-bottom: styles.$spacing--base;
   text-align: center;
   color: styles.$navy--700;
   font-size: styles.$text--sm;
 
   & a {
-    font-weight: bold;
+    font-weight: 600;
     text-decoration: underline;
     color: inherit;
 
