@@ -35,6 +35,7 @@ describe("Avatar", () => {
 
   test("seed will generate facial hair and accessories", () => {
     const {container} = render(<Avatar seed="2" />);
+    console.log(container);
     expect(container.querySelector("[id^=Facial]")).toBeInTheDocument();
     expect(container.querySelector("[id^=Top\\/_Resources]")).toBeInTheDocument();
   });

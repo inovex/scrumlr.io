@@ -1,4 +1,164 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ColumnHeader > should render correctly 1`] = `
+<div>
+  <div
+    class="column-header"
+  >
+    <div
+      class="column-details column-details--moderator-view"
+    >
+      <div
+        class="column-details__name-and-settings-wrapper"
+      >
+        <div
+          class="column-details__name-wrapper"
+        >
+          <div
+            class="column-details__name column-details__name--moderator"
+            id="col-test-columns-id-1-name"
+            role="button"
+            tabindex="0"
+          >
+            test-columns-name-1
+          </div>
+          <div
+            class="column-details__notes-count"
+          >
+            1
+          </div>
+          <svg
+            class="column-details__edit-icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21.538 10.55L12.49 19.583M12.49 19.583C11.9659 20.1101 11.6717 20.8232 11.6717 21.5665C11.6717 22.3099 11.9659 23.023 12.49 23.55M12.49 19.583C12.231 19.8434 11.9231 20.0501 11.584 20.1911C11.2449 20.3322 10.8813 20.4049 10.514 20.405C10.1998 20.4021 9.89047 20.3263 9.61042 20.1837C9.33038 20.0411 9.08721 19.8355 8.90002 19.583"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-opacity="0.7"
+              stroke-width="1.5"
+            />
+            <path
+              d="M23.872 12.4359C22.772 13.5109 20.357 15.8919 18.152 18.0419L11.976 23.9989L6.5 25.2499L7.79 19.9359L9.34 18.4359L19.528 8.54994L20.649 7.45894C21.805 6.33794 23.382 6.62994 24.539 7.74994C24.9998 8.17552 25.3327 8.72136 25.5 9.32594"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.75"
+            />
+            <path
+              d="M16.981 25.25H25.5"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.75"
+            />
+          </svg>
+        </div>
+        <button
+          class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+        >
+          <svg
+            class="column-details__settings-icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="6.5"
+              cy="16"
+              fill="currentColor"
+              r="2.5"
+            />
+            <circle
+              cx="16"
+              cy="16"
+              fill="currentColor"
+              r="2.5"
+            />
+            <circle
+              cx="25.5"
+              cy="16"
+              fill="currentColor"
+              r="2.5"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="column-details__description-wrapper column-details__description-wrapper--moderator-view"
+      >
+        <div
+          class="column-details__description--placeholder column-details__description--placeholder-moderator"
+          role="button"
+          tabindex="0"
+        >
+          Add description (optional)
+        </div>
+      </div>
+      <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+       
+    </div>
+    <form
+      class="note-input"
+    >
+      <textarea
+        class="note-input__input"
+        data-clarity-mask="True"
+        maxlength="1024"
+        placeholder="Add your note..."
+      />
+      <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+      <button
+        aria-label="Create note"
+        class="note-input__add-button"
+        tabindex="-1"
+        title="Create note"
+        type="submit"
+      >
+        <svg
+          class="note-input__icon--add"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M24 16L8 16"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
+          <path
+            d="M16 8L16 24"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+`;
 
 exports[`ColumnHeader should render correctly 1`] = `
 <div>

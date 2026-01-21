@@ -2,7 +2,7 @@ import {render} from "testUtils";
 import {Timer} from "components/Timer";
 import i18n from "i18n";
 
-jest.useFakeTimers().setSystemTime(new Date(60000));
+vi.useFakeTimers().setSystemTime(new Date(60000));
 
 describe("Timer", () => {
   test("should render correctly", () => {

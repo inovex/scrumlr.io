@@ -7,28 +7,32 @@ import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";
 import {API} from "api";
 import {resources} from "i18nTest";
+import {Mock} from "vitest";
 
 // Mock the API
-jest.mock("api", () => ({
+vi.mock("api", async () => ({
   API: {
-    createBoard: jest.fn(),
+    createBoard: vi.fn()
   },
 }));
 
 // Mock the navigate function
-const mockNavigate = jest.fn();
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = vi.fn();
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe("LegacyNewBoard", () => {
   const defaultState = getTestApplicationState();
   const signInToCreateBoardText = resources.en.translation.Templates.TemplateCard.signInToCreateBoards;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    (API.createBoard as jest.Mock).mockResolvedValue("board-id-123");
+    vi.clearAllMocks();
+    (API.createBoard as Mock).mockResolvedValue("board-id-123");
   });
 
   const renderLegacyNewBoard = (state?: Partial<ApplicationState>) => {

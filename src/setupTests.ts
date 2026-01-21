@@ -2,7 +2,9 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-/* import "@testing-library/jest-dom";
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
+/*
 
 // import {TextEncoder} from "util";
 
@@ -19,6 +21,14 @@ global.TextEncoder = TextEncoder;
 // https://yarnpkg.com/package?q=jest-matchmedia&name=jest-matchmedia-mock
 // fortunately, this seems to do the trick:
 // https://github.com/facebook/create-react-app/issues/10126#issuecomment-735272763
+*/
+
+class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+global.ResizeObserver = ResizeObserverMock;
 
 window.matchMedia = (query) => ({
   matches: false,
@@ -30,4 +40,3 @@ window.matchMedia = (query) => ({
   removeEventListener: vi.fn(),
   dispatchEvent: vi.fn(),
 });
-*/

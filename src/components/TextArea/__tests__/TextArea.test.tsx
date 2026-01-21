@@ -7,7 +7,7 @@ import getTestStore from "utils/test/getTestStore";
 describe("TextArea", () => {
   const defaultProps = {
     input: "Test content",
-    setInput: jest.fn(),
+    setInput: vi.fn(),
   };
 
   const renderTextArea = (props: any) => {
@@ -39,7 +39,7 @@ describe("TextArea", () => {
   });
 
   it("should handle double-click events when readOnly", () => {
-    const onDoubleClick = jest.fn();
+    const onDoubleClick = vi.fn();
     const {container} = renderTextArea({...defaultProps, readOnly: true, onDoubleClick});
     const textarea = container.querySelector("textarea")!;
 
@@ -48,7 +48,7 @@ describe("TextArea", () => {
   });
 
   it("should not handle double-click events when disabled", () => {
-    const onDoubleClick = jest.fn();
+    const onDoubleClick = vi.fn();
     const {container} = renderTextArea({...defaultProps, disabled: true, onDoubleClick});
     const textarea = container.querySelector("textarea")!;
 
@@ -58,7 +58,7 @@ describe("TextArea", () => {
   });
 
   it("should have readOnly attribute set correctly", () => {
-    const setInput = jest.fn();
+    const setInput = vi.fn();
     const {container} = renderTextArea({
       input: "Original content",
       setInput,
@@ -74,7 +74,7 @@ describe("TextArea", () => {
   });
 
   it("should allow editing when neither readOnly nor disabled", () => {
-    const setInput = jest.fn();
+    const setInput = vi.fn();
     const {container} = renderTextArea({
       input: "Original content",
       setInput,

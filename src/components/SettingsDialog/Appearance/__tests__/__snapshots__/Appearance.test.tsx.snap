@@ -1,4 +1,1060 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Appearance > should render all Settings correctly with Snowfall 1`] = `
+<div
+  class="settings-dialog__container accent-color__backlog-blue"
+>
+  <header
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text"
+    >
+      Appearance
+    </h2>
+  </header>
+  <div
+    class="appearance-container"
+  >
+    <div
+      class="appearance-settings__theme-container"
+    >
+      <span
+        class="appearance-settings__theme-title"
+      >
+        Color scheme
+      </span>
+      <form
+        class="appearance-settings__theme-options"
+      >
+        <label
+          class="appearence-settings__theme-option"
+          for="auto"
+          title="Scrumlr will match the appearance mode (dark or light) with your active system settings"
+        >
+          <input
+            checked=""
+            id="auto"
+            name="themeAuto"
+            type="radio"
+            value="auto"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="/src/assets/themes/theme-preview-light.svg"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="/src/assets/themes/theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+            </svg>
+            <span>
+              Auto
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="light"
+        >
+          <input
+            id="light"
+            name="themeLight"
+            type="radio"
+            value="light"
+          />
+          <img
+            alt="Color scheme Light"
+            src="/src/assets/themes/theme-preview-light.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 21C16.9889 21 17.9556 20.7068 18.7779 20.1573C19.6001 19.6079 20.241 18.8271 20.6194 17.9134C20.9978 16.9998 21.0969 15.9945 20.9039 15.0246C20.711 14.0546 20.2348 13.1637 19.5355 12.4645C18.8363 11.7652 17.9454 11.289 16.9755 11.0961C16.0055 10.9031 15.0002 11.0022 14.0866 11.3806C13.173 11.759 12.3921 12.3999 11.8427 13.2222C11.2932 14.0444 11 15.0111 11 16C11 17.3261 11.5268 18.5979 12.4645 19.5355C13.4021 20.4732 14.6739 21 16 21Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M16 6V8M16 24V26M26 16H24M8 16H6"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M9 9L10.556 10.556"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21.444 21.444L23 23"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M23 9L21.444 10.556"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10.556 21.444L9 23"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M16.958 13.164C16.958 13.2187 16.9543 13.273 16.947 13.327C16.8928 13.9593 16.6948 14.5709 16.368 15.115C16.0441 15.6553 15.6026 16.1157 15.0763 16.462C14.55 16.8082 13.9524 17.0314 13.328 17.115"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+            </svg>
+            <span>
+              Light
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="dark"
+        >
+          <input
+            id="dark"
+            name="themeDark"
+            type="radio"
+            value="dark"
+          />
+          <img
+            alt="Color scheme Dark"
+            src="/src/assets/themes/theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 9C13.4087 9 11.8826 9.63214 10.7574 10.7574C9.63214 11.8826 9 13.4087 9 15"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.4"
+              />
+              <path
+                d="M16.933 6C17.6155 7.2714 17.956 8.69834 17.9209 10.1409C17.8858 11.5835 17.4765 12.9923 16.733 14.229C15.9887 15.4685 14.9367 16.4947 13.6791 17.208C12.4215 17.9213 11.0008 18.2974 9.555 18.3C8.32775 18.3062 7.11413 18.0427 6 17.528C6.28443 19.3883 7.08514 21.1315 8.31108 22.5594C9.53702 23.9872 11.139 25.0425 12.9349 25.6051C14.7308 26.1677 16.6485 26.2151 18.47 25.742C20.2915 25.2688 21.9436 24.2941 23.2387 22.9286C24.5337 21.5631 25.4196 19.8616 25.7956 18.0176C26.1717 16.1736 26.0228 14.2611 25.3659 12.4975C24.709 10.734 23.5704 9.19009 22.0797 8.04146C20.5889 6.89284 18.8058 6.18554 16.933 6Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+            </svg>
+            <span>
+              Dark
+            </span>
+          </p>
+        </label>
+      </form>
+    </div>
+    <section>
+      <button
+        aria-checked="false"
+        aria-label="Show snowfall"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show snowfall
+        </span>
+        <div
+          class="toggle"
+        />
+      </button>
+    </section>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show hotkey notifications"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show hotkey notifications
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show board reactions"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show board reactions
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Emoji skin tone
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <span>
+            👏
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 10L19 16L13 22"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏻
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏼
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏽
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏾
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏿
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Language
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <svg
+            class="settings-dropdown__item-icon"
+            height="512"
+            viewBox="0 0 512 512"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="a"
+            >
+              <circle
+                cx="256"
+                cy="256"
+                fill="#fff"
+                r="256"
+              />
+            </mask>
+            <g
+              mask="url(#a)"
+            >
+              <path
+                d="M0 256 256 0h256v55.7l-20.7 34.5 20.7 32.2v66.8l-21.2 32.7L512 256v66.8l-24 31.7 24 35.1v66.7l-259.1 28.3L0 456.3v-66.7l27.1-33.3L0 322.8z"
+                fill="#eee"
+              />
+              <path
+                d="M256 256h256v-66.8H236.9zm-19.1-133.6H512V55.7H236.9zM512 512v-55.7H0V512zM0 389.6h512v-66.8H0z"
+                fill="#d80027"
+              />
+              <path
+                d="M0 0h256v256H0z"
+                fill="#0052b4"
+              />
+              <path
+                d="M15 14.5 6.9 40H-20L1.7 55.8l-8.3 25.5L15 65.5l21.6 15.8-8.2-25.4L50.2 40H23.4zm91.8 0L98.5 40H71.7l21.7 15.8-8.3 25.5 21.7-15.8 21.7 15.8-8.3-25.4L142 40h-26.8zm91.9 0-8.3 25.6h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16H207zM15 89.2l-8.3 25.5H-20l21.7 15.8-8.3 25.5L15 140l21.6 15.7-8.2-25.3 21.7-16H23.4zm91.8 0-8.3 25.5H71.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16h-26.8zm91.8 0-8.3 25.5h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16H207zM15 163.6l-8.3 25.5H-20L1.6 205l-8.3 25.5L15 214.6l21.7 15.8-8.3-25.4 21.7-15.9H23.3zm91.8 0-8.3 25.5H71.7L93.4 205l-8.3 25.5 21.7-15.8 21.7 15.8-8.3-25.4 21.7-15.9h-26.8zm91.8 0-8.3 25.5h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.7 15.8L212 205l21.7-15.9H207z"
+                fill="#eee"
+              />
+            </g>
+          </svg>
+          <span>
+            English
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 10L19 16L13 22"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+              height="512"
+              viewBox="0 0 512 512"
+              width="512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="a"
+              >
+                <circle
+                  cx="256"
+                  cy="256"
+                  fill="#fff"
+                  r="256"
+                />
+              </mask>
+              <g
+                mask="url(#a)"
+              >
+                <path
+                  d="m0 345 256.7-25.5L512 345v167H0z"
+                  fill="#ffda44"
+                />
+                <path
+                  d="m0 167 255-23 257 23v178H0z"
+                  fill="#d80027"
+                />
+                <path
+                  d="M0 0h512v167H0z"
+                  fill="#333"
+                />
+              </g>
+            </svg>
+            <span>
+              German
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+              height="512"
+              viewBox="0 0 512 512"
+              width="512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="a"
+              >
+                <circle
+                  cx="256"
+                  cy="256"
+                  fill="#fff"
+                  r="256"
+                />
+              </mask>
+              <g
+                mask="url(#a)"
+              >
+                <path
+                  d="M0 0h512v512H0z"
+                  fill="#eee"
+                />
+                <path
+                  d="M0 0h170.7v512H0z"
+                  fill="#0052b4"
+                />
+                <path
+                  d="M341.3 0H512v512H341.3z"
+                  fill="#d80027"
+                />
+              </g>
+            </svg>
+            <span>
+              French
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Appearance > should render all Settings correctly without Snowfall 1`] = `
+<div
+  class="settings-dialog__container accent-color__backlog-blue"
+>
+  <header
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text"
+    >
+      Appearance
+    </h2>
+  </header>
+  <div
+    class="appearance-container"
+  >
+    <div
+      class="appearance-settings__theme-container"
+    >
+      <span
+        class="appearance-settings__theme-title"
+      >
+        Color scheme
+      </span>
+      <form
+        class="appearance-settings__theme-options"
+      >
+        <label
+          class="appearence-settings__theme-option"
+          for="auto"
+          title="Scrumlr will match the appearance mode (dark or light) with your active system settings"
+        >
+          <input
+            checked=""
+            id="auto"
+            name="themeAuto"
+            type="radio"
+            value="auto"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="/src/assets/themes/theme-preview-light.svg"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="/src/assets/themes/theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+            </svg>
+            <span>
+              Auto
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="light"
+        >
+          <input
+            id="light"
+            name="themeLight"
+            type="radio"
+            value="light"
+          />
+          <img
+            alt="Color scheme Light"
+            src="/src/assets/themes/theme-preview-light.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 21C16.9889 21 17.9556 20.7068 18.7779 20.1573C19.6001 19.6079 20.241 18.8271 20.6194 17.9134C20.9978 16.9998 21.0969 15.9945 20.9039 15.0246C20.711 14.0546 20.2348 13.1637 19.5355 12.4645C18.8363 11.7652 17.9454 11.289 16.9755 11.0961C16.0055 10.9031 15.0002 11.0022 14.0866 11.3806C13.173 11.759 12.3921 12.3999 11.8427 13.2222C11.2932 14.0444 11 15.0111 11 16C11 17.3261 11.5268 18.5979 12.4645 19.5355C13.4021 20.4732 14.6739 21 16 21Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M16 6V8M16 24V26M26 16H24M8 16H6"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M9 9L10.556 10.556"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21.444 21.444L23 23"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M23 9L21.444 10.556"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10.556 21.444L9 23"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M16.958 13.164C16.958 13.2187 16.9543 13.273 16.947 13.327C16.8928 13.9593 16.6948 14.5709 16.368 15.115C16.0441 15.6553 15.6026 16.1157 15.0763 16.462C14.55 16.8082 13.9524 17.0314 13.328 17.115"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+            </svg>
+            <span>
+              Light
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="dark"
+        >
+          <input
+            id="dark"
+            name="themeDark"
+            type="radio"
+            value="dark"
+          />
+          <img
+            alt="Color scheme Dark"
+            src="/src/assets/themes/theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 9C13.4087 9 11.8826 9.63214 10.7574 10.7574C9.63214 11.8826 9 13.4087 9 15"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.4"
+              />
+              <path
+                d="M16.933 6C17.6155 7.2714 17.956 8.69834 17.9209 10.1409C17.8858 11.5835 17.4765 12.9923 16.733 14.229C15.9887 15.4685 14.9367 16.4947 13.6791 17.208C12.4215 17.9213 11.0008 18.2974 9.555 18.3C8.32775 18.3062 7.11413 18.0427 6 17.528C6.28443 19.3883 7.08514 21.1315 8.31108 22.5594C9.53702 23.9872 11.139 25.0425 12.9349 25.6051C14.7308 26.1677 16.6485 26.2151 18.47 25.742C20.2915 25.2688 21.9436 24.2941 23.2387 22.9286C24.5337 21.5631 25.4196 19.8616 25.7956 18.0176C26.1717 16.1736 26.0228 14.2611 25.3659 12.4975C24.709 10.734 23.5704 9.19009 22.0797 8.04146C20.5889 6.89284 18.8058 6.18554 16.933 6Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+            </svg>
+            <span>
+              Dark
+            </span>
+          </p>
+        </label>
+      </form>
+    </div>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show hotkey notifications"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show hotkey notifications
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show board reactions"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show board reactions
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Emoji skin tone
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <span>
+            👏
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 10L19 16L13 22"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏻
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏼
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏽
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏾
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏿
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Language
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <svg
+            class="settings-dropdown__item-icon"
+            height="512"
+            viewBox="0 0 512 512"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="a"
+            >
+              <circle
+                cx="256"
+                cy="256"
+                fill="#fff"
+                r="256"
+              />
+            </mask>
+            <g
+              mask="url(#a)"
+            >
+              <path
+                d="M0 256 256 0h256v55.7l-20.7 34.5 20.7 32.2v66.8l-21.2 32.7L512 256v66.8l-24 31.7 24 35.1v66.7l-259.1 28.3L0 456.3v-66.7l27.1-33.3L0 322.8z"
+                fill="#eee"
+              />
+              <path
+                d="M256 256h256v-66.8H236.9zm-19.1-133.6H512V55.7H236.9zM512 512v-55.7H0V512zM0 389.6h512v-66.8H0z"
+                fill="#d80027"
+              />
+              <path
+                d="M0 0h256v256H0z"
+                fill="#0052b4"
+              />
+              <path
+                d="M15 14.5 6.9 40H-20L1.7 55.8l-8.3 25.5L15 65.5l21.6 15.8-8.2-25.4L50.2 40H23.4zm91.8 0L98.5 40H71.7l21.7 15.8-8.3 25.5 21.7-15.8 21.7 15.8-8.3-25.4L142 40h-26.8zm91.9 0-8.3 25.6h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16H207zM15 89.2l-8.3 25.5H-20l21.7 15.8-8.3 25.5L15 140l21.6 15.7-8.2-25.3 21.7-16H23.4zm91.8 0-8.3 25.5H71.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16h-26.8zm91.8 0-8.3 25.5h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.6 15.7-8.2-25.3 21.7-16H207zM15 163.6l-8.3 25.5H-20L1.6 205l-8.3 25.5L15 214.6l21.7 15.8-8.3-25.4 21.7-15.9H23.3zm91.8 0-8.3 25.5H71.7L93.4 205l-8.3 25.5 21.7-15.8 21.7 15.8-8.3-25.4 21.7-15.9h-26.8zm91.8 0-8.3 25.5h-26.8l21.7 15.8-8.3 25.5 21.7-15.8 21.7 15.8L212 205l21.7-15.9H207z"
+                fill="#eee"
+              />
+            </g>
+          </svg>
+          <span>
+            English
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 10L19 16L13 22"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+              height="512"
+              viewBox="0 0 512 512"
+              width="512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="a"
+              >
+                <circle
+                  cx="256"
+                  cy="256"
+                  fill="#fff"
+                  r="256"
+                />
+              </mask>
+              <g
+                mask="url(#a)"
+              >
+                <path
+                  d="m0 345 256.7-25.5L512 345v167H0z"
+                  fill="#ffda44"
+                />
+                <path
+                  d="m0 167 255-23 257 23v178H0z"
+                  fill="#d80027"
+                />
+                <path
+                  d="M0 0h512v167H0z"
+                  fill="#333"
+                />
+              </g>
+            </svg>
+            <span>
+              German
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+              height="512"
+              viewBox="0 0 512 512"
+              width="512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="a"
+              >
+                <circle
+                  cx="256"
+                  cy="256"
+                  fill="#fff"
+                  r="256"
+                />
+              </mask>
+              <g
+                mask="url(#a)"
+              >
+                <path
+                  d="M0 0h512v512H0z"
+                  fill="#eee"
+                />
+                <path
+                  d="M0 0h170.7v512H0z"
+                  fill="#0052b4"
+                />
+                <path
+                  d="M341.3 0H512v512H341.3z"
+                  fill="#d80027"
+                />
+              </g>
+            </svg>
+            <span>
+              French
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`Appearance should render all Settings correctly with Snowfall 1`] = `
 <div

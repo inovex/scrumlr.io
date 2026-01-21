@@ -1,4 +1,137 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ShareQrCode Tests > render ShareQrCode correctly 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="settings-dialog__container accent-color__backlog-blue"
+        data-testid="qrcode"
+      >
+        <div
+          class="settings-dialog__header"
+        >
+          <h2
+            class="settings-dialog__header-text"
+          >
+             
+            Share Session
+          </h2>
+        </div>
+        <div
+          class="share-session__container"
+        >
+          <div
+            class="share-session__background"
+          >
+            <canvas
+              class="share-qr-code-option__qrcode"
+              height="1024"
+              role="img"
+              style="height: 1024px; width: 1024px;"
+              width="1024"
+            />
+          </div>
+          <button
+            class="share-qr-code-option__copy-to-clipboard"
+          >
+            Copy Invite URL
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="settings-dialog__container accent-color__backlog-blue"
+      data-testid="qrcode"
+    >
+      <div
+        class="settings-dialog__header"
+      >
+        <h2
+          class="settings-dialog__header-text"
+        >
+           
+          Share Session
+        </h2>
+      </div>
+      <div
+        class="share-session__container"
+      >
+        <div
+          class="share-session__background"
+        >
+          <canvas
+            class="share-qr-code-option__qrcode"
+            height="1024"
+            role="img"
+            style="height: 1024px; width: 1024px;"
+            width="1024"
+          />
+        </div>
+        <button
+          class="share-qr-code-option__copy-to-clipboard"
+        >
+          Copy Invite URL
+        </button>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
 
 exports[`ShareQrCode Tests render ShareQrCode correctly 1`] = `
 Object {

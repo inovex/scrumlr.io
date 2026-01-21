@@ -1,4 +1,223 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ColumnDetails > should render correctly (edit) 1`] = `
+<div>
+  <div
+    class="column-details"
+  >
+    <div
+      class="column-details__name-and-settings-wrapper"
+    >
+      <div
+        class="column-details__name-wrapper"
+      >
+        <input
+          class="column-details__name column-details__name--editing"
+          maxlength="128"
+          value="test-columns-name-1"
+        />
+      </div>
+      <button
+        class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+      >
+        <svg
+          class="column-details__settings-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="6.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="25.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="column-details__description-wrapper column-details__description-wrapper--edit"
+    >
+      <style>
+        .text-area { --text-area-rows: 3 }
+      </style>
+      <textarea
+        class="column-details__description-text-area text-area text-area--extendable text-area--embedded text-area--border-thick text-area--text-align-left"
+        maxlength="1024"
+        placeholder="Add description (optional)"
+      />
+      <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+      <div
+        class="column-details__description-mini-menu mini-menu mini-menu--transparent"
+      >
+        <button
+          aria-label="Cancel"
+          class="mini-menu-item--cancel mini-menu__item"
+          data-cy="undefined-item-Cancel"
+          data-tooltip-content="Cancel"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Cancel5"
+        >
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21.3137 10L10 21.3137"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M10 10L21.3137 21.3137"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
+        </button>
+        <button
+          aria-label="Save"
+          class="mini-menu-item--save mini-menu__item"
+          data-cy="undefined-item-Save"
+          data-tooltip-content="Save"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Save6"
+        >
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+              stroke="currentColor"
+              stroke-linecap="square"
+              stroke-width="1.75"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div
+      class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+      style="--top-distance: 0px;"
+    >
+      <ul
+        class="emoji-suggestions__list"
+      />
+    </div>
+     
+  </div>
+</div>
+`;
+
+exports[`ColumnDetails > should render correctly (view) 1`] = `
+<div>
+  <div
+    class="column-details"
+  >
+    <div
+      class="column-details__name-and-settings-wrapper"
+    >
+      <div
+        class="column-details__name-wrapper"
+      >
+        <div
+          class="column-details__name"
+          id="col-test-columns-id-1-name"
+          role="button"
+          tabindex="0"
+        >
+          test-columns-name-1
+        </div>
+        <div
+          class="column-details__notes-count"
+        >
+          1
+        </div>
+      </div>
+      <button
+        class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+      >
+        <svg
+          class="column-details__settings-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="6.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="25.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="column-details__description-wrapper column-details__description-wrapper--view column-details__description-wrapper--empty"
+    >
+      <div
+        class="column-details__description--placeholder"
+        role="button"
+        tabindex="0"
+      >
+        Add description (optional)
+      </div>
+    </div>
+    <div
+      class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+      style="--top-distance: 0px;"
+    >
+      <ul
+        class="emoji-suggestions__list"
+      />
+    </div>
+     
+  </div>
+</div>
+`;
 
 exports[`ColumnDetails should render correctly (edit) 1`] = `
 <div>

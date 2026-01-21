@@ -17,7 +17,7 @@ const mockEmojis: EmojiData[] = [
 
 function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: Partial<ApplicationState>) {
   const suggestionAutocompleteProps: EmojiSuggestionsProps = {
-    acceptSuggestion: jest.fn(),
+    acceptSuggestion: vi.fn(),
     keyboardFocusedIndex: 0,
     suggestions: mockEmojis,
     ...props,
@@ -37,7 +37,7 @@ describe("EmojiSuggestions", () => {
   });
 
   it("should accept suggestion on click", () => {
-    const acceptSuggestion = jest.fn();
+    const acceptSuggestion = vi.fn();
     const {container} = render(
       createSuggestions({
         acceptSuggestion,
@@ -57,7 +57,7 @@ describe("EmojiSuggestions", () => {
     });
 
     it("should pass skin tone to acceptSuggestions", () => {
-      const acceptSuggestion = jest.fn();
+      const acceptSuggestion = vi.fn();
       const {container} = render(
         createSuggestions(
           {

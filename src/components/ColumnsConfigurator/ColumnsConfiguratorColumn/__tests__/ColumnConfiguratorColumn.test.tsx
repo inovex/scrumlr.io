@@ -7,6 +7,7 @@ import {MockStoreEnhanced} from "redux-mock-store";
 import {ApplicationState} from "store";
 import {fireEvent} from "@testing-library/react";
 import {convertToEditableColumn} from "../../ColumnsConfigurator.utils";
+import {vi} from "vitest";
 
 describe("ColumnConfiguratorColumn render", () => {
   let testStore: MockStoreEnhanced<ApplicationState>;
@@ -28,7 +29,7 @@ describe("ColumnConfiguratorColumn render", () => {
       column: editableTemplatesColumn0,
       index: 0,
       allColumns,
-      editColumn: jest.fn(),
+      editColumn: vi.fn(),
     };
 
     return render(<ColumnsConfiguratorColumn {...defaultProps} {...override}/>);
@@ -76,7 +77,7 @@ describe("ColumnConfiguratorColumn render", () => {
   // opens color picker, select pink color, then checks if editColumn fn has been called
   it("should be able to change color", async () => {
     const columnId = "test-templates-columns-id-1";
-    const editColumnSpy: jest.Mock<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void> = jest.fn();
+    const editColumnSpy: vi.Mock<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void> = vi.fn();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", columnId, 0, editColumnSpy);
 
     const colorPickerElement = container.querySelector(".columns-configurator-column__color-picker")!;
@@ -91,7 +92,7 @@ describe("ColumnConfiguratorColumn render", () => {
   });
 
   it("should be able to toggle visibility", () => {
-    const editColumnSpy: jest.Mock<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void> = jest.fn();
+    const editColumnSpy: vi.Mock<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void> = vi.fn();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, editColumnSpy);
     const visibilityButtonElement = container.querySelector(".column-configurator-column__visibility-button")! as HTMLButtonElement;
 
@@ -100,7 +101,7 @@ describe("ColumnConfiguratorColumn render", () => {
   });
 
   it("should be deletable", () => {
-    const deleteColumnSpy: jest.Mock<(templateColumn: EditableTemplateColumn) => void> = jest.fn();
+    const deleteColumnSpy: vi.Mock<(templateColumn: EditableTemplateColumn) => void> = vi.fn();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, undefined, deleteColumnSpy);
     const deleteButtonElement = container.querySelector(".column-configurator-column__delete-button")! as HTMLButtonElement;
 

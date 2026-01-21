@@ -12,10 +12,10 @@ const renderColumnsConfigurator = (templateId: string, override?: Partial<Omit<C
     columns: getTestApplicationState()
       .templateColumns.filter((tc) => tc.template === templateId)
       .map((tc) => convertToEditableColumn(tc)),
-    addColumn: jest.fn(),
-    deleteColumn: jest.fn(),
-    editColumn: jest.fn(),
-    moveColumn: jest.fn(),
+    addColumn: vi.fn(),
+    deleteColumn: vi.fn(),
+    editColumn: vi.fn(),
+    moveColumn: vi.fn(),
   };
 
   return render(<ColumnsConfigurator {...defaultProps} {...override} />);
@@ -31,7 +31,7 @@ describe("ColumnsConfigurator", () => {
   });
 
   it("should fire correct add new template col signal", () => {
-    const addColumnSpy = jest.fn();
+    const addColumnSpy = vi.fn();
     const {container} = renderColumnsConfigurator("test-templates-id-1", {addColumn: addColumnSpy});
     const addTemplateColumnLeft = container.querySelector(".add-template-column--left")!;
     const addTemplateColumnRight = container.querySelector(".add-template-column--right")!;
