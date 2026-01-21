@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
-import {Info, CheckDoneIcon, CloseIcon} from "components/Icon";
+import {InfoIcon, CheckDoneIcon, CloseIcon} from "components/Icon";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -87,7 +87,18 @@ function success(options: Options) {
  * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  */
 function error(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = CloseIcon, iconName = "error"} = options;
+  const {
+    title,
+    message,
+    hintMessage,
+    hintOnClick,
+    buttons,
+    firstButtonOnClick,
+    secondButtonOnClick,
+    autoClose = TOAST_TIMER_DEFAULT,
+    icon = CloseIcon,
+    iconName = "error",
+  } = options;
   toast(
     <CustomToast
       title={title}
@@ -121,7 +132,7 @@ function error(options: Options) {
  * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = Info, iconName = "info"} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, iconName = "info"} = options;
   toast(
     <CustomToast
       title={title}

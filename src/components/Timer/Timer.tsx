@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
-import {CloseIcon, Timer as TimerIcon, MarkAsDone, FlagFinish, PlusOneIcon} from "components/Icon";
+import {CloseIcon, TimerIcon, MarkAsDoneIcon, FlagFinishIcon, PlusOneIconIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -117,7 +117,7 @@ export const Timer = (props: TimerProps) => {
                 className="short-action__button"
                 onClick={() => dispatch(cancelTimer())}
               >
-                <FlagFinish className="short-action__flag-icon" />
+                <FlagFinishIcon className="short-action__flag-icon" />
               </button>
             </li>
           )}
@@ -129,7 +129,7 @@ export const Timer = (props: TimerProps) => {
               className={classNames("short-action__button", {"short-action__button--ready": isReady})}
               onClick={() => dispatch(setUserReadyStatus({userId: me!.user.id, ready: !isReady}))}
             >
-              <MarkAsDone className="short-action__check-icon" />
+              <MarkAsDoneIcon className="short-action__check-icon" />
               <CloseIcon className="short-action__cancel-icon" />
             </button>
           </li>
@@ -144,7 +144,7 @@ export const Timer = (props: TimerProps) => {
           className="timer__increment-button"
           onClick={() => dispatch(incrementTimer())}
         >
-          <PlusOneIcon />
+          <PlusOneIconIcon />
         </button>
       )}
     </div>

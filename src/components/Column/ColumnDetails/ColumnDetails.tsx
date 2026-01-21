@@ -2,7 +2,7 @@ import {Column, createColumn, deleteColumnOptimistically, editColumn} from "stor
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
-import {ArrowDownIcon, ThreeDots as SettingsIcon, CheckDoneIcon, CloseIcon, Edit as EditIcon} from "components/Icon";
+import {ArrowDownIcon, ThreeDotsIcon as SettingsIcon, CheckDoneIcon, CloseIcon, EditIcon} from "components/Icon";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";

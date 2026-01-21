@@ -1,4 +1,4 @@
-import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
+import {JoinIcon, KickIcon, SearchIcon, WifiIcon, MarkAsDoneIcon} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -70,7 +70,7 @@ export const Participants = () => {
       </header>
       <div className="participants__search-input-wrapper">
         <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
-        <Search className="participants__search-icon" />
+        <SearchIcon className="participants__search-icon" />
       </div>
       <div className="participants__filter-buttons">
         <button
@@ -101,7 +101,7 @@ export const Participants = () => {
           onClick={() => setOnlineFilter((o) => !o)}
           title={t("Participants.OnlineFilterTooltip")}
         >
-          <Wifi />
+          <WifiIcon />
         </button>
       </div>
       <div className={classNames("participants__list-wrapper", {"participants__list-scrollable": isScrollable})} ref={listWrapperRef}>
@@ -158,7 +158,7 @@ export const Participants = () => {
                       className="participant__join-icon"
                       onClick={() => banParticipant(participant, false)}
                     >
-                      <Join />
+                      <JoinIcon />
                     </button>
                   ) : (
                     <button
@@ -167,7 +167,7 @@ export const Participants = () => {
                       className="participant__kick-icon"
                       onClick={() => banParticipant(participant, true)}
                     >
-                      <Kick />
+                      <KickIcon />
                     </button>
                   ))}
               </li>
@@ -177,7 +177,7 @@ export const Participants = () => {
       {isModerator && (
         <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
           <div className="participants-reset-state-banner__icon-and-text">
-            <MarkAsDone className="participants-reset-state-banner__check-icon" />
+            <MarkAsDoneIcon className="participants-reset-state-banner__check-icon" />
             <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
           </div>
           <button className="participants-reset-state-banner__button" onClick={resetReadyStateOfAllUsers}>
@@ -191,7 +191,7 @@ export const Participants = () => {
           title={t(selectedParticipant.banned ? "ConfirmationDialog.banParticipant" : "ConfirmationDialog.unbanParticipant", {user: selectedParticipant.participant.user.name})}
           onAccept={() => confirmBan(selectedParticipant.participant, selectedParticipant.banned)} // assertion: selectedParticipant is set
           onDecline={() => resetBanProcess()}
-          icon={Kick}
+          icon={KickIcon}
           className="participants__ban-dialog"
         />
       )}

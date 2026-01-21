@@ -1,6 +1,6 @@
 import {t} from "i18next";
 import {useEffect, useState} from "react";
-import {Hidden as HiddenIcon, Visible as VisibleIcon, DuplicateIcon as ClipboardIcon, Refresh as RefreshIcon, CloseIcon} from "components/Icon";
+import {HiddenIcon, VisibleIcon, DuplicateIcon as ClipboardIcon, RefreshIcon, CloseIcon} from "components/Icon";
 import {generateRandomString} from "utils/random";
 import {TextInputLabel} from "components/TextInputLabel";
 import {TextInput} from "components/TextInput";
