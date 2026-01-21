@@ -46,7 +46,7 @@ tests:
         template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-backend:4.3.1
+          value: scrumlr/scrumlr-backend:4.4.0
         template: /backend/deployment.yaml
 
   - it: should set image tag
