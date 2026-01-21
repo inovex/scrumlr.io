@@ -24,16 +24,16 @@ $padding--mobile: 12.5px styles.$spacing--base;
 
   background-color: styles.$gray--000;
 
+  &--height-small {
+    height: 52px;
+  }
+
   &--height-normal {
     height: 60px;
   }
 
   &--height-larger {
     height: 64px;
-  }
-
-  &--height-small {
-    height: 52px;
   }
 
   &:not(&--disabled) {

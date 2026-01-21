@@ -61,7 +61,7 @@ $side-padding--desktop: 14vw;
     flex-basis: 100%;
     order: 3;
     font-size: styles.$text--lg;
-    line-height: 32px;
+    line-height: styles.$line-height--large;
   }
 }
 
