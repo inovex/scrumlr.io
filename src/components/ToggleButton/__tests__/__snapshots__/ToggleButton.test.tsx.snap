@@ -11,15 +11,3 @@ exports[`ToggleButton > should render correctly 1`] = `
   />
 </button>
 `;
-
-exports[`ToggleButton should render correctly 1`] = `
-<button
-  aria-label="Inactive"
-  aria-pressed="false"
-  class="toggle-button"
->
-  <div
-    class="toggle"
-  />
-</button>
-`;
