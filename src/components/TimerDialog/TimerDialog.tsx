@@ -5,7 +5,7 @@ import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import {getNumberFromStorage, saveToStorage} from "utils/storage";
 import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";
-import {Plus, Minus} from "components/Icon";
+import {PlusIcon, MinusIcon} from "components/Icon";
 import "./TimerDialog.scss";
 import {setTimer} from "store/features";
 
@@ -58,7 +58,7 @@ export const TimerDialog = () => {
             data-testid="timer-dialog__minus-button"
             aria-label={t("Timer.reduce")}
           >
-            <Minus />
+            <MinusIcon />
           </button>
           <label className="timer-dialog__time-label">{customTime}</label>
           <button
@@ -70,7 +70,7 @@ export const TimerDialog = () => {
             data-testid="timer-dialog__plus-button"
             aria-label={t("Timer.increase")}
           >
-            <Plus />
+            <PlusIcon />
           </button>
         </div>
       </button>

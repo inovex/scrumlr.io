@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {animated, Transition} from "@react-spring/web";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
-import {CloseIcon, Warning} from "components/Icon";
+import {CloseIcon, WarningIcon} from "components/Icon";
 import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
@@ -51,7 +51,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                     <h2 className="confirmation-dialog__title">{props.title}</h2>
                     {props.warning && (
                       <div className="confirmation-dialog__warning">
-                        <Warning />
+                        <WarningIcon />
                         <p>{t("ConfirmationDialog.warning")}</p>
                       </div>
                     )}

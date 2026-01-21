@@ -4,7 +4,7 @@ import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
 import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
-import {TemplateGallery, Praise, Bug} from "components/Icon";
+import {TemplateGalleryIcon, PraiseIcon, BugIcon} from "components/Icon";
 import {useOutletContext} from "react-router";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
@@ -73,7 +73,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("PRAISE")}
         />
         <label htmlFor="feedbackTypePraise" className="feedback-option__label">
-          <Praise />
+          <PraiseIcon />
           <span>Praise</span>
         </label>
       </div>
@@ -88,7 +88,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("FEATURE_REQUEST")}
         />
         <label htmlFor="feedbackTypeFeatureRequest" className="feedback-option__label">
-          <TemplateGallery />
+          <TemplateGalleryIcon />
           <span>Feature Request</span>
         </label>
       </div>
@@ -103,7 +103,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("BUG_REPORT")}
         />
         <label htmlFor="feedbackTypeBugReport" className="feedback-option__label">
-          <Bug />
+          <BugIcon />
           <span>Bug Report</span>
         </label>
       </div>

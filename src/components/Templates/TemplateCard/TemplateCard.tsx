@@ -7,7 +7,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
 import {useAppSelector} from "store";
-import {ThreeDots as MenuIcon, ColumnsIcon, Next as NextIcon, CloseIcon, Trash as TrashIcon, Edit as EditIcon} from "components/Icon";
+import {ThreeDotsIcon as MenuIcon, ColumnsIcon, NextIcon, CloseIcon, TrashIcon, EditIcon} from "components/Icon";
 import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
@@ -20,16 +20,16 @@ type TemplateCardProps = {
   disabledReason?: string;
 } & (
   | {
-  templateType: "CUSTOM";
-  onDeleteTemplate: (templateId: string) => void;
-  onToggleFavourite: (templateId: string, favourite: boolean) => void;
-  onNavigateToEdit: (templateId: string) => void;
-}
+      templateType: "CUSTOM";
+      onDeleteTemplate: (templateId: string) => void;
+      onToggleFavourite: (templateId: string, favourite: boolean) => void;
+      onNavigateToEdit: (templateId: string) => void;
+    }
   | {
-  templateType: "RECOMMENDED";
-  onToggleFavourite: (templateId: string, favourite: boolean) => void;
-}
-  );
+      templateType: "RECOMMENDED";
+      onToggleFavourite: (templateId: string, favourite: boolean) => void;
+    }
+);
 
 export const TemplateCard = (props: TemplateCardProps) => {
   const {
@@ -52,9 +52,9 @@ export const TemplateCard = (props: TemplateCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon/>, onClick: () => props.onDeleteTemplate(template.id)},
-          {label: "Edit", element: <EditIcon/>, onClick: () => props.onNavigateToEdit(template.id)},
-          {label: "Close", element: <CloseIcon/>, onClick: closeMenu},
+          {label: "Delete", element: <TrashIcon />, onClick: () => props.onDeleteTemplate(template.id)},
+          {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
+          {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
         focusBehaviour="moveFocus"
         onBlur={() => setShowMiniMenu(false)}
@@ -79,11 +79,11 @@ export const TemplateCard = (props: TemplateCardProps) => {
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={t(template.name, {ns: "templates"})} disabled/>
+        <input className="template-card__title" type="text" value={t(template.name, {ns: "templates"})} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={t(template.description, {ns: "templates"})} disabled/>
-      <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")}/>
+      <TextareaAutosize className={classNames("template-card__description")} value={t(template.description, {ns: "templates"})} disabled />
+      <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
         <div className="template-card__columns-subtitle">
@@ -96,7 +96,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
       <Button
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
-        icon={<NextIcon/>}
+        icon={<NextIcon />}
         onClick={props.disabled ? undefined : () => props.onSelectTemplate({template, columns})}
         disabled={props.disabled}
         dataTooltipId={props.disabled ? "template-card-tooltip" : undefined}

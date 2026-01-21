@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
-import {LockClosed, Trash, Refresh, Info} from "components/Icon";
+import {LockClosedIcon, TrashIcon, RefreshIcon, InfoIcon} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
@@ -71,7 +71,7 @@ export const BoardSettings = () => {
             handleSetPassword("");
           }}
         >
-          <LockClosed />
+          <LockClosedIcon />
           <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
         </button>
       );
@@ -85,7 +85,7 @@ export const BoardSettings = () => {
             handleSetPassword(pw);
           }}
         >
-          <Refresh />
+          <RefreshIcon />
           <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
         </button>
       );
@@ -98,7 +98,7 @@ export const BoardSettings = () => {
       return (
         <>
           <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
-          <LockClosed />
+          <LockClosedIcon />
         </>
       );
     return !isProtected ? (
@@ -106,7 +106,7 @@ export const BoardSettings = () => {
     ) : (
       <>
         <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-        <LockClosed />
+        <LockClosedIcon />
       </>
     );
   };
@@ -251,7 +251,7 @@ export const BoardSettings = () => {
                 </SettingsButton>
                 <a className="board-settings__open-cheat-sheet-button" href={`${import.meta.env.BASE_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
                   <p>{t("Hotkeys.cheatSheet")}</p>
-                  <Info />
+                  <InfoIcon />
                 </a>
               </div>
 
@@ -259,7 +259,7 @@ export const BoardSettings = () => {
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
-                icon={Trash}
+                icon={TrashIcon}
                 reverseOrder
               />
             </>
@@ -270,7 +270,7 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => dispatch(deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
-              icon={Trash}
+              icon={TrashIcon}
               warning
             />
           )}

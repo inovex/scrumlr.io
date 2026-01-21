@@ -6,7 +6,7 @@ import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
 import {PERMANENT_EMOJIS, EmojiData} from "store/features/reactions/types";
 import {addRecentEmoji} from "store/features/recentEmojis/thunks";
-import {Plus} from "components/Icon";
+import {PlusIcon} from "components/Icon";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionPicker.scss";
 import EmojiPicker from "../EmojiPicker/EmojiPicker";
@@ -117,7 +117,7 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
             onClick={togglePicker}
             aria-label="More emojis"
           >
-            <Plus />
+            <PlusIcon />
           </button>
         </div>
       </div>
