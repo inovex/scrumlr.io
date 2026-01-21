@@ -34,6 +34,8 @@ type UserServiceIntegrationTestsuite struct {
 	users                map[string]User
 	boards               map[string]TestBoard
 	sessions             map[string]sessions.BoardSession
+	userService          UserService
+	broker               *realtime.Broker
 }
 
 func TestUserServiceIntegrationTestSuite(t *testing.T) {
@@ -41,13 +43,13 @@ func TestUserServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *UserServiceIntegrationTestsuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
+	dbContainer, dbBun := initialize.StartTestDatabase()
+	suite.SeedDatabase(dbBun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
 	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = bun
+	suite.db = dbBun
 	suite.natsConnectionString = connectionString
 }
 
@@ -56,15 +58,10 @@ func (suite *UserServiceIntegrationTestsuite) TeardownSuite() {
 	initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
-	t := suite.T()
-	ctx := context.Background()
-
-	userName := "Test User"
-
+func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
+		log.Fatalf("Failed to connect to nats server %s", err)
 	}
 
 	noteDatabase := notes.NewNotesDatabase(suite.db)
@@ -76,7 +73,17 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 	userDatabase := NewUserDatabase(suite.db)
 	userService := NewUserService(userDatabase, broker, sessionService)
 
-	user, err := userService.CreateAnonymous(ctx, userName)
+	suite.userService = userService
+	suite.broker = broker
+}
+
+func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
+	t := suite.T()
+	ctx := context.Background()
+
+	userName := "Test User"
+
+	user, err := suite.userService.CreateAnonymous(ctx, userName)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -89,21 +96,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateAppleUser(ctx, "appleId", userName, "")
+	user, err := suite.userService.CreateAppleUser(ctx, "appleId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -116,21 +109,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureadUser() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateAzureAdUser(ctx, "azureId", userName, "")
+	user, err := suite.userService.CreateAzureAdUser(ctx, "azureId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -143,21 +122,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateGitHubUser(ctx, "githubId", userName, "")
+	user, err := suite.userService.CreateGitHubUser(ctx, "githubId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -170,21 +135,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateGoogleUser(ctx, "googleId", userName, "")
+	user, err := suite.userService.CreateGoogleUser(ctx, "googleId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -197,21 +148,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateMicrosoftUser(ctx, "microsoftId", userName, "")
+	user, err := suite.userService.CreateMicrosoftUser(ctx, "microsoftId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -224,21 +161,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.CreateOIDCUser(ctx, "oidcId", userName, "")
+	user, err := suite.userService.CreateOIDCUser(ctx, "oidcId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, user.Name)
@@ -253,23 +176,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	boardId := suite.boards["Update"].id
 	userName := "Test User"
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	user, err := userService.Update(ctx, UserUpdateRequest{ID: userId, Name: userName})
+	user, err := suite.userService.Update(ctx, UserUpdateRequest{ID: userId, Name: userName})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, user.ID)
@@ -288,21 +197,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
 
 	userId := suite.users["Delete"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	err = userService.Delete(ctx, userId)
+	err := suite.userService.Delete(ctx, userId)
 
 	assert.Nil(t, err)
 }
@@ -313,21 +208,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 
 	userId := suite.users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.Get(ctx, userId)
+	user, err := suite.userService.Get(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, user.ID)
@@ -340,21 +221,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 
 	userId := uuid.New()
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.Get(ctx, userId)
+	user, err := suite.userService.Get(ctx, userId)
 
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
@@ -368,21 +235,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
 	board := suite.boards["Update"]
 	userIds := []uuid.UUID{suite.users["Stan"].ID, suite.users["Update"].ID}
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	users, err := userService.GetBoardUsers(ctx, board.id)
+	users, err := suite.userService.GetBoardUsers(ctx, board.id)
 
 	ids := slices.Collect(func(yield func(uuid.UUID) bool) {
 		for _, user := range users {
@@ -399,21 +252,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
 
 	userId := suite.users["Santa"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	available, err := userService.IsUserAvailableForKeyMigration(ctx, userId)
+	available, err := suite.userService.IsUserAvailableForKeyMigration(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, available)
@@ -425,21 +264,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 
 	userId := suite.users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
-	userService := NewUserService(userDatabase, broker, sessionService)
-
-	user, err := userService.SetKeyMigration(ctx, userId)
+	user, err := suite.userService.SetKeyMigration(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, user.ID)

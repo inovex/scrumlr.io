@@ -80,6 +80,15 @@ The port on which the backend should listen for incoming connections.
 SCRUMLR_SERVER_PORT='8080'
 ```
 
+### Server Address
+
+The IP address on which the backend should listen for incoming connections.
+Defaults is an empty string, meaning all available IP addresses.
+
+```ini
+SCRUMLR_SERVER_LISTEN_ADDRESS=''
+```
+
 ### NATS URL
 
 The URL of the NATS server.
