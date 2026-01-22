@@ -1,6 +1,5 @@
 import {MenuBars} from "components/MenuBars";
 import {Provider} from "react-redux";
-import {MockStoreEnhanced} from "redux-mock-store";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import {useTimer} from "utils/hooks/useTimerLeft";
