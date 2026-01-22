@@ -48,7 +48,7 @@ type TestVoting struct {
 	IsAnonymous        bool
 }
 
-type DBBaseIDs struct {
+type DbBaseIDs struct {
 	Users   map[string]TestUser
 	Boards  map[string]TestBoard
 	Columns map[string]TestColumn
@@ -124,8 +124,8 @@ var (
 	}
 )
 
-func GetBaseIDs() DBBaseIDs {
-	baseIDs := DBBaseIDs{
+func GetBaseIDs() DbBaseIDs {
+	baseIDs := DbBaseIDs{
 		Users:   make(map[string]TestUser),
 		Boards:  make(map[string]TestBoard),
 		Columns: make(map[string]TestColumn),
