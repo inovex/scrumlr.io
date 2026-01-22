@@ -42,7 +42,7 @@ describe("Export Boad Tests", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(exportAsJSON).toBeCalled();
+      expect(exportAsJSON).toHaveBeenCalled();
     });
   });
 
@@ -54,7 +54,7 @@ describe("Export Boad Tests", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(exportAsCSV).toBeCalled();
+      expect(exportAsCSV).toHaveBeenCalled();
     });
   });
 });
