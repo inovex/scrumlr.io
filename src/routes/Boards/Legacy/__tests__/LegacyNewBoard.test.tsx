@@ -39,7 +39,6 @@ const getTestState = (isAnonymous: boolean, allowAnonymousBoardCreation: boolean
   });
 
 describe("LegacyNewBoard", () => {
-  const defaultState = getTestApplicationState();
   const signInToCreateBoardText = resources.en.translation.Templates.TemplateCard.signInToCreateBoards;
 
   beforeEach(() => {
