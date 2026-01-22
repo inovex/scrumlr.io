@@ -63,48 +63,6 @@ func (suite *VotingServiceIntegrationTestSuite) TeardownSuite() {
   initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *VotingServiceIntegrationTestSuite) seedVotingVotes(db *bun.DB) {
-  log.Println("Seeding voting votes data")
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update2"].ID)
-
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate2"].ID)
-
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read2"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
-
-  initialize.InsertVote(db, suite.baseData.Boards["Write"].ID, suite.baseData.Votings["Write"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteRemove"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["WriteLimit"].ID, suite.baseData.Votings["WriteLimit"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteLimit"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["WriteClosed"].ID, suite.baseData.Votings["WriteClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteClosed"].ID)
-  initialize.InsertVote(db, suite.baseData.Boards["WriteMultiple"].ID, suite.baseData.Votings["WriteMultiple"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteMultiple"].ID)
-}
-
 func (suite *VotingServiceIntegrationTestSuite) Test_AddVote() {
   t := suite.T()
   ctx := context.Background()
@@ -373,4 +331,46 @@ func (suite *VotingServiceIntegrationTestSuite) Test_GetOpenVoting() {
   assert.Equal(t, false, voting.ShowVotesOfOthers)
   assert.Equal(t, false, voting.IsAnonymous)
   assert.Equal(t, Open, voting.Status)
+}
+
+func (suite *VotingServiceIntegrationTestSuite) seedVotingVotes(db *bun.DB) {
+  log.Println("Seeding voting votes data")
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Update"].ID, suite.baseData.Votings["Update"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Update2"].ID)
+
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate3"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["SortedUpdate"].ID, suite.baseData.Votings["SortedUpdate"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["SortedUpdate2"].ID)
+
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadOpen"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read2"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["Read"].ID, suite.baseData.Votings["ReadClosed"].ID, suite.baseData.Users["Santa"].ID, suite.baseData.Notes["Read1"].ID)
+
+  initialize.InsertVote(db, suite.baseData.Boards["Write"].ID, suite.baseData.Votings["Write"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteRemove"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["WriteLimit"].ID, suite.baseData.Votings["WriteLimit"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteLimit"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["WriteClosed"].ID, suite.baseData.Votings["WriteClosed"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteClosed"].ID)
+  initialize.InsertVote(db, suite.baseData.Boards["WriteMultiple"].ID, suite.baseData.Votings["WriteMultiple"].ID, suite.baseData.Users["Stan"].ID, suite.baseData.Notes["WriteMultiple"].ID)
 }
