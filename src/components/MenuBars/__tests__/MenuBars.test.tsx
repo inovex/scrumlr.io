@@ -6,11 +6,13 @@ import getTestStore from "utils/test/getTestStore";
 import {useTimer} from "utils/hooks/useTimerLeft";
 import getTestParticipant from "../../../utils/test/getTestParticipant";
 import {Mock} from "vitest";
+import getTestApplicationState from "utils/test/getTestApplicationState";
+import {ParticipantRole} from "store/features";
 
 vi.mock("utils/hooks/useTimerLeft");
 
-const createMenuBars = (store: MockStoreEnhanced) => (
-  <Provider store={store}>
+const createMenuBars = (selfRole: ParticipantRole) => (
+  <Provider store={getTestStore({participants: {...getTestApplicationState().participants, self: getTestParticipant({role: selfRole})}})}>
     <MenuBars showNextColumn showPreviousColumn onNextColumn={() => {}} onPreviousColumn={() => {}} />
   </Provider>
 );
@@ -23,26 +25,14 @@ describe("MenuBars", () => {
   test("should match snapshot", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
 
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant({role: "MODERATOR"}),
-        others: [],
-      },
-    });
-    const {container} = render(createMenuBars(store));
+    const {container} = render(createMenuBars("MODERATOR"));
     expect(container.firstChild).toMatchSnapshot();
   });
 
   test("should render both user- and admin-menu for moderators", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
 
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant({role: "MODERATOR"}),
-        others: [],
-      },
-    });
-    const {container} = render(createMenuBars(store));
+    const {container} = render(createMenuBars("MODERATOR"));
     expect(container.getElementsByClassName("admin-menu").length).toBe(1);
     expect(container.getElementsByClassName("user-menu").length).toBe(1);
   });
@@ -50,13 +40,7 @@ describe("MenuBars", () => {
   test("should only render user-menu for participants", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
 
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant({role: "PARTICIPANT"}),
-        others: [],
-      },
-    });
-    const {container} = render(createMenuBars(store));
+    const {container} = render(createMenuBars("PARTICIPANT"));
     expect(container.getElementsByClassName("menu__items").length).toBe(1);
     expect(container.getElementsByClassName("user-menu").length).toBe(1);
   });
@@ -69,36 +53,21 @@ describe("Mark me as Done Tooltip Logic", () => {
 
   it("Does not expand the tooltip if the timer is not expired", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant(),
-        others: [],
-      },
-    });
-    const {asFragment} = render(createMenuBars(store));
+
+    const {asFragment} = render(createMenuBars("PARTICIPANT"));
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("Does not expand the tooltip if the possibleVotes !== usedVotes", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant(),
-        others: [],
-      },
-    });
-    const {asFragment} = render(createMenuBars(store));
+
+    const {asFragment} = render(createMenuBars("PARTICIPANT"));
     expect(asFragment()).toMatchSnapshot();
   });
   it("Expand the tooltip everytime a potential ready state in voting is fulfilled.", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
-    const store = getTestStore({
-      participants: {
-        self: getTestParticipant(),
-        others: [],
-      },
-    });
-    const {asFragment} = render(createMenuBars(store));
+
+    const {asFragment} = render(createMenuBars("PARTICIPANT"));
     expect(asFragment()).toMatchSnapshot();
   });
 });
