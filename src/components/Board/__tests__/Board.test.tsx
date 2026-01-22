@@ -14,7 +14,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   return (
     <Provider store={getTestStore()}>
       <CustomDndContext>
-        <BoardComponent currentUserIsModerator moderating={false}>
+        <BoardComponent currentUserIsModerator moderating={false} locked={false}>
           {colors.map((color, index) => (
             <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" description="" visible={false} index={index} />
           ))}
@@ -31,7 +31,7 @@ describe("basic", () => {
   });
 
   test("correct number of columns is set in inner styles", () => {
-    const {container} = render(createBoardWithColumns("lean-lilac", "planning-pink", "backlog-blue", "poker-purple"));
+    const {container} = render(createBoardWithColumns("value-violet", "planning-pink", "backlog-blue", "poker-purple"));
     expect(container.querySelector("style")).toHaveTextContent(".board { --board__columns: 4 }");
   });
 

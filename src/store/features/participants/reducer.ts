@@ -4,12 +4,12 @@ import {initializeBoard} from "../board";
 import {clearFocusInitiator, createdParticipant, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
 import {editSelf} from "./thunks";
 
-const initialState: ParticipantsState = {};
+const initialState: ParticipantsState = {focusInitiator: null};
 
 const mapParticipantsToState = (participants: ParticipantWithUser[], ownUserId: string): ParticipantsState => {
   const self = participants.find((p) => p.user.id === ownUserId)!;
   const others = participants.filter((p) => p.user.id !== ownUserId);
-  const focusInitiator = undefined;
+  const focusInitiator = null;
 
   return {self, others, focusInitiator};
 };
@@ -38,6 +38,6 @@ export const participantsReducer = createReducer(initialState, (builder) =>
       state.focusInitiator = action.payload;
     })
     .addCase(clearFocusInitiator, (state) => {
-      state.focusInitiator = undefined;
+      state.focusInitiator = null;
     })
 );
