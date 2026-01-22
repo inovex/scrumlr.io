@@ -5,7 +5,7 @@ description: Guide for scrumlr releases
 
 Scrumlr gets new releases about every 4 weeks on [github](https://github.com/inovex/scrumlr.io/releases).
 The releases are get a version that follows the [semver versioning](https://semver.org/).
-A scrumlr version looks like the following: `v4.3.1`.
+A scrumlr version looks like the following: `v4.4.0`.
 
 ## Create a new release
 

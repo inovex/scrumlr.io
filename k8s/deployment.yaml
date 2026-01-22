@@ -26,8 +26,13 @@ spec:
       labels:
         app: scrumlr-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: scrumlr
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-server
           args:
             - "/app/main"
@@ -124,8 +129,13 @@ spec:
       labels:
         app: frontend-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: frontend
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
           resources:
             requests:
@@ -171,8 +181,13 @@ spec:
       labels:
         app: landing-page-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: landing-page
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io-landing-page/image:latest
           resources:
             requests:

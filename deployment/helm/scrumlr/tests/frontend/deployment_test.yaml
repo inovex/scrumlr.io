@@ -46,7 +46,7 @@ tests:
         template: /frontend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-frontend:4.3.1
+          value: scrumlr/scrumlr-frontend:4.4.0
         template: /frontend/deployment.yaml
 
   - it: should set image tag
@@ -597,4 +597,18 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.failureThreshold
           value: 3
+        template: /frontend/deployment.yaml
+
+  - it: should set default security contexts
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.seccompProfile.type
+          value: RuntimeDefault
+        template: /frontend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
         template: /frontend/deployment.yaml
