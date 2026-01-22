@@ -25,7 +25,7 @@ export interface ParticipantWithUserId {
 export type ParticipantsState = {
   self?: ParticipantWithUser;
   others?: ParticipantWithUser[];
-  focusInitiator?: ParticipantWithUser;
+  focusInitiator?: ParticipantWithUser | null;
 };
 
 export type ParticipantExtendedInfo = ParticipantWithUser & {displayName: string; isSelf: boolean};
