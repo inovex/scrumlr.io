@@ -1,6 +1,7 @@
 package serviceinitialize
 
 import (
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -13,6 +14,11 @@ func NewApiInitializer(basePath string) ApiInitializer {
 	initializer := new(ApiInitializer)
 	initializer.basePath = basePath
 	return *initializer
+}
+
+func (init *ApiInitializer) InitializeAuthApi(authService auth.AuthService, userService users.UserService) auth.AuthApi {
+	authApi := auth.NewAuthApi(authService, userService)
+	return authApi
 }
 
 func (init *ApiInitializer) InitializeBoardApi() {

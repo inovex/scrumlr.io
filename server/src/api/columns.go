@@ -17,7 +17,7 @@ import (
 
 // createColumn creates a new column
 func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.create")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.columns.api.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -54,7 +54,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 // deleteColumn deletes a column
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.delete")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.columns.api.delete")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -76,7 +76,7 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 // updateColumn updates a column
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.update")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.columns.api.update")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -110,7 +110,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumn get a column
 func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.columns.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -132,7 +132,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumns get all columns
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get.all")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.columns.api.get.all")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
