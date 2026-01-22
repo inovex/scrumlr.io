@@ -14,7 +14,6 @@ const userData: Auth[] = [
 
 describe("the board export functions", () => {
   it("returns the board data in markdown format", async () => {
-    // eslint-disable-next-line jest/valid-expect-in-promise
     await import("i18nTest").then(async () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
