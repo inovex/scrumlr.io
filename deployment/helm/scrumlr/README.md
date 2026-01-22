@@ -24,6 +24,8 @@
 | `frontend.secretRef`                          | Name of existing secret. If set override the secrets.                                       | `""`                                         |
 | `frontend.env`                                | Additional environment variables for the frontend container                                 | `[]`                                       |
 | `frontend.resources`                          | Set container requests and limits for different resources like CPU or memory                | `{}`                                         |
+| `frontend.podSecurityContext`                 | Pod-level security context                                                                  | `{"seccompProfile":{"type":"RuntimeDefault"}}` |
+| `frontend.containerSecurityContext`           | Container-level security context                                                            | `{"allowPrivilegeEscalation":false}`          |
 | `frontend.startupProbe.enabled`               | Enable/disable the startup probe                                                            | `true`                                       |
 | `frontend.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated                                                     | `10`                                         |
 | `frontend.startupProbe.periodSeconds`         | How often to perform the probe                                                              | `10`                                         |
@@ -71,6 +73,8 @@
 | `backend.secretRef`                          | Name of existing secret. If set override the secrets and extra secret.                      | `""`                                       |
 | `backend.env`                                | Additional environment variables for the backend container                                  | `[]`                                       |
 | `backend.resources`                          | Set container requests and limits for different resources like CPU or memory                | `{}`                                       |
+| `backend.podSecurityContext`                 | Pod-level security context                                                                  | `{"seccompProfile":{"type":"RuntimeDefault"}}` |
+| `backend.containerSecurityContext`           | Container-level security context                                                            | `{"allowPrivilegeEscalation":false}`          |
 | `backend.startupProbe.enabled`               | Enable/disable the startup probe                                                            | `true`                                     |
 | `backend.startupProbe.initialDelaySeconds`   | Delay before startup probe is initiated                                                     | `10`                                       |
 | `backend.startupProbe.periodSeconds`         | How often to perform the probe                                                              | `10`                                       |
