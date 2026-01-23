@@ -396,7 +396,8 @@ func run(c *cli.Context) error {
 	bun := initialize.InitializeBun(db, logger.GetLogLevel())
 	initializer := serviceinitialize.NewServiceInitializer(bun, rt)
 
-	websocket := initializer.InitializeWebsocket()
+	wsService := initializer.InitializeWebSocketService()
+	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
 	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 
@@ -434,6 +435,7 @@ func run(c *cli.Context) error {
 	s := api.New(
 		basePath,
 		rt,
+		wsService,
 		authConfig,
 
 		userRoutes,
