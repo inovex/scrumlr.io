@@ -32,7 +32,6 @@ describe("Images", () => {
     });
 
     it("should return false it the string is not a URL", async () => {
-      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response());
       const isImage = await isImageUrl(notURL);
       expect(isImage).toBe(false);
     });
