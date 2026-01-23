@@ -5,11 +5,12 @@
 package sessionrequests
 
 import (
-  "net/http"
-  "scrumlr.io/server/websocket"
+	"net/http"
 
-  "github.com/google/uuid"
-  mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/websocket"
+
+	"github.com/google/uuid"
+	mock "github.com/stretchr/testify/mock"
 )
 
 // NewMockSessionRequestWebsocket creates a new instance of MockSessionRequestWebsocket. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.

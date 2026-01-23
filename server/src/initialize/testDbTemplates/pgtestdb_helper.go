@@ -3,9 +3,10 @@ package testDbTemplates
 import (
 	"context"
 	"log"
-	"scrumlr.io/server/initialize"
 	"sync"
 	"testing"
+
+	"scrumlr.io/server/initialize"
 
 	"github.com/peterldowns/pgtestdb"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"

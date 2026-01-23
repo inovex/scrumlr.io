@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
 	"scrumlr.io/server/initialize"
 
 	"github.com/golang-migrate/migrate/v4"
