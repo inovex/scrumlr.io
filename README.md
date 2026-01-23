@@ -37,7 +37,7 @@
 - Missing something? Add a **Proposal** to [GitHub Discussions.](https://github.com/inovex/scrumlr.io/discussions/new?category=proposals)
 - Found a bug? [Report here!](https://github.com/inovex/scrumlr.io/issues)
 - Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
-  
+
 ## Documentation
 You can find the full documentation at [docs.scrumlr.io](https://docs.scrumlr.io).
 This includes a guide on how to self-host Scrumlr, how to contribute, and more.
@@ -99,3 +99,6 @@ A special shout-out goes to [inovex](https://inovex.de) for all the support and 
 ## License
 
 See the [LICENSE](./LICENSE) file for licensing information.
+
+
+thats a test
