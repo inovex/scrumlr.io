@@ -1,6 +1,10 @@
 import {addProtocol, isImageUrl} from "utils/images";
 
 describe("Images", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe("addProtocol", () => {
     const urlWithoutProtocol = "www.example.com";
     const urlWithProtocol = "https://www.example.com";
@@ -21,12 +25,14 @@ describe("Images", () => {
     const urlWithImageExtension = "https://www.example.com/image.jpg";
 
     it("should return true if the url ends with an image extension", async () => {
-      global.fetch = vi.fn().mockImplementation(() => Promise.resolve());
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response());
       const isImage = await isImageUrl(urlWithImageExtension);
+      expect(fetchSpy).toHaveBeenCalledWith(urlWithImageExtension);
       expect(isImage).toBe(true);
     });
 
     it("should return false it the string is not a URL", async () => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response());
       const isImage = await isImageUrl(notURL);
       expect(isImage).toBe(false);
     });

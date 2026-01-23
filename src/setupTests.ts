@@ -13,7 +13,7 @@ class ResizeObserverMock {
 }
 global.ResizeObserver = ResizeObserverMock;
 
-window.matchMedia = (query) => ({
+globalThis.matchMedia = (query) => ({
   matches: false,
   media: query,
   onchange: null,
