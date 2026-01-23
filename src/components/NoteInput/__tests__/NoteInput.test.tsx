@@ -26,7 +26,7 @@ const createNoteInput = (columnId: string) => {
 
 describe("Note Input", () => {
   beforeEach(() => {
-    window.IntersectionObserver = vi.fn(
+    globalThis.IntersectionObserver = vi.fn(
       () =>
         ({
           observe: vi.fn(),
