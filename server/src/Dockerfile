@@ -15,7 +15,7 @@ FROM alpine:3.23
 RUN mkdir /app
 WORKDIR /app
 COPY --from=0 /go/src/github.com/inovex/scrumlr.io/main ./
-COPY --from=build /go/src/github.com/inovex/scrumlr.io/healthcheck .
+COPY --from=0 /go/src/github.com/inovex/scrumlr.io/healthcheck ./
 EXPOSE 8080
 
 CMD ["./main"]
