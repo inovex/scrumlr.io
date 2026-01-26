@@ -56,7 +56,7 @@
 | `backend.image.tag`                          | The image tag to use                                                                        | `nil`                                     |
 | `backend.image.pullSecrets`                  | Docker registry secret names as an array                                                    | `[]`                                      |
 | `backend.image.pullPolicy`                   | The imagePullPolicy to use                                                                  | `IfNotPresent`                            |
-| `backend.image.args`                         | Aguments for the scrumlr backend                                                            | `["/main","-disable-check-origin"]`    |
+| `backend.image.args`                         | Aguments for the scrumlr backend                                                            | `["-disable-check-origin"]`    |
 | `backend.replicaCount`                       | Set the replica count for the backend                                                       | `1`                                       |
 | `backend.autoscaling.enabled`                | Enable autoscaling                                                                          | `false`                                   |
 | `backend.autoscaling.minReplicas`            | Min replics for autoscaling                                                                 | `1`                                       |
