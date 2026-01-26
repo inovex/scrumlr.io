@@ -127,7 +127,7 @@ backend:
     pullSecrets: []
     pullPolicy: IfNotPresent
     args:
-      - "/app/main"
+      - "/main"
       - "-disable-check-origin"
   ## @param backend.replicaCount Set the replica count for the backend
   ##

@@ -35,7 +35,7 @@ spec:
             allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-server
           args:
-            - "/app/main"
+            - "/main"
             - "-disable-check-origin"
           resources:
             requests:
