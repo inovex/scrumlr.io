@@ -5,7 +5,6 @@ services:
     image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-4.4.0}"
     container_name: scrumlr-backend
     command:
-      - "/main"
       - "-disable-check-origin"
     environment:
       SCRUMLR_LOG_LEVEL: "${SCRUMLR_LOG_LEVEL:-INFO}"
