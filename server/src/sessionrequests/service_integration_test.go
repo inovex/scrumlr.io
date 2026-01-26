@@ -3,8 +3,9 @@ package sessionrequests
 import (
 	"context"
 	"log"
-	"scrumlr.io/server/websocket"
 	"testing"
+
+	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/users"
 
