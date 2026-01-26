@@ -17,24 +17,13 @@ func main() {
 }
 
 func run() error {
-	port := 8080
-	if value := strings.TrimSpace(os.Getenv("SCRUMLR_SERVER_PORT")); value != "" {
-		parsed, err := strconv.Atoi(value)
-		if err != nil {
-			return fmt.Errorf("invalid SCRUMLR_SERVER_PORT: %w", err)
-		}
-		port = parsed
+	port, err := getEnvInt("SCRUMLR_SERVER_PORT", 8080)
+	if err != nil {
+		return err
 	}
 
-	address := strings.TrimSpace(os.Getenv("SCRUMLR_SERVER_LISTEN_ADDRESS"))
-	if address == "" {
-		address = "127.0.0.1"
-	}
-
-	basePath := strings.TrimSpace(os.Getenv("SCRUMLR_BASE_PATH"))
-	if basePath == "" {
-		basePath = "/"
-	}
+	address := getEnvString("SCRUMLR_SERVER_LISTEN_ADDRESS", "127.0.0.1")
+	basePath := getEnvString("SCRUMLR_BASE_PATH", "/")
 	if !strings.HasPrefix(basePath, "/") {
 		return fmt.Errorf("base path must start with '/'")
 	}
@@ -53,13 +42,31 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("healthcheck failed: %w", err)
 	}
-	defer func() {
-		_ = response.Body.Close()
-	}()
+	defer response.Body.Close()
 
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		return fmt.Errorf("healthcheck failed: %s", response.Status)
 	}
 
 	return nil
+}
+
+func getEnvString(name, defaultValue string) string {
+	value := strings.TrimSpace(os.Getenv(name))
+	if value == "" {
+		return defaultValue
+	}
+	return value
+}
+
+func getEnvInt(name string, defaultValue int) (int, error) {
+	value := strings.TrimSpace(os.Getenv(name))
+	if value == "" {
+		return defaultValue, nil
+	}
+	parsed, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid %s: %w", name, err)
+	}
+	return parsed, nil
 }

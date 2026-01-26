@@ -75,6 +75,32 @@ func TestRunHealthcheck_NonOK(t *testing.T) {
 	assert.ErrorContains(t, err, "503")
 }
 
+func TestGetEnvString_DefaultAndTrim(t *testing.T) {
+	t.Setenv("SCRUMLR_SERVER_LISTEN_ADDRESS", "")
+	assert.Equal(t, "127.0.0.1", getEnvString("SCRUMLR_SERVER_LISTEN_ADDRESS", "127.0.0.1"))
+
+	t.Setenv("SCRUMLR_SERVER_LISTEN_ADDRESS", " 0.0.0.0 ")
+	assert.Equal(t, "0.0.0.0", getEnvString("SCRUMLR_SERVER_LISTEN_ADDRESS", "127.0.0.1"))
+}
+
+func TestGetEnvInt_DefaultAndParse(t *testing.T) {
+	t.Setenv("SCRUMLR_SERVER_PORT", "")
+	value, err := getEnvInt("SCRUMLR_SERVER_PORT", 8080)
+	assert.NoError(t, err)
+	assert.Equal(t, 8080, value)
+
+	t.Setenv("SCRUMLR_SERVER_PORT", " 9090 ")
+	value, err = getEnvInt("SCRUMLR_SERVER_PORT", 8080)
+	assert.NoError(t, err)
+	assert.Equal(t, 9090, value)
+}
+
+func TestGetEnvInt_Invalid(t *testing.T) {
+	t.Setenv("SCRUMLR_SERVER_PORT", "nope")
+	_, err := getEnvInt("SCRUMLR_SERVER_PORT", 8080)
+	assert.ErrorContains(t, err, "invalid SCRUMLR_SERVER_PORT")
+}
+
 func setServerEnv(t *testing.T, serverURL string) {
 	t.Helper()
 
