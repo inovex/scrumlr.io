@@ -75,6 +75,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
             /* --- FULL MODE --- */
             <div className="full-stack-wrapper">
               <Button
+                id={providerConfig[primaryProvider].signInKey}
                 key={`${primaryProvider}-text`}
                 className="login-providers__button text-button"
                 color="backlog-blue"
@@ -98,6 +99,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
           ) : (
             /* --- COMPACT MODE --- */
             <Button
+              id={providerConfig[primaryProvider].signInKey}
               key={`${primaryProvider}-compact`}
               className="login-providers__button"
               color="backlog-blue"
@@ -115,6 +117,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
       {/* --- SECONDARY PROVIDERS --- */}
       {secondaryProviders.map((provider) => (
         <Button
+          id={providerConfig[provider].signInKey}
           key={provider}
           className="login-providers__button"
           color="backlog-blue"

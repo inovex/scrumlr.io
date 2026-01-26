@@ -30,6 +30,8 @@ type ButtonProps = {
   tabIndex?: number;
   /** Used to hide button from screen readers */
   "aria-hidden"?: boolean | "true" | "false";
+
+  id?: string;
 };
 
 export const Button = (props: ButtonProps) => {
@@ -37,6 +39,7 @@ export const Button = (props: ButtonProps) => {
 
   return (
     <button
+      id={props.id}
       className={classNames(
         props.className,
         "button",
