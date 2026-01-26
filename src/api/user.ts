@@ -26,6 +26,29 @@ export const UserAPI = {
     }
   },
 
+  /**
+   * Deletes a user.
+   *
+   * @param userId the ID of the user to delete
+   * @returns void
+   */
+  deleteUser: async (userId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 204) {
+        return;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to delete user: ${error}`);
+    }
+  },
+
   getUserById: async (userId: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
