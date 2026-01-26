@@ -89,7 +89,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                     <div className="confirmation-dialog__error-message">
                       {props.checkbox.showError && (
                         <>
-                          <Warning className="" />
+                          <Warning />
                           <p>{t("ConfirmationDialog.deleteAccountWarning")}</p>
                         </>
                       )}
