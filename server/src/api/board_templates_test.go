@@ -409,6 +409,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			s := New(
 				"/",      // basePath
 				nil,      // realtime (not needed for templates)
+				nil,      // wsService (not needed for templates)
 				mockAuth, // auth
 				userRoutes,
 				sessionRoutes,
