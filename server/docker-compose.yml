@@ -36,7 +36,9 @@ services:
 
   scrumlr:
     build: ./src
-    command: ./main --disable-check-origin --insecure
+    command:
+      - "--disable-check-origin"
+      - "--insecure"
     ports:
       - "8080:8080"
     environment:
