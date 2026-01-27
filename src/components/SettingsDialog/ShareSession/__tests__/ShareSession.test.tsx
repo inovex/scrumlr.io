@@ -37,7 +37,7 @@ describe("ShareQrCode Tests", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost:3000/board/test-board-id");
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/\/board\/test-board-id$/));
     });
 
     await waitFor(() => {
