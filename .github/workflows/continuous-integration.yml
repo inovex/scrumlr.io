@@ -255,4 +255,4 @@ jobs:
             yarn install
             yarn run start
           working-directory: ./
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http://localhost:5173'
