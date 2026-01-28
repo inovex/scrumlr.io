@@ -58,7 +58,7 @@ export const Button = (props: ButtonProps) => {
       data-tooltip-content={props.dataTooltipContent}
       data-cy={props.dataCy}
       tabIndex={props.tabIndex}
-      aria-hidden={Boolean(props.ariaHidden)}
+      aria-hidden={props.ariaHidden ? true : undefined}
     >
       {!props.hideLabel && props.children}
       {props.icon}
