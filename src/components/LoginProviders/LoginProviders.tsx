@@ -1,13 +1,18 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {Apple, Azure, Google, Microsoft, OpenID} from "components/Icon";
-import React, {useState, useRef, useLayoutEffect} from "react";
+import React, {useState, useRef, useLayoutEffect, ReactNode} from "react";
 import {useAppSelector} from "store";
 import {Button} from "../Button";
 import "./LoginProviders.scss";
 
 export interface LoginProvidersProps {
   originURL?: string;
+}
+interface ProviderConfigEntry {
+  label: string;
+  icon: ReactNode;
+  signInKey: string;
 }
 
 export const LoginProviders = ({originURL = window.location.href}: LoginProvidersProps) => {
@@ -22,7 +27,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
     await Auth.signInWithAuthProvider(provider, originURL);
   };
 
-  const providerConfig = {
+  const providerConfig: Record<string, ProviderConfigEntry> = {
     GOOGLE: {label: t("LoginProviders.signInWithGoogle"), icon: <Google className="login-providers__icon" />, signInKey: "google"},
     MICROSOFT: {label: t("LoginProviders.signInWithMicrosoft"), icon: <Microsoft className="login-providers__icon" />, signInKey: "microsoft"},
     AZURE_AD: {label: t("LoginProviders.signInWithAzureAd"), icon: <Azure className="login-providers__icon" />, signInKey: "azure_ad"},
