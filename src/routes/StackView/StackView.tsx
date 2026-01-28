@@ -7,7 +7,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppDispatch, useAppSelector} from "store";
-import {Close, Trash} from "components/Icon";
+import {CloseIcon, TrashIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -206,7 +206,7 @@ export const StackView = () => {
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.info({title: t("Toast.noteDeleted"), icon: Trash});
+      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
 
@@ -316,7 +316,7 @@ export const StackView = () => {
       </div>
       <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, colorClassName)} />
       <button onClick={handleClose} className="stack-view__close-button" aria-label={t("StackView.close")}>
-        <Close />
+        <CloseIcon />
       </button>
     </Portal>
   );

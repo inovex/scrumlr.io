@@ -6,10 +6,13 @@ import {ApplicationState} from "store";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  Navigate: () => <div>Error</div>,
-}));
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    Navigate: () => <div>Error</div>,
+  };
+});
 
 const createRequireAuthentication = (overwrite?: Partial<ApplicationState>) => (
   <Provider store={getTestStore(overwrite)}>

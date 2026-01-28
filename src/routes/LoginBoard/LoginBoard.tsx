@@ -7,7 +7,7 @@ import {Trans, useTranslation} from "react-i18next";
 import {Link, useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {Refresh} from "components/Icon";
+import {RefreshIcon} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
 import {LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
@@ -84,7 +84,7 @@ export const LoginBoard = () => {
                   aria-invalid={!displayName}
                   actions={
                     <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
-                      <Refresh />
+                      <RefreshIcon />
                     </TextInputAction>
                   }
                   data-cy="login-board__username"

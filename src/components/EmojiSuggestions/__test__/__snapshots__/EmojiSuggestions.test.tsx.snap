@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`EmojiSuggestions should match the snapshot 1`] = `
+exports[`EmojiSuggestions > should match the snapshot 1`] = `
 <div
   class="emoji-suggestions emoji-suggestions__container"
   style="--top-distance: 0px;"
@@ -60,7 +60,7 @@ exports[`EmojiSuggestions should match the snapshot 1`] = `
 </div>
 `;
 
-exports[`EmojiSuggestions should use skin tones where supported should use skin tone from store 1`] = `
+exports[`EmojiSuggestions > should use skin tones where supported > should use skin tone from store 1`] = `
 <div
   class="emoji-suggestions emoji-suggestions__container"
   style="--top-distance: 0px;"
