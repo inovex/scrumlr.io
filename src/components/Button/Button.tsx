@@ -29,7 +29,7 @@ type ButtonProps = {
   /** Used to remove button from keyboard navigation */
   tabIndex?: number;
   /** Used to hide button from screen readers */
-  "aria-hidden"?: boolean | "true" | "false";
+  ariaHidden?: boolean;
 
   id?: string;
 };
@@ -58,7 +58,7 @@ export const Button = (props: ButtonProps) => {
       data-tooltip-content={props.dataTooltipContent}
       data-cy={props.dataCy}
       tabIndex={props.tabIndex}
-      aria-hidden={props["aria-hidden"]}
+      aria-hidden={Boolean(props.ariaHidden)}
     >
       {!props.hideLabel && props.children}
       {props.icon}
