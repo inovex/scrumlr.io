@@ -136,7 +136,7 @@ export const LoginBoard = () => {
 
         {showAnonymousContent && (
           <div className="login-board__anonymous-content">
-            <div className="login-board__input-wrapper" data-linked-hover="true">
+            <div className="login-board__input-wrapper input-linked-hover">
               <Input
                 type="text"
                 height="small"

@@ -51,9 +51,9 @@ $padding--mobile: 12.5px styles.$spacing--base;
     &:hover,
     &:focus-within,
 
-    // special case for linked hover state (used in LoginBoard for anonymous name input)
-    [data-linked-hover="true"]:has(button:hover) &,
-    [data-linked-hover="true"]:has(button:active) & {
+    // special case for linked hover state (wrap the input group with .input-linked-hover)
+    .input-linked-hover:has(button:hover) &,
+    .input-linked-hover:has(button:active) & {
       .input__icon-container--search-icon {
         color: styles.$navy--600;
       }
@@ -177,10 +177,10 @@ $padding--mobile: 12.5px styles.$spacing--base;
         @include dark-active-styles;
       }
 
-      // special case for linked hover state (used in LoginBoard for anonymous name input)
+      // special case for linked hover state (wrap the input group with .input-linked-hover)
       @at-root {
-        [theme="dark"] [data-linked-hover="true"]:has(button:hover) .input,
-        [theme="dark"] [data-linked-hover="true"]:has(button:active) .input {
+        [theme="dark"] .input-linked-hover:has(button:hover) .input,
+        [theme="dark"] .input-linked-hover:has(button:active) .input {
           @include dark-active-styles;
         }
       }
