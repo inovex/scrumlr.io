@@ -3,13 +3,13 @@
 
 $side-padding--desktop: 14vw;
 
-.headerBar {
+.header-bar {
   display: flex;
   flex-direction: column;
   padding: styles.$spacing--lg $side-padding--desktop;
 }
 
-.headerBar__top-row {
+.header-bar__top-row {
   display: flex;
   align-items: flex-end;
   gap: styles.$spacing--sm;
@@ -17,18 +17,18 @@ $side-padding--desktop: 14vw;
   position: relative;
 }
 
-.headerBar__scrumlr-logo-container {
+.header-bar__scrumlr-logo-container {
   flex-shrink: 0;
   align-self: flex-start;
 }
 
-.headerBar__user-pill {
+.header-bar__user-pill {
   flex-shrink: 0;
   align-self: flex-start;
   margin-left: auto;
 }
 
-.headerBar__title {
+.header-bar__title {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 50%);
@@ -42,22 +42,22 @@ $side-padding--desktop: 14vw;
 }
 
 @media (max-width: styles.$breakpoint--desktop) {
-  .headerBar {
+  .header-bar {
     padding: styles.$spacing--lg styles.$spacing--2xl;
   }
 }
 
 @media screen and (max-width: styles.$breakpoint--smartphone) {
-  .headerBar {
+  .header-bar {
     padding: styles.$spacing--md styles.$spacing--md;
   }
 
-  .headerBar__top-row {
+  .header-bar__top-row {
     flex-wrap: wrap;
     padding-bottom: styles.$spacing--lg;
   }
 
-  .headerBar__title {
+  .header-bar__title {
     flex-basis: 100%;
     order: 3;
     font-size: styles.$text--lg;
@@ -66,7 +66,7 @@ $side-padding--desktop: 14vw;
 }
 
 [theme="dark"] {
-  .headerBar__title {
+  .header-bar__title {
     color: styles.$gray--000;
   }
 }

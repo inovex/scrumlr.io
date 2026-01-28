@@ -14,10 +14,10 @@ export const HeaderBar = (props: HeaderBarProps) => {
   const {loginBoard = false} = props;
 
   return (
-    <div className="headerBar">
-      <div className="headerBar__top-row">
+    <div className="header-bar">
+      <div className="header-bar__top-row">
         {/* logo - - - profile */}
-        <div className="headerBar__scrumlr-logo-container">
+        <div className="header-bar__scrumlr-logo-container">
           {/* this still needs fixing bc that uses other styles */}
           <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
             <ScrumlrLogo className="new-board__scrumlr-logo" />
@@ -25,9 +25,9 @@ export const HeaderBar = (props: HeaderBarProps) => {
         </div>
 
         {/* - - title - - */}
-        <div className="headerBar__title">{props.renderTitle()}</div>
+        <div className="header-bar__title">{props.renderTitle()}</div>
 
-        <UserPill className="headerBar__user-pill" locationPrefix={props.locationPrefix} disabled={loginBoard} />
+        <UserPill className="header-bar__user-pill" locationPrefix={props.locationPrefix} disabled={loginBoard} />
       </div>
     </div>
   );
