@@ -1,4 +1,4 @@
-import {Dispatch, FormEvent, SetStateAction, useRef, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useRef, useState, type KeyboardEventHandler} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {ReactComponent as IconSearch} from "assets/icons/search.svg";
@@ -18,13 +18,15 @@ type SearchBarProps = {
   disabled?: boolean;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
+  onSubmit?: () => void;
+  maxLength?: number;
 
   // validation
   required?: boolean;
 
   // style
   placeholder?: string;
-  height: "normal" | "larger"; // normal e.g. TemplateEditor, larger e.g. Boards
+  height: "small" | "normal" | "larger"; // normal e.g. TemplateEditor, larger e.g. Boards
 
   dataCy?: string;
 };
@@ -53,6 +55,14 @@ export const Input = (props: SearchBarProps) => {
   const clearInput = () => props.setInput("");
 
   const togglePasswordHidden = () => setPasswordHidden((curr) => !curr);
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.defaultPrevented) return;
+    if (event.key !== "Enter") return;
+    if (props.disabled) return;
+
+    props.onSubmit?.();
+  };
 
   const renderRightIcon = () => {
     if (errorType)
@@ -112,6 +122,8 @@ export const Input = (props: SearchBarProps) => {
           tabIndex={0}
           value={props.input}
           onInput={updateInput}
+          onKeyDown={handleKeyDown}
+          maxLength={props.maxLength}
           required={props.required}
           data-cy={props.dataCy}
         />

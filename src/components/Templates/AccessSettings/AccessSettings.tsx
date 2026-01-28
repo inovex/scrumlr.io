@@ -82,10 +82,10 @@ export const AccessSettings = (props: AccessSettingsProps) => {
           </Select>
         </main>
         <footer className="access-settings__footer">
-          <Button type="secondary" onClick={props.onCancel}>
+          <Button variant="secondary" onClick={props.onCancel}>
             {t("Templates.AccessSettings.Buttons.cancel")}
           </Button>
-          <Button type="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
+          <Button variant="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
             {t("Templates.AccessSettings.Buttons.start")}
           </Button>
         </footer>

@@ -24,6 +24,10 @@ $padding--mobile: 12.5px styles.$spacing--base;
 
   background-color: styles.$gray--000;
 
+  &--height-small {
+    height: 52px;
+  }
+
   &--height-normal {
     height: 60px;
   }
@@ -45,7 +49,11 @@ $padding--mobile: 12.5px styles.$spacing--base;
     // alternatively, this could be split up and put in their respective classes,
     // which might be more readable but also requires a little bit more code
     &:hover,
-    &:focus-within {
+    &:focus-within,
+
+    // special case for linked hover state (wrap the input group with .input-linked-hover)
+    .input-linked-hover:has(button:hover) &,
+    .input-linked-hover:has(button:active) & {
       .input__icon-container--search-icon {
         color: styles.$navy--600;
       }
@@ -155,14 +163,25 @@ $padding--mobile: 12.5px styles.$spacing--base;
         }
       }
 
-      &:hover,
-      &:focus-within {
+      @mixin dark-active-styles {
         .input__icon-container--search-icon {
           color: styles.$gray--000;
         }
-
         .input__input {
           color: styles.$gray--000;
+        }
+      }
+
+      &:hover,
+      &:focus-within {
+        @include dark-active-styles;
+      }
+
+      // special case for linked hover state (wrap the input group with .input-linked-hover)
+      @at-root {
+        [theme="dark"] .input-linked-hover:has(button:hover) .input,
+        [theme="dark"] .input-linked-hover:has(button:active) .input {
+          @include dark-active-styles;
         }
       }
     }

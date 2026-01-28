@@ -5,9 +5,8 @@ import {createBoardFromTemplate, CreateSessionAccessPolicy, deleteTemplate, getT
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
-// using a png instead of svg for now. reason being problems with layering
-import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
-import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
+import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.svg";
+import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.svg";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
@@ -149,6 +148,7 @@ export const Templates = () => {
       ) : null}
       <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
+          <div className="templates__stan-spacing" />
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>

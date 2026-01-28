@@ -89,17 +89,17 @@
     }
   },
   "LoginBoard": {
-    "title": "Sign in to scrumlr.io",
-    "anonymousLogin": "Join board anonymously",
-    "usernameValidationError": "Username may not be empty",
-    "termsValidationError": "You must accept the terms and privacy policy",
-    "anonymousLoginDisabledError": "Anonymous accounts are disabled; please use one of the providers above",
+    "title": "Sign in",
+    "subtitleLogin": "Log in and enjoy the benefits",
+    "loginFeature1": "Create and save custom templates",
+    "loginFeature2": "Custom settings are saved in your profile",
+    "subtitleAnonymous": "Log in anonymously",
+    "anonymousLogin": "Join board anonymously without benefits",
     "noLoginAvailable": "There isn't any valid login available",
-    "errorOnRedirect": "An error occurred while redirecting you",
-    "login": "Sign in",
-    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
-    "generateRandomName": "Generate random name",
-    "username": "Username"
+    "dividerWord": "or",
+    "login": "Continue anonymously",
+    "acceptTerms": "By signing up, you agree to our <terms>Terms and Conditions</terms> and <privacy>Privacy Policy</privacy>.",
+    "generateRandomName": "Generate random name"
   },
   "AccessPolicy": {
     "PUBLIC": "Open",

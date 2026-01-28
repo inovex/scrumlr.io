@@ -89,17 +89,17 @@
     }
   },
   "LoginBoard": {
-    "title": "Se connecter à scrumlr.io",
-    "anonymousLogin": "Rejoindre le tableau de manière anonyme",
-    "usernameValidationError": "Le nom d'utilisateur ne peut pas être vide",
-    "termsValidationError": "Vous devez accepter les conditions et la politique de confidentialité",
-    "anonymousLoginDisabledError": "Les comptes anonymes sont désactivés ; veuillez utiliser l'un des fournisseurs ci-dessus",
+    "title": "Se connecter",
+    "subtitleLogin": "Connectez-vous et profitez des avantages",
+    "loginFeature1": "Créer et sauvegarder des modèles personnalisés",
+    "loginFeature2": "Les paramètres personnalisés sont sauvegardés dans le profil",
+    "subtitleAnonymous": "Connexion anonyme",
+    "anonymousLogin": "Rejoindre le tableau de manière anonyme sans avantages",
     "noLoginAvailable": "Aucune connexion valide n'est disponible",
-    "errorOnRedirect": "Une erreur s'est produite lors de votre redirection",
-    "login": "Se connecter",
-    "acceptTerms": "J'accepte les <terms>conditions</terms> et la <privacy>politique de confidentialité</privacy>",
-    "generateRandomName": "Générer un nom aléatoire",
-    "username": "Nom d'utilisateur"
+    "dividerWord": "ou",
+    "login": "Continuer anonymement",
+    "acceptTerms": "En vous inscrivant, vous acceptez nos <terms>Conditions générales</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+    "generateRandomName": "Générer un nom aléatoire"
   },
   "AccessPolicy": {
     "PUBLIC": "Ouvert",

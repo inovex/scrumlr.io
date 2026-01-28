@@ -20,6 +20,9 @@ export interface HeroIllustrationProps {
   className?: string;
 }
 
+/**
+ * @deprecated to be removed with the landing page redesign
+ */
 export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
   <aside className={classNames("hero-illustration", className)} aria-hidden>
     <div className="hero-illustration__position-anchor">

@@ -1,0 +1,72 @@
+@use "sass:color";
+@use "constants/styles";
+
+$side-padding--desktop: 14vw;
+
+.header-bar {
+  display: flex;
+  flex-direction: column;
+  padding: styles.$spacing--lg $side-padding--desktop;
+}
+
+.header-bar__top-row {
+  display: flex;
+  align-items: flex-end;
+  gap: styles.$spacing--sm;
+  padding-bottom: styles.$spacing--xl;
+  position: relative;
+}
+
+.header-bar__scrumlr-logo-container {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.header-bar__user-pill {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+.header-bar__title {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  bottom: styles.$spacing--xl;
+  text-align: center;
+
+  font-size: styles.$text--2xl;
+  font-weight: 700;
+  line-height: styles.$spacing--2xl;
+  color: styles.$navy--900;
+}
+
+@media (max-width: styles.$breakpoint--desktop) {
+  .header-bar {
+    padding: styles.$spacing--lg styles.$spacing--2xl;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .header-bar {
+    padding: styles.$spacing--md styles.$spacing--md;
+  }
+
+  .header-bar__top-row {
+    flex-wrap: wrap;
+    padding-bottom: styles.$spacing--lg;
+  }
+
+  .header-bar__title {
+    flex-basis: 100%;
+    order: 3;
+    font-size: styles.$text--lg;
+    line-height: styles.$line-height--large;
+  }
+}
+
+[theme="dark"] {
+  .header-bar__title {
+    color: styles.$gray--000;
+  }
+}

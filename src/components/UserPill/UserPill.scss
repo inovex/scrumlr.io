@@ -20,18 +20,6 @@ $size-mobile: 56px;
   &:enabled {
     cursor: pointer;
   }
-
-  &:disabled {
-    background-color: styles.$gray--300;
-
-    .user-pill__avatar-overlay {
-      background-color: color.change(#eeeff1, $alpha: 0.5);
-    }
-
-    .user-pill__name {
-      color: styles.$gray--800;
-    }
-  }
 }
 
 .user-pill__container {
@@ -77,9 +65,13 @@ $size-mobile: 56px;
   color: styles.$navy--600;
 }
 
+.user-pill--no-name {
+  padding: $padding--mobile;
+}
+
 // desktop only styles
 @media screen and (min-width: calc(styles.$breakpoint--smartphone + 1px)) {
-  .user-pill:enabled {
+  .user-pill:enabled:not(.user-pill--no-name) {
     // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
     @include mixins.default-states($padding: $padding--default);
   }
@@ -106,18 +98,6 @@ $size-mobile: 56px;
 [theme="dark"] {
   .user-pill {
     background-color: styles.$navy--400;
-
-    &:disabled {
-      background-color: styles.$navy--400;
-
-      .user-pill__avatar-overlay {
-        background-color: color.change(styles.$navy--700, $alpha: 0.5);
-      }
-
-      .user-pill__name {
-        color: styles.$navy--700;
-      }
-    }
   }
 
   .user-pill__avatar-container {
