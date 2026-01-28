@@ -34,7 +34,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
     AZURE_AD: {label: t("LoginProviders.signInWithAzureAd"), icon: <Azure className="login-providers__icon" />, signInKey: "azure_ad"},
     APPLE: {label: t("LoginProviders.signInWithApple"), icon: <Apple className="login-providers__icon" />, signInKey: "apple"},
     OIDC: {label: t("LoginProviders.signInWithOIDC"), icon: <OpenID className="login-providers__icon" />, signInKey: "oidc"},
-    GITHUB: {label: t("LoginProviders.signInWithGitHub"), icon: <GitHub className="login-providers__icon" />, signInKey: "github"}, // Using Google icon as placeholder
+    GITHUB: {label: t("LoginProviders.signInWithGitHub"), icon: <GitHub className="login-providers__icon" />, signInKey: "github"},
   } as const;
 
   type ProviderKey = keyof typeof providerConfig;
