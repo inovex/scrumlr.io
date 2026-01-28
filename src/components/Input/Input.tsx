@@ -18,7 +18,7 @@ type SearchBarProps = {
   disabled?: boolean;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
-  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+  onSubmit?: () => void;
   maxLength?: number;
 
   // validation
@@ -55,6 +55,14 @@ export const Input = (props: SearchBarProps) => {
   const clearInput = () => props.setInput("");
 
   const togglePasswordHidden = () => setPasswordHidden((curr) => !curr);
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.defaultPrevented) return;
+    if (event.key !== "Enter") return;
+    if (props.disabled) return;
+
+    props.onSubmit?.();
+  };
 
   const renderRightIcon = () => {
     if (errorType)
@@ -114,7 +122,7 @@ export const Input = (props: SearchBarProps) => {
           tabIndex={0}
           value={props.input}
           onInput={updateInput}
-          onKeyDown={props.onKeyDown}
+          onKeyDown={handleKeyDown}
           maxLength={props.maxLength}
           required={props.required}
           data-cy={props.dataCy}

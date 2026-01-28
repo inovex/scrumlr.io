@@ -137,16 +137,7 @@ export const LoginBoard = () => {
         {showAnonymousContent && (
           <div className="login-board__anonymous-content">
             <div className="login-board__input-wrapper input-linked-hover">
-              <Input
-                type="text"
-                height="small"
-                input={displayName}
-                setInput={setDisplayName}
-                maxLength={64}
-                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") handleAnonymousLogin();
-                }}
-              />
+              <Input type="text" height="small" input={displayName} setInput={setDisplayName} maxLength={64} onSubmit={handleAnonymousLogin} />
               <Button type="ghost" color="backlog-blue" onClick={() => setDisplayName(getRandomName())} title={t("LoginBoard.generateRandomName")} icon={<Refresh />} hideLabel />
             </div>
             <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} data-cy="login-board__anonymous-login-button">
