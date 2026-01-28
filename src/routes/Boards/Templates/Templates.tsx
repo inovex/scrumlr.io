@@ -149,6 +149,7 @@ export const Templates = () => {
       ) : null}
       <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
+          <div className="templates__stan-spacing" />
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
