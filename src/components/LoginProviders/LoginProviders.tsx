@@ -1,7 +1,8 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {Apple, Azure, GitHub, Google, Microsoft, OpenID} from "components/Icon";
-import React, {useState, useRef, useLayoutEffect, ReactNode} from "react";
+import {useState, useRef, ReactNode, useEffect} from "react";
+import {useSize} from "utils/hooks/useSize";
 import {useAppSelector} from "store";
 import {Button} from "../Button";
 import "./LoginProviders.scss";
@@ -39,29 +40,14 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
   type ProviderKey = keyof typeof providerConfig;
   const enabledProviders = providers.filter((provider): provider is ProviderKey => provider in providerConfig);
 
-  const primaryKey = enabledProviders[0];
-  const primaryData = primaryKey ? providerConfig[primaryKey] : null;
+  const containerSize = useSize(containerRef);
+  const ghostSize = useSize(ghostRef);
 
-  // useLayoutEffect prevents visual flickering by calculating width before paint
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    const ghost = ghostRef.current;
-
-    if (!container || !ghost) return undefined;
-
-    const checkFit = () => {
-      const availableWidth = container.offsetWidth;
-      const requiredWidth = ghost.offsetWidth;
-
-      setIsCompact(requiredWidth > availableWidth);
-    };
-
-    const resizeObserver = new ResizeObserver(() => checkFit());
-    resizeObserver.observe(container);
-    checkFit();
-
-    return () => resizeObserver.disconnect();
-  }, [primaryData?.label]);
+  useEffect(() => {
+    if (containerSize && ghostSize) {
+      setIsCompact(ghostSize.width > containerSize.width);
+    }
+  }, [containerSize, ghostSize]);
 
   if (enabledProviders.length === 0) return null;
 
