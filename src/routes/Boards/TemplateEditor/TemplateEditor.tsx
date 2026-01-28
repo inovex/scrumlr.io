@@ -275,7 +275,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
           <div className="template-editor__buttons">
             <Button
               className={classNames("template-editor__button", "template-editor__button--return")}
-              type="secondary"
+              variant="secondary"
               onClick={cancelAndGoBack}
               dataCy="template-editor__button--return"
             >
@@ -283,7 +283,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
             </Button>
             <Button
               className={classNames("template-editor__button", "template-editor__button--create")}
-              type="primary"
+              variant="primary"
               icon={<AddIcon />}
               onClick={saveTemplate}
               disabled={!validForm}

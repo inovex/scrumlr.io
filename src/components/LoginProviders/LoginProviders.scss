@@ -1,5 +1,11 @@
 @use "constants/styles";
 
+//todo remove these later
+
+// button heights
+$button-height--default: 52px;
+$button-height--small: 46px;
+
 .login-providers {
   display: flex;
   gap: styles.$spacing--xs;
@@ -42,11 +48,11 @@
 
   background-color: styles.$gray--000;
   border-radius: 50%;
-  width: calc(#{styles.$button-height--default} * 0.85);
-  height: calc(#{styles.$button-height--default} * 0.85);
+  width: calc(#{$button-height--default} * 0.85);
+  height: calc(#{$button-height--default} * 0.85);
   padding: 0;
   min-width: unset;
-  flex: 0 0 calc(#{styles.$button-height--default} * 0.85);
+  flex: 0 0 calc(#{$button-height--default} * 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +60,7 @@
 
 .login-providers__button.text-button {
   // Add padding to the left so text doesn't hide behind the white circle
-  padding-left: calc(#{styles.$button-height--small} + #{styles.$spacing--xxs});
+  padding-left: calc(#{$button-height--small} + #{styles.$spacing--xxs});
   padding-right: styles.$spacing--xxs;
   justify-content: center;
 }
@@ -75,8 +81,8 @@
 //Secondary buttons (direct children) should not grow
 .login-providers > .login-providers__button {
   flex: 0 0 auto;
-  width: styles.$button-height--default;
-  height: styles.$button-height--default;
+  width: $button-height--default;
+  height: $button-height--default;
 }
 
 // Icon Sizing

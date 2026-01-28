@@ -4,6 +4,10 @@
 $content-gap: 10px;
 $border-width: 2px;
 
+// button heights
+$button-height--default: 52px;
+$button-height--small: 46px;
+
 .button {
   all: unset;
   outline: 0;
@@ -14,10 +18,9 @@ $border-width: 2px;
   align-items: center;
   gap: $content-gap;
 
-  height: styles.$button-height--default;
+  height: $button-height--default;
   box-sizing: border-box;
 
-  @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
   border-radius: styles.$rounded--full;
   border-width: $border-width;
   border-style: solid;
@@ -30,7 +33,7 @@ $border-width: 2px;
   }
 
   &--small {
-    height: styles.$button-height--small;
+    height: $button-height--small;
     gap: styles.$spacing--xxs;
 
     @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
@@ -42,13 +45,13 @@ $border-width: 2px;
   }
 
   &--icon-only {
-    width: styles.$button-height--default;
+    width: $button-height--default;
     min-width: unset;
     padding: 0;
     gap: 0;
 
     &.button--small {
-      width: styles.$button-height--small;
+      width: $button-height--small;
     }
   }
 
@@ -146,6 +149,50 @@ $border-width: 2px;
       color: styles.$gray--800;
       background-color: styles.$gray--200;
     }
+  }
+}
+
+.button__content-wrapper {
+  @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  // normal padding
+  &--pos {
+    &-left {
+      padding-left: 0;
+      // we need bigger padding on the left
+      // smaller on the right
+    }
+    &-right {
+      padding-right: 0;
+      // we need bigger padding on the right
+      // smaller on the left
+    }
+  }
+  &--align {
+    &-compact {
+      // same as with icon currently
+    }
+    &-spaced {
+      // spacing so that the icon is on the border
+    }
+  }
+}
+
+.button__icon-background {
+  border-radius: 50%;
+  width: calc(#{$button-height--default} * 0.85);
+  height: calc(#{$button-height--default} * 0.85);
+  padding: 0;
+  min-width: unset;
+  flex: 0 0 calc(#{$button-height--default} * 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: styles.$spacing--xxs; //my try to
+  &--embedded {
+    background-color: styles.$gray--000;
   }
 }
 

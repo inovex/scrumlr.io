@@ -62,13 +62,23 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
           <span ref={ghostRef} className="ghost-measurer" aria-hidden="true">
             {providerConfig[primaryProvider].label}
           </span>
+          <Button
+            id={providerConfig[primaryProvider].signInKey}
+            color="backlog-blue"
+            onClick={signIn(providerConfig[primaryProvider].signInKey)}
+            icon={providerConfig[primaryProvider].icon}
+            iconPosition="left"
+            iconStyle="embedded"
+            iconAlignment="spaced"
+          >
+            {providerConfig[primaryProvider].label}
+          </Button>
 
           {!isCompact ? (
             /* --- FULL MODE --- */
             <div className="full-stack-wrapper">
               <Button
                 id={providerConfig[primaryProvider].signInKey}
-                key={`${primaryProvider}-text`}
                 className="login-providers__button text-button"
                 color="backlog-blue"
                 onClick={signIn(providerConfig[primaryProvider].signInKey)}
@@ -81,7 +91,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
                 color="backlog-blue"
                 icon={providerConfig[primaryProvider].icon}
                 hideLabel
-                type="ghost"
+                variant="ghost"
                 aria-hidden="true"
                 tabIndex={-1}
               >
@@ -98,7 +108,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
               onClick={signIn(providerConfig[primaryProvider].signInKey)}
               icon={providerConfig[primaryProvider].icon}
               hideLabel
-              type="ghost"
+              variant="ghost"
             >
               {providerConfig[primaryProvider].label}
             </Button>
@@ -116,7 +126,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
           onClick={signIn(providerConfig[provider].signInKey)}
           icon={providerConfig[provider].icon}
           hideLabel
-          type="ghost"
+          variant="ghost"
         >
           {providerConfig[provider].label}
         </Button>
