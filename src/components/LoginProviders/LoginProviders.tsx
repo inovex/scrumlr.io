@@ -1,6 +1,6 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
-import {Apple, Azure, Google, Microsoft, OpenID} from "components/Icon";
+import {Apple, Azure, GitHub, Google, Microsoft, OpenID} from "components/Icon";
 import React, {useState, useRef, useLayoutEffect, ReactNode} from "react";
 import {useAppSelector} from "store";
 import {Button} from "../Button";
@@ -33,6 +33,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
     AZURE_AD: {label: t("LoginProviders.signInWithAzureAd"), icon: <Azure className="login-providers__icon" />, signInKey: "azure_ad"},
     APPLE: {label: t("LoginProviders.signInWithApple"), icon: <Apple className="login-providers__icon" />, signInKey: "apple"},
     OIDC: {label: t("LoginProviders.signInWithOIDC"), icon: <OpenID className="login-providers__icon" />, signInKey: "oidc"},
+    GITHUB: {label: t("LoginProviders.signInWithGitHub"), icon: <GitHub className="login-providers__icon" />, signInKey: "github"}, // Using Google icon as placeholder
   } as const;
 
   type ProviderKey = keyof typeof providerConfig;
