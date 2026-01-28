@@ -21,12 +21,6 @@ export const UserPill = (props: UserPillProps) => {
     navigate(`${props.locationPrefix ?? ""}/settings/profile`);
   };
 
-  const executeClick = () => {
-    if (!props.disabled) {
-      openSettings();
-    }
-  };
-
   const renderAvatar = () =>
     avatar && me ? (
       <Avatar seed={me.id} avatar={avatar} className={classNames("user-pill__avatar", "user-pill__avatar--own")} />
@@ -35,7 +29,7 @@ export const UserPill = (props: UserPillProps) => {
     );
 
   return (
-    <button className={classNames("user-pill", props.className, {"user-pill--no-name": !myName})} disabled={props.disabled} tabIndex={0} onClick={executeClick}>
+    <button className={classNames("user-pill", props.className, {"user-pill--no-name": !myName})} disabled={props.disabled} tabIndex={0} onClick={openSettings}>
       <div className="user-pill__container">
         <div className="user-pill__avatar-container">
           {renderAvatar()}
