@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "src/",
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -15,7 +15,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -30,7 +30,19 @@
     "downlevelIteration": true,
     "ignoreDeprecations": "5.0",
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
+    "paths": {
+      "api/*": ["api/*"],
+      "assets/*": ["assets/*"],
+      "components/*": ["components/*"],
+      "constants/*": ["constants/*"],
+      "i18n/*": ["i18n/*"],
+      "routes/*": ["routes/*"],
+      "store/*": ["store/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "vite-env.d.ts" ,"vite-env-override.d.ts"]
 }

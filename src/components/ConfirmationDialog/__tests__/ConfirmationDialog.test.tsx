@@ -9,7 +9,7 @@ describe("<ConfirmationDialog />", () => {
   });
 
   test("snapshot test", () => {
-    const {container} = render(<ConfirmationDialog title="headline" onAcceptLabel="accept" onDeclineLabel="decline" onAccept={jest.fn()} onDecline={jest.fn()} />, {
+    const {container} = render(<ConfirmationDialog title="headline" onAcceptLabel="accept" onDeclineLabel="decline" onAccept={vi.fn()} onDecline={vi.fn()} />, {
       container: global.document.querySelector("#portal")!,
     });
     expect(container.firstChild).toMatchSnapshot();

@@ -1,9 +1,6 @@
 import classNames from "classnames";
 import {EditableTemplateColumn} from "store/features";
-import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
-import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
-import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
-import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
+import {VisibleIcon, HiddenIcon, TrashIcon, DragAndDropIcon} from "components/Icon";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
@@ -94,7 +91,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       />
       {titleEditState === "closed" && (
         <div className="columns-configurator-column__menu">
-          <DnDIcon
+          <DragAndDropIcon
             className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--dnd", "columns-configurator-column__drag-element", {
               "columns-configurator-column__drag-element--dragging": props.activeDrag,
             })}
@@ -141,7 +138,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             onClick={() => props.deleteColumn?.(props.column)}
             disabled={disableDelete}
           >
-            <DeleteIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--delete")} />
+            <TrashIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--delete")} />
           </button>
         </div>
       )}

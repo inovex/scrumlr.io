@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AddTemplateColumn should render correctly 1`] = `
+exports[`AddTemplateColumn > should render correctly 1`] = `
 <div>
   <div
     class="add-template-column add-template-column--left accent-color__backlog-blue"
@@ -10,8 +10,39 @@ exports[`AddTemplateColumn should render correctly 1`] = `
     >
       <svg
         class="add-template-column__icon"
+        fill="none"
+        height="56"
+        viewBox="0 0 56 56"
+        width="56"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        add-column.svg
+        <g
+          id="add-column"
+        >
+          <circle
+            cx="28"
+            cy="28"
+            fill="currentColor"
+            fill-opacity="0.08"
+            id="circle"
+            r="18.799"
+            stroke="currentColor"
+            stroke-width="2"
+            transform="rotate(45 28 28)"
+          />
+          <path
+            d="M35.9199 27.5204L20.0807 27.5204"
+            id="Line"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M28 19.6008L28 35.44"
+            id="Line_2"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </g>
       </svg>
     </button>
   </div>

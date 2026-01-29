@@ -5,20 +5,20 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
 
-Object.assign(navigator, {
-  clipboard: {
-    writeText: () => {},
+Object.defineProperty(navigator, "clipboard", {
+  value: {
+    writeText: vi.fn(),
   },
+  configurable: true,
 });
 
-jest.mock("utils/export", () => ({
-  ...jest.requireActual("utils/export"),
-  exportAsJSON: jest.fn(),
-  exportAsCSV: jest.fn(),
-  exportAsCSVZip: jest.fn(),
-}));
+vi.mock("utils/export", async () => ({
+  exportAsJSON: vi.fn(),
+  exportAsCSV: vi.fn(),
+  exportAsCSVZip: vi.fn(),
+}))
 
-jest.mock("file-saver", () => ({saveAs: jest.fn()}));
+vi.mock("file-saver", async () => ({saveAs: vi.fn()}));
 
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
   return (

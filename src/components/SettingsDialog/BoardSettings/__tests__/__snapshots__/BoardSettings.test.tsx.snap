@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`BoardSettings should match snapshot 1`] = `
+exports[`BoardSettings > should match snapshot 1`] = `
 <div
   class="settings-dialog__container accent-color__backlog-blue"
 >
@@ -96,8 +96,17 @@ exports[`BoardSettings should match snapshot 1`] = `
         <button
           class="board-settings__password-management-button board-settings__generate-password-button"
         >
-          <svg>
-            refresh.svg
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.986 22.238a8.368 8.368 0 0 1-2.147-3.08c-1.227-3.017-.652-6.604 1.743-9.079l2.21 2.216c.123.122.342.034.371-.146l1.208-7.922a.197.197 0 0 0-.224-.225l-7.908 1.21c-.18.03-.268.25-.146.372l2.215 2.22c-3.657 3.75-4.28 9.372-1.88 13.765a11.708 11.708 0 0 0 2.99 3.549c2.163 1.723 4.821 2.548 7.46 2.494l.497-3.256c-2.274.196-4.611-.507-6.389-2.118Zm14.706 1.955c3.657-3.749 4.28-9.372 1.88-13.765a11.706 11.706 0 0 0-2.99-3.548c-2.163-1.724-4.821-2.548-7.46-2.495l-.497 3.256c2.27-.195 4.611.508 6.389 2.118a8.368 8.368 0 0 1 2.147 3.08c1.227 3.017.652 6.604-1.743 9.08l-2.211-2.217c-.122-.122-.34-.034-.37.146l-1.208 7.922a.197.197 0 0 0 .224.225l7.908-1.21c.18-.03.263-.25.146-.371l-2.215-2.221Z"
+              fill="currentColor"
+            />
           </svg>
           <span
             class="board-settings__password-management-text"
@@ -267,15 +276,45 @@ exports[`BoardSettings should match snapshot 1`] = `
         </button>
         <a
           class="board-settings__open-cheat-sheet-button"
-          href="/hotkeys.pdf"
+          href="//hotkeys.pdf"
           rel="noopener noreferrer"
           target="_blank"
         >
           <p>
             Hotkey Cheat Sheet
           </p>
-          <svg>
-            info.svg
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              fill="currentColor"
+              height="8"
+              width="2"
+              x="15"
+              y="14"
+            />
+            <rect
+              fill="currentColor"
+              height="2"
+              width="2"
+              x="15"
+              y="10"
+            />
+            <rect
+              height="20.5"
+              opacity="0.5"
+              rx="10.25"
+              stroke="currentColor"
+              stroke-width="1.5"
+              width="20.5"
+              x="5.75"
+              y="5.75"
+            />
           </svg>
         </a>
       </div>
@@ -291,8 +330,42 @@ exports[`BoardSettings should match snapshot 1`] = `
         </span>
         <svg
           class="settings-option-button__icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          trash.svg
+          <path
+            d="M14 14.75V20.75"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-opacity="0.7"
+            stroke-width="1.5"
+          />
+          <path
+            d="M18 14.75V20.75"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-opacity="0.7"
+            stroke-width="1.5"
+          />
+          <path
+            d="M8 10.25H24M12.9231 9.4V8.17C12.9231 7.52383 13.4603 7 14.1231 7H17.8769C18.5397 7 19.0769 7.52383 19.0769 8.17V9.4"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+          />
+          <path
+            d="M9.80001 11.25L10.6923 23.9308C10.7087 24.6533 11.3742 25.2357 12.2 25.25H20.0154C20.8412 25.2357 21.5067 24.6533 21.5231 23.9308C21.7636 20.513 21.944 17.9497 22.0642 16.2408C22.0775 16.0512 22.1528 14.982 22.205 14.2397"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>

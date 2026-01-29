@@ -8,8 +8,8 @@ import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
-import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
-import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
+import {ArrowLeftIcon, ArrowRightIcon} from "components/Icon";
+
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
@@ -124,13 +124,17 @@ export const Templates = () => {
     showCustomTemplates ? (
       <header className="templates__container-header">
         <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left", true)} aria-label="scroll left">
-          <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})} />
+          <ArrowLeftIcon
+            className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})}
+          />
         </button>
         <div className="templates__container-title" role="button" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left", true)}>
           {title}
         </div>
         <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right", true)} aria-label="scroll right">
-          <ArrowRight className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})} />
+          <ArrowRightIcon
+            className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})}
+          />
         </button>
       </header>
     ) : (

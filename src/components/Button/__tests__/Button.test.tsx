@@ -48,7 +48,7 @@ describe("Button", () => {
   });
 
   it("should handle click events", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Clickable</Button>);
 
     fireEvent.click(screen.getByRole("button"));
@@ -56,7 +56,7 @@ describe("Button", () => {
   });
 
   it("should not trigger click when disabled", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(
       <Button onClick={handleClick} disabled>
         Disabled
@@ -134,7 +134,7 @@ describe("Button", () => {
   });
 
   it("should maintain all functionality when all props are provided", () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const icon = <span data-testid="complex-icon">🔥</span>;
 
     render(
