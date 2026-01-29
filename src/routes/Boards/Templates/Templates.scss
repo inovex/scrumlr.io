@@ -1,6 +1,6 @@
 @use "constants/styles";
 
-$stan-height: 70vh;
+$stan-height: 50vh;
 $max-card-width: 500px;
 
 .templates__portal {
@@ -13,6 +13,7 @@ $max-card-width: 500px;
   display: flex;
   flex-direction: row;
   flex: 1;
+  gap: styles.$spacing--md;
 }
 
 .templates__container {
@@ -23,10 +24,6 @@ $max-card-width: 500px;
 
   border-radius: styles.$rounded--default;
   background-color: styles.$blue--50;
-
-  &--saved {
-    margin-left: styles.$spacing--md; // instead of gap, see above
-  }
 }
 
 .templates__container-header {
@@ -75,6 +72,10 @@ $max-card-width: 500px;
   height: $stan-height;
   // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
+}
+
+.templates__stan-spacing {
+  height: styles.$spacing--3xl;
 }
 
 .templates__stan {

@@ -2,8 +2,10 @@ import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, Deta
 import classNames from "classnames";
 import "./LegacyButton.scss";
 
-export interface LegacyButtonProps
-  extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
+export interface LegacyButtonProps extends DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>,
+  HTMLButtonElement & HTMLAnchorElement
+> {
   color?: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text-link";
   leftIcon?: ReactElement;
