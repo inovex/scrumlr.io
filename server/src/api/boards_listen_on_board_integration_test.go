@@ -2,9 +2,10 @@ package api
 
 import (
 	"context"
-	"scrumlr.io/server/websocket"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"

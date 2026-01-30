@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
 	"scrumlr.io/server/websocket"
 
 	"github.com/go-chi/chi/v5"

@@ -3,8 +3,9 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/websocket"
 	"time"
+
+	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"

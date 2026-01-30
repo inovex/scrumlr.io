@@ -35,13 +35,13 @@ func TestSessionServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *SessionServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
+	dbContainer, dbBun := initialize.StartTestDatabase()
+	suite.SeedDatabase(dbBun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
 	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = bun
+	suite.db = dbBun
 	suite.natsConnectionString = connectionString
 }
 
