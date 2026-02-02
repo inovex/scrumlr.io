@@ -375,7 +375,7 @@ func (suite *VotingServiceIntegrationTestSuite) seedVotingTestData(db *bun.DB) {
 	}
 
 	for _, v := range votes {
-		err := initialize.InsertVote(
+		err := testDbTemplates.InsertVote(
 			db,
 			suite.baseData.Boards[v.board].ID,
 			suite.baseData.Votings[v.voting].ID,

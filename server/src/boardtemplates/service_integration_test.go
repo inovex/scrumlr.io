@@ -13,7 +13,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
@@ -219,13 +218,13 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) seedBoardTemplatesTestDat
 	log.Println("Seeding board templates test data")
 
 	for _, user := range suite.users {
-		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, template := range suite.templates {
-		if err := initialize.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite); err != nil {
+		if err := testDbTemplates.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite); err != nil {
 			log.Fatalf("Failed to insert board template: %s", err)
 		}
 	}

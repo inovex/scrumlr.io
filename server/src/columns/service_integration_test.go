@@ -345,13 +345,13 @@ func (suite *ColumnServiceIntegrationTestSuite) seedColumnsTestData(db *bun.DB) 
 	log.Println("Seeding columns test data")
 
 	for _, board := range suite.boards {
-		if err := initialize.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		if err := testDbTemplates.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 			log.Fatalf("Failed to insert board %s: %s", board.Name, err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		if err := initialize.InsertColumn(db, column.ID, column.Board, column.Name, column.Description, string(column.Color), column.Visible, column.Index); err != nil {
+		if err := testDbTemplates.InsertColumn(db, column.ID, column.Board, column.Name, column.Description, string(column.Color), column.Visible, column.Index); err != nil {
 			log.Fatalf("Failed to insert column: %s", err)
 		}
 	}

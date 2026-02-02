@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 var baseSeedHash = "base_seed_hash_v1"
@@ -158,31 +157,31 @@ func GetBaseIDs() DbBaseIDs {
 
 func SeedDBBase(db *bun.DB) {
 	for _, user := range users {
-		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
 			log.Fatalf("Failed to insert test user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, board := range boards {
-		if err := initialize.InsertBoard(db, board.ID, board.Name+" Board", "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		if err := InsertBoard(db, board.ID, board.Name+" Board", "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 			log.Fatalf("Failed to insert test board %s: %s", board.Name, err)
 		}
 	}
 
 	for _, column := range columns {
-		if err := initialize.InsertColumn(db, column.ID, column.BoardID, column.Name+" Column", "", "backlog-blue", true, 0); err != nil {
+		if err := InsertColumn(db, column.ID, column.BoardID, column.Name+" Column", "", "backlog-blue", true, 0); err != nil {
 			log.Fatalf("Failed to insert test column %s: %s", column.Name, err)
 		}
 	}
 
 	for _, note := range notes {
-		if err := initialize.InsertNote(db, note.ID, note.AuthorID, note.BoardID, note.ColumnID, note.Text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+		if err := InsertNote(db, note.ID, note.AuthorID, note.BoardID, note.ColumnID, note.Text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
 			log.Fatalf("Failed to insert test note %s: %s", note.Name, err)
 		}
 	}
 
 	for _, voting := range votings {
-		if err := initialize.InsertVoting(db, voting.ID, voting.BoardID, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, voting.Status, voting.IsAnonymous); err != nil {
+		if err := InsertVoting(db, voting.ID, voting.BoardID, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, voting.Status, voting.IsAnonymous); err != nil {
 			log.Fatalf("Failed to insert test voting %s: %s", voting.Name, err)
 		}
 	}

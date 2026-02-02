@@ -288,21 +288,21 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 	log.Println("Seeding users test data")
 
-	if err := initialize.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType)); err != nil {
+	if err := testDbTemplates.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType)); err != nil {
 		log.Fatalf("Failed to insert update user: %s", err)
 	}
-	if err := initialize.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType)); err != nil {
+	if err := testDbTemplates.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType)); err != nil {
 		log.Fatalf("Failed to insert delete user: %s", err)
 	}
 
-	if err := initialize.InsertBoard(db, suite.updateBoard.ID, suite.updateBoard.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+	if err := testDbTemplates.InsertBoard(db, suite.updateBoard.ID, suite.updateBoard.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 		log.Fatalf("Failed to insert test board: %s", err)
 	}
 
-	if err := initialize.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Stan session: %s", err)
 	}
-	if err := initialize.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Update user session: %s", err)
 	}
 }

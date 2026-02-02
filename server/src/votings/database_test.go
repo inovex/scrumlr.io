@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
@@ -314,7 +313,7 @@ func (suite *DatabaseVotingTestSuite) seedVotes(db *bun.DB) {
 	}
 
 	for _, v := range votes {
-		err := initialize.InsertVote(
+		err := testDbTemplates.InsertVote(
 			db,
 			suite.baseData.Boards[v.board].ID,
 			suite.baseData.Votings[v.voting].ID,

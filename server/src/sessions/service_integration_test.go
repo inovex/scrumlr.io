@@ -291,13 +291,13 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	log.Println("Seeding sessions test data")
 
 	for _, user := range suite.users {
-		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		if err := initialize.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		if err := testDbTemplates.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 			log.Fatalf("Failed to insert board %s: %s", board.Name, err)
 		}
 	}
@@ -333,7 +333,7 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	}
 
 	for _, s := range sessions {
-		if err := initialize.InsertSession(db, s.userID, s.boardID, string(s.role), s.banned, s.ready, s.connected, s.raisedHand); err != nil {
+		if err := testDbTemplates.InsertSession(db, s.userID, s.boardID, string(s.role), s.banned, s.ready, s.connected, s.raisedHand); err != nil {
 			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}

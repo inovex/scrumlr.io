@@ -202,21 +202,21 @@ func (suite *SessionRequestServiceIntegrationTestSuite) seedSessionRequestTestDa
 	suite.sessionsRequests["Read4"] = DatabaseBoardSessionRequest{User: suite.users["Bob"].ID, Board: suite.boards["Read"].id, Status: RequestRejected}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, sessionRequest := range suite.sessionsRequests {
-		err := initialize.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
+		err := testDbTemplates.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
 		if err != nil {
 			log.Fatalf("Failed to insert test session requests %s", err)
 		}
