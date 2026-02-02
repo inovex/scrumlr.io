@@ -8,34 +8,31 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
 )
 
-type TestBoard struct {
-	id   uuid.UUID
-	name string
-}
-
 type UserServiceIntegrationTestsuite struct {
 	suite.Suite
-	dbContainer          *postgres.PostgresContainer
 	natsContainer        *nats.NATSContainer
-	db                   *bun.DB
 	natsConnectionString string
-	users                map[string]User
-	boards               map[string]TestBoard
-	sessions             map[string]sessions.BoardSession
+	baseData             testDbTemplates.DbBaseIDs
 	userService          UserService
 	broker               *realtime.Broker
+
+	// Additional test-specific data
+	updateUser  testDbTemplates.TestUser
+	deleteUser  testDbTemplates.TestUser
+	updateBoard testDbTemplates.TestBoard
 }
 
 func TestUserServiceIntegrationTestSuite(t *testing.T) {
@@ -43,34 +40,52 @@ func TestUserServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *UserServiceIntegrationTestsuite) SetupSuite() {
-	dbContainer, dbBun := initialize.StartTestDatabase()
-	suite.SeedDatabase(dbBun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = dbBun
 	suite.natsConnectionString = connectionString
+	suite.baseData = testDbTemplates.GetBaseIDs()
 }
 
 func (suite *UserServiceIntegrationTestsuite) TeardownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
 	initialize.StopTestNats(suite.natsContainer)
 }
 
 func (suite *UserServiceIntegrationTestsuite) SetupTest() {
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Failed to connect to nats server %s", err)
+	suite.updateUser = testDbTemplates.TestUser{
+		Name:        "UpdateMe",
+		ID:          uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+		AccountType: common.Anonymous,
+	}
+	suite.deleteUser = testDbTemplates.TestUser{
+		Name:        "DeleteMe",
+		ID:          uuid.MustParse("b2c3d4e5-f6a7-8901-bcde-f12345678901"),
+		AccountType: common.GitHub,
+	}
+	suite.updateBoard = testDbTemplates.TestBoard{
+		Name: "UsersTestUpdate",
+		ID:   uuid.MustParse("c3d4e5f6-a7b8-9012-cdef-123456789012"),
 	}
 
-	noteDatabase := notes.NewNotesDatabase(suite.db)
+	db := testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		true,
+		testDbTemplates.AdditionalSeed{
+			Name: "users_test_data",
+			Func: suite.seedUsersTestData,
+		},
+	)
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	require.NoError(suite.T(), err, "Failed to connect to nats server")
+
+	noteDatabase := notes.NewNotesDatabase(db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	userDatabase := NewUserDatabase(suite.db)
+	userDatabase := NewUserDatabase(db)
 	userService := NewUserService(userDatabase, broker, sessionService)
 
 	suite.userService = userService
@@ -103,7 +118,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 	assert.Equal(t, common.Apple, user.AccountType)
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureadUser() {
+func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 	t := suite.T()
 	ctx := context.Background()
 
@@ -172,8 +187,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Update"].ID
-	boardId := suite.boards["Update"].id
+	userId := suite.updateUser.ID
+	boardId := suite.updateBoard.ID
 	userName := "Test User"
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
@@ -195,7 +210,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Delete"].ID
+	userId := suite.deleteUser.ID
 
 	err := suite.userService.Delete(ctx, userId)
 
@@ -206,13 +221,13 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"].ID
+	userId := suite.baseData.Users["Stan"].ID
 
 	user, err := suite.userService.Get(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, user.ID)
-	assert.Equal(t, suite.users["Stan"].Name, user.Name)
+	assert.Equal(t, suite.baseData.Users["Stan"].Name, user.Name)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
@@ -232,10 +247,10 @@ func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
 	t := suite.T()
 	ctx := context.Background()
 
-	board := suite.boards["Update"]
-	userIds := []uuid.UUID{suite.users["Stan"].ID, suite.users["Update"].ID}
+	board := suite.updateBoard
+	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID}
 
-	users, err := suite.userService.GetBoardUsers(ctx, board.id)
+	users, err := suite.userService.GetBoardUsers(ctx, board.ID)
 
 	ids := slices.Collect(func(yield func(uuid.UUID) bool) {
 		for _, user := range users {
@@ -250,7 +265,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Santa"].ID
+	userId := suite.baseData.Users["Santa"].ID
 
 	available, err := suite.userService.IsUserAvailableForKeyMigration(ctx, userId)
 
@@ -262,7 +277,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"].ID
+	userId := suite.baseData.Users["Stan"].ID
 
 	user, err := suite.userService.SetKeyMigration(ctx, userId)
 
@@ -270,41 +285,24 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 	assert.Equal(t, userId, user.ID)
 }
 
-func (suite *UserServiceIntegrationTestsuite) SeedDatabase(db *bun.DB) {
-	// test users
-	suite.users = make(map[string]User, 4)
-	suite.users["Stan"] = User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
-	suite.users["Santa"] = User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Update"] = User{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
-	suite.users["Delete"] = User{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
+func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
+	log.Println("Seeding users test data")
 
-	// test boards
-	suite.boards = make(map[string]TestBoard, 1)
-	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update"}
-
-	// test sessions
-	suite.sessions = make(map[string]sessions.BoardSession, 1)
-	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
-	suite.sessions["Update"] = sessions.BoardSession{UserID: suite.users["Update"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
-
-	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
-		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
-		}
+	if err := initialize.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType)); err != nil {
+		log.Fatalf("Failed to insert update user: %s", err)
+	}
+	if err := initialize.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType)); err != nil {
+		log.Fatalf("Failed to insert delete user: %s", err)
 	}
 
-	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
-		if err != nil {
-			log.Fatalf("Failed to insert test board %s", err)
-		}
+	if err := initialize.InsertBoard(db, suite.updateBoard.ID, suite.updateBoard.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		log.Fatalf("Failed to insert test board: %s", err)
 	}
 
-	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.UserID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
-		if err != nil {
-			log.Fatalf("Failed to insert test sessions %s", err)
-		}
+	if err := initialize.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+		log.Fatalf("Failed to insert Stan session: %s", err)
+	}
+	if err := initialize.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+		log.Fatalf("Failed to insert Update user session: %s", err)
 	}
 }

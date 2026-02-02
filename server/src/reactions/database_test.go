@@ -3,12 +3,12 @@ package reactions
 import (
 	"context"
 	"log"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
@@ -16,7 +16,6 @@ import (
 
 type DatabaseReactionTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
 	db        *bun.DB
 	users     map[string]TestUser
 	boards    map[string]TestBoard
@@ -29,17 +28,15 @@ func TestDatabaseReactionTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseReactionTestSuite))
 }
 
-func (suite *DatabaseReactionTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseReactionTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseReactionTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction() {
@@ -218,7 +215,7 @@ type TestNote struct {
 	text     string
 }
 
-func (suite *DatabaseReactionTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	// test users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Anonymous}

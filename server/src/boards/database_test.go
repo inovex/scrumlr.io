@@ -10,36 +10,33 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
 type DatabaseBoardTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	users     map[string]TestUser
-	boards    map[string]DatabaseBoard
-	sessions  map[string]TestSession
+	db       *bun.DB
+	users    map[string]TestUser
+	boards   map[string]DatabaseBoard
+	sessions map[string]TestSession
 }
 
-func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
+func TestDatabaseBoardTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseBoardTestSuite))
 }
 
-func (suite *DatabaseBoardTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseBoardTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseBoardTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "boards_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
@@ -403,7 +400,9 @@ type TestSession struct {
 	user  uuid.UUID
 }
 
-func (suite *DatabaseBoardTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseBoardTestSuite) seedData(db *bun.DB) {
+	log.Println("Seeding boards database test data")
+
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}

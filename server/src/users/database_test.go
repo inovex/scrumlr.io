@@ -9,38 +9,40 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/sessions"
 )
 
+type testBoard struct {
+	id   uuid.UUID
+	name string
+}
+
 type DatabaseUserTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	users     map[string]DatabaseUser
-	boards    map[string]TestBoard
-	sessions  map[string]sessions.BoardSession
+	db       *bun.DB
+	users    map[string]DatabaseUser
+	boards   map[string]testBoard
+	sessions map[string]sessions.BoardSession
 }
 
 func TestDatabaseUserTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseUserTestSuite))
 }
 
-func (suite *DatabaseUserTestSuite) SetupSuite() {
-	container, dbBun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(dbBun)
-
-	suite.container = container
-	suite.db = dbBun
-}
-
-func (suite *DatabaseUserTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseUserTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "users_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
@@ -340,7 +342,9 @@ func (suite *DatabaseUserTestSuite) TesDatabasSetKeyMigration() {
 	assert.Equal(t, suite.users["Santa"].Avatar, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
+	log.Println("Seeding users database test data")
+
 	// test users
 	suite.users = make(map[string]DatabaseUser, 6)
 	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
@@ -351,8 +355,8 @@ func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
 	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google}
 
 	// test boards
-	suite.boards = make(map[string]TestBoard, 1)
-	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update"}
+	suite.boards = make(map[string]testBoard, 1)
+	suite.boards["Update"] = testBoard{id: uuid.New(), name: "Update"}
 
 	// test sessions
 	suite.sessions = make(map[string]sessions.BoardSession, 1)
