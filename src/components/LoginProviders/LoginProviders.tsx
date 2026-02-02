@@ -62,38 +62,17 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
           <span ref={ghostRef} className="ghost-measurer" aria-hidden="true">
             {providerConfig[primaryProvider].label}
           </span>
-          <Button
-            id={providerConfig[primaryProvider].signInKey}
-            color="backlog-blue"
-            onClick={signIn(providerConfig[primaryProvider].signInKey)}
-            icon={providerConfig[primaryProvider].icon}
-            iconPosition="left"
-            iconStyle="embedded"
-            iconAlignment="spaced"
-          >
-            {providerConfig[primaryProvider].label}
-          </Button>
-
           {!isCompact ? (
             /* --- FULL MODE --- */
             <div className="full-stack-wrapper">
               <Button
                 id={providerConfig[primaryProvider].signInKey}
-                className="login-providers__button text-button"
                 color="backlog-blue"
                 onClick={signIn(providerConfig[primaryProvider].signInKey)}
-              >
-                {providerConfig[primaryProvider].label}
-              </Button>
-              <Button
-                key={`${primaryProvider}-overlay`}
-                className="login-providers__button overlay-icon-button"
-                color="backlog-blue"
                 icon={providerConfig[primaryProvider].icon}
-                hideLabel
-                variant="ghost"
-                aria-hidden="true"
-                tabIndex={-1}
+                iconPosition="left"
+                iconStyle="embedded"
+                iconAlignment="spaced"
               >
                 {providerConfig[primaryProvider].label}
               </Button>

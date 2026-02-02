@@ -10,9 +10,15 @@ $button-height--small: 46px;
 
 .button {
   all: unset;
+  font-family: inherit;
   outline: 0;
 
   display: flex;
+
+  &--full-width {
+    width: 100%;
+  }
+
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -28,9 +34,7 @@ $button-height--small: 46px;
   font-size: styles.$text-size--medium;
   font-weight: 700;
 
-  &--with-icon {
-    @include mixins.compensate-padding(styles.$spacing--base 22px styles.$spacing--base 28px, $border-width);
-  }
+  @include mixins.compensate-padding(6px styles.$spacing--xl, $border-width);
 
   &--small {
     height: $button-height--small;
@@ -39,9 +43,12 @@ $button-height--small: 46px;
     @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
 
     &.button--with-icon {
-      // both have to be active to apply
-      @include mixins.compensate-padding(6px styles.$spacing--sm 6px styles.$spacing--base, $border-width);
+      padding: 0;
     }
+  }
+
+  &--with-icon {
+    padding: 0;
   }
 
   &--icon-only {
@@ -152,45 +159,72 @@ $button-height--small: 46px;
   }
 }
 
+// helper for spaced icon alignment
+$icon-edge-gap--default: 3px;
+$icon-edge-gap--small: 2px;
+
 .button__content-wrapper {
-  @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
   display: flex;
-  flex-direction: row;
-  align-items: left;
-  // normal padding
-  &--pos {
-    &-left {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  gap: $content-gap;
+
+  @include mixins.compensate-padding(styles.$spacing--sm, $border-width);
+
+  &[data-align="spaced"] {
+    display: grid;
+    width: 100%;
+    padding: 0;
+    column-gap: $content-gap;
+
+    // default: icon on right
+    grid-template-columns: 1fr auto;
+    justify-items: center;
+    padding-left: styles.$spacing--xs;
+
+    .button__icon-background {
+      margin-right: $icon-edge-gap--default;
+
+      &[data-size="small"] {
+        margin-right: $icon-edge-gap--small;
+      }
+    }
+
+    //icon on left
+    &[data-pos="left"] {
+      grid-template-columns: auto 1fr;
       padding-left: 0;
-      // we need bigger padding on the left
-      // smaller on the right
-    }
-    &-right {
-      padding-right: 0;
-      // we need bigger padding on the right
-      // smaller on the left
-    }
-  }
-  &--align {
-    &-compact {
-      // same as with icon currently
-    }
-    &-spaced {
-      // spacing so that the icon is on the border
+      padding-right: styles.$spacing--xs;
+
+      .button__icon-background {
+        margin-right: 0;
+        margin-left: $icon-edge-gap--default;
+
+        &[data-size="small"] {
+          margin-left: $icon-edge-gap--small;
+        }
+      }
     }
   }
 }
 
 .button__icon-background {
+  --icon-size: #{$button-height--default * 0.85};
+
+  width: var(--icon-size);
+  height: var(--icon-size);
   border-radius: 50%;
-  width: calc(#{$button-height--default} * 0.85);
-  height: calc(#{$button-height--default} * 0.85);
-  padding: 0;
-  min-width: unset;
-  flex: 0 0 calc(#{$button-height--default} * 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: styles.$spacing--xxs; //my try to
+
+  &[data-size="small"] {
+    --icon-size: #{$button-height--small * 0.85};
+  }
+
   &--embedded {
     background-color: styles.$gray--000;
   }

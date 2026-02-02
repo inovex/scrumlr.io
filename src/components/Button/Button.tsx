@@ -25,29 +25,14 @@ type ButtonProps = {
   title?: string; // Tooltip text shown on hover
   dataTooltipId?: string; // ID for react-tooltip integration
   dataTooltipContent?: string; // Content for react-tooltip
+  fullWidth?: boolean; // If true, button takes full width of its container. Defaults to false.
 
   // Icon Props
   icon?: ReactNode;
   iconStyle?: IconStyle; // Defaults to 'default'
   iconPosition?: IconPosition; // Defaults to 'right'
   iconAlignment?: IconAlignment; // Defaults to 'compact' (close)
-
-  /** TODO remove tabIndex and ariaHidden as it will no longer be needed */
-
-  /** Used to remove button from keyboard navigation */
-  tabIndex?: number;
-  /** Used to hide button from screen readers */
-  ariaHidden?: boolean;
 };
-
-// logic:
-// if we have no icon given, then we ignore the iconType and iconPosition
-// if we have an icon given:
-// if type is not given -> default same as now
-// if type is embedded then it gets a round cycle in white (or todo perhaps even other color) in size 0.85 of the button
-// if pos is not given it is right close
-// close means aligned to text
-// far means aligned to the border
 
 export const Button = (props: ButtonProps) => {
   const hasLabel = props.children !== null && props.children !== undefined && props.children !== "";
@@ -56,30 +41,27 @@ export const Button = (props: ButtonProps) => {
   const iconPos = props.iconPosition ?? "right";
   const iconAlign = props.iconAlignment ?? "compact";
   const iconStyle = props.iconStyle ?? "default";
+  const buttonSize = props.small ? "small" : "default";
+
+  const isFullWidth = props.fullWidth || iconAlign === "spaced";
 
   const renderButtonContent = () => {
-    // 1. Define the label content once
     const label = !props.hideLabel && hasLabel ? props.children : null;
 
-    // 2. If there is no icon, we can exit early
     if (!props.icon) return label;
 
-    // 3. Define the icon structure once
     const iconMarkup = (
-      // Added BEM element convention for clarity
-      <div className={`button__icon-background button__icon-background--${iconStyle}`}>{props.icon}</div>
+      <div data-size={buttonSize} className={`button__icon-background button__icon-background--${iconStyle}`}>
+        {props.icon}
+      </div>
     );
 
     if (isIconOnly) {
       return iconMarkup;
     }
 
-    // 4. Return them in the correct order
     return (
-      // 1. Fixed spelling (alignment)
-      // 2. Added default value (iconAlign)
-      // 3. Added position class (iconPos) -> Critical for CSS Flex direction/margins
-      <div className={classNames("button__content-wrapper", `button__content-wrapper--align-${iconAlign}`, `button__content-wrapper--pos-${iconPos}`)}>
+      <div className="button__content-wrapper" data-align={iconAlign} data-pos={iconPos} data-size={buttonSize}>
         {iconPos === "left" && iconMarkup}
         {label}
         {iconPos !== "left" && iconMarkup}
@@ -96,6 +78,7 @@ export const Button = (props: ButtonProps) => {
         `button--${props.variant ?? "primary"}`,
         {
           "button--small": props.small,
+          "button--full-width": isFullWidth,
           "button--with-icon": props.icon && !isIconOnly,
           "button--icon-only": isIconOnly,
         },
@@ -107,8 +90,7 @@ export const Button = (props: ButtonProps) => {
       data-tooltip-id={props.dataTooltipId}
       data-tooltip-content={props.dataTooltipContent}
       data-cy={props.dataCy}
-      tabIndex={props.tabIndex}
-      aria-hidden={props.ariaHidden}
+      aria-label={isIconOnly ? props.title || "Button" : undefined}
     >
       {renderButtonContent()}
     </button>
