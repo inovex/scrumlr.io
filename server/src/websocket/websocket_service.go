@@ -34,7 +34,7 @@ func NewWebSocketService() WebSocketInterface {
 func (c *webSocketService) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
 	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		InsecureSkipVerify: !checkOrigin,
-		CompressionMode:    websocket.CompressionContextTakeover,
+		CompressionMode:    websocket.CompressionDisabled, // compression doesn't work with Safari and led to #5777: see https://pkg.go.dev/github.com/coder/websocket#CompressionMode
 	})
 	if err != nil {
 		return nil, err
