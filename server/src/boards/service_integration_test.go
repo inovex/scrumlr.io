@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"log"
 	"testing"
 	"time"
 
@@ -10,14 +11,15 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -28,17 +30,22 @@ import (
 	"scrumlr.io/server/votings"
 )
 
+type testSession struct {
+	board uuid.UUID
+	user  uuid.UUID
+}
+
 type BoardServiceIntegrationTestSuite struct {
 	suite.Suite
-	dbContainer          *postgres.PostgresContainer
 	natsContainer        *nats.NATSContainer
-	db                   *bun.DB
 	natsConnectionString string
-	users                map[string]TestUser
-	boards               map[string]Board
-	sessions             map[string]TestSession
-	service              BoardService
 	broker               *realtime.Broker
+	service              BoardService
+
+	// Additional test-specific data
+	users    map[string]testDbTemplates.TestUser
+	boards   map[string]Board
+	sessions map[string]testSession
 }
 
 func TestBoardServiceIntegrationTestSuite(t *testing.T) {
@@ -46,47 +53,95 @@ func TestBoardServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *BoardServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, dbBun := initialize.StartTestDatabase()
-	suite.SeedDatabase(dbBun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = dbBun
 	suite.natsConnectionString = connectionString
-	suite.setupBoardService()
+	suite.initTestData()
 }
 
 func (suite *BoardServiceIntegrationTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
 	initialize.StopTestNats(suite.natsContainer)
 }
 
-func (suite *BoardServiceIntegrationTestSuite) setupBoardService() {
+func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
+	db := testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "boards_test",
+			Func: suite.seedBoardsTestData,
+		},
+	)
+
 	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		suite.FailNow("Failed to connect to nats server %s", err)
-	}
+	require.NoError(suite.T(), err, "Failed to connect to nats server")
+	suite.broker = broker
 
 	clock := timeprovider.NewClock()
 	generatedHash := hash.NewHashSha512()
-	reactionDatabase := reactions.NewReactionsDatabase(suite.db)
+	reactionDatabase := reactions.NewReactionsDatabase(db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
-	votingDatabase := votings.NewVotingDatabase(suite.db)
+	votingDatabase := votings.NewVotingDatabase(db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
+	noteDatabase := notes.NewNotesDatabase(db)
 	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
+	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
+	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	wsService := websocket.NewWebSocketService()
-	websocket := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
-	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(suite.db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-	database := NewBoardDatabase(suite.db)
-	service := NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
-	suite.service, suite.broker = service, broker
+	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
+	database := NewBoardDatabase(db)
+	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) initTestData() {
+	suite.users = map[string]testDbTemplates.TestUser{
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567001"), AccountType: common.Google},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+	}
+
+	// Board names and descriptions
+	read1Name := "Read1"
+	read1Desc := "This is a board"
+	read2Name := "Read2"
+	read2Desc := "This is also a board"
+	timerName := "TimerUpdate"
+	timerDesc := "This is a board to update the timer"
+	updateName := "Update"
+	updateDesc := "This is a board to update"
+	updateToPassphraseName := "UpdateToPassphrase"
+	updateToPassphraseDesc := "This is a board to update"
+	updateToInviteName := "UpdateToInvite"
+	updateToInviteDesc := "This is a board to update"
+	updateToPublicName := "UpdateToPublic"
+	updateToPublicDesc := "This is a board to update"
+	passphrase := "SuperStrongPassword"
+	salt := "SaltForPassphrase"
+	deleteName := "DeleteBoard"
+	deleteDesc := "This is a board to delete"
+
+	suite.boards = map[string]Board{
+		"Read1":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567101"), Name: &read1Name, Description: &read1Desc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Read2":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567102"), Name: &read2Name, Description: &read2Desc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Timer":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567103"), Name: &timerName, Description: &timerDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Update":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567104"), Name: &updateName, Description: &updateDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePublicToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567105"), Name: &updateToPassphraseName, Description: &updateToPassphraseDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePublicToInvite":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567106"), Name: &updateToInviteName, Description: &updateToInviteDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePassphraseToPublic": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567107"), Name: &updateToPublicName, Description: &updateToPublicDesc, Passphrase: &passphrase, Salt: &salt, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePassphraseToInvite": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567108"), Name: &updateToInviteName, Description: &updateToInviteDesc, Passphrase: &passphrase, Salt: &salt, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdateInviteToPublic":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567109"), Name: &updateToPublicName, Description: &updateToPublicDesc, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdateInviteToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710a"), Name: &updateToPassphraseName, Description: &updateToPassphraseDesc, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Delete":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710b"), Name: &deleteName, Description: &deleteDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+	}
+
+	suite.sessions = map[string]testSession{
+		"Read1": {board: suite.boards["Read1"].ID, user: suite.users["Stan"].ID},
+		"Read2": {board: suite.boards["Read2"].ID, user: suite.users["Stan"].ID},
+	}
 }
 
 func (suite *BoardServiceIntegrationTestSuite) assertBoardEventAndData(events chan *realtime.BoardEvent, expectedName string, expectedAccessPolicy AccessPolicy) {
@@ -142,7 +197,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Santa"].id
+	userId := suite.users["Santa"].ID
 	name := "Insert Board"
 	description := "This board was inserted"
 	accessPolicy := Public
@@ -173,7 +228,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Santa"].id
+	userId := suite.users["Santa"].ID
 	name := "Insert Board"
 	description := "This board was inserted"
 	accessPolicy := ByPassphrase
@@ -490,7 +545,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"].id
+	userId := suite.users["Stan"].ID
 
 	boards, err := suite.service.GetBoards(ctx, userId)
 
@@ -544,7 +599,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {
 	ctx := context.Background()
 
 	boardIds := []uuid.UUID{suite.boards["Read1"].ID, suite.boards["Read2"].ID}
-	userId := suite.users["Stan"].id
+	userId := suite.users["Stan"].ID
 
 	boards, err := suite.service.BoardOverview(ctx, boardIds, userId)
 
@@ -608,85 +663,24 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	assert.Equal(t, minutes+1, uint8(board.TimerEnd.Sub(*board.TimerStart).Minutes()))
 }
 
-func (suite *BoardServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
-	// tests users
-	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
-
-	// tests boards
-	suite.boards = make(map[string]Board, 11)
-	firstReadName := "Read1"
-	firstReadDescription := "This is a board"
-	suite.boards["Read1"] = Board{ID: uuid.New(), Name: &firstReadName, Description: &firstReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	secondReadName := "Read2"
-	secondReadDescription := "This is also a board"
-	suite.boards["Read2"] = Board{ID: uuid.New(), Name: &secondReadName, Description: &secondReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	timerName := "TimerUpdate"
-	timerDescription := "This is a board to update the timer"
-	suite.boards["Timer"] = Board{ID: uuid.New(), Name: &timerName, Description: &timerDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateName := "Update"
-	updateDescription := "This is a board to update"
-	suite.boards["Update"] = Board{ID: uuid.New(), Name: &updateName, Description: &updateDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNamePassphrase := "UpdateToPassphrase"
-	updateDescriptionPassphrase := "This is a board to update"
-	suite.boards["UpdatePublicToPassphrase"] = Board{ID: uuid.New(), Name: &updateNamePassphrase, Description: &updateDescriptionPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNamePublicToInvite := "UpdateToInvite"
-	updateDescriptionPublicToInvite := "This is a board to update"
-	suite.boards["UpdatePublicToInvite"] = Board{ID: uuid.New(), Name: &updateNamePublicToInvite, Description: &updateDescriptionPublicToInvite, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNamePassphraseToPublic := "UpdateToPublic"
-	updateDescriptionPassphraseToPublic := "This is a board to update"
-	passphrasePassphraseToPublic := "SuperStrongPassword"
-	saltPassphraseToPublic := "SaltForPassphrase"
-	suite.boards["UpdatePassphraseToPublic"] = Board{ID: uuid.New(), Name: &updateNamePassphraseToPublic, Description: &updateDescriptionPassphraseToPublic, Passphrase: &passphrasePassphraseToPublic, Salt: &saltPassphraseToPublic, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNamePassphraseToInvite := "UpdateToInvite"
-	updateDescriptionPassphraseToInvite := "This is a board to update"
-	passphrasePassphraseToInvite := "SuperStrongPassword"
-	saltPassphraseToInvite := "SaltForPassphrase"
-	suite.boards["UpdatePassphraseToInvite"] = Board{ID: uuid.New(), Name: &updateNamePassphraseToInvite, Description: &updateDescriptionPassphraseToInvite, Passphrase: &passphrasePassphraseToInvite, Salt: &saltPassphraseToInvite, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNameInviteToPublic := "UpdateToPublic"
-	updateDescriptionInviteToPublic := "This is a board to update"
-	suite.boards["UpdateInviteToPublic"] = Board{ID: uuid.New(), Name: &updateNameInviteToPublic, Description: &updateDescriptionInviteToPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	updateNameInviteToPassphrase := "UpdateToPassphrase"
-	updateDescriptionInviteToPassphrase := "This is a board to update"
-	suite.boards["UpdateInviteToPassphrase"] = Board{ID: uuid.New(), Name: &updateNameInviteToPassphrase, Description: &updateDescriptionInviteToPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	deleteName := "DeleteBoard"
-	deleteDescription := "This is a board to delete"
-	suite.boards["Delete"] = Board{ID: uuid.New(), Name: &deleteName, Description: &deleteDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-
-	// test sessions
-	suite.sessions = make(map[string]TestSession, 2)
-	suite.sessions["Read1"] = TestSession{board: suite.boards["Read1"].ID, user: suite.users["Stan"].id}
-	suite.sessions["Read2"] = TestSession{board: suite.boards["Read2"].ID, user: suite.users["Stan"].id}
+func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
+	log.Println("Seeding boards test data")
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
-		if err != nil {
-			suite.FailNow("Failed to insert test user %s", err)
+		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.ID, *board.Name, *board.Description, board.Passphrase, board.Salt, string(board.AccessPolicy), board.ShowAuthors, board.ShowNotesOfOtherUsers, board.ShowNoteReactions, board.AllowStacking, board.IsLocked)
-		if err != nil {
-			suite.FailNow("Failed to insert test boards %s", err)
+		if err := initialize.InsertBoard(db, board.ID, *board.Name, *board.Description, board.Passphrase, board.Salt, string(board.AccessPolicy), board.ShowAuthors, board.ShowNotesOfOtherUsers, board.ShowNoteReactions, board.AllowStacking, board.IsLocked); err != nil {
+			log.Fatalf("Failed to insert board %s: %s", *board.Name, err)
 		}
 	}
 
 	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false)
-		if err != nil {
-			suite.FailNow("Failed to insert test sessions %s", err)
+		if err := initialize.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false); err != nil {
+			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}
 }

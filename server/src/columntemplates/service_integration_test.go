@@ -8,19 +8,26 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 )
+
+type testBoardTemplate struct {
+	id          uuid.UUID
+	creator     uuid.UUID
+	name        string
+	description string
+	favourite   bool
+}
 
 type ColumnTemplateServiceIntegrationTestSuite struct {
 	suite.Suite
-	dbContainer     *postgres.PostgresContainer
-	db              *bun.DB
-	users           map[string]TestUser
-	boardTemplates  map[string]TestBoardTemplate
+	service         ColumnTemplateService
+	users           map[string]testDbTemplates.TestUser
+	boardTemplates  map[string]testBoardTemplate
 	columnTemplates map[string]DatabaseColumnTemplate
 }
 
@@ -29,15 +36,55 @@ func TestColumnTemplateServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
-
-	suite.dbContainer = dbContainer
-	suite.db = bun
+	suite.initTestData()
 }
 
-func (suite *ColumnTemplateServiceIntegrationTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
+func (suite *ColumnTemplateServiceIntegrationTestSuite) SetupTest() {
+	db := testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "columntemplates_test",
+			Func: suite.seedColumnTemplatesTestData,
+		},
+	)
+
+	database := NewColumnTemplateDatabase(db)
+	suite.service = NewColumnTemplateService(database)
+}
+
+func (suite *ColumnTemplateServiceIntegrationTestSuite) initTestData() {
+	suite.users = map[string]testDbTemplates.TestUser{
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: common.Google},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+	}
+
+	suite.boardTemplates = map[string]testBoardTemplate{
+		"InsertFirst":       {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567101"), creator: suite.users["Santa"].ID, name: "InsertFirst", description: "This is a description", favourite: false},
+		"InsertNoIndex":     {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567102"), creator: suite.users["Santa"].ID, name: "InsertNoIndex", description: "This is a description", favourite: false},
+		"InsertLast":        {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567103"), creator: suite.users["Santa"].ID, name: "InsertLast", description: "This is a description", favourite: false},
+		"InsertHighIndex":   {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567104"), creator: suite.users["Santa"].ID, name: "InsertHighIndex", description: "This is a description", favourite: false},
+		"InsertMiddleIndex": {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567105"), creator: suite.users["Santa"].ID, name: "InsertMiddleindex", description: "This is a description", favourite: false},
+		"Write":             {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567106"), creator: suite.users["Santa"].ID, name: "WriteTemplate", description: "This is a description", favourite: true},
+		"Read1":             {id: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567107"), creator: suite.users["Stan"].ID, name: "ReadTemplate", description: "This is a description", favourite: true},
+	}
+
+	suite.columnTemplates = map[string]DatabaseColumnTemplate{
+		// test column templates for insert
+		"InsertFirst":        {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567201"), BoardTemplate: suite.boardTemplates["InsertFirst"].id, Name: "InsertFirst", Description: "Initial template", Visible: false, Color: columns.ColorYieldingYellow, Index: 0},
+		"InsertNoIndex":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567202"), BoardTemplate: suite.boardTemplates["InsertNoIndex"].id, Name: "InsertNoIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
+		"InsertLast":         {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567203"), BoardTemplate: suite.boardTemplates["InsertLast"].id, Name: "InsertLast", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
+		"InsertHighIndex":    {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567204"), BoardTemplate: suite.boardTemplates["InsertHighIndex"].id, Name: "InsertHighIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
+		"InsertMiddleIndex0": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567205"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle0", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
+		"InsertMiddleIndex1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567206"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle1", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 1},
+		// test column templates for write
+		"Update":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567207"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "This is a column description", Visible: false, Color: columns.ColorOnlineOrange, Index: 0},
+		"UpdateIndex": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567208"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "The index of this column will be update through the update of the column above", Visible: false, Color: columns.ColorPlanningPink, Index: 1},
+		"Delete":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567209"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Delete", Description: "This column will be delete throug a test", Visible: true, Color: columns.ColorPokerPurple, Index: 2},
+		// test column templates for get
+		"Read1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567210"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column1", Description: "This is a column description", Visible: true, Color: columns.ColorOnlineOrange, Index: 0},
+		"Read2": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567211"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1},
+	}
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create() {
@@ -50,10 +97,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create() {
 	color := columns.ColorYieldingYellow
 	visible := true
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Create(ctx, ColumnTemplateRequest{
+	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
 		BoardTemplate: boardId,
 		Name:          name,
 		Description:   description,
@@ -82,10 +126,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex()
 	visible := true
 	index := 0
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Create(ctx, ColumnTemplateRequest{
+	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
 		BoardTemplate: boardId,
 		Name:          name,
 		Description:   description,
@@ -114,10 +155,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 	visible := true
 	index := 1
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Create(ctx, ColumnTemplateRequest{
+	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
 		BoardTemplate: boardId,
 		Name:          name,
 		Description:   description,
@@ -146,10 +184,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex(
 	visible := true
 	index := 1
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Create(ctx, ColumnTemplateRequest{
+	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
 		BoardTemplate: boardId,
 		Name:          name,
 		Description:   description,
@@ -179,10 +214,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Update() {
 	index := 1
 	visible := true
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Update(ctx, ColumnTemplateUpdateRequest{
+	template, err := suite.service.Update(ctx, ColumnTemplateUpdateRequest{
 		ID:            columnId,
 		BoardTemplate: boardId,
 		Name:          name,
@@ -209,10 +241,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Delete() {
 	columnId := suite.columnTemplates["Delete"].ID
 	boardId := suite.columnTemplates["Delete"].BoardTemplate
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	err := service.Delete(ctx, boardId, columnId)
+	err := suite.service.Delete(ctx, boardId, columnId)
 
 	assert.Nil(t, err)
 }
@@ -224,10 +253,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Get() {
 	columnId := suite.columnTemplates["Read1"].ID
 	boardId := suite.boardTemplates["Read1"].id
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	template, err := service.Get(ctx, boardId, columnId)
+	template, err := suite.service.Get(ctx, boardId, columnId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, columnId, template.ID)
@@ -245,10 +271,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_GetAll() {
 
 	boardId := suite.boardTemplates["Read1"].id
 
-	database := NewColumnTemplateDatabase(suite.db)
-	service := NewColumnTemplateService(database)
-
-	templates, err := service.GetAll(ctx, boardId)
+	templates, err := suite.service.GetAll(ctx, boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, templates, 2)
@@ -270,57 +293,24 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Equal(t, suite.columnTemplates["Read2"].Visible, templates[1].Visible)
 }
 
-func (suite *ColumnTemplateServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
-	// tests users
-	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
-
-	// test board templates
-	suite.boardTemplates = make(map[string]TestBoardTemplate, 7)
-	suite.boardTemplates["InsertFirst"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "InsertFirst", description: "This is a description", favourite: false}
-	suite.boardTemplates["InsertNoIndex"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "InsertNoIndex", description: "This is a description", favourite: false}
-	suite.boardTemplates["InsertLast"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "InsertLast", description: "This is a description", favourite: false}
-	suite.boardTemplates["InsertHighIndex"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "InsertHighIndex", description: "This is a description", favourite: false}
-	suite.boardTemplates["InsertMiddleIndex"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "InsertMiddleindex", description: "This is a description", favourite: false}
-	suite.boardTemplates["Write"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Santa"].id, name: "WriteTemplate", description: "This is a description", favourite: true}
-	suite.boardTemplates["Read1"] = TestBoardTemplate{id: uuid.New(), creator: suite.users["Stan"].id, name: "ReadTemplate", description: "This is a description", favourite: true}
-
-	// test column templates
-	suite.columnTemplates = make(map[string]DatabaseColumnTemplate, 11)
-	// test column templates for insert
-	suite.columnTemplates["InsertFirst"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertFirst"].id, Name: "InsertFirst", Description: "Initial template", Visible: false, Color: columns.ColorYieldingYellow, Index: 0}
-	suite.columnTemplates["InsertNoIndex"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertNoIndex"].id, Name: "InsertNoIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0}
-	suite.columnTemplates["InsertLast"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertLast"].id, Name: "InsertLast", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0}
-	suite.columnTemplates["InsertHighIndex"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertHighIndex"].id, Name: "InsertHighIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0}
-	suite.columnTemplates["InsertMiddleIndex0"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle0", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0}
-	suite.columnTemplates["InsertMiddleIndex1"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle1", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 1}
-	// test column templates for write
-	suite.columnTemplates["Update"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "This is a column description", Visible: false, Color: columns.ColorOnlineOrange, Index: 0}
-	suite.columnTemplates["UpdateIndex"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "The index of this column will be update through the update of the column above", Visible: false, Color: columns.ColorPlanningPink, Index: 1}
-	suite.columnTemplates["Delete"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Delete", Description: "This column will be delete throug a test", Visible: true, Color: columns.ColorPokerPurple, Index: 2}
-	// test colum templates for get
-	suite.columnTemplates["Read1"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column1", Description: "This is a column description", Visible: true, Color: columns.ColorOnlineOrange, Index: 0}
-	suite.columnTemplates["Read2"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1}
+func (suite *ColumnTemplateServiceIntegrationTestSuite) seedColumnTemplatesTestData(db *bun.DB) {
+	log.Println("Seeding column templates test data")
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
-		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
+		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, boardTemplate := range suite.boardTemplates {
-		err := initialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite)
-		if err != nil {
-			log.Fatalf("Failed to insert test board templates %s", err)
+		if err := initialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite); err != nil {
+			log.Fatalf("Failed to insert board template %s: %s", boardTemplate.name, err)
 		}
 	}
 
 	for _, columnTemplate := range suite.columnTemplates {
-		err := initialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index)
-		if err != nil {
-			log.Fatalf("Failed to insert test column templates %s", err)
+		if err := initialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index); err != nil {
+			log.Fatalf("Failed to insert column template: %s", err)
 		}
 	}
 }

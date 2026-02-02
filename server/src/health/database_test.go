@@ -6,30 +6,21 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
 type DatabaseHealthTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
+	db *bun.DB
 }
 
 func TestDatabaseHealthTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseHealthTestSuite))
 }
 
-func (suite *DatabaseHealthTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseHealthTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseHealthTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(suite.T(), false)
 }
 
 func (suite *DatabaseHealthTestSuite) Test_Database_IsHealthy() {

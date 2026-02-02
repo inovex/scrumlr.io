@@ -44,15 +44,16 @@ func (suite *VotingServiceIntegrationTestSuite) SetupSuite() {
 
 	suite.natsContainer = natsContainer
 	suite.natsConnectionString = connectionString
+	suite.baseData = testDbTemplates.GetBaseIDs()
 }
 
 func (suite *VotingServiceIntegrationTestSuite) SetupTest() {
-	suite.baseData = testDbTemplates.GetBaseIDs()
 	db := testDbTemplates.NewBaseTestDB(
 		suite.T(),
+		true,
 		testDbTemplates.AdditionalSeed{
-			Name: "voting_votes",
-			Func: suite.seedVotingVotes,
+			Name: "votings_test_data",
+			Func: suite.seedVotingTestData,
 		},
 	)
 
@@ -327,7 +328,7 @@ func compareVotingResults(t *testing.T, expectedVoting testDbTemplates.TestVotin
 	assert.Equal(t, VotingStatus(expectedVoting.Status), actualVoting.Status)
 }
 
-func (suite *VotingServiceIntegrationTestSuite) seedVotingVotes(db *bun.DB) {
+func (suite *VotingServiceIntegrationTestSuite) seedVotingTestData(db *bun.DB) {
 	log.Println("Seeding voting votes data")
 
 	votes := []struct {
