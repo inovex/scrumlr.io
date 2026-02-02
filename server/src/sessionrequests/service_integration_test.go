@@ -2,10 +2,11 @@ package sessionrequests
 
 import (
 	"context"
-	"github.com/stretchr/testify/require"
 	"log"
-	"scrumlr.io/server/initialize/testDbTemplates"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"scrumlr.io/server/websocket"
 

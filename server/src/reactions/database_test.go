@@ -3,8 +3,9 @@ package reactions
 import (
 	"context"
 	"log"
-	"scrumlr.io/server/initialize/testDbTemplates"
 	"testing"
+
+	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
