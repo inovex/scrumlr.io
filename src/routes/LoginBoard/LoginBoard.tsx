@@ -123,6 +123,7 @@ export const LoginBoard = () => {
           className={classNames("login-board__anonymous-toggle", {
             "login-board__anonymous-toggle--active": showAnonymousContent,
           })}
+          data-cy="login-board__anonymous-toggle"
           onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
           onKeyDown={(e) => {
             if ((e.key === "Enter" || e.key === " ") && !showAnonymousContent) {
@@ -137,7 +138,7 @@ export const LoginBoard = () => {
         {showAnonymousContent && (
           <div className="login-board__anonymous-content">
             <div className="login-board__input-wrapper input-linked-hover">
-              <Input type="text" height="small" input={displayName} setInput={setDisplayName} maxLength={64} onSubmit={handleAnonymousLogin} />
+              <Input type="text" height="small" input={displayName} setInput={setDisplayName} maxLength={64} onSubmit={handleAnonymousLogin} dataCy="login-board__username" />
               <Button
                 variant="ghost"
                 color="backlog-blue"
@@ -147,7 +148,7 @@ export const LoginBoard = () => {
                 hideLabel
               />
             </div>
-            <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} data-cy="login-board__anonymous-login-button">
+            <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} dataCy="login-board__anonymous-login-button">
               {t("LoginBoard.login")}
             </Button>
           </div>
