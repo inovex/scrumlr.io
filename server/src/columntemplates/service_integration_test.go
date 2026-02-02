@@ -11,7 +11,6 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
@@ -297,19 +296,19 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) seedColumnTemplatesTestD
 	log.Println("Seeding column templates test data")
 
 	for _, user := range suite.users {
-		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, boardTemplate := range suite.boardTemplates {
-		if err := initialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite); err != nil {
+		if err := testDbTemplates.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite); err != nil {
 			log.Fatalf("Failed to insert board template %s: %s", boardTemplate.name, err)
 		}
 	}
 
 	for _, columnTemplate := range suite.columnTemplates {
-		if err := initialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index); err != nil {
+		if err := testDbTemplates.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index); err != nil {
 			log.Fatalf("Failed to insert column template: %s", err)
 		}
 	}

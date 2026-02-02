@@ -334,13 +334,13 @@ func (suite *NoteServiceIntegrationTestSuite) seedNotesTestData(db *bun.DB) {
 
 	// Insert boards
 	for _, board := range suite.boards {
-		if err := initialize.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		if err := testDbTemplates.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 			log.Fatalf("Failed to insert board %s: %s", board.Name, err)
 		}
 	}
 
 	// Insert session for Write board
-	if err := initialize.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(common.ParticipantRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(common.ParticipantRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert session: %s", err)
 	}
 
@@ -350,14 +350,14 @@ func (suite *NoteServiceIntegrationTestSuite) seedNotesTestData(db *bun.DB) {
 		"Delete": 0, "DeleteStack": 1, "Stack": 0, "Read1": 0, "Read2": 1,
 	}
 	for name, col := range suite.columns {
-		if err := initialize.InsertColumn(db, col.ID, col.BoardID, col.Name, "", "backlog-blue", true, columnIndices[name]); err != nil {
+		if err := testDbTemplates.InsertColumn(db, col.ID, col.BoardID, col.Name, "", "backlog-blue", true, columnIndices[name]); err != nil {
 			log.Fatalf("Failed to insert column %s: %s", col.Name, err)
 		}
 	}
 
 	// Insert notes
 	for _, note := range suite.notes {
-		if err := initialize.InsertNote(db, note.ID, note.Author, note.Board, note.Column, note.Text, note.Stack, note.Rank); err != nil {
+		if err := testDbTemplates.InsertNote(db, note.ID, note.Author, note.Board, note.Column, note.Text, note.Stack, note.Rank); err != nil {
 			log.Fatalf("Failed to insert note: %s", err)
 		}
 	}

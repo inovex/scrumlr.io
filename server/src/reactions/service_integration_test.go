@@ -323,31 +323,31 @@ func (suite *ReactionServiceIntegrationTestSuite) seedReactionsTestData(db *bun.
 	log.Println("Seeding reactions test data")
 
 	for _, user := range suite.users {
-		if err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		if err := initialize.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+		if err := testDbTemplates.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 			log.Fatalf("Failed to insert board %s: %s", board.Name, err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		if err := initialize.InsertColumn(db, column.ID, column.BoardID, column.Name, "", "backlog-blue", true, 0); err != nil {
+		if err := testDbTemplates.InsertColumn(db, column.ID, column.BoardID, column.Name, "", "backlog-blue", true, 0); err != nil {
 			log.Fatalf("Failed to insert column %s: %s", column.Name, err)
 		}
 	}
 
 	for _, note := range suite.notes {
-		if err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+		if err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
 			log.Fatalf("Failed to insert note: %s", err)
 		}
 	}
 
 	for _, reaction := range suite.reactions {
-		if err := initialize.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType)); err != nil {
+		if err := testDbTemplates.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType)); err != nil {
 			log.Fatalf("Failed to insert reaction: %s", err)
 		}
 	}

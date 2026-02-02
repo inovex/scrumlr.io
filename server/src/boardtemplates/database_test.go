@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
@@ -204,14 +203,14 @@ func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
 	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name2, Description: &description2, Favourite: &favourite2}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, template := range suite.templates {
-		err := initialize.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
+		err := testDbTemplates.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
 		if err != nil {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}

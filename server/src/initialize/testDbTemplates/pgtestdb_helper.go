@@ -14,6 +14,11 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+const POSTGRES_IMAGE = "postgres:17.5-alpine"
+const DATABASE_NAME = "scrumlr_test"
+const DATABASE_USERNAME = "stan"
+const DATABASE_PASSWORD = "scrumlr"
+
 var (
 	testDBConfig  pgtestdb.Config
 	once          sync.Once
@@ -29,10 +34,10 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
 		ctx := context.Background()
 		container, err := postgres.Run(
 			ctx,
-			initialize.POSTGRES_IMAGE,
-			postgres.WithDatabase(initialize.DATABASE_NAME),
-			postgres.WithUsername(initialize.DATABASE_USERNAME),
-			postgres.WithPassword(initialize.DATABASE_PASSWORD),
+			POSTGRES_IMAGE,
+			postgres.WithDatabase(DATABASE_NAME),
+			postgres.WithUsername(DATABASE_USERNAME),
+			postgres.WithPassword(DATABASE_PASSWORD),
 			postgres.BasicWaitStrategies(),
 		)
 		if err != nil {
@@ -54,11 +59,11 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
 
 		testDBConfig = pgtestdb.Config{
 			DriverName: "postgres",
-			User:       initialize.DATABASE_USERNAME,
-			Password:   initialize.DATABASE_PASSWORD,
+			User:       DATABASE_USERNAME,
+			Password:   DATABASE_PASSWORD,
 			Host:       host,
 			Port:       mappedPort.Port(),
-			Database:   initialize.DATABASE_NAME,
+			Database:   DATABASE_NAME,
 			Options:    "sslmode=disable",
 		}
 	})

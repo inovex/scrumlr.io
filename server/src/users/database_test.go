@@ -12,7 +12,6 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/sessions"
 )
@@ -365,26 +364,26 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
-	err := initialize.InsertGoogleUser(db, suite.users["ExistingGoogleUser"].ID, "existingGoogleId", "OldName", "")
+	err := testDbTemplates.InsertGoogleUser(db, suite.users["ExistingGoogleUser"].ID, "existingGoogleId", "OldName", "")
 	if err != nil {
 		log.Fatalf("Failed to insert google_users entry %s", err)
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.UserID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
+		err := testDbTemplates.InsertSession(db, session.UserID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
 		if err != nil {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}
