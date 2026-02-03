@@ -12,6 +12,10 @@ on:
     branches: [main]
     types:
       - completed
+
+permissions:
+  contents: read
+
 env:
   BASE_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io
 
