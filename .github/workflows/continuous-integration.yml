@@ -202,7 +202,7 @@ jobs:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
   postman_tests:
-    #TODO: Disable postman_tests for now
+    #TODO: Currently disabled. Remove postman as soon as the e2e tests are rolled out
     if: ${{ false && github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest

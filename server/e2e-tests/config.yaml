@@ -1,5 +1,4 @@
 # E2E Test Configuration
-# Copy this to config.local.yaml and adjust for your environment
 
 server:
   base_url: "http://localhost:8080"
@@ -15,7 +14,6 @@ users:
     name: "Board Participant"
 
 # Default board settings for tests
-# Valid colors: backlog-blue, goal-green, value-violet, online-orange, planning-pink, poker-purple, yielding-yellow
 board:
   default_access_policy: "PUBLIC"
   default_columns:
