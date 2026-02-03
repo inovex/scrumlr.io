@@ -157,10 +157,18 @@ jobs:
   package:
     if: github.event.pull_request.head.repo.fork == false
     needs: [test-frontend, test-backend]
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yml
 
   deploy_to_dev_cluster:
     needs: package
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+      pull-requests: write
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     uses: ./.github/workflows/deploy_to_dev_cluster.yml
     secrets: inherit
@@ -188,6 +196,10 @@ jobs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
 
   deploy_github_pages:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: ./.github/workflows/deploy_docs.yml
