@@ -244,7 +244,7 @@ jobs:
         working-directory: ./server/e2e-tests
         env:
             E2E_BASE_URL: ${{ env.BASE_URL }}/api
-        run: make e2e
+        run: go test ./...
 
   cypress_end_to_end_test:
     name: Cypress End to End Test
