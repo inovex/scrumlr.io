@@ -240,6 +240,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "^1.25"
+          cache: true
+          cache-dependency-path: server/e2e-tests/go.sum
       - name: Run E2E tests
         working-directory: ./server/e2e-tests
         env:
