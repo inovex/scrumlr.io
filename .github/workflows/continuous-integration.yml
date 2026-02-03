@@ -202,20 +202,33 @@ jobs:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
   postman_tests:
+    #TODO: Disable postman_tests for now
+    if: ${{ false && github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Postman run
+        uses: ./.github/actions/postman_run
+        with:
+          POSTMAN_URL: ${{ env.BASE_URL }}/api
+
+  e2e_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+      - uses: actions/setup-go@v5
         with:
-          HEALTH_URL: ${{ env.BASE_URL }}/api/health
-      - name: Postman run
-        uses: ./.github/actions/postman_run
-        with:
-          POSTMAN_URL: ${{ env.BASE_URL }}/api
+          go-version: "^1.25"
+      - name: Run E2E tests
+        working-directory: ./server/e2e-tests
+        env:
+            E2E_BASE_URL: ${{ env.BASE_URL }}/api
+        run: make e2e
 
   cypress_end_to_end_test:
     name: Cypress End to End Test

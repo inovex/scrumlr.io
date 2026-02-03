@@ -1,0 +1,30 @@
+# E2E Test Configuration
+# Copy this to config.local.yaml and adjust for your environment
+
+server:
+  base_url: "http://localhost:8080"
+  timeout_seconds: 30
+
+# Test users to create
+users:
+  default:
+    name: "E2E Test User"
+  moderator:
+    name: "Board Moderator"
+  participant:
+    name: "Board Participant"
+
+# Default board settings for tests
+# Valid colors: backlog-blue, goal-green, value-violet, online-orange, planning-pink, poker-purple, yielding-yellow
+board:
+  default_access_policy: "PUBLIC"
+  default_columns:
+    - name: "Positive"
+      color: "backlog-blue"
+      visible: true
+    - name: "Negative"
+      color: "value-violet"
+      visible: true
+    - name: "Actions"
+      color: "planning-pink"
+      visible: true
