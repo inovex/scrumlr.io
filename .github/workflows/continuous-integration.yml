@@ -244,6 +244,7 @@ jobs:
         working-directory: ./server/e2e-tests
         env:
             E2E_BASE_URL: ${{ env.BASE_URL }}/api
+            E2E_INSECURE_SKIP_VERIFY: "true"
         run: go test ./...
 
   cypress_end_to_end_test:
