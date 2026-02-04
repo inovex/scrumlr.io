@@ -12,10 +12,10 @@ describe("Button", () => {
   });
 
   it("should render with different button types", () => {
-    const {rerender} = render(<Button type="secondary">Secondary</Button>);
+    const {rerender} = render(<Button variant="secondary">Secondary</Button>);
     expect(screen.getByRole("button")).toHaveClass("button--secondary");
 
-    rerender(<Button type="tertiary">Tertiary</Button>);
+    rerender(<Button variant="tertiary">Tertiary</Button>);
     expect(screen.getByRole("button")).toHaveClass("button--tertiary");
   });
 
@@ -139,7 +139,7 @@ describe("Button", () => {
 
     render(
       <Button
-        type="secondary"
+        variant="secondary"
         className="complex-button"
         color="value-violet"
         small
