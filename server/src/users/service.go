@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -45,13 +46,15 @@ type Service struct {
 	database       UserDatabase
 	sessionService sessions.SessionService
 	realtime       *realtime.Broker
+	notesService   notes.NotesService
 }
 
-func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService) UserService {
+func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService, notesService notes.NotesService) UserService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
 	service.sessionService = sessionService
+	service.notesService = notesService
 
 	return service
 }
@@ -308,6 +311,11 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.RecordError(err)
 		return err
 	}
+
+	for _, cBoard := range connectedBoards {
+		service.deleteUserNotesFromBoard(ctx, cBoard.Board, id)
+	}
+
 	err = service.database.DeleteUser(ctx, id)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete user")
@@ -319,6 +327,42 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	deletedUserCounter.Add(ctx, 1)
 	service.deletedUser(ctx, id, connectedBoards)
 	return err
+}
+
+func (service *Service) deleteUserNotesFromBoard(ctx context.Context, boardID, userID uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "users.service.delete.board_cleanup")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("board_id", boardID.String()),
+		attribute.String("user_id", userID.String()),
+	)
+
+	log := logger.FromContext(ctx)
+	allNotes, err := service.notesService.GetAll(ctx, boardID)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to fetch notes")
+		log.Errorw("failed to get all notes for board during user deletion", "board", boardID, "user", userID, "err", err)
+		return
+	}
+
+	for _, note := range allNotes {
+		if note.Author != userID {
+			continue
+		}
+
+		req := notes.NoteDeleteRequest{
+			ID:          note.ID,
+			Board:       boardID,
+			DeleteStack: false,
+		}
+
+		if err := service.notesService.Delete(ctx, userID, req); err != nil {
+			span.RecordError(err)
+			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
+		}
+	}
 }
 
 func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {
