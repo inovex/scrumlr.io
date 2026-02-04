@@ -6,18 +6,17 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/initialize/testDbTemplates"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 type DatabaseSessionRequestTestSuite struct {
 	suite.Suite
-	container        *postgres.PostgresContainer
 	db               *bun.DB
 	users            map[string]TestUser
 	boards           map[string]TestBoard
@@ -28,17 +27,15 @@ func TestDatabaseSessionRequestTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseSessionRequestTestSuite))
 }
 
-func (suite *DatabaseSessionRequestTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseSessionRequestTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseSessionRequestTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_Create() {
@@ -297,7 +294,7 @@ type TestBoard struct {
 	name string
 }
 
-func (suite *DatabaseSessionRequestTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseSessionRequestTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 6)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
@@ -329,21 +326,21 @@ func (suite *DatabaseSessionRequestTestSuite) SeedDatabase(db *bun.DB) {
 	suite.sessionsRequests["Read4"] = DatabaseBoardSessionRequest{User: suite.users["Bob"].id, Board: suite.boards["Read"].id, Status: RequestRejected}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, sessionRequest := range suite.sessionsRequests {
-		err := initialize.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
+		err := testDbTemplates.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
 		if err != nil {
 			log.Fatalf("Failed to insert test session requests %s", err)
 		}
