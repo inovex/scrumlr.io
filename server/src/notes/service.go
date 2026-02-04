@@ -20,9 +20,14 @@ import (
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
+}
+
 type Service struct {
-	database NotesDatabase
-	realtime *realtime.Broker
+	database                 NotesDatabase
+	realtime                 *realtime.Broker
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 }
 
 type NotesDatabase interface {
@@ -37,10 +42,11 @@ type NotesDatabase interface {
 	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
+func NewNotesService(db NotesDatabase, rt *realtime.Broker, boardLastModifiedUpdater BoardLastModifiedUpdater) NotesService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
+	service.boardLastModifiedUpdater = boardLastModifiedUpdater
 
 	return service
 }
@@ -69,6 +75,10 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		span.RecordError(err)
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
 		return nil, common.InternalServerError
+	}
+
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
+		log.Warnw("unable to update last modified", "board", body.Board, "err", err)
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -189,6 +199,10 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		return nil, common.InternalServerError
 	}
 
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
+		log.Warnw("unable to update last modified", "board", body.Board, "err", err)
+	}
+
 	service.updatedNotes(ctx, body.Board)
 	return new(Note).From(note), err
 }
@@ -242,6 +256,10 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		span.RecordError(err)
 		log.Errorw("unable to delete note", "note", body, "err", err)
 		return err
+	}
+
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
+		log.Warnw("unable to update last modified", "board", body.Board, "err", err)
 	}
 
 	service.deletedNote(ctx, body.Board, stackIds...)

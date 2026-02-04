@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"scrumlr.io/server/votings"
 
@@ -46,9 +47,10 @@ func (d *DB) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpda
 }
 
 func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error) {
+	update.LastModifiedAt = time.Now()
 	query := d.db.NewUpdate().
 		Model(&update).
-		Column("timer_start", "timer_end", "shared_note")
+		Column("timer_start", "timer_end", "shared_note", "last_modified_at")
 
 	if update.Name != nil {
 		query.Column("name")
