@@ -5,41 +5,38 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/initialize/testDbTemplates"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 type DatabaseNoteTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	users     map[string]TestUser
-	boards    map[string]TestBoard
-	sessions  map[string]TestSession
-	columns   map[string]TestColumn
-	notes     []DatabaseNote //map iteration order is not defined
+	db       *bun.DB
+	users    map[string]TestUser
+	boards   map[string]TestBoard
+	sessions map[string]TestSession
+	columns  map[string]TestColumn
+	notes    []DatabaseNote //map iteration order is not defined
 }
 
 func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseNoteTestSuite))
 }
 
-func (suite *DatabaseNoteTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseNoteTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseNoteTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseNoteTestSuite) Test_Database_Create() {
@@ -696,7 +693,7 @@ type TestColumn struct {
 	index   int
 }
 
-func (suite *DatabaseNoteTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseNoteTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
@@ -762,35 +759,35 @@ func (suite *DatabaseNoteTestSuite) SeedDatabase(db *bun.DB) {
 	suite.notes[26] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Read"].id, Column: suite.columns["Read2"].id, Text: "I have no idea", Rank: 1}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.userId, session.boardId, string(common.ParticipantRole), false, false, true, false)
+		err := testDbTemplates.InsertSession(db, session.userId, session.boardId, string(common.ParticipantRole), false, false, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test session %s", err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
+		err := testDbTemplates.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, note := range suite.notes {
-		err := initialize.InsertNote(db, note.ID, note.Author, note.Board, note.Column, note.Text, note.Stack, note.Rank)
+		err := testDbTemplates.InsertNote(db, note.ID, note.Author, note.Board, note.Column, note.Text, note.Stack, note.Rank)
 		if err != nil {
 			log.Fatalf("Failed to insert test notes %s", err)
 		}
