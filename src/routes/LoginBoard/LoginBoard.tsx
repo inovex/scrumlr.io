@@ -1,137 +1,199 @@
-import {getRandomName} from "utils/random";
-import {Auth} from "utils/auth";
-import {Toast} from "utils/Toast";
+// external
 import {useState} from "react";
-import {LoginProviders} from "components/LoginProviders";
+import {Link, useLocation, useNavigate} from "react-router";
 import {Trans, useTranslation} from "react-i18next";
-import {Link, useLocation} from "react-router";
-import {HeroIllustration} from "components/HeroIllustration";
-import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {Refresh} from "components/Icon";
-import {TextInputAction} from "components/TextInputAction";
-import {LegacyButton} from "components/Button";
-import {TextInput} from "components/TextInput";
-import {TextInputLabel} from "components/TextInputLabel";
-import {ValidationError} from "components/ValidationError";
+import classNames from "classnames";
+// internal
 import {useAppSelector} from "store";
-import {SHOW_LEGAL_DOCUMENTS} from "../../config";
+import {Auth} from "utils/auth";
+import {getRandomName} from "utils/random";
+// components
+import {Background} from "components/Background";
+import {Button} from "components/Button";
+import {HeaderBar} from "components/HeaderBar";
+import {Refresh, MarkAsDone} from "components/Icon";
+import {Input} from "components/Input/Input";
+import {LoginProviders} from "components/LoginProviders";
+import {ValidationError} from "components/ValidationError";
+// assets
+import StanCoffeeDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.svg";
+import StanCoffeeLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.svg";
+import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
+import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.svg";
+// styles
 import "./LoginBoard.scss";
 
-interface State {
+interface LocationState {
   from: {pathname: string};
 }
 
-export const LoginBoard = () => {
-  const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
-  const providersAvailable = useAppSelector((state) => state.view.enabledAuthProvider).length > 0;
+const FEATURE_KEYS = [
+  "LoginBoard.loginFeature1",
+  "LoginBoard.loginFeature2",
+  // ...
+];
 
+const TERMS_LINKS = {
+  terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+  privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+};
+
+export const LoginBoard = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const location = useLocation();
 
+  const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
+  const enabledProviders = useAppSelector((state) => state.view.enabledAuthProvider);
+  const providersAvailable = enabledProviders.length > 0;
+
   const [displayName, setDisplayName] = useState(getRandomName());
-  const [termsAccepted, setTermsAccepted] = useState(!SHOW_LEGAL_DOCUMENTS);
-  const [submitted, setSubmitted] = useState(false);
+  const [showAnonymousContent, setShowAnonymousContent] = useState(false);
 
-  let redirectPath = "/";
-  if (location.state) {
-    redirectPath = (location.state as State).from.pathname;
+  const redirectPath = (location.state as LocationState)?.from?.pathname || "/";
+
+  async function handleAnonymousLogin() {
+    if (!displayName) return; // Basic safety check
+    await Auth.signInAnonymously(displayName);
+    navigate(redirectPath);
   }
 
-  // anonymous sign in and redirection to board path that is in history
-  async function handleLogin() {
-    if (termsAccepted) {
-      try {
-        await Auth.signInAnonymously(displayName);
-        window.location.pathname = redirectPath;
-      } catch (err) {
-        Toast.error({title: t("LoginBoard.errorOnRedirect")});
-      }
-    }
-    setSubmitted(true);
-  }
-
-  // https://dribbble.com/shots/7757250-Sign-up-revamp
-  return (
-    <div className="login-board">
-      <div className="login-board__dialog">
-        <div className="login-board__form-wrapper">
-          <div className="login-board__form">
-            <a href="/" aria-label="Homepage">
-              <ScrumlrLogo className="login-board__logo" />
-            </a>
-
-            <h1>{t("LoginBoard.title")}</h1>
-
-            <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
-
-            <hr className="login-board__divider" data-label="or" />
-
-            <fieldset className="login-board__fieldset">
-              <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
-
-              <div className="login-board__username">
-                <TextInputLabel label={t("LoginBoard.username")} htmlFor="login-board__username" />
-                <TextInput
-                  id="login-board__username"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (e.key === "Enter") {
-                      handleLogin();
-                    }
-                  }}
-                  maxLength={64}
-                  aria-invalid={!displayName}
-                  actions={
-                    <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
-                      <Refresh />
-                    </TextInputAction>
-                  }
-                  data-cy="login-board__username"
-                />
+  /**
+   * Logic Section: Providers
+   * Flattened logic:
+   * 1. If providers exist -> Show Features, Providers, and Divider (if anonymous login is enabled).
+   * 2. If no providers AND anonymous login disabled -> Show Error.
+   * 3. If no providers AND anonymous login enabled -> Show Anonymous Subtitle.
+   */
+  const renderProvidersSectionContent = () => {
+    if (providersAvailable) {
+      return (
+        <>
+          <h1>{t("LoginBoard.subtitleLogin")}</h1>
+          <div className="login-board__features">
+            {FEATURE_KEYS.map((key) => (
+              <div key={key} className="login-board__feature">
+                <MarkAsDone className="login-board__feature-icon" />
+                <span>{t(key)}</span>
               </div>
-              {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
+            ))}
+          </div>
+          <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
+        </>
+      );
+    }
 
-              {SHOW_LEGAL_DOCUMENTS && (
-                <label className="login-board__form-element login-board__terms">
-                  <input
-                    type="checkbox"
-                    className="login-board__checkbox"
-                    defaultChecked={termsAccepted}
-                    onChange={() => setTermsAccepted(!termsAccepted)}
-                    data-cy="login-board__checkbox"
-                  />
-                  <span className="login-board__terms-label">
-                    <Trans
-                      i18nKey="LoginBoard.acceptTerms"
-                      components={{
-                        terms: <Link to="/legal/termsAndConditions" target="_blank" />,
-                        privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
-                      }}
-                    />
-                  </span>
-                </label>
-              )}
-            </fieldset>
-            {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
+    if (anonymousLoginDisabled) {
+      return <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>;
+    }
 
-            <LegacyButton
-              className="login-board__anonymous-login-button"
-              color="primary"
-              onClick={handleLogin}
-              disabled={anonymousLoginDisabled}
-              data-cy="login-board__anonymous-login-button"
-            >
+    return <h1>{t("LoginBoard.subtitleAnonymous")}</h1>;
+  };
+
+  /**
+   * Logic Section: Divider
+   * Flattened logic:
+   * If provider exist AND anonymous login enabled -> show devider
+   * Else show nothing
+   */
+  const renderDivider = () => {
+    if (providersAvailable && !anonymousLoginDisabled) {
+      return <hr className="login-board__divider" data-label={t("LoginBoard.dividerWord")} />;
+    }
+    return null;
+  };
+
+  /**
+   * Logic Section: Anonymous Form
+   * Flattened logic:
+   * 1. If anonymous login disabled -> Return nothing.
+   * 2. Render Toggle.
+   * 3. If toggle active -> Render Inputs.
+   */
+  const renderAnonymousSectionContent = () => {
+    if (anonymousLoginDisabled) return null;
+
+    return (
+      <>
+        <p
+          // eslint-disable-next-line
+          role="button"
+          aria-expanded={showAnonymousContent}
+          tabIndex={showAnonymousContent ? -1 : 0} // Remove from tab order if already active
+          className={classNames("login-board__anonymous-toggle", {
+            "login-board__anonymous-toggle--active": showAnonymousContent,
+          })}
+          data-cy="login-board__anonymous-toggle"
+          onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
+          onKeyDown={(e) => {
+            if ((e.key === "Enter" || e.key === " ") && !showAnonymousContent) {
+              setShowAnonymousContent(true);
+            }
+          }}
+          style={{cursor: showAnonymousContent ? "default" : "pointer"}}
+        >
+          {t("LoginBoard.anonymousLogin")}
+        </p>
+
+        {showAnonymousContent && (
+          <div className="login-board__anonymous-content">
+            <div className="login-board__input-wrapper input-linked-hover">
+              <Input type="text" height="small" input={displayName} setInput={setDisplayName} maxLength={64} onSubmit={handleAnonymousLogin} dataCy="login-board__username" />
+              <Button
+                variant="ghost"
+                color="backlog-blue"
+                onClick={() => setDisplayName(getRandomName())}
+                title={t("LoginBoard.generateRandomName")}
+                icon={<Refresh />}
+                hideLabel
+              />
+            </div>
+            <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} dataCy="login-board__anonymous-login-button">
               {t("LoginBoard.login")}
-            </LegacyButton>
-            {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
-            {/* admin messed something up */}
-            {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
+            </Button>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  return (
+    <Background>
+      <div className="login-board">
+        <HeaderBar renderTitle={() => t("LoginBoard.title")} loginBoard />
+        <div className="login-board__wrapper">
+          <div className="login-board__card">
+            {/* Stan Images - Left */}
+            <div className="login-board__stan-container login-board__stan-container--left">
+              <img className="login-board__stan login-board__stan--dark" src={StanCoffeeDark} alt="Stan hanging with coffee" />
+              <img className="login-board__stan login-board__stan--light" src={StanCoffeeLight} alt="Stan hanging with coffee" />
+            </div>
+            {/* Stan Images - Right */}
+            <div className="login-board__stan-container login-board__stan-container--right">
+              <img className="login-board__stan login-board__stan--dark" src={StanOkayDark} alt="Stan showing okay sign" />
+              <img className="login-board__stan login-board__stan--light" src={StanOkayLight} alt="Stan showing okay sign" />
+            </div>
+
+            <div className="login-board__form-wrapper">
+              <div className="login-board__form">
+                {/* Providers Section */}
+                <div className="login-board__providers-section">{renderProvidersSectionContent()}</div>
+
+                {/* Divider Section */}
+                <div className="login-board__divider-section">{renderDivider()}</div>
+
+                {/* Anonymous Section */}
+                <div className="login-board__anonymous-section">{renderAnonymousSectionContent()}</div>
+              </div>
+
+              {/* Footer Terms */}
+              <span className="login-board__terms-label">
+                <Trans i18nKey="LoginBoard.acceptTerms" components={TERMS_LINKS} />
+              </span>
+            </div>
           </div>
         </div>
-
-        <HeroIllustration className="login-board__illustration" />
       </div>
-    </div>
+    </Background>
   );
 };

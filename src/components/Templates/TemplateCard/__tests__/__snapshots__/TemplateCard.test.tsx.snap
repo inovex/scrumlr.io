@@ -65,10 +65,22 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
     >
-      Start
-      <svg>
-        next.svg
-      </svg>
+      <div
+        class="button__content-wrapper"
+        data-align="compact"
+        data-pos="right"
+        data-size="small"
+      >
+        Start
+        <div
+          class="button__icon-background button__icon-background--default"
+          data-size="small"
+        >
+          <svg>
+            next.svg
+          </svg>
+        </div>
+      </div>
     </button>
   </div>
 </div>
@@ -133,10 +145,22 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
     >
-      Start
-      <svg>
-        next.svg
-      </svg>
+      <div
+        class="button__content-wrapper"
+        data-align="compact"
+        data-pos="right"
+        data-size="small"
+      >
+        Start
+        <div
+          class="button__icon-background button__icon-background--default"
+          data-size="small"
+        >
+          <svg>
+            next.svg
+          </svg>
+        </div>
+      </div>
     </button>
   </div>
 </div>
