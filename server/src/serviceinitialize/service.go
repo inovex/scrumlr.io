@@ -131,7 +131,9 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.broker)
+	boardsDB := boards.NewBoardDatabase(init.db)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB)
+	notesService := notes.NewNotesService(notesDB, init.broker, boardLastModifiedUpdater)
 
 	return notesService
 }

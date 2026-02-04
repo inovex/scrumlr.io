@@ -50,24 +50,24 @@ func (suite *NotesTestSuite) TestCreateNote() {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			noteMock := notes.NewMockNotesService(suite.T())
-			testText := "asdf"
-
-			boardId, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			colId, _ := uuid.NewRandom()
 
 			s.notes = noteMock
+
+			testText := "asdf"
+			boardID, _ := uuid.NewRandom()
+			userId, _ := uuid.NewRandom()
+			colId, _ := uuid.NewRandom()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
 				"text" : "%s"
 				}`, colId.String(), testText)))
 			req.Req = logger.InitTestLoggerRequest(req.Request())
-			req.AddToContext(identifiers.BoardIdentifier, boardId).
+			req.AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.UserIdentifier, userId)
 
 			noteMock.EXPECT().Create(mock.Anything, notes.NoteCreateRequest{
-				Board:  boardId,
+				Board:  boardID,
 				User:   userId,
 				Text:   testText,
 				Column: colId,
@@ -84,6 +84,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 	}
 
 }
+
 func (suite *NotesTestSuite) TestGetNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
@@ -152,6 +153,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			boardMock := boards.NewMockBoardService(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
 			votingMock := votings.NewMockVotingService(suite.T())
+
 			s.notes = noteMock
 			s.boards = boardMock
 			s.sessions = sessionMock
@@ -216,20 +218,21 @@ func (suite *NotesTestSuite) TestEditNote() {
 
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
+			// given
 			s := new(Server)
 			noteMock := notes.NewMockNotesService(suite.T())
 			updatedText := "This note has been edited"
 
-			boardId, _ := uuid.NewRandom()
+			s.notes = noteMock
+
+			boardID, _ := uuid.NewRandom()
 			noteId, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()
-
-			s.notes = noteMock
 
 			req := technical_helper.NewTestRequestBuilder("PUT", fmt.Sprintf("/notes/%s", noteId.String()), strings.NewReader(fmt.Sprintf(`{
 				"text": "%s"}`, updatedText)))
 			req.Req = logger.InitTestLoggerRequest(req.Request())
-			req.AddToContext(identifiers.BoardIdentifier, boardId).
+			req.AddToContext(identifiers.BoardIdentifier, boardID).
 				AddToContext(identifiers.NoteIdentifier, noteId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
@@ -238,15 +241,17 @@ func (suite *NotesTestSuite) TestEditNote() {
 				Position: nil,
 				Edited:   false,
 				ID:       noteId,
-				Board:    boardId,
+				Board:    boardID,
 			}).Return(&notes.Note{
 				Text: updatedText,
 			}, tt.err)
 
 			rr := httptest.NewRecorder()
 
+			// when
 			s.updateNote(rr, req.Request())
 
+			// then
 			// parse response to Note
 			buf := new(bytes.Buffer)
 			_, err := buf.ReadFrom(rr.Result().Body)
@@ -264,7 +269,6 @@ func (suite *NotesTestSuite) TestEditNote() {
 				suite.Equal(updatedText, note.Text)
 			}
 			noteMock.AssertExpectations(suite.T())
-
 		})
 	}
 }
