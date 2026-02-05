@@ -276,7 +276,7 @@ stringData:
   url: postgres://scrumlr:POSTGRES_DEV_PASSWORD@cluster-PR_NUMBER-rw:5432/scrumlr
 ---
 # nats repository
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: nats
@@ -285,7 +285,7 @@ spec:
   url: https://nats-io.github.io/k8s/helm/charts/
 ---
 # nats deployment
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nats-PR_NUMBER
