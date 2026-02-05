@@ -17,7 +17,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/uptrace/bun"
-	httpMock "scrumlr.io/server/mocks/net/http"
 	"scrumlr.io/server/realtime"
 )
 
@@ -372,12 +371,12 @@ func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockWebSocket := NewMockSessionRequestWebsocket(t)
-	mockResponseWriter := httpMock.NewMockResponseWriter(t)
+	recorder := httptest.NewRecorder()
 	mockRequest := httptest.NewRequest(http.MethodGet, "/test", nil)
 	mockWebSocket.EXPECT().OpenSocket(mock.Anything, mock.Anything)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	service.OpenSocket(context.Background(), mockResponseWriter, mockRequest)
+	service.OpenSocket(context.Background(), recorder, mockRequest)
 
-	mockWebSocket.AssertCalled(t, "OpenSocket", mockResponseWriter, mockRequest)
+	mockWebSocket.AssertCalled(t, "OpenSocket", recorder, mockRequest)
 }

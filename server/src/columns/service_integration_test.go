@@ -62,9 +62,10 @@ func (suite *ColumnServiceIntegrationTestSuite) SetupTest() {
 	suite.broker = broker
 
 	notesDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(notesDatabase, broker)
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
+	noteService := notes.NewNotesService(notesDatabase, broker, boardLastModifiedUpdater)
 	database := NewColumnsDatabase(db)
-	suite.columnService = NewColumnService(database, broker, noteService)
+	suite.columnService = NewColumnService(database, broker, noteService, boardLastModifiedUpdater)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) initTestData() {
@@ -100,7 +101,6 @@ func (suite *ColumnServiceIntegrationTestSuite) initTestData() {
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithoutIndex() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := suite.boards["InsertNoIndex"].ID
@@ -114,28 +114,27 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithoutIndex() {
 
 	column, err := suite.columnService.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible})
 
-	assert.Nil(t, err)
-	assert.Equal(t, name, column.Name)
-	assert.Equal(t, description, column.Description)
-	assert.Equal(t, color, column.Color)
-	assert.Equal(t, visible, column.Visible)
-	assert.Equal(t, index, column.Index)
+	suite.Nil(err)
+	suite.Equal(name, column.Name)
+	suite.Equal(description, column.Description)
+	suite.Equal(color, column.Color)
+	suite.Equal(visible, column.Visible)
+	suite.Equal(index, column.Index)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventColumnsUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventColumnsUpdated, msg.Type)
 	columnData, err := technical_helper.Unmarshal[[]Column](msg.Data)
-	assert.Nil(t, err)
-	assert.Len(t, *columnData, 1)
+	suite.Nil(err)
+	suite.Len(*columnData, 1)
 
 	notesMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, notesMsg.Type)
+	suite.Equal(realtime.BoardEventNotesSync, notesMsg.Type)
 	notesData, err := technical_helper.Unmarshal[[]notes.Note](notesMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.Nil(err)
+	suite.Nil(notesData)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := suite.boards["InsertMiddle"].ID
@@ -158,28 +157,27 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 		},
 	)
 
-	assert.Nil(t, err)
-	assert.Equal(t, name, column.Name)
-	assert.Equal(t, description, column.Description)
-	assert.Equal(t, color, column.Color)
-	assert.Equal(t, visible, column.Visible)
-	assert.Equal(t, index, column.Index)
+	suite.Nil(err)
+	suite.Equal(name, column.Name)
+	suite.Equal(description, column.Description)
+	suite.Equal(color, column.Color)
+	suite.Equal(visible, column.Visible)
+	suite.Equal(index, column.Index)
 
 	colunMsg := <-events
-	assert.Equal(t, realtime.BoardEventColumnsUpdated, colunMsg.Type)
+	suite.Equal(realtime.BoardEventColumnsUpdated, colunMsg.Type)
 	columnData, err := technical_helper.Unmarshal[[]Column](colunMsg.Data)
-	assert.Nil(t, err)
-	assert.Len(t, *columnData, 3)
+	suite.Nil(err)
+	suite.Len(*columnData, 3)
 
 	notesMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, notesMsg.Type)
+	suite.Equal(realtime.BoardEventNotesSync, notesMsg.Type)
 	notesData, err := technical_helper.Unmarshal[[]notes.Note](notesMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.Nil(err)
+	suite.Nil(notesData)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Update() {
-	t := suite.T()
 	ctx := context.Background()
 
 	columnId := suite.columns["Update"].ID
@@ -194,29 +192,28 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Update() {
 
 	column, err := suite.columnService.Update(ctx, ColumnUpdateRequest{ID: columnId, Board: boardId, Name: name, Description: description, Color: color, Visible: visible, Index: index})
 
-	assert.Nil(t, err)
-	assert.Equal(t, columnId, column.ID)
-	assert.Equal(t, name, column.Name)
-	assert.Equal(t, description, column.Description)
-	assert.Equal(t, color, column.Color)
-	assert.Equal(t, visible, column.Visible)
-	assert.Equal(t, index, column.Index)
+	suite.Nil(err)
+	suite.Equal(columnId, column.ID)
+	suite.Equal(name, column.Name)
+	suite.Equal(description, column.Description)
+	suite.Equal(color, column.Color)
+	suite.Equal(visible, column.Visible)
+	suite.Equal(index, column.Index)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventColumnsUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventColumnsUpdated, msg.Type)
 	columnData, err := technical_helper.Unmarshal[[]Column](msg.Data)
-	assert.Nil(t, err)
-	assert.Len(t, *columnData, 2)
+	suite.Nil(err)
+	suite.Len(*columnData, 2)
 
 	notesMsg := <-events
-	assert.Equal(t, realtime.BoardEventNotesSync, notesMsg.Type)
+	suite.Equal(realtime.BoardEventNotesSync, notesMsg.Type)
 	notesData, err := technical_helper.Unmarshal[[]notes.Note](notesMsg.Data)
-	assert.Nil(t, err)
-	assert.Nil(t, notesData)
+	suite.Nil(err)
+	suite.Nil(notesData)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Delete() {
-	t := suite.T()
 	ctx := context.Background()
 
 	columnId := suite.columns["Delete"].ID
@@ -227,21 +224,20 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Delete() {
 
 	err := suite.columnService.Delete(ctx, boardId, columnId, userId)
 
-	assert.Nil(t, err)
+	suite.Nil(err)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventColumnDeleted, msg.Type)
+	suite.Equal(realtime.BoardEventColumnDeleted, msg.Type)
 	type DeleteColumn struct {
 		Column uuid.UUID
 		Notes  []uuid.UUID
 	}
 	columnData, err := technical_helper.Unmarshal[DeleteColumn](msg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, columnId, columnData.Column)
+	suite.Nil(err)
+	suite.Equal(columnId, columnData.Column)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Get() {
-	t := suite.T()
 	ctx := context.Background()
 
 	columnId := suite.columns["Read1"].ID
@@ -249,13 +245,13 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Get() {
 
 	column, err := suite.columnService.Get(ctx, boardId, columnId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, columnId, column.ID)
-	assert.Equal(t, suite.columns["Read1"].Name, column.Name)
-	assert.Equal(t, suite.columns["Read1"].Description, column.Description)
-	assert.Equal(t, suite.columns["Read1"].Index, column.Index)
-	assert.Equal(t, suite.columns["Read1"].Color, column.Color)
-	assert.Equal(t, suite.columns["Read1"].Visible, column.Visible)
+	suite.Nil(err)
+	suite.Equal(columnId, column.ID)
+	suite.Equal(suite.columns["Read1"].Name, column.Name)
+	suite.Equal(suite.columns["Read1"].Description, column.Description)
+	suite.Equal(suite.columns["Read1"].Index, column.Index)
+	suite.Equal(suite.columns["Read1"].Color, column.Color)
+	suite.Equal(suite.columns["Read1"].Visible, column.Visible)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_Get_NotFound() {
@@ -267,78 +263,74 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	column, err := suite.columnService.Get(ctx, boardId, columnId)
 
-	assert.Nil(t, column)
+	suite.Nil(column)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+	suite.Equal(common.NotFoundError, err)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetAll() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := suite.boards["Read"].ID
 
 	columns, err := suite.columnService.GetAll(ctx, boardId)
 
-	assert.Nil(t, err)
-	assert.Len(t, columns, 3)
+	suite.Nil(err)
+	suite.Len(columns, 3)
 
-	assert.Equal(t, suite.columns["Read1"].ID, columns[0].ID)
-	assert.Equal(t, suite.columns["Read1"].Name, columns[0].Name)
-	assert.Equal(t, suite.columns["Read1"].Description, columns[0].Description)
-	assert.Equal(t, suite.columns["Read1"].Index, columns[0].Index)
-	assert.Equal(t, suite.columns["Read1"].Color, columns[0].Color)
-	assert.Equal(t, suite.columns["Read1"].Visible, columns[0].Visible)
+	suite.Equal(suite.columns["Read1"].ID, columns[0].ID)
+	suite.Equal(suite.columns["Read1"].Name, columns[0].Name)
+	suite.Equal(suite.columns["Read1"].Description, columns[0].Description)
+	suite.Equal(suite.columns["Read1"].Index, columns[0].Index)
+	suite.Equal(suite.columns["Read1"].Color, columns[0].Color)
+	suite.Equal(suite.columns["Read1"].Visible, columns[0].Visible)
 
-	assert.Equal(t, suite.columns["Read2"].ID, columns[1].ID)
-	assert.Equal(t, suite.columns["Read2"].Name, columns[1].Name)
-	assert.Equal(t, suite.columns["Read2"].Description, columns[1].Description)
-	assert.Equal(t, suite.columns["Read2"].Index, columns[1].Index)
-	assert.Equal(t, suite.columns["Read2"].Color, columns[1].Color)
-	assert.Equal(t, suite.columns["Read2"].Visible, columns[1].Visible)
+	suite.Equal(suite.columns["Read2"].ID, columns[1].ID)
+	suite.Equal(suite.columns["Read2"].Name, columns[1].Name)
+	suite.Equal(suite.columns["Read2"].Description, columns[1].Description)
+	suite.Equal(suite.columns["Read2"].Index, columns[1].Index)
+	suite.Equal(suite.columns["Read2"].Color, columns[1].Color)
+	suite.Equal(suite.columns["Read2"].Visible, columns[1].Visible)
 
-	assert.Equal(t, suite.columns["Read3"].ID, columns[2].ID)
-	assert.Equal(t, suite.columns["Read3"].Name, columns[2].Name)
-	assert.Equal(t, suite.columns["Read3"].Description, columns[2].Description)
-	assert.Equal(t, suite.columns["Read3"].Index, columns[2].Index)
-	assert.Equal(t, suite.columns["Read3"].Color, columns[2].Color)
-	assert.Equal(t, suite.columns["Read3"].Visible, columns[2].Visible)
+	suite.Equal(suite.columns["Read3"].ID, columns[2].ID)
+	suite.Equal(suite.columns["Read3"].Name, columns[2].Name)
+	suite.Equal(suite.columns["Read3"].Description, columns[2].Description)
+	suite.Equal(suite.columns["Read3"].Index, columns[2].Index)
+	suite.Equal(suite.columns["Read3"].Color, columns[2].Color)
+	suite.Equal(suite.columns["Read3"].Visible, columns[2].Visible)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetAll_NotFound() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	columns, err := suite.columnService.GetAll(ctx, boardId)
 
-	assert.Nil(t, err)
-	assert.Len(t, columns, 0)
+	suite.Nil(err)
+	suite.Len(columns, 0)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := suite.boards["Read"].ID
 
 	count, err := suite.columnService.GetCount(ctx, boardId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, 3, count)
+	suite.Nil(err)
+	suite.Equal(3, count)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetCount_BoarNotFound() {
-	t := suite.T()
 	ctx := context.Background()
 
 	boardId := uuid.New()
 
 	count, err := suite.columnService.GetCount(ctx, boardId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, 0, count)
+	suite.Nil(err)
+	suite.Equal(0, count)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) seedColumnsTestData(db *bun.DB) {

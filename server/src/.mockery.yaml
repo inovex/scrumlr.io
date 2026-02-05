@@ -1,15 +1,7 @@
 ---
 inpackage: true
-with-expecter: true
 filename: "mock_{{.InterfaceName}}.go"
 packages:
-  # configuration on package level
-  net/http:
-    config:
-      dir: mocks/net/http
-    interfaces:
-      ResponseWriter:
-
   scrumlr.io/server/timeprovider:
     config:
       dir: timeprovider
@@ -22,6 +14,12 @@ packages:
     interfaces:
       BoardService:
       BoardDatabase:
+
+  scrumlr.io/server/common:
+    config:
+      dir: common
+    interfaces:
+      BoardLastModifiedUpdater:
 
   scrumlr.io/server/realtime:
     config:
@@ -63,6 +61,7 @@ packages:
     interfaces:
       SessionRequestService:
       SessionRequestDatabase:
+      SessionRequestWebsocket:
 
   scrumlr.io/server/users:
     config:
@@ -78,7 +77,6 @@ packages:
     interfaces:
       NotesService:
       NotesDatabase:
-      BoardLastModifiedUpdater:
 
   scrumlr.io/server/votings:
     config:
@@ -107,4 +105,3 @@ packages:
     interfaces:
       ColumnService:
       ColumnDatabase:
-      BoardLastModifiedUpdater:
