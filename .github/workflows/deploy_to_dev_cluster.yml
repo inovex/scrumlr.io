@@ -55,6 +55,7 @@ jobs:
         with:
           namespace: scrumlr-dev-deployments
           force: true
+          pull-images: false
           manifests: |
             k8s/deployment.yaml
           images: |

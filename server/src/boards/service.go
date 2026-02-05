@@ -537,10 +537,10 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 
 	if board.TimerEnd.After(currentTime) {
 		timerStart = *board.TimerStart
-		timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
+		timerEnd = board.TimerEnd.Add(time.Minute)
 	} else {
 		timerStart = currentTime
-		timerEnd = currentTime.Add(time.Minute * time.Duration(1))
+		timerEnd = currentTime.Add(time.Minute)
 	}
 
 	update := DatabaseBoardTimerUpdate{

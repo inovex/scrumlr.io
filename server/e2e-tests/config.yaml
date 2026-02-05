@@ -1,0 +1,28 @@
+# E2E Test Configuration
+
+server:
+  base_url: "http://localhost:8080"
+  timeout_seconds: 30
+
+# Test users to create
+users:
+  default:
+    name: "E2E Test User"
+  moderator:
+    name: "Board Moderator"
+  participant:
+    name: "Board Participant"
+
+# Default board settings for tests
+board:
+  default_access_policy: "PUBLIC"
+  default_columns:
+    - name: "Positive"
+      color: "backlog-blue"
+      visible: true
+    - name: "Negative"
+      color: "value-violet"
+      visible: true
+    - name: "Actions"
+      color: "planning-pink"
+      visible: true

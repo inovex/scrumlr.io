@@ -12,6 +12,10 @@ on:
     branches: [main]
     types:
       - completed
+
+permissions:
+  contents: read
+
 env:
   BASE_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io
 
@@ -153,10 +157,18 @@ jobs:
   package:
     if: github.event.pull_request.head.repo.fork == false
     needs: [test-frontend, test-backend]
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yml
 
   deploy_to_dev_cluster:
     needs: package
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+      pull-requests: write
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     uses: ./.github/workflows/deploy_to_dev_cluster.yml
     secrets: inherit
@@ -184,6 +196,10 @@ jobs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
 
   deploy_github_pages:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: ./.github/workflows/deploy_docs.yml
@@ -202,20 +218,36 @@ jobs:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
   postman_tests:
+    #TODO: Currently disabled. Remove postman as soon as the e2e tests are rolled out
+    if: ${{ false && github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Postman run
+        uses: ./.github/actions/postman_run
+        with:
+          POSTMAN_URL: ${{ env.BASE_URL }}/api
+
+  e2e_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+      - uses: actions/setup-go@v5
         with:
-          HEALTH_URL: ${{ env.BASE_URL }}/api/health
-      - name: Postman run
-        uses: ./.github/actions/postman_run
-        with:
-          POSTMAN_URL: ${{ env.BASE_URL }}/api
+          go-version: "^1.25"
+          cache: true
+          cache-dependency-path: server/e2e-tests/go.sum
+      - name: Run E2E tests
+        working-directory: ./server/e2e-tests
+        env:
+            E2E_BASE_URL: ${{ env.BASE_URL }}/api
+            E2E_INSECURE_SKIP_VERIFY: "true"
+        run: go test ./...
 
   cypress_end_to_end_test:
     name: Cypress End to End Test
