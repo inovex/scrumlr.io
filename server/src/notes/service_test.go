@@ -18,7 +18,7 @@ type NoteServiceTestSuite struct {
 	mockDB                   *MockNotesDatabase
 	mockBrokerClient         *realtime.MockClient
 	broker                   *realtime.Broker
-	mockBoardModifiedUpdater *MockBoardLastModifiedUpdater
+	mockBoardModifiedUpdater *common.MockBoardLastModifiedUpdater
 	service                  NotesService
 	authorID                 uuid.UUID
 	boardID                  uuid.UUID
@@ -36,7 +36,7 @@ func (suite *NoteServiceTestSuite) SetupTest() {
 	suite.mockBrokerClient = realtime.NewMockClient(suite.T())
 	suite.broker = new(realtime.Broker)
 	suite.broker.Con = suite.mockBrokerClient
-	suite.mockBoardModifiedUpdater = NewMockBoardLastModifiedUpdater(suite.T())
+	suite.mockBoardModifiedUpdater = common.NewMockBoardLastModifiedUpdater(suite.T())
 	suite.service = NewNotesService(suite.mockDB, suite.broker, suite.mockBoardModifiedUpdater)
 	suite.authorID = uuid.New()
 	suite.boardID = uuid.New()
@@ -52,8 +52,7 @@ func (suite *NoteServiceTestSuite) TearDownTest() {
 func (suite *NoteServiceTestSuite) TestCreate() {
 	// given
 	text := "This is a text on a note"
-	result := suite.createDatabaseNote(text, false)
-	suite.expectCreateSuccess(text, result)
+	suite.expectCreateSuccess(suite.createNoteInsert(text), suite.createDatabaseNote(text, false))
 
 	// when
 	note, err := suite.service.Create(context.Background(), suite.createNoteCreateRequest(text))
@@ -83,8 +82,7 @@ func (suite *NoteServiceTestSuite) TestCreate_DatabaseError() {
 	text := "This is a text on a note"
 	dbError := errors.New("database error")
 
-	suite.mockDB.EXPECT().CreateNote(mock.Anything, suite.createNoteInsert(text)).
-		Return(DatabaseNote{}, dbError)
+	suite.expectCreateFailure(suite.createNoteInsert(text), DatabaseNote{}, dbError)
 
 	// when
 	note, err := suite.service.Create(context.Background(), suite.createNoteCreateRequest(text))
@@ -552,7 +550,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	}
 
 	suite.expectPrecondition(precondition)
-	suite.expectDeleteSuccess(deleteStack, stack)
+	suite.expectDeleteSuccessAndBroadcast(deleteStack, stack)
 
 	// when
 	err := suite.service.Delete(context.Background(), suite.callerID, suite.createNoteDeleteRequest(deleteStack))
@@ -576,7 +574,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote_Owner() {
 	}
 
 	suite.expectPrecondition(precondition)
-	suite.expectDeleteSuccess(deleteStack, stack)
+	suite.expectDeleteSuccessAndBroadcast(deleteStack, stack)
 
 	// when
 	err := suite.service.Delete(context.Background(), suite.callerID, suite.createNoteDeleteRequest(deleteStack))
@@ -600,7 +598,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote_Moderator() {
 	}
 
 	suite.expectPrecondition(precondition)
-	suite.expectDeleteSuccess(deleteStack, stack)
+	suite.expectDeleteSuccessAndBroadcast(deleteStack, stack)
 
 	// when
 	err := suite.service.Delete(context.Background(), suite.callerID, suite.createNoteDeleteRequest(deleteStack))
@@ -763,33 +761,36 @@ func (suite *NoteServiceTestSuite) expectBroadcast() {
 	suite.mockBrokerClient.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 }
 
-func (suite *NoteServiceTestSuite) expectBoardTouched() {
+func (suite *NoteServiceTestSuite) expectBoardLastModifiedAtTouched() {
 	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(nil)
 }
 
-func (suite *NoteServiceTestSuite) expectNotesUpdated() {
+func (suite *NoteServiceTestSuite) expectNotesUpdatedAndBroadcast() {
 	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]DatabaseNote{}, nil)
 	suite.expectBroadcast()
 }
 
-func (suite *NoteServiceTestSuite) expectCreateSuccess(text string, result DatabaseNote) {
-	noteInsert := suite.createNoteInsert(text)
+func (suite *NoteServiceTestSuite) expectCreateSuccess(noteInsert DatabaseNoteInsert, result DatabaseNote) {
 	suite.mockDB.EXPECT().CreateNote(mock.Anything, noteInsert).Return(result, nil)
-	suite.expectNotesUpdated()
-	suite.expectBoardTouched()
+	suite.expectNotesUpdatedAndBroadcast()
+	suite.expectBoardLastModifiedAtTouched()
+}
+
+func (suite *NoteServiceTestSuite) expectCreateFailure(noteInsert DatabaseNoteInsert, result DatabaseNote, err error) {
+	suite.mockDB.EXPECT().CreateNote(mock.Anything, noteInsert).Return(result, err)
 }
 
 func (suite *NoteServiceTestSuite) expectUpdateSuccess(update DatabaseNoteUpdate, result DatabaseNote) {
 	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.callerID, update).Return(result, nil)
-	suite.expectNotesUpdated()
-	suite.expectBoardTouched()
+	suite.expectNotesUpdatedAndBroadcast()
+	suite.expectBoardLastModifiedAtTouched()
 }
 
-func (suite *NoteServiceTestSuite) expectDeleteSuccess(deleteStack bool, stack []DatabaseNote) {
+func (suite *NoteServiceTestSuite) expectDeleteSuccessAndBroadcast(deleteStack bool, stack []DatabaseNote) {
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).Return(stack, nil)
 	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.callerID, suite.boardID, suite.noteID, deleteStack).Return(nil)
 	suite.expectBroadcast()
-	suite.expectBoardTouched()
+	suite.expectBoardLastModifiedAtTouched()
 }
 
 func (suite *NoteServiceTestSuite) expectPrecondition(precondition Precondition) {

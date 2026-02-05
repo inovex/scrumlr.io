@@ -56,7 +56,9 @@ func (init *ServiceInitializer) InitializeBoardService(sessionRequestService ses
 
 func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService) columns.ColumnService {
 	columnDb := columns.NewColumnsDatabase(init.db)
-	columnService := columns.NewColumnService(columnDb, init.broker, noteService)
+	boardsDB := boards.NewBoardDatabase(init.db)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB)
+	columnService := columns.NewColumnService(columnDb, init.broker, noteService, boardLastModifiedUpdater)
 
 	return columnService
 }
