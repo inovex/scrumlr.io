@@ -633,7 +633,7 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.users["Luke"] = TestUser{id: uuid.New(), name: "Luke", accountType: common.Anonymous}
 	suite.users["Leia"] = TestUser{id: uuid.New(), name: "Leia", accountType: common.Anonymous}
 	suite.users["Han"] = TestUser{id: uuid.New(), name: "Han", accountType: common.Anonymous}
-	suite.users["Blubb"] = TestUser{id: uuid.New(), name: "Blub", accountType: common.Anonymous}
+	suite.users["Blubb"] = TestUser{id: uuid.New(), name: "Blubb", accountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 5)
