@@ -86,7 +86,7 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	userDatabase := NewUserDatabase(db)
-	userService := NewUserService(userDatabase, broker, sessionService)
+	userService := NewUserService(userDatabase, broker, sessionService, noteService)
 
 	suite.userService = userService
 	suite.broker = broker
