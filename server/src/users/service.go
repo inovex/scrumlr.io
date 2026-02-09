@@ -305,15 +305,21 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.delete.id", id.String()),
 	)
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, id)
+	userBoards, err := service.sessionService.GetUserBoards(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get connected boards")
+		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
 		return err
 	}
 
-	for _, cBoard := range connectedBoards {
-		service.deleteUserNotesFromBoard(ctx, cBoard.Board, id)
+	connectedBoards := make([]*sessions.BoardSession, 0, len(userBoards))
+
+	for i := range userBoards {
+		board := userBoards[i]
+		if board.Connected {
+			connectedBoards = append(connectedBoards, board)
+		}
+		service.deleteUserNotesFromBoard(ctx, board.Board, id)
 	}
 
 	err = service.database.DeleteUser(ctx, id)
