@@ -206,3 +206,16 @@ func (database *SessionDB) GetUserConnectedBoards(ctx context.Context, user uuid
 
 	return sessions, err
 }
+
+// Gets all board sessions of a single user
+func (database *SessionDB) GetUserBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+	var sessions []DatabaseBoardSession
+	err := database.db.NewSelect().
+		TableExpr("board_sessions AS s").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		Where("s.user = ?", user).
+		Join("INNER JOIN users AS u ON u.id = s.user").
+		Scan(ctx, &sessions)
+
+	return sessions, err
+}
