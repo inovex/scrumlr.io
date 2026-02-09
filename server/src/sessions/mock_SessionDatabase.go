@@ -331,6 +331,74 @@ func (_c *MockSessionDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Con
 	return _c
 }
 
+// GetUserBoards provides a mock function for the type MockSessionDatabase
+func (_mock *MockSessionDatabase) GetUserBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+	ret := _mock.Called(ctx, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetUserBoards")
+	}
+
+	var r0 []DatabaseBoardSession
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseBoardSession, error)); ok {
+		return returnFunc(ctx, user)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseBoardSession); ok {
+		r0 = returnFunc(ctx, user)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]DatabaseBoardSession)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockSessionDatabase_GetUserBoards_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserBoards'
+type MockSessionDatabase_GetUserBoards_Call struct {
+	*mock.Call
+}
+
+// GetUserBoards is a helper method to define mock.On call
+//   - ctx context.Context
+//   - user uuid.UUID
+func (_e *MockSessionDatabase_Expecter) GetUserBoards(ctx interface{}, user interface{}) *MockSessionDatabase_GetUserBoards_Call {
+	return &MockSessionDatabase_GetUserBoards_Call{Call: _e.mock.On("GetUserBoards", ctx, user)}
+}
+
+func (_c *MockSessionDatabase_GetUserBoards_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockSessionDatabase_GetUserBoards_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionDatabase_GetUserBoards_Call) Return(databaseBoardSessions []DatabaseBoardSession, err error) *MockSessionDatabase_GetUserBoards_Call {
+	_c.Call.Return(databaseBoardSessions, err)
+	return _c
+}
+
+func (_c *MockSessionDatabase_GetUserBoards_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)) *MockSessionDatabase_GetUserBoards_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetUserConnectedBoards provides a mock function for the type MockSessionDatabase
 func (_mock *MockSessionDatabase) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
 	ret := _mock.Called(ctx, user)

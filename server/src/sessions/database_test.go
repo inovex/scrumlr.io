@@ -570,6 +570,48 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConne
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)
 }
 
+func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards() {
+	t := suite.T()
+	database := NewSessionDatabase(suite.db)
+
+	userId := suite.users["Stan"].id
+
+	dbSessions, err := database.GetUserBoards(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, dbSessions, 3)
+
+	firstSession := checkSessionInList(dbSessions, suite.sessions["Read1"].Board, suite.sessions["Read1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["Read1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["Read1"].User, firstSession.User)
+	assert.True(t, !firstSession.Connected)
+
+	secondSession := checkSessionInList(dbSessions, suite.sessions["UpdateAll1"].Board, suite.sessions["UpdateAll1"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["UpdateAll1"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["UpdateAll1"].User, secondSession.User)
+	assert.True(t, secondSession.Connected)
+
+	thirdSession := checkSessionInList(dbSessions, suite.sessions["ReadFilter1"].Board, suite.sessions["ReadFilter1"].User)
+	assert.NotNil(t, thirdSession)
+	assert.Equal(t, suite.sessions["ReadFilter1"].Board, thirdSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter1"].User, thirdSession.User)
+	assert.True(t, thirdSession.Connected)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
+	t := suite.T()
+	database := NewSessionDatabase(suite.db)
+
+	userId := suite.users["Blubb"].id
+
+	dbSessions, err := database.GetUserBoards(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)
+}
+
 type TestUser struct {
 	id          uuid.UUID
 	name        string
@@ -591,6 +633,7 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.users["Luke"] = TestUser{id: uuid.New(), name: "Luke", accountType: common.Anonymous}
 	suite.users["Leia"] = TestUser{id: uuid.New(), name: "Leia", accountType: common.Anonymous}
 	suite.users["Han"] = TestUser{id: uuid.New(), name: "Han", accountType: common.Anonymous}
+	suite.users["Blubb"] = TestUser{id: uuid.New(), name: "Blub", accountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 5)
