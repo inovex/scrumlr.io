@@ -291,6 +291,36 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	assert.Equal(t, &endTime, dbBoard.TimerEnd)
 }
 
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_SetsLastModifiedAt() {
+	t := suite.T()
+	database := NewBoardDatabase(suite.db)
+
+	boardId := suite.boards["UpdatePassphrase"].ID
+
+	// Get board before update to compare LastModifiedAt
+	boardBefore, err := database.GetBoard(context.Background(), boardId)
+	assert.Nil(t, err)
+
+	// Wait a short moment to ensure time difference
+	time.Sleep(10 * time.Millisecond)
+	timeBeforeUpdate := time.Now()
+
+	// Perform update
+	newName := "Updated Name"
+	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:   boardId,
+		Name: &newName,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, dbBoard.ID)
+	assert.Equal(t, &newName, dbBoard.Name)
+
+	// Verify LastModifiedAt was set and is after the time before update
+	assert.True(t, dbBoard.LastModifiedAt.After(boardBefore.LastModifiedAt) || dbBoard.LastModifiedAt.Equal(boardBefore.LastModifiedAt))
+	assert.True(t, !dbBoard.LastModifiedAt.Before(timeBeforeUpdate), "LastModifiedAt should be at or after timeBeforeUpdate")
+}
+
 func (suite *DatabaseBoardTestSuite) Test_Database_Delete() {
 	t := suite.T()
 	database := NewBoardDatabase(suite.db)
