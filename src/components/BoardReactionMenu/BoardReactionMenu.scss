@@ -54,7 +54,7 @@ $reaction-size: 48px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-reactions-menu {
     background-color: styles.$navy--500;
     @include mixins.box-shadow-dark;

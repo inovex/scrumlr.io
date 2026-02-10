@@ -64,7 +64,7 @@
   }
 
   // ampersand to correctly scope the rule
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
   }
 }
@@ -100,7 +100,7 @@
     }
   }
 
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     &:focus,
     &:focus-within {
       border: $border-size solid colors.$blue--400;
@@ -124,7 +124,7 @@
     @include compensate-padding($padding, $border-size);
   }
 
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     border-color: colors.$critical-carmine--dark;
   }
 }

@@ -36,7 +36,7 @@
   text-align: justify;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .legal {
     color: styles.$gray--000;
   }

@@ -41,7 +41,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .drag-indicator-pill {
     background-color: rgba(var(--accent-color--dark-rgb), 0.95);
     border: 1px solid rgba(styles.$navy--900, 0.3);

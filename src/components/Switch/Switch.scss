@@ -78,7 +78,7 @@ $padding--mobile: 6px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .switch {
     background-color: styles.$navy--600;
 

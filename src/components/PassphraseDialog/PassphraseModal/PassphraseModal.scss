@@ -39,7 +39,7 @@
   margin: 0;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .password-modal__container {
     background: styles.$navy--600;
     color: white;

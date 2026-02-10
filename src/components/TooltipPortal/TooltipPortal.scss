@@ -5,7 +5,7 @@
   @include mixins.tooltip--light;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .tooltip-portal__root .tooltip-portal {
     @include mixins.tooltip--dark;
   }

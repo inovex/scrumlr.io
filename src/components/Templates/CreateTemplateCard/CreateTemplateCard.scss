@@ -64,7 +64,7 @@ $icon-size: 80px;
   color: styles.$blue--500;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .create-template-card {
     background-color: rgba(styles.$blue--400, 0.08);
     border-color: styles.$blue--400;

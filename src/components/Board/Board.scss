@@ -68,7 +68,7 @@
   @include mixins.column-stripes-light;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board__spacer-left {
     @include mixins.inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
   }

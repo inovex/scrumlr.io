@@ -46,7 +46,7 @@
   flex-direction: column;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-reaction-chip-condensed__root {
     background-color: styles.$navy--600;
 
