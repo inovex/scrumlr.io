@@ -57,4 +57,3 @@ For a detailed overview of the backend read the [architecture documentation](./d
 Currently the backend is refactored.
 Not all parts of the backend are done.
 For a list of things that need refactorings see the [todos](./docs/todo.md)
-
