@@ -17,13 +17,15 @@ import (
 
 type NotesServiceTestSuite struct {
 	suite.Suite
-	service NotesService
-	mockDB  *MockNotesDatabase
-
-	// Additional test-specific data
-	//users    map[string]testDbTemplates.TestUser
-	//boards   map[string]Board
-	//sessions map[string]testSession
+	service    NotesService
+	mockDB     *MockNotesDatabase
+	authorID   uuid.UUID
+	boardID    uuid.UUID
+	columnID   uuid.UUID
+	noteID     uuid.UUID
+	rank       int
+	mockBroker *realtime.MockClient
+	broker     *realtime.Broker
 }
 
 func TestBoardServiceIntegrationTestSuite(t *testing.T) {
@@ -40,55 +42,46 @@ func TestBoardServiceIntegrationTestSuite(t *testing.T) {
 
 func (suite *NotesServiceTestSuite) SetupTest() {
 	suite.mockDB = NewMockNotesDatabase(suite.T())
+
+	// broker stuff
+	suite.mockBroker = realtime.NewMockClient(suite.T())
+	suite.broker = new(realtime.Broker)
+	suite.broker.Con = suite.mockBroker
+	suite.service = NewNotesService(suite.mockDB, suite.broker)
+
+	suite.authorID = uuid.New()
+	suite.boardID = uuid.New()
+	suite.columnID = uuid.New()
+	suite.noteID = uuid.New()
+	suite.rank = 0
 }
 
 func (suite *NotesServiceTestSuite) Test_Create() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
-	rank := 0
-	noteId := uuid.New()
 	edited := false
 	text := "This is a text on a note"
 
-	suite.mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{Author: authorId, Board: boardId, Column: columnId, Text: text}).
-		Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Stack: uuid.NullUUID{}, Rank: rank, Edited: edited}, nil)
-	suite.mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	suite.mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text}).
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(suite.mockDB, broker)
-
-	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
+	note, err := suite.service.Create(context.Background(), NoteCreateRequest{User: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.Equal(edited, note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Create_EmptyText() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	text := ""
 
-	mockDB := NewMockNotesDatabase(suite.T())
-
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
+	note, err := suite.service.Create(context.Background(), NoteCreateRequest{User: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text})
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -96,23 +89,12 @@ func (suite *NotesServiceTestSuite) Test_Create_EmptyText() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	text := "This is a text on a note"
 	dbError := errors.New("database error")
-
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{Author: authorId, Board: boardId, Column: columnId, Text: text}).
+	suite.mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text}).
 		Return(DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Create(context.Background(), NoteCreateRequest{User: authorId, Board: boardId, Column: columnId, Text: text})
+	note, err := suite.service.Create(context.Background(), NoteCreateRequest{User: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text})
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -120,50 +102,26 @@ func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Import() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
-	rank := 0
-	noteId := uuid.New()
 	edited := false
 	text := "This is a text on a note"
+	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: authorId, Board: boardId, Text: text, Position: &NoteUpdatePosition{Column: columnId}}).
-		Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Stack: uuid.NullUUID{}, Rank: rank, Edited: edited}, nil)
-
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
+	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.Equal(edited, note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_EmptyText() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	text := ""
 
-	mockDB := NewMockNotesDatabase(suite.T())
-
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
+	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -171,23 +129,12 @@ func (suite *NotesServiceTestSuite) Test_Import_EmptyText() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
-	authorId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	text := "This is a text on a note"
 	dbError := errors.New("database error")
-
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: authorId, Board: boardId, Text: text, Position: &NoteUpdatePosition{Column: columnId}}).
+	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
 		Return(DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Import(context.Background(), NoteImportRequest{User: authorId, Board: boardId, Text: text, Position: NotePosition{Column: columnId}})
+	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -195,293 +142,236 @@ func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
-	authorId := uuid.New()
 	callerRole := common.OwnerRole
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := true
 	text := "Updated text"
-	rank := 0
-
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     &text,
 		Position: nil,
 		Edited:   true,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: true}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &text,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: nil,
 		Edited:   true,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.True(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
-	authorId := uuid.New()
+
 	callerRole := common.OwnerRole
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
+
 	stackAllowed := true
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
-	rank := 0
+
 	pos := NotePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 	posUpdate := NoteUpdatePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     nil,
 		Position: &posUpdate,
 		Edited:   false,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
-		ID:       noteId,
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
+		ID:       suite.noteID,
 		Text:     nil,
-		Board:    boardId,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   false,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.False(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
-	authorId := uuid.New()
+
 	callerRole := common.ModeratorRole
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
+
 	stackAllowed := true
 	text := "Updated text"
-	rank := 0
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     &text,
 		Position: nil,
 		Edited:   true,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: true}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &text,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: nil,
 		Edited:   true,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.True(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
-	authorId := uuid.New()
+
 	callerRole := common.ModeratorRole
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
+
 	stackAllowed := true
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
-	rank := 0
+
 	pos := NotePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 	posUpdate := NoteUpdatePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     nil,
 		Position: &posUpdate,
 		Edited:   false,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     nil,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   false,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.False(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := true
 	text := "Updated text"
-	rank := 0
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     &text,
 		Position: nil,
 		Edited:   true,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: true}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: true}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &text,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: nil,
 		Edited:   false,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.True(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := uuid.New()
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
+
 	stackAllowed := true
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	txt := "Updated text"
 	pos := NotePosition{
-		Column: columnId,
+		Column: suite.columnID,
 		Rank:   0,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerId).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), callerId, NoteUpdateRequest{
 		Text:     &txt,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   true,
 	})
@@ -492,94 +382,75 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := true
 	text := "Updated text"
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
-	rank := 0
+
 	pos := NotePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 	posUpdate := NoteUpdatePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     nil,
 		Position: &posUpdate,
 		Edited:   false,
-	}).Return(DatabaseNote{ID: noteId, Author: authorId, Board: boardId, Column: columnId, Text: text, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     nil,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   false,
 	})
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.False(note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := false
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	txt := "Updated text"
 	pos := NotePosition{
-		Column: columnId,
+		Column: suite.columnID,
 		Rank:   0,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &txt,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   true,
 	})
@@ -590,35 +461,25 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: noteId}
+	stackId := uuid.NullUUID{Valid: true, UUID: suite.noteID}
 	txt := "Updated text"
 	pos := NotePosition{
-		Column: columnId,
+		Column: suite.columnID,
 		Rank:   0,
 		Stack:  stackId,
 	}
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &txt,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   true,
 	})
@@ -629,48 +490,37 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
-	authorId := uuid.New()
 
-	noteId := uuid.New()
-	boardId := uuid.New()
-	columnId := uuid.New()
 	stackAllowed := true
 	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
-	rank := 0
+
 	pos := NotePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 	posUpdate := NoteUpdatePosition{
-		Column: columnId,
-		Rank:   rank,
+		Column: suite.columnID,
+		Rank:   suite.rank,
 		Stack:  stackId,
 	}
 	dbError := errors.New("database error")
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: common.ParticipantRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
-		ID:       noteId,
-		Board:    boardId,
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: common.ParticipantRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Text:     &text,
 		Position: &posUpdate,
 		Edited:   true,
 	}).Return(DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		Text:     &text,
-		ID:       noteId,
-		Board:    boardId,
+		ID:       suite.noteID,
+		Board:    suite.boardID,
 		Position: &pos,
 		Edited:   true,
 	})
@@ -681,89 +531,67 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	boardId := uuid.New()
-	noteId := uuid.New()
 	deleteStack := true
 
 	ctx := context.Background()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().GetStack(mock.Anything, noteId).
-		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
+		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: uuid.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
+	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, deleteStack).
 		Return(nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
-	authorId := uuid.New()
+
 	callerRole := common.OwnerRole
-	boardId := uuid.New()
-	noteId := uuid.New()
+
 	deleteStack := true
 
 	ctx := context.Background()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().GetStack(mock.Anything, noteId).
-		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
+		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: uuid.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
+	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, deleteStack).
 		Return(nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
-	authorId := uuid.New()
+
 	callerRole := common.ModeratorRole
-	boardId := uuid.New()
-	noteId := uuid.New()
+
 	deleteStack := true
 
 	ctx := context.Background()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().GetStack(mock.Anything, noteId).
-		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
+		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: uuid.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
+	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, deleteStack).
 		Return(nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
@@ -771,72 +599,45 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
 func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := uuid.New()
-	boardId := uuid.New()
-	noteId := uuid.New()
+
 	deleteStack := true
 
 	ctx := context.Background()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
-		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerId).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, callerId, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.NotNil(err)
 	suite.Equal(common.ForbiddenError(errors.New("not allowed to delete note from other user")), err)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get() {
-	noteId := uuid.New()
-	authorId := uuid.New()
+
 	text := "This is a note"
 	edited := true
-	columnId := uuid.New()
-	rank := 0
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(mock.Anything, noteId).
-		Return(DatabaseNote{ID: noteId, Author: authorId, Text: text, Column: columnId, Edited: edited, Rank: rank}, nil)
+	suite.mockDB.EXPECT().Get(mock.Anything, suite.noteID).
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Text: text, Column: suite.columnID, Edited: edited, Rank: suite.rank}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Get(context.Background(), noteId)
+	note, err := suite.service.Get(context.Background(), suite.noteID)
 
 	suite.Nil(err)
-	suite.Equal(noteId, note.ID)
-	suite.Equal(authorId, note.Author)
+	suite.Equal(suite.noteID, note.ID)
+	suite.Equal(suite.authorID, note.Author)
 	suite.Equal(text, note.Text)
 	suite.Equal(edited, note.Edited)
-	suite.Equal(columnId, note.Position.Column)
-	suite.Equal(rank, note.Position.Rank)
+	suite.Equal(suite.columnID, note.Position.Column)
+	suite.Equal(suite.rank, note.Position.Rank)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get_NotFound() {
-	noteId := uuid.New()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(mock.Anything, noteId).
+	suite.mockDB.EXPECT().Get(mock.Anything, suite.noteID).
 		Return(DatabaseNote{}, sql.ErrNoRows)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Get(context.Background(), noteId)
+	note, err := suite.service.Get(context.Background(), suite.noteID)
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -844,20 +645,13 @@ func (suite *NotesServiceTestSuite) Test_Get_NotFound() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
-	noteId := uuid.New()
+
 	dbError := errors.New("database error")
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(mock.Anything, noteId).
+	suite.mockDB.EXPECT().Get(mock.Anything, suite.noteID).
 		Return(DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	note, err := service.Get(context.Background(), noteId)
+	note, err := suite.service.Get(context.Background(), suite.noteID)
 
 	suite.Nil(note)
 	suite.NotNil(err)
@@ -865,7 +659,7 @@ func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll() {
-	boardId := uuid.New()
+
 	firstNoteId := uuid.New()
 	secondNoteId := uuid.New()
 	firstAuthorId := uuid.New()
@@ -875,20 +669,13 @@ func (suite *NotesServiceTestSuite) Test_GetAll() {
 	firstNoteText := "This is the first note"
 	secondNoteText := "This is the second note"
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: firstNoteId, Author: firstAuthorId, Board: boardId, Text: firstNoteText, Column: firstColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
-			{ID: secondNoteId, Author: secondAuthorId, Board: boardId, Text: secondNoteText, Column: secondColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: true},
+			{ID: firstNoteId, Author: firstAuthorId, Board: suite.boardID, Text: firstNoteText, Column: firstColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+			{ID: secondNoteId, Author: secondAuthorId, Board: suite.boardID, Text: secondNoteText, Column: secondColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: true},
 		}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	notes, err := service.GetAll(context.Background(), boardId)
+	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
 
 	suite.Nil(err)
 	suite.Len(notes, 2)
@@ -913,19 +700,11 @@ func (suite *NotesServiceTestSuite) Test_GetAll_ColumnFilter() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll_NotFound() {
-	boardId := uuid.New()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, sql.ErrNoRows)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	notes, err := service.GetAll(context.Background(), boardId)
+	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
 
 	suite.Nil(notes)
 	suite.NotNil(err)
@@ -933,20 +712,13 @@ func (suite *NotesServiceTestSuite) Test_GetAll_NotFound() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll_DatabaseError() {
-	boardId := uuid.New()
+
 	dbError := errors.New("database error")
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(mock.Anything, boardId).
+	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	notes, err := service.GetAll(context.Background(), boardId)
+	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
 
 	suite.Nil(notes)
 	suite.NotNil(err)
@@ -954,22 +726,14 @@ func (suite *NotesServiceTestSuite) Test_GetAll_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetStack() {
-	noteID := uuid.New()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{
 			{ID: uuid.New(), Text: "Note 1"},
 			{ID: uuid.New(), Text: "Note 2"},
 		}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	result, err := service.GetStack(context.Background(), noteID)
+	result, err := suite.service.GetStack(context.Background(), suite.noteID)
 
 	suite.Nil(err)
 	suite.NotNil(result)
@@ -993,20 +757,13 @@ func (suite *NotesServiceTestSuite) Test_GetStack() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetStack_DatabaseError() {
-	noteID := uuid.New()
+
 	dbError := errors.New("database error")
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetStack(mock.Anything, noteID).
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{}, dbError)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	result, err := service.GetStack(context.Background(), noteID)
+	result, err := suite.service.GetStack(context.Background(), suite.noteID)
 
 	suite.Error(err)
 	suite.Nil(result)
@@ -1014,34 +771,26 @@ func (suite *NotesServiceTestSuite) Test_GetStack_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
-	boardId := uuid.New()
+
 	oteId := uuid.New()
-	authorId := uuid.New()
-	columnId := uuid.New()
+
 	noteText := "This is the first note"
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetByUserAndBoard(mock.Anything, authorId, boardId).
+	suite.mockDB.EXPECT().GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: oteId, Author: authorId, Board: boardId, Text: noteText, Column: columnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+			{ID: oteId, Author: suite.authorID, Board: suite.boardID, Text: noteText, Column: suite.columnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
 		}, nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	service := NewNotesService(mockDB, broker)
-
-	notes, err := service.GetByUserAndBoard(context.Background(), authorId, boardId)
+	notes, err := suite.service.GetByUserAndBoard(context.Background(), suite.authorID, suite.boardID)
 
 	suite.Nil(err)
 	suite.Len(notes, 1)
 
 	suite.Equal(oteId, notes[0].ID)
-	suite.Equal(authorId, notes[0].Author)
+	suite.Equal(suite.authorID, notes[0].Author)
 	suite.Equal(noteText, notes[0].Text)
 	suite.False(notes[0].Edited)
-	suite.Equal(columnId, notes[0].Position.Column)
+	suite.Equal(suite.columnID, notes[0].Position.Column)
 	suite.Equal(0, notes[0].Position.Rank)
 }
 
@@ -1053,31 +802,23 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 //todo!!!! do the tests correct
 
 func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
-	authorId := uuid.New()
+
 	callerRole := common.ParticipantRole
 
-	boardId := uuid.New()
-	noteId := uuid.New()
 	deleteStack := true
 
 	ctx := context.Background()
 
-	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
-		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().GetStack(mock.Anything, noteId).
-		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
+		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: uuid.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
+	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, deleteStack).
 		Return(nil)
 
-	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	service := NewNotesService(mockDB, broker)
-
-	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
