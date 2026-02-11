@@ -388,7 +388,7 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 }
 
 func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
-	ctx, span := tracer.Start(ctx, "users.service.delete.board_cleanup")
+	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
 	defer span.End()
 
 	span.SetAttributes(

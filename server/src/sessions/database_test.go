@@ -604,9 +604,9 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
 	t := suite.T()
 	database := NewSessionDatabase(suite.db)
 
-	userId := suite.users["Blubb"].id
+	unknownUserId := uuid.New()
 
-	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), unknownUserId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)
@@ -633,7 +633,6 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.users["Luke"] = TestUser{id: uuid.New(), name: "Luke", accountType: common.Anonymous}
 	suite.users["Leia"] = TestUser{id: uuid.New(), name: "Leia", accountType: common.Anonymous}
 	suite.users["Han"] = TestUser{id: uuid.New(), name: "Han", accountType: common.Anonymous}
-	suite.users["Blubb"] = TestUser{id: uuid.New(), name: "Blubb", accountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 5)
