@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -45,13 +46,15 @@ type Service struct {
 	database       UserDatabase
 	sessionService sessions.SessionService
 	realtime       *realtime.Broker
+	notesService   notes.NotesService
 }
 
-func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService) UserService {
+func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService, notesService notes.NotesService) UserService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
 	service.sessionService = sessionService
+	service.notesService = notesService
 
 	return service
 }
@@ -302,12 +305,27 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.delete.id", id.String()),
 	)
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, id)
+	userBoards, err := service.sessionService.GetUserBoardSessions(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get connected boards")
+		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
 		return err
 	}
+
+	connectedBoards := make([]*sessions.BoardSession, 0, len(userBoards))
+
+	for _, board := range userBoards {
+		if board.Connected {
+			connectedBoards = append(connectedBoards, board)
+		}
+		if err := service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board); err != nil {
+			span.SetStatus(codes.Error, "failed to delete user notes")
+			span.RecordError(err)
+			log.Errorw("failed to delete user notes from board", "board", board.Board, "user", id, "err", err)
+		}
+
+	}
+
 	err = service.database.DeleteUser(ctx, id)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to delete user")
@@ -402,7 +420,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 		attribute.String("scrumlr.users.service.update.type", string(user.AccountType)),
 	)
 
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, user.ID)
+	connectedBoards, err := service.sessionService.GetUserConnectedBoardSessions(ctx, user.ID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get connected boards")
 		span.RecordError(err)

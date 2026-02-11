@@ -540,7 +540,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -564,7 +564,49 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConne
 
 	userId := suite.users["Friend"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards() {
+	t := suite.T()
+	database := NewSessionDatabase(suite.db)
+
+	userId := suite.users["Stan"].id
+
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, dbSessions, 3)
+
+	firstSession := checkSessionInList(dbSessions, suite.sessions["Read1"].Board, suite.sessions["Read1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["Read1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["Read1"].User, firstSession.User)
+	assert.False(t, firstSession.Connected)
+
+	secondSession := checkSessionInList(dbSessions, suite.sessions["UpdateAll1"].Board, suite.sessions["UpdateAll1"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["UpdateAll1"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["UpdateAll1"].User, secondSession.User)
+	assert.True(t, secondSession.Connected)
+
+	thirdSession := checkSessionInList(dbSessions, suite.sessions["ReadFilter1"].Board, suite.sessions["ReadFilter1"].User)
+	assert.NotNil(t, thirdSession)
+	assert.Equal(t, suite.sessions["ReadFilter1"].Board, thirdSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter1"].User, thirdSession.User)
+	assert.True(t, thirdSession.Connected)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
+	t := suite.T()
+	database := NewSessionDatabase(suite.db)
+
+	unknownUserId := uuid.New()
+
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), unknownUserId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)

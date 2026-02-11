@@ -86,7 +86,7 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	userDatabase := NewUserDatabase(db)
-	userService := NewUserService(userDatabase, broker, sessionService)
+	userService := NewUserService(userDatabase, broker, sessionService, noteService)
 
 	suite.userService = userService
 	suite.broker = broker
@@ -216,6 +216,11 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
 
 	assert.Nil(t, err)
 }
+
+// todo check if notes are actually deleted
+// check directly not going over notes
+// get all notes of that user -> 0 notes
+// check if the events are sent
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 	t := suite.T()

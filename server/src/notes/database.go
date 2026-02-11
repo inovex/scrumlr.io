@@ -486,3 +486,17 @@ func (d *DB) GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID,
 
 	return precondition, err
 }
+
+func (d *DB) GetByUserAndBoard(ctx context.Context, user uuid.UUID, board uuid.UUID) ([]DatabaseNote, error) {
+	var notes []DatabaseNote
+	query := d.db.NewSelect().
+		Model((*DatabaseNote)(nil)).
+		Where("board = ?", board).
+		Where("author = ?", user)
+
+	err := query.
+		OrderExpr("\"column\", stack DESC, rank DESC").
+		Scan(ctx, &notes)
+
+	return notes, err
+}

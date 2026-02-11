@@ -123,9 +123,9 @@ func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService webs
 	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
 }
 
-func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
+func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService, noteService notes.NotesService) users.UserService {
 	userDb := users.NewUserDatabase(init.db)
-	userService := users.NewUserService(userDb, init.broker, sessionService)
+	userService := users.NewUserService(userDb, init.broker, sessionService, noteService)
 	return userService
 }
 
