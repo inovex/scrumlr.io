@@ -118,7 +118,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "/node_modules/(?!react-toastify)"
+      "/node_modules/(?!react-toastify|react-hotkeys-hook)"
     ]
   },
   "lint-staged": {
