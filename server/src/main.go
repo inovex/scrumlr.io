@@ -326,20 +326,20 @@ func run(ctx *cli.Context) error {
 
 	var c *cache.Cache
 	if ctx.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v as chache", ctx.String("redis-address"))
+		logger.Get().Infof("Connecting to redis at %v as cache", ctx.String("redis-address"))
 		c, err = cache.NewRedis(cache.RedisServer{
 			Addr:     ctx.String("redis-address"),
 			Username: ctx.String("redis-username"),
 			Password: ctx.String("redis-password"),
 		})
 		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+			logger.Get().Fatalf("failed to connect to redis cache: %v", err)
 		}
 	} else {
 		logger.Get().Infof("Connecting to nats at %v as cache", ctx.String("nats"))
 		c, err = cache.NewNats(ctx.String("nats"), "scrumlr")
 		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+			logger.Get().Fatalf("failed to connect to nats cache: %v", err)
 		}
 	}
 

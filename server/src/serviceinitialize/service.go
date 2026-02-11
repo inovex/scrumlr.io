@@ -28,12 +28,13 @@ import (
 )
 
 type ServiceInitializer struct {
-	clock  timeprovider.TimeProvider
-	hash   hash.Hash
-	db     *bun.DB
-	broker *realtime.Broker
-	cache  *cache.Cache
-	client *http.Client
+	clock       timeprovider.TimeProvider
+	hash        hash.Hash
+	db          *bun.DB
+	broker      *realtime.Broker
+	checkOrigin bool
+	cache       *cache.Cache
+	client      *http.Client
 }
 
 func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cache) ServiceInitializer {
@@ -42,6 +43,7 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 	initializer.hash = hash.NewHashSha512()
 	initializer.db = db
 	initializer.broker = broker
+	initializer.checkOrigin = false
 	initializer.cache = cache
 	initializer.client = &http.Client{}
 

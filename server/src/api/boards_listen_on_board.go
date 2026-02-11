@@ -144,7 +144,7 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, rawMessage []byte) {
 	var message notes.WebSocketMessage
 	if err := json.Unmarshal(rawMessage, &message); err != nil {
-		logger.Get().Errorw("failed to unmarshal websocket message", "error", err, "message", string(rawMessage))
+		logger.FromContext(ctx).Errorw("failed to unmarshal websocket message", "error", err, "message", string(rawMessage))
 		return
 	}
 
@@ -152,7 +152,7 @@ func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uui
 	case notes.WebSocketMessageTypeDragLock:
 		s.notes.HandleWebSocketMessage(ctx, boardID, userID, conn, message.Data)
 	default:
-		logger.Get().Debugw("unknown websocket message type", "type", message.Type, "user", userID)
+		logger.FromContext(ctx).Debugw("unknown websocket message type", "type", message.Type, "user", userID)
 	}
 }
 
