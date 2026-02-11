@@ -319,6 +319,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 			connectedBoards = append(connectedBoards, board)
 		}
 		service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board)
+
 	}
 
 	err = service.database.DeleteUser(ctx, id)

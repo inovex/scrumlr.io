@@ -33,7 +33,7 @@ type NotesDatabase interface {
 	GetChildNotes(ctx context.Context, parentNote uuid.UUID) ([]DatabaseNote, error)
 	GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error)
 	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
-	GetByUserAndBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]DatabaseNote, error)
+	GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error)
 	UpdateNote(ctx context.Context, caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error)
 	DeleteNote(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 }
@@ -387,7 +387,7 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 	})
 }
 
-func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) error {
+func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
 	ctx, span := tracer.Start(ctx, "users.service.delete.board_cleanup")
 	defer span.End()
 

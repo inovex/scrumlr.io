@@ -329,8 +329,8 @@ func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Conte
 }
 
 // GetByUserAndBoard provides a mock function for the type MockNotesDatabase
-func (_mock *MockNotesDatabase) GetByUserAndBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]DatabaseNote, error) {
-	ret := _mock.Called(ctx, boardID, userID)
+func (_mock *MockNotesDatabase) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error) {
+	ret := _mock.Called(ctx, userID, boardID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetByUserAndBoard")
@@ -339,17 +339,17 @@ func (_mock *MockNotesDatabase) GetByUserAndBoard(ctx context.Context, boardID u
 	var r0 []DatabaseNote
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) ([]DatabaseNote, error)); ok {
-		return returnFunc(ctx, boardID, userID)
+		return returnFunc(ctx, userID, boardID)
 	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) []DatabaseNote); ok {
-		r0 = returnFunc(ctx, boardID, userID)
+		r0 = returnFunc(ctx, userID, boardID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseNote)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
-		r1 = returnFunc(ctx, boardID, userID)
+		r1 = returnFunc(ctx, userID, boardID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -363,13 +363,13 @@ type MockNotesDatabase_GetByUserAndBoard_Call struct {
 
 // GetByUserAndBoard is a helper method to define mock.On call
 //   - ctx context.Context
-//   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetByUserAndBoard(ctx interface{}, boardID interface{}, userID interface{}) *MockNotesDatabase_GetByUserAndBoard_Call {
-	return &MockNotesDatabase_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, boardID, userID)}
+//   - boardID uuid.UUID
+func (_e *MockNotesDatabase_Expecter) GetByUserAndBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesDatabase_GetByUserAndBoard_Call {
+	return &MockNotesDatabase_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, userID, boardID)}
 }
 
-func (_c *MockNotesDatabase_GetByUserAndBoard_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockNotesDatabase_GetByUserAndBoard_Call {
+func (_c *MockNotesDatabase_GetByUserAndBoard_Call) Run(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID)) *MockNotesDatabase_GetByUserAndBoard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -397,7 +397,7 @@ func (_c *MockNotesDatabase_GetByUserAndBoard_Call) Return(databaseNotes []Datab
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetByUserAndBoard_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetByUserAndBoard_Call {
+func (_c *MockNotesDatabase_GetByUserAndBoard_Call) RunAndReturn(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error)) *MockNotesDatabase_GetByUserAndBoard_Call {
 	_c.Call.Return(run)
 	return _c
 }
