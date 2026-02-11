@@ -314,8 +314,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 
 	connectedBoards := make([]*sessions.BoardSession, 0, len(userBoards))
 
-	for i := range userBoards {
-		board := userBoards[i]
+	for _, board := range userBoards {
 		if board.Connected {
 			connectedBoards = append(connectedBoards, board)
 		}

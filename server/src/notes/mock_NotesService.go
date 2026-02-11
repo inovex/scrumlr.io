@@ -320,6 +320,80 @@ func (_c *MockNotesService_GetAll_Call) RunAndReturn(run func(ctx context.Contex
 	return _c
 }
 
+// GetByUserAndBoard provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) GetByUserAndBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]*Note, error) {
+	ret := _mock.Called(ctx, boardID, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetByUserAndBoard")
+	}
+
+	var r0 []*Note
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) ([]*Note, error)); ok {
+		return returnFunc(ctx, boardID, userID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) []*Note); ok {
+		r0 = returnFunc(ctx, boardID, userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*Note)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, boardID, userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockNotesService_GetByUserAndBoard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByUserAndBoard'
+type MockNotesService_GetByUserAndBoard_Call struct {
+	*mock.Call
+}
+
+// GetByUserAndBoard is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+func (_e *MockNotesService_Expecter) GetByUserAndBoard(ctx interface{}, boardID interface{}, userID interface{}) *MockNotesService_GetByUserAndBoard_Call {
+	return &MockNotesService_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, boardID, userID)}
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockNotesService_GetByUserAndBoard_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) Return(notes []*Note, err error) *MockNotesService_GetByUserAndBoard_Call {
+	_c.Call.Return(notes, err)
+	return _c
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]*Note, error)) *MockNotesService_GetByUserAndBoard_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetStack provides a mock function for the type MockNotesService
 func (_mock *MockNotesService) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
 	ret := _mock.Called(ctx, note)

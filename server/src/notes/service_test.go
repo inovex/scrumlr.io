@@ -15,7 +15,7 @@ import (
 	"scrumlr.io/server/common"
 )
 
-func TestCreate(t *testing.T) {
+func Test_Create(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -48,7 +48,7 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestCreate_EmptyText(t *testing.T) {
+func Test_Create_EmptyText(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -69,7 +69,7 @@ func TestCreate_EmptyText(t *testing.T) {
 	assert.Equal(t, common.BadRequestError(errors.New("cannot create note with empty text")), err)
 }
 
-func TestCreate_DatabaseError(t *testing.T) {
+func Test_Create_DatabaseError(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -93,7 +93,7 @@ func TestCreate_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestImport(t *testing.T) {
+func Test_Import(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -123,7 +123,7 @@ func TestImport(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestImport_EmptyText(t *testing.T) {
+func Test_Import_EmptyText(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -144,7 +144,7 @@ func TestImport_EmptyText(t *testing.T) {
 	assert.Equal(t, common.BadRequestError(errors.New("cannot import note with empty text")), err)
 }
 
-func TestImport_DatabaseError(t *testing.T) {
+func Test_Import_DatabaseError(t *testing.T) {
 	authorId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -168,7 +168,7 @@ func TestImport_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestUpdate_Text_Owner(t *testing.T) {
+func Test_Update_Text_Owner(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.OwnerRole
 	authorId := uuid.New()
@@ -216,7 +216,7 @@ func TestUpdate_Text_Owner(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_Position_Owner(t *testing.T) {
+func Test_Update_Position_Owner(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.OwnerRole
 	authorId := uuid.New()
@@ -275,7 +275,7 @@ func TestUpdate_Position_Owner(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_Text_Moderator(t *testing.T) {
+func Test_Update_Text_Moderator(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ModeratorRole
 	authorId := uuid.New()
@@ -323,7 +323,7 @@ func TestUpdate_Text_Moderator(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_Position_Moderator(t *testing.T) {
+func Test_Update_Position_Moderator(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ModeratorRole
 	authorId := uuid.New()
@@ -382,7 +382,7 @@ func TestUpdate_Position_Moderator(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_Text_Participant(t *testing.T) {
+func Test_Update_Text_Participant(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := callerId
@@ -430,7 +430,7 @@ func TestUpdate_Text_Participant(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_Text_Participant_NotAllowed(t *testing.T) {
+func Test_Update_Text_Participant_NotAllowed(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := uuid.New()
@@ -469,7 +469,7 @@ func TestUpdate_Text_Participant_NotAllowed(t *testing.T) {
 	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change text of note")), err)
 }
 
-func TestUpdate_Position_Participant(t *testing.T) {
+func Test_Update_Position_Participant(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := callerId
@@ -528,7 +528,7 @@ func TestUpdate_Position_Participant(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestUpdate_StackingNotAllowed(t *testing.T) {
+func Test_Update_StackingNotAllowed(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := callerId
@@ -567,7 +567,7 @@ func TestUpdate_StackingNotAllowed(t *testing.T) {
 	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to stack notes")), err)
 }
 
-func TestUpdate_StackOnSelf(t *testing.T) {
+func Test_Update_StackOnSelf(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := callerId
@@ -606,7 +606,7 @@ func TestUpdate_StackOnSelf(t *testing.T) {
 	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to stack a note on self")), err)
 }
 
-func TestUpdate_DatabaseError(t *testing.T) {
+func Test_Update_DatabaseError(t *testing.T) {
 	callerId := uuid.New()
 	authorId := callerId
 	noteId := uuid.New()
@@ -658,7 +658,7 @@ func TestUpdate_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestDeleteNote(t *testing.T) {
+func Test_DeleteNote(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := callerId
@@ -688,7 +688,7 @@ func TestDeleteNote(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestDeleteNote_Owner(t *testing.T) {
+func Test_DeleteNote_Owner(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.OwnerRole
 	authorId := uuid.New()
@@ -718,7 +718,7 @@ func TestDeleteNote_Owner(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestDeleteNote_Moderator(t *testing.T) {
+func Test_DeleteNote_Moderator(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ModeratorRole
 	authorId := uuid.New()
@@ -748,7 +748,7 @@ func TestDeleteNote_Moderator(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestDeleteNote_NotAllowed(t *testing.T) {
+func Test_DeleteNote_NotAllowed(t *testing.T) {
 	callerId := uuid.New()
 	callerRole := common.ParticipantRole
 	authorId := uuid.New()
@@ -774,7 +774,7 @@ func TestDeleteNote_NotAllowed(t *testing.T) {
 	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to delete note from other user")), err)
 }
 
-func TestGet(t *testing.T) {
+func Test_Get(t *testing.T) {
 	noteId := uuid.New()
 	authorId := uuid.New()
 	text := "This is a note"
@@ -803,7 +803,7 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, rank, note.Position.Rank)
 }
 
-func TestGet_NotFound(t *testing.T) {
+func Test_Get_NotFound(t *testing.T) {
 	noteId := uuid.New()
 
 	mockDB := NewMockNotesDatabase(t)
@@ -823,7 +823,7 @@ func TestGet_NotFound(t *testing.T) {
 	assert.Equal(t, common.NotFoundError, err)
 }
 
-func TestGet_DatabaseError(t *testing.T) {
+func Test_Get_DatabaseError(t *testing.T) {
 	noteId := uuid.New()
 	dbError := errors.New("database error")
 
@@ -844,7 +844,7 @@ func TestGet_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestGetAll(t *testing.T) {
+func Test_GetAll(t *testing.T) {
 	boardId := uuid.New()
 	firstNoteId := uuid.New()
 	secondNoteId := uuid.New()
@@ -888,11 +888,11 @@ func TestGetAll(t *testing.T) {
 	assert.Equal(t, 0, notes[1].Position.Rank)
 }
 
-func TestGetAll_ColumnFilter(t *testing.T) {
+func Test_GetAll_ColumnFilter(t *testing.T) {
 
 }
 
-func TestGetAll_NotFound(t *testing.T) {
+func Test_GetAll_NotFound(t *testing.T) {
 	boardId := uuid.New()
 
 	mockDB := NewMockNotesDatabase(t)
@@ -912,7 +912,7 @@ func TestGetAll_NotFound(t *testing.T) {
 	assert.Equal(t, common.NotFoundError, err)
 }
 
-func TestGetAll_DatabaseError(t *testing.T) {
+func Test_GetAll_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	dbError := errors.New("database error")
 
@@ -933,7 +933,7 @@ func TestGetAll_DatabaseError(t *testing.T) {
 	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestGetStack(t *testing.T) {
+func Test_GetStack(t *testing.T) {
 	noteID := uuid.New()
 
 	mockDB := NewMockNotesDatabase(t)
@@ -972,7 +972,7 @@ func TestGetStack(t *testing.T) {
 	*/
 }
 
-func TestGetStack_DatabaseError(t *testing.T) {
+func Test_GetStack_DatabaseError(t *testing.T) {
 	noteID := uuid.New()
 	dbError := errors.New("database error")
 
@@ -991,4 +991,36 @@ func TestGetStack_DatabaseError(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	assert.Equal(t, dbError, err)
+}
+
+func Test_GetByUserAndBoard(t *testing.T) {
+	boardId := uuid.New()
+	oteId := uuid.New()
+	authorId := uuid.New()
+	columnId := uuid.New()
+	noteText := "This is the first note"
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetByUserAndBoard(mock.Anything, authorId, boardId).
+		Return([]DatabaseNote{
+			{ID: oteId, Author: authorId, Board: boardId, Text: noteText, Column: columnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewNotesService(mockDB, broker)
+
+	notes, err := service.GetByUserAndBoard(context.Background(), authorId, boardId)
+
+	assert.Nil(t, err)
+	assert.Len(t, notes, 1)
+
+	assert.Equal(t, oteId, notes[0].ID)
+	assert.Equal(t, authorId, notes[0].Author)
+	assert.Equal(t, noteText, notes[0].Text)
+	assert.False(t, notes[0].Edited)
+	assert.Equal(t, columnId, notes[0].Position.Column)
+	assert.Equal(t, 0, notes[0].Position.Rank)
 }

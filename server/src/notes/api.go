@@ -14,4 +14,5 @@ type NotesService interface {
 	GetAll(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error)
 	Delete(ctx context.Context, user uuid.UUID, body NoteDeleteRequest) error
 	GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error)
+	GetByUserAndBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]*Note, error)
 }

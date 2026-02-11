@@ -35,6 +35,7 @@ type NotesDatabase interface {
 	DeleteNote(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error)
 	GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
+	GetByUserAndBoard(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) ([]DatabaseNote, error)
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
@@ -358,4 +359,30 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 		Type: realtime.BoardEventNoteDeleted,
 		Data: notes,
 	})
+}
+
+func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.by_user_and_board")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.user", userID.String()),
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.board", boardID.String()),
+	)
+
+	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "notes not found")
+			span.RecordError(err)
+			return nil, common.NotFoundError
+		}
+
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
+		log.Errorw("unable to get notes", "error", err)
+		return nil, common.InternalServerError
+	}
+	return Notes(notes), nil
 }
