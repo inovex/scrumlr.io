@@ -200,13 +200,13 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Len(t, sessions, 4)
 }
 
-func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
+func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoardSessions() {
 	t := suite.T()
 	ctx := context.Background()
 
 	userId := suite.baseData.Users["Stan"].ID
 
-	sessions, err := suite.sessionService.GetUserConnectedBoards(ctx, userId)
+	sessions, err := suite.sessionService.GetUserConnectedBoardSessions(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 2)

@@ -415,7 +415,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 		attribute.String("scrumlr.users.service.update.type", string(user.AccountType)),
 	)
 
-	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, user.ID)
+	connectedBoards, err := service.sessionService.GetUserConnectedBoardSessions(ctx, user.ID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get connected boards")
 		span.RecordError(err)

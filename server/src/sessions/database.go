@@ -194,7 +194,7 @@ func (database *SessionDB) GetAll(ctx context.Context, board uuid.UUID, filter .
 }
 
 // Gets all board sessions of a single user who he is currently connected to
-func (database *SessionDB) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetUserConnectedBoardSessions(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
 	var sessions []DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").

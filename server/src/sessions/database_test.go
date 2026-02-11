@@ -540,7 +540,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -564,7 +564,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConne
 
 	userId := suite.users["Friend"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)

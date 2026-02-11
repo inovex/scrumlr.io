@@ -784,7 +784,7 @@ func TestUpdateUser(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockUserService := sessions.NewMockSessionService(t)
-	mockUserService.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
+	mockUserService.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
 		Return([]*sessions.BoardSession{
 			{UserID: user.ID, Board: firstBoardId},
 			{UserID: user.ID, Board: secondBoardId},

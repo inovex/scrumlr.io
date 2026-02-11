@@ -399,12 +399,12 @@ func (_c *MockSessionDatabase_GetUserBoardSessions_Call) RunAndReturn(run func(c
 	return _c
 }
 
-// GetUserConnectedBoards provides a mock function for the type MockSessionDatabase
-func (_mock *MockSessionDatabase) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+// GetUserConnectedBoardSessions provides a mock function for the type MockSessionDatabase
+func (_mock *MockSessionDatabase) GetUserConnectedBoardSessions(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
 	ret := _mock.Called(ctx, user)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetUserConnectedBoards")
+		panic("no return value specified for GetUserConnectedBoardSessions")
 	}
 
 	var r0 []DatabaseBoardSession
@@ -427,19 +427,19 @@ func (_mock *MockSessionDatabase) GetUserConnectedBoards(ctx context.Context, us
 	return r0, r1
 }
 
-// MockSessionDatabase_GetUserConnectedBoards_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserConnectedBoards'
-type MockSessionDatabase_GetUserConnectedBoards_Call struct {
+// MockSessionDatabase_GetUserConnectedBoardSessions_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserConnectedBoardSessions'
+type MockSessionDatabase_GetUserConnectedBoardSessions_Call struct {
 	*mock.Call
 }
 
-// GetUserConnectedBoards is a helper method to define mock.On call
+// GetUserConnectedBoardSessions is a helper method to define mock.On call
 //   - ctx context.Context
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) GetUserConnectedBoards(ctx interface{}, user interface{}) *MockSessionDatabase_GetUserConnectedBoards_Call {
-	return &MockSessionDatabase_GetUserConnectedBoards_Call{Call: _e.mock.On("GetUserConnectedBoards", ctx, user)}
+func (_e *MockSessionDatabase_Expecter) GetUserConnectedBoardSessions(ctx interface{}, user interface{}) *MockSessionDatabase_GetUserConnectedBoardSessions_Call {
+	return &MockSessionDatabase_GetUserConnectedBoardSessions_Call{Call: _e.mock.On("GetUserConnectedBoardSessions", ctx, user)}
 }
 
-func (_c *MockSessionDatabase_GetUserConnectedBoards_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockSessionDatabase_GetUserConnectedBoards_Call {
+func (_c *MockSessionDatabase_GetUserConnectedBoardSessions_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockSessionDatabase_GetUserConnectedBoardSessions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -457,12 +457,12 @@ func (_c *MockSessionDatabase_GetUserConnectedBoards_Call) Run(run func(ctx cont
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetUserConnectedBoards_Call) Return(databaseBoardSessions []DatabaseBoardSession, err error) *MockSessionDatabase_GetUserConnectedBoards_Call {
+func (_c *MockSessionDatabase_GetUserConnectedBoardSessions_Call) Return(databaseBoardSessions []DatabaseBoardSession, err error) *MockSessionDatabase_GetUserConnectedBoardSessions_Call {
 	_c.Call.Return(databaseBoardSessions, err)
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetUserConnectedBoards_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)) *MockSessionDatabase_GetUserConnectedBoards_Call {
+func (_c *MockSessionDatabase_GetUserConnectedBoardSessions_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)) *MockSessionDatabase_GetUserConnectedBoardSessions_Call {
 	_c.Call.Return(run)
 	return _c
 }
