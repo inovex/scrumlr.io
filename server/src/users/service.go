@@ -318,7 +318,11 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		if board.Connected {
 			connectedBoards = append(connectedBoards, board)
 		}
-		service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board)
+		if err := service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board); err != nil {
+			span.SetStatus(codes.Error, "failed to delete user notes")
+			span.RecordError(err)
+			log.Errorw("failed to delete user notes from board", "board", board.Board, "user", id, "err", err)
+		}
 
 	}
 
