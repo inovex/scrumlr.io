@@ -195,9 +195,8 @@ func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
-	callerId := uuid.New()
-	callerRole := common.OwnerRole
 	authorId := uuid.New()
+	callerRole := common.OwnerRole
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -206,9 +205,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
 	rank := 0
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     &text,
@@ -225,7 +224,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
@@ -243,9 +242,8 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
-	callerId := uuid.New()
-	callerRole := common.OwnerRole
 	authorId := uuid.New()
+	callerRole := common.OwnerRole
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -265,9 +263,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     nil,
@@ -284,7 +282,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		ID:       noteId,
 		Text:     nil,
 		Board:    boardId,
@@ -302,9 +300,8 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
-	callerId := uuid.New()
-	callerRole := common.ModeratorRole
 	authorId := uuid.New()
+	callerRole := common.ModeratorRole
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -313,9 +310,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
 	rank := 0
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     &text,
@@ -332,7 +329,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
@@ -350,9 +347,8 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
-	callerId := uuid.New()
-	callerRole := common.ModeratorRole
 	authorId := uuid.New()
+	callerRole := common.ModeratorRole
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -372,9 +368,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     nil,
@@ -391,7 +387,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     nil,
 		ID:       noteId,
 		Board:    boardId,
@@ -409,9 +405,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -420,9 +416,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
 	rank := 0
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     &text,
@@ -439,7 +435,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
@@ -496,9 +492,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -518,9 +514,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     nil,
@@ -537,7 +533,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     nil,
 		ID:       noteId,
 		Board:    boardId,
@@ -555,9 +551,9 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -571,7 +567,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -580,7 +576,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteId,
 		Board:    boardId,
@@ -594,9 +590,9 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -610,7 +606,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: authorId}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -619,7 +615,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteId,
 		Board:    boardId,
@@ -633,8 +629,8 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
-	callerId := uuid.New()
-	authorId := callerId
+	authorId := uuid.New()
+
 	noteId := uuid.New()
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -655,9 +651,9 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 	dbError := errors.New("database error")
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: common.ParticipantRole, Author: authorId}, nil)
-	mockDB.EXPECT().UpdateNote(mock.Anything, callerId, DatabaseNoteUpdate{
+	mockDB.EXPECT().UpdateNote(mock.Anything, authorId, DatabaseNoteUpdate{
 		ID:       noteId,
 		Board:    boardId,
 		Text:     &text,
@@ -671,7 +667,7 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 
 	service := NewNotesService(mockDB, broker)
 
-	note, err := service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := service.Update(context.Background(), authorId, NoteUpdateRequest{
 		Text:     &text,
 		ID:       noteId,
 		Board:    boardId,
@@ -685,9 +681,9 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	boardId := uuid.New()
 	noteId := uuid.New()
 	deleteStack := true
@@ -695,11 +691,11 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote() {
 	ctx := context.Background()
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
 	mockDB.EXPECT().GetStack(mock.Anything, noteId).
 		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
+	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
 		Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -709,15 +705,14 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote() {
 
 	service := NewNotesService(mockDB, broker)
 
-	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
-	callerId := uuid.New()
-	callerRole := common.OwnerRole
 	authorId := uuid.New()
+	callerRole := common.OwnerRole
 	boardId := uuid.New()
 	noteId := uuid.New()
 	deleteStack := true
@@ -725,11 +720,11 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
 	ctx := context.Background()
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
 	mockDB.EXPECT().GetStack(mock.Anything, noteId).
 		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
+	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
 		Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -739,15 +734,14 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
 
 	service := NewNotesService(mockDB, broker)
 
-	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
-	callerId := uuid.New()
-	callerRole := common.ModeratorRole
 	authorId := uuid.New()
+	callerRole := common.ModeratorRole
 	boardId := uuid.New()
 	noteId := uuid.New()
 	deleteStack := true
@@ -755,11 +749,11 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
 	ctx := context.Background()
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
 	mockDB.EXPECT().GetStack(mock.Anything, noteId).
 		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
+	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
 		Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -769,7 +763,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
 
 	service := NewNotesService(mockDB, broker)
 
-	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
@@ -1059,9 +1053,9 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 //todo!!!! do the tests correct
 
 func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
-	callerId := uuid.New()
+	authorId := uuid.New()
 	callerRole := common.ParticipantRole
-	authorId := callerId
+
 	boardId := uuid.New()
 	noteId := uuid.New()
 	deleteStack := true
@@ -1069,11 +1063,11 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
 	ctx := context.Background()
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, authorId).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
 	mockDB.EXPECT().GetStack(mock.Anything, noteId).
 		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
-	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
+	mockDB.EXPECT().DeleteNote(mock.Anything, authorId, boardId, noteId, deleteStack).
 		Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
@@ -1083,7 +1077,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
 
 	service := NewNotesService(mockDB, broker)
 
-	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err := service.Delete(ctx, authorId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	suite.Nil(err)
 }
