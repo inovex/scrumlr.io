@@ -36,7 +36,7 @@ type SessionDatabase interface {
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
 	GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)
-	GetUserBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)
+	GetUserBoardSessions(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)
 }
 
 type BoardSessionService struct {
@@ -254,7 +254,7 @@ func (service *BoardSessionService) GetUserConnectedBoards(ctx context.Context, 
 	return BoardSessions(sessions), err
 }
 
-func (service *BoardSessionService) GetUserBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
+func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_boards")
 	defer span.End()
 
@@ -262,7 +262,7 @@ func (service *BoardSessionService) GetUserBoards(ctx context.Context, user uuid
 		attribute.String("scrumlr.sessions.service.get.user_boards.user", user.String()),
 	)
 
-	sessions, err := service.database.GetUserBoards(ctx, user)
+	sessions, err := service.database.GetUserBoardSessions(ctx, user)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)

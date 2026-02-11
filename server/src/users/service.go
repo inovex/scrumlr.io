@@ -305,7 +305,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.delete.id", id.String()),
 	)
-	userBoards, err := service.sessionService.GetUserBoards(ctx, id)
+	userBoards, err := service.sessionService.GetUserBoardSessions(ctx, id)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
@@ -318,7 +318,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		if board.Connected {
 			connectedBoards = append(connectedBoards, board)
 		}
-		service.deleteUserNotesFromBoard(ctx, board.Board, id)
+		service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board)
 	}
 
 	err = service.database.DeleteUser(ctx, id)
@@ -332,42 +332,6 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	deletedUserCounter.Add(ctx, 1)
 	service.deletedUser(ctx, id, connectedBoards)
 	return err
-}
-
-func (service *Service) deleteUserNotesFromBoard(ctx context.Context, boardID, userID uuid.UUID) {
-	ctx, span := tracer.Start(ctx, "users.service.delete.board_cleanup")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("board_id", boardID.String()),
-		attribute.String("user_id", userID.String()),
-	)
-
-	log := logger.FromContext(ctx)
-	allNotes, err := service.notesService.GetAll(ctx, boardID)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to fetch notes")
-		log.Errorw("failed to get all notes for board during user deletion", "board", boardID, "user", userID, "err", err)
-		return
-	}
-
-	for _, note := range allNotes {
-		if note.Author != userID {
-			continue
-		}
-
-		req := notes.NoteDeleteRequest{
-			ID:          note.ID,
-			Board:       boardID,
-			DeleteStack: false,
-		}
-
-		if err := service.notesService.Delete(ctx, userID, req); err != nil {
-			span.RecordError(err)
-			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
-		}
-	}
 }
 
 func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {

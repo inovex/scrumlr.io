@@ -504,12 +504,12 @@ func (_c *MockSessionService_GetAll_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
-// GetUserBoards provides a mock function for the type MockSessionService
-func (_mock *MockSessionService) GetUserBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
+// GetUserBoardSessions provides a mock function for the type MockSessionService
+func (_mock *MockSessionService) GetUserBoardSessions(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
 	ret := _mock.Called(ctx, user)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetUserBoards")
+		panic("no return value specified for GetUserBoardSessions")
 	}
 
 	var r0 []*BoardSession
@@ -532,19 +532,19 @@ func (_mock *MockSessionService) GetUserBoards(ctx context.Context, user uuid.UU
 	return r0, r1
 }
 
-// MockSessionService_GetUserBoards_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserBoards'
-type MockSessionService_GetUserBoards_Call struct {
+// MockSessionService_GetUserBoardSessions_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserBoardSessions'
+type MockSessionService_GetUserBoardSessions_Call struct {
 	*mock.Call
 }
 
-// GetUserBoards is a helper method to define mock.On call
+// GetUserBoardSessions is a helper method to define mock.On call
 //   - ctx context.Context
 //   - user uuid.UUID
-func (_e *MockSessionService_Expecter) GetUserBoards(ctx interface{}, user interface{}) *MockSessionService_GetUserBoards_Call {
-	return &MockSessionService_GetUserBoards_Call{Call: _e.mock.On("GetUserBoards", ctx, user)}
+func (_e *MockSessionService_Expecter) GetUserBoardSessions(ctx interface{}, user interface{}) *MockSessionService_GetUserBoardSessions_Call {
+	return &MockSessionService_GetUserBoardSessions_Call{Call: _e.mock.On("GetUserBoardSessions", ctx, user)}
 }
 
-func (_c *MockSessionService_GetUserBoards_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockSessionService_GetUserBoards_Call {
+func (_c *MockSessionService_GetUserBoardSessions_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockSessionService_GetUserBoardSessions_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -562,12 +562,12 @@ func (_c *MockSessionService_GetUserBoards_Call) Run(run func(ctx context.Contex
 	return _c
 }
 
-func (_c *MockSessionService_GetUserBoards_Call) Return(boardSessions []*BoardSession, err error) *MockSessionService_GetUserBoards_Call {
+func (_c *MockSessionService_GetUserBoardSessions_Call) Return(boardSessions []*BoardSession, err error) *MockSessionService_GetUserBoardSessions_Call {
 	_c.Call.Return(boardSessions, err)
 	return _c
 }
 
-func (_c *MockSessionService_GetUserBoards_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)) *MockSessionService_GetUserBoards_Call {
+func (_c *MockSessionService_GetUserBoardSessions_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)) *MockSessionService_GetUserBoardSessions_Call {
 	_c.Call.Return(run)
 	return _c
 }

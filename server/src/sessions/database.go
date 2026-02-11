@@ -208,7 +208,7 @@ func (database *SessionDB) GetUserConnectedBoards(ctx context.Context, user uuid
 }
 
 // Gets all board sessions of a single user
-func (database *SessionDB) GetUserBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetUserBoardSessions(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
 	var sessions []DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").

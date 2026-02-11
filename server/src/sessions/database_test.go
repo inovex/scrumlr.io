@@ -576,7 +576,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 3)
@@ -585,7 +585,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards() {
 	assert.NotNil(t, firstSession)
 	assert.Equal(t, suite.sessions["Read1"].Board, firstSession.Board)
 	assert.Equal(t, suite.sessions["Read1"].User, firstSession.User)
-	assert.True(t, !firstSession.Connected)
+	assert.False(t, firstSession.Connected)
 
 	secondSession := checkSessionInList(dbSessions, suite.sessions["UpdateAll1"].Board, suite.sessions["UpdateAll1"].User)
 	assert.NotNil(t, secondSession)
@@ -606,7 +606,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
 
 	userId := suite.users["Blubb"].id
 
-	dbSessions, err := database.GetUserBoards(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)

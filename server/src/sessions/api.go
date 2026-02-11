@@ -23,7 +23,7 @@ type SessionService interface {
 	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
 	GetAll(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error)
 	GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)
-	GetUserBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)
+	GetUserBoardSessions(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)
 
 	Connect(ctx context.Context, boardID, userID uuid.UUID) error
 	Disconnect(ctx context.Context, boardID, userID uuid.UUID) error

@@ -1024,3 +1024,40 @@ func Test_GetByUserAndBoard(t *testing.T) {
 	assert.Equal(t, columnId, notes[0].Position.Column)
 	assert.Equal(t, 0, notes[0].Position.Rank)
 }
+
+// to test delete
+// delete multiple notes
+// delete not correct user correct board
+// delete correct user not correct board
+
+//todo!!!! do the tests correct
+
+func Test_DeleteUserNotesFromBoard(t *testing.T) {
+	callerId := uuid.New()
+	callerRole := common.ParticipantRole
+	authorId := callerId
+	boardId := uuid.New()
+	noteId := uuid.New()
+	deleteStack := true
+
+	ctx := context.Background()
+
+	mockDB := NewMockNotesDatabase(t)
+	mockDB.EXPECT().GetPrecondition(mock.Anything, noteId, boardId, callerId).
+		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: authorId}, nil)
+	mockDB.EXPECT().GetStack(mock.Anything, noteId).
+		Return([]DatabaseNote{{ID: noteId, Author: authorId}, {ID: uuid.New(), Author: authorId, Stack: uuid.NullUUID{UUID: noteId, Valid: true}}}, nil)
+	mockDB.EXPECT().DeleteNote(mock.Anything, callerId, boardId, noteId, deleteStack).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewNotesService(mockDB, broker)
+
+	err := service.Delete(ctx, callerId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+
+	assert.Nil(t, err)
+}
