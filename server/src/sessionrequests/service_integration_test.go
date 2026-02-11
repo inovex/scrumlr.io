@@ -5,14 +5,17 @@ import (
 	"log"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+	"scrumlr.io/server/initialize/testDbTemplates"
+
+	"scrumlr.io/server/websocket"
+
 	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -25,9 +28,9 @@ import (
 
 type SessionRequestServiceIntegrationTestSuite struct {
 	suite.Suite
-	dbContainer          *postgres.PostgresContainer
+	service              SessionRequestService
+	broker               *realtime.Broker
 	natsContainer        *nats.NATSContainer
-	db                   *bun.DB
 	natsConnectionString string
 	users                map[string]users.User
 	boards               map[string]TestBoard
@@ -39,18 +42,38 @@ func TestReactionServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *SessionRequestServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = bun
 	suite.natsConnectionString = connectionString
 }
 
+func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
+	db := testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessionrequest_test",
+			Func: suite.seedSessionRequestTestData,
+		},
+	)
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	require.NoError(suite.T(), err, "Failed to connect to nats server")
+	suite.broker = broker
+
+	database := NewSessionRequestDatabase(db)
+	wsService := websocket.NewWebSocketService()
+	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+	noteDatabase := notes.NewNotesDatabase(db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := sessions.NewSessionDatabase(db)
+	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	suite.service = NewSessionRequestService(database, broker, sessionRequestWebsocket, sessionService)
+}
+
 func (suite *SessionRequestServiceIntegrationTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
 	initialize.StopTestNats(suite.natsContainer)
 }
 
@@ -61,28 +84,9 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-
-	request, err := sessionRequestService.Create(ctx, boardId, userId)
+	request, err := suite.service.Create(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, request.User.ID)
@@ -103,28 +107,9 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Santa"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-
-	request, err := sessionRequestService.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
+	request, err := suite.service.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, request.User.ID)
@@ -153,26 +138,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Get() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-
-	request, err := sessionRequestService.Get(ctx, boardId, userId)
+	request, err := suite.service.Get(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, request.User.ID)
@@ -185,26 +151,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-
-	requests, err := sessionRequestService.GetAll(ctx, boardId, "")
+	requests, err := suite.service.GetAll(ctx, boardId, "")
 
 	assert.Nil(t, err)
 	assert.Len(t, requests, 4)
@@ -217,45 +164,26 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	ws := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	websocket := NewWebsocket(ws, broker)
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := sessions.NewSessionDatabase(suite.db)
-	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	sessionRequestDatabase := NewSessionRequestDatabase(suite.db)
-	sessionRequestService := NewSessionRequestService(sessionRequestDatabase, broker, websocket, sessionService)
-
-	exists, err := sessionRequestService.Exists(ctx, boardId, userId)
+	exists, err := suite.service.Exists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
 }
 
-func (suite *SessionRequestServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *SessionRequestServiceIntegrationTestSuite) seedSessionRequestTestData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]users.User, 6)
-	suite.users["Stan"] = users.User{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
-	suite.users["Friend"] = users.User{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
-	suite.users["Santa"] = users.User{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Bob"] = users.User{ID: uuid.New(), Name: "Bob", AccountType: common.Anonymous}
-	suite.users["Luke"] = users.User{ID: uuid.New(), Name: "Luke", AccountType: common.Anonymous}
-	suite.users["Leia"] = users.User{ID: uuid.New(), Name: "Leia", AccountType: common.Anonymous}
+	suite.users["Stan"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567024"), Name: "Stan", AccountType: common.Google}
+	suite.users["Friend"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567025"), Name: "Friend", AccountType: common.Anonymous}
+	suite.users["Santa"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567026"), Name: "Santa", AccountType: common.Anonymous}
+	suite.users["Bob"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567027"), Name: "Bob", AccountType: common.Anonymous}
+	suite.users["Luke"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567028"), Name: "Luke", AccountType: common.Anonymous}
+	suite.users["Leia"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567029"), Name: "Leia", AccountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 2)
-	suite.boards["Write"] = TestBoard{id: uuid.New(), name: "Write"}
-	suite.boards["Read"] = TestBoard{id: uuid.New(), name: "Read"}
+	suite.boards["Write"] = TestBoard{id: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567030"), name: "Write"}
+	suite.boards["Read"] = TestBoard{id: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567031"), name: "Read"}
 
 	// test session requests
 	suite.sessionsRequests = make(map[string]DatabaseBoardSessionRequest, 10)
@@ -274,21 +202,21 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SeedDatabase(db *bun.DB)
 	suite.sessionsRequests["Read4"] = DatabaseBoardSessionRequest{User: suite.users["Bob"].ID, Board: suite.boards["Read"].id, Status: RequestRejected}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, sessionRequest := range suite.sessionsRequests {
-		err := initialize.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
+		err := testDbTemplates.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
 		if err != nil {
 			log.Fatalf("Failed to insert test session requests %s", err)
 		}

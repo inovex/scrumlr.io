@@ -26,17 +26,16 @@ Cypress.Commands.add("login", () => {
     .should("include", "/login")
 
   cy
+    .get("[data-cy='login-board__anonymous-toggle']")
+    .focus()
+    .click()
+
+  cy
     .get<HTMLInputElement>("input[data-cy='login-board__username']")
     .focus()
     .clear()
     .type(AGENT_NAME)
     .should("have.value", AGENT_NAME)
-
-  cy
-    .get<HTMLInputElement>("input[data-cy='login-board__checkbox']")
-    .focus()
-    .check()
-    .should("be.checked", true)
 
   cy
     .get<HTMLButtonElement>("button[data-cy='login-board__anonymous-login-button']")

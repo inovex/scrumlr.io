@@ -6,19 +6,18 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/initialize/testDbTemplates"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 type DatabaseColumnTemplateTestSuite struct {
 	suite.Suite
-	container       *postgres.PostgresContainer
 	db              *bun.DB
 	users           map[string]TestUser
 	boardTemplates  map[string]TestBoardTemplate
@@ -29,17 +28,15 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseColumnTemplateTestSuite))
 }
 
-func (suite *DatabaseColumnTemplateTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseColumnTemplateTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseColumnTemplateTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create() {
@@ -320,7 +317,7 @@ type TestBoardTemplate struct {
 	favourite   bool
 }
 
-func (suite *DatabaseColumnTemplateTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseColumnTemplateTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
@@ -354,21 +351,21 @@ func (suite *DatabaseColumnTemplateTestSuite) SeedDatabase(db *bun.DB) {
 	suite.columnTemplates["Read2"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, boardTemplate := range suite.boardTemplates {
-		err := initialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite)
+		err := testDbTemplates.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite)
 		if err != nil {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}
 	}
 
 	for _, columnTemplate := range suite.columnTemplates {
-		err := initialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index)
+		err := testDbTemplates.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index)
 		if err != nil {
 			log.Fatalf("Failed to insert test column templates %s", err)
 		}

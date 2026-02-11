@@ -7,13 +7,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"
@@ -21,13 +22,16 @@ import (
 
 type SessionServiceIntegrationTestSuite struct {
 	suite.Suite
-	dbContainer          *postgres.PostgresContainer
 	natsContainer        *nats.NATSContainer
-	db                   *bun.DB
 	natsConnectionString string
-	users                map[string]uuid.UUID
-	boards               map[string]TestBoard
-	sessions             map[string]BoardSession
+	baseData             testDbTemplates.DbBaseIDs
+	db                   *bun.DB
+	broker               *realtime.Broker
+	sessionService       SessionService
+
+	// Additional test-specific data
+	users  map[string]testDbTemplates.TestUser
+	boards map[string]testDbTemplates.TestBoard
 }
 
 func TestSessionServiceIntegrationTestSuite(t *testing.T) {
@@ -35,44 +39,72 @@ func TestSessionServiceIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *SessionServiceIntegrationTestSuite) SetupSuite() {
-	dbContainer, bun := initialize.StartTestDatabase()
-	suite.SeedDatabase(bun)
 	natsContainer, connectionString := initialize.StartTestNats()
 
-	suite.dbContainer = dbContainer
 	suite.natsContainer = natsContainer
-	suite.db = bun
 	suite.natsConnectionString = connectionString
+	suite.baseData = testDbTemplates.GetBaseIDs()
+	suite.initTestData()
 }
 
 func (suite *SessionServiceIntegrationTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.dbContainer)
 	initialize.StopTestNats(suite.natsContainer)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) SetupTest() {
+	db := testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		true,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_test",
+			Func: suite.seedSessionsTestData,
+		},
+	)
+	suite.db = db
+
+	broker, err := realtime.NewNats(suite.natsConnectionString)
+	require.NoError(suite.T(), err, "Failed to connect to nats server")
+	suite.broker = broker
+
+	noteDatabase := notes.NewNotesDatabase(db)
+	noteService := notes.NewNotesService(noteDatabase, broker)
+	columnDatabase := columns.NewColumnsDatabase(db)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	sessionDatabase := NewSessionDatabase(db)
+	suite.sessionService = NewSessionService(sessionDatabase, broker, columnService, noteService)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) initTestData() {
+	// Additional users not in base seed
+	suite.users = map[string]testDbTemplates.TestUser{
+		"Friend": {Name: "Friend", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567001"), AccountType: common.Anonymous},
+		"Bob":    {Name: "Bob", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+		"Luke":   {Name: "Luke", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567003"), AccountType: common.Anonymous},
+		"Leia":   {Name: "Leia", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567004"), AccountType: common.Anonymous},
+		"Han":    {Name: "Han", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567005"), AccountType: common.Anonymous},
+	}
+
+	// Test boards
+	suite.boards = map[string]testDbTemplates.TestBoard{
+		"Write":      {Name: "SessionsWrite", ID: uuid.MustParse("e1f2a3b4-c5d6-7890-abcd-ef1234567010")},
+		"Update":     {Name: "SessionsUpdate", ID: uuid.MustParse("e1f2a3b4-c5d6-7890-abcd-ef1234567011")},
+		"Read":       {Name: "SessionsRead", ID: uuid.MustParse("e1f2a3b4-c5d6-7890-abcd-ef1234567012")},
+		"ReadFilter": {Name: "SessionsReadFilter", ID: uuid.MustParse("e1f2a3b4-c5d6-7890-abcd-ef1234567013")},
+		"UpdateAll":  {Name: "SessionsUpdateAll", ID: uuid.MustParse("e1f2a3b4-c5d6-7890-abcd-ef1234567014")},
+	}
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Write"].id
-	userId := suite.users["Luke"]
+	boardId := suite.boards["Write"].ID
+	userId := suite.users["Luke"].ID
 	role := common.ParticipantRole
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	session, err := sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
+	session, err := suite.sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, session.Board)
@@ -91,26 +123,14 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Update"].id
-	userId := suite.users["Luke"]
-	callerId := suite.users["Stan"]
+	boardId := suite.boards["Update"].ID
+	userId := suite.users["Luke"].ID
+	callerId := suite.baseData.Users["Stan"].ID
 	role := common.ModeratorRole
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	session, err := sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: &role})
+	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: &role})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, session.Board)
@@ -133,25 +153,13 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["UpdateAll"].id
+	boardId := suite.boards["UpdateAll"].ID
 	ready := false
 	raisedHand := false
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	sessions, err := sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: &ready, RaisedHand: &raisedHand})
+	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: &ready, RaisedHand: &raisedHand})
 
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 4)
@@ -171,22 +179,10 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Get() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	userId := suite.users["Santa"]
+	boardId := suite.boards["Read"].ID
+	userId := suite.baseData.Users["Santa"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	session, err := sessionService.Get(ctx, boardId, userId)
+	session, err := suite.sessionService.Get(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, session.Board)
@@ -197,21 +193,9 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetAll() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
+	boardId := suite.boards["Read"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	sessions, err := sessionService.GetAll(ctx, boardId, BoardSessionFilter{})
+	sessions, err := suite.sessionService.GetAll(ctx, boardId, BoardSessionFilter{})
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 4)
 }
@@ -220,21 +204,9 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
 	t := suite.T()
 	ctx := context.Background()
 
-	userId := suite.users["Stan"]
+	userId := suite.baseData.Users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	sessions, err := sessionService.GetUserConnectedBoards(ctx, userId)
+	sessions, err := suite.sessionService.GetUserConnectedBoards(ctx, userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 2)
@@ -244,24 +216,12 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Update"].id
-	userId := suite.users["Luke"]
+	boardId := suite.boards["Update"].ID
+	userId := suite.users["Luke"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	err = sessionService.Connect(ctx, boardId, userId)
+	err := suite.sessionService.Connect(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 
@@ -273,24 +233,12 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Update"].id
-	userId := suite.users["Leia"]
+	boardId := suite.boards["Update"].ID
+	userId := suite.users["Leia"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	events := broker.GetBoardChannel(ctx, boardId)
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	err = sessionService.Disconnect(ctx, boardId, userId)
+	err := suite.sessionService.Disconnect(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 
@@ -304,22 +252,10 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	userId := suite.users["Stan"]
+	boardId := suite.boards["Read"].ID
+	userId := suite.baseData.Users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	exists, err := sessionService.Exists(ctx, boardId, userId)
+	exists, err := suite.sessionService.Exists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -329,22 +265,10 @@ func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	userId := suite.users["Stan"]
+	boardId := suite.boards["Read"].ID
+	userId := suite.baseData.Users["Stan"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	exists, err := sessionService.ModeratorSessionExists(ctx, boardId, userId)
+	exists, err := suite.sessionService.ModeratorSessionExists(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -354,96 +278,63 @@ func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardId := suite.boards["Read"].id
-	userId := suite.users["Bob"]
+	boardId := suite.boards["Read"].ID
+	userId := suite.users["Bob"].ID
 
-	broker, err := realtime.NewNats(suite.natsConnectionString)
-	if err != nil {
-		log.Fatalf("Faild to connect to nats server %s", err)
-	}
-
-	noteDatabase := notes.NewNotesDatabase(suite.db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
-	columnDatabase := columns.NewColumnsDatabase(suite.db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
-	sessionDatabase := NewSessionDatabase(suite.db)
-	sessionService := NewSessionService(sessionDatabase, broker, columnService, noteService)
-
-	banned, err := sessionService.IsParticipantBanned(ctx, boardId, userId)
+	banned, err := suite.sessionService.IsParticipantBanned(ctx, boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, banned)
 }
 
-func (suite *SessionServiceIntegrationTestSuite) SeedDatabase(db *bun.DB) {
-	// tests users
-	suite.users = make(map[string]uuid.UUID, 7)
-	suite.users["Stan"] = uuid.New()
-	suite.users["Friend"] = uuid.New()
-	suite.users["Santa"] = uuid.New()
-	suite.users["Bob"] = uuid.New()
-	suite.users["Luke"] = uuid.New()
-	suite.users["Leia"] = uuid.New()
-	suite.users["Han"] = uuid.New()
+func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB) {
+	log.Println("Seeding sessions test data")
 
-	// test boards
-	suite.boards = make(map[string]TestBoard, 5)
-	suite.boards["Write"] = TestBoard{id: uuid.New(), name: "Write"}
-	suite.boards["Update"] = TestBoard{id: uuid.New(), name: "Update"}
-	suite.boards["Read"] = TestBoard{id: uuid.New(), name: "Read"}
-	suite.boards["ReadFilter"] = TestBoard{id: uuid.New(), name: "ReadFilter"}
-	suite.boards["UpdateAll"] = TestBoard{id: uuid.New(), name: "UpdateAll"}
-
-	// test sessions
-	suite.sessions = make(map[string]BoardSession, 16)
-	// test sessions for the write board
-	suite.sessions["Write"] = BoardSession{UserID: suite.users["Han"], Board: suite.boards["Write"].id, Role: common.ParticipantRole}
-	// test sessions for the update board
-	suite.sessions["UpdateOwner"] = BoardSession{UserID: suite.users["Stan"], Board: suite.boards["Update"].id, Role: common.OwnerRole}
-	suite.sessions["UpdateParticipantModerator"] = BoardSession{UserID: suite.users["Luke"], Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
-	suite.sessions["UpdateParticipantOwner"] = BoardSession{UserID: suite.users["Leia"], Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
-	suite.sessions["UpdateModeratorOwner"] = BoardSession{UserID: suite.users["Han"], Board: suite.boards["Update"].id, Role: common.ParticipantRole}
-	// test sessions for the read board
-	suite.sessions["Read1"] = BoardSession{UserID: suite.users["Stan"], Board: suite.boards["Read"].id, Role: common.OwnerRole}
-	suite.sessions["Read2"] = BoardSession{UserID: suite.users["Friend"], Board: suite.boards["Read"].id, Role: common.ModeratorRole}
-	suite.sessions["Read3"] = BoardSession{UserID: suite.users["Santa"], Board: suite.boards["Read"].id, Role: common.ParticipantRole}
-	suite.sessions["Read4"] = BoardSession{UserID: suite.users["Bob"], Board: suite.boards["Read"].id, Role: common.ParticipantRole, Banned: true}
-	// test sessions for the read filter board
-	suite.sessions["ReadFilter1"] = BoardSession{UserID: suite.users["Stan"], Board: suite.boards["ReadFilter"].id, Role: common.OwnerRole, Ready: true, Connected: true}
-	suite.sessions["ReadFilter2"] = BoardSession{UserID: suite.users["Friend"], Board: suite.boards["ReadFilter"].id, Role: common.ModeratorRole, Ready: true}
-	suite.sessions["ReadFilter3"] = BoardSession{UserID: suite.users["Santa"], Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true, Connected: true}
-	suite.sessions["ReadFilter4"] = BoardSession{UserID: suite.users["Bob"], Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true}
-	// test sessions for the update all board
-	suite.sessions["UpdateAll1"] = BoardSession{UserID: suite.users["Stan"], Board: suite.boards["UpdateAll"].id, Role: common.OwnerRole, Connected: true, RaisedHand: true, Ready: false}
-	suite.sessions["UpdateAll2"] = BoardSession{UserID: suite.users["Luke"], Board: suite.boards["UpdateAll"].id, Role: common.ModeratorRole, Connected: true, RaisedHand: false, Ready: true}
-	suite.sessions["UpdateAll3"] = BoardSession{UserID: suite.users["Leia"], Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true, RaisedHand: false, Ready: false}
-	suite.sessions["UpdateAll4"] = BoardSession{UserID: suite.users["Han"], Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true, RaisedHand: true, Ready: true}
-
-	for name, user := range suite.users {
-		if name == "Stan" {
-			err := initialize.InsertUser(db, user, name, string(common.Google))
-			if err != nil {
-				log.Fatalf("Failed to insert test user %s", err)
-			}
-		} else {
-			err := initialize.InsertUser(db, user, name, string(common.Anonymous))
-			if err != nil {
-				log.Fatalf("Failed to insert test user %s", err)
-			}
+	for _, user := range suite.users {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
-		if err != nil {
-			log.Fatalf("Failed to insert test board %s", err)
+		if err := testDbTemplates.InsertBoard(db, board.ID, board.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
+			log.Fatalf("Failed to insert board %s: %s", board.Name, err)
 		}
 	}
 
-	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.UserID, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
-		if err != nil {
-			log.Fatalf("Failed to insert test sessions %s", err)
+	sessions := []struct {
+		userID                               uuid.UUID
+		boardID                              uuid.UUID
+		role                                 common.SessionRole
+		banned, ready, connected, raisedHand bool
+	}{
+		// Write board
+		{suite.users["Han"].ID, suite.boards["Write"].ID, common.ParticipantRole, false, false, false, false},
+		// Update board
+		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, common.OwnerRole, false, false, false, false},
+		{suite.users["Luke"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
+		{suite.users["Leia"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, false, false},
+		// Read board
+		{suite.baseData.Users["Stan"].ID, suite.boards["Read"].ID, common.OwnerRole, false, false, false, false},
+		{suite.users["Friend"].ID, suite.boards["Read"].ID, common.ModeratorRole, false, false, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["Read"].ID, common.ParticipantRole, false, false, false, false},
+		{suite.users["Bob"].ID, suite.boards["Read"].ID, common.ParticipantRole, true, false, false, false},
+		// ReadFilter board
+		{suite.baseData.Users["Stan"].ID, suite.boards["ReadFilter"].ID, common.OwnerRole, false, true, true, false},
+		{suite.users["Friend"].ID, suite.boards["ReadFilter"].ID, common.ModeratorRole, false, true, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, true, true},
+		{suite.users["Bob"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, false, true},
+		// UpdateAll board
+		{suite.baseData.Users["Stan"].ID, suite.boards["UpdateAll"].ID, common.OwnerRole, false, false, true, true},
+		{suite.users["Luke"].ID, suite.boards["UpdateAll"].ID, common.ModeratorRole, false, true, true, false},
+		{suite.users["Leia"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, true, true, true},
+	}
+
+	for _, s := range sessions {
+		if err := testDbTemplates.InsertSession(db, s.userID, s.boardID, string(s.role), s.banned, s.ready, s.connected, s.raisedHand); err != nil {
+			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}
 }

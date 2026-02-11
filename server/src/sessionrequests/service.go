@@ -7,14 +7,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"scrumlr.io/server/websocket"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -22,8 +21,8 @@ import (
 	"scrumlr.io/server/sessions"
 )
 
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/sessionrequests")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/sessionrequests")
+var tracer = otel.Tracer("scrumlr.io/server/sessionrequests")
+var meter = otel.Meter("scrumlr.io/server/sessionrequests")
 
 type SessionRequestDatabase interface {
 	Create(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
@@ -33,23 +32,23 @@ type SessionRequestDatabase interface {
 	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 }
 
-type Websocket interface {
+type SessionRequestWebsocket interface {
 	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *websocket.Conn)
-	closeSocket(conn *websocket.Conn)
+	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection)
+	closeSocket(conn websocket.Connection)
 }
 
 type BoardSessionRequestService struct {
 	database       SessionRequestDatabase
-	realtime       *realtime.Broker
-	websocket      Websocket
+	broker         *realtime.Broker
+	websocket      SessionRequestWebsocket
 	sessionService sessions.SessionService
 }
 
-func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket Websocket, sessionService sessions.SessionService) SessionRequestService {
+func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket SessionRequestWebsocket, sessionService sessions.SessionService) SessionRequestService {
 	service := new(BoardSessionRequestService)
 	service.database = db
-	service.realtime = rt
+	service.broker = rt
 	service.websocket = websocket
 	service.sessionService = sessionService
 
@@ -134,7 +133,7 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 
 	request, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "board session request not found")
 			span.RecordError(err)
 			return nil, common.NotFoundError
@@ -203,7 +202,7 @@ func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w htt
 }
 
 func (service *BoardSessionRequestService) createdSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestCreated,
 		Data: new(BoardSessionRequest).From(request),
 	})
@@ -219,10 +218,10 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 	}
 
 	if status != "" {
-		_ = service.realtime.BroadcastUpdateOnBoardSessionRequest(ctx, board, request.User, status)
+		_ = service.broker.BroadcastUpdateOnBoardSessionRequest(ctx, board, request.User, status)
 	}
 
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestUpdated,
 		Data: new(BoardSessionRequest).From(request),
 	})

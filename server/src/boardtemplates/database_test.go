@@ -9,15 +9,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
 type DatabaseBoardTemplateTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
 	db        *bun.DB
 	users     map[string]TestUser
 	templates map[string]DatabaseBoardTemplate
@@ -27,17 +25,15 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseBoardTemplateTestSuite))
 }
 
-func (suite *DatabaseBoardTemplateTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseBoardTemplateTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseBoardTemplateTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "boardtemplates_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Create() {
@@ -175,7 +171,9 @@ type TestUser struct {
 	accountType common.AccountType
 }
 
-func (suite *DatabaseBoardTemplateTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
+	log.Println("Seeding boardtemplates database test data")
+
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
@@ -205,14 +203,14 @@ func (suite *DatabaseBoardTemplateTestSuite) SeedDatabase(db *bun.DB) {
 	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name2, Description: &description2, Favourite: &favourite2}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, template := range suite.templates {
-		err := initialize.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
+		err := testDbTemplates.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
 		if err != nil {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}

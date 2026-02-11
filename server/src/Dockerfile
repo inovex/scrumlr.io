@@ -1,19 +1,22 @@
 # Build application
-FROM golang:1.25
+FROM golang:1.25-alpine AS build
 
 ARG TARGETARCH
 ARG TARGETOS
 
 WORKDIR /go/src/github.com/inovex/scrumlr.io/
 COPY ./ .
-RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main \
+    && GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o healthcheck ./cmd/healthcheck
 
 # Start application
-FROM alpine:3.23
+FROM gcr.io/distroless/static:nonroot
 
-RUN mkdir /app
-WORKDIR /app
-COPY --from=0 /go/src/github.com/inovex/scrumlr.io/main ./
+WORKDIR /
+
+COPY --from=build /go/src/github.com/inovex/scrumlr.io/main /
+COPY --from=build /go/src/github.com/inovex/scrumlr.io/healthcheck /
+
 EXPOSE 8080
 
-CMD ["./main"]
+ENTRYPOINT ["/main"]

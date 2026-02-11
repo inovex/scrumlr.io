@@ -15,7 +15,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	mock "github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/mock"
 	"github.com/uptrace/bun"
 	httpMock "scrumlr.io/server/mocks/net/http"
 	"scrumlr.io/server/realtime"
@@ -34,7 +34,7 @@ func TestGetSessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 
@@ -60,7 +60,7 @@ func TestGetSessionRequest_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 
@@ -90,7 +90,7 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
@@ -121,7 +121,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	sessionRequest, err := service.GetAll(context.Background(), boardId, query)
@@ -150,7 +150,7 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
@@ -181,7 +181,7 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
@@ -202,7 +202,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
@@ -228,7 +228,7 @@ func TestCreateSessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	request, err := service.Create(context.Background(), boardId, userId)
@@ -253,7 +253,7 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	request, err := service.Create(context.Background(), boardId, userId)
@@ -284,7 +284,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
@@ -309,7 +309,7 @@ func TestUpdatesessionRequest_DBError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
@@ -331,7 +331,7 @@ func TestSessionRequestExists(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	exists, err := service.Exists(context.Background(), boardId, userId)
@@ -353,7 +353,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	exists, err := service.Exists(context.Background(), boardId, userId)
@@ -371,7 +371,7 @@ func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockWebSocket := NewMockWebsocket(t)
+	mockWebSocket := NewMockSessionRequestWebsocket(t)
 	mockResponseWriter := httpMock.NewMockResponseWriter(t)
 	mockRequest := httptest.NewRequest(http.MethodGet, "/test", nil)
 	mockWebSocket.EXPECT().OpenSocket(mock.Anything, mock.Anything)

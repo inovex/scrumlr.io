@@ -24,10 +24,18 @@ spec:
         - name: {{ $val | quote }}
       {{- end }}
       {{- end}}
+      {{- with .Values.backend.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Release.Name }}-backend
           image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion  }}
           imagePullPolicy: {{ .Values.backend.image.pullPolicy | quote }}
+          {{- with .Values.backend.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.backend.image.args }}
           args: {{ range $val := .Values.backend.image.args }}
             - {{ $val | quote }} {{ end }}

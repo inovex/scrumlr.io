@@ -6,42 +6,39 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/initialize/testDbTemplates"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 type DatabaseSessionTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
-	db        *bun.DB
-	users     map[string]TestUser
-	boards    map[string]TestBoard
-	sessions  map[string]DatabaseBoardSession
+	db       *bun.DB
+	users    map[string]TestUser
+	boards   map[string]TestBoard
+	sessions map[string]DatabaseBoardSession
 }
 
 func TestDatabaseSessionTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseSessionTestSuite))
 }
 
-func (suite *DatabaseSessionTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
+func (suite *DatabaseSessionTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
-func (suite *DatabaseSessionTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
-}
-
-func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Particpant() {
+func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Participant() {
 	t := suite.T()
 	database := NewSessionDatabase(suite.db)
 
@@ -584,7 +581,7 @@ type TestBoard struct {
 	name string
 }
 
-func (suite *DatabaseSessionTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 7)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
@@ -628,21 +625,21 @@ func (suite *DatabaseSessionTestSuite) SeedDatabase(db *bun.DB) {
 	suite.sessions["UpdateAll4"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, session := range suite.sessions {
-		err := initialize.InsertSession(db, session.User, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
+		err := testDbTemplates.InsertSession(db, session.User, session.Board, string(session.Role), session.Banned, session.Ready, session.Connected, session.RaisedHand)
 		if err != nil {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}

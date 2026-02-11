@@ -1,13 +1,13 @@
 # Default values for scrumlr.
 
-## @section Frontend paramaters
+## @section Frontend parameters
 ##
 frontend:
   ## @param frontend.image.repository The scrumlr image to deploy
   ## @param frontend.image.tag The image tag to use
   ## @param frontend.image.pullSecrets Docker registry secret names as an array
   ## @param frontend.image.pullPolicy The imagePullPolicy to use
-  ## @param frontend.image.args Aguments for the scrumlr backend
+  ## @param frontend.image.args Arguments for the scrumlr backend
   ##
   image:
     repository: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
@@ -19,7 +19,7 @@ frontend:
   ##
   replicaCount: 1
   ## @param frontend.autoscaling.enabled Enable autoscaling
-  ## @param frontend.autoscaling.minReplicas Min replics for autoscaling
+  ## @param frontend.autoscaling.minReplicas Min replicas for autoscaling
   ## @param frontend.autoscaling.maxReplicas Max replicas for autoscaling
   ## @param frontend.autoscaling.cpuUtilization Define the CPU target to trigger the scaling actions (utilization percentage)
   ## @param frontend.autoscaling.memoryUtilization Define the memory target to trigger the scaling actions (utilization percentage)
@@ -51,6 +51,15 @@ frontend:
   ## @param frontend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
+  ## @param frontend.podSecurityContext Pod-level security context
+  ##
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param frontend.containerSecurityContext Container-level security context
+  ##
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   ## @param frontend.startupProbe.enabled Enable/disable the startup probe
   ## @param frontend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param frontend.startupProbe.periodSeconds How often to perform the probe
@@ -118,7 +127,6 @@ backend:
     pullSecrets: []
     pullPolicy: IfNotPresent
     args:
-      - "/app/main"
       - "-disable-check-origin"
   ## @param backend.replicaCount Set the replica count for the backend
   ##
@@ -164,6 +172,15 @@ backend:
   ## @param backend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
+  ## @param backend.podSecurityContext Pod-level security context
+  ##
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  ## @param backend.containerSecurityContext Container-level security context
+  ##
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   ## @param backend.startupProbe.enabled Enable/disable the startup probe
   ## @param backend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param backend.startupProbe.periodSeconds How often to perform the probe

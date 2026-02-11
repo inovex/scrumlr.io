@@ -4,27 +4,28 @@ import (
 	"context"
 	"net/http"
 
+	"scrumlr.io/server/websocket"
+
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 type BoardSessionRequestSubscription struct {
-	clients       map[uuid.UUID]*websocket.Conn
+	clients       map[uuid.UUID]websocket.Connection
 	subscriptions map[uuid.UUID]chan *realtime.BoardSessionRequestEventType
 }
 
-type WS struct {
-	upgrader                         websocket.Upgrader
+type sessionRequestWebsocket struct {
+	websocketService                 websocket.WebSocketInterface
 	realtime                         *realtime.Broker
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
-func NewWebsocket(upgrader websocket.Upgrader, rt *realtime.Broker) Websocket {
-	websocket := new(WS)
-	websocket.upgrader = upgrader
+func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
+	websocket := new(sessionRequestWebsocket)
+	websocket.websocketService = webSocketService
 	websocket.realtime = rt
 	websocket.boardSessionRequestSubscriptions = make(map[uuid.UUID]*BoardSessionRequestSubscription)
 
@@ -35,47 +36,46 @@ func (session *BoardSessionRequestSubscription) startListeningOnBoardSessionRequ
 	msg := <-session.subscriptions[userId]
 	logger.Get().Debugw("message received", "message", msg)
 	conn := session.clients[userId]
-	err := conn.WriteJSON(msg)
+	err := conn.WriteJSON(context.Background(), msg)
 	if err != nil {
 		logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 	}
 }
 
-func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
+func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := logger.FromContext(ctx)
 
-	id := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	conn, err := socket.upgrader.Upgrade(w, r, nil)
+	conn, err := socket.websocketService.Accept(w, r, true)
 	if err != nil {
-		log.Errorw("unable to upgrade websocket", "err", err, "board", id, "user", userID)
+		log.Errorw("unable to upgrade websocket", "err", err, "board", boardId, "user", userID)
 		return
 	}
 
 	websocketOpenedCounter.Add(ctx, 1)
 	defer socket.closeSocket(conn)
 
-	socket.listenOnBoardSessionRequest(id, userID, conn)
+	socket.listenOnBoardSessionRequest(boardId, userID, conn)
 
 	for {
-		_, message, err := conn.ReadMessage()
+		_, _, err := conn.Read(ctx)
 		if err != nil {
-			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
+			if socket.websocketService.IsNormalClose(err) {
 				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
-				delete(socket.boardSessionRequestSubscriptions[id].clients, userID)
+				delete(socket.boardSessionRequestSubscriptions[boardId].clients, userID)
 			}
 			break
 		}
-		log.Debugw("received message", "message", message)
 	}
 }
 
-func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *websocket.Conn) {
+func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection) {
 	if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
 		socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
-			clients:       make(map[uuid.UUID]*websocket.Conn),
+			clients:       make(map[uuid.UUID]websocket.Connection),
 			subscriptions: make(map[uuid.UUID]chan *realtime.BoardSessionRequestEventType),
 		}
 	}
@@ -90,7 +90,7 @@ func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *w
 	}
 }
 
-func (socket *WS) closeSocket(conn *websocket.Conn) {
-	_ = conn.Close()
+func (socket *sessionRequestWebsocket) closeSocket(conn websocket.Connection) {
+	_ = conn.Close("")
 	websocketClosedCounter.Add(context.Background(), 1)
 }
