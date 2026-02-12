@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	"scrumlr.io/server/timeprovider"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/timeprovider"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"

@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"fmt"
+
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 

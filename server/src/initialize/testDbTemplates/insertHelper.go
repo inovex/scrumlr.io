@@ -1,9 +1,10 @@
 package testDbTemplates
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string) error {
