@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -13,12 +14,14 @@ import (
 )
 
 type DB struct {
-	db *bun.DB
+	db    *bun.DB
+	clock timeprovider.TimeProvider
 }
 
-func NewBoardDatabase(database *bun.DB) BoardDatabase {
+func NewBoardDatabase(database *bun.DB, clock timeprovider.TimeProvider) BoardDatabase {
 	db := new(DB)
 	db.db = database
+	db.clock = clock
 
 	return db
 }
@@ -46,9 +49,10 @@ func (d *DB) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpda
 }
 
 func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error) {
+	update.LastModifiedAt = d.clock.Now()
 	query := d.db.NewUpdate().
 		Model(&update).
-		Column("timer_start", "timer_end", "shared_note")
+		Column("timer_start", "timer_end", "shared_note", "last_modified_at")
 
 	if update.Name != nil {
 		query.Column("name")

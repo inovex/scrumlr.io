@@ -64,7 +64,8 @@ func (suite *NoteServiceIntegrationTestSuite) SetupTest() {
 	suite.broker = broker
 
 	database := NewNotesDatabase(db)
-	suite.noteService = NewNotesService(database, broker)
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
+	suite.noteService = NewNotesService(database, broker, boardLastModifiedUpdater)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) initTestData() {
