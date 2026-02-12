@@ -119,50 +119,62 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
     >
-      Start
-      <svg
-        fill="none"
-        height="32"
-        viewBox="0 0 32 32"
-        width="32"
-        xmlns="http://www.w3.org/2000/svg"
+      <div
+        class="button__content-wrapper"
+        data-align="compact"
+        data-pos="right"
+        data-size="small"
       >
-        <rect
-          fill="none"
-          height="32"
-          width="32"
-        />
-        <g
-          id="Icons"
+        Start
+        <div
+          class="button__icon-background button__icon-background--default"
+          data-size="small"
         >
-          <g
-            id="icon/icon-32-next"
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
           >
+            <rect
+              fill="none"
+              height="32"
+              width="32"
+            />
             <g
-              id="Variant=ic-32-next-dark4light"
+              id="Icons"
             >
-              <path
-                d="M19.2188 11L24.0004 16.0002"
-                stroke="currentColor"
-                stroke-linecap="square"
-                stroke-width="2"
-              />
-              <path
-                d="M24 16L19.2185 21.0002"
-                stroke="currentColor"
-                stroke-linecap="square"
-                stroke-width="2"
-              />
-              <path
-                d="M7 16.0781H21.6419"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-              />
+              <g
+                id="icon/icon-32-next"
+              >
+                <g
+                  id="Variant=ic-32-next-dark4light"
+                >
+                  <path
+                    d="M19.2188 11L24.0004 16.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M24 16L19.2185 21.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M7 16.0781H21.6419"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                  />
+                </g>
+              </g>
             </g>
-          </g>
-        </g>
-      </svg>
+          </svg>
+        </div>
+      </div>
     </button>
   </div>
 </div>
@@ -259,213 +271,59 @@ exports[`TemplateCard > should render correctly (recommended) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
     >
-      Start
-      <svg
-        fill="none"
-        height="32"
-        viewBox="0 0 32 32"
-        width="32"
-        xmlns="http://www.w3.org/2000/svg"
+      <div
+        class="button__content-wrapper"
+        data-align="compact"
+        data-pos="right"
+        data-size="small"
       >
-        <rect
-          fill="none"
-          height="32"
-          width="32"
-        />
-        <g
-          id="Icons"
+        Start
+        <div
+          class="button__icon-background button__icon-background--default"
+          data-size="small"
         >
-          <g
-            id="icon/icon-32-next"
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
           >
+            <rect
+              fill="none"
+              height="32"
+              width="32"
+            />
             <g
-              id="Variant=ic-32-next-dark4light"
+              id="Icons"
             >
-              <path
-                d="M19.2188 11L24.0004 16.0002"
-                stroke="currentColor"
-                stroke-linecap="square"
-                stroke-width="2"
-              />
-              <path
-                d="M24 16L19.2185 21.0002"
-                stroke="currentColor"
-                stroke-linecap="square"
-                stroke-width="2"
-              />
-              <path
-                d="M7 16.0781H21.6419"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-width="2"
-              />
+              <g
+                id="icon/icon-32-next"
+              >
+                <g
+                  id="Variant=ic-32-next-dark4light"
+                >
+                  <path
+                    d="M19.2188 11L24.0004 16.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M24 16L19.2185 21.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M7 16.0781H21.6419"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                  />
+                </g>
+              </g>
             </g>
-          </g>
-        </g>
-      </svg>
-    </button>
-  </div>
-</div>
-`;
-
-exports[`TemplateCard should render correctly (custom) 1`] = `
-<div>
-  <div
-    class="template-card"
-    data-cy="template-card--CUSTOM"
-  >
-    <button
-      class="template-card__favourite favourite-button accent-color__planning-pink"
-      id="favourite-icon-4"
-      tabindex="0"
-    >
-      <svg
-        class="favourite-icon"
-      >
-        star.svg
-      </svg>
-    </button>
-    <div
-      class="tooltip-container"
-    />
-    <div
-      class="template-card__head"
-    >
-      <input
-        class="template-card__title"
-        disabled=""
-        type="text"
-        value="sample name 1"
-      />
-    </div>
-    <svg
-      class="template-card__menu template-card__icon template-card__icon--menu"
-      data-cy="template-card__menu"
-    >
-      three-dots.svg
-    </svg>
-    <textarea
-      class="template-card__description"
-      disabled=""
-    >
-      sample description 1
-    </textarea>
-    <svg
-      class="template-card__icon template-card__icon--columns"
-    >
-      columns.svg
-    </svg>
-    <div
-      class="template-card__columns"
-    >
-      <div
-        class="template-card__columns-title"
-      >
-        2 Columns
-      </div>
-      <div
-        class="template-card__columns-subtitle"
-      >
-        sample templates col name 1, sample templates col name 2
-      </div>
-    </div>
-    <button
-      class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
-      data-cy="template-card__start-button"
-    >
-      <div
-        class="button__content-wrapper"
-        data-align="compact"
-        data-pos="right"
-        data-size="small"
-      >
-        Start
-        <div
-          class="button__icon-background button__icon-background--default"
-          data-size="small"
-        >
-          <svg>
-            next.svg
-          </svg>
-        </div>
-      </div>
-    </button>
-  </div>
-</div>
-`;
-
-exports[`TemplateCard should render correctly (recommended) 1`] = `
-<div>
-  <div
-    class="template-card"
-    data-cy="template-card--RECOMMENDED"
-  >
-    <button
-      class="template-card__favourite favourite-button accent-color__planning-pink"
-      id="favourite-icon-3"
-      tabindex="0"
-    >
-      <svg
-        class="favourite-icon"
-      >
-        star.svg
-      </svg>
-    </button>
-    <div
-      class="tooltip-container"
-    />
-    <div
-      class="template-card__head"
-    >
-      <input
-        class="template-card__title"
-        disabled=""
-        type="text"
-        value="sample name 1"
-      />
-    </div>
-    <textarea
-      class="template-card__description"
-      disabled=""
-    >
-      sample description 1
-    </textarea>
-    <svg
-      class="template-card__icon template-card__icon--columns"
-    >
-      columns.svg
-    </svg>
-    <div
-      class="template-card__columns"
-    >
-      <div
-        class="template-card__columns-title"
-      >
-        2 Columns
-      </div>
-      <div
-        class="template-card__columns-subtitle"
-      >
-        sample templates col name 1, sample templates col name 2
-      </div>
-    </div>
-    <button
-      class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
-      data-cy="template-card__start-button"
-    >
-      <div
-        class="button__content-wrapper"
-        data-align="compact"
-        data-pos="right"
-        data-size="small"
-      >
-        Start
-        <div
-          class="button__icon-background button__icon-background--default"
-          data-size="small"
-        >
-          <svg>
-            next.svg
           </svg>
         </div>
       </div>
