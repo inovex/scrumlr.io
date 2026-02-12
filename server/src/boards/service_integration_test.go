@@ -84,7 +84,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
-	database := NewBoardDatabase(db)
+	database := NewBoardDatabase(db, clock)
 	boardLastModifiedUpdater := NewLastModifiedUpdater(database)
 	noteDatabase := notes.NewNotesDatabase(db)
 	noteService := notes.NewNotesService(noteDatabase, broker, boardLastModifiedUpdater)

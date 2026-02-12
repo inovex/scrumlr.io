@@ -3,6 +3,7 @@ package testDbTemplates
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"time"
 )
 
 func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string) error {
@@ -16,8 +17,9 @@ func InsertGoogleUser(db *bun.DB, userID uuid.UUID, googleID string, name string
 }
 
 func InsertBoard(db *bun.DB, id uuid.UUID, name string, description string, passhphrase *string, salt *string, accessPolicy string, showAuthors bool, showOtherNotes bool, showReactions bool, stacking bool, locked bool) error {
-	_, err := db.Exec("INSERT INTO boards (\"id\", \"name\", \"description\", \"passphrase\", \"salt\", \"access_policy\", \"show_authors\", \"show_notes_of_other_users\", \"show_note_reactions\", \"allow_stacking\", \"is_locked\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-		id.String(), name, description, passhphrase, salt, accessPolicy, showAuthors, showOtherNotes, showReactions, stacking, locked)
+	lastModifiedAt := time.Now()
+	_, err := db.Exec("INSERT INTO boards (\"id\", \"name\", \"description\", \"passphrase\", \"salt\", \"access_policy\", \"show_authors\", \"show_notes_of_other_users\", \"show_note_reactions\", \"allow_stacking\", \"is_locked\", \"last_modified_at\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+		id.String(), name, description, passhphrase, salt, accessPolicy, showAuthors, showOtherNotes, showReactions, stacking, locked, lastModifiedAt)
 	return err
 }
 
