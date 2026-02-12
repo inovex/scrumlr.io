@@ -5,7 +5,7 @@ import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "store";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
   useImageChecker: () => false,
 }));
 
@@ -30,17 +30,6 @@ const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
 };
 
 describe("Column", () => {
-  beforeEach(() => {
-    window.ResizeObserver = jest.fn(
-      () =>
-        ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-          unobserve: jest.fn(),
-        }) as unknown as ResizeObserver
-    );
-  });
-
   describe("should render correctly", () => {
     test("column has correct accent-color", () => {
       const {container} = render(createColumn());

@@ -1,30 +1,42 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
+import {vi, expect} from "vitest";
+import * as matchers from "@testing-library/jest-dom/matchers";
 
-import {TextEncoder} from "util";
+expect.extend(matchers);
 
-global.ResizeObserver = require("resize-observer-polyfill");
+// mock resize observer
+class ResizeObserverMock {
+  observe = vi.fn();
 
-// global.TextDecoder = require('util').TextDecoder;
-global.TextEncoder = TextEncoder;
+  unobserve = vi.fn();
 
-// jest can't handle match media, and the official workaround doesn't work (lol):
-// https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-// the package to mock it correctly almost works, but not quite:
-// https://yarnpkg.com/package?q=jest-matchmedia&name=jest-matchmedia-mock
-// fortunately, this seems to do the trick:
-// https://github.com/facebook/create-react-app/issues/10126#issuecomment-735272763
+  disconnect = vi.fn();
+}
+globalThis.ResizeObserver = ResizeObserverMock;
 
-window.matchMedia = (query) => ({
+globalThis.matchMedia = (query) => ({
   matches: false,
   media: query,
   onchange: null,
-  addListener: jest.fn(), // deprecated
-  removeListener: jest.fn(), // deprecated
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-  dispatchEvent: jest.fn(),
+  addListener: vi.fn(), // deprecated
+  removeListener: vi.fn(), // deprecated
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+});
+
+// happy dom doesn't support all properties; so we define them here
+Object.defineProperty(HTMLElement.prototype, "offsetLeft", {
+  get() {
+    return 0;
+  },
+});
+Object.defineProperty(HTMLElement.prototype, "offsetTop", {
+  get() {
+    return 0;
+  },
+});
+Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+  get() {
+    return null;
+  },
 });

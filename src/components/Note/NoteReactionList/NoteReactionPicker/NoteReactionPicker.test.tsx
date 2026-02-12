@@ -8,7 +8,7 @@ import {MemoryRouter} from "react-router";
 import {NoteReactionPicker} from "./NoteReactionPicker";
 
 // Mock EmojiPicker to avoid database initialization issues during tests
-jest.mock("../EmojiPicker/EmojiPicker", () => ({
+ vi.mock("../EmojiPicker/EmojiPicker", () => ({
   __esModule: true,
   default: () => <div data-testid="emoji-picker-mock" />,
 }));
@@ -17,7 +17,7 @@ const renderNoteReactionPicker = (close?: () => void, click?: () => void, overwr
   render(
     <Provider store={getTestStore(overwrite)}>
       <MemoryRouter>
-        <NoteReactionPicker closeReactionBar={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
+        <NoteReactionPicker closeReactionBar={close ?? vi.fn()} reactions={[]} handleClickReaction={click ?? vi.fn()} />
       </MemoryRouter>
     </Provider>
   );
@@ -36,21 +36,21 @@ describe("NoteReactionPicker", () => {
   });
 
   it("calls handleClickReaction when a reaction button is clicked", () => {
-    const handleClickReactionFunction = jest.fn();
+    const handleClickReactionFunction = vi.fn();
     renderNoteReactionPicker(undefined, handleClickReactionFunction);
     fireEvent.click(screen.getByText(PERMANENT_EMOJIS[0].reactionType));
     expect(handleClickReactionFunction).toHaveBeenCalled();
   });
 
   it("closes the reaction bar when Escape key is pressed and picker is not open", () => {
-    const closeReactionBarFunction = jest.fn();
+    const closeReactionBarFunction = vi.fn();
     renderNoteReactionPicker(closeReactionBarFunction);
     fireEvent.keyDown(document, {key: "Escape"});
     expect(closeReactionBarFunction).toHaveBeenCalled();
   });
 
   it("closes only the emoji picker when Escape is pressed and picker is open", async () => {
-    const closeReactionBarFunction = jest.fn();
+    const closeReactionBarFunction = vi.fn();
     renderNoteReactionPicker(closeReactionBarFunction);
 
     const moreButton = screen.getByRole("button", {name: "More emojis"});
@@ -107,7 +107,7 @@ describe("NoteReactionPicker", () => {
     render(
       <Provider store={getTestStore()}>
         <MemoryRouter>
-          <NoteReactionPicker closeReactionBar={jest.fn()} reactions={reactions} handleClickReaction={jest.fn()} />
+          <NoteReactionPicker closeReactionBar={vi.fn()} reactions={reactions} handleClickReaction={vi.fn()} />
         </MemoryRouter>
       </Provider>
     );
@@ -117,7 +117,7 @@ describe("NoteReactionPicker", () => {
   });
 
   it("closes reaction bar after emoji is clicked", () => {
-    const closeReactionBarFunction = jest.fn();
+    const closeReactionBarFunction = vi.fn();
     renderNoteReactionPicker(closeReactionBarFunction);
     fireEvent.click(screen.getByText(PERMANENT_EMOJIS[0].reactionType));
     expect(closeReactionBarFunction).toHaveBeenCalled();

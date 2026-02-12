@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ColumnDetails should render correctly (edit) 1`] = `
+exports[`ColumnDetails > should render correctly (edit) 1`] = `
 <div>
   <div
     class="column-details"
@@ -22,8 +22,30 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
       >
         <svg
           class="column-details__settings-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          three-dots.svg
+          <circle
+            cx="6.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="25.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
         </svg>
       </button>
     </div>
@@ -57,8 +79,24 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Cancel5"
         >
-          <svg>
-            close.svg
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21.3137 10L10 21.3137"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M10 10L21.3137 21.3137"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
           </svg>
         </button>
         <button
@@ -69,8 +107,20 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Save6"
         >
-          <svg>
-            check-done.svg
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+              stroke="currentColor"
+              stroke-linecap="square"
+              stroke-width="1.75"
+            />
           </svg>
         </button>
       </div>
@@ -88,7 +138,7 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
 </div>
 `;
 
-exports[`ColumnDetails should render correctly (view) 1`] = `
+exports[`ColumnDetails > should render correctly (view) 1`] = `
 <div>
   <div
     class="column-details"
@@ -118,8 +168,30 @@ exports[`ColumnDetails should render correctly (view) 1`] = `
       >
         <svg
           class="column-details__settings-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          three-dots.svg
+          <circle
+            cx="6.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
+          <circle
+            cx="25.5"
+            cy="16"
+            fill="currentColor"
+            r="2.5"
+          />
         </svg>
       </button>
     </div>

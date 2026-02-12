@@ -4,20 +4,15 @@ import {LoginProviders} from "components/LoginProviders";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
+import getTestApplicationState from "utils/test/getTestApplicationState";
 
 describe("check for all provider buttons", () => {
   const createLoginProviders = (providers?: string[]) => (
     <Provider
       store={getTestStore({
         view: {
+          ...getTestApplicationState().view,
           enabledAuthProvider: providers ?? [],
-          serverTimeOffset: 0,
-          moderating: false,
-          feedbackEnabled: false,
-          showBoardReactions: true,
-          noteFocused: false,
-          hotkeyNotificationsEnabled: true,
-          hotkeysAreActive: false,
         },
       })}
     >
@@ -52,7 +47,7 @@ describe("check for all provider buttons", () => {
   });
 
   describe("click-handler", () => {
-    const signInSpy = jest.spyOn(Auth, "signInWithAuthProvider");
+    const signInSpy = vi.spyOn(Auth, "signInWithAuthProvider");
 
     test("google sign in", () => {
       const {container} = render(createLoginProviders(["GOOGLE"]));
