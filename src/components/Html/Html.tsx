@@ -1,4 +1,3 @@
-import {useEffect} from "react";
 import {Helmet} from "react-helmet-async";
 import {useAppSelector} from "store";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
@@ -11,10 +10,6 @@ export const Html = () => {
 
   const theme = useAppSelector((state) => state.view.theme);
   const autoTheme = useAutoTheme(theme);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("theme", autoTheme.toString());
-  }, [autoTheme]);
 
   return (
     <Helmet>
