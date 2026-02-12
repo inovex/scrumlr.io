@@ -11,7 +11,7 @@ import {getRandomName} from "utils/random";
 import {Background} from "components/Background";
 import {Button} from "components/Button";
 import {HeaderBar} from "components/HeaderBar";
-import {Refresh, MarkAsDone} from "components/Icon";
+import {RefreshIcon, MarkAsDoneIcon} from "components/Icon";
 import {Input} from "components/Input/Input";
 import {LoginProviders} from "components/LoginProviders";
 import {ValidationError} from "components/ValidationError";
@@ -73,7 +73,7 @@ export const LoginBoard = () => {
           <div className="login-board__features">
             {FEATURE_KEYS.map((key) => (
               <div key={key} className="login-board__feature">
-                <MarkAsDone className="login-board__feature-icon" />
+                <MarkAsDoneIcon className="login-board__feature-icon" />
                 <span>{t(key)}</span>
               </div>
             ))}
@@ -144,7 +144,7 @@ export const LoginBoard = () => {
                 color="backlog-blue"
                 onClick={() => setDisplayName(getRandomName())}
                 title={t("LoginBoard.generateRandomName")}
-                icon={<Refresh />}
+                icon={<RefreshIcon />}
                 hideLabel
               />
             </div>
