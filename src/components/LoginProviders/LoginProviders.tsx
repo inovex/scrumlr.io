@@ -1,6 +1,6 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
-import {AppleIcon, AzureIcon, GitHub, Google, Microsoft, OpenID} from "components/Icon";
+import {AppleIcon, AzureIcon, GitHubIcon, GoogleIcon, MicrosoftIcon, OpenIDIcon} from "components/Icon";
 import {useState, useRef, ReactNode, useEffect} from "react";
 import {useSize} from "utils/hooks/useSize";
 import {useAppSelector} from "store";
@@ -29,12 +29,12 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
   };
 
   const providerConfig: Record<string, ProviderConfigEntry> = {
-    GOOGLE: {label: t("LoginProviders.signInWithGoogle"), icon: <Google className="login-providers__icon" />, signInKey: "google"},
-    MICROSOFT: {label: t("LoginProviders.signInWithMicrosoft"), icon: <Microsoft className="login-providers__icon" />, signInKey: "microsoft"},
-    AZURE_AD: {label: t("LoginProviders.signInWithAzureAd"), icon: <Azure className="login-providers__icon" />, signInKey: "azure_ad"},
-    APPLE: {label: t("LoginProviders.signInWithApple"), icon: <Apple className="login-providers__icon" />, signInKey: "apple"},
-    OIDC: {label: t("LoginProviders.signInWithOIDC"), icon: <OpenID className="login-providers__icon" />, signInKey: "oidc"},
-    GITHUB: {label: t("LoginProviders.signInWithGitHub"), icon: <GitHub className="login-providers__icon" />, signInKey: "github"},
+    GOOGLE: {label: t("LoginProviders.signInWithGoogle"), icon: <GoogleIcon className="login-providers__icon" />, signInKey: "google"},
+    MICROSOFT: {label: t("LoginProviders.signInWithMicrosoft"), icon: <MicrosoftIcon className="login-providers__icon" />, signInKey: "microsoft"},
+    AZURE_AD: {label: t("LoginProviders.signInWithAzureAd"), icon: <AzureIcon className="login-providers__icon" />, signInKey: "azure_ad"},
+    APPLE: {label: t("LoginProviders.signInWithApple"), icon: <AppleIcon className="login-providers__icon" />, signInKey: "apple"},
+    OIDC: {label: t("LoginProviders.signInWithOIDC"), icon: <OpenIDIcon className="login-providers__icon" />, signInKey: "oidc"},
+    GITHUB: {label: t("LoginProviders.signInWithGitHub"), icon: <GitHubIcon className="login-providers__icon" />, signInKey: "github"},
   } as const;
 
   type ProviderKey = keyof typeof providerConfig;
