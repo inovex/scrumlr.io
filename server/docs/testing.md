@@ -102,7 +102,26 @@ make coverage
 
 This will run all tests and produce the coverage report.
 
-### Postman tests
+### E2E Tests / old Postman tests
+
+There is an [e2e test folder](scrumlr.io/server/e2e-tests), which contains tests for the backend. These are the old postman tests in go code.
+
+To run them, start a docker container:
+
+
+```bash
+make run-docker
+```
+
+or
+
+```bash
+docker compose up
+```
+
+And run the tests as a normal go test (go test ./...) in the e2e-tests folder (or with IDE support by clicking on the play button next to the tests).
+
+#### Deprecated postman tests
 
 To run the postman tests you can either import the [postman collection](./../api.postman_collection.json) into postman
 and run it from the postman app or you could use the postman cli tool `newman`.

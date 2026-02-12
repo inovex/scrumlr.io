@@ -217,19 +217,6 @@ jobs:
         with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
-  postman_tests:
-    #TODO: Currently disabled. Remove postman as soon as the e2e tests are rolled out
-    if: ${{ false && github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deployment_health_check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Postman run
-        uses: ./.github/actions/postman_run
-        with:
-          POSTMAN_URL: ${{ env.BASE_URL }}/api
-
   e2e_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
