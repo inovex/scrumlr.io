@@ -70,7 +70,7 @@ $side-padding--desktop: 14vw;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .boards {
     background: linear-gradient(161deg, styles.$navy--600 16.78%, styles.$navy--700 49.35%, styles.$navy--800 81.65%);
   }

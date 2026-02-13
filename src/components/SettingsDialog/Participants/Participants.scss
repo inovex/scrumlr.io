@@ -311,7 +311,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .participants__search-input {
     background-color: styles.$navy--500;
     color: styles.$gray--000;

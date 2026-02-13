@@ -76,7 +76,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .settings-dropdown {
     &__button {
       color: styles.$gray--000;

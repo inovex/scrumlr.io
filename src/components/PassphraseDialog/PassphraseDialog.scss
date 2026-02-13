@@ -190,7 +190,7 @@ $color-form-background--dark: #292f3b;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .passphrase-dialog__form {
     background-color: $color-form-background--dark;
     color: styles.$gray--300;

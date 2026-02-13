@@ -294,10 +294,21 @@ spec:
   chart:
     spec:
       chart: nats
-      version: 0.19.12
+      version: 2.12.1
       sourceRef:
         kind: HelmRepository
         name: nats
   install: {}
   interval: 10m0s
   targetNamespace: scrumlr-dev-deployments
+  values:
+    config:
+      cluster:
+        enabled: true
+        replicas: 2
+      jetstream:
+        enabled: true
+        fileStore:
+          enabled: false
+        memoryStore:
+          enabled: true

@@ -57,7 +57,7 @@ $mini-column-height: 91px;
   font-weight: 600;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .columns-mini-view__column {
     &--hidden {
       @include mixins.column-stripes-dark;

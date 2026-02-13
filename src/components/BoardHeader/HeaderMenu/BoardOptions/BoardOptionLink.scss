@@ -18,7 +18,7 @@ $header-menu__item-height: 48px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-option-link {
     background-color: styles.$navy--500;
 
@@ -40,6 +40,6 @@ $header-menu__item-height: 48px;
   font-weight: 600;
 }
 
-[theme="dark"] .board-option-link__label {
+[data-theme="dark"] .board-option-link__label {
   color: styles.$pink--500;
 }

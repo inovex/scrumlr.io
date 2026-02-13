@@ -57,7 +57,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .stack-view__navigation-button {
     background: styles.$navy--500;
     color: styles.$gray--000;

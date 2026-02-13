@@ -96,7 +96,7 @@ $button-height--small: 46px;
   pointer-events: none;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .overlay-icon-button {
     background-color: styles.$gray--000;
   }

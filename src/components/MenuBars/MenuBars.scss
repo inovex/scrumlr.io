@@ -94,7 +94,7 @@ $menu-mobile__width: 72px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-bars-mobile__fab {
     background: styles.$navy--500;
   }
@@ -124,7 +124,7 @@ $menu-mobile__width: 72px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-bars-mobile__fab svg path {
     fill: styles.$gray--000;
   }
@@ -225,7 +225,7 @@ $menu-mobile__width: 72px;
   margin: 0;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu {
     background-color: styles.$navy--500;
     @include mixins.box-shadow-light;
@@ -279,7 +279,7 @@ $menu-mobile__width: 72px;
   color: styles.$gray--600;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-bars__navigation {
     background: styles.$navy--500;
     color: styles.$gray--000;

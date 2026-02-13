@@ -43,14 +43,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   body,
   #root {
     background: colors.$navy--600;
   }
 }
 
-html[theme="dark"] {
+html[data-theme="dark"] {
   background: colors.$navy--600;
 }
 

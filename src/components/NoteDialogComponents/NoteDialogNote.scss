@@ -68,7 +68,7 @@ $footer-height: 36px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-dialog__note {
     background-color: styles.$navy--500;
     box-shadow: 0 6px 9px 0 styles.$navy--900;

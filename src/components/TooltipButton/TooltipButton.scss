@@ -264,7 +264,7 @@ $tooltip-button-size: 46px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .tooltip-button {
     &:focus-visible,
     &:hover {

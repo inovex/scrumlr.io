@@ -152,7 +152,7 @@ $stable-content-width: 80%;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .template-editor__info,
   .template-editor__info-text {
     color: styles.$gray--000;

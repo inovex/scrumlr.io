@@ -86,7 +86,7 @@ $height--small: 36px;
   padding-right: styles.$spacing--xxs;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .mini-menu__item {
     color: styles.$gray--000;
 

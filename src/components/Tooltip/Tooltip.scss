@@ -17,7 +17,7 @@
   }
 }
 
-[theme="dark"] .tooltip-container .tooltip {
+[data-theme="dark"] .tooltip-container .tooltip {
   background-color: styles.$navy--300;
   color: styles.$gray--000;
 }
