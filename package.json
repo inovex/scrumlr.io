@@ -63,7 +63,7 @@
     "@types/jest": "^30.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.23",
-    "@types/node": "^25.1.0",
+    "@types/node": "^25.2.0",
     "@types/qrcode.react": "^3.0.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
