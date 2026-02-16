@@ -585,10 +585,6 @@ func (suite *NotesServiceTestSuite) Test_GetAll() {
 	suite.Equal(0, notes[1].Position.Rank)
 }
 
-func (suite *NotesServiceTestSuite) Test_GetAll_ColumnFilter() {
-
-}
-
 func (suite *NotesServiceTestSuite) Test_GetAll_NotFound() {
 
 	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
