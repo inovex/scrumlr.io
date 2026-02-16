@@ -679,22 +679,69 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 	suite.Equal(0, notes[0].Position.Rank)
 }
 
-// to test delete
-// delete multiple notes
-// delete not correct user correct board
-// delete correct user not correct board
-
-//todo!!!! do the tests correct
-
 func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
 	callerRole := common.ParticipantRole
 	stackAllowed := true
-	deleteStack := true
 
-	suite.expectPrecondition(stackAllowed, callerRole)
-	suite.expectDeleteSequence(deleteStack)
+	noteA := uuid.New()
+	noteB := uuid.New()
 
-	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
+	suite.mockDB.EXPECT().
+		GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
+		Return([]DatabaseNote{
+			{ID: noteA, Author: suite.authorID, Board: suite.boardID},
+			{ID: noteB, Author: suite.authorID, Board: suite.boardID},
+		}, nil)
+
+	suite.mockDB.EXPECT().
+		GetPrecondition(mock.Anything, noteA, suite.boardID, suite.authorID).
+		Return(Precondition{
+			StackingAllowed: stackAllowed,
+			CallerRole:      callerRole,
+			Author:          suite.authorID,
+		}, nil)
+	suite.mockDB.EXPECT().
+		DeleteNote(mock.Anything, suite.authorID, suite.boardID, noteA, false).
+		Return(nil)
+	suite.expectPublish()
+
+	suite.mockDB.EXPECT().
+		GetPrecondition(mock.Anything, noteB, suite.boardID, suite.authorID).
+		Return(Precondition{
+			StackingAllowed: stackAllowed,
+			CallerRole:      callerRole,
+			Author:          suite.authorID,
+		}, nil)
+	suite.mockDB.EXPECT().
+		DeleteNote(mock.Anything, suite.authorID, suite.boardID, noteB, false).
+		Return(nil)
+	suite.expectPublish()
+
+	err := suite.service.DeleteUserNotesFromBoard(suite.ctx, suite.authorID, suite.boardID)
 
 	suite.Nil(err)
+
+}
+
+func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard_NoNotes() {
+
+	suite.mockDB.EXPECT().
+		GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
+		Return([]DatabaseNote{}, nil)
+
+	err := suite.service.DeleteUserNotesFromBoard(suite.ctx, suite.authorID, suite.boardID)
+
+	suite.Nil(err)
+}
+
+func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard_GetByUserAndBoardError() {
+	dbErr := errors.New("db error")
+
+	suite.mockDB.EXPECT().
+		GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
+		Return([]DatabaseNote{}, dbErr)
+
+	err := suite.service.DeleteUserNotesFromBoard(suite.ctx, suite.authorID, suite.boardID)
+
+	suite.Equal(common.InternalServerError, err)
 }
