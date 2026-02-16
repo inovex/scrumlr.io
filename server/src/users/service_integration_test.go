@@ -217,7 +217,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	seenNoteDeleted := false
 	deadline := time.After(2 * time.Second)
 
-	for !(seenUserDeleted && seenNoteDeleted) {
+	for !seenUserDeleted || !seenNoteDeleted {
 		select {
 		case msg := <-events:
 			switch msg.Type {
@@ -307,7 +307,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
 
 	board := suite.updateBoard
-	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID}
+	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID, suite.deleteUser.ID}
 
 	users, err := suite.userService.GetBoardUsers(suite.ctx, board.ID)
 
