@@ -26,6 +26,9 @@ type NotesServiceTestSuite struct {
 	rank       int
 	mockBroker *realtime.MockClient
 	broker     *realtime.Broker
+	stackID    uuid.NullUUID
+	pos        NotePosition
+	posUpdate  NoteUpdatePosition
 }
 
 func TestBoardServiceIntegrationTestSuite(t *testing.T) {
@@ -54,6 +57,20 @@ func (suite *NotesServiceTestSuite) SetupTest() {
 	suite.columnID = uuid.New()
 	suite.noteID = uuid.New()
 	suite.rank = 0
+
+	suite.stackID = uuid.NullUUID{Valid: true, UUID: uuid.New()}
+
+	suite.pos = NotePosition{
+		Column: suite.columnID,
+		Rank:   suite.rank,
+		Stack:  suite.stackID,
+	}
+
+	suite.posUpdate = NoteUpdatePosition{
+		Column: suite.columnID,
+		Rank:   suite.rank,
+		Stack:  suite.stackID,
+	}
 
 }
 
@@ -195,19 +212,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 	callerRole := common.OwnerRole
 
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
-
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
-	posUpdate := NoteUpdatePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
 
 	suite.expectPrecondition().
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
@@ -215,7 +220,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Text:     nil,
-		Position: &posUpdate,
+		Position: &suite.posUpdate,
 		Edited:   false,
 	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
 	suite.expectGetAllEmpty()
@@ -226,7 +231,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 		ID:       suite.noteID,
 		Text:     nil,
 		Board:    suite.boardID,
-		Position: &pos,
+		Position: &suite.pos,
 		Edited:   false,
 	})
 
@@ -281,19 +286,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 	callerRole := common.ModeratorRole
 
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
-
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
-	posUpdate := NoteUpdatePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
 
 	suite.expectPrecondition().
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
@@ -301,7 +294,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Text:     nil,
-		Position: &posUpdate,
+		Position: &suite.posUpdate,
 		Edited:   false,
 	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
 	suite.expectGetAllEmpty()
@@ -312,7 +305,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 		Text:     nil,
 		ID:       suite.noteID,
 		Board:    suite.boardID,
-		Position: &pos,
+		Position: &suite.pos,
 		Edited:   false,
 	})
 
@@ -363,22 +356,18 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
-	callerId := uuid.New()
+	callerID := uuid.New()
 	callerRole := common.ParticipantRole
 
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	txt := "Updated text"
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   0,
-		Stack:  stackId,
-	}
+	pos := suite.pos
+	pos.Rank = 0
 
-	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerId).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerID).
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	note, err := suite.service.Update(context.Background(), callerId, NoteUpdateRequest{
+	note, err := suite.service.Update(context.Background(), callerID, NoteUpdateRequest{
 		Text:     &txt,
 		ID:       suite.noteID,
 		Board:    suite.boardID,
@@ -397,18 +386,6 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 
 	stackAllowed := true
 	text := "Updated text"
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
-
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
-	posUpdate := NoteUpdatePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
 
 	suite.expectPrecondition().
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
@@ -416,7 +393,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Text:     nil,
-		Position: &posUpdate,
+		Position: &suite.posUpdate,
 		Edited:   false,
 	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: false}, nil)
 	suite.expectGetAllEmpty()
@@ -427,7 +404,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 		Text:     nil,
 		ID:       suite.noteID,
 		Board:    suite.boardID,
-		Position: &pos,
+		Position: &suite.pos,
 		Edited:   false,
 	})
 
@@ -445,13 +422,9 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 	callerRole := common.ParticipantRole
 
 	stackAllowed := false
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	txt := "Updated text"
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   0,
-		Stack:  stackId,
-	}
+	pos := suite.pos
+	pos.Rank = 0
 
 	suite.expectPrecondition().
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
@@ -474,13 +447,11 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	callerRole := common.ParticipantRole
 
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: suite.noteID}
+	stackIDNote := uuid.NullUUID{Valid: true, UUID: suite.noteID}
 	txt := "Updated text"
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   0,
-		Stack:  stackId,
-	}
+	pos := suite.pos
+	pos.Rank = 0
+	pos.Stack = stackIDNote
 
 	suite.expectPrecondition().
 		Return(Precondition{StackingAllowed: stackAllowed, CallerRole: callerRole, Author: suite.authorID}, nil)
@@ -501,19 +472,8 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 
 	stackAllowed := true
-	stackId := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	text := "Updated text"
 
-	pos := NotePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
-	posUpdate := NoteUpdatePosition{
-		Column: suite.columnID,
-		Rank:   suite.rank,
-		Stack:  stackId,
-	}
 	dbError := errors.New("database error")
 
 	suite.expectPrecondition().
@@ -522,7 +482,7 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Text:     &text,
-		Position: &posUpdate,
+		Position: &suite.posUpdate,
 		Edited:   true,
 	}).Return(DatabaseNote{}, dbError)
 
@@ -530,7 +490,7 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 		Text:     &text,
 		ID:       suite.noteID,
 		Board:    suite.boardID,
-		Position: &pos,
+		Position: &suite.pos,
 		Edited:   true,
 	})
 
@@ -606,17 +566,17 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
-	callerId := uuid.New()
+	callerID := uuid.New()
 	callerRole := common.ParticipantRole
 
 	deleteStack := true
 
 	ctx := context.Background()
 
-	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerId).
+	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerID).
 		Return(Precondition{StackingAllowed: true, CallerRole: callerRole, Author: suite.authorID}, nil)
 
-	err := suite.service.Delete(ctx, callerId, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
+	err := suite.service.Delete(ctx, callerID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.NotNil(err)
 	suite.Equal(common.ForbiddenError(errors.New("not allowed to delete note from other user")), err)
@@ -669,19 +629,19 @@ func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
 
 func (suite *NotesServiceTestSuite) Test_GetAll() {
 
-	firstNoteId := uuid.New()
-	secondNoteId := uuid.New()
-	firstAuthorId := uuid.New()
-	secondAuthorId := uuid.New()
-	firstColumnId := uuid.New()
-	secondColumnId := uuid.New()
+	firstNoteID := uuid.New()
+	secondNoteID := uuid.New()
+	firstAuthorID := uuid.New()
+	secondAuthorID := uuid.New()
+	firstColumnID := uuid.New()
+	secondColumnID := uuid.New()
 	firstNoteText := "This is the first note"
 	secondNoteText := "This is the second note"
 
 	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: firstNoteId, Author: firstAuthorId, Board: suite.boardID, Text: firstNoteText, Column: firstColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
-			{ID: secondNoteId, Author: secondAuthorId, Board: suite.boardID, Text: secondNoteText, Column: secondColumnId, Stack: uuid.NullUUID{}, Rank: 0, Edited: true},
+			{ID: firstNoteID, Author: firstAuthorID, Board: suite.boardID, Text: firstNoteText, Column: firstColumnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+			{ID: secondNoteID, Author: secondAuthorID, Board: suite.boardID, Text: secondNoteText, Column: secondColumnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: true},
 		}, nil)
 
 	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
@@ -689,18 +649,18 @@ func (suite *NotesServiceTestSuite) Test_GetAll() {
 	suite.Nil(err)
 	suite.Len(notes, 2)
 
-	suite.Equal(firstNoteId, notes[0].ID)
-	suite.Equal(firstAuthorId, notes[0].Author)
+	suite.Equal(firstNoteID, notes[0].ID)
+	suite.Equal(firstAuthorID, notes[0].Author)
 	suite.Equal(firstNoteText, notes[0].Text)
 	suite.False(notes[0].Edited)
-	suite.Equal(firstColumnId, notes[0].Position.Column)
+	suite.Equal(firstColumnID, notes[0].Position.Column)
 	suite.Equal(0, notes[0].Position.Rank)
 
-	suite.Equal(secondNoteId, notes[1].ID)
-	suite.Equal(secondAuthorId, notes[1].Author)
+	suite.Equal(secondNoteID, notes[1].ID)
+	suite.Equal(secondAuthorID, notes[1].Author)
 	suite.Equal(secondNoteText, notes[1].Text)
 	suite.True(notes[1].Edited)
-	suite.Equal(secondColumnId, notes[1].Position.Column)
+	suite.Equal(secondColumnID, notes[1].Position.Column)
 	suite.Equal(0, notes[1].Position.Rank)
 }
 
@@ -749,18 +709,18 @@ func (suite *NotesServiceTestSuite) Test_GetStack() {
 	suite.Len(result, 2)
 
 	/*
-		  suite.Equal(firstNoteId, notes[0].ID)
-			suite.Equal(firstAuthorId, notes[0].Author)
+		  suite.Equal(firstNoteID, notes[0].ID)
+			suite.Equal(firstAuthorID, notes[0].Author)
 			suite.Equal(firstNoteText, notes[0].Text)
 			suite.False(notes[0].Edited)
-			suite.Equal(firstColumnId, notes[0].Position.Column)
+			suite.Equal(firstColumnID, notes[0].Position.Column)
 			suite.Equal(0, notes[0].Position.Rank)
 
-			suite.Equal(secondNoteId, notes[1].ID)
-			suite.Equal(secondAuthorId, notes[1].Author)
+			suite.Equal(secondNoteID, notes[1].ID)
+			suite.Equal(secondAuthorID, notes[1].Author)
 			suite.Equal(secondNoteText, notes[1].Text)
 			suite.True(notes[1].Edited)
-			suite.Equal(secondColumnId, notes[1].Position.Column)
+			suite.Equal(secondColumnID, notes[1].Position.Column)
 			suite.Equal(0, notes[1].Position.Rank)
 	*/
 }
@@ -781,13 +741,13 @@ func (suite *NotesServiceTestSuite) Test_GetStack_DatabaseError() {
 
 func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 
-	oteId := uuid.New()
+	oteID := uuid.New()
 
 	noteText := "This is the first note"
 
 	suite.mockDB.EXPECT().GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: oteId, Author: suite.authorID, Board: suite.boardID, Text: noteText, Column: suite.columnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+			{ID: oteID, Author: suite.authorID, Board: suite.boardID, Text: noteText, Column: suite.columnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
 		}, nil)
 
 	notes, err := suite.service.GetByUserAndBoard(context.Background(), suite.authorID, suite.boardID)
@@ -795,7 +755,7 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 	suite.Nil(err)
 	suite.Len(notes, 1)
 
-	suite.Equal(oteId, notes[0].ID)
+	suite.Equal(oteID, notes[0].ID)
 	suite.Equal(suite.authorID, notes[0].Author)
 	suite.Equal(noteText, notes[0].Text)
 	suite.False(notes[0].Edited)
