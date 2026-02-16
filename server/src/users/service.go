@@ -305,7 +305,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.delete.id", id.String()),
 	)
-	userBoards, err := service.sessionService.GetUserBoardSessions(ctx, id)
+	userBoards, err := service.sessionService.GetUserBoardSessions(ctx, id, false)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
@@ -420,7 +420,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 		attribute.String("scrumlr.users.service.update.type", string(user.AccountType)),
 	)
 
-	connectedBoards, err := service.sessionService.GetUserConnectedBoardSessions(ctx, user.ID)
+	connectedBoards, err := service.sessionService.GetUserBoardSessions(ctx, user.ID, true)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get connected boards")
 		span.RecordError(err)

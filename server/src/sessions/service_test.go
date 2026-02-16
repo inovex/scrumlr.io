@@ -123,13 +123,13 @@ func TestGetSessions(t *testing.T) {
 	assert.Equal(t, boardId, boardSessions[1].Board)
 }
 
-func TestGetUserConnectedBoardSessions(t *testing.T) {
+func TestGetUserBoardSessions_ConnectedOnly(t *testing.T) {
 	userId := uuid.New()
 	firstBoard := uuid.New()
 	secondBoard := uuid.New()
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{
 			{User: userId, Board: firstBoard},
 			{User: userId, Board: secondBoard},
@@ -144,7 +144,7 @@ func TestGetUserConnectedBoardSessions(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	sessions, err := sessionService.GetUserConnectedBoardSessions(context.Background(), userId)
+	sessions, err := sessionService.GetUserBoardSessions(context.Background(), userId, true)
 
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 2)
@@ -155,12 +155,12 @@ func TestGetUserConnectedBoardSessions(t *testing.T) {
 	assert.Equal(t, secondBoard, sessions[1].Board)
 }
 
-func TestGetUserConnectedBoardSessions_DatabaseError(t *testing.T) {
+func TestGetUserBoardSessions_ConnectedOnly_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	dbError := "database error"
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -172,7 +172,7 @@ func TestGetUserConnectedBoardSessions_DatabaseError(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	sessions, err := sessionService.GetUserConnectedBoardSessions(context.Background(), userId)
+	sessions, err := sessionService.GetUserBoardSessions(context.Background(), userId, true)
 
 	assert.Nil(t, sessions)
 	assert.NotNil(t, err)
@@ -410,7 +410,7 @@ func TestUpdateSession_Role(t *testing.T) {
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -463,7 +463,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, RaisedHand: raisedHand}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -799,7 +799,7 @@ func TestConnectSession(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Connected: connected}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
@@ -867,7 +867,7 @@ func TestDisconnectSession(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Connected: connected}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)

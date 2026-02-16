@@ -784,7 +784,7 @@ func TestUpdateUser(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockUserService := sessions.NewMockSessionService(t)
-	mockUserService.EXPECT().GetUserConnectedBoardSessions(mock.Anything, userId).
+	mockUserService.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]*sessions.BoardSession{
 			{UserID: user.ID, Board: firstBoardId},
 			{UserID: user.ID, Board: secondBoardId},
@@ -972,7 +972,7 @@ func TestDeleteUser(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId).Return([]*sessions.BoardSession{}, nil)
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId, false).Return([]*sessions.BoardSession{}, nil)
 	mockNotesService := notes.NewMockNotesService(t)
 	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
 
@@ -994,7 +994,7 @@ func TestDeleteUser_DatabaseError(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId).Return([]*sessions.BoardSession{}, nil)
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId, false).Return([]*sessions.BoardSession{}, nil)
 
 	mockNotesService := notes.NewMockNotesService(t)
 	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)

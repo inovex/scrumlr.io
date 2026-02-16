@@ -206,7 +206,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoardSessi
 
 	userId := suite.baseData.Users["Stan"].ID
 
-	sessions, err := suite.sessionService.GetUserConnectedBoardSessions(ctx, userId)
+	sessions, err := suite.sessionService.GetUserBoardSessions(ctx, userId, true)
 
 	assert.Nil(t, err)
 	assert.Len(t, sessions, 2)

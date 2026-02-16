@@ -538,7 +538,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId, true)
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 2)
@@ -562,7 +562,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConne
 
 	userId := suite.users["Friend"].id
 
-	dbSessions, err := database.GetUserConnectedBoardSessions(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId, true)
 
 	suite.Nil(err)
 	suite.Equal([]DatabaseBoardSession(nil), dbSessions)
@@ -574,7 +574,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), userId, false)
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 3)
@@ -607,7 +607,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
 
 	unknownUserId := uuid.New()
 
-	dbSessions, err := database.GetUserBoardSessions(context.Background(), unknownUserId)
+	dbSessions, err := database.GetUserBoardSessions(context.Background(), unknownUserId, false)
 
 	suite.Nil(err)
 	suite.Equal([]DatabaseBoardSession(nil), dbSessions)
