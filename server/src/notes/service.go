@@ -347,6 +347,41 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 	return Notes(notes), nil
 }
 
+func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
+	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("board_id", boardID.String()),
+		attribute.String("user_id", userID.String()),
+	)
+
+	log := logger.FromContext(ctx)
+	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to fetch notes")
+		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
+		return err
+	}
+
+	for _, note := range userNotes {
+
+		req := NoteDeleteRequest{
+			ID:          note.ID,
+			Board:       boardID,
+			DeleteStack: false,
+		}
+
+		if err := service.Delete(ctx, userID, req); err != nil {
+			span.RecordError(err)
+			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
+		}
+	}
+
+	return nil
+}
+
 func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.update")
 	defer span.End()
@@ -385,39 +420,4 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 		Type: realtime.BoardEventNoteDeleted,
 		Data: notes,
 	})
-}
-
-func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
-	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("board_id", boardID.String()),
-		attribute.String("user_id", userID.String()),
-	)
-
-	log := logger.FromContext(ctx)
-	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to fetch notes")
-		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
-		return err
-	}
-
-	for _, note := range userNotes {
-
-		req := NoteDeleteRequest{
-			ID:          note.ID,
-			Board:       boardID,
-			DeleteStack: false,
-		}
-
-		if err := service.Delete(ctx, userID, req); err != nil {
-			span.RecordError(err)
-			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
-		}
-	}
-
-	return nil
 }
