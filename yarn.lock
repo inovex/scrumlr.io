@@ -4759,10 +4759,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-cypress@^15.9.0:
-  version "15.9.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.9.0.tgz#9bcbbfbf3923d8aca7d06990cb174d5ba67e4084"
-  integrity sha512-Ks6Bdilz3TtkLZtTQyqYaqtL/WT3X3APKaSLhTV96TmTyudzSjc6EJsJCHmBb7DxO+3R12q3Jkbjgm/iPgmwfg==
+cypress@^15.10.0:
+  version "15.10.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-15.10.0.tgz#06bed98a690fad1b98a21010613f9c8c7fa9f639"
+  integrity sha512-OtUh7OMrfEjKoXydlAD1CfG2BvKxIqgWGY4/RMjrqQ3BKGBo5JFKoYNH+Tpcj4xKxWH4XK0Xri+9y8WkxhYbqQ==
   dependencies:
     "@cypress/request" "^3.0.10"
     "@cypress/xvfb" "^1.2.4"
@@ -4792,7 +4792,7 @@ cypress@^15.9.0:
     hasha "5.2.2"
     is-installed-globally "~0.4.0"
     listr2 "^3.8.3"
-    lodash "^4.17.21"
+    lodash "^4.17.23"
     log-symbols "^4.0.0"
     minimist "^1.2.8"
     ospath "^1.2.2"
@@ -8813,7 +8813,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==
 
-lodash@>=4.17.21, lodash@^4.17.2, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.7.0:
+lodash@>=4.17.21, lodash@^4.17.2, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.23, lodash@^4.7.0:
   version "4.17.23"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
   integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
