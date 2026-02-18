@@ -10,997 +10,647 @@ import (
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 )
 
-func TestGetUser(t *testing.T) {
-	userId := uuid.New()
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{ID: userId}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Get(context.Background(), userId)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+type UserServiceTestSuite struct {
+	suite.Suite
+	userID           uuid.UUID
+	mockUserDatabase *MockUserDatabase
+	mockBroker       *realtime.MockClient
+	broker           *realtime.Broker
 }
 
-func TestGetUser_NotFound(t *testing.T) {
-	userId := uuid.New()
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{}, sql.ErrNoRows)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Get(context.Background(), userId)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+func TestUserServiceTestSuite(t *testing.T) {
+	suite.Run(t, new(UserServiceTestSuite))
 }
 
-func TestGetUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) SetupTest() {
+	suite.userID = uuid.New()
+	suite.mockUserDatabase = NewMockUserDatabase(suite.T())
+	suite.mockBroker = realtime.NewMockClient(suite.T())
+	suite.broker = new(realtime.Broker)
+	suite.broker.Con = suite.mockBroker
+
+}
+
+func (suite *UserServiceTestSuite) TestGetUser() {
+	suite.mockUserDatabase.EXPECT().GetUser(mock.Anything, suite.userID).Return(DatabaseUser{ID: suite.userID}, nil)
+
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.Get(context.Background(), suite.userID)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+}
+
+func (suite *UserServiceTestSuite) TestGetUser_NotFound() {
+	suite.mockUserDatabase.EXPECT().GetUser(mock.Anything, suite.userID).Return(DatabaseUser{}, sql.ErrNoRows)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+	user, err := userService.Get(context.Background(), suite.userID)
+
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.NotFoundError, err)
+}
+
+func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().GetUser(mock.Anything, suite.userID).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.Get(context.Background(), suite.userID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Get(context.Background(), userId)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestGetBoardUsers(t *testing.T) {
+func (suite *UserServiceTestSuite) TestGetBoardUsers() {
 	boardID := uuid.New()
-	userIds := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUsers(mock.Anything, boardID).Return([]DatabaseUser{
-		{ID: userIds[0]},
-		{ID: userIds[1]},
-		{ID: userIds[2]},
+	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
+	suite.mockUserDatabase.EXPECT().GetUsers(mock.Anything, boardID).Return([]DatabaseUser{
+		{ID: userIDs[0]},
+		{ID: userIDs[1]},
+		{ID: userIDs[2]},
 	}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
 	user, err := userService.GetBoardUsers(context.Background(), boardID)
 
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateAnonymusUser(t *testing.T) {
+func (suite *UserServiceTestSuite) TestCreateAnonymusUser() {
 	name := "Stan"
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
+	suite.mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
+func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 	name := "Stan"
 	dbError := "unable to execute"
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
+	suite.mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(errors.New(dbError), err)
 }
 
-func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
+func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 	name := "   "
-
-	mockUserDatabase := NewMockUserDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not be empty"), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(errors.New("name may not be empty"), err)
 }
 
-func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
+func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 	name := "Stan\n"
-
-	mockUserDatabase := NewMockUserDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(errors.New("name may not contain newline characters"), err)
 }
 
-func TestCreateAppleUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAppleUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateAppleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateAppleUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAppleUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateAppleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateAppleUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateAppleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateAppleUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateAppleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestCreateAzureUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAzureUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateAzureAdUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateAzureUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAzureUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateAzureAdUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateAzureUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateAzureAdUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateAzureUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateAzureAdUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestCreateGitHubUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateGitHubUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateGitHubUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGitHubUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateGitHubUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateGitHubUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateGitHubUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestCreateGoogleUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateGoogleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateGoogleUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGoogleUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateGoogleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateGoogleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateGoogleUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestCreateMicrosoftUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateMicrosoftUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateMicrosoftUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateMicrosoftUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateMicrosoftUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestCreateOIDCUser(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
 	name := "Stan"
 	avatarUrl := ""
+	suite.mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, suite.userID.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
+	user, err := userService.CreateOIDCUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestCreateOIDCUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateOIDCUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.CreateOIDCUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 	name := "   "
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateOIDCUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 	name := "Stan\n"
 	avatarUrl := ""
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.CreateOIDCUser(context.Background(), suite.userID.String(), name, avatarUrl)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestUpdateUser(t *testing.T) {
-	userId := uuid.New()
-	firstBoardId := uuid.New()
-	secondBoardId := uuid.New()
+func (suite *UserServiceTestSuite) TestUpdateUser() {
+	firstBoardID := uuid.New()
+	secondBoardID := uuid.New()
 	name := "Stan"
-
 	user := User{
-		ID:   userId,
+		ID:   suite.userID,
 		Name: name,
 	}
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: userId, Name: name}).
-		Return(DatabaseUser{ID: userId, Name: name}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockUserService := sessions.NewMockSessionService(t)
-	mockUserService.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
+	suite.mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: suite.userID, Name: name}).
+		Return(DatabaseUser{ID: suite.userID, Name: name}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockUserService := sessions.NewMockSessionService(suite.T())
+	mockUserService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
 		Return([]*sessions.BoardSession{
-			{UserID: user.ID, Board: firstBoardId},
-			{UserID: user.ID, Board: secondBoardId},
+			{UserID: user.ID, Board: firstBoardID},
+			{UserID: user.ID, Board: secondBoardID},
 		}, nil)
-	mockUserService.EXPECT().Get(mock.Anything, firstBoardId, userId).
-		Return(&sessions.BoardSession{UserID: user.ID, Board: firstBoardId}, nil)
-	mockUserService.EXPECT().Get(mock.Anything, secondBoardId, userId).
-		Return(&sessions.BoardSession{UserID: user.ID, Board: secondBoardId}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, firstBoardID, suite.userID).
+		Return(&sessions.BoardSession{UserID: user.ID, Board: firstBoardID}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, secondBoardID, suite.userID).
+		Return(&sessions.BoardSession{UserID: user.ID, Board: secondBoardID}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockUserService, mockNotesService)
 
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockUserService, mockNotesService)
+	updatedUser, err := userService.Update(context.Background(), UserUpdateRequest{ID: suite.userID, Name: name})
 
-	updatedUser, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, updatedUser)
+	suite.Nil(err)
+	suite.NotNil(updatedUser)
 }
 
-func TestUpdateUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestUpdateUser_DatabaseError() {
 	name := "Stan"
 	dbError := "unable to execute"
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: userId, Name: name}).
+	suite.mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: suite.userID, Name: name}).
 		Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: suite.userID, Name: name})
 
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }
 
-func TestUpdateUser_EmptyUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
 	name := "   "
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: suite.userID, Name: name})
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not be empty")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
 }
 
-func TestUpdateUser_NewLineUsername(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 	name := "Stan\n"
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: suite.userID, Name: name})
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name may not contain newline characters")), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
 }
 
-func TestAvailableForKeyMigration(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {
+	suite.mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, suite.userID).Return(true, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userId).Return(true, nil)
+	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), suite.userID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
-
-	assert.Nil(t, err)
-	assert.True(t, available)
+	suite.Nil(err)
+	suite.True(available)
 }
 
-func TestAvailableForKeyMigration_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestAvailableForKeyMigration_DatabaseError() {
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, suite.userID).Return(false, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userId).Return(false, errors.New(dbError))
+	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), suite.userID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
-
-	assert.False(t, available)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	suite.False(available)
+	suite.NotNil(err)
+	suite.Equal(errors.New(dbError), err)
 }
 
-func TestSetKeyMigration(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestSetKeyMigration() {
+	suite.mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, suite.userID).Return(DatabaseUser{ID: suite.userID}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, userId).Return(DatabaseUser{ID: userId}, nil)
+	user, err := userService.SetKeyMigration(context.Background(), suite.userID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.SetKeyMigration(context.Background(), userId)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	suite.Nil(err)
+	suite.NotNil(user)
 }
 
-func TestSetKeymigration_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestSetKeymigration_DatabaseError() {
 	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, suite.userID).Return(DatabaseUser{}, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, userId).Return(DatabaseUser{}, errors.New(dbError))
+	user, err := userService.SetKeyMigration(context.Background(), suite.userID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	user, err := userService.SetKeyMigration(context.Background(), userId)
-
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(errors.New(dbError), err)
 }
 
-func TestDeleteUser(t *testing.T) {
-	userId := uuid.New()
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().DeleteUser(mock.Anything, userId).
+func (suite *UserServiceTestSuite) TestDeleteUser() {
+	suite.mockUserDatabase.EXPECT().DeleteUser(mock.Anything, suite.userID).
 		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, false).Return([]*sessions.BoardSession{}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	err := userService.Delete(context.Background(), suite.userID)
 
-	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId, false).Return([]*sessions.BoardSession{}, nil)
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	err := userService.Delete(context.Background(), userId)
-
-	assert.Nil(t, err)
+	suite.Nil(err)
 }
 
-func TestDeleteUser_DatabaseError(t *testing.T) {
-	userId := uuid.New()
+func (suite *UserServiceTestSuite) TestDeleteUser_DatabaseError() {
 	dbError := errors.New("database error")
-
-	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().DeleteUser(mock.Anything, userId).
+	suite.mockUserDatabase.EXPECT().DeleteUser(mock.Anything, suite.userID).
 		Return(dbError)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, false).Return([]*sessions.BoardSession{}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	err := userService.Delete(context.Background(), suite.userID)
 
-	mockSessionService := sessions.NewMockSessionService(t)
-	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, userId, false).Return([]*sessions.BoardSession{}, nil)
-
-	mockNotesService := notes.NewMockNotesService(t)
-	userService := NewUserService(mockUserDatabase, broker, mockSessionService, mockNotesService)
-
-	err := userService.Delete(context.Background(), userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
 }

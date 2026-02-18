@@ -32,7 +32,7 @@ type NotesServiceTestSuite struct {
 	ctx        context.Context
 }
 
-func TestBoardServiceIntegrationTestSuite(t *testing.T) {
+func TestNotesServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(NotesServiceTestSuite))
 }
 
