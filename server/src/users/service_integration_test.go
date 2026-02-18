@@ -213,33 +213,16 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	suite.Nil(notesErr)
 	suite.Len(notesAfterDelete, 0)
 
-	seenUserDeleted := false
-	seenNoteDeleted := false
-	deadline := time.After(2 * time.Second)
-
-	for !seenUserDeleted || !seenNoteDeleted {
-		select {
-		case msg := <-events:
-			switch msg.Type {
-			case realtime.BoardEventNoteDeleted:
-				noteData, err := technical_helper.Unmarshal[[]uuid.UUID](msg.Data)
-				suite.Nil(err)
-				suite.Contains(*noteData, suite.deleteNote.ID)
-				seenNoteDeleted = true
-			case realtime.BoardEventUserDeleted:
-				userData, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
-				suite.Nil(err)
-				suite.Equal(userId, *userData)
-				seenUserDeleted = true
-			}
-		case <-deadline:
-			suite.Fail("timed out waiting for delete events")
-			return
-		}
+	select {
+	case msg := <-events:
+		suite.Equal(realtime.BoardEventNoteDeleted, msg.Type)
+		noteData, err := technical_helper.Unmarshal[[]uuid.UUID](msg.Data)
+		suite.Nil(err)
+		suite.Contains(*noteData, suite.deleteNote.ID)
+	case <-time.After(10 * time.Second):
+		suite.Fail("timed out waiting for delete events")
+		return
 	}
-
-	suite.True(seenNoteDeleted)
-	suite.True(seenUserDeleted)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithoutNotes() {
@@ -249,8 +232,6 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithoutNotes() {
 	suite.Nil(preDeleteErr)
 	suite.Len(preDeleteNotes, 0)
 
-	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
-
 	err := suite.userService.Delete(suite.ctx, userId)
 
 	suite.Nil(err)
@@ -258,28 +239,6 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithoutNotes() {
 	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, suite.updateBoard.ID)
 	suite.Nil(notesErr)
 	suite.Len(notesAfterDelete, 0)
-
-	seenUserDeleted := false
-	deadline := time.After(2 * time.Second)
-
-	for !seenUserDeleted {
-		select {
-		case msg := <-events:
-			switch msg.Type {
-			case realtime.BoardEventUserDeleted:
-				userData, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
-				suite.Nil(err)
-				suite.Equal(userId, *userData)
-				seenUserDeleted = true
-			case realtime.BoardEventNoteDeleted:
-				suite.Fail("unexpected note deletion event")
-				return
-			}
-		case <-deadline:
-			suite.Fail("timed out waiting for user deleted event")
-			return
-		}
-	}
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get() {

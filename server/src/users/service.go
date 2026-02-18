@@ -448,13 +448,6 @@ func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID, conne
 	span.SetAttributes(
 		attribute.String("scrumlr.users.service.update.id", userId.String()),
 	)
-
-	for _, session := range connectedBoards {
-		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
-			Type: realtime.BoardEventUserDeleted,
-			Data: userId,
-		})
-	}
 }
 
 func validateUsername(name string) error {
