@@ -442,7 +442,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 }
 
 func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID, connectedBoards []*sessions.BoardSession) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.update")
+	_, span := tracer.Start(ctx, "scrumlr.users.service.update")
 	defer span.End()
 
 	span.SetAttributes(
