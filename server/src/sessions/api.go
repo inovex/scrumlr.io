@@ -22,15 +22,12 @@ type SessionService interface {
 	UpdateAll(ctx context.Context, body BoardSessionsUpdateRequest) ([]*BoardSession, error)
 	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
 	GetAll(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error)
-	GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error)
-
+	GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]*BoardSession, error)
 	Connect(ctx context.Context, boardID, userID uuid.UUID) error
 	Disconnect(ctx context.Context, boardID, userID uuid.UUID) error
-
 	Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-
 	BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter
 }
 
