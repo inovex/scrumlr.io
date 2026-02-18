@@ -236,11 +236,11 @@ func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUI
 }
 
 func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]*BoardSession, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_boards")
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_boardsession")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.sessions.service.get.user_boards.user", user.String()),
+		attribute.String("scrumlr.sessions.service.get.user_boardsession.user", user.String()),
 	)
 
 	sessions, err := service.database.GetUserBoardSessions(ctx, user, connectedOnly)

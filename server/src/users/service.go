@@ -312,12 +312,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 
-	connectedBoards := make([]*sessions.BoardSession, 0, len(userBoards))
-
 	for _, board := range userBoards {
-		if board.Connected {
-			connectedBoards = append(connectedBoards, board)
-		}
 		if err := service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board); err != nil {
 			span.SetStatus(codes.Error, "failed to delete user notes")
 			span.RecordError(err)
@@ -335,7 +330,6 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 
 	deletedUserCounter.Add(ctx, 1)
-	service.deletedUser(ctx, id, connectedBoards)
 	return err
 }
 
@@ -439,15 +433,6 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 			Data: session,
 		})
 	}
-}
-
-func (service *Service) deletedUser(ctx context.Context, userId uuid.UUID, connectedBoards []*sessions.BoardSession) {
-	_, span := tracer.Start(ctx, "scrumlr.users.service.update")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.update.id", userId.String()),
-	)
 }
 
 func validateUsername(name string) error {

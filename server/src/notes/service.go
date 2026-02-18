@@ -348,6 +348,7 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 }
 
 func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
 	defer span.End()
 
@@ -356,7 +357,6 @@ func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uui
 		attribute.String("user_id", userID.String()),
 	)
 
-	log := logger.FromContext(ctx)
 	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
 	if err != nil {
 		span.RecordError(err)

@@ -682,6 +682,25 @@ func (suite *DatabaseNoteTestSuite) Test_Database_GetByUserAndBoard() {
 	assert.Nil(t, err)
 	assert.Len(t, dbNotes, 2)
 
+	assert.Equal(t, suite.notes[23].ID, dbNotes[0].ID)
+	assert.Equal(t, suite.notes[23].Author, dbNotes[0].Author)
+	assert.Equal(t, suite.notes[23].Board, dbNotes[0].Board)
+	assert.Equal(t, suite.notes[23].Column, dbNotes[0].Column)
+	assert.Equal(t, suite.notes[23].Edited, dbNotes[0].Edited)
+	assert.Equal(t, suite.notes[23].Rank, dbNotes[0].Rank)
+	assert.Equal(t, suite.notes[23].Stack, dbNotes[0].Stack)
+	assert.Equal(t, suite.notes[23].Text, dbNotes[0].Text)
+	assert.NotNil(t, dbNotes[0].CreatedAt)
+
+	assert.Equal(t, suite.notes[25].ID, dbNotes[1].ID)
+	assert.Equal(t, suite.notes[25].Author, dbNotes[1].Author)
+	assert.Equal(t, suite.notes[25].Board, dbNotes[1].Board)
+	assert.Equal(t, suite.notes[25].Column, dbNotes[1].Column)
+	assert.Equal(t, suite.notes[25].Edited, dbNotes[1].Edited)
+	assert.Equal(t, suite.notes[25].Rank, dbNotes[1].Rank)
+	assert.Equal(t, suite.notes[25].Stack, dbNotes[1].Stack)
+	assert.Equal(t, suite.notes[25].Text, dbNotes[1].Text)
+	assert.NotNil(t, dbNotes[1].CreatedAt)
 }
 
 func (suite *DatabaseNoteTestSuite) Test_Database_GetByUserAndBoard_NonExistentBoard() {
