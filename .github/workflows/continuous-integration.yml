@@ -28,8 +28,21 @@ jobs:
     name: Build and Test – Frontend
     runs-on: ubuntu-latest
     steps:
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+        continue-on-error: true
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Measure Checkout
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'repo checkout'
+        continue-on-error: true
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -48,18 +61,58 @@ jobs:
           yarn install
           CI=false yarn build
 
+      - name: Measure Build
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'yarn install & build'
+        continue-on-error: true
+
       - name: Lint code
         run: yarn lint --max-warnings 0
 
+      - name: Measure Lint
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'lint'
+        continue-on-error: true
+
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
+
+      - name: Measure Tests
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'frontend tests'
+        continue-on-error: true
+
+      - name: Show Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
+        continue-on-error: true
 
   test-backend:
       name: Build and Test – Backend
       runs-on: ubuntu-latest
       steps:
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+        continue-on-error: true
+
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Measure Checkout
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'repo checkout'
+        continue-on-error: true
 
       - uses: actions/setup-go@v5
         with:
@@ -86,9 +139,23 @@ jobs:
         working-directory: ./server/src
         run: go list -m all
 
+      - name: Measure Go Setup
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'go setup'
+        continue-on-error: true
+
       - name: Check Go formatting
         working-directory: ./server
         run: make format-check
+
+      - name: Measure Format Check
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'format check'
+        continue-on-error: true
 
       - name: Go lint
         uses: golangci/golangci-lint-action@v8
@@ -97,11 +164,31 @@ jobs:
           skip-cache: true
           working-directory: ./server/src/
 
+      - name: Measure Lint
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'go lint'
+        continue-on-error: true
+
       - name: Build server
         working-directory: ./server
         run: |
           make test
           make build-alpine
+
+      - name: Measure Build & Test
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'backend test & build'
+        continue-on-error: true
+
+      - name: Show Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
+        continue-on-error: true
 
   sonarqube:
     name: SonarQube
@@ -222,13 +309,35 @@ jobs:
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+        continue-on-error: true
+
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Measure Checkout
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'repo checkout'
+        continue-on-error: true
+
       - uses: actions/setup-go@v5
         with:
           go-version: "^1.25"
           cache: true
           cache-dependency-path: server/e2e-tests/go.sum
+
+      - name: Measure Go Setup
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'go setup'
+        continue-on-error: true
+
       - name: Run E2E tests
         working-directory: ./server/e2e-tests
         env:
@@ -236,17 +345,52 @@ jobs:
             E2E_INSECURE_SKIP_VERIFY: "true"
         run: go test ./...
 
+      - name: Measure E2E Tests
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'e2e tests'
+        continue-on-error: true
+
+      - name: Show Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
+        continue-on-error: true
+
   cypress_end_to_end_test:
     name: Cypress End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
+      - name: Start Energy Measurement
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: start-measurement
+        continue-on-error: true
+
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Measure Checkout
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'repo checkout'
+        continue-on-error: true
+
       - name: Start server
         run: docker compose --profile build up -d
         working-directory: server
+
+      - name: Measure Server Start
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'docker compose up'
+        continue-on-error: true
+
       - name: Setup client and run tests
         uses: cypress-io/github-action@v6
         with:
@@ -256,3 +400,16 @@ jobs:
             yarn run start
           working-directory: ./
           wait-on: 'http://localhost:3000'
+
+      - name: Measure Cypress Tests
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: get-measurement
+          label: 'cypress tests'
+        continue-on-error: true
+
+      - name: Show Energy Results
+        uses: green-coding-solutions/eco-ci-energy-estimation@v5
+        with:
+          task: display-results
+        continue-on-error: true
