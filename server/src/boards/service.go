@@ -191,6 +191,32 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	return new(Board).From(b), nil
 }
 
+func (service *Service) UpdateLastModified(ctx context.Context, boardID uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.update_last_modified")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.update_last_modified.board", boardID.String()),
+	)
+
+	update := DatabaseBoardUpdate{
+		ID: boardID,
+	}
+
+	_, err := service.database.UpdateBoard(ctx, update)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to update last modified")
+		span.RecordError(err)
+		log.Errorw("unable to update last modified", "boardID", boardID, "err", err)
+		return err
+	}
+
+	// no BoardUpdated event needed here because the last_modified_at is only used for the board overview
+
+	return nil
+}
+
 func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.get.full")

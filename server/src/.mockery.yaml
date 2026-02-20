@@ -1,81 +1,107 @@
 ---
-structname: "Mock{{.InterfaceName}}"
-pkgname: "{{.SrcPackageName}}"
+inpackage: true
 filename: "mock_{{.InterfaceName}}.go"
 packages:
-  # configuration on package level
-  net/http:
-    config:
-      dir: mocks/net/http
-    interfaces:
-      ResponseWriter:
-
   scrumlr.io/server/timeprovider:
+    config:
+      dir: timeprovider
     interfaces:
       TimeProvider:
 
   scrumlr.io/server/boards:
+    config:
+      dir: boards
     interfaces:
       BoardService:
       BoardDatabase:
 
+  scrumlr.io/server/common:
+    config:
+      dir: common
+    interfaces:
+      BoardLastModifiedUpdater:
+
   scrumlr.io/server/realtime:
+    config:
+      dir: realtime
     interfaces:
       Client:
 
   scrumlr.io/server/reactions:
+    config:
+      dir: reactions
     interfaces:
       ReactionService:
       ReactionDatabase:
 
   scrumlr.io/server/hash:
+    config:
+      dir: hash
     interfaces:
       Hash:
 
   scrumlr.io/server/health:
+    config:
+      dir: health
     interfaces:
       HealthService:
       HealthDatabase:
 
   scrumlr.io/server/sessions:
+    config:
+      dir: sessions
     interfaces:
       SessionService:
       SessionDatabase:
       SessionApi:
 
   scrumlr.io/server/sessionrequests:
+    config:
+      dir: sessionrequests
     interfaces:
       SessionRequestService:
       SessionRequestDatabase:
-      Websocket:
+      SessionRequestWebsocket:
 
   scrumlr.io/server/users:
+    config:
+      dir: users
     interfaces:
       UserService:
       UserDatabase:
       UsersApi:
 
   scrumlr.io/server/notes:
+    config:
+      dir: notes
     interfaces:
       NotesService:
       NotesDatabase:
 
   scrumlr.io/server/votings:
+    config:
+      dir: votings
     interfaces:
       VotingService:
       VotingDatabase:
 
   scrumlr.io/server/columntemplates:
+    config:
+      dir: columntemplates
     interfaces:
       ColumnTemplateService:
       ColumnTemplateDatabase:
 
   scrumlr.io/server/boardtemplates:
+    config:
+      dir: boardtemplates
     interfaces:
       BoardTemplateService:
       BoardTemplateDatabase:
 
   scrumlr.io/server/columns:
+    config:
+      dir: columns
     interfaces:
       ColumnService:
       ColumnDatabase:
