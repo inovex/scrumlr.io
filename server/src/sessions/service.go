@@ -35,7 +35,7 @@ type SessionDatabase interface {
 	IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error)
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
-	GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error)
+	GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]DatabaseBoardSession, error)
 }
 
 type BoardSessionService struct {
@@ -235,17 +235,17 @@ func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUI
 	return BoardSessions(sessions), err
 }
 
-func (service *BoardSessionService) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_connected_boards")
+func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]*BoardSession, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.get.user_boardsession")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.sessions.service.get.user_connected_boards.user", user.String()),
+		attribute.String("scrumlr.sessions.service.get.user_boardsession.user", user.String()),
 	)
 
-	sessions, err := service.database.GetUserConnectedBoards(ctx, user)
+	sessions, err := service.database.GetUserBoardSessions(ctx, user, connectedOnly)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user connected boards")
+		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
 		return nil, err
 	}
@@ -409,7 +409,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 		attribute.String("scrumlr.sessions.service.update.user", userId.String()),
 	)
 
-	connectedBoards, err := service.database.GetUserConnectedBoards(ctx, userId)
+	connectedBoards, err := service.database.GetUserBoardSessions(ctx, userId, true)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user connections")
 		span.RecordError(err)

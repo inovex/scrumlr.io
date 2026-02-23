@@ -486,3 +486,14 @@ func (d *DB) GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID,
 
 	return precondition, err
 }
+
+func (d *DB) GetByUserAndBoard(ctx context.Context, user uuid.UUID, board uuid.UUID) ([]DatabaseNote, error) {
+	var notes []DatabaseNote
+	err := d.db.NewSelect().
+		Model((*DatabaseNote)(nil)).
+		Where("note.board = ?", board).
+		Where("note.author = ?", user).
+		Scan(ctx, &notes)
+
+	return notes, err
+}
