@@ -143,6 +143,13 @@
     "deleteNoteButton": "Kärtchen löschen",
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
+    "deleteAccount": "Bist du sicher, dass du dein Konto löschen möchtest?",
+    "deleteAccountText": "Wenn du dein Konto löschst, werden alle damit verbundenen Daten ebenfalls dauerhaft entfernt, einschließlich:",
+    "deleteAccountItems": "deine eigenen erstellten Vorlagen \n deine Notizen & Stimmen auf anderen Sitzungen",
+    "deleteAccountTextAfterItems": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteAccountCheck": "Ich verstehe und stimme der dauerhaften Löschung zu.",
+    "deleteAccountWarning": "Du musst die Löschung bestätigen.",
+    "deleteAccountButton": "Konto löschen",
     "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
     "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",
     "warning": "Die Aktion ist nicht umkehrbar.",
@@ -520,7 +527,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nutzername"
+    "UserName": "Nutzername",
+    "deleteAccount": "Konto löschen"
   },
   "Error": {
     "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
@@ -553,7 +561,8 @@
     "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
-    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut.",
+    "deleteAccount": "Es tut uns leid, aber wir haben ein Problem beim Löschen deines Kontos. Bitte versuche es erneut."
   },
   "Validation": {
     "REQUIRED": "required",

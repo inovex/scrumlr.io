@@ -26,3 +26,14 @@ export const signOut = createAsyncThunk("auth/signOut", async (_payload, {dispat
     // eslint-disable-next-line no-restricted-globals
     .then(() => location.reload());
 });
+
+export const deleteAccount = createAsyncThunk<void, string>("auth/deleteAccount", async (userId, {dispatch}) => {
+  await retryable(
+    () => API.deleteUser(userId),
+    dispatch,
+    () => deleteAccount(userId),
+    "deleteAccount"
+  );
+  // After successful deletion, redirect to login with query parameter
+  window.location.replace("/login?accountDeleted=true");
+});
