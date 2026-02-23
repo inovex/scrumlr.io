@@ -220,8 +220,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 		suite.Nil(err)
 		suite.Contains(*noteData, suite.deleteNote.ID)
 	case <-time.After(10 * time.Second):
-		suite.Fail("timed out waiting for delete events")
-		return
+		suite.FailNow("timed out waiting for delete events")
 	}
 }
 

@@ -491,10 +491,8 @@ func (d *DB) GetByUserAndBoard(ctx context.Context, user uuid.UUID, board uuid.U
 	var notes []DatabaseNote
 	err := d.db.NewSelect().
 		Model((*DatabaseNote)(nil)).
-		Join("JOIN columns ON columns.id = note.\"column\"").
 		Where("note.board = ?", board).
 		Where("note.author = ?", user).
-		OrderExpr("columns.\"index\" ASC, note.stack DESC, note.rank DESC").
 		Scan(ctx, &notes)
 
 	return notes, err

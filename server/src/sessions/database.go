@@ -202,7 +202,7 @@ func (database *SessionDB) GetUserBoardSessions(ctx context.Context, user uuid.U
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
 	if connectedOnly {
-		query.Where("s.connected IS TRUE")
+		query.Where("s.connected = ?", connectedOnly)
 	}
 	err := query.Scan(ctx, &sessions)
 
