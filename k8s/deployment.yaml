@@ -214,12 +214,7 @@ spec:
       services:
         - name: scrumlr-backend-PR_NUMBER
           port: 8080
-    - match: >-
-        Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) &&
-        (
-        PathPrefix(`/{p:(assets|static|locales|login|board|new|legal|emoji-data)}`) ||
-        Path(`/{f:(timer_finished\.mp3|hotkeys\.pdf)}`)
-        )
+    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/assets`, `/static`, `/locales`, `/login`, `/board`, `/new`, `/legal/`, `/emoji-data/`) || Path(`/timer_finished.mp3`, `/hotkeys.pdf`))
       kind: Rule
       services:
         - name: scrumlr-frontend-PR_NUMBER
