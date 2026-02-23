@@ -26,6 +26,7 @@ type NotesServiceTestSuite struct {
   mockBroker *realtime.MockClient
   broker     *realtime.Broker
   stackID    uuid.NullUUID
+  mockCache  *cache.MockClient
   pos        NotePosition
   posUpdate  NoteUpdatePosition
   ctx        context.Context
@@ -45,6 +46,7 @@ func (suite *NotesServiceTestSuite) SetupTest() {
   mockCache := cache.NewMockClient(suite.T())
   c := new(cache.Cache)
   c.Con = mockCache
+	suite.mockCache = mockCache
   suite.service = NewNotesService(suite.mockDB, suite.broker, c)
 
   suite.authorID = uuid.New()
@@ -74,6 +76,10 @@ func (suite *NotesServiceTestSuite) expectPublish() {
   suite.mockBroker.EXPECT().
     Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
     Return(nil)
+}
+
+func (suite *NotesServiceTestSuite) expectNoLock() {
+  suite.mockCache.EXPECT().Get(mock.Anything, mock.Anything).Return(nil, &cache.KeyNotFound{})
 }
 
 func (suite *NotesServiceTestSuite) expectPrecondition(stackingAllowed bool, callerRole common.SessionRole) {
@@ -183,6 +189,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -212,6 +219,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -241,6 +249,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -270,6 +279,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -299,6 +309,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -352,6 +363,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
   stackAllowed := true
   text := "Updated text"
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -383,6 +395,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
   pos := suite.pos
   pos.Rank = 0
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
 
   note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
@@ -407,6 +420,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
   pos.Rank = 0
   pos.Stack = stackIDNote
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
 
   note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
@@ -428,6 +442,7 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
   stackAllowed := true
   dbError := errors.New("database error")
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
     ID:       suite.noteID,
@@ -464,6 +479,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote() {
   stackAllowed := true
   deleteStack := true
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.expectDeleteSequence(deleteStack)
 
@@ -477,6 +493,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
   stackAllowed := true
   deleteStack := true
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.expectDeleteSequence(deleteStack)
 
@@ -490,6 +507,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
   stackAllowed := true
   deleteStack := true
 
+  suite.expectNoLock()
   suite.expectPrecondition(stackAllowed, callerRole)
   suite.expectDeleteSequence(deleteStack)
 
@@ -692,6 +710,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
       {ID: noteB, Author: suite.authorID, Board: suite.boardID},
     }, nil)
 
+  suite.mockCache.EXPECT().Get(mock.Anything, mock.Anything).Return(nil, &cache.KeyNotFound{})
   suite.mockDB.EXPECT().
     GetPrecondition(mock.Anything, noteA, suite.boardID, suite.authorID).
     Return(Precondition{
@@ -704,6 +723,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
     Return(nil)
   suite.expectPublish()
 
+  suite.mockCache.EXPECT().Get(mock.Anything, mock.Anything).Return(nil, &cache.KeyNotFound{})
   suite.mockDB.EXPECT().
     GetPrecondition(mock.Anything, noteB, suite.boardID, suite.authorID).
     Return(Precondition{
