@@ -130,7 +130,7 @@
   margin-left: styles.$spacing--base;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .new-board {
     color: styles.$gray--000;
   }

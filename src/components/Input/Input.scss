@@ -152,7 +152,7 @@ $padding--mobile: 12.5px styles.$spacing--base;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .input {
     background-color: styles.$navy--400;
 
@@ -179,8 +179,8 @@ $padding--mobile: 12.5px styles.$spacing--base;
 
       // special case for linked hover state (wrap the input group with .input-linked-hover)
       @at-root {
-        [theme="dark"] .input-linked-hover:has(button:hover) .input,
-        [theme="dark"] .input-linked-hover:has(button:active) .input {
+        [data-theme="dark"] .input-linked-hover:has(button:hover) .input,
+        [data-theme="dark"] .input-linked-hover:has(button:active) .input {
           @include dark-active-styles;
         }
       }

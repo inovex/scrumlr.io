@@ -229,7 +229,7 @@ $note__footer-gap: 42px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note,
   .note__in-stack {
     background-color: styles.$navy--400;

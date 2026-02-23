@@ -419,7 +419,8 @@
     "me": "Moi",
     "you": "vous",
     "userImageAlt": "média fourni par {{user}}",
-    "edited": "modifié"
+    "edited": "modifié",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Note précédente",

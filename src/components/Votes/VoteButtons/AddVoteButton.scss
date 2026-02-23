@@ -37,7 +37,7 @@
   pointer-events: none;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .vote-button-add {
     color: var(--accent-color--500);
     background-color: rgba(var(--accent-color--400-rgb), 0.24);

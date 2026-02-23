@@ -17,6 +17,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
@@ -64,8 +65,11 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	database := NewSessionRequestDatabase(db)
 	wsService := websocket.NewWebSocketService()
 	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
+	require.NoError(suite.T(), err, "Failed to connect to nats cache")
+
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch)
 	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
 	sessionDatabase := sessions.NewSessionDatabase(db)

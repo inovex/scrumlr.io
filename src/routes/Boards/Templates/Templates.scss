@@ -125,7 +125,7 @@ $max-card-width: 500px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .templates__container {
     background-color: styles.$navy--700;
   }

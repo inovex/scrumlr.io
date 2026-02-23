@@ -110,7 +110,7 @@ $border-width--thick: 3px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .text-area {
     color: styles.$gray--300;
     &:not(&--embedded) {

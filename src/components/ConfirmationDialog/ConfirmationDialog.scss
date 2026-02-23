@@ -253,7 +253,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .confirmation-dialog__background {
     background-color: rgba($color: styles.$pink--500, $alpha: 0.1);
   }

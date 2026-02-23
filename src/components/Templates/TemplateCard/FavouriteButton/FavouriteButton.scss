@@ -34,7 +34,7 @@ $icon-size: 36px;
   color: inherit;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .favourite-button {
     color: rgba(styles.$gray--000, 0.7);
 

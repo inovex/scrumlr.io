@@ -56,7 +56,7 @@ $add-column-height: 326px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .add-template-column {
     border-color: var(--accent-color--dark);
   }

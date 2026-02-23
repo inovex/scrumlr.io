@@ -3,6 +3,7 @@ name: scrumlr
 services:
   nats:
     image: nats:2.12.3-alpine
+    command: ["-js"]
     ports:
       - "4222:4222"
     healthcheck:
