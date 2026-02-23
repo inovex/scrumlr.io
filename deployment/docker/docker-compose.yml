@@ -2,7 +2,7 @@
 services:
   scrumlr-backend:
     restart: always
-    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-4.5.0}"
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-4.6.0}"
     container_name: scrumlr-backend
     command:
       - "-disable-check-origin"
@@ -53,7 +53,7 @@ services:
 
   scrumlr-frontend:
     restart: always
-    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-4.5.0}"
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-4.6.0}"
     container_name: scrumlr-frontend
     environment:
       SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
