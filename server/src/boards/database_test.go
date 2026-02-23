@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/timeprovider"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -15,12 +17,16 @@ import (
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
+var nowDate = time.Date(2126, 2, 12, 10, 0, 0, 0, time.UTC)
+
 type DatabaseBoardTestSuite struct {
 	suite.Suite
-	db       *bun.DB
-	users    map[string]TestUser
-	boards   map[string]DatabaseBoard
-	sessions map[string]TestSession
+	db           *bun.DB
+	users        map[string]TestUser
+	boards       map[string]DatabaseBoard
+	sessions     map[string]TestSession
+	database     BoardDatabase
+	timeProvider *timeprovider.MockTimeProvider
 }
 
 func TestDatabaseBoardTestSuite(t *testing.T) {
@@ -36,16 +42,17 @@ func (suite *DatabaseBoardTestSuite) SetupTest() {
 			Func: suite.seedData,
 		},
 	)
+	suite.timeProvider = timeprovider.NewMockTimeProvider(suite.T())
+	suite.database = NewBoardDatabase(suite.db, suite.timeProvider)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public},
 	)
 
@@ -59,14 +66,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{
 			Name:         &name,
 			Description:  &description,
@@ -86,12 +92,11 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{
 			Name:         &name,
 			Description:  &description,
@@ -109,7 +114,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdatePassphrase"].ID
 	name := "New Name"
@@ -123,7 +127,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -153,7 +159,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdatePublic"].ID
 	name := "New Name"
@@ -165,7 +170,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -193,7 +200,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdateInvite"].ID
 	name := "New Name"
@@ -205,7 +211,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -233,7 +241,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdateInvite"].ID
 	name := "New Name"
@@ -247,7 +254,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -277,13 +286,15 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
+	mockClock := timeprovider.NewMockTimeProvider(t)
 
 	boardId := suite.boards["Timer"].ID
-	startTime := time.Now().UTC().Round(time.Millisecond)
+	mockTime := time.Date(2024, 1, 15, 10, 0, 0, 0, time.UTC)
+	mockClock.EXPECT().Now().Return(mockTime)
+	startTime := mockClock.Now().UTC().Round(time.Millisecond)
 	endTime := startTime.Add(time.Minute * 2)
 
-	dbBoard, err := database.UpdateBoardTimer(context.Background(), DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
+	dbBoard, err := suite.database.UpdateBoardTimer(context.Background(), DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -291,24 +302,46 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	assert.Equal(t, &endTime, dbBoard.TimerEnd)
 }
 
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_SetsLastModifiedAt() {
+	t := suite.T()
+
+	boardId := suite.boards["UpdatePassphrase"].ID
+
+	boardBefore, err := suite.database.GetBoard(context.Background(), boardId)
+	assert.Nil(t, err)
+
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	newName := "Updated Name"
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:   boardId,
+		Name: &newName,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, dbBoard.ID)
+	assert.Equal(t, &newName, dbBoard.Name)
+
+	assert.True(t, dbBoard.LastModifiedAt.After(boardBefore.LastModifiedAt), "LastModifiedAt should be after the previous value")
+	assert.True(t, dbBoard.LastModifiedAt.After(nowDate) || dbBoard.LastModifiedAt.Equal(nowDate), "LastModifiedAt should be at or after timeBeforeUpdate")
+}
+
 func (suite *DatabaseBoardTestSuite) Test_Database_Delete() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["Delete"].ID
 
-	err := database.DeleteBoard(context.Background(), boardId)
+	err := suite.database.DeleteBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Get() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["Read1"].ID
 
-	dbBoard, err := database.GetBoard(context.Background(), boardId)
+	dbBoard, err := suite.database.GetBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -329,11 +362,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Get_NotFound() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	boardId := uuid.New()
 
-	dbBoard, err := database.GetBoard(context.Background(), boardId)
+	dbBoard, err := suite.database.GetBoard(context.Background(), boardId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -342,11 +373,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get_NotFound() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	userId := suite.users["Stan"].id
 
-	dbBoards, err := database.GetBoards(context.Background(), userId)
+	dbBoards, err := suite.database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 2)
@@ -378,11 +407,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser_NotFound() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	userId := uuid.New()
 
-	dbBoards, err := database.GetBoards(context.Background(), userId)
+	dbBoards, err := suite.database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 0)

@@ -79,10 +79,11 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	broker, err := realtime.NewNats(suite.natsConnectionString)
 	require.NoError(suite.T(), err, "Failed to connect to nats server")
 
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker)
+	noteService := notes.NewNotesService(noteDatabase, broker, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	userDatabase := NewUserDatabase(db)
