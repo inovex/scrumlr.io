@@ -5,9 +5,9 @@ import (
 	"log"
 	"slices"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
@@ -19,6 +19,7 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 )
 
 type UserServiceIntegrationTestsuite struct {
@@ -27,12 +28,17 @@ type UserServiceIntegrationTestsuite struct {
 	natsConnectionString string
 	baseData             testDbTemplates.DbBaseIDs
 	userService          UserService
+	notesService         notes.NotesService
 	broker               *realtime.Broker
+	ctx                  context.Context
+	testUserName         string
 
 	// Additional test-specific data
-	updateUser  testDbTemplates.TestUser
-	deleteUser  testDbTemplates.TestUser
-	updateBoard testDbTemplates.TestBoard
+	updateUser   testDbTemplates.TestUser
+	deleteUser   testDbTemplates.TestUser
+	updateBoard  testDbTemplates.TestBoard
+	deleteColumn testDbTemplates.TestColumn
+	deleteNote   testDbTemplates.TestNote
 }
 
 func TestUserServiceIntegrationTestSuite(t *testing.T) {
@@ -66,6 +72,19 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 		Name: "UsersTestUpdate",
 		ID:   uuid.MustParse("c3d4e5f6-a7b8-9012-cdef-123456789012"),
 	}
+	suite.deleteColumn = testDbTemplates.TestColumn{
+		Name:    "UsersDeleteColumn",
+		ID:      uuid.MustParse("d4e5f6a7-b8c9-0123-def4-234567890123"),
+		BoardID: suite.updateBoard.ID,
+	}
+	suite.deleteNote = testDbTemplates.TestNote{
+		Name:     "UsersDeleteNote",
+		ID:       uuid.MustParse("e5f6a7b8-c9d0-1234-ef56-345678901234"),
+		AuthorID: suite.deleteUser.ID,
+		BoardID:  suite.updateBoard.ID,
+		ColumnID: suite.deleteColumn.ID,
+		Text:     "Delete user note",
+	}
 
 	db := testDbTemplates.NewBaseTestDB(
 		suite.T(),
@@ -86,203 +105,195 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	userDatabase := NewUserDatabase(db)
-	userService := NewUserService(userDatabase, broker, sessionService)
+	userService := NewUserService(userDatabase, broker, sessionService, noteService)
 
 	suite.userService = userService
+	suite.notesService = noteService
 	suite.broker = broker
+	suite.ctx = context.Background()
+	suite.testUserName = "Test User"
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateAnonymous(suite.ctx, suite.testUserName)
 
-	user, err := suite.userService.CreateAnonymous(ctx, userName)
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Anonymous, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.Anonymous, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateAppleUser(suite.ctx, "appleId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateAppleUser(ctx, "appleId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Apple, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.Apple, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateAzureAdUser(suite.ctx, "azureId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateAzureAdUser(ctx, "azureId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.AzureAd, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.AzureAd, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateGitHubUser(suite.ctx, "githubId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateGitHubUser(ctx, "githubId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.GitHub, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.GitHub, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateGoogleUser(suite.ctx, "googleId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateGoogleUser(ctx, "googleId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Google, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.Google, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateMicrosoftUser(suite.ctx, "microsoftId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateMicrosoftUser(ctx, "microsoftId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.Microsoft, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.Microsoft, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
-	t := suite.T()
-	ctx := context.Background()
 
-	userName := "Test User"
+	user, err := suite.userService.CreateOIDCUser(suite.ctx, "oidcId", suite.testUserName, "")
 
-	user, err := suite.userService.CreateOIDCUser(ctx, "oidcId", userName, "")
-
-	assert.Nil(t, err)
-	assert.Equal(t, userName, user.Name)
-	assert.Equal(t, common.TypeOIDC, user.AccountType)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, user.Name)
+	suite.Equal(common.TypeOIDC, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Update() {
-	t := suite.T()
-	ctx := context.Background()
-
 	userId := suite.updateUser.ID
 	boardId := suite.updateBoard.ID
-	userName := "Test User"
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
 
-	user, err := suite.userService.Update(ctx, UserUpdateRequest{ID: userId, Name: userName})
+	user, err := suite.userService.Update(suite.ctx, UserUpdateRequest{ID: userId, Name: suite.testUserName})
 
-	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
-	assert.Equal(t, userName, user.Name)
+	suite.Nil(err)
+	suite.Equal(userId, user.ID)
+	suite.Equal(suite.testUserName, user.Name)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventParticipantUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventParticipantUpdated, msg.Type)
 	sessionData := msg.Data.(map[string]interface{})
-	assert.True(t, sessionData["connected"].(bool))
-	assert.Equal(t, string(common.OwnerRole), sessionData["role"].(string))
+	suite.True(sessionData["connected"].(bool))
+	suite.Equal(string(common.OwnerRole), sessionData["role"].(string))
 }
 
-func (suite *UserServiceIntegrationTestsuite) Test_Delete() {
-	t := suite.T()
-	ctx := context.Background()
-
+func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	userId := suite.deleteUser.ID
+	boardId := suite.updateBoard.ID
+	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, boardId)
+	suite.Nil(preDeleteErr)
+	suite.Len(preDeleteNotes, 1)
 
-	err := suite.userService.Delete(ctx, userId)
+	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
 
-	assert.Nil(t, err)
+	err := suite.userService.Delete(suite.ctx, userId)
+
+	suite.Nil(err)
+
+	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, suite.updateBoard.ID)
+	suite.Nil(notesErr)
+	suite.Len(notesAfterDelete, 0)
+
+	select {
+	case msg := <-events:
+		suite.Equal(realtime.BoardEventNoteDeleted, msg.Type)
+		noteData, err := technical_helper.Unmarshal[[]uuid.UUID](msg.Data)
+		suite.Nil(err)
+		suite.Contains(*noteData, suite.deleteNote.ID)
+	case <-time.After(10 * time.Second):
+		suite.FailNow("timed out waiting for delete events")
+	}
+}
+
+func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithoutNotes() {
+	userId := suite.updateUser.ID
+	boardId := suite.updateBoard.ID
+	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, boardId)
+	suite.Nil(preDeleteErr)
+	suite.Len(preDeleteNotes, 0)
+
+	err := suite.userService.Delete(suite.ctx, userId)
+
+	suite.Nil(err)
+
+	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, suite.updateBoard.ID)
+	suite.Nil(notesErr)
+	suite.Len(notesAfterDelete, 0)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get() {
-	t := suite.T()
-	ctx := context.Background()
 
 	userId := suite.baseData.Users["Stan"].ID
 
-	user, err := suite.userService.Get(ctx, userId)
+	user, err := suite.userService.Get(suite.ctx, userId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
-	assert.Equal(t, suite.baseData.Users["Stan"].Name, user.Name)
+	suite.Nil(err)
+	suite.Equal(userId, user.ID)
+	suite.Equal(suite.baseData.Users["Stan"].Name, user.Name)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
-	t := suite.T()
-	ctx := context.Background()
 
 	userId := uuid.New()
 
-	user, err := suite.userService.Get(ctx, userId)
+	user, err := suite.userService.Get(suite.ctx, userId)
 
-	assert.Nil(t, user)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.NotFoundError, err)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
-	t := suite.T()
-	ctx := context.Background()
 
 	board := suite.updateBoard
-	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID}
+	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID, suite.deleteUser.ID}
 
-	users, err := suite.userService.GetBoardUsers(ctx, board.ID)
+	users, err := suite.userService.GetBoardUsers(suite.ctx, board.ID)
 
 	ids := slices.Collect(func(yield func(uuid.UUID) bool) {
 		for _, user := range users {
 			yield(user.ID)
 		}
 	})
-	assert.Nil(t, err)
-	assert.ElementsMatch(t, userIds, ids)
+	suite.Nil(err)
+	suite.ElementsMatch(userIds, ids)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
-	t := suite.T()
-	ctx := context.Background()
-
 	userId := suite.baseData.Users["Santa"].ID
 
-	available, err := suite.userService.IsUserAvailableForKeyMigration(ctx, userId)
+	available, err := suite.userService.IsUserAvailableForKeyMigration(suite.ctx, userId)
 
-	assert.Nil(t, err)
-	assert.True(t, available)
+	suite.Nil(err)
+	suite.True(available)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
-	t := suite.T()
-	ctx := context.Background()
-
 	userId := suite.baseData.Users["Stan"].ID
 
-	user, err := suite.userService.SetKeyMigration(ctx, userId)
+	user, err := suite.userService.SetKeyMigration(suite.ctx, userId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, userId, user.ID)
+	suite.Nil(err)
+	suite.Equal(userId, user.ID)
 }
 
 func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
@@ -298,11 +309,20 @@ func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 	if err := testDbTemplates.InsertBoard(db, suite.updateBoard.ID, suite.updateBoard.Name, "", nil, nil, "PUBLIC", true, true, true, true, false); err != nil {
 		log.Fatalf("Failed to insert test board: %s", err)
 	}
+	if err := testDbTemplates.InsertColumn(db, suite.deleteColumn.ID, suite.deleteColumn.BoardID, suite.deleteColumn.Name, "", "backlog-blue", true, 0); err != nil {
+		log.Fatalf("Failed to insert delete user column: %s", err)
+	}
+	if err := testDbTemplates.InsertNote(db, suite.deleteNote.ID, suite.deleteNote.AuthorID, suite.deleteNote.BoardID, suite.deleteNote.ColumnID, suite.deleteNote.Text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+		log.Fatalf("Failed to insert delete user note: %s", err)
+	}
 
 	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Stan session: %s", err)
 	}
 	if err := testDbTemplates.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Update user session: %s", err)
+	}
+	if err := testDbTemplates.InsertSession(db, suite.deleteUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+		log.Fatalf("Failed to insert Delete user session: %s", err)
 	}
 }
