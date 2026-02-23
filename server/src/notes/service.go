@@ -41,6 +41,7 @@ type NotesDatabase interface {
   DeleteNote(ctx context.Context, caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
   GetStack(ctx context.Context, noteID uuid.UUID) ([]DatabaseNote, error)
   GetPrecondition(ctx context.Context, id uuid.UUID, board uuid.UUID, caller uuid.UUID) (Precondition, error)
+  GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error)
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker, cache *cache.Cache) NotesService {
@@ -524,6 +525,67 @@ func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, use
       log.Errorw("failed to send drag lock response", "error", err, "response", response)
     }
   }
+}
+
+func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.by_user_and_board")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.user", userID.String()),
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.board", boardID.String()),
+	)
+
+	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "notes not found")
+			span.RecordError(err)
+			return nil, common.NotFoundError
+		}
+
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
+		log.Errorw("unable to get notes", "error", err)
+		return nil, common.InternalServerError
+	}
+	return Notes(notes), nil
+}
+
+func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("board_id", boardID.String()),
+		attribute.String("user_id", userID.String()),
+	)
+
+	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to fetch notes")
+		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
+		return err
+	}
+
+	for _, note := range userNotes {
+
+		req := NoteDeleteRequest{
+			ID:          note.ID,
+			Board:       boardID,
+			DeleteStack: false,
+		}
+
+		if err := service.Delete(ctx, userID, req); err != nil {
+			span.RecordError(err)
+			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
+		}
+	}
+
+	return nil
 }
 
 func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {

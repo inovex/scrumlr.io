@@ -434,7 +434,7 @@ func run(ctx *cli.Context) error {
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
 	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 
-	userService := initializer.InitializeUserService(sessionService)
+	userService := initializer.InitializeUserService(sessionService, noteService)
 
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")

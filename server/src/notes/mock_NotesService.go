@@ -177,8 +177,8 @@ func (_c *MockNotesService_Create_Call) RunAndReturn(run func(ctx context.Contex
 }
 
 // Delete provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) Delete(ctx context.Context, user uuid.UUID, body NoteDeleteRequest) error {
-	ret := _mock.Called(ctx, user, body)
+func (_mock *MockNotesService) Delete(ctx context.Context, userID uuid.UUID, body NoteDeleteRequest) error {
+	ret := _mock.Called(ctx, userID, body)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
@@ -186,7 +186,7 @@ func (_mock *MockNotesService) Delete(ctx context.Context, user uuid.UUID, body 
 
 	var r0 error
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, NoteDeleteRequest) error); ok {
-		r0 = returnFunc(ctx, user, body)
+		r0 = returnFunc(ctx, userID, body)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -200,13 +200,13 @@ type MockNotesService_Delete_Call struct {
 
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
-//   - user uuid.UUID
+//   - userID uuid.UUID
 //   - body NoteDeleteRequest
-func (_e *MockNotesService_Expecter) Delete(ctx interface{}, user interface{}, body interface{}) *MockNotesService_Delete_Call {
-	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, user, body)}
+func (_e *MockNotesService_Expecter) Delete(ctx interface{}, userID interface{}, body interface{}) *MockNotesService_Delete_Call {
+	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, userID, body)}
 }
 
-func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, user uuid.UUID, body NoteDeleteRequest)) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, userID uuid.UUID, body NoteDeleteRequest)) *MockNotesService_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -234,7 +234,70 @@ func (_c *MockNotesService_Delete_Call) Return(err error) *MockNotesService_Dele
 	return _c
 }
 
-func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID, body NoteDeleteRequest) error) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(ctx context.Context, userID uuid.UUID, body NoteDeleteRequest) error) *MockNotesService_Delete_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteUserNotesFromBoard provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
+	ret := _mock.Called(ctx, userID, boardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUserNotesFromBoard")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, userID, boardID)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockNotesService_DeleteUserNotesFromBoard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteUserNotesFromBoard'
+type MockNotesService_DeleteUserNotesFromBoard_Call struct {
+	*mock.Call
+}
+
+// DeleteUserNotesFromBoard is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID uuid.UUID
+//   - boardID uuid.UUID
+func (_e *MockNotesService_Expecter) DeleteUserNotesFromBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesService_DeleteUserNotesFromBoard_Call {
+	return &MockNotesService_DeleteUserNotesFromBoard_Call{Call: _e.mock.On("DeleteUserNotesFromBoard", ctx, userID, boardID)}
+}
+
+func (_c *MockNotesService_DeleteUserNotesFromBoard_Call) Run(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID)) *MockNotesService_DeleteUserNotesFromBoard_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_DeleteUserNotesFromBoard_Call) Return(err error) *MockNotesService_DeleteUserNotesFromBoard_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockNotesService_DeleteUserNotesFromBoard_Call) RunAndReturn(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error) *MockNotesService_DeleteUserNotesFromBoard_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -386,6 +449,80 @@ func (_c *MockNotesService_GetAll_Call) Return(notes []*Note, err error) *MockNo
 }
 
 func (_c *MockNotesService_GetAll_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error)) *MockNotesService_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetByUserAndBoard provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error) {
+	ret := _mock.Called(ctx, userID, boardID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetByUserAndBoard")
+	}
+
+	var r0 []*Note
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) ([]*Note, error)); ok {
+		return returnFunc(ctx, userID, boardID)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) []*Note); ok {
+		r0 = returnFunc(ctx, userID, boardID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*Note)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, userID, boardID)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockNotesService_GetByUserAndBoard_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByUserAndBoard'
+type MockNotesService_GetByUserAndBoard_Call struct {
+	*mock.Call
+}
+
+// GetByUserAndBoard is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userID uuid.UUID
+//   - boardID uuid.UUID
+func (_e *MockNotesService_Expecter) GetByUserAndBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesService_GetByUserAndBoard_Call {
+	return &MockNotesService_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, userID, boardID)}
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) Run(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID)) *MockNotesService_GetByUserAndBoard_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) Return(notes []*Note, err error) *MockNotesService_GetByUserAndBoard_Call {
+	_c.Call.Return(notes, err)
+	return _c
+}
+
+func (_c *MockNotesService_GetByUserAndBoard_Call) RunAndReturn(run func(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error)) *MockNotesService_GetByUserAndBoard_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -785,8 +922,8 @@ func (_c *MockNotesService_ReleaseLock_Call) RunAndReturn(run func(ctx context.C
 }
 
 // Update provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) Update(ctx context.Context, user uuid.UUID, body NoteUpdateRequest) (*Note, error) {
-	ret := _mock.Called(ctx, user, body)
+func (_mock *MockNotesService) Update(ctx context.Context, userID uuid.UUID, body NoteUpdateRequest) (*Note, error) {
+	ret := _mock.Called(ctx, userID, body)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -795,17 +932,17 @@ func (_mock *MockNotesService) Update(ctx context.Context, user uuid.UUID, body 
 	var r0 *Note
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, NoteUpdateRequest) (*Note, error)); ok {
-		return returnFunc(ctx, user, body)
+		return returnFunc(ctx, userID, body)
 	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, NoteUpdateRequest) *Note); ok {
-		r0 = returnFunc(ctx, user, body)
+		r0 = returnFunc(ctx, userID, body)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Note)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, NoteUpdateRequest) error); ok {
-		r1 = returnFunc(ctx, user, body)
+		r1 = returnFunc(ctx, userID, body)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -819,13 +956,13 @@ type MockNotesService_Update_Call struct {
 
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
-//   - user uuid.UUID
+//   - userID uuid.UUID
 //   - body NoteUpdateRequest
-func (_e *MockNotesService_Expecter) Update(ctx interface{}, user interface{}, body interface{}) *MockNotesService_Update_Call {
-	return &MockNotesService_Update_Call{Call: _e.mock.On("Update", ctx, user, body)}
+func (_e *MockNotesService_Expecter) Update(ctx interface{}, userID interface{}, body interface{}) *MockNotesService_Update_Call {
+	return &MockNotesService_Update_Call{Call: _e.mock.On("Update", ctx, userID, body)}
 }
 
-func (_c *MockNotesService_Update_Call) Run(run func(ctx context.Context, user uuid.UUID, body NoteUpdateRequest)) *MockNotesService_Update_Call {
+func (_c *MockNotesService_Update_Call) Run(run func(ctx context.Context, userID uuid.UUID, body NoteUpdateRequest)) *MockNotesService_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -853,7 +990,7 @@ func (_c *MockNotesService_Update_Call) Return(note *Note, err error) *MockNotes
 	return _c
 }
 
-func (_c *MockNotesService_Update_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID, body NoteUpdateRequest) (*Note, error)) *MockNotesService_Update_Call {
+func (_c *MockNotesService_Update_Call) RunAndReturn(run func(ctx context.Context, userID uuid.UUID, body NoteUpdateRequest) (*Note, error)) *MockNotesService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
