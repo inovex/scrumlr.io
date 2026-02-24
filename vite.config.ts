@@ -25,6 +25,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
+    assetsDir: 'static',
   },
   test: {
     globals: true,
