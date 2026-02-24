@@ -62,6 +62,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
   const isValidDetails = isValidName && isValidDescription;
 
+  const hasInputChanged = () => !(localName === props.column.name && localDescription === props.column.description);
+
   // focus input upon entering edit mode
   useEffect(() => {
     if (props.mode === "edit") {
@@ -95,6 +97,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       cancelUpdate();
       return;
     }
+
+    if (!hasInputChanged()) return;
 
     const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {

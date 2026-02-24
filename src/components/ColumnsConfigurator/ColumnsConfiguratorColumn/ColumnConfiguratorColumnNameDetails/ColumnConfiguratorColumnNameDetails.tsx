@@ -35,12 +35,16 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const hasInputChanged = () => !(name === props.name && description === props.description);
+
   const cancelChanges = () => {
     props.setOpenState("closed");
     nameInputRef.current?.blur(); // leave input (or we can keep typing inside it)
   };
 
   const saveChanges = () => {
+    if (!hasInputChanged()) return;
+
     props.updateColumnTitle(name, description);
     // show visual feedback for 2s before displaying menu options again
     nameInputRef.current?.blur(); // leave input (or we can keep typing inside it)
