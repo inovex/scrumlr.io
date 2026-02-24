@@ -109,11 +109,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
-    // behaviour: do not save
-    // could also change it to only save if persisted is empty or always save,
-    // but this is streamlined with the template editor
-    cancelUpdate();
-    changeMode("view");
+    // behaviour: save on blur
+    // same behaviour with the template editor
+    updateColumnDetails();
   };
 
   useSubmitOnShortcut(inputRef, updateColumnDetails);

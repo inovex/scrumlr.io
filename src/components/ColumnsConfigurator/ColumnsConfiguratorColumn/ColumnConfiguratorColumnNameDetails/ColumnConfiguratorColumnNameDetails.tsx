@@ -50,11 +50,9 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     }, 2000);
   };
 
-  // if we leave the wrapper, reset and close
+  // if we leave the wrapper, also save and close
   const handleBlurNameWrapperContents = () => {
-    props.setOpenState("closed");
-    setName(props.name);
-    setDescription(props.description);
+    saveChanges();
   };
 
   const nameWrapperRef = useOnBlur<HTMLDivElement>(handleBlurNameWrapperContents);
