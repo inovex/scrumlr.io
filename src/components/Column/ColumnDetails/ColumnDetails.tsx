@@ -98,7 +98,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       return;
     }
 
-    if (!hasInputChanged()) return;
+    if (!hasInputChanged()) {
+      props.changeMode("view");
+      return;
+    }
 
     const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {

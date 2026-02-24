@@ -43,7 +43,10 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
   };
 
   const saveChanges = () => {
-    if (!hasInputChanged()) return;
+    if (!hasInputChanged()) {
+      props.setOpenState("closed");
+      return;
+    }
 
     props.updateColumnTitle(name, description);
     // show visual feedback for 2s before displaying menu options again
