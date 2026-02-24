@@ -60,10 +60,25 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
   });
 
+  it("should close without saving when there are no actual changes", () => {
+    jest.useFakeTimers();
+    const setOpenStateSpy = jest.fn();
+    const {container} = renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy});
+
+    const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
+    fireEvent.mouseDown(saveChangesButtonElement);
+
+    expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
+  });
+
   it("should set openState to visualFeedback, then to closed upon confirming changes", () => {
     jest.useFakeTimers();
     const setOpenStateSpy = jest.fn();
     const {container} = renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy});
+
+    // make sure to insert actual changes
+    const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
+    fireEvent.input(inputElement, {target: {value: "Custom Title"}});
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
     fireEvent.mouseDown(saveChangesButtonElement);
