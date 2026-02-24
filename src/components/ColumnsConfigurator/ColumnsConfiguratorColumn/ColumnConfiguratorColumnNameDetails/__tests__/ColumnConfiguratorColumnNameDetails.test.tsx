@@ -61,7 +61,6 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should close without saving when there are no actual changes", () => {
-    jest.useFakeTimers();
     const setOpenStateSpy = jest.fn();
     const {container} = renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy});
 
