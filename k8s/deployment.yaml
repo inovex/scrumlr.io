@@ -217,8 +217,9 @@ spec:
     - match: >-
         Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) &&
         (
-          PathPrefix(`/{p:(static|locales|login|board|new|legal|emoji-data)}`) ||
-          Path(`/{f:(timer_finished\.mp3|hotkeys\.pdf)}`)
+          PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) ||
+          PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/legal`) || PathPrefix(`/emoji-data`) ||
+          Path(`/timer_finished.mp3`) || Path(`/hotkeys.pdf`)
         )
       kind: Rule
       services:
