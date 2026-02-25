@@ -14,6 +14,7 @@ import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import Plausible from "plausible-tracker";
+import {HelmetProvider} from "react-helmet-async";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} from "./config";
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
@@ -58,13 +59,15 @@ root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
-        <Html />
-        <Suspense fallback={<LoadingScreen />}>
-          <Tooltip id="scrumlr-tooltip" />
-          <ToastContainer limit={2} />
-          <Router />
-          {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
-        </Suspense>
+        <HelmetProvider>
+          <Html />
+          <Suspense fallback={<LoadingScreen />}>
+            <Tooltip id="scrumlr-tooltip" />
+            <ToastContainer limit={2} />
+            <Router />
+            {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
+          </Suspense>
+        </HelmetProvider>
       </Provider>
     </I18nextProvider>
   </React.StrictMode>

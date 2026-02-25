@@ -252,5 +252,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       visible: true,
     },
   ],
+  dragLocks: {
+    lockedNotes: {},
+  },
   ...overwrite,
 });

@@ -35,7 +35,7 @@
   width: 36px;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .share-button {
     border: 2px solid styles.$blue--200;
     color: styles.$blue--200;

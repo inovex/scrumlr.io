@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .loading-screen {
     background-color: styles.$navy--600;
   }

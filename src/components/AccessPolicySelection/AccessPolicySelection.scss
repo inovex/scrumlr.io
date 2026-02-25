@@ -37,7 +37,7 @@
   box-shadow: 0 2px 6px 4px rgba(styles.$navy--900, 0.1);
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .access-policy__details {
     color: styles.$gray--000;
     background: styles.$navy--500;

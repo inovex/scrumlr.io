@@ -3,9 +3,14 @@ import {arrayMove, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
+import {getColorClassName} from "constants/colors";
 import {ReactNode, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
-import {editNote} from "store/features";
+import {editNote, broadcastNoteDragStart, broadcastNoteDragEnd} from "store/features";
+import {DragIndicatorPill} from "components/DragIndicatorPill";
+import "./DragLockIndicator.scss";
+import "./Sortable.scss";
 
 type SortableProps = {
   id: UniqueIdentifier;
@@ -46,15 +51,36 @@ export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], new
 export const Sortable = ({id, children, disabled, className, columnId, setItems}: SortableProps) => {
   const dispatch = useAppDispatch();
   const {collisions} = useDndContext();
+  const {t} = useTranslation();
+
+  // Check if this note is locked by another user
+  const {lockedNotes} = useAppSelector((state) => state.dragLocks);
+  const currentUserId = useAppSelector((state) => state.participants!.self!.user!.id);
+  const participants = useAppSelector((state) => state.participants!);
+
+  const draggingUserId = lockedNotes[id.toString()];
+  const isLockedByOther = draggingUserId && draggingUserId !== currentUserId;
+  const dragDisabled = Boolean(disabled || isLockedByOther);
+
+  // Get the user who is dragging this note
+  const findParticipantById = (userId: string) => participants.others?.find((p) => p.user!.id === userId) ?? (participants.self?.user!.id === userId ? participants.self : null);
+  const draggingUser = draggingUserId ? findParticipantById(draggingUserId) : null;
+
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
     data: {columnId, type: "note"},
-    disabled,
+    disabled: dragDisabled || undefined,
   });
 
   const combine = shouldCombine(id, items, newIndex, collisions, active);
 
   const globalNotes = useAppSelector((state) => state.notes);
+  const columns = useAppSelector((state) => state.columns);
+
+  // Get the column color for this note
+  const note = globalNotes.find((n) => n.id === id.toString());
+  const column = columns.find((c) => c.id === note?.position.column);
+  const noteColorClassName = column ? getColorClassName(column.color) : undefined;
 
   const topCollision = collisions?.at(0);
   /* const hasActive = !!active && items.includes(active.id.toString());
@@ -63,10 +89,16 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const [localItems, setLocalItems] = useState(items);
 
   useDndMonitor({
-    onDragStart: () => {
+    onDragStart: (event) => {
       setLocalItems(items);
+      if (event.active?.id === id) {
+        dispatch(broadcastNoteDragStart(id.toString()));
+      }
     },
     onDragEnd: (event: DragEndEvent) => {
+      if (event.active?.id === id) {
+        dispatch(broadcastNoteDragEnd(id.toString()));
+      }
       if (!columnId || !active) return;
 
       if (shouldStack(id, items, newIndex, collisions, active)) {
@@ -75,11 +107,11 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
         const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
         if (!maxNoteCollision) return;
 
-        const note = globalNotes.find((n) => n.id === maxNoteCollision.id.toString());
+        const targetNote = globalNotes.find((n) => n.id === maxNoteCollision.id.toString());
         const position = {
           stack: maxNoteCollision.id.toString(),
-          column: note?.position.column ?? columnId,
-          rank: note?.position.rank ?? 0,
+          column: targetNote?.position.column ?? columnId,
+          rank: targetNote?.position.rank ?? 0,
         };
 
         dispatch(
@@ -131,13 +163,30 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   return (
     <div
       ref={setNodeRef}
-      className={classNames(className, {shouldCombine: combine})}
+      className={classNames(className, "sortable", {
+        shouldCombine: combine,
+        "sortable--locked": isLockedByOther,
+        "sortable--dragging": isDragging,
+      })}
       {...attributes}
       {...listeners}
-      style={{transition, transform: CSS.Transform.toString(transform), opacity: isDragging ? 0.5 : 1, touchAction: "manipulation"}}
+      style={{
+        transition,
+        transform: CSS.Transform.toString(transform),
+      }}
       tabIndex={-1}
     >
       {children}
+      {isLockedByOther && draggingUser && (
+        <div className={classNames("drag-lock-indicator", noteColorClassName)}>
+          <DragIndicatorPill
+            userId={draggingUser.user?.id || ""}
+            userName={draggingUser.user?.name || "Someone"}
+            userAvatar={draggingUser.user?.avatar}
+            message={t("Note.isMovingThis", {user: draggingUser.user?.name || "Someone"})}
+          />
+        </div>
+      )}
     </div>
   );
 };

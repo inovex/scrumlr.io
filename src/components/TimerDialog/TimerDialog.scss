@@ -31,7 +31,7 @@
     }
   }
 
-  [theme="dark"] {
+  [data-theme="dark"] {
     #portal .timer-dialog::after {
       border-color: transparent transparent transparent styles.$navy--600;
     }
@@ -75,7 +75,7 @@
   font-size: styles.$text-size--medium;
   width: 20px;
 }
-[theme="dark"] .timer-dialog__time-label {
+[data-theme="dark"] .timer-dialog__time-label {
   color: white;
 }
 

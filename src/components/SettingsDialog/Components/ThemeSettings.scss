@@ -98,7 +98,7 @@
   flex: 0 0 auto;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .appearance-settings__theme-container {
     color: styles.$gray--000;
     background-color: styles.$navy--500;

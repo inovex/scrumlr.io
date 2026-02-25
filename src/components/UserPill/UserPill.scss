@@ -95,7 +95,7 @@ $size-mobile: 56px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .user-pill {
     background-color: styles.$navy--400;
   }

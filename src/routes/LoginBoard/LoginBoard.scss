@@ -205,7 +205,7 @@ $space--between-parts: styles.$spacing--xl;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .login-board__divider {
     border-color: styles.$gray--700;
     color: styles.$gray--700;

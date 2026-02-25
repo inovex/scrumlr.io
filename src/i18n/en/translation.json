@@ -142,6 +142,13 @@
     "deleteNoteButton": "Delete Note",
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
+    "deleteAccount": "Are you sure you want to delete your account?",
+    "deleteAccountText": "If you delete your account, all related data will also be permanently removed, including:",
+    "deleteAccountItems": "your own created templates \n your notes & votes on other boards",
+    "deleteAccountTextAfterItems": "This action cannot be undone.",
+    "deleteAccountCheck": "I understand and agree to the permanent deletion.",
+    "deleteAccountWarning": "You must confirm the deletion.",
+    "deleteAccountButton": "Delete Account",
     "banParticipant": "Are you sure you want to remove participant '{{user}}' from the session?",
     "unbanParticipant": "Are you sure you want to allow participant '{{user}}' to join the session again?",
     "warning": "This action cannot be undone.",
@@ -412,7 +419,8 @@
     "me": "Me",
     "you": "you",
     "userImageAlt": "media provided by {{user}}",
-    "edited": "edited"
+    "edited": "edited",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Previous note",
@@ -518,7 +526,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profile",
-    "UserName": "User Name"
+    "UserName": "User Name",
+    "deleteAccount": "Delete account"
   },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
@@ -551,7 +560,8 @@
     "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
-    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again.",
+    "deleteAccount": "Sorry, but we're having trouble deleting your account. Please try again."
   },
   "Validation": {
     "REQUIRED": "required",

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -32,16 +33,18 @@ type ServiceInitializer struct {
 	db          *bun.DB
 	broker      *realtime.Broker
 	checkOrigin bool
+	cache       *cache.Cache
 	client      *http.Client
 }
 
-func NewServiceInitializer(db *bun.DB, broker *realtime.Broker) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cache) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.clock = timeprovider.NewClock()
 	initializer.hash = hash.NewHashSha512()
 	initializer.db = db
 	initializer.broker = broker
 	initializer.checkOrigin = false
+	initializer.cache = cache
 	initializer.client = &http.Client{}
 
 	return *initializer
@@ -131,7 +134,7 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.broker)
+	notesService := notes.NewNotesService(notesDB, init.broker, init.cache)
 
 	return notesService
 }

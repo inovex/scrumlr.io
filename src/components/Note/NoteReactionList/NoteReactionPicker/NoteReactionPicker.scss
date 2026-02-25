@@ -63,7 +63,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-reaction-picker__root {
     background: styles.$navy--600;
   }
@@ -101,7 +101,7 @@
   background: styles.$gray--000;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-reaction-picker__picker-portal {
     background: styles.$navy--600;
   }

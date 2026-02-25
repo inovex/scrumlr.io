@@ -230,7 +230,7 @@ $icon-edge-gap--small: 2px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .button {
     &--primary {
       color: styles.$gray--000;
