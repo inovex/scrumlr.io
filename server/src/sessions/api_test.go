@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -21,9 +22,11 @@ import (
 type APISessionTestSuite struct {
 	suite.Suite
 	boardID     uuid.UUID
+	userID      uuid.UUID
 	mockService *MockSessionService
 	api         SessionApi
 	rr          *httptest.ResponseRecorder
+	nextOK      http.Handler
 }
 
 func TestAPISessionTestSuite(t *testing.T) {
@@ -32,9 +35,27 @@ func TestAPISessionTestSuite(t *testing.T) {
 
 func (suite *APISessionTestSuite) SetupTest() {
 	suite.boardID = uuid.New()
+	suite.userID = uuid.New()
 	suite.mockService = NewMockSessionService(suite.T())
 	suite.api = NewSessionApi(suite.mockService)
 	suite.rr = httptest.NewRecorder()
+	suite.nextOK = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+}
+
+func (suite *APISessionTestSuite) newRequest(method string, target string, body io.Reader) *technical_helper.TestRequestBuilder {
+	return technical_helper.NewTestRequestBuilder(method, target, body)
+}
+
+func (suite *APISessionTestSuite) withRouteParam(req *technical_helper.TestRequestBuilder, key string, value string) *technical_helper.TestRequestBuilder {
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add(key, value)
+	return req.AddToContext(chi.RouteCtxKey, rctx)
+}
+
+func (suite *APISessionTestSuite) assertStatus(expected int) {
+	suite.Equal(expected, suite.rr.Result().StatusCode)
 }
 
 func (suite *APISessionTestSuite) Test_GetBoardSessions_api() {
@@ -230,111 +251,74 @@ func (suite *APISessionTestSuite) Test_UpdateBoardSessions_ServiceError() {
 }
 
 func (suite *APISessionTestSuite) Test_BoardParticipantContext() {
-	userID := uuid.New()
-	sessionServiceMock := NewMockSessionService(suite.T())
-	sessionApi := NewSessionApi(sessionServiceMock)
-	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, userID)
+	req := suite.withRouteParam(
+		suite.newRequest("GET", "/", nil).AddToContext(identifiers.UserIdentifier, suite.userID),
+		"id",
+		suite.boardID.String(),
+	)
 
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", suite.boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	suite.mockService.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.mockService.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
 
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-	sessionServiceMock.EXPECT().Exists(mock.Anything, suite.boardID, userID).Return(true, nil)
-	sessionServiceMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, userID).Return(false, nil)
+	suite.api.BoardParticipantContext(suite.nextOK).ServeHTTP(suite.rr, req.Request())
 
-	sessionApi.BoardParticipantContext(next).ServeHTTP(suite.rr, req.Request())
-
-	suite.Equal(http.StatusOK, suite.rr.Result().StatusCode)
+	suite.assertStatus(http.StatusOK)
 }
 
 func (suite *APISessionTestSuite) Test_BoardParticipantContext_NoParticipant() {
-	userID := uuid.New()
-	sessionServiceMock := NewMockSessionService(suite.T())
-	sessionApi := NewSessionApi(sessionServiceMock)
-	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, userID)
+	req := suite.withRouteParam(
+		suite.newRequest("GET", "/", nil).AddToContext(identifiers.UserIdentifier, suite.userID),
+		"id",
+		suite.boardID.String(),
+	)
 
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", suite.boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	suite.mockService.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
 
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-	sessionServiceMock.EXPECT().Exists(mock.Anything, suite.boardID, userID).Return(false, nil)
+	suite.api.BoardParticipantContext(suite.nextOK).ServeHTTP(suite.rr, req.Request())
 
-	sessionApi.BoardParticipantContext(next).ServeHTTP(suite.rr, req.Request())
-
-	suite.Equal(http.StatusForbidden, suite.rr.Result().StatusCode)
+	suite.assertStatus(http.StatusForbidden)
 }
 
 func (suite *APISessionTestSuite) Test_BoardParticipantContext_ParticipantBanned() {
-	userID := uuid.New()
-	sessionServiceMock := NewMockSessionService(suite.T())
-	sessionApi := NewSessionApi(sessionServiceMock)
-	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, userID)
+	req := suite.withRouteParam(
+		suite.newRequest("GET", "/", nil).AddToContext(identifiers.UserIdentifier, suite.userID),
+		"id",
+		suite.boardID.String(),
+	)
 
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", suite.boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	suite.mockService.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.mockService.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
 
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-	sessionServiceMock.EXPECT().Exists(mock.Anything, suite.boardID, userID).Return(true, nil)
-	sessionServiceMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, userID).Return(true, nil)
+	suite.api.BoardParticipantContext(suite.nextOK).ServeHTTP(suite.rr, req.Request())
 
-	sessionApi.BoardParticipantContext(next).ServeHTTP(suite.rr, req.Request())
-
-	suite.Equal(http.StatusForbidden, suite.rr.Result().StatusCode)
+	suite.assertStatus(http.StatusForbidden)
 	suite.Error(common.ForbiddenError(errors.New("participant is currently banned from this session")))
 }
 
 func (suite *APISessionTestSuite) Test_BoardModeratorContext_Exists() {
-	userID := uuid.New()
-	sessionServiceMock := NewMockSessionService(suite.T())
-	sessionApi := NewSessionApi(sessionServiceMock)
-	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, userID)
+	req := suite.withRouteParam(
+		suite.newRequest("GET", "/", nil).AddToContext(identifiers.UserIdentifier, suite.userID),
+		"id",
+		suite.boardID.String(),
+	)
 
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", suite.boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	suite.mockService.EXPECT().ModeratorSessionExists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
 
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
+	suite.api.BoardModeratorContext(suite.nextOK).ServeHTTP(suite.rr, req.Request())
 
-	sessionServiceMock.EXPECT().ModeratorSessionExists(mock.Anything, suite.boardID, userID).Return(true, nil)
-
-	sessionApi.BoardModeratorContext(next).ServeHTTP(suite.rr, req.Request())
-
-	suite.Equal(http.StatusOK, suite.rr.Result().StatusCode)
+	suite.assertStatus(http.StatusOK)
 }
 
 func (suite *APISessionTestSuite) Test_BoardModeratorContext_DoesNotExists() {
-	userID := uuid.New()
-	sessionServiceMock := NewMockSessionService(suite.T())
-	sessionApi := NewSessionApi(sessionServiceMock)
-	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, userID)
+	req := suite.withRouteParam(
+		suite.newRequest("GET", "/", nil).AddToContext(identifiers.UserIdentifier, suite.userID),
+		"id",
+		suite.boardID.String(),
+	)
 
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", suite.boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	suite.mockService.EXPECT().ModeratorSessionExists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
 
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
+	suite.api.BoardModeratorContext(suite.nextOK).ServeHTTP(suite.rr, req.Request())
 
-	sessionServiceMock.EXPECT().ModeratorSessionExists(mock.Anything, suite.boardID, userID).Return(false, nil)
-
-	sessionApi.BoardModeratorContext(next).ServeHTTP(suite.rr, req.Request())
-
-	suite.Equal(http.StatusNotFound, suite.rr.Result().StatusCode)
+	suite.assertStatus(http.StatusNotFound)
 }
