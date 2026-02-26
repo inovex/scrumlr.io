@@ -10,7 +10,9 @@ import {ParticipantWithUser} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {Sortable} from "components/DragAndDrop/Sortable";
+import {ArrowRight} from "components/Icon";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
@@ -76,6 +78,7 @@ export const Note = (props: NoteProps) => {
   const isImage = useImageChecker(note?.text ?? "");
 
   const dimensions = useSize(noteRef);
+  const {isTextTruncated, textRef} = useTextOverflow<HTMLDivElement>(note?.text ?? "");
 
   const handleClick = () => {
     if (moderating && isModerator) {
@@ -121,8 +124,21 @@ export const Note = (props: NoteProps) => {
           </div>
         ) : (
           <main className={classNames("note__container")}>
-            <div data-clarity-mask="True" className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+            <div
+              ref={textRef}
+              data-clarity-mask="True"
+              className={classNames("note__text", {
+                "note__text--extended": !showNoteReactions,
+                "note__text--truncated": isTextTruncated.vertical,
+              })}
+            >
               <NoteTextContent text={note.text} truncate />
+              {isTextTruncated.vertical && (
+                <span className="note__show-more">
+                  {t("Note.showMore")}
+                  <ArrowRight className="note__show-more-icon" />
+                </span>
+              )}
             </div>
             {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>

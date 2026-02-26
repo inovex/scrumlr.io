@@ -132,17 +132,47 @@ $note__footer-gap: 42px;
 }
 
 .note__text {
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  max-height: calc(3 * #{styles.$line-height--medium});
+  position: relative;
+  word-break: break-word;
 
-  display: -webkit-box;
+  &--truncated::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 150px;
+    width: 100px;
+    height: styles.$line-height--medium;
+    background: linear-gradient(to right, transparent 0%, styles.$gray--000 100%);
+    pointer-events: none;
+  }
 }
 
 .note__marker-edited {
   color: styles.$gray--700;
   font-size: styles.$text--sm;
+}
+
+.note__show-more {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: styles.$text-size--medium;
+  line-height: styles.$line-height--medium;
+  font-weight: 700;
+  color: styles.$navy--400;
+  padding: 0 8px 0 32px;
+  background-color: styles.$gray--000;
+}
+
+.note__show-more-icon {
+  width: styles.$icon--small;
+  height: styles.$icon--small;
+  flex-shrink: 0;
 }
 
 .note__image-wrapper {
@@ -240,5 +270,14 @@ $note__footer-gap: 42px;
 
   .note__text {
     color: styles.$gray--000;
+
+    &--truncated::after {
+      background: linear-gradient(to right, transparent 0%, styles.$navy--400 100%);
+    }
+  }
+
+  .note__show-more {
+    color: styles.$gray--200;
+    background-color: styles.$navy--400;
   }
 }
