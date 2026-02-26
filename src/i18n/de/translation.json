@@ -434,7 +434,8 @@
     "you": "dir",
     "userImageAlt": "Von {{user}} hochgeladenes Bild",
     "edited": "bearbeitet",
-    "isMovingThis": "{{user}}"
+    "isMovingThis": "{{user}}",
+    "showMore": "Mehr anzeigen"
   },
   "StackView": {
     "prevNote": "Vorheriges Kärtchen",
