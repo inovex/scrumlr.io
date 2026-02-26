@@ -132,8 +132,11 @@ $note__footer-gap: 42px;
 }
 
 .note__text {
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  max-height: calc(3 * #{styles.$line-height--medium});
+  text-overflow: ellipsis;
+  display: -webkit-box;
   position: relative;
   word-break: break-word;
 
@@ -272,7 +275,7 @@ $note__footer-gap: 42px;
     color: styles.$gray--000;
 
     &--truncated::after {
-      background: linear-gradient(to right, transparent 0%, styles.$navy--400 100%);
+      background: linear-gradient(to right, transparent 0%, transparent 40%, styles.$navy--400 100%);
     }
   }
 

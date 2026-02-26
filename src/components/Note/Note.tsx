@@ -134,7 +134,7 @@ export const Note = (props: NoteProps) => {
             >
               <NoteTextContent text={note.text} truncate />
               {isTextTruncated.vertical && (
-                <span className="note__show-more">
+                <span className="note__show-more" role="button" aria-expanded="false" title={t("Note.showMore")}>
                   {t("Note.showMore")}
                   <ArrowRight className="note__show-more-icon" />
                 </span>
