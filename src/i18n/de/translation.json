@@ -15,6 +15,18 @@
     "uploadFile": "Datei hochladen oder hierher ziehen",
     "importNewBoard": "Jetzt importieren"
   },
+  "ImportBoard": {
+    "button": "JSON Importieren",
+    "title": "Sitzung Importieren",
+    "step1Title": "Datei Auswählen",
+    "dropzone": "Datei hochladen oder hierher ziehen",
+    "successPrefix": "Datei geladen:",
+    "errorInvalid": "Die Datei konnte nicht gelesen werden. Bitte verwenden Sie einen gültigen JSON-Export.",
+    "continue": "Weiter",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "openBoard": "Sitzung Öffnen"
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -164,6 +176,7 @@
   },
   "ExportBoardOption": {
     "title": "Sitzung exportieren",
+    "subtitle": "Beim Exportieren einer Sitzung werden keine Zugriffseinstellungen gespeichert. Zudem ist ein Sitzungs-Import ausschließlich mit einer JSON-Datei möglich.",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",

@@ -24,6 +24,7 @@ export const ExportBoard = () => {
     <div data-testid="export" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
         <h2 className="settings-dialog__header-text"> {t("ExportBoardOption.title")}</h2>
+        <p className="settings-dialog__header-subtitle">{t("ExportBoardOption.subtitle")}</p>
       </div>
 
       <div className="settings-dialog__group">

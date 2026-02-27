@@ -1,0 +1,210 @@
+@use "constants/styles";
+
+.import-board__portal {
+  backdrop-filter: blur(10px);
+  background: rgba(styles.$blue--500, 0.1);
+}
+
+.import-board__centering-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.import-board {
+  position: relative;
+  background: styles.$gray--000;
+  border-radius: styles.$rounded--medium;
+  box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  width: 540px;
+  max-width: 90vw;
+  margin: auto;
+}
+
+.import-board__close-button {
+  position: absolute;
+  top: styles.$spacing--base;
+  right: styles.$spacing--base;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.import-board__close-icon {
+  font-size: 28px;
+  color: styles.$navy--900;
+  line-height: 1;
+}
+
+.import-board__header {
+  padding: styles.$spacing--lg styles.$spacing--2xl styles.$spacing--md styles.$spacing--lg;
+  border-bottom: 1px solid styles.$gray--200;
+}
+
+.import-board__title {
+  margin: 0;
+  font-size: styles.$text--lg;
+  font-weight: 700;
+  color: styles.$navy--900;
+}
+
+.import-board__main {
+  padding: styles.$spacing--lg;
+  flex: 1;
+}
+
+.import-board__dropzone {
+  border: 2px dashed styles.$gray--300;
+  border-radius: styles.$rounded--small;
+  padding: styles.$spacing--2xl styles.$spacing--lg;
+  text-align: center;
+  transition:
+    border-color 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background-color: styles.$gray--100;
+
+  &:hover {
+    border-color: styles.$blue--400;
+    background-color: styles.$blue--50;
+  }
+
+  &--has-file {
+    border-color: styles.$green--500;
+    background-color: styles.$green--100;
+  }
+}
+
+.import-board__dropzone-text {
+  margin: 0 0 styles.$spacing--md 0;
+  color: styles.$gray--700;
+  font-size: styles.$text--base;
+}
+
+.import-board__file-input {
+  display: none;
+}
+
+.import-board__browse-button {
+  background: styles.$blue--500;
+  color: styles.$gray--000;
+  border: none;
+  padding: styles.$spacing--sm styles.$spacing--lg;
+  border-radius: styles.$rounded--small;
+  font-size: styles.$text--base;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background: styles.$blue--600;
+  }
+}
+
+.import-board__file-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: styles.$spacing--md;
+}
+
+.import-board__success-icon {
+  width: 48px;
+  height: 48px;
+  color: styles.$green--500;
+}
+
+.import-board__file-name {
+  color: styles.$navy--900;
+  font-weight: 500;
+  font-size: styles.$text--base;
+  word-break: break-all;
+}
+
+.import-board__error-message {
+  color: styles.$critical-carmine--light;
+  font-size: styles.$text--sm;
+  margin: styles.$spacing--md 0 0 0;
+}
+
+.import-board__footer {
+  display: flex;
+  gap: styles.$spacing--md;
+  justify-content: flex-end;
+  padding: styles.$spacing--lg;
+  border-top: 1px solid styles.$gray--200;
+}
+
+[data-theme="dark"] {
+  .import-board {
+    background: styles.$navy--400;
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--400, 0.26);
+  }
+
+  .import-board__close-icon {
+    color: styles.$gray--000;
+  }
+
+  .import-board__header {
+    border-bottom-color: styles.$navy--600;
+  }
+
+  .import-board__title {
+    color: styles.$gray--000;
+  }
+
+  .import-board__dropzone {
+    border-color: styles.$navy--600;
+    background-color: styles.$navy--500;
+
+    &:hover {
+      border-color: styles.$blue--400;
+      background-color: styles.$navy--600;
+    }
+
+    &--has-file {
+      border-color: styles.$green--400;
+      background-color: rgba(styles.$green--400, 0.15);
+    }
+  }
+
+  .import-board__dropzone-text {
+    color: styles.$gray--300;
+  }
+
+  .import-board__browse-button {
+    background: styles.$blue--400;
+
+    &:hover {
+      background: styles.$blue--300;
+    }
+  }
+
+  .import-board__file-name {
+    color: styles.$gray--000;
+  }
+
+  .import-board__footer {
+    border-top-color: styles.$navy--600;
+  }
+}

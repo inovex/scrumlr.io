@@ -15,6 +15,18 @@
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
   },
+  "ImportBoard": {
+    "button": "Import JSON",
+    "title": "Import Board",
+    "step1Title": "Select File",
+    "dropzone": "Upload file or drag here",
+    "successPrefix": "File loaded:",
+    "errorInvalid": "The file could not be read. Please use a valid JSON export.",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "back": "Back",
+    "openBoard": "Open Board"
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -163,6 +175,7 @@
   },
   "ExportBoardOption": {
     "title": "Export board",
+    "subtitle": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",

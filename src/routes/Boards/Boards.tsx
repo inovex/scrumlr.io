@@ -3,9 +3,12 @@ import {Outlet, useLocation, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
+import {Button} from "components/Button";
 import classNames from "classnames";
 import {getTemplates} from "store/features";
-import {useAppDispatch} from "store";
+import {useAppDispatch, useAppSelector} from "store";
+import {FileJson} from "components/Icon";
+import {ImportBoard} from "components/ImportBoard";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
@@ -25,6 +28,11 @@ export const Boards = () => {
   const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
+  const [showImportModal, setShowImportModal] = useState(false);
+
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
+  const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
 
   useEffect(() => {
     // first sub path after "/boards"
@@ -60,6 +68,20 @@ export const Boards = () => {
           {/* desktop search bar */}
           <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
+          {/* import button */}
+          {boardView === "templates" && (
+            <Button
+              className="boards__import-button"
+              variant="secondary"
+              onClick={() => setShowImportModal(true)}
+              disabled={!canCreateBoard}
+              title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : ""}
+            >
+              <FileJson className="boards__import-button-icon" />
+              {t("ImportBoard.button")}
+            </Button>
+          )}
+
           {/* mobile search bar */}
           <Input
             className="boards__mobile-search-bar"
@@ -71,6 +93,8 @@ export const Boards = () => {
           />
         </div>
       )}
+
+      {showImportModal && <ImportBoard onClose={() => setShowImportModal(false)} />}
 
       <main className={classNames("boards__outlet", {"boards__outlet--extended-top": viewType === "overview"})}>
         <Outlet context={{searchBarInput}} />

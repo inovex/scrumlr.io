@@ -13,6 +13,8 @@ import {Input} from "components/Input/Input";
 type AccessSettingsProps = {
   onCancel: () => void;
   onSelectSessionPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
+  cancelLabel?: string;
+  confirmLabel?: string;
 };
 
 // yes, this modal can also be abstracted / generalized if need be
@@ -83,10 +85,10 @@ export const AccessSettings = (props: AccessSettingsProps) => {
         </main>
         <footer className="access-settings__footer">
           <Button variant="secondary" onClick={props.onCancel}>
-            {t("Templates.AccessSettings.Buttons.cancel")}
+            {props.cancelLabel ?? t("Templates.AccessSettings.Buttons.cancel")}
           </Button>
           <Button variant="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
-            {t("Templates.AccessSettings.Buttons.start")}
+            {props.confirmLabel ?? t("Templates.AccessSettings.Buttons.start")}
           </Button>
         </footer>
       </div>
