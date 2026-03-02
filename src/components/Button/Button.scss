@@ -3,23 +3,30 @@
 
 $content-gap: 10px;
 $border-width: 2px;
-$height--default: 52px;
-$height--small: 46px;
+
+// button heights
+$button-height--default: 52px;
+$button-height--small: 46px;
 
 .button {
   all: unset;
+  font-family: inherit;
   outline: 0;
 
   display: flex;
+
+  &--full-width {
+    width: 100%;
+  }
+
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: $content-gap;
 
-  height: $height--default;
+  height: $button-height--default;
   box-sizing: border-box;
 
-  @include mixins.compensate-padding(styles.$spacing--base styles.$spacing--xl, $border-width);
   border-radius: styles.$rounded--full;
   border-width: $border-width;
   border-style: solid;
@@ -27,19 +34,31 @@ $height--small: 46px;
   font-size: styles.$text-size--medium;
   font-weight: 700;
 
-  &--with-icon {
-    @include mixins.compensate-padding(styles.$spacing--base 22px styles.$spacing--base 28px, $border-width);
-  }
+  @include mixins.compensate-padding(6px styles.$spacing--xl, $border-width);
 
   &--small {
-    height: $height--small;
+    height: $button-height--small;
     gap: styles.$spacing--xxs;
 
     @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
 
     &.button--with-icon {
-      // both have to be active to apply
-      @include mixins.compensate-padding(6px styles.$spacing--sm 6px styles.$spacing--base, $border-width);
+      padding: 0;
+    }
+  }
+
+  &--with-icon {
+    padding: 0;
+  }
+
+  &--icon-only {
+    width: $button-height--default;
+    min-width: unset;
+    padding: 0;
+    gap: 0;
+
+    &.button--small {
+      width: $button-height--small;
     }
   }
 
@@ -115,9 +134,103 @@ $height--small: 46px;
       color: styles.$gray--800;
     }
   }
+
+  &--ghost {
+    color: var(--accent-color--light);
+    background-color: styles.$gray--000;
+    border-color: transparent;
+
+    &:enabled:hover {
+      box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
+    }
+
+    &:focus {
+      border-color: var(--accent-color--300);
+    }
+
+    &:active {
+      background-color: styles.$gray--200;
+    }
+
+    &:disabled {
+      color: styles.$gray--800;
+      background-color: styles.$gray--200;
+    }
+  }
 }
 
-[theme="dark"] {
+// helper for spaced icon alignment
+$icon-edge-gap--default: 3px;
+$icon-edge-gap--small: 2px;
+
+.button__content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  gap: $content-gap;
+
+  @include mixins.compensate-padding(styles.$spacing--sm, $border-width);
+
+  &[data-align="spaced"] {
+    display: grid;
+    width: 100%;
+    padding: 0;
+    column-gap: $content-gap;
+
+    // default: icon on right
+    grid-template-columns: 1fr auto;
+    justify-items: center;
+    padding-left: styles.$spacing--xs;
+
+    .button__icon-background {
+      margin-right: $icon-edge-gap--default;
+
+      &[data-size="small"] {
+        margin-right: $icon-edge-gap--small;
+      }
+    }
+
+    //icon on left
+    &[data-pos="left"] {
+      grid-template-columns: auto 1fr;
+      padding-left: 0;
+      padding-right: styles.$spacing--xs;
+
+      .button__icon-background {
+        margin-right: 0;
+        margin-left: $icon-edge-gap--default;
+
+        &[data-size="small"] {
+          margin-left: $icon-edge-gap--small;
+        }
+      }
+    }
+  }
+}
+
+.button__icon-background {
+  --icon-size: #{$button-height--default * 0.85};
+
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &[data-size="small"] {
+    --icon-size: #{$button-height--small * 0.85};
+  }
+
+  &--embedded {
+    background-color: styles.$gray--000;
+  }
+}
+
+[data-theme="dark"] {
   .button {
     &--primary {
       color: styles.$gray--000;
@@ -169,6 +282,29 @@ $height--small: 46px;
 
       &:disabled {
         color: styles.$gray--800;
+      }
+    }
+
+    &--ghost {
+      color: var(--accent-color--dark);
+      background-color: styles.$navy--400;
+      border-color: transparent;
+
+      &:enabled:hover {
+        box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
+      }
+
+      &:focus {
+        border-color: var(--accent-color--300);
+      }
+
+      &:active {
+        background-color: styles.$navy--500;
+      }
+
+      &:disabled {
+        color: styles.$gray--800;
+        background-color: styles.$navy--800;
       }
     }
   }

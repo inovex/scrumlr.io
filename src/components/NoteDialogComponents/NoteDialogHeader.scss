@@ -55,7 +55,7 @@ $header-max-width: 80vw;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-dialog-header__name {
     border-bottom-color: var(--accent-color--dark);
   }

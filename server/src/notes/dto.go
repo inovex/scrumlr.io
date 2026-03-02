@@ -88,6 +88,12 @@ type NotePosition struct {
 	Rank int `json:"rank"`
 }
 
+type DragLock struct {
+	NoteID  uuid.UUID
+	UserID  uuid.UUID
+	BoardID uuid.UUID
+}
+
 func (n *Note) From(note DatabaseNote) *Note {
 	n.ID = note.ID
 	n.Author = note.Author

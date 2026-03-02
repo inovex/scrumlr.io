@@ -2,6 +2,7 @@ export * from "./auth";
 export * from "./board";
 export * from "./boardReactions";
 export * from "./columns";
+export * from "./dragLocks";
 export * from "./notes";
 export * from "./participants";
 export * from "./reactions";

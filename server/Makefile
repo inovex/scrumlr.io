@@ -41,6 +41,11 @@ postman: ## Run the postman tests
 	newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
 
 .ONESHELL:
+e2e: ## Run the Go e2e tests (requires server running on localhost:8080, or specify another base URL via BASE_URL env var)
+	cd e2e-tests
+	go test -v ./...
+
+.ONESHELL:
 format: ## Format all Go code
 	cd src
 	goimports -w .

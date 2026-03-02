@@ -182,7 +182,7 @@ $icon-size: styles.$icon--large;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .column-details__name {
     color: styles.$gray--000;
     border-bottom-color: var(--accent-color--dark);

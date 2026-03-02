@@ -46,7 +46,7 @@ tests:
         template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-backend:4.3.1
+          value: scrumlr/scrumlr-backend:4.6.0
         template: /backend/deployment.yaml
 
   - it: should set image tag
@@ -198,6 +198,20 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].resources
+        template: /backend/deployment.yaml
+
+  - it: should set default security contexts
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.seccompProfile.type
+          value: RuntimeDefault
+        template: /backend/deployment.yaml
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
         template: /backend/deployment.yaml
 
   - it: should set resources

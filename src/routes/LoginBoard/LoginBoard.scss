@@ -1,45 +1,141 @@
 @use "constants/styles";
 
-.login-board__dialog {
-  color: styles.$navy--900;
+$stan-height: 80%;
+
+// Space constant
+$space--between-parts: styles.$spacing--xl;
+
+.login-board {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-.login-board__illustration {
+.login-board__wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: styles.$spacing--md;
+}
+
+.login-board__card {
+  position: relative;
+  flex: 1;
+  max-width: 800px;
+  max-height: 920px;
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
+  padding: styles.$spacing--md;
+  padding-top: styles.$spacing--3xl;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & h1 {
+    font-size: styles.$line-height--large;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.login-board__stan-container {
+  position: absolute;
+  height: $stan-height;
+  top: 50%;
+  pointer-events: none;
+
+  &--left {
+    left: 0;
+    transform: translate(-100%, -50%);
+  }
+
+  &--right {
+    right: 0;
+    transform: translate(100%, -50%);
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--desktop) {
+  .login-board__stan-container {
+    display: none;
+  }
+}
+
+.login-board__stan {
+  height: 100%;
   display: none;
+
+  &--dark {
+    display: inline;
+  }
 }
 
 .login-board__form-wrapper {
-  padding: styles.$spacing--base;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: fit-content;
+  flex: 1;
 }
 
-.login-board__form a {
-  outline: none;
+.login-board__form {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: $space--between-parts;
+}
 
-  svg {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 2px;
-  }
+.login-board__providers-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space--between-parts;
 
-  &:focus-visible svg {
-    border: 1px solid styles.$blue--500;
+  & h1 {
+    font-size: styles.$text--lg;
   }
 }
 
-.login-board__logo {
-  margin-bottom: 1.5em;
-  transition: all 0.08s ease-out;
+.login-board__anonymous-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space--between-parts;
+}
 
-  &:hover {
-    filter: styles.$brighten--strongly;
-  }
+.login-board__anonymous-content {
+  display: flex;
+  flex-direction: column;
+  gap: $space--between-parts;
+}
+
+.login-board__features {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
+.login-board__feature {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--sm;
+}
+
+.login-board__feature-icon {
+  width: styles.$icon--medium;
+  height: styles.$icon--medium;
+  flex-shrink: 0;
 }
 
 .login-board__divider {
-  display: none;
-  margin-top: styles.$spacing--xl;
-  margin-bottom: styles.$spacing--base;
+  margin: 0;
+  margin-top: 1.25em; //needed to center the line with the text
+  margin-bottom: 0px;
+
   padding: 0;
   overflow: visible;
   border: none;
@@ -48,121 +144,68 @@
   text-align: center;
 }
 
-.login-providers + .login-board__divider {
-  display: block;
-}
-
 .login-board__divider::after {
   content: attr(data-label);
   display: inline-block;
   position: relative;
   top: -0.625em;
   padding: 0 styles.$spacing--base;
-  background: styles.$gray--000;
+  background: styles.$blue--50;
 }
 
-.login-board__fieldset {
-  border: none;
-  outline: none;
-  margin: 0;
-  padding: 0;
-}
-
-.login-board__fieldset-legend {
-  position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.login-board__checkbox {
-  opacity: 0;
-  z-index: -1;
-  height: 1px;
-  width: 1px;
-}
-
-.login-board__terms a {
-  color: styles.$pink--500;
-  font-weight: bold;
-  text-decoration: none;
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    filter: brightness(1.4);
-    text-decoration: underline;
-  }
-}
-
-.login-board__terms-label {
-  position: relative;
-  display: block;
-  padding-left: 1.5em;
-
-  a:focus-visible {
-    text-decoration: underline;
-  }
-}
-
-// checkbox border
-.login-board__checkbox + .login-board__terms-label::before {
-  display: block;
-  content: "";
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-  border: 1px solid styles.$blue--500;
-  background: styles.$gray--000;
+.login-board__anonymous-toggle {
+  text-align: center;
   cursor: pointer;
-  border-radius: 100%;
-  transition: all 0.16s ease-out;
+  text-decoration: underline;
+  font-weight: bold;
+  color: styles.$navy--700;
+  margin: 0;
+
+  &--active {
+    cursor: default;
+    text-decoration: none;
+    font-weight: normal;
+  }
 }
 
-.login-board__terms:hover .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.2);
+.login-board__input-wrapper {
+  display: flex;
+  gap: styles.$spacing--xs;
+  align-items: center;
+  width: 100%;
 }
 
-.login-board__checkbox:focus-visible + .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.4);
-}
-
-// checkbox checkmark
-.login-board__checkbox + .login-board__terms-label::after {
-  content: "";
-  width: 0.5em;
-  height: 0.5em;
-  position: absolute;
-  top: 0.25em;
-  left: 0.25em;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(styles.$blue--500, 0.75);
-  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
-  transform: scale(0);
-  border-radius: 100%;
-}
-
-.login-board__checkbox:checked + .login-board__terms-label::after {
-  transform: scale(1);
+.login-board__input-wrapper .input__root {
+  flex: 1;
 }
 
 .login-board__anonymous-login-button {
-  margin-top: 2em;
+  width: 100%;
 }
 
-[theme="dark"] {
-  .login-board__dialog {
-    color: styles.$gray--000;
-    background: #1a2232;
-  }
+.login-board__terms-label {
+  width: 0;
+  min-width: 100%;
+  position: relative;
+  bottom: auto;
+  padding-top: $space--between-parts;
+  padding-bottom: styles.$spacing--base;
+  text-align: center;
+  color: styles.$navy--700;
+  font-size: styles.$text--sm;
 
+  & a {
+    font-weight: 600;
+    text-decoration: underline;
+    color: inherit;
+
+    &:visited {
+      color: inherit;
+    }
+  }
+}
+
+[data-theme="dark"] {
   .login-board__divider {
     border-color: styles.$gray--700;
     color: styles.$gray--700;
@@ -170,66 +213,65 @@
 
   .login-board__divider::after {
     color: styles.$gray--700;
-    background: #1a2232;
+    background: styles.$navy--700;
   }
 
-  .login-board__terms:hover .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.2);
+  .login-board__card {
+    background-color: styles.$navy--700;
   }
 
-  .login-board__terms:focus-visible.login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba(styles.$gray--000, 0.4);
+  .login-board__providers-section {
+    color: styles.$gray--000;
   }
 
-  @media #{styles.$tablet} {
-    .login-board__form-wrapper,
-    .login-board__divider::after {
-      background: styles.$navy--600;
-    }
+  .login-board__anonymous-toggle {
+    color: styles.$gray--800;
+  }
+
+  .login-board__terms-label {
+    color: styles.$gray--000;
+  }
+
+  .login-board__stan--dark {
+    display: none;
+  }
+
+  .login-board__stan--light {
+    display: inline;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  .login-board__card {
+    width: 90%;
   }
 }
 
 @media #{styles.$tablet} {
-  .login-board {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    min-height: 100vh;
+  .login-board__card {
+    width: 90%;
   }
 
-  .login-board__dialog {
-    width: 100vw;
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    overflow: hidden;
+  .login-board__providers-section {
+    & h1 {
+      font-size: styles.$text--xl;
+    }
   }
+}
 
-  .login-board__illustration {
-    display: initial;
-    flex: 0 1 640px;
-
-    padding: 64px;
+@media screen and (min-width: calc(styles.$breakpoint--desktop + 1px)) {
+  // the 1px is needed here so that the hiding of stand and the adjustment of headder bar is in sync with the size adjustment
+  .login-board__card {
+    padding-bottom: styles.$spacing--base;
   }
 
   .login-board__form-wrapper {
-    height: 100vh;
-    padding: 64px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    flex: 1 1 100%;
-    box-shadow: 0 2px 16px 8px rgba(styles.$navy--900, 0.2);
-    overflow: auto;
+    width: 500px;
   }
 
-  .login-board__form {
-    max-width: 640px;
+  .login-board__providers-section {
+    & h1 {
+      font-size: styles.$text--xl;
+    }
   }
 }

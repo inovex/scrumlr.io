@@ -3,6 +3,7 @@ name: scrumlr
 services:
   nats:
     image: nats:2.12.3-alpine
+    command: ["-js"]
     ports:
       - "4222:4222"
     healthcheck:
@@ -36,7 +37,9 @@ services:
 
   scrumlr:
     build: ./src
-    command: ./main --disable-check-origin --insecure
+    command:
+      - "--disable-check-origin"
+      - "--insecure"
     ports:
       - "8080:8080"
     environment:

@@ -61,7 +61,7 @@ $header-menu-border-bottom-color: #efefef;
   background-color: styles.$gray--000;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .settings-option-button {
     background-color: styles.$navy--500;
   }
@@ -84,7 +84,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 }
 
-.settings-option-button-reverse-order {
+.settings-option-button--reverse-order {
   flex-direction: row-reverse;
   justify-content: flex-end;
 }

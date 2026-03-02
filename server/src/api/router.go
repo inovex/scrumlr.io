@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"scrumlr.io/server/websocket"
+
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -27,7 +29,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
-	"github.com/gorilla/websocket"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
@@ -43,7 +44,9 @@ import (
 type Server struct {
 	basePath string
 
-	realtime *realtime.Broker
+	realtime  *realtime.Broker
+	wsService websocket.WebSocketInterface
+	auth      auth.Auth
 
 	authRoutes    chi.Router
 	userRoutes    chi.Router
@@ -64,7 +67,7 @@ type Server struct {
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
-	upgrader websocket.Upgrader
+	checkOrigin bool
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
@@ -81,7 +84,8 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	authRoutes chi.Router,
+	wsService websocket.WebSocketInterface,
+	auth auth.Auth,
 
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
@@ -135,6 +139,7 @@ func New(
 	s := Server{
 		basePath:                         basePath,
 		realtime:                         rt,
+		wsService:                        wsService,
 		userRoutes:                       userRoutes,
 		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
@@ -159,12 +164,7 @@ func New(
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
-	}
-
-	// initialize websocket upgrader with origin check depending on options
-	s.upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		checkOrigin:                   checkOrigin,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -177,13 +177,6 @@ func New(
 		gothic.Store = store
 	}
 
-	if checkOrigin {
-		s.upgrader.CheckOrigin = nil
-	} else {
-		s.upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true
-		}
-	}
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)

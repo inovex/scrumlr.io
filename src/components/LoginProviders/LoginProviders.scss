@@ -1,36 +1,103 @@
 @use "constants/styles";
 
+//todo remove these later
+
+// button heights
+$button-height--default: 52px;
+$button-height--small: 46px;
+
 .login-providers {
   display: flex;
-  gap: 8px;
+  gap: styles.$spacing--xs;
+  width: 100%;
 }
 
-.login-providers__button:first-child {
+.primary-provider-wrapper {
   flex: 1 1 auto;
-}
-
-.login-providers__button:not(:first-child) {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 48px;
-  min-width: auto;
+  position: relative;
+  min-width: 0;
+}
+
+// Used by to calculate dynamic width of full-width buttons
+.ghost-measurer {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  z-index: -100;
+  font-family: inherit;
+  font-weight: 500;
+  padding: 0 20px;
+}
+
+// --- FULL MODE STYLES (Primary) ---
+
+.full-stack-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.overlay-icon-button {
+  pointer-events: none;
+  position: absolute;
+  left: 4px; // manual tweak to center it visually
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+
+  background-color: styles.$gray--000;
+  border-radius: 50%;
+  width: calc(#{$button-height--default} * 0.85);
+  height: calc(#{$button-height--default} * 0.85);
   padding: 0;
-  background: styles.$gray--300;
-  border-radius: styles.$rounded--full;
-}
-.login-providers__button:not(:first-child) > span {
-  display: none;
+  min-width: unset;
+  flex: 0 0 calc(#{$button-height--default} * 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.login-providers__button.text-button {
+  // Add padding to the left so text doesn't hide behind the white circle
+  padding-left: calc(#{$button-height--small} + #{styles.$spacing--xxs});
+  padding-right: styles.$spacing--xxs;
+  justify-content: center;
+}
+
+// --- GENERAL & SHARED STYLES ---
+
+.login-providers__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//Only the buttons inside the primary wrapper should expand, excluding the overlay icon button
+.primary-provider-wrapper .login-providers__button:not(.overlay-icon-button) {
+  width: 100%;
+}
+
+//Secondary buttons (direct children) should not grow
+.login-providers > .login-providers__button {
+  flex: 0 0 auto;
+  width: $button-height--default;
+  height: $button-height--default;
+}
+
+// Icon Sizing
 .login-providers__icon {
-  height: styles.$icon--medium;
-  width: styles.$icon--medium;
-  flex: 0 0 styles.$icon--medium;
+  height: styles.$icon--large;
+  width: styles.$icon--large;
+  flex: 0 0 styles.$icon--large;
 }
 
-[theme="dark"] {
-  .login-providers__button:not(:first-child) {
-    background: styles.$gray--700;
+.login-providers__button svg {
+  pointer-events: none;
+}
+
+[data-theme="dark"] {
+  .overlay-icon-button {
+    background-color: styles.$gray--000;
   }
 }

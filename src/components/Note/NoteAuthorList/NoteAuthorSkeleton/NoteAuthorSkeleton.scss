@@ -25,7 +25,7 @@ $skeleton-name-width: 92px;
   background-color: styles.$gray--300;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-author-skeleton__avatar {
     background-color: styles.$navy--600;
 

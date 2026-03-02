@@ -7,102 +7,18 @@ $side-padding--desktop: 14vw;
   width: 100vw;
   height: 100vh;
   background: linear-gradient(180deg, color.change(styles.$blue--500, $alpha: 0.075), color.change(styles.$gray--000, $alpha: 0.2));
+
+  display: flex;
+  flex-direction: column;
 }
 
-.boards__grid {
-  display: grid;
-
-  // split the central `1fr` column into `1fr 8fr 1fr`.
-  // this creates an 80% content area with 10% gutters on each side.
-  grid-template-columns:
-    $side-padding--desktop
-    [bleed-start] auto // logo
-    auto // left gutter for breakout
-    1fr
-    auto // right gutter for breakout
-    auto [bleed-end] // user
-    $side-padding--desktop;
-
-  grid-template-rows: styles.$spacing--lg 56px 48px 1fr styles.$spacing--lg;
-
-  grid-template-areas:
-    ".  .      .      .      .      .     ."
-    ".  logo   title  title  title  user  ."
-    ".  .      title  title  title  .     ."
-    ".  main   main   main   main   main  ."
-    ".  .      .      .      .      .     .";
-
-  height: 100vh;
-
-  &--view-type-overview {
-    grid-template-columns: $side-padding--desktop auto auto styles.$spacing--base 1fr auto auto $side-padding--desktop;
-    grid-template-rows: styles.$spacing--lg 56px 48px 64px 1fr styles.$spacing--lg; // using the actual component heights seems to yield the best results
-    grid-template-areas:
-      ".  .    .       .       .       .       .      ."
-      ".  logo title   title   title   title   user   ."
-      ".  .    title   title   title   title   .      ."
-      ".  .    switch  search  search  search  .      ."
-      ".  main main    main    main    main    main   ."
-      ".  .    .       .       .       .       .      .";
-  }
-}
-
-.boards__scrumlr-logo-container {
-  grid-area: logo;
-}
-
-.boards__user-pill {
-  grid-area: user;
-  justify-self: flex-end;
-}
-
-.boards__title {
-  grid-area: title;
-  align-self: center;
-  justify-self: center;
-
-  font-size: styles.$text--2xl;
-  font-weight: 700;
-  line-height: 48px; // TODO use constant
-  color: styles.$navy--900;
-}
-
-.boards__switch {
-  grid-area: switch;
+.boards__search-area {
+  padding: 0 $side-padding--desktop;
+  margin-bottom: styles.$spacing--xl;
 }
 
 .boards__search-bar {
-  grid-area: search;
   width: 100%;
-}
-
-.boards__search-button {
-  all: unset;
-  display: none;
-
-  grid-area: search;
-
-  cursor: pointer;
-}
-
-.boards__search-button-icon-container {
-  width: styles.$icon--large;
-  height: styles.$icon--large;
-  padding: styles.$spacing--sm;
-  border-radius: 100%;
-
-  color: styles.$navy--600;
-  background-color: styles.$gray--000;
-
-  &--active {
-    color: styles.$gray--000;
-    background-color: styles.$navy--600;
-  }
-}
-
-.boards--search-button-logo {
-  width: styles.$icon--large;
-  height: styles.$icon--large;
 }
 
 .boards__mobile-search-bar {
@@ -110,79 +26,31 @@ $side-padding--desktop: 14vw;
 }
 
 .boards__outlet {
-  grid-area: main;
+  flex: 1;
   display: flex;
   justify-content: stretch;
-
+  padding: 0 $side-padding--desktop;
   overflow-y: auto;
 
   &--extended-top {
-    margin-top: styles.$spacing--xl;
+    margin-top: 0;
   }
 }
 
 @media (max-width: styles.$breakpoint--desktop) {
-  .boards__grid {
-    grid-template-columns: styles.$spacing--2xl auto auto styles.$spacing--base 1fr auto auto styles.$spacing--2xl;
-    grid-template-areas:
-      ".  .      .       .       .       .       .      ."
-      ".  logo   title   title   title   title   user   ."
-      ".  .      title   title   title   title   .      ."
-      ".  search search  search  search  search  search ."
-      ".  main   main    main    main    main    main   ."
-      ".  .      .       .       .       .       .      .";
+  .boards__search-area {
+    padding: 0 styles.$spacing--2xl;
+  }
 
-    &--view-type-edit {
-      grid-template-rows: styles.$spacing--lg 56px 48px 1fr styles.$spacing--lg;
-      grid-template-columns: styles.$spacing--2xl auto 1fr auto styles.$spacing--2xl;
-      grid-template-areas:
-        ".  .      .      .     ."
-        ".  logo   title  user  ."
-        ".  .      title  .     ."
-        ".  main   main   main  ."
-        ".  .      .      .     .";
-    }
+  .boards__outlet {
+    padding: 0 styles.$spacing--2xl;
   }
 }
 
 @media screen and (max-width: styles.$breakpoint--smartphone) {
-  .boards__grid {
-    // stretch main to full width
-    grid-template-columns: styles.$spacing--md auto auto 1fr auto auto styles.$spacing--md;
-    // adds a row where the mobile search bar resides,
-    grid-template-rows: styles.$spacing--md 56px styles.$spacing--sm 32px styles.$spacing--md 57px auto 1fr;
-    grid-template-areas:
-      ".    .        .       .       .       .        ."
-      ".    logo     .       .       .       user     ."
-      ".    .        .       .       .       .        ."
-      ".    title    title   title   title   title    ."
-      ".    .        .       .       .       .        ."
-      ".    search2  search2 search2 search2 search2  ."
-      ".    .        .       .       .       .        ."
-      "main main     main    main    main    main     main";
-
-    &--view-type-edit {
-      grid-template-columns: styles.$spacing--md auto auto 1fr auto auto styles.$spacing--md;
-      grid-template-rows: styles.$spacing--md 56px styles.$spacing--sm 32px styles.$spacing--md 1fr styles.$spacing--md;
-      grid-template-areas:
-        ".    .        .       .       .       .        ."
-        ".    logo     .       .       .       user     ."
-        ".    .        .       .       .       .        ."
-        ".    title    title   title   title   title    ."
-        ".    .        .       .       .       .        ."
-        ".    main     main    main    main    main     ."
-        ".    .        .       .       .       .        .";
-    }
-  }
-
-  .boards__title {
-    font-size: styles.$text--lg;
-    line-height: 32px; // TODO use constant
-  }
-
-  .boards__search-button {
-    display: inline-block;
-    margin-right: styles.$spacing--sm;
+  .boards__search-area {
+    padding: 0 styles.$spacing--md;
+    margin-bottom: styles.$spacing--md;
   }
 
   .boards__search-bar {
@@ -191,26 +59,19 @@ $side-padding--desktop: 14vw;
 
   .boards__mobile-search-bar {
     display: flex;
-    grid-area: search2;
+  }
+
+  .boards__outlet {
+    padding: 0;
+
+    &--extended-top {
+      margin-top: styles.$spacing--sm;
+    }
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .boards {
     background: linear-gradient(161deg, styles.$navy--600 16.78%, styles.$navy--700 49.35%, styles.$navy--800 81.65%);
-  }
-
-  .boards__title {
-    color: styles.$gray--000;
-  }
-
-  .boards__search-button-icon-container {
-    color: styles.$gray--000;
-    background-color: styles.$navy--400;
-
-    &--active {
-      color: styles.$navy--400;
-      background-color: styles.$gray--000;
-    }
   }
 }

@@ -17,7 +17,7 @@
     41.8px 41.8px 33.4px rgba(0, 0, 0, 0.05),
     100px 100px 80px rgba(0, 0, 0, 0.07);
 }
-[theme="dark"] .dialog {
+[data-theme="dark"] .dialog {
   background: styles.$navy--600;
 }
 
@@ -47,7 +47,7 @@
   padding-bottom: 8px;
   margin: 0;
 }
-[theme="dark"] {
+[data-theme="dark"] {
   .dialog__header-text {
     color: styles.$gray--000;
   }
@@ -113,7 +113,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .dialog__button {
     background-color: styles.$navy--500;
   }

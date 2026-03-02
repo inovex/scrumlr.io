@@ -1,7 +1,7 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SERVER_WEBSOCKET_URL} from "config";
-import {ServerEvent} from "types/websocket";
+import {ServerEvent, ClientMessage} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
@@ -16,6 +16,7 @@ import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
+import {noteDragStarted, noteDragEnded} from "../dragLocks";
 import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
 
@@ -25,6 +26,13 @@ const redirectToBoardDeletedPage = () => {
 };
 
 let socket: Socket | null = null;
+
+// Function to send WebSocket messages using sockette's json method
+export const sendWebSocketMessage = (message: ClientMessage) => {
+  if (socket) {
+    socket.json(message);
+  }
+};
 
 // creates a board from a template and returns board id if successful
 export const createBoardFromTemplate = createAsyncThunk<
@@ -194,6 +202,14 @@ export const permittedBoardAccess = createAsyncThunk<
       if (message.type === "BOARD_REACTION_ADDED") {
         dispatch(addedBoardReaction(message.data));
         setTimeout(() => dispatch(removeBoardReaction(message.data.id)), 5000);
+      }
+      if (message.type === "NOTE_DRAG_START") {
+        const {noteId, userId} = message.data;
+        dispatch(noteDragStarted({noteId, userId}));
+      }
+      if (message.type === "NOTE_DRAG_END") {
+        const {noteId, userId} = message.data;
+        dispatch(noteDragEnded({noteId, userId}));
       }
     },
   });

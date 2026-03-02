@@ -5,18 +5,17 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/initialize/testDbTemplates"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
 )
 
 type DatabaseReactionTestSuite struct {
 	suite.Suite
-	container *postgres.PostgresContainer
 	db        *bun.DB
 	users     map[string]TestUser
 	boards    map[string]TestBoard
@@ -29,17 +28,15 @@ func TestDatabaseReactionTestSuite(t *testing.T) {
 	suite.Run(t, new(DatabaseReactionTestSuite))
 }
 
-func (suite *DatabaseReactionTestSuite) SetupSuite() {
-	container, bun := initialize.StartTestDatabase()
-
-	suite.SeedDatabase(bun)
-
-	suite.container = container
-	suite.db = bun
-}
-
-func (suite *DatabaseReactionTestSuite) TearDownSuite() {
-	initialize.StopTestDatabase(suite.container)
+func (suite *DatabaseReactionTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "sessions_database_test_data",
+			Func: suite.seedData,
+		},
+	)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction() {
@@ -218,7 +215,7 @@ type TestNote struct {
 	text     string
 }
 
-func (suite *DatabaseReactionTestSuite) SeedDatabase(db *bun.DB) {
+func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	// test users
 	suite.users = make(map[string]TestUser, 2)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Anonymous}
@@ -255,35 +252,35 @@ func (suite *DatabaseReactionTestSuite) SeedDatabase(db *bun.DB) {
 	suite.reactions["Get3"] = DatabaseReaction{ID: uuid.New(), Note: suite.notes["Read2"].id, User: suite.users["Santa"].id, ReactionType: Heart}
 
 	for _, user := range suite.users {
-		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
+		err := testDbTemplates.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, note := range suite.notes {
-		err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
+		err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, reaction := range suite.reactions {
-		err := initialize.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType))
+		err := testDbTemplates.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType))
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}

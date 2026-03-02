@@ -116,7 +116,7 @@ $min-lines: 3;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .note-dialog__note-content-text {
     color: styles.$gray--000;
   }

@@ -43,7 +43,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   color: styles.$gray--000;
   background-color: var(--accent-color--light);
 }
-[theme="dark"] .settings-dialog__feedback-option > label {
+[data-theme="dark"] .settings-dialog__feedback-option > label {
   color: styles.$gray--000;
   background-color: styles.$navy--500;
   &:hover {
@@ -98,7 +98,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   height: 80px;
   padding: 0;
 }
-[theme="dark"] .feedback-form__feedback-textarea {
+[data-theme="dark"] .feedback-form__feedback-textarea {
   color: white;
 }
 
@@ -109,7 +109,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   width: 100%;
   padding: 0;
 }
-[theme="dark"] .feedback-form__contact-input {
+[data-theme="dark"] .feedback-form__contact-input {
   color: styles.$gray--000;
 }
 

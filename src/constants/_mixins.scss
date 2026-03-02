@@ -6,7 +6,7 @@
 
 // tooltip
 @mixin tooltip {
-  z-index: styles.$request-z-index;
+  z-index: styles.$tooltip-z-index;
   border-radius: styles.$rounded--large;
   max-width: 80%;
   font-size: styles.$text--sm;
@@ -64,7 +64,7 @@
   }
 
   // ampersand to correctly scope the rule
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
   }
 }
@@ -100,7 +100,7 @@
     }
   }
 
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     &:focus,
     &:focus-within {
       border: $border-size solid colors.$blue--400;
@@ -124,7 +124,7 @@
     @include compensate-padding($padding, $border-size);
   }
 
-  [theme="dark"] & {
+  [data-theme="dark"] & {
     border-color: colors.$critical-carmine--dark;
   }
 }

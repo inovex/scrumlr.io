@@ -62,7 +62,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   .vote-display__progress-bar {
     background-color: $vote-display__progress-bar-color--depleted-light;
   }
-  [theme="dark"] .vote-display__progress-bar {
+  [data-theme="dark"] .vote-display__progress-bar {
     background-color: $vote-display__progress-bar-color--depleted-dark;
   }
 }
@@ -139,7 +139,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .vote-display {
     color: styles.$gray--000;
     background-color: styles.$navy--500;

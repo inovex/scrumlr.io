@@ -283,10 +283,22 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
           data-cy="template-editor__button--create"
           disabled=""
         >
-          Create template
-          <svg>
-            plus.svg
-          </svg>
+          <div
+            class="button__content-wrapper"
+            data-align="compact"
+            data-pos="right"
+            data-size="default"
+          >
+            Create template
+            <div
+              class="button__icon-background button__icon-background--default"
+              data-size="default"
+            >
+              <svg>
+                plus.svg
+              </svg>
+            </div>
+          </div>
         </button>
       </div>
     </section>
@@ -590,10 +602,22 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
           class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
           data-cy="template-editor__button--create"
         >
-          Save
-          <svg>
-            plus.svg
-          </svg>
+          <div
+            class="button__content-wrapper"
+            data-align="compact"
+            data-pos="right"
+            data-size="default"
+          >
+            Save
+            <div
+              class="button__icon-background button__icon-background--default"
+              data-size="default"
+            >
+              <svg>
+                plus.svg
+              </svg>
+            </div>
+          </div>
         </button>
       </div>
     </section>
