@@ -44,7 +44,7 @@ spec:
             - name: SCRUMLR_SERVER_PORT
               value: "8080"
             - name: SCRUMLR_LOG_LEVEL
-              value: "INFO"
+              value: "DEBUG"
             - name: SCRUMLR_API_HOST
               value: "https://PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
             - name: SCRUMLR_SERVER_NATS_URL
@@ -235,7 +235,7 @@ metadata:
 spec:
   secretName: scrumlr-development-certificate-PR_NUMBER
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-production
     kind: ClusterIssuer
   commonName: PR_NUMBER.development.scrumlr.fra.ics.inovex.io
   dnsNames:

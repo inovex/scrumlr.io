@@ -18,7 +18,7 @@ import (
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.get")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.session_requests.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -59,7 +59,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 }
 
 func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.get.all")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.session_requests.api.get.all")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -80,7 +80,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.update")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.session_requests.api.update")
 	defer span.End()
 	log := logger.FromContext(ctx)
 

@@ -15,7 +15,7 @@ import (
 
 // addVote adds a vote to the currently open voting session
 func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.votes.api.add")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.votes.api.add")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -49,7 +49,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 // removeVote removes a vote
 func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.votes.api.remove")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.votes.api.remove")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -82,7 +82,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.votes.api.get")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.votes.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 

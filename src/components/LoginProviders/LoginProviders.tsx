@@ -25,7 +25,7 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
   const ghostRef = useRef<HTMLSpanElement>(null);
 
   const signIn = (provider: string) => async () => {
-    await Auth.signInWithAuthProvider(provider, originURL);
+    await Auth.signInWithAuthProvider(provider, cleanUrl);
   };
 
   const providerConfig: Record<string, ProviderConfigEntry> = {

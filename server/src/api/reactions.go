@@ -14,10 +14,10 @@ import (
 	"scrumlr.io/server/reactions"
 )
 
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+var Tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.get")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.reactions.api.get")
 	defer span.End()
 
 	id := ctx.Value(identifiers.ReactionIdentifier).(uuid.UUID)
@@ -35,7 +35,7 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.get.all")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.reactions.api.get.all")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -53,7 +53,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.create")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.reactions.api.create")
 	defer span.End()
 
 	log := logger.FromContext(ctx)
@@ -86,7 +86,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.remove")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.reactions.api.remove")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -106,7 +106,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.update")
+	ctx, span := Tracer.Start(r.Context(), "scrumlr.reactions.api.update")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
