@@ -4,10 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"scrumlr.io/server/identifiers"
-
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
 

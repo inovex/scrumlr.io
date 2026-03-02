@@ -33,7 +33,6 @@ func Test_NewAuthService(t *testing.T) {
 	assert.True(t, service.Exists(common.Microsoft))
 	assert.True(t, service.Exists(common.TypeOIDC))
 	assert.True(t, service.Exists(common.GitHub))
-
 	assert.False(t, service.Exists(common.Apple))
 
 	config := service.GetConfig("GOOGLE")
