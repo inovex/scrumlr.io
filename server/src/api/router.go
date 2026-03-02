@@ -5,6 +5,10 @@ import (
   "os"
   "time"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/websocket"
+
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -39,6 +43,8 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 )
+
+var Tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 type Server struct {
 	basePath string
@@ -84,7 +90,6 @@ func New(
 	rt *realtime.Broker,
 	wsService websocket.WebSocketInterface,
 	authRoutes chi.Router,
-
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 
