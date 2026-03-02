@@ -1,8 +1,6 @@
 import {Select} from "components/Select/Select";
 import {SelectOption} from "components/Select/SelectOption/SelectOption";
-import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
-import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
-import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
+import {OpenIcon as GlobeIcon, LockClosedIcon, KeyProtectedIcon} from "components/Icon";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
@@ -62,12 +60,12 @@ export const AccessSettings = (props: AccessSettingsProps) => {
             <SelectOption
               label={t("Templates.AccessSettings.Options.By_Invite.title")}
               description={t("Templates.AccessSettings.Options.By_Invite.description")}
-              icon={<LockIcon />}
+              icon={<LockClosedIcon />}
             />
             <SelectOption
               label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
               description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
-              icon={<KeyIcon />}
+              icon={<KeyProtectedIcon />}
             >
               <Input
                 type="password"

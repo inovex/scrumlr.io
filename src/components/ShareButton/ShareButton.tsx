@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
-import {Share} from "components/Icon";
+import {ShareIcon} from "components/Icon";
 import "./ShareButton.scss";
 
 export const ShareButton = () => {
@@ -16,7 +16,7 @@ export const ShareButton = () => {
       }}
       title={t("ShareQrCodeOption.title")}
     >
-      <Share />
+      <ShareIcon />
     </button>
   );
 };

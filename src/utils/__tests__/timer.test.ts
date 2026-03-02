@@ -2,12 +2,12 @@ import {Timer} from "utils/timer";
 
 describe("Timer", () => {
   beforeAll(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date(2022, 0, 1, 13, 0, 0));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2022, 0, 1, 13, 0, 0));
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   describe("calculateTimeLeft", () => {

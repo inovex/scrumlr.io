@@ -8,8 +8,8 @@ import {act, fireEvent} from "@testing-library/react";
 const renderRecommendedTemplateCard = (
   templateId: string,
   {
-    onSelectTemplate = jest.fn(),
-    onToggleFavourite = jest.fn(),
+    onSelectTemplate = vi.fn(),
+    onToggleFavourite = vi.fn(),
   }: {
     onSelectTemplate?: (template: TemplateWithColumns) => void;
     onToggleFavourite?: (templateId: string, favourite: boolean) => void;
@@ -41,10 +41,10 @@ const renderRecommendedTemplateCard = (
 const renderCustomTemplateCard = (
   templateId: string,
   {
-    onSelectTemplate = jest.fn(),
-    onDeleteTemplate = jest.fn(),
-    onToggleFavourite = jest.fn(),
-    onNavigateToEdit = jest.fn(),
+    onSelectTemplate = vi.fn(),
+    onDeleteTemplate = vi.fn(),
+    onToggleFavourite = vi.fn(),
+    onNavigateToEdit = vi.fn(),
   }: {
     onSelectTemplate?: (template: TemplateWithColumns) => void;
     onDeleteTemplate?: (templateId: string) => void;
@@ -97,7 +97,7 @@ describe("TemplateCard", () => {
   });
 
   it("should call back on select", () => {
-    const onSelectTemplate: (template: TemplateWithColumns) => void = jest.fn();
+    const onSelectTemplate: (template: TemplateWithColumns) => void = vi.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onSelectTemplate});
     const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
@@ -108,7 +108,7 @@ describe("TemplateCard", () => {
   });
 
   it("should favourite template", () => {
-    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = vi.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onToggleFavourite});
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
@@ -119,7 +119,7 @@ describe("TemplateCard", () => {
   });
 
   it("should un-favourite template", () => {
-    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = vi.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-2", {onToggleFavourite});
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
@@ -130,7 +130,7 @@ describe("TemplateCard", () => {
   });
 
   it("should favourite template (recommended)", () => {
-    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = vi.fn();
 
     const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onToggleFavourite}, false);
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
@@ -141,7 +141,7 @@ describe("TemplateCard", () => {
   });
 
   it("should un-favourite template (recommended)", () => {
-    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = vi.fn();
 
     const {container} = renderRecommendedTemplateCard("test-templates-id-2", {onToggleFavourite}, true);
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
@@ -152,7 +152,7 @@ describe("TemplateCard", () => {
   });
 
   it("should call back on delete", () => {
-    const onDeleteTemplate: (templateId: string) => void = jest.fn();
+    const onDeleteTemplate: (templateId: string) => void = vi.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onDeleteTemplate});
 
@@ -163,7 +163,7 @@ describe("TemplateCard", () => {
   });
 
   it("should call back on edit", () => {
-    const onNavigateToEdit: (templateId: string) => void = jest.fn();
+    const onNavigateToEdit: (templateId: string) => void = vi.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onNavigateToEdit});
 
@@ -181,7 +181,7 @@ describe("TemplateCard", () => {
     });
 
     it("should disable start button when template card is disabled", () => {
-      const onSelectTemplate = jest.fn();
+      const onSelectTemplate = vi.fn();
       const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
 
       const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
@@ -197,7 +197,7 @@ describe("TemplateCard", () => {
     });
 
     it("should not call onSelectTemplate when disabled start button is clicked", () => {
-      const onSelectTemplate = jest.fn();
+      const onSelectTemplate = vi.fn();
       const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
 
       const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
@@ -216,7 +216,7 @@ describe("TemplateCard", () => {
     });
 
     it("should still allow favourite functionality when template card is disabled", () => {
-      const onToggleFavourite = jest.fn();
+      const onToggleFavourite = vi.fn();
       const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onToggleFavourite}, false, true, "Sign in to create boards");
 
       const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
@@ -226,7 +226,7 @@ describe("TemplateCard", () => {
     });
 
     it("should work with custom template cards when disabled", () => {
-      const onSelectTemplate = jest.fn();
+      const onSelectTemplate = vi.fn();
       const {container} = renderCustomTemplateCard("test-templates-id-1", {onSelectTemplate}, true, "Custom disabled reason");
 
       expect(container.querySelector(".template-card")).toHaveClass("template-card--disabled");

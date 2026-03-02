@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ColumnsMiniView should match render of template 1 1`] = `
+exports[`ColumnsMiniView > should match render of template 1 1`] = `
 <div>
   <div
     class="test-columns-mini-view columns-mini-view"
@@ -27,7 +27,7 @@ exports[`ColumnsMiniView should match render of template 1 1`] = `
 </div>
 `;
 
-exports[`ColumnsMiniView should match render of template 2 1`] = `
+exports[`ColumnsMiniView > should match render of template 2 1`] = `
 <div>
   <div
     class="test-columns-mini-view columns-mini-view"

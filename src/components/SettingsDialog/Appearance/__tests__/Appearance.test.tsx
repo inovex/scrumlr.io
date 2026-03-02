@@ -16,14 +16,14 @@ const createAppearance = () => (
 
 describe("Appearance", () => {
   test("should render all Settings correctly with Snowfall", () => {
-    jest.useFakeTimers().setSystemTime(new Date(2025, 11, 24)); // Christmas!
+    vi.useFakeTimers().setSystemTime(new Date(2025, 11, 24)); // Christmas!
     const {container} = render(createAppearance());
     expect(container.firstChild).toMatchSnapshot();
     expect(within(container.getElementsByClassName("appearance-container")[0] as HTMLDivElement).queryByLabelText(t("Appearance.showSnowfall"))).toBeInTheDocument();
   });
 
   test("should render all Settings correctly without Snowfall", () => {
-    jest.useFakeTimers().setSystemTime(new Date(2025, 5, 7)); // my birthday!
+    vi.useFakeTimers().setSystemTime(new Date(2025, 5, 7)); // my birthday!
     const {container} = render(createAppearance());
     expect(container.firstChild).toMatchSnapshot();
     expect(within(container.getElementsByClassName("appearance-container")[0] as HTMLDivElement).queryByLabelText(t("Appearance.showSnowfall"))).not.toBeInTheDocument();

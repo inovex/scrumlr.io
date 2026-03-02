@@ -2,11 +2,7 @@ import {Column, createColumn, deleteColumnOptimistically, editColumn} from "stor
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
-import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
-import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
-import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
-import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
+import {ArrowDownIcon, ThreeDotsIcon as SettingsIcon, CheckDoneIcon, CloseIcon, EditIcon} from "components/Icon";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";
@@ -235,7 +231,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
+              <ArrowDownIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
             </button>
           )}
         </>

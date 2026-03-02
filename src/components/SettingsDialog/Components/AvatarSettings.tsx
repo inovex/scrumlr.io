@@ -1,4 +1,4 @@
-import {Shuffle} from "components/Icon";
+import {ShuffleIcon} from "components/Icon";
 import classNames from "classnames";
 import {Avatar, generateRandomProps} from "components/Avatar";
 import {Fragment, useEffect, useState} from "react";
@@ -84,7 +84,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
       <div className="avatar-settings__avatar">
         <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
-          <Shuffle />
+          <ShuffleIcon />
         </button>
       </div>
       <div className="avatar-settings__settings-wrapper">

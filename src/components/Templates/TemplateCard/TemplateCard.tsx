@@ -7,12 +7,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
 import {useAppSelector} from "store";
-import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
-import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
-import {ReactComponent as NextIcon} from "assets/icons/next.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
-import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
-import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
+import {ThreeDotsIcon as MenuIcon, ColumnsIcon, NextIcon, CloseIcon, TrashIcon, EditIcon} from "components/Icon";
 import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";

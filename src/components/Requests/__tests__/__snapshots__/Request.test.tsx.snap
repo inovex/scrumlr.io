@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`JoinRequest should render correctly on multiple join requests 1`] = `
+exports[`JoinRequest > should render correctly > on multiple join requests 1`] = `
 <div
   class="requests__wrapper"
 >
@@ -446,8 +446,36 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     >
       <svg
         class="request-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        join.svg
+        <path
+          d="M15.232 8.117h7.939c.813 0 1.593.325 2.169.903.575.578.898 1.363.898 2.18v11.305a3.09 3.09 0 0 1-.898 2.18M8.86 14.331v8.174c0 .818.322 1.602.898 2.18a3.059 3.059 0 0 0 2.168.903h2.79"
+          stroke="currentColor"
+          stroke-opacity="0.5"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.023 8.117h6.134M9.094 5.031v6.167"
+          stroke="currentColor"
+          stroke-linecap="square"
+          stroke-width="2"
+        />
+        <path
+          d="M19.97 13.14a2.566 2.566 0 0 1 2.361 1.586 2.581 2.581 0 0 1-.554 2.8 2.552 2.552 0 0 1-2.785.558 2.559 2.559 0 0 1-1.147-.947 2.578 2.578 0 0 1 .318-3.244 2.549 2.549 0 0 1 1.807-.752Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M14.373 26.89c0-.02-.416-5.171 5.614-5.171 6.029 0 5.582 5.171 5.582 5.171"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        />
       </svg>
     </div>
   </div>
@@ -895,8 +923,36 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     >
       <svg
         class="request-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        join.svg
+        <path
+          d="M15.232 8.117h7.939c.813 0 1.593.325 2.169.903.575.578.898 1.363.898 2.18v11.305a3.09 3.09 0 0 1-.898 2.18M8.86 14.331v8.174c0 .818.322 1.602.898 2.18a3.059 3.059 0 0 0 2.168.903h2.79"
+          stroke="currentColor"
+          stroke-opacity="0.5"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.023 8.117h6.134M9.094 5.031v6.167"
+          stroke="currentColor"
+          stroke-linecap="square"
+          stroke-width="2"
+        />
+        <path
+          d="M19.97 13.14a2.566 2.566 0 0 1 2.361 1.586 2.581 2.581 0 0 1-.554 2.8 2.552 2.552 0 0 1-2.785.558 2.559 2.559 0 0 1-1.147-.947 2.578 2.578 0 0 1 .318-3.244 2.549 2.549 0 0 1 1.807-.752Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M14.373 26.89c0-.02-.416-5.171 5.614-5.171 6.029 0 5.582 5.171 5.582 5.171"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        />
       </svg>
     </div>
   </div>
@@ -1375,15 +1431,43 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     >
       <svg
         class="request-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        join.svg
+        <path
+          d="M15.232 8.117h7.939c.813 0 1.593.325 2.169.903.575.578.898 1.363.898 2.18v11.305a3.09 3.09 0 0 1-.898 2.18M8.86 14.331v8.174c0 .818.322 1.602.898 2.18a3.059 3.059 0 0 0 2.168.903h2.79"
+          stroke="currentColor"
+          stroke-opacity="0.5"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.023 8.117h6.134M9.094 5.031v6.167"
+          stroke="currentColor"
+          stroke-linecap="square"
+          stroke-width="2"
+        />
+        <path
+          d="M19.97 13.14a2.566 2.566 0 0 1 2.361 1.586 2.581 2.581 0 0 1-.554 2.8 2.552 2.552 0 0 1-2.785.558 2.559 2.559 0 0 1-1.147-.947 2.578 2.578 0 0 1 .318-3.244 2.549 2.549 0 0 1 1.807-.752Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M14.373 26.89c0-.02-.416-5.171 5.614-5.171 6.029 0 5.582 5.171 5.582 5.171"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        />
       </svg>
     </div>
   </div>
 </div>
 `;
 
-exports[`JoinRequest should render correctly on single join request 1`] = `
+exports[`JoinRequest > should render correctly > on single join request 1`] = `
 <div
   class="requests__wrapper"
 >
@@ -1829,8 +1913,36 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
     >
       <svg
         class="request-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        join.svg
+        <path
+          d="M15.232 8.117h7.939c.813 0 1.593.325 2.169.903.575.578.898 1.363.898 2.18v11.305a3.09 3.09 0 0 1-.898 2.18M8.86 14.331v8.174c0 .818.322 1.602.898 2.18a3.059 3.059 0 0 0 2.168.903h2.79"
+          stroke="currentColor"
+          stroke-opacity="0.5"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.023 8.117h6.134M9.094 5.031v6.167"
+          stroke="currentColor"
+          stroke-linecap="square"
+          stroke-width="2"
+        />
+        <path
+          d="M19.97 13.14a2.566 2.566 0 0 1 2.361 1.586 2.581 2.581 0 0 1-.554 2.8 2.552 2.552 0 0 1-2.785.558 2.559 2.559 0 0 1-1.147-.947 2.578 2.578 0 0 1 .318-3.244 2.549 2.549 0 0 1 1.807-.752Z"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M14.373 26.89c0-.02-.416-5.171 5.614-5.171 6.029 0 5.582 5.171 5.582 5.171"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        />
       </svg>
     </div>
   </div>

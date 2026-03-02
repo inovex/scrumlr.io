@@ -6,8 +6,9 @@ import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
 import getTestParticipant from "utils/test/getTestParticipant";
+import getTestApplicationState from "utils/test/getTestApplicationState";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
 }));
 
@@ -25,11 +26,11 @@ const createNoteInput = (columnId: string) => {
 
 describe("Note Input", () => {
   beforeEach(() => {
-    window.IntersectionObserver = jest.fn(
+    globalThis.IntersectionObserver = vi.fn(
       () =>
         ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
+          observe: vi.fn(),
+          disconnect: vi.fn(),
         }) as unknown as IntersectionObserver
     );
   });
@@ -106,7 +107,7 @@ describe("Note Input", () => {
     render(
       <I18nextProvider i18n={i18nTest}>
         <Provider store={store}>
-          <NoteInput columnId="test-colum-id" columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
+          <NoteInput column={getTestApplicationState().columns[0]} />
         </Provider>
       </I18nextProvider>
     );

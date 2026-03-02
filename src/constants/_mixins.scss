@@ -42,10 +42,18 @@
 // helper function for inset-border mixin
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color--light)) {
   $props: ();
-  $props: list.append($props, if($left, inset #{2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($right, inset #{-2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($top, inset 0 #{2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
-  $props: list.append($props, if($bottom, inset 0 #{-2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, null), comma);
+  @if $left {
+    $props: list.append($props, inset #{2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, comma);
+  }
+  @if $right {
+    $props: list.append($props, inset #{-2 * styles.$column__border-width} 0 0 #{- styles.$column__border-width} #{$color}, comma);
+  }
+  @if $top {
+    $props: list.append($props, inset 0 #{2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, comma);
+  }
+  @if $bottom {
+    $props: list.append($props, inset 0 #{-2 * styles.$column__border-width} 0 #{- styles.$column__border-width} #{$color}, comma);
+  }
   @return $props;
 }
 

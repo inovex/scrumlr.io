@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<ConfirmationDialog /> snapshot test 1`] = `
+exports[`<ConfirmationDialog /> > snapshot test 1`] = `
 <div
   class="portal"
   role="dialog"
@@ -40,8 +40,22 @@ exports[`<ConfirmationDialog /> snapshot test 1`] = `
             >
               <svg
                 class="dialog__close-icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </button>
             <div

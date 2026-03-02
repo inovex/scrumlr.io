@@ -44,7 +44,7 @@ i18n
     returnNull: false,
   })
   .then(() => {
-    store.dispatch(setLanguage(i18n.language));
+    if (store) store.dispatch(setLanguage(i18n.language));
   });
 
 export default i18n;

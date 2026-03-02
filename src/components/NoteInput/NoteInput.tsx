@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import {AddImage, LockClosed, Plus, Star} from "components/Icon";
+import {AddImageIcon, LockClosedIcon, PlusIcon, StarIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
@@ -83,7 +83,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
       }}
       ref={emoji.containerRef}
     >
-      {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
+      {!isModerator && boardLocked && <LockClosedIcon className="note-input__lock-icon" />}
       <TextareaAutosize
         data-clarity-mask="True"
         disabled={!isModerator && boardLocked}
@@ -110,10 +110,10 @@ export const NoteInput = ({column}: NoteInputProps) => {
       <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
-          <AddImage className="note-input__icon--image" />
-          <Star className="note-input__icon--star star-1" />
-          <Star className="note-input__icon--star star-2" />
-          <Star className="note-input__icon--star star-3" />
+          <AddImageIcon className="note-input__icon--image" />
+          <StarIcon className="note-input__icon--star star-1" />
+          <StarIcon className="note-input__icon--star star-2" />
+          <StarIcon className="note-input__icon--star star-3" />
         </div>
       )}
       <button
@@ -124,7 +124,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
         aria-label={t("NoteInput.create")}
         title={t("NoteInput.create")}
       >
-        <Plus className="note-input__icon--add" />
+        <PlusIcon className="note-input__icon--add" />
       </button>
     </form>
   );

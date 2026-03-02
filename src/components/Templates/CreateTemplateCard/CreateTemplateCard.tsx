@@ -1,4 +1,4 @@
-import {ReactComponent as PlusIcon} from "assets/icons/plus.svg";
+import {PlusIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import "./CreateTemplateCard.scss";
 

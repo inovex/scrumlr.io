@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
+import {TrashIcon} from "components/Icon";
 import {useAppDispatch, useAppSelector} from "store";
 import {deleteAccount} from "store/features/auth/thunks";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -42,7 +42,7 @@ export const UserDeletion = (props: UserDeletionProps) => {
     <>
       <section>
         <SettingsButton
-          icon={DeleteIcon}
+          icon={TrashIcon}
           aria-checked={hotkeyNotificationsEnabled}
           label={t("ProfileSettings.deleteAccount")}
           onClick={() => setShowDialog(true)}
@@ -58,7 +58,7 @@ export const UserDeletion = (props: UserDeletionProps) => {
           onAcceptLabel={t("ConfirmationDialog.deleteAccountButton")}
           onDecline={onCancel}
           onDeclineLabel={t("ConfirmationDialog.cancel")}
-          icon={DeleteIcon}
+          icon={TrashIcon}
           text={t("ConfirmationDialog.deleteAccountText")}
           items={t("ConfirmationDialog.deleteAccountItems")}
           textAfterItems={t("ConfirmationDialog.deleteAccountTextAfterItems")}

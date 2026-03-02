@@ -1,6 +1,6 @@
 import {ReactNode} from "react";
 import classNames from "classnames";
-import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
+import ArrowIcon from "assets/icons/arrow-down.svg?react";
 import "./Dropdown.scss";
 
 type DropdownOption<K = string> = {

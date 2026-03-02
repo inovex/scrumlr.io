@@ -9,6 +9,10 @@ RUN yarn install --network-timeout 240000
 COPY src/ src/
 COPY public/ public/
 COPY tsconfig.json .
+COPY vite-env.d.ts .
+COPY vite-env-override.d.ts .
+COPY vite.config.ts .
+COPY index.html .
 COPY .prettierrc .
 COPY .eslintignore .
 COPY .eslintrc.json .

@@ -7,11 +7,14 @@ import i18nTest from "i18nTest";
 import getTestStore from "utils/test/getTestStore";
 import {BrowserRouter} from "react-router";
 
-jest.mock("utils/export", () => ({
-  ...jest.requireActual("utils/export"),
-  exportAsJSON: jest.fn(),
-  exportAsCSV: jest.fn(),
-}));
+vi.mock("utils/export", async () => {
+  const actual = await vi.importActual<typeof import("utils/export")>("utils/export");
+  return {
+    ...actual,
+    exportAsJSON: vi.fn(),
+    exportAsCSV: vi.fn(),
+  };
+});
 
 const renderExportBoard = () => {
   return render(
@@ -39,7 +42,7 @@ describe("Export Boad Tests", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(exportAsJSON).toBeCalled();
+      expect(exportAsJSON).toHaveBeenCalled();
     });
   });
 
@@ -51,7 +54,7 @@ describe("Export Boad Tests", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(exportAsCSV).toBeCalled();
+      expect(exportAsCSV).toHaveBeenCalled();
     });
   });
 });

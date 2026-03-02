@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`TemplateCard should render correctly (custom) 1`] = `
+exports[`TemplateCard > should render correctly (custom) 1`] = `
 <div>
   <div
     class="template-card"
@@ -13,8 +13,19 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     >
       <svg
         class="favourite-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        star.svg
+        <path
+          d="M16.0551 23.403L8.77502 26.917L10.755 18.6649L4.29602 13.085L12.696 12.2289L16.057 4.41296L19.418 12.2289L27.818 13.085L21.36 18.6649L23.339 26.917L16.0551 23.403Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.75"
+        />
       </svg>
     </button>
     <div
@@ -33,8 +44,30 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     <svg
       class="template-card__menu template-card__icon template-card__icon--menu"
       data-cy="template-card__menu"
+      fill="none"
+      height="32"
+      viewBox="0 0 32 32"
+      width="32"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      three-dots.svg
+      <circle
+        cx="6.5"
+        cy="16"
+        fill="currentColor"
+        r="2.5"
+      />
+      <circle
+        cx="16"
+        cy="16"
+        fill="currentColor"
+        r="2.5"
+      />
+      <circle
+        cx="25.5"
+        cy="16"
+        fill="currentColor"
+        r="2.5"
+      />
     </svg>
     <textarea
       class="template-card__description"
@@ -44,8 +77,29 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     </textarea>
     <svg
       class="template-card__icon template-card__icon--columns"
+      fill="none"
+      height="32"
+      viewBox="0 0 32 32"
+      width="32"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      columns.svg
+      <path
+        d="M26 8H25C24.4477 8 24 8.44772 24 9V24C24 24.5523 24.4477 25 25 25H26"
+        stroke="currentColor"
+        stroke-opacity="0.7"
+        stroke-width="1.5"
+      />
+      <path
+        d="M6 8H7.08789C7.64018 8 8.08789 8.44772 8.08789 9V24C8.08789 24.5523 7.64018 25 7.08789 25H6"
+        stroke="currentColor"
+        stroke-opacity="0.7"
+        stroke-width="1.5"
+      />
+      <path
+        d="M12.0879 9L12.0879 24C12.0879 24.5523 12.5356 25 13.0879 25H19.0879C19.6402 25 20.0879 24.5523 20.0879 24V9C20.0879 8.44772 19.6402 8 19.0879 8H13.0879C12.5356 8 12.0879 8.44772 12.0879 9Z"
+        stroke="currentColor"
+        stroke-width="1.75"
+      />
     </svg>
     <div
       class="template-card__columns"
@@ -76,8 +130,48 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
           class="button__icon-background button__icon-background--default"
           data-size="small"
         >
-          <svg>
-            next.svg
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              fill="none"
+              height="32"
+              width="32"
+            />
+            <g
+              id="Icons"
+            >
+              <g
+                id="icon/icon-32-next"
+              >
+                <g
+                  id="Variant=ic-32-next-dark4light"
+                >
+                  <path
+                    d="M19.2188 11L24.0004 16.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M24 16L19.2185 21.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M7 16.0781H21.6419"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                  />
+                </g>
+              </g>
+            </g>
           </svg>
         </div>
       </div>
@@ -86,7 +180,7 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
 </div>
 `;
 
-exports[`TemplateCard should render correctly (recommended) 1`] = `
+exports[`TemplateCard > should render correctly (recommended) 1`] = `
 <div>
   <div
     class="template-card"
@@ -99,8 +193,19 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
     >
       <svg
         class="favourite-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        star.svg
+        <path
+          d="M16.0551 23.403L8.77502 26.917L10.755 18.6649L4.29602 13.085L12.696 12.2289L16.057 4.41296L19.418 12.2289L27.818 13.085L21.36 18.6649L23.339 26.917L16.0551 23.403Z"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.75"
+        />
       </svg>
     </button>
     <div
@@ -124,8 +229,29 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
     </textarea>
     <svg
       class="template-card__icon template-card__icon--columns"
+      fill="none"
+      height="32"
+      viewBox="0 0 32 32"
+      width="32"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      columns.svg
+      <path
+        d="M26 8H25C24.4477 8 24 8.44772 24 9V24C24 24.5523 24.4477 25 25 25H26"
+        stroke="currentColor"
+        stroke-opacity="0.7"
+        stroke-width="1.5"
+      />
+      <path
+        d="M6 8H7.08789C7.64018 8 8.08789 8.44772 8.08789 9V24C8.08789 24.5523 7.64018 25 7.08789 25H6"
+        stroke="currentColor"
+        stroke-opacity="0.7"
+        stroke-width="1.5"
+      />
+      <path
+        d="M12.0879 9L12.0879 24C12.0879 24.5523 12.5356 25 13.0879 25H19.0879C19.6402 25 20.0879 24.5523 20.0879 24V9C20.0879 8.44772 19.6402 8 19.0879 8H13.0879C12.5356 8 12.0879 8.44772 12.0879 9Z"
+        stroke="currentColor"
+        stroke-width="1.75"
+      />
     </svg>
     <div
       class="template-card__columns"
@@ -156,8 +282,48 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
           class="button__icon-background button__icon-background--default"
           data-size="small"
         >
-          <svg>
-            next.svg
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              fill="none"
+              height="32"
+              width="32"
+            />
+            <g
+              id="Icons"
+            >
+              <g
+                id="icon/icon-32-next"
+              >
+                <g
+                  id="Variant=ic-32-next-dark4light"
+                >
+                  <path
+                    d="M19.2188 11L24.0004 16.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M24 16L19.2185 21.0002"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M7 16.0781H21.6419"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                  />
+                </g>
+              </g>
+            </g>
           </svg>
         </div>
       </div>

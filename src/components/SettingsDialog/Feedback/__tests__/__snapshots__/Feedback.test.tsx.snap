@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Feedback should match snapshot 1`] = `
+exports[`Feedback > should match snapshot 1`] = `
 <div
   class="settings-dialog__container accent-color__backlog-blue"
 >
@@ -34,8 +34,20 @@ exports[`Feedback should match snapshot 1`] = `
           class="feedback-option__label"
           for="feedbackTypePraise"
         >
-          <svg>
-            praise.svg
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.985 14.76h-5.13a.87.87 0 0 0-.605.243.812.812 0 0 0-.25.584v9.087c0 .219.09.43.25.584a.87.87 0 0 0 .605.242h5.13m0-10.74V25.5m0-10.74L15.26 6.5c.908 0 1.777.348 2.419.968a3.249 3.249 0 0 1 1.002 2.336v2.479h6.615a1.75 1.75 0 0 1 .704.145c.22.096.418.237.578.413.16.176.279.384.35.608.07.224.09.46.057.692l-1.282 9.913a1.636 1.636 0 0 1-.563 1.03c-.31.266-.711.414-1.126.416H10.985"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
           </svg>
           <span>
             Praise
@@ -56,8 +68,47 @@ exports[`Feedback should match snapshot 1`] = `
           class="feedback-option__label"
           for="feedbackTypeFeatureRequest"
         >
-          <svg>
-            template-gallery.svg
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.132 18.52C20.2195 18.3671 20.3459 18.24 20.4983 18.1516C20.6508 18.0632 20.8238 18.0166 21 18.0166C21.1763 18.0166 21.3493 18.0632 21.5018 18.1516C21.6542 18.24 21.7805 18.3671 21.868 18.52L24.145 22.501C24.2329 22.6532 24.2791 22.8258 24.279 23.0015C24.2789 23.1772 24.2326 23.3498 24.1446 23.5019C24.0566 23.654 23.93 23.7802 23.7777 23.8678C23.6254 23.9554 23.4527 24.0014 23.277 24.001H18.723C18.5473 24.0014 18.3746 23.9554 18.2224 23.8678C18.0701 23.7802 17.9435 23.654 17.8555 23.5019C17.7675 23.3498 17.7212 23.1772 17.7211 23.0015C17.721 22.8258 17.7672 22.6532 17.855 22.501L20.132 18.52Z"
+              stroke="currentColor"
+              stroke-opacity="0.7"
+              stroke-width="1.5"
+            />
+            <path
+              d="M21 14.001C22.6569 14.001 24 12.6578 24 11.001C24 9.34412 22.6569 8.00098 21 8.00098C19.3431 8.00098 18 9.34412 18 11.001C18 12.6578 19.3431 14.001 21 14.001Z"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M13 18.001H9C8.44772 18.001 8 18.4487 8 19.001V23.001C8 23.5533 8.44772 24.001 9 24.001H13C13.5523 24.001 14 23.5533 14 23.001V19.001C14 18.4487 13.5523 18.001 13 18.001Z"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M11.75 8C11.75 7.58579 11.4142 7.25 11 7.25C10.5858 7.25 10.25 7.58579 10.25 8H11.75ZM10.25 9.5V10.25H11.75V9.5H10.25ZM10.25 8V9.5H11.75V8H10.25Z"
+              fill="currentColor"
+              fill-opacity="0.7"
+            />
+            <path
+              d="M11.75 12.5V11.75H10.25V12.5H11.75ZM10.25 14C10.25 14.4142 10.5858 14.75 11 14.75C11.4142 14.75 11.75 14.4142 11.75 14H10.25ZM10.25 12.5V14H11.75V12.5H10.25Z"
+              fill="currentColor"
+              fill-opacity="0.7"
+            />
+            <path
+              d="M14 11L8 11"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-opacity="0.7"
+              stroke-width="1.5"
+            />
           </svg>
           <span>
             Feature Request
@@ -78,8 +129,24 @@ exports[`Feedback should match snapshot 1`] = `
           class="feedback-option__label"
           for="feedbackTypeBugReport"
         >
-          <svg>
-            bug.svg
+          <svg
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18.625 13.75a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Zm-5.25 0a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z"
+              fill="currentColor"
+            />
+            <path
+              d="M16 16v9m10.875-9H5.125M23.5 17.5a7.5 7.5 0 0 1-15 0v-3a7.5 7.5 0 0 1 15 0v3Zm2.238 4.119-2.691-1.556m2.691-9.688-2.691 1.556M6.266 10.375l2.69 1.556m-2.69 9.688 2.69-1.556"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
           </svg>
           <span>
             Bug Report

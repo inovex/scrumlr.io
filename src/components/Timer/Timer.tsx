@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
-import {Close, Timer as TimerIcon, MarkAsDone, FlagFinish, PlusOne} from "components/Icon";
+import {CloseIcon, TimerIcon, MarkAsDoneIcon, FlagFinishIcon, PlusOneIconIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -39,7 +39,7 @@ export const Timer = (props: TimerProps) => {
   const boardId = useAppSelector((state) => state.board.data!.id);
   const me = useAppSelector((state) => state.participants?.self);
 
-  const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
+  const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${import.meta.env.BASE_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(TimerUtils.calculateTimeLeft(props.endTime));
   const [elapsedTimePercentage, setElapsedTimePercentage] = useState<number>(TimerUtils.calculateElapsedTimePercentage(props.startTime, props.endTime));
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
@@ -117,7 +117,7 @@ export const Timer = (props: TimerProps) => {
                 className="short-action__button"
                 onClick={() => dispatch(cancelTimer())}
               >
-                <FlagFinish className="short-action__flag-icon" />
+                <FlagFinishIcon className="short-action__flag-icon" />
               </button>
             </li>
           )}
@@ -129,8 +129,8 @@ export const Timer = (props: TimerProps) => {
               className={classNames("short-action__button", {"short-action__button--ready": isReady})}
               onClick={() => dispatch(setUserReadyStatus({userId: me!.user.id, ready: !isReady}))}
             >
-              <MarkAsDone className="short-action__check-icon" />
-              <Close className="short-action__cancel-icon" />
+              <MarkAsDoneIcon className="short-action__check-icon" />
+              <CloseIcon className="short-action__cancel-icon" />
             </button>
           </li>
         </ul>
@@ -144,7 +144,7 @@ export const Timer = (props: TimerProps) => {
           className="timer__increment-button"
           onClick={() => dispatch(incrementTimer())}
         >
-          <PlusOne />
+          <PlusOneIconIcon />
         </button>
       )}
     </div>

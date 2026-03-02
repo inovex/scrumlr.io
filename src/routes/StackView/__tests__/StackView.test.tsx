@@ -10,15 +10,18 @@ import {StackView} from "../StackView";
 import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 
-jest.mock("utils/hooks/useImageChecker.ts", () => ({
+vi.mock("utils/hook/useImageChecker.ts", async () => ({
   useImageChecker: () => false,
 }));
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useParams: jest.fn(),
-  useNavigate: jest.fn(),
-}));
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useParams: vi.fn(),
+    useNavigate: vi.fn(),
+  };
+});
 
 const BOARD_ID = "test-board-id";
 const NOTE_ID = "test-notes-id-1";
@@ -43,7 +46,7 @@ describe("StackView", () => {
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
     global.document.querySelector("body")!.appendChild(portal);
-    jest.spyOn(reactRouter, "useParams").mockReturnValue({boardId: BOARD_ID, noteId: NOTE_ID});
+    vi.spyOn(reactRouter, "useParams").mockReturnValue({boardId: BOARD_ID, noteId: NOTE_ID});
   });
 
   describe("display", () => {
@@ -60,8 +63,8 @@ describe("StackView", () => {
 
   describe("side effects", () => {
     it("should navigate to board route on close", () => {
-      const mockedUsedNavigate = jest.fn();
-      jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => mockedUsedNavigate);
+      const mockedUsedNavigate = vi.fn();
+      vi.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => mockedUsedNavigate);
 
       const {container} = render(createStackView(), {container: global.document.querySelector("#portal")!});
       expect(container.querySelector(".stack-view__portal")).not.toBeNull();

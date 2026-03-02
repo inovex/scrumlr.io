@@ -15,11 +15,11 @@ const createBoardHeader = (overwrite?: Partial<ApplicationState>) => {
 
 describe("Board Header", () => {
   beforeEach(() => {
-    window.IntersectionObserver = jest.fn(
+    window.IntersectionObserver = vi.fn(
       () =>
         ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
+          observe: vi.fn(),
+          disconnect: vi.fn(),
         }) as unknown as IntersectionObserver
     );
   });

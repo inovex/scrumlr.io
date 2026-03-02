@@ -8,8 +8,8 @@ const renderColumnConfiguratorColumnNameDetails = (override?: Partial<ColumnConf
     name: "Default Name",
     description: "Default Description",
     openState: "closed",
-    setOpenState: jest.fn(),
-    updateColumnTitle: jest.fn(),
+    setOpenState: vi.fn(),
+    updateColumnTitle: vi.fn(),
   };
 
   return <ColumnConfiguratorColumnNameDetails {...defaultProps} {...override} />;
@@ -48,7 +48,7 @@ describe("ColumnConfiguratorColumnNameDetails render", () => {
 
 describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   it("should make title editable after focusing", () => {
-    const setOpenStateSpy = jest.fn();
+    const setOpenStateSpy = vi.fn();
     const {container, rerender} = render(renderColumnConfiguratorColumnNameDetails({openState: "closed", setOpenState: setOpenStateSpy}));
 
     const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
@@ -65,7 +65,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should make description editable after clicking", () => {
-    const setOpenStateSpy = jest.fn();
+    const setOpenStateSpy = vi.fn();
     const {container, rerender} = render(renderColumnConfiguratorColumnNameDetails({openState: "closed", setOpenState: setOpenStateSpy}));
 
     const inlineDescriptionElement = container.querySelector<HTMLDivElement>(".column-configurator-column-name-details__inline-description")!;
@@ -81,7 +81,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should close after losing focus", () => {
-    const setOpenStateSpy = jest.fn();
+    const setOpenStateSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     // note: useOnBlur does not actually use the native blur event, but scans for clicks outside the element instead.
@@ -94,7 +94,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should close without saving when there are no actual changes", () => {
-    const setOpenStateSpy = jest.fn();
+    const setOpenStateSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
@@ -104,9 +104,9 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should set openState to visualFeedback, then to closed upon confirming changes", () => {
-    jest.useFakeTimers();
-    const setOpenStateSpy = jest.fn();
-    const updateColumnTitleSpy = jest.fn();
+    vi.useFakeTimers();
+    const setOpenStateSpy = vi.fn();
+    const updateColumnTitleSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy, updateColumnTitle: updateColumnTitleSpy}));
 
     // make sure to insert actual changes
@@ -123,11 +123,11 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
       expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
     }, 2000);
 
-    jest.runAllTimers();
+    vi.runAllTimers();
   });
 
   it("should call save changes with new input title", () => {
-    const updateColumnTitleSpy = jest.fn();
+    const updateColumnTitleSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", updateColumnTitle: updateColumnTitleSpy}));
 
     const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
@@ -140,7 +140,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should also save after pressing enter", () => {
-    const updateColumnTitleSpy = jest.fn();
+    const updateColumnTitleSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", updateColumnTitle: updateColumnTitleSpy}));
 
     const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
@@ -152,8 +152,8 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
   });
 
   it("should reset after pressing escape", () => {
-    const updateColumnTitleSpy = jest.fn();
-    const setOpenStateSpy = jest.fn();
+    const updateColumnTitleSpy = vi.fn();
+    const setOpenStateSpy = vi.fn();
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy, updateColumnTitle: updateColumnTitleSpy}));
 
     const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;

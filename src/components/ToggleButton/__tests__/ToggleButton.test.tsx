@@ -31,28 +31,28 @@ describe("ToggleButton", () => {
   });
 
   test("should call onClick on component click", () => {
-    const onToggleMock = jest.fn();
+    const onToggleMock = vi.fn();
     const {container} = render(createToggleButton({onToggle: onToggleMock}));
     fireEvent.click(container.firstChild!);
     expect(onToggleMock).toHaveBeenCalled();
   });
 
   test("should return the opposite value", () => {
-    const onToggleMock = jest.fn();
+    const onToggleMock = vi.fn();
     const {container} = render(createToggleButton({onToggle: onToggleMock}));
     fireEvent.click(container.firstChild!);
     expect(onToggleMock).toHaveBeenCalledWith("value2");
   });
 
   test("should call onLeft if toggled to the left", () => {
-    const onRightMock = jest.fn();
+    const onRightMock = vi.fn();
     const {container} = render(createToggleButton({onRight: onRightMock}));
     fireEvent.click(container.firstChild!);
     expect(onRightMock).toHaveBeenCalled();
   });
 
   test("should call onRight if toggled to the right", () => {
-    const onLeftMock = jest.fn();
+    const onLeftMock = vi.fn();
     const {container} = render(createToggleButton({value: "value2", onLeft: onLeftMock}));
     fireEvent.click(container.firstChild!);
     expect(onLeftMock).toHaveBeenCalled();

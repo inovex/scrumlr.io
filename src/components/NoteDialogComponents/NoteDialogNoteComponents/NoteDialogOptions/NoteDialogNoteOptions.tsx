@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import {ParticipantWithUser} from "store/features/participants/types";
-import {Trash, Eject} from "components/Icon";
+import {TrashIcon, EjectIcon} from "components/Icon";
 import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -67,7 +67,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
                 props.onClose();
               }}
             >
-              <Eject />
+              <EjectIcon />
             </button>
           </li>
         )}
@@ -84,7 +84,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
                 onDelete(props.noteId);
               }}
             >
-              <Trash />
+              <TrashIcon />
             </button>
           </li>
         )}
@@ -96,7 +96,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowChildDialog(false)}
           onDeclineLabel={t("ConfirmationDialog.cancel")}
-          icon={Trash}
+          icon={TrashIcon}
           warning
         />
       )}
@@ -109,7 +109,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onDeclineLabel={t("ConfirmationDialog.cancel")}
           onExtraOption={() => onDelete(props.noteId, true)}
           onExtraOptionLabel={t("ConfirmationDialog.deleteStackButton")}
-          icon={Trash}
+          icon={TrashIcon}
           warning
         />
       )}

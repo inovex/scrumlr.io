@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {getColorClassName} from "constants/colors";
-import {ReactComponent as FavouriteIcon} from "assets/icons/star.svg";
+import {StarIcon as FavouriteIcon} from "components/Icon";
 import {Tooltip} from "components/Tooltip";
 import {uniqueId} from "underscore";
 import "./FavouriteButton.scss";

@@ -23,7 +23,7 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
   const autoTheme = useAutoTheme(theme);
 
   const lang = i18n.resolvedLanguage as AppLanguage;
-  const dataSourceUrl = `${process.env.PUBLIC_URL}/emoji-data/${lang}.json`;
+  const dataSourceUrl = `${import.meta.env.BASE_URL}/emoji-data/${lang}.json`;
   const skinToneMapping = Object.keys(skinTones) as SkinToneName[];
   const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
 
@@ -43,7 +43,10 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
     const element = ref.current;
 
     if (element) {
-      import(`emoji-picker-element/i18n/${lang}.js`) // .js suffix required because of bundling of dynamic import resolution
+      import(
+        /* @vite-ignore */
+        `emoji-picker-element/i18n/${lang}.js`
+        ) // .js suffix required because of bundling of dynamic import resolution
         .then(({default: i18ndefault}: {default: I18n}) => {
           element.i18n = i18ndefault;
         });

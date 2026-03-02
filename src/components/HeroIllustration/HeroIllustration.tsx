@@ -1,17 +1,17 @@
-import Panel01 from "assets/hero/scrumlr-lp-01.svg";
-import Panel02 from "assets/hero/scrumlr-lp-02.svg";
-import Panel03 from "assets/hero/scrumlr-lp-03.svg";
-import Panel04 from "assets/hero/scrumlr-lp-04.svg";
-import Panel05 from "assets/hero/scrumlr-lp-05.svg";
-import Panel06 from "assets/hero/scrumlr-lp-06.svg";
-import Panel07 from "assets/hero/scrumlr-lp-07.svg";
-import Panel08 from "assets/hero/scrumlr-lp-08.svg";
-import Panel09 from "assets/hero/scrumlr-lp-09.svg";
-import Panel10 from "assets/hero/scrumlr-lp-10.svg";
-import Panel11 from "assets/hero/scrumlr-lp-11.svg";
-import Panel12 from "assets/hero/scrumlr-lp-12.svg";
-import ActionbarUser from "assets/hero/scrumlr_actionbar_user.svg";
-import ActionbarModerator from "assets/hero/scrumlr_actionbar_mod.svg";
+import Panel01 from "assets/hero/scrumlr-lp-01.svg?react";
+import Panel02 from "assets/hero/scrumlr-lp-02.svg?react";
+import Panel03 from "assets/hero/scrumlr-lp-03.svg?react";
+import Panel04 from "assets/hero/scrumlr-lp-04.svg?react";
+import Panel05 from "assets/hero/scrumlr-lp-05.svg?react";
+import Panel06 from "assets/hero/scrumlr-lp-06.svg?react";
+import Panel07 from "assets/hero/scrumlr-lp-07.svg?react";
+import Panel08 from "assets/hero/scrumlr-lp-08.svg?react";
+import Panel09 from "assets/hero/scrumlr-lp-09.svg?react";
+import Panel10 from "assets/hero/scrumlr-lp-10.svg?react";
+import Panel11 from "assets/hero/scrumlr-lp-11.svg?react";
+import Panel12 from "assets/hero/scrumlr-lp-12.svg?react";
+import ActionbarUser from "assets/hero/scrumlr_actionbar_user.svg?url";
+import ActionbarModerator from "assets/hero/scrumlr_actionbar_mod.svg?url";
 import {FC} from "react";
 import classNames from "classnames";
 import "./HeroIllustration.scss";
@@ -31,40 +31,40 @@ export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
         <img src={ActionbarModerator} className="hero-illustration__actionbar-moderator" alt="" />
 
         <div className="hero-illustration__tile">
-          <img src={Panel01} className="hero-illustration__tile-image" alt="" />
+          <Panel01 />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel02} className="hero-illustration__tile-image" alt="" />
+          <Panel02  />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel03} className="hero-illustration__tile-image" alt="" />
+          <Panel03   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel04} className="hero-illustration__tile-image" alt="" />
+          <Panel04   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel05} className="hero-illustration__tile-image" alt="" />
+          <Panel05   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel06} className="hero-illustration__tile-image" alt="" />
+          <Panel06   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel07} className="hero-illustration__tile-image" alt="" />
+          <Panel07   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel08} className="hero-illustration__tile-image" alt="" />
+          <Panel08   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel09} className="hero-illustration__tile-image" alt="" />
+          <Panel09   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel10} className="hero-illustration__tile-image" alt="" />
+          <Panel10   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel11} className="hero-illustration__tile-image" alt="" />
+          <Panel11   />
         </div>
         <div className="hero-illustration__tile">
-          <img src={Panel12} className="hero-illustration__tile-image" alt="" />
+          <Panel12   />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DotButton should render correctly 1`] = `
+exports[`DotButton > should render correctly 1`] = `
 <div>
   <button
     class="dot-button"
@@ -12,7 +12,7 @@ exports[`DotButton should render correctly 1`] = `
 </div>
 `;
 
-exports[`DotButton should render correctly with additional classname 1`] = `
+exports[`DotButton > should render correctly with additional classname 1`] = `
 <div>
   <button
     class="dot-button test-classname"

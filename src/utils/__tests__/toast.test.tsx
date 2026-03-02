@@ -6,10 +6,10 @@ const testOptions: Options = {
   title: "Titeliger titel",
   message: "1 heftige Message mit gaanz super Buchstabän drinnnen",
   hintMessage: "wennd mogsch zeig ichs nemmer o",
-  hintOnClick: jest.fn(),
+  hintOnClick: vi.fn(),
   buttons: ["save", "cancel"],
-  firstButtonOnClick: jest.fn(),
-  secondButtonOnClick: jest.fn(),
+  firstButtonOnClick: vi.fn(),
+  secondButtonOnClick: vi.fn(),
   autoClose: false,
 };
 

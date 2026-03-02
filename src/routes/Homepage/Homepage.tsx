@@ -1,10 +1,10 @@
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
-import {ReactComponent as German} from "assets/flags/DE.svg";
-import {ReactComponent as English} from "assets/flags/US.svg";
-import {ReactComponent as French} from "assets/flags/FR.svg";
-import {ArrowRight, Logout} from "components/Icon";
+import German from "assets/flags/DE.svg?react";
+import English from "assets/flags/US.svg?react";
+import French from "assets/flags/FR.svg?react";
+import {ArrowRightIcon, LogoutIcon} from "components/Icon";
 import {Link, useHref} from "react-router";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
@@ -77,7 +77,7 @@ export const Homepage = withTranslation()(() => {
 
             {!!user && (
               <li>
-                <LegacyButton variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
+                <LegacyButton variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout
                 </LegacyButton>
               </li>
@@ -98,7 +98,7 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <LegacyButton href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRight className="homepage__proceed-icon" />}>
+              <LegacyButton href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRightIcon className="homepage__proceed-icon" />}>
                 <Trans i18nKey="Homepage.startButton" />
               </LegacyButton>
             </main>

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
-import {MarkAsDone} from "components/Icon";
+import {MarkAsDoneIcon} from "components/Icon";
 import {isEqual} from "underscore";
 import {UserAvatar} from "./UserAvatar";
 
@@ -65,7 +65,7 @@ export const BoardUsers = () => {
               {usersRest.filter((participant) => participant.ready).length / usersRest.length < 1 ? (
                 <span className="rest-users__count">{usersRest.length}</span>
               ) : (
-                <MarkAsDone className="rest-users__all-ready" />
+                <MarkAsDoneIcon className="rest-users__all-ready" />
               )}
             </div>
           )}
