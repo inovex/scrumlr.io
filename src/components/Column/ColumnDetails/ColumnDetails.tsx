@@ -62,6 +62,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
   const isValidDetails = isValidName && isValidDescription;
 
+  const hasInputChanged = () => !(localName === props.column.name && localDescription === props.column.description);
+
   // focus input upon entering edit mode
   useEffect(() => {
     if (props.mode === "edit") {
@@ -96,6 +98,11 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       return;
     }
 
+    if (!hasInputChanged()) {
+      props.changeMode("view");
+      return;
+    }
+
     const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {
       dispatch(createColumn(updateColumnPayload));
@@ -109,11 +116,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
-    // behaviour: do not save
-    // could also change it to only save if persisted is empty or always save,
-    // but this is streamlined with the template editor
-    cancelUpdate();
-    changeMode("view");
+    // behaviour: save on blur
+    // same behaviour with the template editor
+    updateColumnDetails();
   };
 
   useSubmitOnShortcut(inputRef, updateColumnDetails);
