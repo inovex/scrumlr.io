@@ -18,6 +18,9 @@ var _logger *zap.SugaredLogger
 var _logLevel zapcore.Level = zap.InfoLevel
 
 type ctxLoggerKey int
+type TmpLogger struct {
+	_logger *zap.SugaredLogger
+}
 
 const ctxRequestLogger ctxLoggerKey = iota
 
@@ -64,6 +67,16 @@ func EnableDevelopmentLogger() {
 	loggerConfig.Level = zap.NewAtomicLevelAt(_logLevel)
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
+}
+
+func (l TmpLogger) Logf(format string, args ...interface{}) {
+	l._logger.Debug(fmt.Sprintf(format, args...))
+
+}
+func GetTmpLogger() TmpLogger {
+	return TmpLogger{
+		_logger: _logger,
+	}
 }
 
 // EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger

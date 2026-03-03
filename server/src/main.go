@@ -228,6 +228,12 @@ func main() {
 				Value:   "openid",
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-oidc-base-path",
+				EnvVars:  []string{"SCRUMLR_AUTH_OIDC_BASE_PATH"},
+				Usage:    "OIDC provider base path",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "auth-oidc-user-name-scope",
 				EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE"},
 				Usage:   "JWT claim to request for the user name",
@@ -399,14 +405,20 @@ func run(ctx *cli.Context) error {
 	}
 	if ctx.String("auth-oidc-discovery-url") != "" && ctx.String("auth-oidc-client-id") != "" && ctx.String("auth-oidc-client-secret") != "" && ctx.String("auth-callback-host") != "" {
 		logger.Get().Info("Using oicd authentication.")
-		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
-			ClientId:       ctx.String("auth-oidc-client-id"),
-			ClientSecret:   ctx.String("auth-oidc-client-secret"),
-			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-			DiscoveryUri:   ctx.String("auth-oidc-discovery-url"),
-			UserIdentScope: ctx.String("auth-oidc-user-ident-scope"),
-			UserNameScope:  ctx.String("auth-oidc-user-name-scope"),
+		if ctx.String("auth-oidc-discovery-url") != "" {
+			providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
+				ClientId:       ctx.String("auth-oidc-client-id"),
+				ClientSecret:   ctx.String("auth-oidc-client-secret"),
+				RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+				DiscoveryUri:   ctx.String("auth-oidc-discovery-url"),
+				UserIdentScope: ctx.String("auth-oidc-user-ident-scope"),
+				UserNameScope:  ctx.String("auth-oidc-user-name-scope"),
+				AuthBasePath:   strings.TrimSuffix(ctx.String("auth-oidc-base-path"), "/"),
+			}
+		} else {
+			logger.Get().Warn("OIDC not fully configured, missing base path!")
 		}
+
 	}
 
 	if ctx.String("session-secret") == "" && len(providersMap) != 0 {
@@ -435,10 +447,9 @@ func run(ctx *cli.Context) error {
 	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 
 	userService := initializer.InitializeUserService(sessionService, noteService)
-
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+	authService := initializer.InitializeAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -448,18 +459,21 @@ func run(ctx *cli.Context) error {
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
+	authApi := apiInitializer.InitializeAuthApi(authService, userService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
+	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
+
 	s := api.New(
 		basePath,
 		rt,
 		wsService,
-		authConfig,
-
+		authRoutes,
 		userRoutes,
 		sessionRoutes,
+		authService,
 		boardService,
 		columnService,
 		votingService,

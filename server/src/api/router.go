@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/sessions"
@@ -41,16 +43,19 @@ import (
 	"scrumlr.io/server/sessionrequests"
 )
 
+var Tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+
 type Server struct {
 	basePath string
 
 	realtime  *realtime.Broker
 	wsService websocket.WebSocketInterface
-	auth      auth.Auth
 
+	authRoutes    chi.Router
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
 
+	authService     auth.AuthService
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
@@ -83,11 +88,11 @@ func New(
 
 	rt *realtime.Broker,
 	wsService websocket.WebSocketInterface,
-	auth auth.Auth,
-
+	authRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 
+	authService auth.AuthService,
 	boards boards.BoardService,
 	columns columns.ColumnService,
 	votings votings.VotingService,
@@ -141,7 +146,8 @@ func New(
 		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-		auth:                             auth,
+		authService:                      authService,
+		authRoutes:                       authRoutes,
 		boards:                           boards,
 		columns:                          columns,
 		votings:                          votings,
@@ -190,22 +196,14 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
 		r.Post("/feedback", s.createFeedback)
-		r.Route("/login", func(r chi.Router) {
-			r.Delete("/", s.logout)
-			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
-
-			r.Route("/{provider}", func(r chi.Router) {
-				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
-			})
-		})
+		r.Mount("/login", s.authRoutes)
 	})
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
-		r.Use(s.auth.Verifier())
-		r.Use(s.auth.Authenticator())
+		r.Use(s.authService.Verifier())
+		r.Use(s.authService.Authenticator())
 		r.Use(auth.AuthContext)
 
 		r.Route("/templates", func(r chi.Router) {
