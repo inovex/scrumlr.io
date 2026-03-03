@@ -1,26 +1,26 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"strings"
+  "errors"
+  "fmt"
+  "log"
+  "net/http"
+  "os"
+  "strings"
 
-	"go.uber.org/zap"
-	"scrumlr.io/server/cache"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/initialize"
-	"scrumlr.io/server/serviceinitialize"
+  "go.uber.org/zap"
+  "scrumlr.io/server/cache"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/initialize"
+  "scrumlr.io/server/serviceinitialize"
 
-	"scrumlr.io/server/auth"
+  "scrumlr.io/server/auth"
 
-	"github.com/urfave/cli/v2"
-	"github.com/urfave/cli/v2/altsrc"
-	"scrumlr.io/server/api"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/realtime"
+  "github.com/urfave/cli/v2"
+  "github.com/urfave/cli/v2/altsrc"
+  "scrumlr.io/server/api"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/realtime"
 )
 
 func main() {
@@ -286,80 +286,80 @@ func main() {
   }
   app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
+  if err := app.Run(os.Args); err != nil {
+    log.Fatal(err)
+  }
 }
 
 func run(ctx *cli.Context) error {
-	logger.SetLogLevel(ctx.String("log-level"))
+  logger.SetLogLevel(ctx.String("log-level"))
 
-	otelShutdown, err := initialize.SetupOTelSDK(ctx.Context, ctx.String("otel-grpc"), ctx.String("otel-http"))
-	if err != nil {
-		return fmt.Errorf("failed to setup OpenTelemetry: %w", err)
-	}
-	defer func() {
-		err = errors.Join(err, otelShutdown(ctx.Context))
-	}()
+  otelShutdown, err := initialize.SetupOTelSDK(ctx.Context, ctx.String("otel-grpc"), ctx.String("otel-http"))
+  if err != nil {
+    return fmt.Errorf("failed to setup OpenTelemetry: %w", err)
+  }
+  defer func() {
+    err = errors.Join(err, otelShutdown(ctx.Context))
+  }()
 
-	db, err := initialize.InitializeDatabase(ctx.String("database"))
-	if err != nil {
-		return fmt.Errorf("unable to migrate database: %w", err)
-	}
+  db, err := initialize.InitializeDatabase(ctx.String("database"))
+  if err != nil {
+    return fmt.Errorf("unable to migrate database: %w", err)
+  }
 
-	if !ctx.Bool("insecure") && ctx.String("key") == "" {
-		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
-	}
+  if !ctx.Bool("insecure") && ctx.String("key") == "" {
+    return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
+  }
 
-	var rt *realtime.Broker
-	if ctx.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v as message broker", ctx.String("redis-address"))
-		rt, err = realtime.NewRedis(realtime.RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
-		})
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
-		}
-	} else {
-		logger.Get().Infof("Connecting to nats at %v as message broker", ctx.String("nats"))
-		rt, err = realtime.NewNats(ctx.String("nats"))
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
-		}
-	}
+  var rt *realtime.Broker
+  if ctx.String("redis-address") != "" {
+    logger.Get().Infof("Connecting to redis at %v as message broker", ctx.String("redis-address"))
+    rt, err = realtime.NewRedis(realtime.RedisServer{
+      Addr:     ctx.String("redis-address"),
+      Username: ctx.String("redis-username"),
+      Password: ctx.String("redis-password"),
+    })
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+    }
+  } else {
+    logger.Get().Infof("Connecting to nats at %v as message broker", ctx.String("nats"))
+    rt, err = realtime.NewNats(ctx.String("nats"))
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+    }
+  }
 
-	var c *cache.Cache
-	if ctx.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v as cache", ctx.String("redis-address"))
-		c, err = cache.NewRedis(cache.RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
-		})
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis cache: %v", err)
-		}
-	} else {
-		logger.Get().Infof("Connecting to nats at %v as cache", ctx.String("nats"))
-		c, err = cache.NewNats(ctx.String("nats"), "scrumlr")
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats cache: %v", err)
-		}
-	}
+  var c *cache.Cache
+  if ctx.String("redis-address") != "" {
+    logger.Get().Infof("Connecting to redis at %v as cache", ctx.String("redis-address"))
+    c, err = cache.NewRedis(cache.RedisServer{
+      Addr:     ctx.String("redis-address"),
+      Username: ctx.String("redis-username"),
+      Password: ctx.String("redis-password"),
+    })
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to redis cache: %v", err)
+    }
+  } else {
+    logger.Get().Infof("Connecting to nats at %v as cache", ctx.String("nats"))
+    c, err = cache.NewNats(ctx.String("nats"), "scrumlr")
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to nats cache: %v", err)
+    }
+  }
 
-	basePath := "/"
-	if ctx.IsSet("base-path") {
-		basePath = ctx.String("base-path")
-		if !strings.HasPrefix(basePath, "/") {
-			return errors.New("base path must start with '/'")
-		}
+  basePath := "/"
+  if ctx.IsSet("base-path") {
+    basePath = ctx.String("base-path")
+    if !strings.HasPrefix(basePath, "/") {
+      return errors.New("base path must start with '/'")
+    }
 
-		if len(basePath) > 1 {
-			basePath = strings.TrimSuffix(basePath, "/")
-		}
-	}
+    if len(basePath) > 1 {
+      basePath = strings.TrimSuffix(basePath, "/")
+    }
+  }
 
   providersMap := make(map[string]auth.AuthProviderConfiguration)
   if ctx.String("auth-google-client-id") != "" && ctx.String("auth-google-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -421,50 +421,50 @@ func run(ctx *cli.Context) error {
 
   }
 
-	if ctx.String("session-secret") == "" && len(providersMap) != 0 {
-		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
-	}
-
-	bun := initialize.InitializeBun(db, logger.GetLogLevel())
-	initializer := serviceinitialize.NewServiceInitializer(bun, rt, c)
-
-	wsService := initializer.InitializeWebSocketService()
-	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
-	feedbackService := initializer.InitializeFeedbackService(ctx.String("feedback-webhook-url"))
-	healthService := initializer.InitializeHealthService()
-
-	boardReactionService := initializer.InitializeBoardReactionService()
-	reactionService := initializer.InitializeReactionService()
-
-	columnTemplateService := initializer.InitializeColumnTemplateService()
-	boardTemplateService := initializer.InitializeBoardTemplateService(columnTemplateService)
-
-	votingService := initializer.InitializeVotingService()
-	noteService := initializer.InitializeNotesService()
-	columnService := initializer.InitializeColumnService(noteService)
-
-	sessionService := initializer.InitializeSessionService(columnService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
-
-  userService := initializer.InitializeUserService(sessionService, noteService)
-  keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
-  unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
-  authService := auth.NewAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
-  if err != nil {
-    return fmt.Errorf("unable to setup authentication: %w", err)
+  if ctx.String("session-secret") == "" && len(providersMap) != 0 {
+    return errors.New("you may not start the application without a session secret if an authentication provider is configured")
   }
 
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+  bun := initialize.InitializeBun(db, logger.GetLogLevel())
+  initializer := serviceinitialize.NewServiceInitializer(bun, rt, c)
+
+  wsService := initializer.InitializeWebSocketService()
+  websocket := initializer.InitializeSessionRequestWebsocket(wsService)
+  feedbackService := initializer.InitializeFeedbackService(ctx.String("feedback-webhook-url"))
+  healthService := initializer.InitializeHealthService()
+
+  boardReactionService := initializer.InitializeBoardReactionService()
+  reactionService := initializer.InitializeReactionService()
+
+  columnTemplateService := initializer.InitializeColumnTemplateService()
+  boardTemplateService := initializer.InitializeBoardTemplateService(columnTemplateService)
+
+  votingService := initializer.InitializeVotingService()
+  noteService := initializer.InitializeNotesService()
+  columnService := initializer.InitializeColumnService(noteService)
+
+  sessionService := initializer.InitializeSessionService(columnService, noteService)
+  sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
+
+	userService := initializer.InitializeUserService(sessionService, noteService)
+	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
+	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
+	authService := initializer.InitializeAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
+	if err != nil {
+		return fmt.Errorf("unable to setup authentication: %w", err)
+	}
+
+  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
   apiInitializer := serviceinitialize.NewApiInitializer(basePath)
   sessionApi := apiInitializer.InitializeSessionApi(sessionService)
   userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
   authApi := apiInitializer.InitializeAuthApi(authService, userService)
 
-	routesInitializer := serviceinitialize.NewRoutesInitializer()
-	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
-	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
-	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
+  routesInitializer := serviceinitialize.NewRoutesInitializer()
+  authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
+  userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
+  sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 
   s := api.New(
     basePath,
