@@ -158,15 +158,18 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 				Where("id = ?", extUserID).
 				Returning("*").
 				Exec(ctx, &user)
+
 			if err != nil {
 				return err
 			}
+
 			_, err = tx.NewUpdate().
 				Table(table).
 				Set("name = ?", name).
 				Set("avatar_url = ?", avatarUrl).
 				Where("id = ?", id).
 				Exec(ctx)
+
 			return err
 		}
 
@@ -180,15 +183,19 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			Model(&insert).
 			Returning("*").
 			Exec(ctx, &user)
+
 		if err != nil {
 			return err
 		}
+
 		_, err = tx.NewRaw(
 			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
 			user.ID, id, name, avatarUrl,
 		).Exec(ctx)
+
 		return err
 	})
+
 	return user, err
 }
 
