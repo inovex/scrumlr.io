@@ -668,7 +668,7 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.sessions["UpdateAll4"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

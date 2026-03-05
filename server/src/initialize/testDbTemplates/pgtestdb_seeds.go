@@ -157,7 +157,7 @@ func GetBaseIDs() DbBaseIDs {
 
 func SeedDBBase(db *bun.DB) {
 	for _, user := range users {
-		if err := InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := InsertUser(db, user.ID, user.Name, string(user.AccountType), nil); err != nil {
 			log.Fatalf("Failed to insert test user %s: %s", user.Name, err)
 		}
 	}
