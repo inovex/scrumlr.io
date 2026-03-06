@@ -323,7 +323,7 @@ func (suite *ReactionServiceIntegrationTestSuite) seedReactionsTestData(db *bun.
 	log.Println("Seeding reactions test data")
 
 	for _, user := range suite.users {
-		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), nil); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}
