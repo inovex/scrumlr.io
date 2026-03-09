@@ -57,36 +57,49 @@ To see all values that can be set and what purpose they serve, take a look at th
 
 ## Local testing of auth providers
 
-In order to use of provider in a local test environment following arguments must be set either in the CLI arguments or in the .env file:
+In order to use a provider in a local test environment the following arguments must be set either in the CLI arguments or in the .env file:
 
 ### Needed for all providers
-```
+
+```ini
 -auth-callback-host     = http://localhost:8080
--session-secret         = <own session secret>
+-session-secret         = <random string>
 ```
+
+A random string can be generated like the following:
+
+```sh
+pwgen -s 64 1
+```
+
 ### Google
-```
+
+```ini
 -auth-google-client-id      = <google client id>
 -auth-google-client-secret  = <google client secret>
 ```
 
 ### Microsoft
-```
+
+```ini
 -auth-microsoft-client-id     = <microsoft client id>
 -auth-microsoft-client-secret = <microsoft client secret>
 ```
 
 ### GitHub
-```
+
+```ini
 -auth-github-client-id        =	<github client id>
 -auth-github-client-secret    = <github client secret>
 ```
 
 ### OIDC Dex
-Start the docker with the OIDC profile
+Start the docker compose file with the OIDC profile
+
 ```bash
 docker compose -f docker-compose.dev.yml --profile=oidc up
 ```
+
 ```
 -auth-oidc-discovery-url    = http://oidc.localhost:5556/dex/.well-known/openid-configuration
 -auth-oidc-client-id        = <oidc client id>

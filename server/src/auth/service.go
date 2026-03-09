@@ -6,6 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"math"
+	"net/http"
+	"time"
+
 	"github.com/MicahParks/keyfunc/v3"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/golang-jwt/jwt/v5"
@@ -18,14 +23,10 @@ import (
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/endpoints"
-	"io"
-	"math"
-	"net/http"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/users"
-	"time"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/auth")
