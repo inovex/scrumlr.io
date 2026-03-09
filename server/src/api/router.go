@@ -1,49 +1,48 @@
 package api
 
 import (
-	"net/http"
-	"os"
-	"time"
+  "net/http"
+  "os"
+  "time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/websocket"
+  "go.opentelemetry.io/otel"
+  "scrumlr.io/server/websocket"
 
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
+  "scrumlr.io/server/sessions"
+  "scrumlr.io/server/users"
 
-	"scrumlr.io/server/boards"
+  "scrumlr.io/server/boards"
 
-	"scrumlr.io/server/votings"
+  "scrumlr.io/server/votings"
 
-	"scrumlr.io/server/boardreactions"
-	"scrumlr.io/server/boardtemplates"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/notes"
+  "scrumlr.io/server/boardreactions"
+  "scrumlr.io/server/boardtemplates"
+  "scrumlr.io/server/columns"
+  "scrumlr.io/server/columntemplates"
+  "scrumlr.io/server/notes"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
+  "github.com/go-chi/chi/v5"
+  "github.com/go-chi/chi/v5/middleware"
+  "github.com/markbates/goth/gothic"
 
-	"github.com/go-chi/cors"
-	"github.com/go-chi/httprate"
-	"github.com/go-chi/render"
-	"github.com/google/uuid"
-	gorillaSessions "github.com/gorilla/sessions"
+  "github.com/go-chi/cors"
+  "github.com/go-chi/httprate"
+  "github.com/go-chi/render"
+  "github.com/google/uuid"
+  gorillaSessions "github.com/gorilla/sessions"
 
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
+  "scrumlr.io/server/auth"
+  "scrumlr.io/server/feedback"
+  "scrumlr.io/server/health"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/reactions"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/sessionrequests"
 )
 
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+var tracer = otel.Tracer("scrumlr.io/server/api")
 
 type Server struct {
 	basePath string

@@ -13,7 +13,6 @@ import (
 	"scrumlr.io/server/notes"
 )
 
-//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
