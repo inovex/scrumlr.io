@@ -351,7 +351,7 @@ func (suite *DatabaseColumnTemplateTestSuite) seedData(db *bun.DB) {
 	suite.columnTemplates["Read2"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
