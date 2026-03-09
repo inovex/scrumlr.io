@@ -196,9 +196,9 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
           // check if user tries to authenticate by a prior authentication key
           // attempt to migrate JWT to new key
           var userID string
-          err := token.Get("id", &userID)
+          err = token.Get("id", &userID)
           if err != nil {
-            return
+            logger.Get().Errorw("Error getting user ID", "error", err)
           }
           var user uuid.UUID
           user, err = uuid.Parse(userID)
