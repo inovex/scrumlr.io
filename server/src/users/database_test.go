@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"log"
 	"testing"
 
@@ -119,11 +120,11 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateGoogleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabaseUpdateGoogleUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
-	existingUserID := suite.users["ExistingGoogleUser"].ID
+	existingUser := suite.users["ExistingGoogleUser"]
 	googleID := "existingGoogleId"
 	updatedName := "UpdatedName"
 	updatedAvatarUrl := "https://example.com/avatar.jpg"
@@ -132,9 +133,10 @@ func (suite *DatabaseUserTestSuite) TestDatabaseUpdateGoogleUser() {
 
 	// check that the existing user was updated in the main users table
 	assert.Nil(t, err)
-	assert.Equal(t, existingUserID, dbUser.ID)
+	assert.Equal(t, existingUser.ID, dbUser.ID)
 	assert.Equal(t, updatedName, dbUser.Name)
 	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Equal(t, existingUser.Avatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 
@@ -346,12 +348,12 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 
 	// test users
 	suite.users = make(map[string]DatabaseUser, 6)
-	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google}
+	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
 	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
 	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
 	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
 	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
-	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google}
+	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
 
 	// test boards
 	suite.boards = make(map[string]testBoard, 1)
@@ -364,7 +366,13 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		var avatar *string
+		if user.Avatar != nil {
+			a, _ := json.Marshal(&user.Avatar)
+			avatarString := string(a)
+			avatar = &avatarString
+		}
+		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), avatar)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
