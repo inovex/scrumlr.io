@@ -27,13 +27,11 @@ import (
   "scrumlr.io/server/logger"
 )
 
-//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
-
 // createBoard creates a new board
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.create")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.create")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   owner := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
   // parse request
@@ -69,9 +67,9 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 // deleteBoard deletes a board
 func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.delete")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.delete")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -89,9 +87,9 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -118,9 +116,9 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -158,9 +156,9 @@ type JoinBoardRequest struct {
 
 // joinBoard create a new participant
 func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.join")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.join")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardParam := chi.URLParam(r, "id")
   board, err := uuid.Parse(boardParam)
@@ -316,9 +314,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 // updateBoard updates a board
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -346,9 +344,9 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.set")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.set")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -375,9 +373,9 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.delete")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.delete")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -395,9 +393,9 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.increment")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.increment")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -415,9 +413,9 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
@@ -533,9 +531,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.import")
-	defer span.End()
-	log := logger.FromContext(ctx)
+  ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.import")
+  defer span.End()
+  log := logger.FromContext(ctx)
 
   owner := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
