@@ -14,11 +14,11 @@ import (
 	"github.com/google/uuid"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
 
 // createVoting creates a new voting session
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.votings.api.create")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.create")
 	defer span.End()
 
 	log := logger.FromContext(ctx)
@@ -54,7 +54,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 // updateVoting updates a voting session
 func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.votings.api.update")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.update")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -97,7 +97,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVoting get a voting session
 func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.votings.api.get")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.get")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -117,7 +117,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVotings get all voting sessions
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.votings.api.update")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.update")
 	defer span.End()
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)

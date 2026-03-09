@@ -9,10 +9,10 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
 
 func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.health.api")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.health.api")
 	defer span.End()
 	log := logger.FromContext(ctx)
 

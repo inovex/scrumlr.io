@@ -1,9 +1,9 @@
 package api
 
 import (
-  "net/http"
-  "os"
-  "time"
+	"net/http"
+	"os"
+	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
@@ -44,7 +44,7 @@ import (
 	"scrumlr.io/server/sessionrequests"
 )
 
-var Tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 type Server struct {
 	basePath string

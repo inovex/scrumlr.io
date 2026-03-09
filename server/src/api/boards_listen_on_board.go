@@ -35,7 +35,7 @@ type InitEvent struct {
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -157,7 +157,7 @@ func (s *Server) handleWebSocketMessage(ctx context.Context, boardID, userID uui
 }
 
 func (s *Server) closeBoardSocket(ctx context.Context, board, user uuid.UUID, conn websocket.Connection, reason string) {
-	ctx, span := Tracer.Start(ctx, "scrumlr.listen.api.socket.close")
+	ctx, span := tracer.Start(ctx, "scrumlr.listen.api.socket.close")
 	defer span.End()
 	log := logger.FromContext(ctx)
 

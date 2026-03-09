@@ -13,10 +13,10 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
 
 func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.column_templates.api.create")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -48,7 +48,7 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.column_templates.api.get")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -69,7 +69,7 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.column_templates.api.get.all")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.get.all")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -89,7 +89,7 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.column_templates.api.update")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.update")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -122,7 +122,7 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.column_templates.api.delete")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.delete")
 	defer span.End()
 	log := logger.FromContext(ctx)
 

@@ -13,11 +13,11 @@ import (
 	"scrumlr.io/server/notes"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+//var tracer trace.tracer = otel.tracer("scrumlr.io/server/api")
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.notes.api.create")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.notes.api.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -55,7 +55,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 // getNote get a note
 func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.notes.api.get")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.notes.api.get")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -76,7 +76,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 
 // getNotes get all notes
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.notes.api.get.all")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.notes.api.get.all")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -97,7 +97,7 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 // updateNote updates a note
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.notes.api.update")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.notes.api.update")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
@@ -131,7 +131,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
-	ctx, span := Tracer.Start(r.Context(), "scrumlr.notes.api.delete")
+	ctx, span := tracer.Start(r.Context(), "scrumlr.notes.api.delete")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
