@@ -303,10 +303,10 @@ func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
 func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 	log.Println("Seeding users test data")
 
-	if err := testDbTemplates.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType)); err != nil {
+	if err := testDbTemplates.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType), nil); err != nil {
 		log.Fatalf("Failed to insert update user: %s", err)
 	}
-	if err := testDbTemplates.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType)); err != nil {
+	if err := testDbTemplates.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType), nil); err != nil {
 		log.Fatalf("Failed to insert delete user: %s", err)
 	}
 
