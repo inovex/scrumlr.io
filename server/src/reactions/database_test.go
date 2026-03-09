@@ -252,7 +252,7 @@ func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	suite.reactions["Get3"] = DatabaseReaction{ID: uuid.New(), Note: suite.notes["Read2"].id, User: suite.users["Santa"].id, ReactionType: Heart}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

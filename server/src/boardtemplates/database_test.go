@@ -203,7 +203,7 @@ func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
 	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name2, Description: &description2, Favourite: &favourite2}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
