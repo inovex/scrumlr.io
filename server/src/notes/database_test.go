@@ -817,7 +817,7 @@ func (suite *DatabaseNoteTestSuite) seedData(db *bun.DB) {
 	suite.notes[26] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Read"].id, Column: suite.columns["Read2"].id, Text: "I have no idea", Rank: 1}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

@@ -74,9 +74,9 @@ func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (Databa
 func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	err := db.db.NewSelect().
-		Model(&user).
+		Model((*DatabaseUser)(nil)).
 		Where("id = ?", id).
-		Scan(ctx)
+		Scan(ctx, &user)
 
 	return user, err
 }
@@ -84,7 +84,8 @@ func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 func (db *DB) GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
 	var users []DatabaseUser
 
-	err := db.db.NewSelect().Model((*DatabaseUser)(nil)).
+	err := db.db.NewSelect().
+		Model((*DatabaseUser)(nil)).
 		Join("JOIN board_sessions AS s ON s.user = id").
 		Where("s.board = ?", boardID).
 		Scan(ctx, &users)
@@ -141,7 +142,6 @@ func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, 
 
 func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
-
 	var user DatabaseUser
 	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 		var extUserID uuid.UUID
@@ -151,15 +151,14 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			Where("id = ?", id).
 			Scan(ctx, &extUserID)
 
-		if err == nil {
+		if err == nil { // external user exists
 			_, err = tx.NewUpdate().
-				Model(&DatabaseUserUpdate{
-					ID:   extUserID,
-					Name: name,
-				}).
+				Model((*DatabaseUser)(nil)).
+				Set("name = ?", name).
 				Where("id = ?", extUserID).
 				Returning("*").
 				Exec(ctx, &user)
+
 			if err != nil {
 				return err
 			}
@@ -170,6 +169,7 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 				Set("avatar_url = ?", avatarUrl).
 				Where("id = ?", id).
 				Exec(ctx)
+
 			return err
 		}
 
@@ -177,11 +177,13 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			return err
 		}
 
+		// add new external user to the database
 		insert := DatabaseUserInsert{Name: name, AccountType: accountType}
 		_, err = tx.NewInsert().
 			Model(&insert).
 			Returning("*").
 			Exec(ctx, &user)
+
 		if err != nil {
 			return err
 		}
@@ -190,6 +192,7 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
 			user.ID, id, name, avatarUrl,
 		).Exec(ctx)
+
 		return err
 	})
 
