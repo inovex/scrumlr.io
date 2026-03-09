@@ -188,7 +188,7 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
     return func(next http.Handler) http.Handler {
       hfn := func(w http.ResponseWriter, r *http.Request) {
         ctx := r.Context()
-
+        log := logger.FromContext(ctx)
         var token jwt.Token
         var err error
 
@@ -198,7 +198,7 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
           var userID string
           err = token.Get("id", &userID)
           if err != nil {
-            logger.Get().Errorw("Error getting user ID", "error", err)
+            log.Errorw("Error getting user ID", "error", err)
           }
           var user uuid.UUID
           user, err = uuid.Parse(userID)
