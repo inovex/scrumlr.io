@@ -21,9 +21,7 @@ import (
   "go.opentelemetry.io/otel/trace"
   "golang.org/x/crypto/ssh"
   "golang.org/x/oauth2"
-  "golang.org/x/oauth2/github"
-  "golang.org/x/oauth2/google"
-  "golang.org/x/oauth2/microsoft"
+  "golang.org/x/oauth2/endpoints"
   "scrumlr.io/server/auth/devkeys"
   "scrumlr.io/server/common"
   "scrumlr.io/server/logger"
@@ -82,6 +80,7 @@ type GithubUserInformation struct {
 var googleJWKS keyfunc.Keyfunc
 var microsoftJWKS keyfunc.Keyfunc
 var oidcJWKS keyfunc.Keyfunc
+var appleJWKS keyfunc.Keyfunc
 
 func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, userService users.UserService) AuthService {
   a := new(AuthConfiguration)
@@ -110,7 +109,7 @@ func (a *AuthConfiguration) initializeProviders() error {
       ClientID:     p.ClientId,
       ClientSecret: p.ClientSecret,
       RedirectURL:  p.RedirectUri,
-      Endpoint:     google.Endpoint,
+      Endpoint:     endpoints.Google,
       Scopes:       []string{"openid", "email", "profile"},
     }
     var err error
@@ -124,7 +123,7 @@ func (a *AuthConfiguration) initializeProviders() error {
       ClientID:     p.ClientId,
       ClientSecret: p.ClientSecret,
       RedirectURL:  p.RedirectUri,
-      Endpoint:     github.Endpoint,
+      Endpoint:     endpoints.GitHub,
       Scopes:       []string{"user"},
     }
   }
@@ -133,9 +132,10 @@ func (a *AuthConfiguration) initializeProviders() error {
       ClientID:     p.ClientId,
       ClientSecret: p.ClientSecret,
       RedirectURL:  p.RedirectUri,
-      Endpoint:     microsoft.AzureADEndpoint(""),
+      Endpoint:     endpoints.AzureAD(""),
       Scopes:       []string{"openid", "email", "profile"},
     }
+
     var err error
     microsoftJWKS, err = keyfunc.NewDefault([]string{"https://login.microsoftonline.com/common/discovery/v2.0/keys"})
     if err != nil {
@@ -144,7 +144,7 @@ func (a *AuthConfiguration) initializeProviders() error {
   }
   if p, ok := a.providers[string(common.TypeOIDC)]; ok {
     endpoint := oauth2.Endpoint{
-      AuthURL:   p.AuthBasePath + "/auth", //todo: move to environment variables
+      AuthURL:   p.AuthBasePath + "/auth",
       TokenURL:  p.AuthBasePath + "/token",
       AuthStyle: 0, //auto-detect
     }
@@ -156,7 +156,21 @@ func (a *AuthConfiguration) initializeProviders() error {
       Scopes:       []string{"openid", "profile", "email"},
     }
     var err error
-    oidcJWKS, err = keyfunc.NewDefault([]string{"http://127.0.0.1:5556/dex/keys"})
+    oidcJWKS, err = keyfunc.NewDefault([]string{p.AuthBasePath + "/keys"})
+    if err != nil {
+      return err
+    }
+  }
+  if p, ok := a.providers[string(common.Apple)]; ok {
+    a.oauthConfigs[string(common.Apple)] = &oauth2.Config{
+      ClientID:     p.ClientId,
+      ClientSecret: p.ClientSecret,
+      RedirectURL:  p.RedirectUri,
+      Endpoint:     endpoints.Apple,
+      Scopes:       []string{"name", "email"},
+    }
+    var err error
+    appleJWKS, err = keyfunc.NewDefault([]string{"https://appleid.apple.com/auth/keys"})
     if err != nil {
       return err
     }
@@ -184,7 +198,6 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
           userID := authToken.PrivateClaims()["id"].(string)
           var user uuid.UUID
           user, err = uuid.Parse(userID)
-
           if err == nil {
             var ok bool
             if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
@@ -299,6 +312,8 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
     internalUser, err = a.userService.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
   case common.Microsoft:
     internalUser, err = a.userService.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+  case common.Apple:
+    internalUser, err = a.userService.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 
   }
 
@@ -350,7 +365,7 @@ func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider stri
   case string(common.TypeOIDC):
     kf = oidcJWKS.Keyfunc
   case string(common.Apple):
-    return nil, errors.New("not implemented")
+    kf = appleJWKS.Keyfunc
   default:
     return nil, fmt.Errorf("unsupported provider for token verification: %s", provider)
   }
@@ -386,7 +401,8 @@ func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider stri
     res.Name = fmt.Sprint(claims["name"])
     res.AvatarURL = fmt.Sprint(claims["avatar_url"])
   case string(common.Apple):
-    panic("not implemented")
+    res.Ident = fmt.Sprint(claims["sub"])
+    res.Name = fmt.Sprint(claims["name"]) //todo: does this work?
   case string(common.TypeOIDC):
     res.Ident = fmt.Sprint(claims["sub"])
     res.Name = fmt.Sprint(claims["name"])
