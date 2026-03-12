@@ -3,6 +3,7 @@ package realtime
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -164,4 +165,49 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	event := <-eventChannel
 	assert.NotNil(t, event)
 	assert.Equal(t, &eventType, event)
+}
+
+// Regression test for the same missing-return bug, applied to session request subscriptions.
+// Scenario: user and admin are both waiting on a board session request channel;
+// the user's context is cancelled, then a new request event is broadcast.
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_FirstSubscriberContextCancelled_SecondSubscriberReceivesEvent() {
+	t := suite.T()
+	boardId := uuid.New()
+	userId1 := uuid.New()
+	userId2 := uuid.New()
+	eventType := RequestAccepted
+
+	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
+	assert.Nil(t, err)
+
+	// Subscriber 1: user who will close the tab
+	ctx1, cancel1 := context.WithCancel(context.Background())
+	ch1 := broker.GetBoardSessionRequestChannel(ctx1, boardId, userId1)
+
+	// Subscriber 2: another user still waiting
+	ch2 := broker.GetBoardSessionRequestChannel(context.Background(), boardId, userId2)
+
+	// Subscriber 1 closes browser tab → context cancelled
+	cancel1()
+
+	// Wait until ch1 is closed to confirm the goroutine processed ctx.Done()
+	select {
+	case _, ok := <-ch1:
+		assert.False(t, ok, "ch1 should be closed after context cancellation")
+	case <-time.After(5 * time.Second):
+		t.Fatal("timeout: ch1 was not closed after context cancellation")
+	}
+
+	// A new session request event is broadcast for subscriber 2
+	// Without the fix: goroutine 1 panics with "send on closed channel"
+	err = broker.BroadcastUpdateOnBoardSessionRequest(context.Background(), boardId, userId2, eventType)
+	assert.Nil(t, err)
+
+	select {
+	case event := <-ch2:
+		assert.NotNil(t, event)
+		assert.Equal(t, &eventType, event)
+	case <-time.After(5 * time.Second):
+		t.Fatal("timeout: ch2 did not receive the expected event")
+	}
 }
