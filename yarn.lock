@@ -5243,10 +5243,10 @@ emittery@^0.8.1:
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.8.1.tgz#bb23cc86d03b30aa75a7f734819dee2e1ba70860"
   integrity sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==
 
-emoji-picker-element@^1.29.0:
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/emoji-picker-element/-/emoji-picker-element-1.29.0.tgz#8af41d98e5e782df1a1fb3b3cf6156c077ac8e1d"
-  integrity sha512-lQm8YayfwIP5j+Xe1O2Fjul7hv2b4spPS16X99O4qKQdzDQaEeiAqqYaRONHncewcpisUf6qGFJkhM2G3riEdA==
+emoji-picker-element@^1.29.1:
+  version "1.29.1"
+  resolved "https://registry.yarnpkg.com/emoji-picker-element/-/emoji-picker-element-1.29.1.tgz#24119c44341b4f63573357b77290032c1659140a"
+  integrity sha512-TOiHzu9Dqib3x4MwcAi3wi3RdyT4SoeB4b15AvH1ks4SBwTl7DeebhZ0d3x6dNi4XfNU7IGRZ7NBQllj0RqwrQ==
 
 emoji-regex@^10.3.0:
   version "10.3.0"
