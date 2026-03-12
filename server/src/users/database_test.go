@@ -131,10 +131,10 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUser() {
 
 	dbUser, err := database.CreateGoogleUser(context.Background(), googleID, updatedName, updatedAvatarUrl)
 
-	// check that the existing user was updated in the main users table
+	// check that the existing user's name was NOT overwritten in the main users table
 	assert.Nil(t, err)
 	assert.Equal(t, existingUser.ID, dbUser.ID)
-	assert.Equal(t, updatedName, dbUser.Name)
+	assert.Equal(t, existingUser.Name, dbUser.Name)
 	assert.Equal(t, common.Google, dbUser.AccountType)
 	assert.Equal(t, existingUser.Avatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)

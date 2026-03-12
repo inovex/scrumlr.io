@@ -152,12 +152,10 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			Scan(ctx, &extUserID)
 
 		if err == nil { // external user exists
-			_, err = tx.NewUpdate().
+			err = tx.NewSelect().
 				Model((*DatabaseUser)(nil)).
-				Set("name = ?", name).
 				Where("id = ?", extUserID).
-				Returning("*").
-				Exec(ctx, &user)
+				Scan(ctx, &user)
 
 			if err != nil {
 				return err
