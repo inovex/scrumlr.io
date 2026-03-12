@@ -9,29 +9,37 @@ import {resources} from "i18nTest";
 
 const mockLocation = {pathname: "/boards/templates"};
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useLocation: () => mockLocation,
-  useParams: () => ({}),
-  Outlet: () => null,
-}));
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useLocation: () => mockLocation,
+    useParams: () => ({}),
+    Outlet: () => null,
+  };
+});
 
 // Mock getTemplates to return a proper thunk that dispatches fulfilled with an empty list.
-// This prevents the templates reducer from crashing on a real API call during render.
-jest.mock("store/features/templates/thunks", () => {
-  const actual = jest.requireActual("store/features/templates/thunks");
+vi.mock("store/features/templates/thunks", async () => {
+  const actual = await vi.importActual<typeof import("store/features/templates/thunks")>("store/features/templates/thunks");
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mockGetTemplates: any = () => (dispatch: any) => {
     dispatch({type: actual.getTemplates.fulfilled.type, payload: []});
   };
+
   mockGetTemplates.fulfilled = actual.getTemplates.fulfilled;
   mockGetTemplates.pending = actual.getTemplates.pending;
   mockGetTemplates.rejected = actual.getTemplates.rejected;
   mockGetTemplates.typePrefix = actual.getTemplates.typePrefix;
-  return {...actual, getTemplates: mockGetTemplates};
+
+  return {
+    ...actual,
+    getTemplates: mockGetTemplates,
+  };
 });
 
-jest.mock("components/ImportBoard", () => ({
+vi.mock("components/ImportBoard", () => ({
   ImportBoard: ({onClose}: {onClose: () => void}) => (
     <div data-testid="import-board-modal">
       <button onClick={onClose}>Close import modal</button>

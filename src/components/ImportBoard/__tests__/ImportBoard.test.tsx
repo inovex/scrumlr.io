@@ -3,15 +3,16 @@ import {render} from "testUtils";
 import {ImportBoard} from "../ImportBoard";
 import * as boardThunks from "store/features/board/thunks";
 import {Toast} from "utils/Toast";
+import {vi, Mock} from "vitest";
 
-jest.mock("utils/Toast", () => ({
+vi.mock("utils/Toast", () => ({
   Toast: {
-    error: jest.fn(),
+    error: vi.fn(),
   },
 }));
 
 const mockFileReaderInstance = {
-  readAsText: jest.fn(),
+  readAsText: vi.fn(),
   onload: null as ((e: {target: {result: string}}) => void) | null,
   onerror: null as (() => void) | null,
 };
@@ -25,16 +26,16 @@ const validImportData = {
 };
 
 describe("ImportBoard", () => {
-  let onClose: jest.Mock;
+  let onClose: Mock;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    onClose = jest.fn();
-    mockFileReaderInstance.readAsText = jest.fn();
+    vi.clearAllMocks();
+    onClose = vi.fn();
+    mockFileReaderInstance.readAsText = vi.fn();
     mockFileReaderInstance.onload = null;
     mockFileReaderInstance.onerror = null;
-    global.FileReader = jest.fn(() => mockFileReaderInstance) as unknown as typeof FileReader;
-    jest.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as any);
+    global.FileReader = vi.fn(() => mockFileReaderInstance) as unknown as typeof FileReader;
+    vi.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as any);
     const portal = document.createElement("div");
     portal.setAttribute("id", "portal");
     document.body.appendChild(portal);

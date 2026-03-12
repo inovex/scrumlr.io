@@ -7,7 +7,7 @@ import {Button} from "components/Button";
 import classNames from "classnames";
 import {getTemplates} from "store/features";
 import {useAppDispatch, useAppSelector} from "store";
-import {FileJson} from "components/Icon";
+import {FileJsonIcon} from "components/Icon";
 import {ImportBoard} from "components/ImportBoard";
 import "./Boards.scss";
 
@@ -77,7 +77,7 @@ export const Boards = () => {
               disabled={!canCreateBoard}
               title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : ""}
             >
-              <FileJson className="boards__import-button-icon" />
+              <FileJsonIcon className="boards__import-button-icon" />
               {t("ImportBoard.button")}
             </Button>
           )}

@@ -6,7 +6,7 @@ import {BoardImportData, CreateSessionAccessPolicy} from "store/features/board/t
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {Button} from "components/Button";
-import {CheckDone} from "components/Icon";
+import {CheckDoneIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import classNames from "classnames";
 import "./ImportBoard.scss";
@@ -127,7 +127,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
                   </>
                 ) : (
                   <div className="import-board__file-success">
-                    <CheckDone className="import-board__success-icon" />
+                    <CheckDoneIcon className="import-board__success-icon" />
                     <span className="import-board__file-name">
                       {t("ImportBoard.successPrefix")} {fileName}
                     </span>
