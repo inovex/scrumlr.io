@@ -69,7 +69,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         <SettingsCarousel
           carouselItems={group.values}
           currentValue={properties[group.key]}
-          onValueChange={(value) => updateAvatar(group.key, value)}
+          onValueChange={(value) => updateAvatar(group.key, value as AvataaarProps[keyof AvataaarProps])}
           disabled={isDisabled}
           localizationPath={`Avatar.${group.key}.`}
           label={t(`Avatar.${group.key}.label`)}
@@ -92,7 +92,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
           {Object.entries(AVATAR_CONFIG).map(([label, groups], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
-                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
+                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing" | "background"}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
                 headerClassName="avatar-settings__settings-group-header"
