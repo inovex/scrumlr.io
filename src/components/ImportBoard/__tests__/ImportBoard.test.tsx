@@ -34,7 +34,10 @@ describe("ImportBoard", () => {
     mockFileReaderInstance.readAsText = vi.fn();
     mockFileReaderInstance.onload = null;
     mockFileReaderInstance.onerror = null;
-    global.FileReader = vi.fn(() => mockFileReaderInstance) as unknown as typeof FileReader;
+    // TODO check possibility of using stubGlobal
+    global.FileReader = vi.fn().mockImplementation(function () {
+      return mockFileReaderInstance;
+    }) as unknown as typeof FileReader;
     vi.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as any);
     const portal = document.createElement("div");
     portal.setAttribute("id", "portal");
