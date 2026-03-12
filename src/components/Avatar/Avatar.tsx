@@ -40,7 +40,7 @@ export const generateRandomProps = (seed: string) => {
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
 
   return {
-    accentColorClass: getColorClassName(getColorForIndex(hash)),
+    backgroundColor: getColorForIndex(hash),
     skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
     topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
     clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
@@ -81,13 +81,13 @@ export const Avatar = React.memo(
       return null;
     }
     if (!avatar) {
-      const {accentColorClass, ...avatarProps} = generateRandomProps(seed);
-      return <Avataar className={classNames("avatar", className, accentColorClass)} circle {...avatarProps} />;
+      const avatarProps = generateRandomProps(seed);
+      return <Avataar className={classNames("avatar", className, getColorClassName(avatarProps.backgroundColor))} circle {...avatarProps} />;
     }
 
     return (
       <Avataar
-        className={classNames("avatar", className, avatar.accentColorClass)}
+        className={classNames("avatar", className, getColorClassName(avatar.backgroundColor))}
         circle
         topType={avatar.topType}
         accessoriesType={avatar.accessoriesType}
