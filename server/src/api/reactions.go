@@ -5,16 +5,12 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.get")

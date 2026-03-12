@@ -2,6 +2,7 @@ package serviceinitialize
 
 import (
 	"github.com/go-chi/chi/v5"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -13,6 +14,11 @@ func NewRoutesInitializer() RoutesInitializer {
 	initializer := new(RoutesInitializer)
 
 	return *initializer
+}
+
+func (init *RoutesInitializer) InitializeAuthRoutes(authApi auth.AuthApi) chi.Router {
+	router := auth.NewAuthRouter(authApi).RegisterRoutes()
+	return router
 }
 
 func (init *RoutesInitializer) InitializeBoardRoutes() {

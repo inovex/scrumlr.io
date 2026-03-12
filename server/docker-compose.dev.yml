@@ -28,3 +28,14 @@ services:
       - "4317:4317"
       - "4318:4318"
       - "5000:3000"
+
+  oidc.localhost:
+    restart: always
+    image: ghcr.io/dexidp/dex:v2.41.1-distroless
+    container_name: oidc.localhost
+    volumes:
+      - ./dex.yaml:/etc/dex/config.docker.yaml:ro
+    ports:
+      - "5556:5556"
+    profiles:
+      - oidc

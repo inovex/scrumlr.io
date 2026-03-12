@@ -52,6 +52,7 @@ func ConflictError(err error) *APIError {
 
 var NotFoundError = &APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 var InternalServerError = &APIError{StatusCode: http.StatusInternalServerError, StatusText: "Internal server error."}
+var UnauthorizedError = &APIError{StatusCode: http.StatusUnauthorized, StatusText: "Unauthorized."}
 
 func Throw(w http.ResponseWriter, r *http.Request, err error) {
 	var apiErr *APIError

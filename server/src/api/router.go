@@ -1,56 +1,60 @@
 package api
 
 import (
-	"net/http"
-	"os"
-	"time"
+  "net/http"
+  "os"
+  "time"
 
-	"scrumlr.io/server/websocket"
+  "go.opentelemetry.io/otel"
+  "scrumlr.io/server/websocket"
 
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
+  "scrumlr.io/server/sessions"
+  "scrumlr.io/server/users"
 
-	"scrumlr.io/server/boards"
+  "scrumlr.io/server/boards"
 
-	"scrumlr.io/server/votings"
+  "scrumlr.io/server/votings"
 
-	"scrumlr.io/server/boardreactions"
-	"scrumlr.io/server/boardtemplates"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/notes"
+  "scrumlr.io/server/boardreactions"
+  "scrumlr.io/server/boardtemplates"
+  "scrumlr.io/server/columns"
+  "scrumlr.io/server/columntemplates"
+  "scrumlr.io/server/notes"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
+  "github.com/go-chi/chi/v5"
+  "github.com/go-chi/chi/v5/middleware"
+  "github.com/markbates/goth/gothic"
 
-	"github.com/go-chi/cors"
-	"github.com/go-chi/httprate"
-	"github.com/go-chi/render"
-	"github.com/google/uuid"
-	gorillaSessions "github.com/gorilla/sessions"
+  "github.com/go-chi/cors"
+  "github.com/go-chi/httprate"
+  "github.com/go-chi/render"
+  "github.com/google/uuid"
+  gorillaSessions "github.com/gorilla/sessions"
 
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
+  "scrumlr.io/server/auth"
+  "scrumlr.io/server/feedback"
+  "scrumlr.io/server/health"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/reactions"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/sessionrequests"
 )
+
+var tracer = otel.Tracer("scrumlr.io/server/api")
 
 type Server struct {
 	basePath string
 
 	realtime  *realtime.Broker
 	wsService websocket.WebSocketInterface
-	auth      auth.Auth
 
+	authRoutes    chi.Router
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
 
+	authService     auth.AuthService
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
@@ -83,11 +87,11 @@ func New(
 
 	rt *realtime.Broker,
 	wsService websocket.WebSocketInterface,
-	auth auth.Auth,
-
+	authRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 
+	authService auth.AuthService,
 	boards boards.BoardService,
 	columns columns.ColumnService,
 	votings votings.VotingService,
@@ -141,7 +145,8 @@ func New(
 		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-		auth:                             auth,
+		authService:                      authService,
+		authRoutes:                       authRoutes,
 		boards:                           boards,
 		columns:                          columns,
 		votings:                          votings,
@@ -190,22 +195,14 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
 		r.Post("/feedback", s.createFeedback)
-		r.Route("/login", func(r chi.Router) {
-			r.Delete("/", s.logout)
-			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
-
-			r.Route("/{provider}", func(r chi.Router) {
-				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
-			})
-		})
+		r.Mount("/login", s.authRoutes)
 	})
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
-		r.Use(s.auth.Verifier())
-		r.Use(s.auth.Authenticator())
+		r.Use(s.authService.Verifier())
+		r.Use(s.authService.Authenticator())
 		r.Use(auth.AuthContext)
 
 		r.Route("/templates", func(r chi.Router) {

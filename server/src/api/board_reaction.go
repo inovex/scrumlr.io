@@ -12,7 +12,6 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // createBoardReaction creates a new board reaction
 func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {

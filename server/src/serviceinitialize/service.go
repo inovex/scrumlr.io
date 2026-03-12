@@ -3,6 +3,7 @@ package serviceinitialize
 import (
 	"net/http"
 
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/hash"
@@ -48,6 +49,11 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 	initializer.client = &http.Client{}
 
 	return *initializer
+}
+
+func (init *ServiceInitializer) InitializeAuthService(providers map[string]auth.AuthProviderConfiguration, unsafePrivateKey, privateKey string, userService users.UserService) auth.AuthService {
+	authService := auth.NewAuthService(providers, unsafePrivateKey, privateKey, userService)
+	return authService
 }
 
 func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {

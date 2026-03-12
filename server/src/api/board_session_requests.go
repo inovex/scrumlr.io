@@ -15,7 +15,6 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.get")
