@@ -7,12 +7,15 @@ import i18nTest from "i18nTest";
 import {I18nextProvider} from "react-i18next";
 import {TimerDialog} from "..";
 
-const mockedUsedNavigate = jest.fn();
-jest.spyOn(store, "dispatch");
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useNavigate: () => mockedUsedNavigate,
-}));
+const mockedUsedNavigate = vi.fn();
+vi.spyOn(store, "dispatch");
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useNavigate: () => mockedUsedNavigate,
+  };
+});
 
 const createTimerDialog = (isParticipant?: boolean) => (
   <I18nextProvider i18n={i18nTest}>

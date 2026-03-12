@@ -7,28 +7,43 @@ import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";
 import {API} from "api";
 import {resources} from "i18nTest";
+import {Mock} from "vitest";
 
 // Mock the API
-jest.mock("api", () => ({
+vi.mock("api", async () => ({
   API: {
-    createBoard: jest.fn(),
+    createBoard: vi.fn(),
   },
 }));
 
 // Mock the navigate function
-const mockNavigate = jest.fn();
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useNavigate: () => mockNavigate,
-}));
+const mockNavigate = vi.fn();
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+const getTestState = (isAnonymous: boolean, allowAnonymousBoardCreation: boolean) =>
+  getTestApplicationState({
+    auth: {
+      ...getTestApplicationState().auth,
+      user: {
+        ...getTestApplicationState().auth.user!,
+        isAnonymous,
+      },
+    },
+    view: {...getTestApplicationState().view, allowAnonymousBoardCreation},
+  });
 
 describe("LegacyNewBoard", () => {
-  const defaultState = getTestApplicationState();
   const signInToCreateBoardText = resources.en.translation.Templates.TemplateCard.signInToCreateBoards;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    (API.createBoard as jest.Mock).mockResolvedValue("board-id-123");
+    vi.clearAllMocks();
+    (API.createBoard as Mock).mockResolvedValue("board-id-123");
   });
 
   const renderLegacyNewBoard = (state?: Partial<ApplicationState>) => {
@@ -42,83 +57,32 @@ describe("LegacyNewBoard", () => {
   };
 
   it("should render correctly for authenticated users", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "user-id",
-          name: "Test User",
-          isAnonymous: false,
-        },
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(false, false);
+    renderLegacyNewBoard(testState);
 
     expect(screen.getByText("Choose a template")).toBeInTheDocument();
     expect(screen.getByText("Create new Board")).toBeInTheDocument();
   });
 
   it("should render correctly for anonymous users with board creation allowed", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: true,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, true);
+    renderLegacyNewBoard(testState);
 
     expect(screen.getByText("Choose a template")).toBeInTheDocument();
     expect(screen.getByText("Create new Board")).toBeInTheDocument();
   });
 
   it("should disable create board button for anonymous users when board creation is disabled", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
     expect(createButton).toBeDisabled();
   });
 
   it("should show tooltip for disabled create board button for anonymous users", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
     expect(createButton).toBeDisabled();
@@ -126,21 +90,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should disable import board button for anonymous users when board creation is disabled", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     // Click on import file option first
     const importFileLabel = screen.getByText("Import JSON");
@@ -151,21 +102,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should show tooltip for disabled import board button for anonymous users", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     // Click on import file option first
     const importFileLabel = screen.getByText("Import JSON");
@@ -177,20 +115,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should enable create board button when template is selected and user can create boards", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "user-id",
-          name: "Test User",
-          isAnonymous: false,
-        },
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(false, false);
+    renderLegacyNewBoard(testState);
 
     // Select a template
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -201,21 +127,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should enable create board button for anonymous users when board creation is allowed and template is selected", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: true,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, true);
+    renderLegacyNewBoard(testState);
 
     // Select a template
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -226,20 +139,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should call API and navigate when creating board with allowed permissions", async () => {
-    const state = {
-      auth: {
-        user: {
-          id: "user-id",
-          name: "Test User",
-          isAnonymous: false,
-        },
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(false, false);
+    renderLegacyNewBoard(testState);
 
     // Select a template
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -255,21 +156,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should not call API when creating board with disabled permissions", async () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     // Select a template
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -291,20 +179,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should handle extended configuration mode", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "user-id",
-          name: "Test User",
-          isAnonymous: false,
-        },
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(false, false);
+    renderLegacyNewBoard(testState);
 
     // Select a template first to enable extended configuration
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -319,20 +195,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should switch between basic and extended configuration", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "user-id",
-          name: "Test User",
-          isAnonymous: false,
-        },
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(false, false);
+    renderLegacyNewBoard(testState);
 
     // Select a template first
     const leanCoffeeOption = screen.getByDisplayValue("leanCoffee");
@@ -352,21 +216,8 @@ describe("LegacyNewBoard", () => {
   });
 
   it("should show correct disabled state logic for create button with all conditions", () => {
-    const state = {
-      auth: {
-        user: {
-          id: "anonymous-user-id",
-          name: "Anonymous User",
-          isAnonymous: true,
-        },
-        initializationSucceeded: true,
-      },
-      view: {
-        allowAnonymousBoardCreation: false,
-      },
-    };
-
-    renderLegacyNewBoard(state);
+    const testState = getTestState(true, false);
+    renderLegacyNewBoard(testState);
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
 

@@ -13,7 +13,7 @@ describe("ColumnDetails", () => {
       notesCount: 1,
       mode: "view",
       isTemporary: false,
-      changeMode: jest.fn(),
+      changeMode: vi.fn(),
     };
 
     const props = {...defaultProps, ...overrideProps};
@@ -37,7 +37,7 @@ describe("ColumnDetails", () => {
   });
 
   it("should switch to edit mode (self is moderator)", () => {
-    const changeModeSpy = jest.fn();
+    const changeModeSpy = vi.fn();
     const {container} = renderColumnDetails({changeMode: changeModeSpy});
     const columnDetailNameNode = container.querySelector<HTMLDivElement>(".column-details__name")!;
 
@@ -46,7 +46,7 @@ describe("ColumnDetails", () => {
   });
 
   it("should not switch to edit mode (self is participant)", () => {
-    const changeModeSpy = jest.fn();
+    const changeModeSpy = vi.fn();
     const {container} = renderColumnDetails({changeMode: changeModeSpy}, "PARTICIPANT");
     const columnDetailNameNode = container.querySelector<HTMLDivElement>(".column-details__name")!;
 
@@ -56,7 +56,7 @@ describe("ColumnDetails", () => {
 
   describe("Description click editing with readOnly TextArea", () => {
     it("should switch to edit mode when clicking description placeholder (moderator)", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy});
 
@@ -68,7 +68,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should not switch to edit mode when clicking description placeholder (participant)", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy}, "PARTICIPANT");
 
@@ -80,7 +80,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should switch to edit mode when clicking filled description with readOnly TextArea (moderator)", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy});
 
@@ -99,7 +99,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should not switch to edit mode when clicking filled description (participant)", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy}, "PARTICIPANT");
 
@@ -115,7 +115,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should focus description field when switching to edit mode via placeholder click", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container, rerender} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy});
 
@@ -139,7 +139,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should focus description field when switching to edit mode via filled description click", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container, rerender} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy});
 
@@ -198,7 +198,7 @@ describe("ColumnDetails", () => {
     });
 
     it("should preserve click functionality after expand/collapse", () => {
-      const changeModeSpy = jest.fn();
+      const changeModeSpy = vi.fn();
       const longDescription = "This is a long description ".repeat(10);
       const columnWithLongDescription = {...getTestApplicationState().columns[0], description: longDescription};
       const {container} = renderColumnDetails({column: columnWithLongDescription, changeMode: changeModeSpy});

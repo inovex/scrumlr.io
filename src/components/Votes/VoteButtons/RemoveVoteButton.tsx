@@ -2,7 +2,7 @@ import {FC, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {DotButton} from "components/DotButton";
-import {Minus} from "components/Icon";
+import {MinusIcon} from "components/Icon";
 import "./RemoveVoteButton.scss";
 import {useAppDispatch} from "store";
 import {deleteVote} from "store/features";
@@ -49,7 +49,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
       dataTooltipContent={isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}
     >
       <span className="vote-button-remove__folded-corner" />
-      <Minus className="vote-button-remove__icon" />
+      <MinusIcon className="vote-button-remove__icon" />
       <span className="vote-button-remove__count">{numberOfVotes}</span>
     </DotButton>
   );

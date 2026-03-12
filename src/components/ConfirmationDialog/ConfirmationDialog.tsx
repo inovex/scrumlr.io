@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {animated, Transition} from "@react-spring/web";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
-import {Close, Warning} from "components/Icon";
+import {CloseIcon, WarningIcon} from "components/Icon";
 import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
@@ -42,7 +42,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
           {(styles) => (
             <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles} onClick={(e) => e.stopPropagation()}>
               <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
-                <Close className="dialog__close-icon" />
+                <CloseIcon className="dialog__close-icon" />
               </button>
               <div className="confirmation-dialog__icon-content-wrapper">
                 {props.icon && <props.icon className="confirmation-dialog__icon" />}
@@ -51,7 +51,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                     <h2 className="confirmation-dialog__title">{props.title}</h2>
                     {props.warning && (
                       <div className="confirmation-dialog__warning">
-                        <Warning />
+                        <WarningIcon />
                         <p>{t("ConfirmationDialog.warning")}</p>
                       </div>
                     )}
@@ -89,7 +89,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                     <div className="confirmation-dialog__error-message">
                       {props.checkbox.showError && (
                         <>
-                          <Warning />
+                          <WarningIcon />
                           <p>{t("ConfirmationDialog.deleteAccountWarning")}</p>
                         </>
                       )}

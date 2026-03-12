@@ -1,9 +1,9 @@
 import {useAppDispatch, useAppSelector} from "store";
 import {Theme} from "store/features/view/types";
 import {t} from "i18next";
-import {SettingsDarkMode, SettingsLightMode, GeneralSettings} from "components/Icon";
-import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
-import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
+import {SettingsDarkModeIcon, SettingsLightModeIcon, GeneralSettingsIcon} from "components/Icon";
+import ThemePreviewDark from "assets/themes/theme-preview-dark.svg?url";
+import ThemePreviewLight from "assets/themes/theme-preview-light.svg?url";
 import "./ThemeSettings.scss";
 import {setTheme} from "store/features";
 
@@ -24,7 +24,7 @@ export const ThemeSettings = () => {
           <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
           <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
           <p>
-            <GeneralSettings className="appearance-settings__theme-icon" />
+            <GeneralSettingsIcon className="appearance-settings__theme-icon" />
             <span>Auto</span>
           </p>
         </label>
@@ -32,7 +32,7 @@ export const ThemeSettings = () => {
           <input id="light" type="radio" value="light" name="themeLight" checked={theme === "light"} onChange={() => dispatchTheme("light")} />
           <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
           <p>
-            <SettingsLightMode className="appearance-settings__theme-icon" />
+            <SettingsLightModeIcon className="appearance-settings__theme-icon" />
             <span>{t("Appearance.colorSchemeLight")}</span>
           </p>
         </label>
@@ -40,7 +40,7 @@ export const ThemeSettings = () => {
           <input id="dark" type="radio" value="dark" name="themeDark" checked={theme === "dark"} onChange={() => dispatchTheme("dark")} />
           <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
           <p>
-            <SettingsDarkMode className="appearance-settings__theme-icon" />
+            <SettingsDarkModeIcon className="appearance-settings__theme-icon" />
             <span>{t("Appearance.colorSchemeDark")}</span>
           </p>
         </label>
