@@ -3185,7 +3185,7 @@ eslint-plugin-css-modules@^2.12.0:
     gonzales-pe "^4.3.0"
     lodash "^4.17.2"
 
-eslint-plugin-import@^2.32.0:
+eslint-plugin-import@2.32.0:
   version "2.32.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.32.0.tgz#602b55faa6e4caeaa5e970c198b5c00a37708980"
   integrity sha512-whOE1HFo/qJDyX4SnXzP4N6zOWn79WhnCUY/iDR0mPfQZO8wcYE4JClzI2oZrhBnnMUCBCHZhO6VQyoBU95mZA==
