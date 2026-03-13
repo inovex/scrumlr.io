@@ -144,23 +144,36 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 	name = strings.TrimSpace(name)
 	var user DatabaseUser
 	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
-		var extUserID uuid.UUID
+		var extUser struct {
+			UserID uuid.UUID `bun:"user"`
+			Name   string    `bun:"name"`
+		}
 		err := tx.NewSelect().
 			Table(table).
-			Column("user").
+			Column("user", "name").
 			Where("id = ?", id).
-			Scan(ctx, &extUserID)
+			Scan(ctx, &extUser)
 
 		if err == nil { // external user exists
-			_, err = tx.NewUpdate().
+			err = tx.NewSelect().
 				Model((*DatabaseUser)(nil)).
-				Set("name = ?", name).
-				Where("id = ?", extUserID).
-				Returning("*").
-				Exec(ctx, &user)
+				Where("id = ?", extUser.UserID).
+				Scan(ctx, &user)
 
 			if err != nil {
 				return err
+			}
+
+			if extUser.Name == user.Name && user.Name != name {
+				_, err = tx.NewUpdate().
+					Table("users").
+					Set("name = ?", name).
+					Where("id = ?", extUser.UserID).
+					Returning("*").
+					Exec(common.ContextWithValues(ctx, "Database", db), &user)
+				if err != nil {
+					return err
+				}
 			}
 
 			_, err = tx.NewUpdate().
