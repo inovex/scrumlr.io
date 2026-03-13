@@ -131,16 +131,51 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUser() {
 
 	dbUser, err := database.CreateGoogleUser(context.Background(), googleID, updatedName, updatedAvatarUrl)
 
-	// check that the existing user's name was NOT overwritten in the main users table
+	// user has not manually changed their name, so the new OAuth name should be synced
 	assert.Nil(t, err)
 	assert.Equal(t, existingUser.ID, dbUser.ID)
-	assert.Equal(t, existingUser.Name, dbUser.Name)
+	assert.Equal(t, updatedName, dbUser.Name)
 	assert.Equal(t, common.Google, dbUser.AccountType)
 	assert.Equal(t, existingUser.Avatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 
-	// check the same for the external google_users table
+	// check the external google_users table was updated too
+	var externalUser struct {
+		Name      string
+		AvatarUrl string
+	}
+	err = suite.db.NewSelect().
+		Table("google_users").
+		Column("name", "avatar_url").
+		Where("id = ?", googleID).
+		Scan(context.Background(), &externalUser)
+
+	assert.Nil(t, err)
+	assert.Equal(t, updatedName, externalUser.Name)
+	assert.Equal(t, updatedAvatarUrl, externalUser.AvatarUrl)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUserWithManualNameChange() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	existingUser := suite.users["ExistingGoogleUserManualName"]
+	googleID := "existingGoogleIdManualName"
+	updatedName := "UpdatedName"
+	updatedAvatarUrl := "https://example.com/avatar.jpg"
+
+	dbUser, err := database.CreateGoogleUser(context.Background(), googleID, updatedName, updatedAvatarUrl)
+
+	// user has manually changed their scrumlr name, so it must be preserved
+	assert.Nil(t, err)
+	assert.Equal(t, existingUser.ID, dbUser.ID)
+	assert.Equal(t, existingUser.Name, dbUser.Name)
+	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Nil(t, dbUser.KeyMigration)
+	assert.NotNil(t, dbUser.CreatedAt)
+
+	// check that the external google_users table was still updated
 	var externalUser struct {
 		Name      string
 		AvatarUrl string
@@ -354,6 +389,7 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
 	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
 	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
+	suite.users["ExistingGoogleUserManualName"] = DatabaseUser{ID: uuid.New(), Name: "CustomName", AccountType: common.Google}
 
 	// test boards
 	suite.boards = make(map[string]testBoard, 1)
@@ -379,6 +415,11 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	}
 
 	err := testDbTemplates.InsertGoogleUser(db, suite.users["ExistingGoogleUser"].ID, "existingGoogleId", "OldName", "")
+	if err != nil {
+		log.Fatalf("Failed to insert google_users entry %s", err)
+	}
+
+	err = testDbTemplates.InsertGoogleUser(db, suite.users["ExistingGoogleUserManualName"].ID, "existingGoogleIdManualName", "OldGoogleName", "")
 	if err != nil {
 		log.Fatalf("Failed to insert google_users entry %s", err)
 	}
