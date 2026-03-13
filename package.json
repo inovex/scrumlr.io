@@ -73,7 +73,7 @@
     "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "@vitejs/plugin-react": "^5.1.1",
+    "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^4.0.16",
     "cross-env": "^10.1.0",
     "cypress": "^15.11.0",
@@ -89,7 +89,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
-    "happy-dom": "^20.3.4",
+    "happy-dom": "^20.8.3",
     "hash-files": "^1.1.1",
     "husky": "^9.1.7",
     "i18next-fs-backend": "^2.6.1",
@@ -105,7 +105,7 @@
     "typescript": "^5.8.3",
     "vite": "^7.2.2",
     "vite-plugin-svgr": "^4.5.0",
-    "vite-tsconfig-paths": "^5.1.4",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.16"
   },
   "scripts": {
