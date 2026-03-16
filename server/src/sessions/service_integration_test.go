@@ -144,7 +144,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	msgSession := <-events
 	msgColumns := <-events
 	msgNotes := <-events
-	assert.Equal(t, realtime.BoardEventParticipantUpdated, msgSession.Type)
+	assert.Equal(t, realtime.BoardEventSessionUpdated, msgSession.Type)
 	assert.Equal(t, realtime.BoardEventColumnsUpdated, msgColumns.Type)
 	assert.Equal(t, realtime.BoardEventNotesSync, msgNotes.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
@@ -230,7 +230,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 	assert.Nil(t, err)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventParticipantUpdated, msg.Type)
+	assert.Equal(t, realtime.BoardEventSessionUpdated, msg.Type)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {

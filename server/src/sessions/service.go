@@ -427,7 +427,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 		}
 
 		err = service.realtime.BroadcastToBoard(ctx, s.Board, realtime.BoardEvent{
-			Type: realtime.BoardEventParticipantUpdated,
+			Type: realtime.BoardEventSessionUpdated,
 			Data: new(BoardSession).From(userSession),
 		})
 
