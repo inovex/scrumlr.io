@@ -25,6 +25,11 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
     initialState = generateRandomProps(props.id ?? "");
   }
 
+  // old authenticated accounts may be missing backgroundColor, so we set it explicitly. It will be persisted when going to the profile settings for the first time
+  if (!initialState.backgroundColor) {
+    initialState = {...initialState, backgroundColor: generateRandomProps(props.id ?? "").backgroundColor};
+  }
+
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
