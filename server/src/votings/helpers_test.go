@@ -215,6 +215,57 @@ func TestShouldFailUnmarshallingVoteData(t *testing.T) {
 //	}
 //}
 
+func TestSortNotesByVotesOrdersDescending(t *testing.T) {
+	note1 := Note{ID: uuid.New()}
+	note2 := Note{ID: uuid.New()}
+	note3 := Note{ID: uuid.New()}
+
+	results := &VotingResults{
+		Votes: map[uuid.UUID]VotingResultsPerNote{
+			note1.ID: {Total: 1},
+			note2.ID: {Total: 5},
+			note3.ID: {Total: 3},
+		},
+	}
+
+	sorted := sortNotesByVotes([]Note{note1, note2, note3}, results)
+
+	assert.Equal(t, note2.ID, sorted[0].ID)
+	assert.Equal(t, note3.ID, sorted[1].ID)
+	assert.Equal(t, note1.ID, sorted[2].ID)
+}
+
+func TestSortNotesByVotesZeroVoteNotesIncludedAtEnd(t *testing.T) {
+	noteWithVotes := Note{ID: uuid.New()}
+	noteWithoutVotes := Note{ID: uuid.New()}
+
+	results := &VotingResults{
+		Votes: map[uuid.UUID]VotingResultsPerNote{
+			noteWithVotes.ID: {Total: 3},
+		},
+	}
+
+	sorted := sortNotesByVotes([]Note{noteWithoutVotes, noteWithVotes}, results)
+
+	assert.Equal(t, noteWithVotes.ID, sorted[0].ID)
+	assert.Equal(t, noteWithoutVotes.ID, sorted[1].ID)
+}
+
+func TestSortNotesByVotesNilResults(t *testing.T) {
+	note1 := Note{ID: uuid.New()}
+	note2 := Note{ID: uuid.New()}
+
+	sorted := sortNotesByVotes([]Note{note1, note2}, nil)
+
+	assert.Len(t, sorted, 2)
+}
+
+func TestSortNotesByVotesEmptyInput(t *testing.T) {
+	sorted := sortNotesByVotes([]Note{}, &VotingResults{Votes: map[uuid.UUID]VotingResultsPerNote{}})
+
+	assert.Empty(t, sorted)
+}
+
 func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *DatabaseVote {
 	return &DatabaseVote{
 		Voting:    votingId,

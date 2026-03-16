@@ -1,6 +1,8 @@
 package votings
 
 import (
+	"sort"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/technical_helper"
 )
@@ -123,4 +125,20 @@ func (v *Voting) calculateTotalVoteCount(notes []Note) *VotingResults {
 
 func (v *Voting) hasNoResults() bool {
 	return v.VotingResults == nil
+}
+
+func sortNotesByVotes(notes []Note, votingResults *VotingResults) []Note {
+	sort.SliceStable(notes, func(i, j int) bool {
+		var iTotal, jTotal int
+		if votingResults != nil {
+			if result, ok := votingResults.Votes[notes[i].ID]; ok {
+				iTotal = result.Total
+			}
+			if result, ok := votingResults.Votes[notes[j].ID]; ok {
+				jTotal = result.Total
+			}
+		}
+		return iTotal > jTotal
+	})
+	return notes
 }
