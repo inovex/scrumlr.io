@@ -28,7 +28,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.2.18
 	github.com/uptrace/bun/extra/bunotel v1.2.18
 	github.com/urfave/cli/v2 v2.27.7
-	github.com/weppos/publicsuffix-go v0.50.2
+	github.com/weppos/publicsuffix-go v0.50.3
 	go.opentelemetry.io/contrib/bridges/otelzap v0.16.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.66.0
 	go.opentelemetry.io/otel v1.41.0
