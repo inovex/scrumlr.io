@@ -12,7 +12,7 @@ import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
-  id?: string;
+  id: string;
 }
 
 export const AvatarSettings = (props: AvatarSettingsProps) => {
@@ -22,12 +22,12 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
 
   let initialState = self.avatar;
   if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(props.id ?? "");
+    initialState = generateRandomProps(props.id);
   }
 
   // old authenticated accounts may be missing backgroundColor, so we set it explicitly. It will be persisted when going to the profile settings for the first time
   if (!initialState.backgroundColor) {
-    initialState = {...initialState, backgroundColor: generateRandomProps(props.id ?? "").backgroundColor};
+    initialState = {...initialState, backgroundColor: generateRandomProps(props.id).backgroundColor};
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
@@ -87,7 +87,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <Avatar seed={props.id} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
           <ShuffleIcon />
         </button>

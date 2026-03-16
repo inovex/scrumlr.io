@@ -20,7 +20,7 @@ export const ProfileSettings = () => {
   const self = useAppSelector((state) => state.auth.user!);
 
   const [userName, setUserName] = useState<string>(self.name);
-  const [id] = useState<string | undefined>(self.id);
+  const [id] = useState<string>(self.id);
 
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
