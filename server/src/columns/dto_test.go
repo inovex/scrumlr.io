@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 func TestShouldFilterVisibleColumns(t *testing.T) {
@@ -31,7 +32,7 @@ func TestFromMapping(t *testing.T) {
 		Board:       uuid.New(),
 		Name:        *randSeq(10),
 		Description: *randSeq(10),
-		Color:       ColorBacklogBlue,
+		Color:       common.ColorBacklogBlue,
 		Visible:     false,
 		Index:       1,
 	}
@@ -54,7 +55,7 @@ func TestColumnDatabaseMapping(t *testing.T) {
 		Board:       uuid.New(),
 		Name:        *randSeq(10),
 		Description: *randSeq(10),
-		Color:       ColorBacklogBlue,
+		Color:       common.ColorBacklogBlue,
 		Visible:     false,
 		Index:       1,
 	}
@@ -100,7 +101,7 @@ func buildColumn(id uuid.UUID, visible bool) *Column {
 	return &Column{
 		ID:      id,
 		Visible: visible,
-		Color:   ColorBacklogBlue,
+		Color:   common.ColorBacklogBlue,
 	}
 }
 

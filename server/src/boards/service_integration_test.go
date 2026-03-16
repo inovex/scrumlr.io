@@ -212,8 +212,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 		Owner:        userId,
 		AccessPolicy: accessPolicy,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
-			{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
+			{Name: "Column 1", Description: "This is the first column", Color: common.ColorBacklogBlue},
+			{Name: "Column 2", Description: "This is the second column", Color: common.ColorOnlineOrange},
 		},
 	})
 
@@ -245,8 +245,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 		AccessPolicy: accessPolicy,
 		Passphrase:   &passphrase,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
-			{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
+			{Name: "Column 1", Description: "This is the first column", Color: common.ColorBacklogBlue},
+			{Name: "Column 2", Description: "This is the second column", Color: common.ColorOnlineOrange},
 		},
 	})
 
