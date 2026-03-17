@@ -55,6 +55,8 @@ func NewNotesService(db NotesDatabase, rt *realtime.Broker, cache *cache.Cache, 
 	return service
 }
 
+const errUnableToUpdateLastModified = "unable to update last modified"
+
 func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.create")
@@ -124,7 +126,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 
 	notesImportCounter.Add(ctx, 1)
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
-		log.Warnw("unable to update last modified", "board", body.Board, "err", err)
+		log.Warnw(errUnableToUpdateLastModified, "board", body.Board, "err", err)
 	}
 
 	return new(Note).From(note), err
@@ -600,7 +602,7 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	defer span.End()
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
-		log.Warnw("unable to update last modified", "board", board, "err", err)
+		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
 	span.SetAttributes(
@@ -631,7 +633,7 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 	defer span.End()
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
-		log.Warnw("unable to update last modified", "board", board, "err", err)
+		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
 	span.SetAttributes(

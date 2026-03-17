@@ -15,6 +15,8 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votings"
 )
 
 var nowDate = time.Date(2126, 2, 12, 10, 0, 0, 0, time.UTC)
@@ -300,6 +302,104 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	assert.Equal(t, boardId, dbBoard.ID)
 	assert.Equal(t, &startTime, dbBoard.TimerStart)
 	assert.Equal(t, &endTime, dbBoard.TimerEnd)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesTimerAndSharedNoteWhenSet() {
+	t := suite.T()
+
+	boardId := suite.boards["Timer"].ID
+	authorID := suite.users["Stan"].id
+	columnID := uuid.New()
+	noteID := uuid.New()
+
+	err := testDbTemplates.InsertColumn(suite.db, columnID, boardId, "Column", "Description", "backlog-blue", true, 0)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertNote(suite.db, noteID, authorID, boardId, columnID, "Shared note", uuid.NullUUID{}, 0)
+	assert.Nil(t, err)
+
+	startTime := nowDate.Add(time.Minute)
+	endTime := startTime.Add(2 * time.Minute)
+
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardId,
+		TimerStart: &startTime,
+		TimerEnd:   &endTime,
+		SharedNote: uuid.NullUUID{UUID: noteID, Valid: true},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, dbBoard.ID)
+	assert.Equal(t, &startTime, dbBoard.TimerStart)
+	assert.Equal(t, &endTime, dbBoard.TimerEnd)
+	assert.True(t, dbBoard.SharedNote.Valid)
+	assert.Equal(t, noteID, dbBoard.SharedNote.UUID)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesVotingWhenClosedVotingExists() {
+	t := suite.T()
+
+	boardID := suite.boards["Timer"].ID
+	votingID := uuid.New()
+
+	err := testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
+	assert.Nil(t, err)
+
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardID,
+		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, dbBoard.ID)
+	assert.True(t, dbBoard.ShowVoting.Valid)
+	assert.Equal(t, votingID, dbBoard.ShowVoting.UUID)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteRanksForClosedVoting() {
+	t := suite.T()
+
+	boardID := suite.boards["Timer"].ID
+	columnID := uuid.New()
+	noteAID := uuid.New()
+	noteBID := uuid.New()
+	votingID := uuid.New()
+
+	err := testDbTemplates.InsertColumn(suite.db, columnID, boardID, "Column", "Description", "backlog-blue", true, 0)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertNote(suite.db, noteAID, suite.users["Stan"].id, boardID, columnID, "A", uuid.NullUUID{}, 0)
+	assert.Nil(t, err)
+	err = testDbTemplates.InsertNote(suite.db, noteBID, suite.users["Santa"].id, boardID, columnID, "B", uuid.NullUUID{}, 1)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
+	assert.Nil(t, err)
+	err = testDbTemplates.InsertVote(suite.db, boardID, votingID, suite.users["Stan"].id, noteAID)
+	assert.Nil(t, err)
+
+	suite.timeProvider.EXPECT().Now().Return(nowDate)
+
+	_, err = suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardID,
+		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+	})
+	assert.Nil(t, err)
+
+	var noteA notes.DatabaseNote
+	err = suite.db.NewSelect().Model(&noteA).Where("id = ?", noteAID).Scan(context.Background())
+	assert.Nil(t, err)
+
+	var noteB notes.DatabaseNote
+	err = suite.db.NewSelect().Model(&noteB).Where("id = ?", noteBID).Scan(context.Background())
+	assert.Nil(t, err)
+
+	assert.Equal(t, 1, noteA.Rank)
+	assert.Equal(t, 0, noteB.Rank)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_SetsLastModifiedAt() {
