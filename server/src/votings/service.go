@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"sort"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -344,30 +343,7 @@ func (service *Service) updatedVoting(ctx context.Context, board uuid.UUID, voti
 	)
 
 	currentVoting := new(Voting).From(voting, votes)
-	if currentVoting.VotingResults != nil {
-		//map notes for quick lookup
-		noteMap := make(map[uuid.UUID]Note, len(affectedNotes))
-		for _, note := range affectedNotes {
-			noteMap[note.ID] = note
-		}
-
-		noteIDs := make([]uuid.UUID, 0, len(currentVoting.VotingResults.Votes))
-
-		for key := range currentVoting.VotingResults.Votes {
-			noteIDs = append(noteIDs, key)
-		}
-		// sort note IDs by votes
-		sort.SliceStable(noteIDs, func(i, j int) bool {
-			return currentVoting.VotingResults.Votes[noteIDs[i]].Total > currentVoting.VotingResults.Votes[noteIDs[j]].Total
-		})
-		// order notes by votes based on sorted note IDs
-		affectedNotes = make([]Note, 0, len(noteIDs))
-		for _, id := range noteIDs {
-			if note, ok := noteMap[id]; ok {
-				affectedNotes = append(affectedNotes, note)
-			}
-		}
-	}
+	sortNotesByVotes(affectedNotes, currentVoting.VotingResults)
 
 	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
