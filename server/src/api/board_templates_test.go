@@ -15,7 +15,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boardtemplates"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
@@ -40,7 +39,7 @@ func createValidBoardTemplateRequest() boardtemplates.CreateBoardTemplateRequest
 			{
 				Name:        "To Do",
 				Description: "Tasks to be done",
-				Color:       columns.ColorBacklogBlue,
+				Color:       common.ColorBacklogBlue,
 				Visible:     &visible,
 				Index:       &index,
 			},

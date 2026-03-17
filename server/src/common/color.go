@@ -1,4 +1,4 @@
-package columns
+package common
 
 import (
 	"encoding/json"
