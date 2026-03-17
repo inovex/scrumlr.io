@@ -4,7 +4,7 @@ import {SERVER_WEBSOCKET_URL} from "config";
 import {ServerEvent, ClientMessage} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
-import {ApplicationState, retryable, store} from "store";
+import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
