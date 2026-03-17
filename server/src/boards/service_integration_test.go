@@ -89,7 +89,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
 	database := NewBoardDatabase(db, clock)
-	boardLastModifiedUpdater := NewLastModifiedUpdater(database)
+	boardLastModifiedUpdater := NewLastModifiedUpdater(database, clock)
 	noteDatabase := notes.NewNotesDatabase(db)
 	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)

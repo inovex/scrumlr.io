@@ -49,10 +49,12 @@ func (d *DB) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpda
 }
 
 func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error) {
-	update.LastModifiedAt = d.clock.Now()
 	query := d.db.NewUpdate().
-		Model(&update).
-		Column("last_modified_at")
+		Model(&update)
+
+	if !update.LastModifiedAt.IsZero() {
+		query.Column("last_modified_at")
+	}
 
 	if update.TimerStart != nil {
 		query.Column("timer_start")

@@ -32,10 +32,11 @@ var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
 
 type Service struct {
-	clock    timeprovider.TimeProvider
-	hash     hash.Hash
-	database BoardDatabase
-	realtime *realtime.Broker
+	clock                    timeprovider.TimeProvider
+	hash                     hash.Hash
+	database                 BoardDatabase
+	realtime                 *realtime.Broker
+	boardLastModifiedUpdater common.BoardLastModifiedUpdater
 
 	columnService         columns.ColumnService
 	notesService          notes.NotesService
@@ -54,7 +55,18 @@ type BoardDatabase interface {
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
 }
 
-func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, clock timeprovider.TimeProvider, hash hash.Hash) BoardService {
+func NewBoardService(
+	db BoardDatabase,
+	rt *realtime.Broker,
+	sessionRequestService sessionrequests.SessionRequestService,
+	sessionService sessions.SessionService,
+	columnService columns.ColumnService,
+	noteService notes.NotesService,
+	reactionService reactions.ReactionService,
+	votingService votings.VotingService,
+	clock timeprovider.TimeProvider,
+	hash hash.Hash,
+) BoardService {
 	b := new(Service)
 	b.clock = clock
 	b.hash = hash
@@ -66,6 +78,7 @@ func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestServic
 	b.notesService = noteService
 	b.reactionService = reactionService
 	b.votingService = votingService
+	b.boardLastModifiedUpdater = NewLastModifiedUpdater(db, clock)
 
 	return b
 }
@@ -419,6 +432,10 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
 		return nil, err
+	}
+
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID); err != nil {
+		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
 	service.UpdatedBoard(ctx, board)

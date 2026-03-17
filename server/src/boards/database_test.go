@@ -129,8 +129,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
-
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
@@ -172,8 +170,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
-
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
@@ -212,8 +208,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	showNoteReactions := false
 	allowStacking := false
 	isLocked := true
-
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
@@ -255,8 +249,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	showNoteReactions := false
 	allowStacking := false
 	isLocked := true
-
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
@@ -321,8 +313,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesTimerAndSh
 	startTime := nowDate.Add(time.Minute)
 	endTime := startTime.Add(2 * time.Minute)
 
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
-
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:         boardId,
 		TimerStart: &startTime,
@@ -346,8 +336,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesVotingWhen
 
 	err := testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
 	assert.Nil(t, err)
-
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:         boardID,
@@ -382,8 +370,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteR
 	err = testDbTemplates.InsertVote(suite.db, boardID, votingID, suite.users["Stan"].id, noteAID)
 	assert.Nil(t, err)
 
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
-
 	_, err = suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:         boardID,
 		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
@@ -402,28 +388,23 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteR
 	assert.Equal(t, 0, noteB.Rank)
 }
 
-func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_SetsLastModifiedAt() {
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UsesProvidedLastModifiedAt() {
 	t := suite.T()
 
 	boardId := suite.boards["UpdatePassphrase"].ID
 
-	boardBefore, err := suite.database.GetBoard(context.Background(), boardId)
-	assert.Nil(t, err)
-
-	suite.timeProvider.EXPECT().Now().Return(nowDate)
-
 	newName := "Updated Name"
+	newLastModifiedAt := nowDate.Add(5 * time.Minute)
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
-		ID:   boardId,
-		Name: &newName,
+		ID:             boardId,
+		Name:           &newName,
+		LastModifiedAt: newLastModifiedAt,
 	})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
 	assert.Equal(t, &newName, dbBoard.Name)
-
-	assert.True(t, dbBoard.LastModifiedAt.After(boardBefore.LastModifiedAt), "LastModifiedAt should be after the previous value")
-	assert.True(t, dbBoard.LastModifiedAt.After(nowDate) || dbBoard.LastModifiedAt.Equal(nowDate), "LastModifiedAt should be at or after timeBeforeUpdate")
+	assert.Equal(t, newLastModifiedAt, dbBoard.LastModifiedAt)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Delete() {

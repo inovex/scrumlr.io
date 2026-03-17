@@ -60,7 +60,7 @@ func (init *ServiceInitializer) InitializeBoardService(sessionRequestService ses
 func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService) columns.ColumnService {
 	columnDb := columns.NewColumnsDatabase(init.db)
 	boardsDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB, init.clock)
 	columnService := columns.NewColumnService(columnDb, init.broker, noteService, boardLastModifiedUpdater)
 
 	return columnService
@@ -137,7 +137,7 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
 	boardsDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB, init.clock)
 	notesService := notes.NewNotesService(notesDB, init.broker, init.cache, boardLastModifiedUpdater)
 
 	return notesService

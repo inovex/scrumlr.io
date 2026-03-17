@@ -302,10 +302,14 @@ func TestDelete(t *testing.T) {
 func TestUpdate(t *testing.T) {
 	boardID := uuid.New()
 	updatedName := "Updated Board Name"
+	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
+	})).Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -326,6 +330,7 @@ func TestUpdate(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(updatedAt)
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
@@ -370,10 +375,14 @@ func TestUpdate_ToPassphrase(t *testing.T) {
 	accessPolicy := ByPassphrase
 	passphrase := "SuperStrongPassword"
 	salt := "ThisIsTheSalt"
+	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
+	})).Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -394,6 +403,7 @@ func TestUpdate_ToPassphrase(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(updatedAt)
 	mockHash := hash.NewMockHash(t)
 	mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
 
@@ -441,10 +451,14 @@ func TestUpdate_ToPublic(t *testing.T) {
 	boardID := uuid.New()
 	updatedName := "Updated Board Name"
 	accessPolicy := Public
+	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
+	})).Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -465,6 +479,7 @@ func TestUpdate_ToPublic(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(updatedAt)
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
@@ -510,10 +525,14 @@ func TestUpdate_ToInvite(t *testing.T) {
 	boardID := uuid.New()
 	updatedName := "Updated Board Name"
 	accessPolicy := ByInvite
+	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
+	})).Return(DatabaseBoard{ID: boardID}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -534,6 +553,7 @@ func TestUpdate_ToInvite(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(updatedAt)
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
