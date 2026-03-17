@@ -51,7 +51,7 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 }
 
 func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
-	boardDB := boards.NewBoardDatabase(init.db)
+	boardDB := boards.NewBoardDatabase(init.db, init.clock)
 	boardService := boards.NewBoardService(boardDB, init.broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, init.clock, init.hash)
 
 	return boardService
@@ -59,7 +59,9 @@ func (init *ServiceInitializer) InitializeBoardService(sessionRequestService ses
 
 func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService) columns.ColumnService {
 	columnDb := columns.NewColumnsDatabase(init.db)
-	columnService := columns.NewColumnService(columnDb, init.broker, noteService)
+	boardsDB := boards.NewBoardDatabase(init.db, init.clock)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB, init.clock)
+	columnService := columns.NewColumnService(columnDb, init.broker, noteService, boardLastModifiedUpdater)
 
 	return columnService
 }
@@ -134,7 +136,9 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 
 func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.broker, init.cache)
+	boardsDB := boards.NewBoardDatabase(init.db, init.clock)
+	boardLastModifiedUpdater := boards.NewLastModifiedUpdater(boardsDB, init.clock)
+	notesService := notes.NewNotesService(notesDB, init.broker, init.cache, boardLastModifiedUpdater)
 
 	return notesService
 }

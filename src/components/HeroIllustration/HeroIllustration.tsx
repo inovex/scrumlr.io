@@ -34,37 +34,37 @@ export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
           <Panel01 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel02  />
+          <Panel02 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel03   />
+          <Panel03 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel04   />
+          <Panel04 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel05   />
+          <Panel05 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel06   />
+          <Panel06 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel07   />
+          <Panel07 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel08   />
+          <Panel08 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel09   />
+          <Panel09 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel10   />
+          <Panel10 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel11   />
+          <Panel11 />
         </div>
         <div className="hero-illustration__tile">
-          <Panel12   />
+          <Panel12 />
         </div>
       </div>
     </div>

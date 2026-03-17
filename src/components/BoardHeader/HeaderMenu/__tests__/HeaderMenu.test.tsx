@@ -16,7 +16,7 @@ vi.mock("utils/export", async () => ({
   exportAsJSON: vi.fn(),
   exportAsCSV: vi.fn(),
   exportAsCSVZip: vi.fn(),
-}))
+}));
 
 vi.mock("file-saver", async () => ({saveAs: vi.fn()}));
 

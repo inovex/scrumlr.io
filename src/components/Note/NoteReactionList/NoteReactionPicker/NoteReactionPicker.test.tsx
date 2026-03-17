@@ -8,7 +8,7 @@ import {MemoryRouter} from "react-router";
 import {NoteReactionPicker} from "./NoteReactionPicker";
 
 // Mock EmojiPicker to avoid database initialization issues during tests
- vi.mock("../EmojiPicker/EmojiPicker", () => ({
+vi.mock("../EmojiPicker/EmojiPicker", () => ({
   __esModule: true,
   default: () => <div data-testid="emoji-picker-mock" />,
 }));
