@@ -49,45 +49,43 @@ export const AccessSettings = (props: AccessSettingsProps) => {
   };
 
   return (
-    <div className="access-settings__wrapper">
-      <div className="access-settings">
-        <header className="access-settings__header">
-          <div className="access-settings__title">{t("Templates.AccessSettings.title")}</div>
-        </header>
-        <main className="access-settings__main">
-          <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
-            <SelectOption label={t("Templates.AccessSettings.Options.Public.title")} description={t("Templates.AccessSettings.Options.Public.description")} icon={<GlobeIcon />} />
-            <SelectOption
-              label={t("Templates.AccessSettings.Options.By_Invite.title")}
-              description={t("Templates.AccessSettings.Options.By_Invite.description")}
-              icon={<LockClosedIcon />}
+    <div className="access-settings">
+      <header className="access-settings__header">
+        <div className="access-settings__title">{t("Templates.AccessSettings.title")}</div>
+      </header>
+      <main className="access-settings__main">
+        <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
+          <SelectOption label={t("Templates.AccessSettings.Options.Public.title")} description={t("Templates.AccessSettings.Options.Public.description")} icon={<GlobeIcon />} />
+          <SelectOption
+            label={t("Templates.AccessSettings.Options.By_Invite.title")}
+            description={t("Templates.AccessSettings.Options.By_Invite.description")}
+            icon={<LockClosedIcon />}
+          />
+          <SelectOption
+            label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
+            description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
+            icon={<KeyProtectedIcon />}
+          >
+            <Input
+              type="password"
+              required
+              placeholder={t("Templates.AccessSettings.Options.By_Passphrase.inputPlaceholder")}
+              input={passwordInput}
+              setInput={setPasswordInput}
+              height="normal"
             />
-            <SelectOption
-              label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
-              description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
-              icon={<KeyProtectedIcon />}
-            >
-              <Input
-                type="password"
-                required
-                placeholder={t("Templates.AccessSettings.Options.By_Passphrase.inputPlaceholder")}
-                input={passwordInput}
-                setInput={setPasswordInput}
-                height="normal"
-              />
-              <p className="access-settings__hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
-            </SelectOption>
-          </Select>
-        </main>
-        <footer className="access-settings__footer">
-          <Button variant="secondary" onClick={props.onCancel}>
-            {t("Templates.AccessSettings.Buttons.cancel")}
-          </Button>
-          <Button variant="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
-            {t("Templates.AccessSettings.Buttons.start")}
-          </Button>
-        </footer>
-      </div>
+            <p className="access-settings__hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
+          </SelectOption>
+        </Select>
+      </main>
+      <footer className="access-settings__footer">
+        <Button variant="secondary" onClick={props.onCancel}>
+          {t("Templates.AccessSettings.Buttons.cancel")}
+        </Button>
+        <Button variant="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
+          {t("Templates.AccessSettings.Buttons.start")}
+        </Button>
+      </footer>
     </div>
   );
 };

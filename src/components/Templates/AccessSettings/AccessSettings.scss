@@ -1,21 +1,10 @@
 @use "constants/styles";
 
-.access-settings__wrapper {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-}
-
 .access-settings {
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--xl;
   overflow-y: auto;
-
-  width: 37%;
 
   padding: 40px styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
 
