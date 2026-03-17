@@ -45,7 +45,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			s.columns = columnMock
 
 			name := "TestColumn"
-			color := columns.Color("backlog-blue")
+			color := common.Color("backlog-blue")
 			visible := true
 			index := 0
 			boardID, _ := uuid.NewRandom()
@@ -145,7 +145,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -200,7 +200,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "Updated Column Name"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -251,7 +251,7 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 

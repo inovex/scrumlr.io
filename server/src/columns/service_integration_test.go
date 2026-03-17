@@ -88,19 +88,19 @@ func (suite *ColumnServiceIntegrationTestSuite) initTestData() {
 
 	suite.columns = map[string]DatabaseColumn{
 		// Columns for insert tests
-		"InsertLast":    {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567001"), Board: suite.boards["InsertLast"].ID, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0},
-		"InsertHigh":    {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567002"), Board: suite.boards["InsertHigh"].ID, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0},
-		"InsertMiddle0": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567003"), Board: suite.boards["InsertMiddle"].ID, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0},
-		"InsertMiddle1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567004"), Board: suite.boards["InsertMiddle"].ID, Name: "Column 2", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 1},
+		"InsertLast":    {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567001"), Board: suite.boards["InsertLast"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0},
+		"InsertHigh":    {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567002"), Board: suite.boards["InsertHigh"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0},
+		"InsertMiddle0": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567003"), Board: suite.boards["InsertMiddle"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0},
+		"InsertMiddle1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567004"), Board: suite.boards["InsertMiddle"].ID, Name: "Column 2", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 1},
 		// Columns for update tests
-		"Update":  {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567005"), Board: suite.boards["Update"].ID, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0},
-		"Update1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567006"), Board: suite.boards["Update"].ID, Name: "Column 2", Description: "This is a description", Color: ColorYieldingYellow, Visible: true, Index: 1},
+		"Update":  {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567005"), Board: suite.boards["Update"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0},
+		"Update1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567006"), Board: suite.boards["Update"].ID, Name: "Column 2", Description: "This is a description", Color: common.ColorYieldingYellow, Visible: true, Index: 1},
 		// Columns for delete tests
-		"Delete": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567007"), Board: suite.boards["Delete"].ID, Name: "Column 1", Description: "This is a description", Color: ColorGoalGreen, Visible: true, Index: 0},
+		"Delete": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567007"), Board: suite.boards["Delete"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorGoalGreen, Visible: true, Index: 0},
 		// Columns for read tests
-		"Read1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567008"), Board: suite.boards["Read"].ID, Name: "Column 1", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 0},
-		"Read2": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567009"), Board: suite.boards["Read"].ID, Name: "Column 2", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 1},
-		"Read3": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567010"), Board: suite.boards["Read"].ID, Name: "Column 3", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 2},
+		"Read1": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567008"), Board: suite.boards["Read"].ID, Name: "Column 1", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 0},
+		"Read2": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567009"), Board: suite.boards["Read"].ID, Name: "Column 2", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 1},
+		"Read3": {ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567010"), Board: suite.boards["Read"].ID, Name: "Column 3", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 2},
 	}
 }
 
@@ -110,7 +110,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithoutIndex() {
 	boardId := suite.boards["InsertNoIndex"].ID
 	name := "Create no index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 0
 
@@ -144,7 +144,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	boardId := suite.boards["InsertMiddle"].ID
 	name := "Create middle index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 1
 
@@ -188,7 +188,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.columns["Update"].Board
 	name := "Column Updated"
 	description := "This column was updated"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := false
 	index := 1
 

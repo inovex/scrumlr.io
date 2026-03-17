@@ -104,12 +104,12 @@ func TestCreate(t *testing.T) {
 			Board:       boardID,
 			Name:        columnName,
 			Description: columnDescription,
-			Color:       columns.ColorGoalGreen,
+			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
 			User:        userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
@@ -139,7 +139,7 @@ func TestCreate(t *testing.T) {
 					Board:       boardID,
 					Name:        columnName,
 					Description: columnDescription,
-					Color:       columns.ColorGoalGreen,
+					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
 					User:        userID,
@@ -178,12 +178,12 @@ func TestCreate_ByPassphrase(t *testing.T) {
 			Board:       boardID,
 			Name:        columnName,
 			Description: columnDescription,
-			Color:       columns.ColorGoalGreen,
+			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
 			User:        userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
@@ -215,7 +215,7 @@ func TestCreate_ByPassphrase(t *testing.T) {
 					Board:       boardID,
 					Name:        columnName,
 					Description: columnDescription,
-					Color:       columns.ColorGoalGreen,
+					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
 					User:        userID,

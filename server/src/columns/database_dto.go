@@ -3,6 +3,7 @@ package columns
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 // Column the model for a column of a board
@@ -12,7 +13,7 @@ type DatabaseColumn struct {
 	Board         uuid.UUID
 	Name          string
 	Description   string
-	Color         Color
+	Color         common.Color
 	Visible       bool
 	Index         int
 }
@@ -23,7 +24,7 @@ type DatabaseColumnInsert struct {
 	Board         uuid.UUID
 	Name          string
 	Description   string
-	Color         Color
+	Color         common.Color
 	Visible       *bool
 	Index         int
 }
@@ -35,7 +36,7 @@ type DatabaseColumnUpdate struct {
 	Board         uuid.UUID
 	Name          string
 	Description   string
-	Color         Color
+	Color         common.Color
 	Visible       bool
 	Index         int
 }
