@@ -4,7 +4,7 @@ import "scrumlr.io/server/common/avatar"
 
 type Avatar struct {
 	AccessoriesType avatar.AccessoriesType `json:"accessoriesType,omitempty"`
-	BackgroundColor string                 `json:"backgroundColor,omitempty"`
+	BackgroundColor Color                  `json:"backgroundColor,omitempty"`
 	ClotheColor     avatar.ClotheColor     `json:"clotheColor,omitempty"`
 	ClotheType      avatar.ClotheType      `json:"clotheType,omitempty"`
 	EyeType         avatar.EyeType         `json:"eyeType,omitempty"`
