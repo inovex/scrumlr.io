@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {animated, Transition} from "@react-spring/web";
-import {Outlet, useLocation, useNavigate, Link} from "react-router";
+import {Link, Outlet, useLocation, useNavigate} from "react-router";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {useAppSelector, useAppDispatch} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeftIcon, CloseIcon, LogoutIcon} from "components/Icon";
 import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
@@ -124,7 +124,6 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
           <animated.aside
             aria-modal="true"
             className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
-            onClick={(e) => e.stopPropagation()}
             role="dialog"
             style={styles}
           >

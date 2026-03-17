@@ -15,7 +15,7 @@ export const Dialog: FC<PropsWithChildren<DialogProps>> = ({title, className, on
 
   return (
     <Portal onClose={() => onClose?.()}>
-      <aside className={classNames("dialog", className)} {...other} onClick={(e) => e.stopPropagation()}>
+      <aside className={classNames("dialog", className)} {...other}>
         <article className="dialog__content">
           <h2 className="dialog__header-text">{title}</h2>
           {children}
