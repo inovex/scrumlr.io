@@ -1,4 +1,4 @@
-import {useState, useRef} from "react";
+import {useState, useRef, ChangeEvent, DragEvent} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch} from "store";
 import {importBoard} from "store/features/board/thunks";
@@ -27,7 +27,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>) => {
+  const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>) => {
     let file: File | null = null;
     if ("dataTransfer" in event) {
       event.preventDefault();
@@ -56,7 +56,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     reader.readAsText(file);
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
