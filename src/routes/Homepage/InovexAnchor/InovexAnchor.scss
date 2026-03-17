@@ -19,7 +19,7 @@
   vertical-align: bottom;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .inovex-anchor:focus-visible,
   .inovex-anchor:hover {
     color: styles.$gray--000;

@@ -118,7 +118,7 @@ $column-height: 340px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .columns-configurator-column {
     border-color: var(--accent-color--dark);
 

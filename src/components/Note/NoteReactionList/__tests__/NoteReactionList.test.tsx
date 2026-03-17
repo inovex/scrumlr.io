@@ -4,6 +4,7 @@ import {NoteReactionList} from "../NoteReactionList";
 import {render} from "testUtils";
 import {fireEvent} from "@testing-library/react";
 import {ApplicationState} from "store";
+import getTestApplicationState from "utils/test/getTestApplicationState";
 
 const NOTE_ID = "test-notes-id-1";
 
@@ -34,13 +35,8 @@ describe("NoteReactionList", () => {
         board: {
           status: "ready",
           data: {
-            id: "test-board-id",
-            name: "test-board-name",
-            accessPolicy: "PUBLIC",
-            showAuthors: true,
-            showNotesOfOtherUsers: true,
+            ...getTestApplicationState().board.data!,
             showNoteReactions: false,
-            allowStacking: true,
           },
         },
       })

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
+exports[`<HeaderMenu/> > should render correctly > for moderator 1`] = `
 <div
   id="portal"
 >
@@ -158,7 +158,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
 </div>
 `;
 
-exports[`<HeaderMenu/> should render correctly for participants 1`] = `
+exports[`<HeaderMenu/> > should render correctly > for participants 1`] = `
 <div
   id="portal"
 >

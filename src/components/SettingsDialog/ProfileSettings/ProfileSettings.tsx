@@ -7,6 +7,7 @@ import {useOutletContext} from "react-router";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {AvatarSettings} from "../Components/AvatarSettings";
+import {UserDeletion} from "../Components/UserDeletion";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./ProfileSettings.scss";
 
@@ -39,6 +40,7 @@ export const ProfileSettings = () => {
           />
 
           <AvatarSettings id={id} />
+          <UserDeletion id={id} />
         </div>
       </div>
     </div>

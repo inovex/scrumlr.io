@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possibleVotes !== usedVotes 1`] = `
+exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the possibleVotes !== usedVotes 1`] = `
 <DocumentFragment>
   <aside
     class="menu-bars"
@@ -40,14 +40,45 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  mark-as-done.svg
+                  <path
+                    d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -78,14 +109,54 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  raise-hand.svg
+                  <path
+                    d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.4"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -116,14 +187,64 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  add-sticker-reaction.svg
+                  <path
+                    d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                    stroke="currentColor"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M5 9H11"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M8 6V12"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.25"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -154,14 +275,49 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  general-settings.svg
+                  <path
+                    clip-rule="evenodd"
+                    d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                    fill-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -174,8 +330,17 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-left.svg
+          <path
+            d="M19 22L13 16L19 10"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -191,8 +356,17 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-right.svg
+          <path
+            d="M13 10L19 16L13 22"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -206,8 +380,16 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
     >
       <svg
         aria-hidden="true"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        menu.svg
+        <path
+          d="M11.554 14.227h14.649c.477 0 .934.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H11.525a1.805 1.805 0 0 1-1.267-.535 1.78 1.78 0 0 1 .023-2.527 1.8 1.8 0 0 1 1.276-.511h-.003ZM5.827 4H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.527 1.805 1.805 0 0 1-1.272.523H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 5.786c.012-.475.209-.926.55-1.26A1.85 1.85 0 0 1 5.827 4Zm0 20.43H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 26.216c.012-.475.209-.927.55-1.26a1.85 1.85 0 0 1 1.277-.526Z"
+          fill="currentColor"
+        />
       </svg>
     </button>
     <ul
@@ -238,14 +420,49 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              general-settings.svg
+              <path
+                clip-rule="evenodd"
+                d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -275,14 +492,64 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              add-sticker-reaction.svg
+              <path
+                d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                stroke="currentColor"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M5 9H11"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M8 6V12"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.25"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -312,14 +579,54 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              raise-hand.svg
+              <path
+                d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.4"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -349,14 +656,45 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              mark-as-done.svg
+              <path
+                d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -366,7 +704,7 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possib
 </DocumentFragment>
 `;
 
-exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer is not expired 1`] = `
+exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the timer is not expired 1`] = `
 <DocumentFragment>
   <aside
     class="menu-bars"
@@ -406,14 +744,45 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  mark-as-done.svg
+                  <path
+                    d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -444,14 +813,54 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  raise-hand.svg
+                  <path
+                    d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.4"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -482,14 +891,64 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  add-sticker-reaction.svg
+                  <path
+                    d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                    stroke="currentColor"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M5 9H11"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M8 6V12"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.25"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -520,14 +979,49 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  general-settings.svg
+                  <path
+                    clip-rule="evenodd"
+                    d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                    fill-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -540,8 +1034,17 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-left.svg
+          <path
+            d="M19 22L13 16L19 10"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -557,8 +1060,17 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-right.svg
+          <path
+            d="M13 10L19 16L13 22"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -572,8 +1084,16 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
     >
       <svg
         aria-hidden="true"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        menu.svg
+        <path
+          d="M11.554 14.227h14.649c.477 0 .934.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H11.525a1.805 1.805 0 0 1-1.267-.535 1.78 1.78 0 0 1 .023-2.527 1.8 1.8 0 0 1 1.276-.511h-.003ZM5.827 4H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.527 1.805 1.805 0 0 1-1.272.523H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 5.786c.012-.475.209-.926.55-1.26A1.85 1.85 0 0 1 5.827 4Zm0 20.43H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 26.216c.012-.475.209-.927.55-1.26a1.85 1.85 0 0 1 1.277-.526Z"
+          fill="currentColor"
+        />
       </svg>
     </button>
     <ul
@@ -604,14 +1124,49 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              general-settings.svg
+              <path
+                clip-rule="evenodd"
+                d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -641,14 +1196,64 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              add-sticker-reaction.svg
+              <path
+                d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                stroke="currentColor"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M5 9H11"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M8 6V12"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.25"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -678,14 +1283,54 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              raise-hand.svg
+              <path
+                d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.4"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -715,14 +1360,45 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              mark-as-done.svg
+              <path
+                d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -732,7 +1408,7 @@ exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer 
 </DocumentFragment>
 `;
 
-exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential ready state in voting is fulfilled. 1`] = `
+exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potential ready state in voting is fulfilled. 1`] = `
 <DocumentFragment>
   <aside
     class="menu-bars"
@@ -772,14 +1448,45 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  mark-as-done.svg
+                  <path
+                    d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -810,14 +1517,54 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  raise-hand.svg
+                  <path
+                    d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.4"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -848,14 +1595,64 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  add-sticker-reaction.svg
+                  <path
+                    d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                    stroke="currentColor"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M5 9H11"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M8 6V12"
+                    stroke="currentColor"
+                    stroke-linecap="square"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.25"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -886,14 +1683,49 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  general-settings.svg
+                  <path
+                    clip-rule="evenodd"
+                    d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                    fill-rule="evenodd"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-opacity="0.7"
+                    stroke-width="1.5"
+                  />
                 </svg>
                 <svg
                   aria-hidden="true"
                   class="tooltip-button__icon"
+                  fill="none"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  close.svg
+                  <path
+                    d="M21.3137 10L10 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
+                  <path
+                    d="M10 10L21.3137 21.3137"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                  />
                 </svg>
               </div>
             </button>
@@ -906,8 +1738,17 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-left.svg
+          <path
+            d="M19 22L13 16L19 10"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -923,8 +1764,17 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
       >
         <svg
           class="menu-bars__navigation-icon"
+          fill="none"
+          height="32"
+          viewBox="0 0 32 32"
+          width="32"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          arrow-right.svg
+          <path
+            d="M13 10L19 16L13 22"
+            stroke="currentColor"
+            stroke-width="1.75"
+          />
         </svg>
       </button>
     </div>
@@ -938,8 +1788,16 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
     >
       <svg
         aria-hidden="true"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        menu.svg
+        <path
+          d="M11.554 14.227h14.649c.477 0 .934.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H11.525a1.805 1.805 0 0 1-1.267-.535 1.78 1.78 0 0 1 .023-2.527 1.8 1.8 0 0 1 1.276-.511h-.003ZM5.827 4H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.527 1.805 1.805 0 0 1-1.272.523H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 5.786c.012-.475.209-.926.55-1.26A1.85 1.85 0 0 1 5.827 4Zm0 20.43H26.2c.477 0 .935.188 1.272.523a1.78 1.78 0 0 1 0 2.526 1.805 1.805 0 0 1-1.272.524H5.8a1.82 1.82 0 0 1-1.268-.528A1.796 1.796 0 0 1 4 26.216c.012-.475.209-.927.55-1.26a1.85 1.85 0 0 1 1.277-.526Z"
+          fill="currentColor"
+        />
       </svg>
     </button>
     <ul
@@ -970,14 +1828,49 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              general-settings.svg
+              <path
+                clip-rule="evenodd"
+                d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                fill-rule="evenodd"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -1007,14 +1900,64 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              add-sticker-reaction.svg
+              <path
+                d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                stroke="currentColor"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M5 9H11"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M8 6V12"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.25"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -1044,14 +1987,54 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              raise-hand.svg
+              <path
+                d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.4"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -1081,14 +2064,45 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              mark-as-done.svg
+              <path
+                d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="1.75"
+              />
+              <path
+                d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
             <svg
               aria-hidden="true"
               class="tooltip-button__icon"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              close.svg
+              <path
+                d="M21.3137 10L10 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
+              <path
+                d="M10 10L21.3137 21.3137"
+                stroke="currentColor"
+                stroke-width="1.75"
+              />
             </svg>
           </div>
         </button>
@@ -1098,7 +2112,7 @@ exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential 
 </DocumentFragment>
 `;
 
-exports[`MenuBars should match snapshot 1`] = `
+exports[`MenuBars > should match snapshot 1`] = `
 <aside
   class="menu-bars"
 >
@@ -1137,14 +2151,45 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                mark-as-done.svg
+                <path
+                  d="M10.4628 17.3982L14.4769 21.3237L24.4628 11.3237"
+                  stroke="currentColor"
+                  stroke-linecap="square"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M21.519 8.65957C19.9373 7.61083 18.04 7 16 7C10.4772 7 6 11.4772 6 17C6 22.5228 10.4772 27 16 27C21.5228 27 26 22.5228 26 17C26 16.5449 25.9696 16.0968 25.9107 15.6578"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1175,14 +2220,54 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                raise-hand.svg
+                <path
+                  d="M26.8814 11C26.8814 9.14348 26.1439 7.36301 24.8312 6.05025C23.5184 4.7375 21.738 4 19.8814 4"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M8.99553 20.2111L9.09897 13.36C9.12883 13.0335 9.27768 12.7294 9.51718 12.5056C9.74723 12.2859 10.0547 12.1659 10.3728 12.1717C10.5228 12.1797 10.6695 12.2186 10.8037 12.2861C10.9379 12.3535 11.0568 12.448 11.1527 12.5636C11.2486 12.6791 11.3196 12.8133 11.3612 12.9577C11.4028 13.102 11.4141 13.2534 11.3943 13.4023L11.3809 15.9615"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M11.4858 16.1109L15.9334 7.46546C16.0191 7.32068 16.1325 7.19421 16.2671 7.09325C16.4017 6.9923 16.5548 6.91884 16.7178 6.87707C16.8808 6.83531 17.0504 6.82606 17.2169 6.84984C17.3835 6.87363 17.5437 6.92999 17.6884 7.0157C17.8351 7.09821 17.964 7.2088 18.0679 7.34114C18.1717 7.47348 18.2485 7.62498 18.2938 7.787C18.3391 7.94902 18.3521 8.11838 18.332 8.2854C18.3118 8.45243 18.259 8.61385 18.1764 8.76046L15.8508 13.7305L19.3339 8.69776C19.5204 8.43157 19.8 8.24494 20.1173 8.17466C20.4347 8.10438 20.7669 8.15554 21.0484 8.31808C21.3299 8.48061 21.5403 8.74271 21.6381 9.0527C21.736 9.3627 21.7141 9.69809 21.5769 9.99276L17.7774 15.5737L21.5059 11.4136C21.6925 11.1475 21.972 10.9608 22.2894 10.8905C22.6068 10.8203 22.939 10.8714 23.2205 11.034C23.502 11.1965 23.7124 11.4586 23.8102 11.7686C23.908 12.0786 23.8862 12.414 23.7489 12.7086L19.7056 17.4179L21.8249 15.3991C22.3934 14.9964 22.9633 14.5934 23.5799 14.9494C24.1965 15.3054 24.5417 16.1975 24.0679 16.6941L20.8401 20.6329L18.805 22.9798C17.2135 24.8483 14.2601 25.3637 12.7091 24.4682C11.9988 24.0817 11.3151 23.6484 10.6624 23.1711C10.18 22.8955 9.77538 22.5021 9.4863 22.0277C9.19723 21.5532 9.03317 21.0132 9.00945 20.4582"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.4"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1213,14 +2298,64 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                add-sticker-reaction.svg
+                <path
+                  d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+                  stroke="currentColor"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M5 9H11"
+                  stroke="currentColor"
+                  stroke-linecap="square"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M8 6V12"
+                  stroke="currentColor"
+                  stroke-linecap="square"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.25"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1251,14 +2386,49 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                general-settings.svg
+                <path
+                  clip-rule="evenodd"
+                  d="M13.8544 6.21794C15.2244 5.91747 16.5191 5.92769 17.8942 6.24859L18.1173 7.35512C18.867 7.57635 19.413 7.79877 19.902 8.05865L21.1538 7.67133C21.716 8.03181 22.2333 8.44402 22.6832 8.89393C23.1669 9.37768 23.6073 9.93644 23.9843 10.5517L23.3816 11.4558C23.7585 12.1499 23.9887 12.7053 24.1535 13.2542L25.2829 13.8612C25.4281 14.5154 25.5017 15.172 25.5 15.8067C25.5 16.4863 25.4155 17.1951 25.2513 17.8947L24.188 18.1082C23.9587 18.8679 23.7264 19.4225 23.455 19.9208L23.8266 21.1553C23.4643 21.7207 23.0533 22.2362 22.6048 22.6847C22.1204 23.169 21.5609 23.6099 20.9479 23.9841L20.026 23.3699C19.3454 23.7308 18.8 23.9518 18.2603 24.1103L17.64 25.2838C16.984 25.4268 16.3298 25.5002 15.7012 25.5002C14.9992 25.5002 14.3046 25.4155 13.6044 25.2484L13.375 24.1133C12.6565 23.8897 12.1309 23.6678 11.6573 23.4115L10.3531 23.8314C9.78198 23.4676 9.26191 23.0535 8.8176 22.6057C8.33308 22.1249 7.89417 21.5643 7.51519 20.9514L8.17729 19.9562C7.83522 19.3082 7.62421 18.7907 7.4693 18.2809L6.21924 17.6506C6.07263 16.9884 5.99833 16.3272 6.00003 15.6955C5.99822 15.0185 6.08278 14.3124 6.25225 13.606L7.43083 13.367C7.64577 12.6581 7.85834 12.1411 8.10278 11.6773L7.66699 10.3554C8.03349 9.7812 8.44799 9.26063 8.89555 8.81651C9.37838 8.33182 9.93881 7.8906 10.552 7.5161L11.5271 8.16532C12.1906 7.80635 12.7177 7.58549 13.2342 7.42531L13.8544 6.21794Z"
+                  fill-rule="evenodd"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M15.75 18.7505C17.4069 18.7505 18.75 17.4073 18.75 15.7504C18.75 14.0935 17.4069 12.7504 15.75 12.7504C14.0932 12.7504 12.75 14.0935 12.75 15.7504C12.75 17.4073 14.0932 18.7505 15.75 18.7505Z"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1271,8 +2441,17 @@ exports[`MenuBars should match snapshot 1`] = `
     >
       <svg
         class="menu-bars__navigation-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        arrow-left.svg
+        <path
+          d="M19 22L13 16L19 10"
+          stroke="currentColor"
+          stroke-width="1.75"
+        />
       </svg>
     </button>
   </div>
@@ -1311,14 +2490,58 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                timer.svg
+                <path
+                  d="M18.6621 9.95362C17.8293 9.65983 16.9333 9.5 16 9.5C11.5817 9.5 8 13.0817 8 17.5C8 21.9183 11.5817 25.5 16 25.5C20.4183 25.5 24 21.9183 24 17.5C24 15.3875 23.1812 13.4663 21.8437 12.0364L23.5607 10.5"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M18.6621 9.95362C17.8293 9.65983 16.9333 9.5 16 9.5C11.5817 9.5 8 13.0817 8 17.5C8 21.9183 11.5817 25.5 16 25.5C20.4183 25.5 24 21.9183 24 17.5C24 15.3875 23.1812 13.4663 21.8437 12.0364"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M13.5 7.03882V7C13.5 6.44772 13.9477 6 14.5 6H17.5C18.0523 6 18.5 6.44772 18.5 7V7.0813"
+                  stroke="currentColor"
+                  stroke-linecap="square"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M16 18V14"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1349,14 +2572,61 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                voting.svg
+                <path
+                  d="M16.3778 13.6387C17.7565 13.0074 18.7142 11.6155 18.7142 10C18.7142 7.79086 16.9234 6 14.7142 6C12.5051 6 10.7142 7.79086 10.7142 10C10.7142 11.6276 11.6864 13.0282 13.0817 13.6528"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M18.7142 10C18.7142 7.79086 16.9234 6 14.7142 6C12.5051 6 10.7142 7.79086 10.7142 10"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M15.9242 15.4995C15.9242 14.5403 15.9242 13.1014 15.9242 11.1829C15.9242 10.5296 15.3946 10 14.7413 10C14.0881 10 13.5585 10.5296 13.5585 11.1829V20.6511L10.0947 18.2516C9.95503 17.9678 9.87018 18.0222 9.57014 17.9222C9.27009 17.8222 8.94249 17.8465 8.66049 17.9897C8.37673 18.1294 8.16072 18.3769 8.0607 18.6769C7.96069 18.977 7.985 19.3046 8.12821 19.5866L13.6176 25.3234M15.9242 15.9143C15.9242 15.261 16.4538 14.7314 17.1071 14.7314C17.7603 14.7314 18.2899 15.261 18.2899 15.9143M18.3195 15.9143C18.3195 15.261 18.8195 15.3229 19.4728 15.3229C20.1261 15.3229 20.6556 15.8524 20.6556 16.5057"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M13.6177 25.3234C14.1616 26.2058 15.1242 26.7431 16.1608 26.7429H20.0642C21.6974 26.7429 23.0214 25.4189 23.0214 23.7857V17.6886C23.0214 17.0353 22.0619 16.2688 21.4086 16.2688"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1387,14 +2657,67 @@ exports[`MenuBars should match snapshot 1`] = `
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                presenter-mode.svg
+                <path
+                  clip-rule="evenodd"
+                  d="M5 11.528C5 10.4424 5.71916 9.55426 6.59814 9.55426H22.4019C23.2808 9.55426 24 10.4424 24 11.528V23.5806C24 24.6661 23.2808 25.5543 22.4019 25.5543H6.59814C5.71916 25.5543 5 24.6661 5 23.5806V11.528Z"
+                  fill-rule="evenodd"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M20.1122 13.4771L15.1122 18.4661"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="1.25"
+                />
+                <path
+                  d="M17.1122 13.4661H20.1009L20.1122 13.477V16.4661"
+                  stroke="currentColor"
+                  stroke-linecap="square"
+                  stroke-width="1.25"
+                />
+                <path
+                  d="M7.61218 22.4662L21.4602 22.2388"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M22.5688 6C24.8159 6 27.6376 8.75131 27.6376 10.9117V12"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.7"
+                  stroke-width="1.5"
+                />
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                close.svg
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
               </svg>
             </div>
           </button>
@@ -1407,8 +2730,17 @@ exports[`MenuBars should match snapshot 1`] = `
     >
       <svg
         class="menu-bars__navigation-icon"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        arrow-right.svg
+        <path
+          d="M13 10L19 16L13 22"
+          stroke="currentColor"
+          stroke-width="1.75"
+        />
       </svg>
     </button>
   </div>

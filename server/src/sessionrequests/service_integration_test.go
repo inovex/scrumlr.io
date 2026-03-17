@@ -17,6 +17,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
@@ -64,9 +65,12 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	database := NewSessionRequestDatabase(db)
 	wsService := websocket.NewWebSocketService()
 	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
+	require.NoError(suite.T(), err, "Failed to connect to nats cache")
+
 	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, boardLastModifiedUpdater)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
@@ -203,7 +207,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) seedSessionRequestTestDa
 	suite.sessionsRequests["Read4"] = DatabaseBoardSessionRequest{User: suite.users["Bob"].ID, Board: suite.boards["Read"].id, Status: RequestRejected}
 
 	for _, user := range suite.users {
-		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), nil)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

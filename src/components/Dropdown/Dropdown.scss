@@ -129,7 +129,7 @@
 }
 
 // same goes for dark mode
-[theme="dark"] {
+[data-theme="dark"] {
   .dropdown {
     background-color: styles.$navy--400;
   }

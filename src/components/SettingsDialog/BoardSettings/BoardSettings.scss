@@ -77,7 +77,7 @@
   color: styles.$navy--800;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__board-name-button_input {
     color: styles.$gray--000;
   }
@@ -126,7 +126,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__policy-button_value span {
     color: styles.$gray--000;
   }
@@ -185,7 +185,7 @@
   cursor: default;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__show-password-button--disabled {
     color: styles.$gray--000;
   }
@@ -202,7 +202,7 @@
   max-width: 120px;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__password-button_value-input {
     color: styles.$gray--000;
   }
@@ -268,7 +268,7 @@
   font-weight: bold;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__delete-button span {
     color: styles.$critical-carmine--light;
   }
@@ -334,7 +334,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-settings__open-cheat-sheet-button {
     color: styles.$gray--700;
 

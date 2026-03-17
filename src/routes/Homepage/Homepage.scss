@@ -39,7 +39,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .homepage__language {
     background: styles.$navy--500;
     box-shadow: none;
@@ -177,7 +177,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .homepage {
     background: styles.$navy--600;
   }

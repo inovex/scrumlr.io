@@ -54,7 +54,7 @@ $name-max-length: 20em;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-reaction__name-container {
     color: styles.$gray--000;
     background-color: styles.$navy--200;

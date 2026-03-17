@@ -6,7 +6,7 @@ import {Color, COLOR_ORDER, getRandomColor} from "constants/colors";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "constants/misc";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "utils/Toast";
-import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
+import {HiddenIcon, VisibleIcon, EditIcon, ArrowLeftIcon, ArrowRightIcon, TrashIcon, CloseIcon} from "components/Icon";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
 import "./ColumnSettings.scss";
@@ -65,7 +65,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
   const menuItems: MiniMenuItem[] = [
     {
       label: t("Column.deleteColumn"),
-      element: <Trash />,
+      element: <TrashIcon />,
       onClick: () => {
         props.onClose();
         dispatch(deleteColumn(props.column.id));
@@ -87,7 +87,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.addColumnLeft"),
-      element: <ArrowLeft />,
+      element: <ArrowLeftIcon />,
       onClick: () => {
         props.onClose();
         handleAddColumn(props.column.index);
@@ -95,7 +95,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.addColumnRight"),
-      element: <ArrowRight />,
+      element: <ArrowRightIcon />,
       onClick: () => {
         props.onClose();
         handleAddColumn(props.column.index + 1);
@@ -103,7 +103,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: props.column.visible ? t("Column.hideColumn") : t("Column.showColumn"),
-      element: props.column.visible ? <Hidden /> : <Visible />,
+      element: props.column.visible ? <HiddenIcon /> : <VisibleIcon />,
       onClick: () => {
         props.onClose?.();
         dispatch(
@@ -119,7 +119,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.editName"),
-      element: <Edit />,
+      element: <EditIcon />,
       onClick: () => {
         props.onNameEdit();
         props.onClose();
@@ -127,7 +127,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.resetName"),
-      element: <Close />,
+      element: <CloseIcon />,
       onClick: props.onClose,
     },
   ];

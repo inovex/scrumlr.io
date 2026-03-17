@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {useTranslation} from "react-i18next";
-import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
+import {CloseIcon, CheckDoneIcon} from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState} from "react";
@@ -35,12 +34,19 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const hasInputChanged = () => !(name === props.name && description === props.description);
+
   const cancelChanges = () => {
     props.setOpenState("closed");
     nameInputRef.current?.blur(); // leave input (or we can keep typing inside it)
   };
 
   const saveChanges = () => {
+    if (!hasInputChanged()) {
+      props.setOpenState("closed");
+      return;
+    }
+
     props.updateColumnTitle(name, description);
     // show visual feedback for 2s before displaying menu options again
     nameInputRef.current?.blur(); // leave input (or we can keep typing inside it)
@@ -50,11 +56,9 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     }, 2000);
   };
 
-  // if we leave the wrapper, reset and close
+  // if we leave the wrapper, also save and close
   const handleBlurNameWrapperContents = () => {
-    props.setOpenState("closed");
-    setName(props.name);
-    setDescription(props.description);
+    saveChanges();
   };
 
   const nameWrapperRef = useOnBlur<HTMLDivElement>(handleBlurNameWrapperContents);

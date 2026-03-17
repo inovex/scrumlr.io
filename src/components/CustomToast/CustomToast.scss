@@ -271,7 +271,7 @@ input[type="checkbox"]:checked::before {
 }
 
 // Toast Dark-Theme (Desktop)
-[theme="dark"] {
+[data-theme="dark"] {
   .Toastify__toast.Toastify__toast:has(div.toast-single),
   .Toastify__toast.Toastify__toast:has(div.toast-multi) {
     background-color: styles.$navy--500;
@@ -412,7 +412,7 @@ input[type="checkbox"]:checked::before {
     color: $color-success;
   }
 
-  [theme="dark"] {
+  [data-theme="dark"] {
     .toast-single:hover .toast__button-single.toast__button-info {
       background: styles.$navy--500;
       color: $color-info-darkmode;

@@ -124,6 +124,32 @@ export interface AddedBoardReactionEvent {
   data: BoardReactionType;
 }
 
+export interface NoteDragStartEvent {
+  type: "NOTE_DRAG_START";
+  data: {
+    noteId: string;
+    userId: string;
+  };
+}
+
+export interface NoteDragEndEvent {
+  type: "NOTE_DRAG_END";
+  data: {
+    noteId: string;
+    userId: string;
+  };
+}
+
+export interface DragLockMessage {
+  type: "DRAG_LOCK_MESSAGE";
+  data: {
+    action: "ACQUIRE" | "RELEASE";
+    noteId: string;
+  };
+}
+
+export type ClientMessage = DragLockMessage;
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
@@ -145,4 +171,6 @@ export type ServerEvent =
   | VotingCreatedEvent
   | VotingUpdatedEvent
   | DeleteVotesEvent
-  | AddedBoardReactionEvent;
+  | AddedBoardReactionEvent
+  | NoteDragStartEvent
+  | NoteDragEndEvent;

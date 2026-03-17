@@ -35,6 +35,8 @@ const (
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
 	BoardEventBoardReactionAdded    BoardEventType = "BOARD_REACTION_ADDED"
+	BoardEventNoteDragStart         BoardEventType = "NOTE_DRAG_START"
+	BoardEventNoteDragEnd           BoardEventType = "NOTE_DRAG_END"
 )
 
 type BoardEvent struct {

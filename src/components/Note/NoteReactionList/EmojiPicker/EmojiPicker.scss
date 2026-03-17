@@ -13,7 +13,7 @@ emoji-picker {
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   emoji-picker {
     --indicator-color: #{colors.$blue--400};
   }

@@ -52,7 +52,7 @@ jobs:
         run: yarn lint --max-warnings 0
 
       - name: Test with coverage
-        run: yarn test --coverage --watchAll=false --passWithNoTests
+        run: yarn test --run --coverage --passWithNoTests
 
   test-backend:
       name: Build and Test – Backend
@@ -255,4 +255,4 @@ jobs:
             yarn install
             yarn run start
           working-directory: ./
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http://localhost:5173'

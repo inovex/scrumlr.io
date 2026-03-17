@@ -16,7 +16,7 @@ $menu-item-size: 42px;
 .menu-item:focus-visible {
   outline: 2px solid rgba(styles.$navy--900, 0.5);
 }
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-item:focus-visible {
     outline: 2px solid rgba(styles.$gray--000, 0.5);
   }
@@ -54,7 +54,7 @@ $menu-item-size: 42px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-item__tooltip {
     background-color: styles.$navy--300;
   }
@@ -153,7 +153,7 @@ $menu-item-size: 42px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .tooltip__text {
     color: styles.$gray--000 !important;
     background-color: styles.$navy--300 !important;
@@ -199,7 +199,7 @@ $menu-item-size: 42px;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .menu-item__icon {
     color: styles.$gray--000;
     background: styles.$navy--500;

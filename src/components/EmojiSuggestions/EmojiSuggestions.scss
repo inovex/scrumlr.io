@@ -56,7 +56,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .emoji-suggestions {
     &__container {
       color: styles.$gray--000;

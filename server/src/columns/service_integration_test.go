@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
@@ -61,9 +62,12 @@ func (suite *ColumnServiceIntegrationTestSuite) SetupTest() {
 	require.NoError(suite.T(), err, "Failed to connect to nats server")
 	suite.broker = broker
 
+	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-columns")
+	require.NoError(suite.T(), err, "Failed to connect to nats cache")
+
 	notesDatabase := notes.NewNotesDatabase(db)
 	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
-	noteService := notes.NewNotesService(notesDatabase, broker, boardLastModifiedUpdater)
+	noteService := notes.NewNotesService(notesDatabase, broker, ch, boardLastModifiedUpdater)
 	database := NewColumnsDatabase(db)
 	suite.columnService = NewColumnService(database, broker, noteService, boardLastModifiedUpdater)
 }

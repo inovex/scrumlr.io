@@ -142,6 +142,13 @@
     "deleteNoteButton": "Supprimer la note",
     "deleteStackButton": "Supprimer la pile",
     "deleteOptions": "Que voulez-vous supprimer ?",
+    "deleteAccount": "Êtes-vous sûr de vouloir supprimer votre compte?",
+    "deleteAccountText": "Si vous supprimez votre compte, toutes les données associées seront également supprimées de manière définitive, notamment:",
+    "deleteAccountItems": "les modèles que vous avez créés \n vos notes et votes sur d'autres tableaux",
+    "deleteAccountTextAfterItems": "Cette action ne peut pas être annulée.",
+    "deleteAccountCheck": "Je comprends et j'accepte la suppression définitive.",
+    "deleteAccountWarning": "Vous devez confirmer la suppression.",
+    "deleteAccountButton": "Supprimer le compte",
     "banParticipant": "Êtes-vous sûr de vouloir retirer le participant '{{user}}' de la session ?",
     "unbanParticipant": "Êtes-vous sûr de vouloir autoriser le participant '{{user}}' à rejoindre la session à nouveau ?",
     "warning": "Cette action ne peut pas être annulée.",
@@ -412,7 +419,8 @@
     "me": "Moi",
     "you": "vous",
     "userImageAlt": "média fourni par {{user}}",
-    "edited": "modifié"
+    "edited": "modifié",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Note précédente",
@@ -518,7 +526,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nom d'utilisateur"
+    "UserName": "Nom d'utilisateur",
+    "deleteAccount": "Supprimer le compte"
   },
   "Error": {
     "editBoard": "Désolé, mais nous avons des difficultés à mettre à jour le tableau. Veuillez réessayer.",
@@ -551,7 +560,8 @@
     "createVoting": "Désolé, mais nous avons des difficultés à démarrer un nouveau vote. Veuillez réessayer.",
     "closeVoting": "Désolé, mais nous avons des difficultés à terminer le vote. Veuillez réessayer.",
     "abortVoting": "Désolé, mais nous avons des difficultés à annuler le vote. Veuillez réessayer.",
-    "editSelf": "Désolé, mais nous avons des difficultés à mettre à jour vos informations. Veuillez réessayer."
+    "editSelf": "Désolé, mais nous avons des difficultés à mettre à jour vos informations. Veuillez réessayer.",
+    "deleteAccount": "Désolé, mais nous avons des difficultés à supprimer votre compte. Veuillez réessayer."
   },
   "Validation": {
     "REQUIRED": "requis",

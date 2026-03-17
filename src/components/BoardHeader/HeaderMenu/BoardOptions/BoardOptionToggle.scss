@@ -57,6 +57,6 @@ $header-menu-toggle-background-color: #c8c8c8;
   left: $header-menu-toggle-button-width;
   background-color: styles.$blue--500;
 }
-[theme="dark"] .board-option-toggle__switch--right::after {
+[data-theme="dark"] .board-option-toggle__switch--right::after {
   background-color: styles.$pink--500;
 }

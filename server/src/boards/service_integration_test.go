@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
@@ -84,10 +85,13 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
+	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-boards")
+	require.NoError(suite.T(), err, "Failed to connect to nats cache")
+
 	database := NewBoardDatabase(db, clock)
 	boardLastModifiedUpdater := NewLastModifiedUpdater(database)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, boardLastModifiedUpdater)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
@@ -668,7 +672,7 @@ func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 	log.Println("Seeding boards test data")
 
 	for _, user := range suite.users {
-		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), nil); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}

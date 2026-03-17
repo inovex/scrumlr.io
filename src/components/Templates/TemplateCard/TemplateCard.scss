@@ -145,7 +145,7 @@ $card-description-height: 4 * 20px;
   justify-self: end;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .template-card {
     background-color: styles.$navy--400;
     box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);

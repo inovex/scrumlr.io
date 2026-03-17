@@ -193,16 +193,18 @@ func (database *SessionDB) GetAll(ctx context.Context, board uuid.UUID, filter .
 	return sessions, err
 }
 
-// Gets all board sessions of a single user who he is currently connected to
-func (database *SessionDB) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]DatabaseBoardSession, error) {
 	var sessions []DatabaseBoardSession
-	err := database.db.NewSelect().
+	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
 		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.user = ?", user).
-		Where("s.connected").
-		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(ctx, &sessions)
+		Join("INNER JOIN users AS u ON u.id = s.user")
+
+	if connectedOnly {
+		query.Where("s.connected = ?", connectedOnly)
+	}
+	err := query.Scan(ctx, &sessions)
 
 	return sessions, err
 }

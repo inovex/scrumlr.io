@@ -163,7 +163,7 @@ $timer__progress-bar-color: #6096ff;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .timer {
     color: styles.$gray--000;
     background-color: styles.$navy--500;

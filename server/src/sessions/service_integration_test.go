@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
@@ -66,9 +67,12 @@ func (suite *SessionServiceIntegrationTestSuite) SetupTest() {
 	require.NoError(suite.T(), err, "Failed to connect to nats server")
 	suite.broker = broker
 
+	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessions")
+	require.NoError(suite.T(), err, "Failed to connect to nats cache")
+
 	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, boardLastModifiedUpdater)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := NewSessionDatabase(db)
@@ -218,8 +222,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
 
 	userId := suite.baseData.Users["Stan"].ID
 
-	// when
-	sessions, err := suite.sessionService.GetUserConnectedBoards(ctx, userId)
+	sessions, err := suite.sessionService.GetUserBoardSessions(ctx, userId, true)
 
 	// then
 	suite.Nil(err)
@@ -309,7 +312,7 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	log.Println("Seeding sessions test data")
 
 	for _, user := range suite.users {
-		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType)); err != nil {
+		if err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), nil); err != nil {
 			log.Fatalf("Failed to insert user %s: %s", user.Name, err)
 		}
 	}

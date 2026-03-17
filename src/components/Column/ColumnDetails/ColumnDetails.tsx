@@ -2,11 +2,7 @@ import {Column, createColumn, deleteColumnOptimistically, editColumn} from "stor
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
-import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
-import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
-import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
-import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
+import {ArrowDownIcon, ThreeDotsIcon as SettingsIcon, CheckDoneIcon, CloseIcon, EditIcon} from "components/Icon";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";
@@ -62,6 +58,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
   const isValidDetails = isValidName && isValidDescription;
 
+  const hasInputChanged = () => !(localName === props.column.name && localDescription === props.column.description);
+
   // focus input upon entering edit mode
   useEffect(() => {
     if (props.mode === "edit") {
@@ -96,6 +94,11 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       return;
     }
 
+    if (!hasInputChanged()) {
+      props.changeMode("view");
+      return;
+    }
+
     const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {
       dispatch(createColumn(updateColumnPayload));
@@ -109,11 +112,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
-    // behaviour: do not save
-    // could also change it to only save if persisted is empty or always save,
-    // but this is streamlined with the template editor
-    cancelUpdate();
-    changeMode("view");
+    // behaviour: save on blur
+    // same behaviour with the template editor
+    updateColumnDetails();
   };
 
   useSubmitOnShortcut(inputRef, updateColumnDetails);
@@ -230,7 +231,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
+              <ArrowDownIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
             </button>
           )}
         </>

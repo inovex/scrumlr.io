@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ColumnsConfigurator should render correctly 1`] = `
+exports[`ColumnsConfigurator > should render correctly 1`] = `
 <div>
   <div
     class="test-columns-configurator columns-configurator accent-color__backlog-blue"
@@ -13,8 +13,39 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
       >
         <svg
           class="add-template-column__icon"
+          fill="none"
+          height="56"
+          viewBox="0 0 56 56"
+          width="56"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          add-column.svg
+          <g
+            id="add-column"
+          >
+            <circle
+              cx="28"
+              cy="28"
+              fill="currentColor"
+              fill-opacity="0.08"
+              id="circle"
+              r="18.799"
+              stroke="currentColor"
+              stroke-width="2"
+              transform="rotate(45 28 28)"
+            />
+            <path
+              d="M35.9199 27.5204L20.0807 27.5204"
+              id="Line"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M28 19.6008L28 35.44"
+              id="Line_2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </g>
         </svg>
       </button>
     </div>
@@ -53,8 +84,58 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           <svg
             class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
             data-cy="columns-configurator-column__drag-element"
+            fill="none"
+            height="17"
+            viewBox="0 0 24 17"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            drag-and-drop.svg
+            <g
+              id="Group 303"
+            >
+              <g
+                id="Group 301"
+              >
+                <path
+                  d="M16 1V16"
+                  id="Pfad 4028"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M8 1V16"
+                  id="Pfad 4029"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M3.82929 5.17071C3.89229 5.10771 4 5.15233 4 5.24142V10.7586C4 10.8477 3.89229 10.8923 3.82929 10.8293L1.07071 8.07069C1.03166 8.03164 1.03166 7.96833 1.07071 7.92927L3.82929 5.17071Z"
+                  fill="currentColor"
+                  id="Pfad 4031"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M20.1707 10.8293C20.1077 10.8923 20 10.8477 20 10.7586V5.24142C20 5.15233 20.1077 5.10771 20.1707 5.17071L22.9293 7.92929C22.9683 7.96834 22.9683 8.03166 22.9293 8.07071L20.1707 10.8293Z"
+                  fill="currentColor"
+                  id="Pfad 4032"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M12 1V16"
+                  id="Pfad 4033"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+              </g>
+            </g>
           </svg>
           <span
             aria-label="current colorBacklog Blue"
@@ -69,8 +150,34 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--visible"
               data-cy="columns-configurator-column__icon--visibility"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              visible.svg
+              <path
+                d="M16 9C7.864 9 4 16 4 16C4 16 7.864 23 16 23C24.136 23 28 16 28 16C28 16 24.136 9 16 9Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M15.5 21C16.5878 21 17.6512 20.6774 18.5556 20.0731C19.4601 19.4687 20.1651 18.6098 20.5813 17.6048C20.9976 16.5998 21.1065 15.4939 20.8943 14.427C20.6821 13.3601 20.1583 12.3801 19.3891 11.6109C18.6199 10.8417 17.6399 10.3179 16.573 10.1057C15.5061 9.89346 14.4002 10.0024 13.3952 10.4187C12.3902 10.8349 11.5313 11.5399 10.9269 12.4444C10.3226 13.3488 10 14.4122 10 15.5C10 16.9587 10.5795 18.3576 11.6109 19.3891C12.6424 20.4205 14.0413 21 15.5 21Z"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                d="M13.268 14C13.0911 14.4221 13 14.8753 13 15.333C13 15.7907 13.0911 16.2439 13.268 16.666C13.3943 17.0336 13.6258 17.3559 13.9337 17.5931C14.2416 17.8302 14.6124 17.9717 15 18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
             </svg>
           </button>
           <button
@@ -78,8 +185,42 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           >
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              trash.svg
+              <path
+                d="M14 14.75V20.75"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M18 14.75V20.75"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M8 10.25H24M12.9231 9.4V8.17C12.9231 7.52383 13.4603 7 14.1231 7H17.8769C18.5397 7 19.0769 7.52383 19.0769 8.17V9.4"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M9.80001 11.25L10.6923 23.9308C10.7087 24.6533 11.3742 25.2357 12.2 25.25H20.0154C20.8412 25.2357 21.5067 24.6533 21.5231 23.9308C21.7636 20.513 21.944 17.9497 22.0642 16.2408C22.0775 16.0512 22.1528 14.982 22.205 14.2397"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
             </svg>
           </button>
         </div>
@@ -116,8 +257,58 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           <svg
             class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
             data-cy="columns-configurator-column__drag-element"
+            fill="none"
+            height="17"
+            viewBox="0 0 24 17"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            drag-and-drop.svg
+            <g
+              id="Group 303"
+            >
+              <g
+                id="Group 301"
+              >
+                <path
+                  d="M16 1V16"
+                  id="Pfad 4028"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M8 1V16"
+                  id="Pfad 4029"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M3.82929 5.17071C3.89229 5.10771 4 5.15233 4 5.24142V10.7586C4 10.8477 3.89229 10.8923 3.82929 10.8293L1.07071 8.07069C1.03166 8.03164 1.03166 7.96833 1.07071 7.92927L3.82929 5.17071Z"
+                  fill="currentColor"
+                  id="Pfad 4031"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M20.1707 10.8293C20.1077 10.8923 20 10.8477 20 10.7586V5.24142C20 5.15233 20.1077 5.10771 20.1707 5.17071L22.9293 7.92929C22.9683 7.96834 22.9683 8.03166 22.9293 8.07071L20.1707 10.8293Z"
+                  fill="currentColor"
+                  id="Pfad 4032"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M12 1V16"
+                  id="Pfad 4033"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-opacity="0.5"
+                  stroke-width="1.5"
+                />
+              </g>
+            </g>
           </svg>
           <span
             aria-label="current colorPlanning Pink"
@@ -132,8 +323,27 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
               data-cy="columns-configurator-column__icon--visibility"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              hidden.svg
+              <path
+                d="M13.519 22.72C14.3326 22.9079 15.165 23.0019 16 23C23 23 28 16 28 16C26.8878 14.5427 25.5887 13.2382 24.136 12.12M21.492 10.4C19.7994 9.50151 17.9162 9.02146 16 9C9 9 4 16 4 16C5.69746 18.2194 7.82868 20.0702 10.264 21.44M16 20.6C17.2838 20.6107 18.5192 20.1109 19.4345 19.2108C20.3499 18.3106 20.8702 17.0838 20.881 15.8M19.458 12.4C18.5335 11.4973 17.2926 10.9919 16.0005 10.9919C14.7084 10.9919 13.4675 11.4973 12.543 12.4C12.0897 12.8426 11.7295 13.3715 11.4835 13.9553C11.2376 14.5392 11.1109 15.1664 11.1109 15.8C11.1109 16.4336 11.2376 17.0608 11.4835 17.6447C11.7295 18.2285 12.0897 18.7574 12.543 19.2"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.7"
+              />
+              <path
+                d="M24 8.5L7.5 24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.7"
+              />
             </svg>
           </button>
           <button
@@ -141,8 +351,42 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           >
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+              fill="none"
+              height="32"
+              viewBox="0 0 32 32"
+              width="32"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              trash.svg
+              <path
+                d="M14 14.75V20.75"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M18 14.75V20.75"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-opacity="0.7"
+                stroke-width="1.5"
+              />
+              <path
+                d="M8 10.25H24M12.9231 9.4V8.17C12.9231 7.52383 13.4603 7 14.1231 7H17.8769C18.5397 7 19.0769 7.52383 19.0769 8.17V9.4"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+              <path
+                d="M9.80001 11.25L10.6923 23.9308C10.7087 24.6533 11.3742 25.2357 12.2 25.25H20.0154C20.8412 25.2357 21.5067 24.6533 21.5231 23.9308C21.7636 20.513 21.944 17.9497 22.0642 16.2408C22.0775 16.0512 22.1528 14.982 22.205 14.2397"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
             </svg>
           </button>
         </div>
@@ -156,8 +400,39 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
       >
         <svg
           class="add-template-column__icon"
+          fill="none"
+          height="56"
+          viewBox="0 0 56 56"
+          width="56"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          add-column.svg
+          <g
+            id="add-column"
+          >
+            <circle
+              cx="28"
+              cy="28"
+              fill="currentColor"
+              fill-opacity="0.08"
+              id="circle"
+              r="18.799"
+              stroke="currentColor"
+              stroke-width="2"
+              transform="rotate(45 28 28)"
+            />
+            <path
+              d="M35.9199 27.5204L20.0807 27.5204"
+              id="Line"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M28 19.6008L28 35.44"
+              id="Line_2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </g>
         </svg>
       </button>
     </div>

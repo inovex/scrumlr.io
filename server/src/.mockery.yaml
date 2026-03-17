@@ -27,6 +27,10 @@ packages:
     interfaces:
       Client:
 
+  scrumlr.io/server/cache:
+    interfaces:
+      Client:
+
   scrumlr.io/server/reactions:
     config:
       dir: reactions

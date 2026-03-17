@@ -7,8 +7,8 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string) error {
-	_, err := db.Exec("INSERT INTO users (\"id\", \"name\", \"account_type\") VALUES (?, ?, ?);", id.String(), name, accountType)
+func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string, avatar *string) error {
+	_, err := db.Exec("INSERT INTO users (\"id\", \"name\", \"account_type\", \"avatar\") VALUES (?, ?, ?, ?);", id.String(), name, accountType, avatar)
 	return err
 }
 

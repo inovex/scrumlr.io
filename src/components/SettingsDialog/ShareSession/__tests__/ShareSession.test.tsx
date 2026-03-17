@@ -16,10 +16,11 @@ const renderSettingsDialog = (overwrite?: Partial<ApplicationState>) =>
     </I18nextProvider>
   );
 
-Object.assign(navigator, {
-  clipboard: {
-    writeText: () => {},
+Object.defineProperty(navigator, "clipboard", {
+  value: {
+    writeText: vi.fn(),
   },
+  configurable: true,
 });
 
 describe("ShareQrCode Tests", () => {
@@ -30,13 +31,13 @@ describe("ShareQrCode Tests", () => {
 
   test("Click on copy share link", async () => {
     const shareDialog = renderSettingsDialog();
-    jest.spyOn(navigator.clipboard, "writeText");
+    vi.spyOn(navigator.clipboard, "writeText");
 
     const button = shareDialog.getByRole("button");
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/board/test-board-id");
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/\/board\/test-board-id$/));
     });
 
     await waitFor(() => {

@@ -56,7 +56,7 @@ $header-menu-border-bottom-color: #efefef;
   background-color: styles.$gray--200;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-option-button {
     background-color: styles.$navy--500;
 

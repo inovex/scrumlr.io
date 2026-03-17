@@ -1,5 +1,6 @@
 @use "constants/styles";
 @use "constants/mixins";
+@use "sass:math";
 
 .confirmation-dialog__background {
   position: fixed;
@@ -43,7 +44,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 5px;
 }
 .confirmation-dialog__title {
   margin: 0px;
@@ -55,18 +56,121 @@
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  margin: 12px 0px 0px 0px;
+  margin: styles.$spacing--sm 0px 0px 0px;
+  & > svg {
+    color: var(--accent-color--light);
+    height: styles.$icon--medium;
+    width: styles.$icon--medium;
+    opacity: 0.8;
+  }
+  & > p {
+    margin: 0px;
+    font-size: styles.$text-size--medium;
+    letter-spacing: styles.$letter-spacing--small;
+  }
 }
-.confirmation-dialog__warning > svg {
-  color: var(--accent-color--light);
-  height: styles.$icon--medium;
-  width: styles.$icon--medium;
-  opacity: 0.8;
+
+.confirmation-dialog__error-message {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--xxs;
+  margin: styles.$spacing--xs 0px styles.$spacing--xs 0px;
+  padding-left: 0;
+  min-height: 28px;
+  visibility: visible;
+  color: styles.$critical-carmine--light;
+  &:empty {
+    visibility: hidden;
+  }
+  & > svg {
+    height: styles.$icon--medium;
+    width: styles.$icon--medium;
+    opacity: 0.8;
+    margin-left: calc(0.5em - #{math.div(styles.$icon--medium, 2)});
+    flex-shrink: 0;
+  }
+  & > p {
+    margin: 0px;
+    font-size: styles.$text-size--medium;
+    letter-spacing: styles.$letter-spacing--small;
+  }
 }
-.confirmation-dialog__warning > p {
+
+.confirmation-dialog__text {
   margin: 0px;
   font-size: styles.$text-size--medium;
   letter-spacing: styles.$letter-spacing--small;
+  white-space: pre-line;
+}
+
+.confirmation-dialog__items {
+  margin: styles.$spacing--sm 0px;
+  padding-left: styles.$spacing--lg;
+  & > li {
+    margin-bottom: styles.$spacing--xs;
+    font-size: styles.$text-size--medium;
+    letter-spacing: styles.$letter-spacing--small;
+  }
+}
+
+.confirmation-dialog__checkbox-wrapper {
+  display: block;
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+  font-size: styles.$text-size--medium;
+  letter-spacing: styles.$letter-spacing--small;
+  &:hover .confirmation-dialog__checkbox-label::before {
+    box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.2);
+  }
+}
+
+.confirmation-dialog__checkbox {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  // checkbox border
+  & + .confirmation-dialog__checkbox-label::before {
+    display: block;
+    content: "";
+    width: styles.$icon--small;
+    height: styles.$icon--small;
+    position: absolute;
+    top: 0.1em;
+    left: 0;
+    overflow: hidden;
+    border: 1px solid styles.$blue--500;
+    background: styles.$gray--000;
+    cursor: pointer;
+    border-radius: 100%;
+    transition: all 0.16s ease-out;
+  }
+  &:focus-visible + .confirmation-dialog__checkbox-label::before {
+    box-shadow: 0 0 0 4px rgba(styles.$blue--500, 0.4);
+  }
+  // checkbox checkmark
+  & + .confirmation-dialog__checkbox-label::after {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    position: absolute;
+    top: 0.35em;
+    left: 0.25em;
+    background-color: rgba(styles.$blue--500, 0.75);
+    transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+    transform: scale(0);
+    border-radius: 100%;
+  }
+  &:checked + .confirmation-dialog__checkbox-label::after {
+    transform: scale(1);
+  }
+}
+
+.confirmation-dialog__checkbox-label {
+  position: relative;
+  display: block;
+  padding-left: 1.5em;
 }
 
 @media #{styles.$mini-smartphone} {
@@ -81,6 +185,10 @@
   }
   .confirmation-dialog__warning {
     align-items: start;
+  }
+  .confirmation-dialog__error-message {
+    align-items: start;
+    min-height: 56px;
   }
   .confirmation-dialog {
     width: 80%;
@@ -102,14 +210,14 @@
     transform: scale(1.05);
     box-shadow: 0 4px 10px 0 rgba($color: styles.$blue--500, $alpha: 0.2);
   }
-}
-.confirmation-dialog__button--accept {
-  color: styles.$gray--000;
-  background-color: styles.$blue--500;
-}
-.confirmation-dialog__button--decline {
-  color: styles.$blue--500;
-  background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
+  &--accept {
+    color: styles.$gray--000;
+    background-color: styles.$blue--500;
+  }
+  &--decline {
+    color: styles.$blue--500;
+    background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
+  }
 }
 .confirmation-dialog__buttons {
   display: flex;
@@ -139,12 +247,13 @@
     color: styles.$gray--000;
     background-color: styles.$blue--500;
   }
+  & > svg {
+    height: 100%;
+    width: 100%;
+  }
 }
-.confirmation-dialog__close-button > svg {
-  height: 100%;
-  width: 100%;
-}
-[theme="dark"] {
+
+[data-theme="dark"] {
   .confirmation-dialog__background {
     background-color: rgba($color: styles.$pink--500, $alpha: 0.1);
   }
@@ -158,6 +267,7 @@
 
   .confirmation-dialog__button {
     border-color: styles.$pink--500;
+    font-weight: bold;
     &:hover {
       box-shadow: 0 4px 8px rgba($color: styles.$pink--500, $alpha: 0.2);
     }
@@ -179,5 +289,28 @@
       color: styles.$gray--000;
       background-color: styles.$pink--500;
     }
+  }
+
+  .confirmation-dialog__checkbox {
+    & + .confirmation-dialog__checkbox-label::before {
+      border-color: styles.$pink--500;
+      background: styles.$navy--600;
+    }
+    & + .confirmation-dialog__checkbox-label::after {
+      background-color: rgba(styles.$pink--500, 0.75);
+    }
+    &:focus-visible + .confirmation-dialog__checkbox-label::before {
+      box-shadow: 0 0 0 4px rgba(styles.$pink--500, 0.4);
+    }
+  }
+
+  .confirmation-dialog__checkbox-wrapper {
+    & :hover .confirmation-dialog__checkbox-label::before {
+      box-shadow: 0 0 0 4px rgba(styles.$pink--500, 0.2);
+    }
+  }
+
+  .confirmation-dialog__error-message {
+    color: styles.$critical-carmine--dark;
   }
 }

@@ -22,7 +22,7 @@
   font-size: styles.$text-size--large;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-guard {
     background-color: styles.$navy--600;
   }

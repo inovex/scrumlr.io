@@ -1,0 +1,13 @@
+.sortable {
+  position: relative;
+  touch-action: manipulation;
+
+  &--dragging {
+    opacity: 0.5;
+  }
+
+  &--locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

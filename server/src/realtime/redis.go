@@ -133,6 +133,7 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 				}
 			case <-ctx.Done():
 				close(retChannel)
+				return
 			}
 		}
 	}()
@@ -179,6 +180,7 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 				}
 			case <-ctx.Done():
 				close(retChannel)
+				return
 			}
 		}
 	}()

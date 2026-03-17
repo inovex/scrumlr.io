@@ -37,7 +37,7 @@ $list-style-type: "– ";
   list-style-type: $list-style-type;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .hint-hidden-columns__info-text,
   .hint-hidden-columns__columns-list {
     color: styles.$gray--000;

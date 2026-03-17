@@ -75,7 +75,7 @@
   grid-area: extra;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .select-option {
     background: styles.$navy--500;
 

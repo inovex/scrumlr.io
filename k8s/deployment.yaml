@@ -214,7 +214,7 @@ spec:
       services:
         - name: scrumlr-backend-PR_NUMBER
           port: 8080
-    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`)  || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/emoji-data/`))
+    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/legal`) || PathPrefix(`/emoji-data`) || Path(`/timer_finished.mp3`) || Path(`/hotkeys.pdf`))
       kind: Rule
       services:
         - name: scrumlr-frontend-PR_NUMBER
@@ -294,10 +294,21 @@ spec:
   chart:
     spec:
       chart: nats
-      version: 0.19.12
+      version: 2.12.1
       sourceRef:
         kind: HelmRepository
         name: nats
   install: {}
   interval: 10m0s
   targetNamespace: scrumlr-dev-deployments
+  values:
+    config:
+      cluster:
+        enabled: true
+        replicas: 2
+      jetstream:
+        enabled: true
+        fileStore:
+          enabled: false
+        memoryStore:
+          enabled: true

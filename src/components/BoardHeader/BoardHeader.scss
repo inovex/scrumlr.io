@@ -32,7 +32,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-header__link {
     &:focus-visible {
       box-shadow: 0 0 0 2px rgba(styles.$pink--500, 0.48);
@@ -82,7 +82,7 @@
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-header_name-and-settings {
     &:focus-visible {
       box-shadow: 0 0 0 2px rgba(styles.$pink--500, 0.48);
@@ -125,7 +125,7 @@
   max-width: 28vw;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .board-header__name {
     color: styles.$gray--000;
   }

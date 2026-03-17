@@ -45,7 +45,7 @@
     outline: 2px solid styles.$blue--500;
   }
 }
-[theme="dark"] {
+[data-theme="dark"] {
   .info-bar__icon {
     color: styles.$gray--000;
   }

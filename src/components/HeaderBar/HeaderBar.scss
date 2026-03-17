@@ -65,7 +65,7 @@ $side-padding--desktop: 14vw;
   }
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .header-bar__title {
     color: styles.$gray--000;
   }

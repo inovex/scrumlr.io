@@ -103,7 +103,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
-	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	userId := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -136,8 +136,8 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
