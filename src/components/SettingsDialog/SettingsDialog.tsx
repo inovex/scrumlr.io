@@ -119,43 +119,40 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
   return (
     <Portal onClose={() => navigate(`..`)}>
-      <div className="settings-dialog__background" />
-      <div className="settings-dialog__wrapper">
-        <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
-          {(styles) => (
-            <animated.aside
-              aria-modal="true"
-              className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
-              onClick={(e) => e.stopPropagation()}
-              role="dialog"
-              style={styles}
-            >
-              <div className="settings-dialog__sidebar">
-                <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
-                {/* render all menu items */}
-                <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
-                <button className="navigation__item navigation__item--logout accent-color__poker-purple" type="button" onClick={handleLogout}>
-                  <span className="navigation-item__icon">
-                    <LogoutIcon />
-                  </span>
-                  <div className="navigation-item__content">
-                    <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
-                  </div>
-                </button>
-              </div>
-              <article className="settings-dialog__content">
-                <Link to="" className="settings-dialog__back-link">
-                  <ArrowLeftIcon />
-                </Link>
-                <Outlet context={activeMenuItem} />
-              </article>
-              <Link to=".." className="settings-dialog__close-button">
-                <CloseIcon className="close-button__icon" />
+      <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
+        {(styles) => (
+          <animated.aside
+            aria-modal="true"
+            className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            style={styles}
+          >
+            <div className="settings-dialog__sidebar">
+              <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
+              {/* render all menu items */}
+              <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
+              <button className="navigation__item navigation__item--logout accent-color__poker-purple" type="button" onClick={handleLogout}>
+                <span className="navigation-item__icon">
+                  <LogoutIcon />
+                </span>
+                <div className="navigation-item__content">
+                  <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
+                </div>
+              </button>
+            </div>
+            <article className="settings-dialog__content">
+              <Link to="" className="settings-dialog__back-link">
+                <ArrowLeftIcon />
               </Link>
-            </animated.aside>
-          )}
-        </Transition>
-      </div>
+              <Outlet context={activeMenuItem} />
+            </article>
+            <Link to=".." className="settings-dialog__close-button">
+              <CloseIcon className="close-button__icon" />
+            </Link>
+          </animated.aside>
+        )}
+      </Transition>
     </Portal>
   );
 };
