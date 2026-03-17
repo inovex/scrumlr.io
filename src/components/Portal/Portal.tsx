@@ -9,11 +9,13 @@ type Alignment = "here" | "center" | "bottom";
 
 type CloseMode = "backdrop" | "except-selector";
 
+type BackdropType = "transparent" | "blur" | "hardBlur";
+
 export type PortalProps = {
   align: Alignment;
   onClose?: () => void;
   hiddenOverflow?: boolean;
-  backdrop?: boolean;
+  backdrop?: BackdropType;
   closeMode?: CloseMode;
   closeIgnoreSelector?: string;
   disabledPadding?: boolean;
@@ -84,7 +86,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({
             "portal__frame",
             {"portal__frame--hiddenOverflow": hiddenOverflow},
             `portal__frame--align-${align}`,
-            {"portal__frame--backdrop": backdrop},
+            `portal__frame--backdrop-${backdrop ?? "transparent"}`,
             {"portal__frame--disabled-padding": disabledPadding},
             getAccentColor()
           )}
