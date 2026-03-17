@@ -57,8 +57,18 @@
 .portal__frame--centered {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
 }
 
 .portal__frame--disabled-padding {
   padding: 0;
+}
+
+.portal__content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
