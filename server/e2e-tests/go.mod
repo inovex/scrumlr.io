@@ -44,7 +44,7 @@ require (
 	github.com/uptrace/bun v1.2.18 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	github.com/weppos/publicsuffix-go v0.50.2 // indirect
+	github.com/weppos/publicsuffix-go v0.50.3 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/bridges/otelzap v0.16.0 // indirect
 	go.opentelemetry.io/otel v1.41.0 // indirect
