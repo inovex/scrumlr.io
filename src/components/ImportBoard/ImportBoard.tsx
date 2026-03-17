@@ -16,6 +16,7 @@ type ImportStep = "file" | "access";
 interface ImportBoardProps {
   onClose: () => void;
 }
+const isDragEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>): event is DragEvent<HTMLDivElement> => "dataTransfer" in event;
 
 export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const {t} = useTranslation();
@@ -29,10 +30,10 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
 
   const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>) => {
     let file: File | null = null;
-    if ("dataTransfer" in event) {
+    if (isDragEvent(event)) {
       event.preventDefault();
       file = event.dataTransfer?.files?.[0] || null;
-    } else if ("target" in event) {
+    } else {
       file = event.target.files?.[0] || null;
     }
 
