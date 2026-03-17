@@ -244,6 +244,8 @@ export const StackView = () => {
 
   return (
     <Portal
+      closeMode="except-selector"
+      closeIgnoreSelector="[data-portal-no-close]"
       onClose={handleClose}
       className={classNames("stack-view__portal", colorClassName, {"stack-view__portal-moderation-visible": moderating})}
       hiddenOverflow
@@ -269,6 +271,7 @@ export const StackView = () => {
                   {item.parent && item.parent.position.column === column?.id && (
                     <div className="stack-view__notes">
                       <NoteDialogComponents.Note
+                        data-portal-no-close
                         key={item.parent.id}
                         noteId={item.parent.id}
                         text={item.parent.text}
@@ -289,6 +292,7 @@ export const StackView = () => {
                         <NoteDialogComponents.Wrapper>
                           {item.stack?.map((n: StackedNote) => (
                             <NoteDialogComponents.Note
+                              data-portal-no-close
                               key={n.id}
                               noteId={n.id}
                               text={n.text}

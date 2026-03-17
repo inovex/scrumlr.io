@@ -7,11 +7,15 @@ import "./Portal.scss";
 
 type Alignment = "here" | "center" | "bottom";
 
+type CloseMode = "backdrop" | "except-selector";
+
 export type PortalProps = {
   align: Alignment;
   onClose?: () => void;
   hiddenOverflow?: boolean;
   backdrop?: boolean;
+  closeMode?: CloseMode;
+  closeIgnoreSelector?: string;
   disabledPadding?: boolean;
   accentColor?: string;
 } & HTMLAttributes<HTMLDivElement>;
@@ -19,7 +23,19 @@ export type PortalProps = {
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal: FC<PropsWithChildren<PortalProps>> = ({align, onClose, hiddenOverflow, backdrop, disabledPadding, accentColor, children, className, ...otherProps}) => {
+export const Portal: FC<PropsWithChildren<PortalProps>> = ({
+  align,
+  onClose,
+  closeMode,
+  closeIgnoreSelector,
+  hiddenOverflow,
+  backdrop,
+  disabledPadding,
+  accentColor,
+  children,
+  className,
+  ...otherProps
+}) => {
   // Check existence of portal node
   const portal: HTMLElement | null = document.getElementById("portal");
   if (portal == null) {
@@ -29,13 +45,23 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({align, onClose, hidd
   const theme = document.documentElement.getAttribute("theme") ?? "light";
 
   // only close if the click target is not inside the contentRef, i.e., the background
+  // or in case of full screen modals (like StackView), we can define a selector to ignore (like stack notes), else the modal closes
   const handleBackgroundClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+
     // we only want to trigger onClose if the user clicked the frame/backdrop itself
     // e.currentTarget is the 'portal' div, e.target is the actual element clicked
-    if (e.target === e.currentTarget || (e.target as HTMLElement).classList.contains("portal__frame")) {
-      e.stopPropagation(); // only apply to the first modal if multiples are stacked (e.g. settings + confirmation)
-      onClose?.();
+    if (!closeMode || closeMode === "backdrop") {
+      const isBackdropClick = e.target === e.currentTarget || target.classList.contains("portal__frame");
+      if (!isBackdropClick) return;
     }
+
+    if (closeMode === "except-selector" && closeIgnoreSelector && target.closest(closeIgnoreSelector)) {
+      return;
+    }
+
+    e.stopPropagation();
+    onClose?.();
   };
 
   useWindowEvent("keydown", (event) => {
