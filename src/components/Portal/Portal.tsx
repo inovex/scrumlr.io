@@ -5,10 +5,12 @@ import {useWindowEvent} from "utils/hooks/useWindowEvent";
 import classNames from "classnames";
 import "./Portal.scss";
 
+type Alignment = "here" | "center" | "bottom";
+
 export type PortalProps = {
+  align: Alignment;
   onClose?: () => void;
   hiddenOverflow?: boolean;
-  centered?: boolean;
   backdrop?: boolean;
   disabledPadding?: boolean;
   accentColor?: string;
@@ -17,7 +19,7 @@ export type PortalProps = {
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverflow, centered, backdrop, disabledPadding, accentColor, children, className, ...otherProps}) => {
+export const Portal: FC<PropsWithChildren<PortalProps>> = ({align, onClose, hiddenOverflow, backdrop, disabledPadding, accentColor, children, className, ...otherProps}) => {
   // Check existence of portal node
   const portal: HTMLElement | null = document.getElementById("portal");
   if (portal == null) {
@@ -55,7 +57,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
           className={classNames(
             "portal__frame",
             {"portal__frame--hiddenOverflow": hiddenOverflow},
-            {"portal__frame--centered": centered},
+            `portal__frame--align-${align}`,
             {"portal__frame--backdrop": backdrop},
             {"portal__frame--disabled-padding": disabledPadding},
             getAccentColor()

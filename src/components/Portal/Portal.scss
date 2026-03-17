@@ -54,7 +54,9 @@
   overflow: hidden;
 }
 
-.portal__frame--centered {
+.portal__frame--align-here {
+}
+.portal__frame--align-center {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -63,6 +65,14 @@
   overflow-y: auto;
 }
 
+.portal__frame--align-bottom {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  overflow-y: auto;
+}
 .portal__frame--backdrop {
   background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
