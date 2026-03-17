@@ -127,7 +127,7 @@ func (v *Voting) hasNoResults() bool {
 	return v.VotingResults == nil
 }
 
-func sortNotesByVotes(notes []Note, votingResults *VotingResults) []Note {
+func sortNotesByVotes(notes []Note, votingResults *VotingResults) {
 	sort.SliceStable(notes, func(i, j int) bool {
 		var iTotal, jTotal int
 		if votingResults != nil {
@@ -140,5 +140,4 @@ func sortNotesByVotes(notes []Note, votingResults *VotingResults) []Note {
 		}
 		return iTotal > jTotal
 	})
-	return notes
 }

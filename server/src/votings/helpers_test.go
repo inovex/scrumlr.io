@@ -228,11 +228,12 @@ func TestSortNotesByVotesOrdersDescending(t *testing.T) {
 		},
 	}
 
-	sorted := sortNotesByVotes([]Note{note1, note2, note3}, results)
+	notes := []Note{note1, note2, note3}
+	sortNotesByVotes(notes, results)
 
-	assert.Equal(t, note2.ID, sorted[0].ID)
-	assert.Equal(t, note3.ID, sorted[1].ID)
-	assert.Equal(t, note1.ID, sorted[2].ID)
+	assert.Equal(t, note2.ID, notes[0].ID)
+	assert.Equal(t, note3.ID, notes[1].ID)
+	assert.Equal(t, note1.ID, notes[2].ID)
 }
 
 func TestSortNotesByVotesZeroVoteNotesIncludedAtEnd(t *testing.T) {
@@ -245,25 +246,28 @@ func TestSortNotesByVotesZeroVoteNotesIncludedAtEnd(t *testing.T) {
 		},
 	}
 
-	sorted := sortNotesByVotes([]Note{noteWithoutVotes, noteWithVotes}, results)
+	notes := []Note{noteWithoutVotes, noteWithVotes}
+	sortNotesByVotes(notes, results)
 
-	assert.Equal(t, noteWithVotes.ID, sorted[0].ID)
-	assert.Equal(t, noteWithoutVotes.ID, sorted[1].ID)
+	assert.Equal(t, noteWithVotes.ID, notes[0].ID)
+	assert.Equal(t, noteWithoutVotes.ID, notes[1].ID)
 }
 
 func TestSortNotesByVotesNilResults(t *testing.T) {
 	note1 := Note{ID: uuid.New()}
 	note2 := Note{ID: uuid.New()}
 
-	sorted := sortNotesByVotes([]Note{note1, note2}, nil)
+	notes := []Note{note1, note2}
+	sortNotesByVotes(notes, nil)
 
-	assert.Len(t, sorted, 2)
+	assert.Len(t, notes, 2)
 }
 
 func TestSortNotesByVotesEmptyInput(t *testing.T) {
-	sorted := sortNotesByVotes([]Note{}, &VotingResults{Votes: map[uuid.UUID]VotingResultsPerNote{}})
+	notes := []Note{}
+	sortNotesByVotes(notes, &VotingResults{Votes: map[uuid.UUID]VotingResultsPerNote{}})
 
-	assert.Empty(t, sorted)
+	assert.Empty(t, notes)
 }
 
 func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *DatabaseVote {

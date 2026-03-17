@@ -343,7 +343,7 @@ func (service *Service) updatedVoting(ctx context.Context, board uuid.UUID, voti
 	)
 
 	currentVoting := new(Voting).From(voting, votes)
-	affectedNotes = sortNotesByVotes(affectedNotes, currentVoting.VotingResults)
+	sortNotesByVotes(affectedNotes, currentVoting.VotingResults)
 
 	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
