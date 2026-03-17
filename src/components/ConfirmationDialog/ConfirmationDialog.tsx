@@ -4,7 +4,6 @@ import {animated, Transition} from "@react-spring/web";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
 import {CloseIcon, WarningIcon} from "components/Icon";
-import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
 type CheckboxConfig = {
@@ -35,7 +34,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
   const {t} = useTranslation();
 
   return (
-    <Portal onClose={props.onDecline}>
+    <Portal onClose={props.onDecline} centered backdrop>
       <Transition {...dialogTransitionConfig}>
         {(styles) => (
           <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles}>
