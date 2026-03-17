@@ -14,57 +14,61 @@ exports[`VotingDialog > should match the snapshot with active voting 1`] = `
     data-focus-lock-disabled="false"
   >
     <div
-      class="portal__frame accent-color__backlog-blue"
+      class="portal__frame portal__frame--align-here portal__frame--backdrop-transparent accent-color__backlog-blue"
     >
       <div
         class="portal__content"
         role="dialog"
       >
-        <aside
-          class="dialog voting-dialog accent-color__planning-pink"
+        <div
+          class="portal__content-container"
         >
-          <article
-            class="dialog__content"
+          <aside
+            class="dialog voting-dialog accent-color__planning-pink"
           >
-            <h2
-              class="dialog__header-text"
+            <article
+              class="dialog__content"
             >
-              Voting
-            </h2>
+              <h2
+                class="dialog__header-text"
+              >
+                Voting
+              </h2>
+              <button
+                class="voting-dialog__start-button"
+                data-testid="voting-dialog__stop-button"
+              >
+                <label>
+                  End voting phase
+                </label>
+              </button>
+            </article>
             <button
-              class="voting-dialog__start-button"
-              data-testid="voting-dialog__stop-button"
+              aria-label="Close"
+              class="dialog__close-button"
             >
-              <label>
-                End voting phase
-              </label>
+              <svg
+                class="dialog__close-icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+              </svg>
             </button>
-          </article>
-          <button
-            aria-label="Close"
-            class="dialog__close-button"
-          >
-            <svg
-              class="dialog__close-icon"
-              fill="none"
-              height="32"
-              viewBox="0 0 32 32"
-              width="32"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21.3137 10L10 21.3137"
-                stroke="currentColor"
-                stroke-width="1.75"
-              />
-              <path
-                d="M10 10L21.3137 21.3137"
-                stroke="currentColor"
-                stroke-width="1.75"
-              />
-            </svg>
-          </button>
-        </aside>
+          </aside>
+        </div>
       </div>
     </div>
   </div>
@@ -90,139 +94,143 @@ exports[`VotingDialog > should match the snapshot with no active voting 1`] = `
     data-focus-lock-disabled="false"
   >
     <div
-      class="portal__frame accent-color__backlog-blue"
+      class="portal__frame portal__frame--align-here portal__frame--backdrop-transparent accent-color__backlog-blue"
     >
       <div
         class="portal__content"
         role="dialog"
       >
-        <aside
-          class="dialog voting-dialog accent-color__planning-pink"
+        <div
+          class="portal__content-container"
         >
-          <article
-            class="dialog__content"
+          <aside
+            class="dialog voting-dialog accent-color__planning-pink"
           >
-            <h2
-              class="dialog__header-text"
+            <article
+              class="dialog__content"
             >
-              Voting
-            </h2>
-            <button
-              class="dialog__button"
-              data-testid="voting-dialog__anonymous-voting-button"
-            >
-              <label>
-                Anonymous voting
-              </label>
-              <div
-                class="toggle toggle--active voting-dialog__toggle"
-              />
-            </button>
-            <button
-              class="dialog__button"
-              data-testid="voting-dialog__cumulative-voting-button"
-            >
-              <label>
-                Allow cumulative voting
-              </label>
-              <div
-                class="toggle toggle--active voting-dialog__toggle"
-              />
-            </button>
-            <div
-              class="dialog__button"
-            >
-              <label>
-                Number of votes
-              </label>
-              <div
-                class="voting-dialog__votes-controls"
+              <h2
+                class="dialog__header-text"
               >
-                <button
-                  aria-label="Decrease number of votes"
-                  class="voting-dialog__vote-button"
-                  data-testid="voting-dialog__minus-button"
-                >
-                  <svg
-                    fill="none"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    width="32"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M24 16H8"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                    />
-                  </svg>
-                </button>
-                <label
-                  class="voting-dialog__vote-label"
-                >
-                  5
+                Voting
+              </h2>
+              <button
+                class="dialog__button"
+                data-testid="voting-dialog__anonymous-voting-button"
+              >
+                <label>
+                  Anonymous voting
                 </label>
-                <button
-                  aria-label="Increase number of votes"
-                  class="voting-dialog__vote-button"
-                  data-testid="voting-dialog__plus-button"
+                <div
+                  class="toggle toggle--active voting-dialog__toggle"
+                />
+              </button>
+              <button
+                class="dialog__button"
+                data-testid="voting-dialog__cumulative-voting-button"
+              >
+                <label>
+                  Allow cumulative voting
+                </label>
+                <div
+                  class="toggle toggle--active voting-dialog__toggle"
+                />
+              </button>
+              <div
+                class="dialog__button"
+              >
+                <label>
+                  Number of votes
+                </label>
+                <div
+                  class="voting-dialog__votes-controls"
                 >
-                  <svg
-                    class="icon"
-                    fill="none"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    width="32"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <button
+                    aria-label="Decrease number of votes"
+                    class="voting-dialog__vote-button"
+                    data-testid="voting-dialog__minus-button"
                   >
-                    <path
-                      d="M24 16L8 16"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                    />
-                    <path
-                      d="M16 8L16 24"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      fill="none"
+                      height="32"
+                      viewBox="0 0 32 32"
+                      width="32"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M24 16H8"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                      />
+                    </svg>
+                  </button>
+                  <label
+                    class="voting-dialog__vote-label"
+                  >
+                    5
+                  </label>
+                  <button
+                    aria-label="Increase number of votes"
+                    class="voting-dialog__vote-button"
+                    data-testid="voting-dialog__plus-button"
+                  >
+                    <svg
+                      class="icon"
+                      fill="none"
+                      height="32"
+                      viewBox="0 0 32 32"
+                      width="32"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M24 16L8 16"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                      />
+                      <path
+                        d="M16 8L16 24"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
+              <button
+                class="voting-dialog__start-button"
+                data-testid="voting-dialog__start-button"
+              >
+                <label>
+                  Start voting phase
+                </label>
+              </button>
+            </article>
             <button
-              class="voting-dialog__start-button"
-              data-testid="voting-dialog__start-button"
+              aria-label="Close"
+              class="dialog__close-button"
             >
-              <label>
-                Start voting phase
-              </label>
+              <svg
+                class="dialog__close-icon"
+                fill="none"
+                height="32"
+                viewBox="0 0 32 32"
+                width="32"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21.3137 10L10 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+                <path
+                  d="M10 10L21.3137 21.3137"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                />
+              </svg>
             </button>
-          </article>
-          <button
-            aria-label="Close"
-            class="dialog__close-button"
-          >
-            <svg
-              class="dialog__close-icon"
-              fill="none"
-              height="32"
-              viewBox="0 0 32 32"
-              width="32"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21.3137 10L10 21.3137"
-                stroke="currentColor"
-                stroke-width="1.75"
-              />
-              <path
-                d="M10 10L21.3137 21.3137"
-                stroke="currentColor"
-                stroke-width="1.75"
-              />
-            </svg>
-          </button>
-        </aside>
+          </aside>
+        </div>
       </div>
     </div>
   </div>
