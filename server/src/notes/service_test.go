@@ -1067,6 +1067,49 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Release() {
 	suite.Empty(response.Error)
 }
 
+func (suite *NotesServiceTestSuite) Test_Update_BoardLastModifiedUpdateError() {
+	callerRole := common.OwnerRole
+	stackAllowed := true
+	text := "Updated text"
+
+	suite.expectNoLock()
+	suite.expectPrecondition(stackAllowed, callerRole)
+	suite.mockDB.EXPECT().UpdateNote(mock.Anything, suite.authorID, DatabaseNoteUpdate{
+		ID:       suite.noteID,
+		Board:    suite.boardID,
+		Text:     &text,
+		Position: nil,
+		Edited:   true,
+	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: true}, nil)
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(errors.New("cannot update board last modified"))
+	suite.expectGetAllEmpty()
+	suite.expectPublish()
+
+	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
+		Text:  &text,
+		ID:    suite.noteID,
+		Board: suite.boardID,
+	})
+
+	suite.Nil(err)
+	suite.NotNil(note)
+	suite.Equal(text, note.Text)
+}
+
+func (suite *NotesServiceTestSuite) Test_Delete_BoardLastModifiedUpdateError() {
+	callerRole := common.OwnerRole
+
+	suite.expectNoLock()
+	suite.expectPrecondition(true, callerRole)
+	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, false).Return(nil)
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(errors.New("cannot update board last modified"))
+	suite.expectPublish()
+
+	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
+
+	suite.Nil(err)
+}
+
 func (suite *NotesServiceTestSuite) Test_Delete_GetPreconditionError() {
 	dbErr := errors.New("database error")
 
