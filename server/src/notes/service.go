@@ -123,6 +123,10 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	}
 
 	notesImportCounter.Add(ctx, 1)
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
+		log.Warnw("unable to update last modified", "board", body.Board, "err", err)
+	}
+
 	return new(Note).From(note), err
 }
 

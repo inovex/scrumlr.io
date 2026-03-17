@@ -163,6 +163,7 @@ func (suite *NotesServiceTestSuite) Test_Import() {
 
 	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
 		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
+	suite.expectBoardLastModifiedAtTouched()
 
 	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
 

@@ -52,8 +52,17 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 	update.LastModifiedAt = d.clock.Now()
 	query := d.db.NewUpdate().
 		Model(&update).
-		Column("timer_start", "timer_end", "shared_note", "last_modified_at")
+		Column("last_modified_at")
 
+	if update.TimerStart != nil {
+		query.Column("timer_start")
+	}
+	if update.TimerEnd != nil {
+		query.Column("timer_end")
+	}
+	if update.SharedNote.Valid {
+		query.Column("shared_note")
+	}
 	if update.Name != nil {
 		query.Column("name")
 	}
