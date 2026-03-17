@@ -1,4 +1,4 @@
-import {FC, HTMLAttributes, PropsWithChildren} from "react";
+import {FC, HTMLAttributes, MouseEvent, PropsWithChildren, useRef} from "react";
 import FocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
@@ -23,7 +23,16 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
     throw new Error("Portal HTML Element doesn't exist!");
   }
 
+  const portalContentRef = useRef<HTMLDivElement>(null);
+
   const theme = document.documentElement.getAttribute("theme") ?? "light";
+
+  // only close if the click target is not inside the contentRef, i.e., the background
+  const handleBackgroundClick = (e: MouseEvent) => {
+    if (portalContentRef.current && !portalContentRef.current.contains(e.target as Node)) {
+      onClose?.();
+    }
+  };
 
   useWindowEvent("keydown", (event) => {
     if (event.key !== "Escape") return;
@@ -38,7 +47,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
   };
 
   return createPortal(
-    <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>
+    <div className={classNames("portal", className)} onClick={handleBackgroundClick} role="dialog" {...otherProps}>
       <FocusLock autoFocus={false} returnFocus>
         <div
           className={classNames(
@@ -50,7 +59,9 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
           )}
         >
           <div className="portal__content" role="dialog">
-            {children}
+            <div ref={portalContentRef} className="portal__content-container">
+              {children}
+            </div>
           </div>
         </div>
       </FocusLock>
