@@ -101,7 +101,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 		_, err = query.
 			With("voting", votingQuery).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
-			Set("voting = (SELECT \"id\" FROM \"voting\")").
+			Set("show_voting = (SELECT \"id\" FROM \"voting\")").
 			Where("id = ?", update.ID).
 			Returning("*").
 			Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
