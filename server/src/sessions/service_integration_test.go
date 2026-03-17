@@ -149,7 +149,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	msgSession := <-events
 	msgColumns := <-events
 	msgNotes := <-events
-	suite.Equal(realtime.BoardEventParticipantUpdated, msgSession.Type)
+	suite.Equal(realtime.BoardEventSessionUpdated, msgSession.Type)
 	suite.Equal(realtime.BoardEventColumnsUpdated, msgColumns.Type)
 	suite.Equal(realtime.BoardEventNotesSync, msgNotes.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
@@ -245,7 +245,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 	suite.Nil(err)
 
 	msg := <-events
-	suite.Equal(realtime.BoardEventParticipantUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventSessionUpdated, msg.Type)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
