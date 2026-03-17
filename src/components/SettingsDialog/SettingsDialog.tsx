@@ -118,7 +118,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     navigate("/login");
   };
   return (
-    <Portal onClose={() => navigate(`..`)} align="center" backdrop>
+    <Portal onClose={() => navigate(`..`)} align="center" backdrop="blur">
       <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
         {(styles) => (
           <animated.aside

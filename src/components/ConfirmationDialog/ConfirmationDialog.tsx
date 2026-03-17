@@ -34,7 +34,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
   const {t} = useTranslation();
 
   return (
-    <Portal onClose={props.onDecline} align="center" backdrop>
+    <Portal onClose={props.onDecline} align="center" backdrop="blur">
       <Transition {...dialogTransitionConfig}>
         {(styles) => (
           <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles}>

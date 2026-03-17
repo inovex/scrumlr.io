@@ -247,6 +247,7 @@ export const StackView = () => {
       closeMode="except-selector"
       closeIgnoreSelector="[data-portal-no-close]"
       onClose={handleClose}
+      backdrop="hardBlur"
       className={classNames("stack-view__portal", colorClassName, {"stack-view__portal-moderation-visible": moderating})}
       hiddenOverflow
       align="center"
