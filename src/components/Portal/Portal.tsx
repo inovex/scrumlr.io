@@ -1,8 +1,9 @@
-import {FC, HTMLAttributes, MouseEvent, PropsWithChildren, useRef} from "react";
+import {FC, HTMLAttributes, MouseEvent, PropsWithChildren} from "react";
 import FocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
 import classNames from "classnames";
+import {getColorClassName} from "constants/colors";
 import "./Portal.scss";
 
 type Alignment = "here" | "center" | "bottom";
@@ -75,7 +76,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({
 
   const getAccentColor = () => {
     if (accentColor) return accentColor;
-    return theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink";
+    return theme === "light" ? getColorClassName("backlog-blue") : getColorClassName("planning-pink");
   };
 
   return createPortal(

@@ -252,6 +252,7 @@ export const StackView = () => {
       hiddenOverflow
       align="center"
       disabledPadding
+      accentColor={column.color}
     >
       <div className={classNames("stack-view", colorClassName)}>
         <NoteDialogComponents.Header columnName={column.name} columnDescription={column.description} />

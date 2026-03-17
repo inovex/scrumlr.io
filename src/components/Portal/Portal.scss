@@ -81,7 +81,7 @@
   }
 
   &-blur {
-    background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
+    background-color: rgba(var(--accent-color--light-rgb), $alpha: 0.1);
     backdrop-filter: blur(10px);
   }
 
