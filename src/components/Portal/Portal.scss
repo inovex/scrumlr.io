@@ -63,6 +63,11 @@
   overflow-y: auto;
 }
 
+.portal__frame--backdrop {
+  background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
+  backdrop-filter: blur(10px);
+}
+
 .portal__frame--disabled-padding {
   padding: 0;
 }
