@@ -9,14 +9,14 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common"
 )
 
 func TestCreateColumnTemplate(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := 0
 	visible := true
 
@@ -64,7 +64,7 @@ func TestCreateColumnTemplate_NegativeIndex(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := -1
 	expectedIndex := 0
 	visible := true
@@ -113,7 +113,7 @@ func TestCreateColumnTemplate_HigherIndex(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := 99
 	expectedIndex := 0
 	visible := true
@@ -162,7 +162,7 @@ func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	board := uuid.New()
 	name := "template test"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := 0
 	visible := true
 
@@ -197,7 +197,7 @@ func TestGetColumnTemplate(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
 	name := "template test"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := 1
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
@@ -303,7 +303,7 @@ func TestUpdateColumnTemplate(t *testing.T) {
 	board := uuid.New()
 	name := "New Name"
 	description := "New Description"
-	color := columns.ColorValueViolet
+	color := common.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseColumnTemplateUpdate{
@@ -347,7 +347,7 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 	board := uuid.New()
 	name := "New Name"
 	description := "New Description"
-	color := columns.ColorValueViolet
+	color := common.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseColumnTemplateUpdate{
@@ -379,7 +379,7 @@ func TestUpdateColumnTemplate_NegativeIndex(t *testing.T) {
 	board := uuid.New()
 	name := "New Name"
 	description := "New Description"
-	color := columns.ColorValueViolet
+	color := common.ColorValueViolet
 	index := -1
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)

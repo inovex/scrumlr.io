@@ -70,10 +70,11 @@ func (suite *SessionServiceIntegrationTestSuite) SetupTest() {
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessions")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, ch)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := NewSessionDatabase(db)
 	suite.sessionService = NewSessionService(sessionDatabase, broker, columnService, noteService)
 }
@@ -99,34 +100,36 @@ func (suite *SessionServiceIntegrationTestSuite) initTestData() {
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
-	t := suite.T()
 	ctx := context.Background()
 
+	// given
 	boardId := suite.boards["Write"].ID
 	userId := suite.users["Luke"].ID
 	role := common.ParticipantRole
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
+	// when
 	session, err := suite.sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.UserID)
-	assert.Equal(t, role, session.Role)
+	// then
+	suite.Nil(err)
+	suite.Equal(boardId, session.Board)
+	suite.Equal(userId, session.UserID)
+	suite.Equal(role, session.Role)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventParticipantCreated, msg.Type)
+	suite.Equal(realtime.BoardEventParticipantCreated, msg.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msg.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, userId, sessionData.UserID)
-	assert.Equal(t, role, sessionData.Role)
+	suite.Nil(err)
+	suite.Equal(userId, sessionData.UserID)
+	suite.Equal(role, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
-	t := suite.T()
 	ctx := context.Background()
 
+	// given
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Luke"].ID
 	callerId := suite.baseData.Users["Stan"].ID
@@ -134,27 +137,29 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
+	// when
 	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: &role})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.UserID)
-	assert.Equal(t, common.ModeratorRole, session.Role)
+	// then
+	suite.Nil(err)
+	suite.Equal(boardId, session.Board)
+	suite.Equal(userId, session.UserID)
+	suite.Equal(common.ModeratorRole, session.Role)
 
 	msgSession := <-events
 	msgColumns := <-events
 	msgNotes := <-events
-	assert.Equal(t, realtime.BoardEventSessionUpdated, msgSession.Type)
-	assert.Equal(t, realtime.BoardEventColumnsUpdated, msgColumns.Type)
-	assert.Equal(t, realtime.BoardEventNotesSync, msgNotes.Type)
+	suite.Equal(realtime.BoardEventParticipantUpdated, msgSession.Type)
+	suite.Equal(realtime.BoardEventColumnsUpdated, msgColumns.Type)
+	suite.Equal(realtime.BoardEventNotesSync, msgNotes.Type)
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
-	assert.Nil(t, err)
-	assert.Equal(t, userId, session.UserID)
-	assert.Equal(t, common.ModeratorRole, sessionData.Role)
+	suite.Nil(err)
+	suite.Equal(userId, session.UserID)
+	suite.Equal(common.ModeratorRole, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
-	t := suite.T()
+	// given
 	ctx := context.Background()
 
 	boardId := suite.boards["UpdateAll"].ID
@@ -163,16 +168,18 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
+	// when
 	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: &ready, RaisedHand: &raisedHand})
 
-	assert.Nil(t, err)
-	assert.Len(t, sessions, 4)
+	// then
+	suite.Nil(err)
+	suite.Len(sessions, 4)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventParticipantsUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventParticipantsUpdated, msg.Type)
 	sessionData, err := technical_helper.UnmarshalSlice[BoardSession](msg.Data)
-	assert.Nil(t, err)
-	assert.Len(t, sessionData, 4)
+	suite.Nil(err)
+	suite.Len(sessionData, 4)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_UpdateUserBoard() {
@@ -180,44 +187,50 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateUserBoard() {
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Get() {
-	t := suite.T()
+	// given
 	ctx := context.Background()
 
 	boardId := suite.boards["Read"].ID
 	userId := suite.baseData.Users["Santa"].ID
 
+	// when
 	session, err := suite.sessionService.Get(ctx, boardId, userId)
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.UserID)
+	// then
+	suite.Nil(err)
+	suite.Equal(boardId, session.Board)
+	suite.Equal(userId, session.UserID)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_GetAll() {
-	t := suite.T()
+	// given
 	ctx := context.Background()
 
 	boardId := suite.boards["Read"].ID
 
+	// when
 	sessions, err := suite.sessionService.GetAll(ctx, boardId, BoardSessionFilter{})
-	assert.Nil(t, err)
-	assert.Len(t, sessions, 4)
+
+	// then
+	suite.Nil(err)
+	suite.Len(sessions, 4)
 }
 
-func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoardSessions() {
-	t := suite.T()
+func (suite *SessionServiceIntegrationTestSuite) Test_GetUserConnectedBoards() {
+	// given
 	ctx := context.Background()
 
 	userId := suite.baseData.Users["Stan"].ID
 
 	sessions, err := suite.sessionService.GetUserBoardSessions(ctx, userId, true)
 
-	assert.Nil(t, err)
-	assert.Len(t, sessions, 2)
+	// then
+	suite.Nil(err)
+	suite.Len(sessions, 2)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
-	t := suite.T()
+	// given
 	ctx := context.Background()
 
 	boardId := suite.boards["Update"].ID
@@ -225,16 +238,18 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
+	// when
 	err := suite.sessionService.Connect(ctx, boardId, userId)
 
-	assert.Nil(t, err)
+	// then
+	suite.Nil(err)
 
 	msg := <-events
-	assert.Equal(t, realtime.BoardEventSessionUpdated, msg.Type)
+	suite.Equal(realtime.BoardEventParticipantUpdated, msg.Type)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
-	t := suite.T()
+	// given
 	ctx := context.Background()
 
 	boardId := suite.boards["Update"].ID
@@ -242,14 +257,16 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
+	// when
 	err := suite.sessionService.Disconnect(ctx, boardId, userId)
 
-	assert.Nil(t, err)
+	// then
+	suite.Nil(err)
 
 	msgColumn := <-events
 	msgNote := <-events
-	assert.Equal(t, realtime.BoardEventColumnsUpdated, msgColumn.Type)
-	assert.Equal(t, realtime.BoardEventNotesSync, msgNote.Type)
+	suite.Equal(realtime.BoardEventColumnsUpdated, msgColumn.Type)
+	suite.Equal(realtime.BoardEventNotesSync, msgNote.Type)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
@@ -261,7 +278,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 
 	exists, err := suite.sessionService.Exists(ctx, boardId, userId)
 
-	assert.Nil(t, err)
+	suite.Nil(err)
 	assert.True(t, exists)
 }
 
@@ -274,7 +291,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 
 	exists, err := suite.sessionService.ModeratorSessionExists(ctx, boardId, userId)
 
-	assert.Nil(t, err)
+	suite.Nil(err)
 	assert.True(t, exists)
 }
 
@@ -287,7 +304,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
 
 	banned, err := suite.sessionService.IsParticipantBanned(ctx, boardId, userId)
 
-	assert.Nil(t, err)
+	suite.Nil(err)
 	assert.True(t, banned)
 }
 

@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
@@ -89,8 +88,8 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Create() {
 	boardtemplate, err := suite.service.Create(ctx,
 		CreateBoardTemplateRequest{Name: &name, Creator: userId, Description: &description,
 			Columns: []*columntemplates.ColumnTemplateRequest{
-				{Name: "Column 1", Description: "This is the first column", Color: columns.ColorGoalGreen},
-				{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
+				{Name: "Column 1", Description: "This is the first column", Color: common.ColorGoalGreen},
+				{Name: "Column 2", Description: "This is the second column", Color: common.ColorOnlineOrange},
 			},
 		},
 	)

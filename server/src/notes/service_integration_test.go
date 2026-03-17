@@ -68,7 +68,8 @@ func (suite *NoteServiceIntegrationTestSuite) SetupTest() {
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
 	database := NewNotesDatabase(db)
-	suite.noteService = NewNotesService(database, broker, ch)
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
+	suite.noteService = NewNotesService(database, broker, ch, boardLastModifiedUpdater)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) initTestData() {

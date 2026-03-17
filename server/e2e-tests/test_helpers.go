@@ -4,6 +4,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common"
+
 	"testing"
 )
 
@@ -21,7 +23,7 @@ func NewBoardBuilder() *BoardBuilder {
 		name:         Ptr("Test Board"),
 		accessPolicy: boards.Public,
 		columns: []columns.ColumnRequest{
-			{Name: "Column 1", Color: columns.ColorBacklogBlue, Visible: Ptr(true)},
+			{Name: "Column 1", Color: common.ColorBacklogBlue, Visible: Ptr(true)},
 		},
 	}
 }
@@ -49,9 +51,9 @@ func (b *BoardBuilder) WithColumns(cols []columns.ColumnRequest) *BoardBuilder {
 
 func (b *BoardBuilder) WithDefaultColumns() *BoardBuilder {
 	b.columns = []columns.ColumnRequest{
-		{Name: "Positive", Color: columns.ColorGoalGreen, Visible: Ptr(true)},
-		{Name: "Negative", Color: columns.ColorOnlineOrange, Visible: Ptr(true)},
-		{Name: "Actions", Color: columns.ColorPlanningPink, Visible: Ptr(true)},
+		{Name: "Positive", Color: common.ColorGoalGreen, Visible: Ptr(true)},
+		{Name: "Negative", Color: common.ColorOnlineOrange, Visible: Ptr(true)},
+		{Name: "Actions", Color: common.ColorPlanningPink, Visible: Ptr(true)},
 	}
 	return b
 }

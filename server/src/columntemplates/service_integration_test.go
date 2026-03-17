@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
@@ -70,19 +69,19 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) initTestData() {
 
 	suite.columnTemplates = map[string]DatabaseColumnTemplate{
 		// test column templates for insert
-		"InsertFirst":        {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567201"), BoardTemplate: suite.boardTemplates["InsertFirst"].id, Name: "InsertFirst", Description: "Initial template", Visible: false, Color: columns.ColorYieldingYellow, Index: 0},
-		"InsertNoIndex":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567202"), BoardTemplate: suite.boardTemplates["InsertNoIndex"].id, Name: "InsertNoIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
-		"InsertLast":         {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567203"), BoardTemplate: suite.boardTemplates["InsertLast"].id, Name: "InsertLast", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
-		"InsertHighIndex":    {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567204"), BoardTemplate: suite.boardTemplates["InsertHighIndex"].id, Name: "InsertHighIndex", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
-		"InsertMiddleIndex0": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567205"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle0", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 0},
-		"InsertMiddleIndex1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567206"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle1", Description: "Initial template", Visible: false, Color: columns.ColorGoalGreen, Index: 1},
+		"InsertFirst":        {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567201"), BoardTemplate: suite.boardTemplates["InsertFirst"].id, Name: "InsertFirst", Description: "Initial template", Visible: false, Color: common.ColorYieldingYellow, Index: 0},
+		"InsertNoIndex":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567202"), BoardTemplate: suite.boardTemplates["InsertNoIndex"].id, Name: "InsertNoIndex", Description: "Initial template", Visible: false, Color: common.ColorGoalGreen, Index: 0},
+		"InsertLast":         {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567203"), BoardTemplate: suite.boardTemplates["InsertLast"].id, Name: "InsertLast", Description: "Initial template", Visible: false, Color: common.ColorGoalGreen, Index: 0},
+		"InsertHighIndex":    {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567204"), BoardTemplate: suite.boardTemplates["InsertHighIndex"].id, Name: "InsertHighIndex", Description: "Initial template", Visible: false, Color: common.ColorGoalGreen, Index: 0},
+		"InsertMiddleIndex0": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567205"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle0", Description: "Initial template", Visible: false, Color: common.ColorGoalGreen, Index: 0},
+		"InsertMiddleIndex1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567206"), BoardTemplate: suite.boardTemplates["InsertMiddleIndex"].id, Name: "InsertMiddle1", Description: "Initial template", Visible: false, Color: common.ColorGoalGreen, Index: 1},
 		// test column templates for write
-		"Update":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567207"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "This is a column description", Visible: false, Color: columns.ColorOnlineOrange, Index: 0},
-		"UpdateIndex": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567208"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "The index of this column will be update through the update of the column above", Visible: false, Color: columns.ColorPlanningPink, Index: 1},
-		"Delete":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567209"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Delete", Description: "This column will be delete throug a test", Visible: true, Color: columns.ColorPokerPurple, Index: 2},
+		"Update":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567207"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "This is a column description", Visible: false, Color: common.ColorOnlineOrange, Index: 0},
+		"UpdateIndex": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567208"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Update", Description: "The index of this column will be update through the update of the column above", Visible: false, Color: common.ColorPlanningPink, Index: 1},
+		"Delete":      {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567209"), BoardTemplate: suite.boardTemplates["Write"].id, Name: "Delete", Description: "This column will be delete throug a test", Visible: true, Color: common.ColorPokerPurple, Index: 2},
 		// test column templates for get
-		"Read1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567210"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column1", Description: "This is a column description", Visible: true, Color: columns.ColorOnlineOrange, Index: 0},
-		"Read2": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567211"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1},
+		"Read1": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567210"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column1", Description: "This is a column description", Visible: true, Color: common.ColorOnlineOrange, Index: 0},
+		"Read2": {ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567211"), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: common.ColorPokerPurple, Index: 1},
 	}
 }
 
@@ -93,7 +92,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create() {
 	boardId := suite.boardTemplates["InsertNoIndex"].id
 	name := "CreateNoIndex"
 	description := "This is inserted from the test"
-	color := columns.ColorYieldingYellow
+	color := common.ColorYieldingYellow
 	visible := true
 
 	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
@@ -121,7 +120,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex()
 	boardId := suite.boardTemplates["InsertFirst"].id
 	name := "CreateFirst"
 	description := "This is inserted from the test"
-	color := columns.ColorYieldingYellow
+	color := common.ColorYieldingYellow
 	visible := true
 	index := 0
 
@@ -150,7 +149,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 	boardId := suite.boardTemplates["InsertLast"].id
 	name := "CreateLast"
 	description := "This is inserted from the test"
-	color := columns.ColorYieldingYellow
+	color := common.ColorYieldingYellow
 	visible := true
 	index := 1
 
@@ -179,7 +178,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex(
 	boardId := suite.boardTemplates["InsertMiddleIndex"].id
 	name := "CreateMiddle"
 	description := "This is inserted from the test"
-	color := columns.ColorYieldingYellow
+	color := common.ColorYieldingYellow
 	visible := true
 	index := 1
 
@@ -209,7 +208,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.columnTemplates["Update"].BoardTemplate
 	name := "Updated Name"
 	description := "This column was updated"
-	color := columns.ColorGoalGreen
+	color := common.ColorGoalGreen
 	index := 1
 	visible := true
 
