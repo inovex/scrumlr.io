@@ -23,13 +23,14 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
     throw new Error("Portal HTML Element doesn't exist!");
   }
 
-  const portalContentRef = useRef<HTMLDivElement>(null);
-
   const theme = document.documentElement.getAttribute("theme") ?? "light";
 
   // only close if the click target is not inside the contentRef, i.e., the background
   const handleBackgroundClick = (e: MouseEvent) => {
-    if (portalContentRef.current && !portalContentRef.current.contains(e.target as Node)) {
+    // we only want to trigger onClose if the user clicked the frame/backdrop itself
+    // e.currentTarget is the 'portal' div, e.target is the actual element clicked
+    if (e.target === e.currentTarget || (e.target as HTMLElement).classList.contains("portal__frame")) {
+      e.stopPropagation(); // only apply to the first modal if multiples are stacked (e.g. settings + confirmation)
       onClose?.();
     }
   };
@@ -59,9 +60,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
           )}
         >
           <div className="portal__content" role="dialog">
-            <div ref={portalContentRef} className="portal__content-container">
-              {children}
-            </div>
+            <div className="portal__content-container">{children}</div>
           </div>
         </div>
       </FocusLock>
