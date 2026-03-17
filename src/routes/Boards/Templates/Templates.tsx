@@ -145,7 +145,7 @@ export const Templates = () => {
     <>
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
-        <Portal className={classNames("templates__portal")} hiddenOverflow centered onClose={onLeaveSessionPolicy}>
+        <Portal className={classNames("templates__portal")} hiddenOverflow align="center" onClose={onLeaveSessionPolicy}>
           <AccessSettings onCancel={onLeaveSessionPolicy} onSelectSessionPolicy={onSelectSessionPolicy} />
         </Portal>
       ) : null}

@@ -247,7 +247,7 @@ export const StackView = () => {
       onClose={handleClose}
       className={classNames("stack-view__portal", colorClassName, {"stack-view__portal-moderation-visible": moderating})}
       hiddenOverflow
-      centered
+      align="center"
       disabledPadding
     >
       <div className={classNames("stack-view", colorClassName)}>

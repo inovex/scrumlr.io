@@ -23,6 +23,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setActiveEditMode(false);
         props.onClose();
       }}
+      align="here"
     >
       <ul className="header-menu">
         <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={props.currentUserIsModerator} setActiveEditMode={setActiveEditMode} />

@@ -61,6 +61,7 @@ export const CookieNotice = () => {
         setShowCookieNotice(false);
         accept();
       }}
+      align="here"
     >
       <div className="cookie-notice">
         <div className="cookie-notice__header">
