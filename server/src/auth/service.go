@@ -47,54 +47,6 @@ type AuthService interface {
 	fetchGithubUser(ctx context.Context, config *oauth2.Config, token *oauth2.Token) (*UserInformation, error)
 }
 
-type AuthProviderConfiguration struct {
-	TenantId       string
-	ClientId       string
-	ClientSecret   string
-	RedirectUri    string
-	DiscoveryUri   string
-	UserIdentScope string
-	UserNameScope  string
-	AuthBasePath   string
-}
-
-type AuthConfiguration struct {
-	oauthConfigs     map[string]*oauth2.Config
-	providers        map[string]AuthProviderConfiguration
-	unsafePrivateKey string
-	privateKey       string
-	unsafeAuth       *jwtauth.JWTAuth
-	auth             *jwtauth.JWTAuth
-	userService      users.UserService
-}
-
-type providerMap struct {
-	identClaim  string
-	nameClaim   string
-	avatarClaim string
-}
-
-var externalProviderConfigs = map[string]providerMap{
-	string(common.Google):    {identClaim: "sub", nameClaim: "name", avatarClaim: "picture"},
-	string(common.Microsoft): {identClaim: "oid", nameClaim: "name", avatarClaim: "avatar_url"},
-	string(common.AzureAd):   {identClaim: "id", nameClaim: "login", avatarClaim: "avatar_url"},
-	string(common.Apple):     {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
-	string(common.TypeOIDC):  {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
-}
-
-type UserInformation struct {
-	Provider  common.AccountType
-	Ident     string `json:"id"`
-	Name      string `json:"login"`
-	AvatarURL string
-}
-
-type GithubUserInformation struct {
-	Provider common.AccountType
-	Ident    int64  `json:"id"`
-	Name     string `json:"login"`
-}
-
 var googleJWKS keyfunc.Keyfunc
 var microsoftJWKS keyfunc.Keyfunc
 var oidcJWKS keyfunc.Keyfunc
