@@ -12,7 +12,7 @@ import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {Sortable} from "components/DragAndDrop/Sortable";
-import {ArrowRight} from "components/Icon";
+import {ArrowRightIcon} from "components/Icon";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
@@ -136,7 +136,7 @@ export const Note = (props: NoteProps) => {
               {isTextTruncated.vertical && (
                 <span className="note__show-more" role="button" aria-expanded="false" title={t("Note.showMore")}>
                   {t("Note.showMore")}
-                  <ArrowRight className="note__show-more-icon" />
+                  <ArrowRightIcon className="note__show-more-icon" />
                 </span>
               )}
             </div>
