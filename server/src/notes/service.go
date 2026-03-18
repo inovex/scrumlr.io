@@ -28,7 +28,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 type Service struct {
 	database                 NotesDatabase
 	realtime                 *realtime.Broker
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 	cache                    *cache.Cache
 }
 
@@ -45,7 +45,16 @@ type NotesDatabase interface {
 	GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error)
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker, cache *cache.Cache, boardLastModifiedUpdater common.BoardLastModifiedUpdater) NotesService {
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
+}
+
+func NewNotesService(
+	db NotesDatabase,
+	rt *realtime.Broker,
+	cache *cache.Cache,
+	boardLastModifiedUpdater BoardLastModifiedUpdater,
+) NotesService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt

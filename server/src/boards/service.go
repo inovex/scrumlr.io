@@ -36,7 +36,7 @@ type Service struct {
 	hash                     hash.Hash
 	database                 BoardDatabase
 	realtime                 *realtime.Broker
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 
 	columnService         columns.ColumnService
 	notesService          notes.NotesService
@@ -53,6 +53,10 @@ type BoardDatabase interface {
 	GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error)
 	DeleteBoard(ctx context.Context, id uuid.UUID) error
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
+}
+
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
 }
 
 func NewBoardService(

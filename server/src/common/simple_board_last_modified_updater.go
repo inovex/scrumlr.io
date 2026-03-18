@@ -8,6 +8,10 @@ import (
 	"github.com/uptrace/bun"
 )
 
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
+}
+
 type SimpleBoardLastModifiedUpdater struct {
 	db *bun.DB
 }

@@ -32,18 +32,22 @@ type ColumnDatabase interface {
 	Count(ctx context.Context, board uuid.UUID) (int, error)
 }
 
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
+}
+
 type Service struct {
 	database                 ColumnDatabase
 	realtime                 *realtime.Broker
 	noteService              notes.NotesService
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 }
 
 func NewColumnService(
 	db ColumnDatabase,
 	rt *realtime.Broker,
 	noteService notes.NotesService,
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater,
+	boardLastModifiedUpdater BoardLastModifiedUpdater,
 ) ColumnService {
 	service := new(Service)
 	service.database = db
