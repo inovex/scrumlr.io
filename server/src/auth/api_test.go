@@ -33,7 +33,7 @@ func Test_SignInAnonymously(t *testing.T) {
   bodyBytes, _ := json.Marshal(reqBody)
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http:", "/")
   rr := httptest.NewRecorder()
   req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -61,7 +61,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
   bodyBytes, _ := json.Marshal(reqBody)
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http:", "/")
   rr := httptest.NewRecorder()
   req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -74,7 +74,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
 func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http:", "/")
   rr := httptest.NewRecorder()
   req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader([]byte("invalid-json")))
 
@@ -85,7 +85,7 @@ func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
 func Test_Logout(t *testing.T) {
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http:", "/")
   rr := httptest.NewRecorder()
   req := technical_helper.NewTestRequestBuilder("GET", "/logout", nil)
 
@@ -100,7 +100,7 @@ func Test_Logout(t *testing.T) {
 func Test_BeginAuth(t *testing.T) {
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/")
   rr := httptest.NewRecorder()
 
   fakeConfig := &oauth2.Config{
@@ -108,11 +108,11 @@ func Test_BeginAuth(t *testing.T) {
     Endpoint: oauth2.Endpoint{AuthURL: "https://provider.com/auth"},
   }
 
-  req := technical_helper.NewTestRequestBuilder("GET", "/login/google", nil)
+  req := technical_helper.NewTestRequestBuilder("GET", "http://localhost:3000/login/google?state=http://localhost:3000:/boards", nil)
   rctx := chi.NewRouteContext()
   rctx.URLParams.Add("provider", "google")
   req.AddToContext(chi.RouteCtxKey, rctx)
-  mockService.EXPECT().GetConfig(string(common.Google)).Return(fakeConfig)
+  mockService.EXPECT().GetConfig(string(common.Google)).Return(fakeConfig, nil)
 
   api.BeginAuth(rr, req.Request())
 
@@ -126,13 +126,22 @@ func Test_BeginAuth(t *testing.T) {
 func Test_Callback(t *testing.T) {
   mockService := NewMockAuthService(t)
   mockUserService := users.NewMockUserService(t)
-  api := NewAuthApi(mockService, mockUserService)
+  api := NewAuthApi(mockService, mockUserService, "http:", "/")
   rr := httptest.NewRecorder()
+  oauthCookie := &http.Cookie{
+    Name:     "oauth_state",
+    Value:    "nonce123",
+    MaxAge:   100,
+    HttpOnly: true,
+    SameSite: http.SameSiteLaxMode,
+    Path:     "/",
+  }
 
   req := technical_helper.NewTestRequestBuilder(http.MethodGet, "/callback/google?state=nonce123__http://localhost:3000/board&code=authcode", nil)
   rctx := chi.NewRouteContext()
   rctx.URLParams.Add("provider", "google")
   req.AddToContext(chi.RouteCtxKey, rctx)
+  req.Req.AddCookie(oauthCookie)
 
   expectedCookie := &http.Cookie{Name: "jwt", Value: "new-token"}
 
@@ -148,6 +157,6 @@ func Test_Callback(t *testing.T) {
 
   cookies := rr.Result().Cookies()
   assert.NotEmpty(t, cookies)
-  assert.Equal(t, "jwt", cookies[0].Name)
-  assert.Equal(t, "new-token", cookies[0].Value)
+  assert.Equal(t, "jwt", cookies[1].Name)
+  assert.Equal(t, "new-token", cookies[1].Value)
 }

@@ -46,21 +46,21 @@ func (api *API) SignInAnonymously(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  user, err := api.userService.CreateAnonymous(ctx, body.Name)
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to create anonymous user")
-    span.RecordError(err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
-  tokenString, err := api.service.Sign(map[string]any{"id": user.ID})
-  if err != nil {
-    span.SetStatus(codes.Error, "failed to generate token string")
-    span.RecordError(err)
-    log.Errorw("unable to generate token string", "err", err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+	user, err := api.userService.CreateAnonymous(ctx, body.Name)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create anonymous user")
+		span.RecordError(err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	tokenString, err := api.service.Sign(map[string]any{"id": user.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to generate token string")
+		span.RecordError(err)
+		log.Errorw("unable to generate token string", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
 
   cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32, Secure: true, SameSite: http.SameSiteStrictMode}
   common.SealCookie(r, &cookie)
@@ -160,11 +160,15 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 
   state := r.FormValue("state")
 
-  oauthCookie, err := r.Cookie("oauth_state")
-  if err != nil {
-    common.Throw(w, r, common.BadRequestError(err))
-    return
-  }
+	oauthCookie, err := r.Cookie("oauth_state")
+	if err != nil {
+		log.Errorw("Missing oauth cookie", "err", err)
+		span.SetStatus(codes.Error, "missing oauth cookie")
+		span.RecordError(fmt.Errorf("missing oauth cookie"))
+		common.Throw(w, r, common.BadRequestError(fmt.Errorf("missing oauth cookie")))
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
 
   //format: nonce__returnURL
   parts := strings.Split(state, "__")

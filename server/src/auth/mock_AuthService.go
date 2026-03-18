@@ -138,7 +138,7 @@ func (_c *MockAuthService_Exists_Call) RunAndReturn(run func(accountType common.
 }
 
 // GetConfig provides a mock function for the type MockAuthService
-func (_mock *MockAuthService) GetConfig(provider string) *oauth2.Config {
+func (_mock *MockAuthService) GetConfig(provider string) (*oauth2.Config, error) {
 	ret := _mock.Called(provider)
 
 	if len(ret) == 0 {
@@ -146,6 +146,10 @@ func (_mock *MockAuthService) GetConfig(provider string) *oauth2.Config {
 	}
 
 	var r0 *oauth2.Config
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(string) (*oauth2.Config, error)); ok {
+		return returnFunc(provider)
+	}
 	if returnFunc, ok := ret.Get(0).(func(string) *oauth2.Config); ok {
 		r0 = returnFunc(provider)
 	} else {
@@ -153,7 +157,12 @@ func (_mock *MockAuthService) GetConfig(provider string) *oauth2.Config {
 			r0 = ret.Get(0).(*oauth2.Config)
 		}
 	}
-	return r0
+	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
+		r1 = returnFunc(provider)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
 }
 
 // MockAuthService_GetConfig_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetConfig'
@@ -180,18 +189,18 @@ func (_c *MockAuthService_GetConfig_Call) Run(run func(provider string)) *MockAu
 	return _c
 }
 
-func (_c *MockAuthService_GetConfig_Call) Return(config *oauth2.Config) *MockAuthService_GetConfig_Call {
-	_c.Call.Return(config)
+func (_c *MockAuthService_GetConfig_Call) Return(config *oauth2.Config, err error) *MockAuthService_GetConfig_Call {
+	_c.Call.Return(config, err)
 	return _c
 }
 
-func (_c *MockAuthService_GetConfig_Call) RunAndReturn(run func(provider string) *oauth2.Config) *MockAuthService_GetConfig_Call {
+func (_c *MockAuthService_GetConfig_Call) RunAndReturn(run func(provider string) (*oauth2.Config, error)) *MockAuthService_GetConfig_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // HandleCallback provides a mock function for the type MockAuthService
-func (_mock *MockAuthService) HandleCallback(ctx context.Context, provider string, code string) (*http.Cookie, *common.APIError) {
+func (_mock *MockAuthService) HandleCallback(ctx context.Context, provider string, code string) (*http.Cookie, error) {
 	ret := _mock.Called(ctx, provider, code)
 
 	if len(ret) == 0 {
@@ -199,8 +208,8 @@ func (_mock *MockAuthService) HandleCallback(ctx context.Context, provider strin
 	}
 
 	var r0 *http.Cookie
-	var r1 *common.APIError
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) (*http.Cookie, *common.APIError)); ok {
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) (*http.Cookie, error)); ok {
 		return returnFunc(ctx, provider, code)
 	}
 	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) *http.Cookie); ok {
@@ -210,12 +219,10 @@ func (_mock *MockAuthService) HandleCallback(ctx context.Context, provider strin
 			r0 = ret.Get(0).(*http.Cookie)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string) *common.APIError); ok {
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
 		r1 = returnFunc(ctx, provider, code)
 	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).(*common.APIError)
-		}
+		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
@@ -256,12 +263,12 @@ func (_c *MockAuthService_HandleCallback_Call) Run(run func(ctx context.Context,
 	return _c
 }
 
-func (_c *MockAuthService_HandleCallback_Call) Return(cookie *http.Cookie, aPIError *common.APIError) *MockAuthService_HandleCallback_Call {
-	_c.Call.Return(cookie, aPIError)
+func (_c *MockAuthService_HandleCallback_Call) Return(cookie *http.Cookie, err error) *MockAuthService_HandleCallback_Call {
+	_c.Call.Return(cookie, err)
 	return _c
 }
 
-func (_c *MockAuthService_HandleCallback_Call) RunAndReturn(run func(ctx context.Context, provider string, code string) (*http.Cookie, *common.APIError)) *MockAuthService_HandleCallback_Call {
+func (_c *MockAuthService_HandleCallback_Call) RunAndReturn(run func(ctx context.Context, provider string, code string) (*http.Cookie, error)) *MockAuthService_HandleCallback_Call {
 	_c.Call.Return(run)
 	return _c
 }

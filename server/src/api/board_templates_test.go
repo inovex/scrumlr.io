@@ -50,16 +50,16 @@ func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateR
 }
 
 func Verifier() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Create proper JWT context using jwtauth library
-			// Extract user ID from context if present, otherwise use test user ID
-			userID := "test-user-id"
-			if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
-				if userUUID, ok := uid.(uuid.UUID); ok {
-					userID = userUUID.String()
-				}
-			}
+  return func(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+      // Create proper JWT context using jwtauth library
+      // Extract user ID from context if present, otherwise use test user ID
+      userID := "test-user-id"
+      if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
+        if userUUID, ok := uid.(uuid.UUID); ok {
+          userID = userUUID.String()
+        }
+      }
 
 			// Create JWT token and context using jwtauth
 			tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
