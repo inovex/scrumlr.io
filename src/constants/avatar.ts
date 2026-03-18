@@ -3,8 +3,10 @@ import {AvatarConfig} from "types/avatar";
 import ClotheColorName from "@gamepark/avataaars/src/avatar/clothes/ClotheColorName";
 import FacialHairColorName from "@gamepark/avataaars/src/avatar/top/facialHair/FacialHairColorName";
 
+const EXCLUDED_TOP_TYPES = [TopType.PrinceCut]; // prince cut skews the whole avatar for some reason
+
 export const AVATAR_SKIN_COLORS = Object.values(SkinColor);
-export const AVATAR_TOP_TYPES = Object.values(TopType);
+export const AVATAR_TOP_TYPES = Object.values(TopType).filter((type) => !EXCLUDED_TOP_TYPES.includes(type));
 export const AVATAR_CLOTHE_COLORS = Object.values(ClotheColorName);
 export const AVATAR_GRAPHIC_TYPES = Object.values(GraphicType);
 export const AVATAR_CLOTHE_TYPES = Object.values(ClotheType);
