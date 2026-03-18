@@ -1,4 +1,4 @@
-import {AccessoriesType, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, HairColorName, HatColorName, MouthType, SkinColor, TopType} from "@gamepark/avataaars";
+import {AccessoriesType, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, HairColorName, MouthType, SkinColor, TopType} from "@gamepark/avataaars";
 import FacialHairColorName from "@gamepark/avataaars/src/avatar/top/facialHair/FacialHairColorName";
 import ClotheColorName from "@gamepark/avataaars/src/avatar/clothes/ClotheColorName";
 

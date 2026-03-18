@@ -2,7 +2,6 @@ import Avataar, {FacialHairType} from "@gamepark/avataaars";
 import React from "react";
 import _ from "underscore";
 import {hashCode} from "utils/hash";
-import "./Avatar.scss";
 import classNames from "classnames";
 import {
   AVATAR_ACCESSORIES_TYPES,
@@ -19,7 +18,8 @@ import {
   AVATAR_TOP_TYPES,
 } from "constants/avatar";
 import {AvataaarProps} from "types/avatar";
-import {getColorClassName, getColorForIndex} from "../../constants/colors";
+import {getColorClassName, getColorForIndex} from "constants/colors";
+import "./Avatar.scss";
 
 export type AvatarProps = {
   seed?: string;
