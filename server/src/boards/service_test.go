@@ -750,7 +750,7 @@ func TestUpdateLastModified(t *testing.T) {
 		Return(DatabaseBoard{ID: boardID}, nil)
 
 	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID)
+	err := updater.UpdateLastModified(context.Background(), boardID, time.Now())
 
 	assert.NoError(t, err)
 }
@@ -768,7 +768,7 @@ func TestUpdateLastModified_DatabaseError(t *testing.T) {
 		Return(DatabaseBoard{}, dbErr)
 
 	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID)
+	err := updater.UpdateLastModified(context.Background(), boardID, time.Now())
 
 	assert.ErrorIs(t, err, dbErr)
 }

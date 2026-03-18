@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
@@ -171,7 +172,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 	return rankUpdate
 }
 
-func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID) error {
-	_, err := u.database.UpdateBoard(ctx, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: u.clock.Now()})
+func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error {
+	_, err := u.database.UpdateBoard(ctx, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: time})
 	return err
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
@@ -69,7 +70,7 @@ func TestSimpleBoardLastModifiedUpdater_UpdateLastModified(t *testing.T) {
 
 			test.prepareMock(mock, boardID)
 
-			err = updater.UpdateLastModified(context.Background(), boardID)
+			err = updater.UpdateLastModified(context.Background(), boardID, time.Now())
 			if test.wantErr != nil {
 				require.Error(t, err)
 				assert.Equal(t, test.wantErr.Error(), err.Error())

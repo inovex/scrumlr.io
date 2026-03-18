@@ -61,7 +61,7 @@ type BoardDatabase interface {
 }
 
 type BoardLastModifiedUpdater interface {
-	UpdateLastModified(ctx context.Context, boardID uuid.UUID) error
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error
 }
 
 func NewBoardService(
@@ -443,7 +443,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		return nil, err
 	}
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, time.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
