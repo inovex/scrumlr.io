@@ -196,9 +196,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 
 	msg := <-events
 	suite.Equal(realtime.BoardEventParticipantUpdated, msg.Type)
-	sessionData := msg.Data.(map[string]interface{})
-	suite.True(sessionData["connected"].(bool))
-	suite.Equal(string(common.OwnerRole), sessionData["role"].(string))
+	userData, err := technical_helper.Unmarshal[User](msg.Data)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, userData.Name)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
