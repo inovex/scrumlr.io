@@ -443,7 +443,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		return nil, err
 	}
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, time.Now()); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
