@@ -8,16 +8,18 @@ import (
 
 type ApiInitializer struct {
 	basePath string
+	hostPath string
 }
 
-func NewApiInitializer(basePath string) ApiInitializer {
+func NewApiInitializer(hostPath string, basePath string) ApiInitializer {
 	initializer := new(ApiInitializer)
+	initializer.hostPath = hostPath
 	initializer.basePath = basePath
 	return *initializer
 }
 
 func (init *ApiInitializer) InitializeAuthApi(authService auth.AuthService, userService users.UserService) auth.AuthApi {
-	authApi := auth.NewAuthApi(authService, userService)
+	authApi := auth.NewAuthApi(authService, userService, init.hostPath, init.basePath)
 	return authApi
 }
 

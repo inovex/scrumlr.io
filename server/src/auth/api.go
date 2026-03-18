@@ -24,6 +24,7 @@ type API struct {
   service     AuthService
   userService users.UserService
   basePath    string
+  hostPath    string
 }
 
 type AnonymousSignUpRequest struct {
@@ -89,12 +90,14 @@ func (api *API) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
+  log := logger.FromContext(r.Context())
   _, span := tracer.Start(r.Context(), "scrumlr.login.api.begin_auth")
   defer span.End()
   provider := strings.ToUpper(chi.URLParam(r, "provider"))
-  config, err := api.service.GetConfig(provider)
 
+  config, err := api.service.GetConfig(provider)
   if err != nil {
+    log.Errorw("provider does not exist", "provider", provider)
     span.SetStatus(codes.Error, "provider does not exist")
     span.RecordError(fmt.Errorf("provider %s does not exist", provider))
     common.Throw(w, r, common.BadRequestError(err))
@@ -103,6 +106,9 @@ func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
   //get redirect url from query param
   nonceBytes := make([]byte, 64)
   if _, err := io.ReadFull(rand.Reader, nonceBytes); err != nil {
+    log.Errorw("unable to generate nonce", "err", err)
+    span.SetStatus(codes.Error, "unable to generate nonce")
+    span.RecordError(fmt.Errorf("unable to generate nonce"))
     common.Throw(w, r, common.InternalServerError)
     return
   }
@@ -119,7 +125,14 @@ func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
   })
 
   returnURL := r.URL.Query().Get("state")
-  //todo: check that returnURL is a relative path
+  if !strings.HasPrefix(returnURL, api.hostPath) {
+    log.Errorw("host path not prefix of return url", "expected", api.hostPath, "got", returnURL)
+    span.SetStatus(codes.Error, "host path not prefix of return url")
+    span.RecordError(fmt.Errorf("host path not prefix of return url"))
+    common.Throw(w, r, common.ForbiddenError(errors.New("invalid return url")))
+    return
+  }
+
   state := nonce
   if returnURL != "" {
     state = fmt.Sprintf("%s__%s", nonce, returnURL)
@@ -195,9 +208,11 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
   http.Redirect(w, r, targetURL, http.StatusSeeOther)
 }
 
-func NewAuthApi(service AuthService, userService users.UserService) AuthApi {
+func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string) AuthApi {
   api := new(API)
   api.service = service
   api.userService = userService
+  api.hostPath = hostPath
+  api.basePath = basePath
   return api
 }
