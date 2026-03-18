@@ -170,3 +170,8 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 
 	return rankUpdate
 }
+
+func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID) error {
+	_, err := u.database.UpdateBoard(ctx, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: u.clock.Now()})
+	return err
+}

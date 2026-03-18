@@ -46,6 +46,11 @@ type Service struct {
 	votingService         votings.VotingService
 }
 
+type LastModifiedUpdater struct {
+	database BoardDatabase
+	clock    timeprovider.TimeProvider
+}
+
 type BoardDatabase interface {
 	CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error)
 	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
@@ -677,4 +682,8 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 		boardEditable := context.WithValue(ctx, identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
+}
+
+func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
+	return &LastModifiedUpdater{database: database, clock: clock}
 }

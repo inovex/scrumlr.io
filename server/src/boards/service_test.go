@@ -737,3 +737,38 @@ func TestDelete_BroadcastsCorrectEvent(t *testing.T) {
 	// Verify that all expectations were met (including the Publish call)
 	mockBroker.AssertExpectations(t)
 }
+
+func TestUpdateLastModified(t *testing.T) {
+	boardID := uuid.New()
+	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(now)
+	mockBoardDatabase.EXPECT().
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
+		Return(DatabaseBoard{ID: boardID}, nil)
+
+	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
+	err := updater.UpdateLastModified(context.Background(), boardID)
+
+	assert.NoError(t, err)
+}
+
+func TestUpdateLastModified_DatabaseError(t *testing.T) {
+	boardID := uuid.New()
+	dbErr := errors.New("database error")
+	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
+
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(now)
+	mockBoardDatabase.EXPECT().
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
+		Return(DatabaseBoard{}, dbErr)
+
+	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
+	err := updater.UpdateLastModified(context.Background(), boardID)
+
+	assert.ErrorIs(t, err, dbErr)
+}
