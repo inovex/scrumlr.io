@@ -1,4 +1,4 @@
-import {useState, VFC} from "react";
+import {useState} from "react";
 import German from "assets/flags/DE.svg?react";
 import English from "assets/flags/US.svg?react";
 import French from "assets/flags/FR.svg?react";
@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import i18n from "i18n";
 import {SettingsDropdown} from "./SettingsDropdown";
 
-export const LanguageSettingsDropdown: VFC = () => {
+export const LanguageSettingsDropdown = () => {
   const {t} = useTranslation();
   const [currentlanguage, setCurrentlanguage] = useState(i18n.resolvedLanguage);
 

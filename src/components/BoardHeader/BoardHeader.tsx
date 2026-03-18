@@ -1,4 +1,4 @@
-import {useState, VFC} from "react";
+import {useState} from "react";
 import {LockClosedIcon, OpenIcon as GlobeIcon, KeyProtectedIcon, LogoutIcon} from "components/Icon";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppDispatch, useAppSelector} from "store";
@@ -13,11 +13,11 @@ import {Tooltip} from "react-tooltip";
 import {leaveBoard} from "store/features";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
-export interface BoardHeaderProps {
+type BoardHeaderProps = {
   currentUserIsModerator: boolean;
-}
+};
 
-export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
+export const BoardHeader = (props: BoardHeaderProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const state = useAppSelector(

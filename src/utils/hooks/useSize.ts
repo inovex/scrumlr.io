@@ -2,7 +2,7 @@ import {RefObject, useLayoutEffect, useState} from "react";
 import useResizeObserver from "@react-hook/resize-observer";
 
 // this hook returns the current dimensions of a reference html element
-export const useSize = (target: RefObject<HTMLElement>, {includePosition}: {includePosition?: boolean} = {}) => {
+export const useSize = (target: RefObject<HTMLElement | null>, {includePosition}: {includePosition?: boolean} = {}) => {
   const [size, setSize] = useState<DOMRect>();
 
   useLayoutEffect(() => setSize(target.current?.getBoundingClientRect()), [target]);

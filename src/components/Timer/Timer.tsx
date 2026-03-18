@@ -17,7 +17,7 @@ type TimerProps = {
 };
 
 const usePrevious = (value: boolean) => {
-  const ref = useRef<boolean>();
+  const ref = useRef<boolean>(value);
   useEffect(() => {
     ref.current = value;
   });

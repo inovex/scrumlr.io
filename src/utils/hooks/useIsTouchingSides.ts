@@ -6,7 +6,7 @@ import {useIsScrolling} from "./useIsScrolling";
  * returns if the container is scrolled to the very left or very right of the viewport.
  * @param ref the container ref which is checked
  */
-export const useIsTouchingSides = (ref: RefObject<HTMLDivElement>) => {
+export const useIsTouchingSides = (ref: RefObject<HTMLDivElement | null>) => {
   // margin of error, because different browsers treat the scroll width differently
   const EPSILON = 1;
 

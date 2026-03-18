@@ -7,7 +7,7 @@ import {RefObject, useEffect} from "react";
  * @param {RefObject<T>} elementRef - the ref object pointing to the target DOM element.
  * @param {() => void} callback - the function to be executed when the key combination is detected.
  */
-export const useSubmitOnShortcut = <T extends HTMLElement>(elementRef: RefObject<T>, callback?: () => void) => {
+export const useSubmitOnShortcut = <T extends HTMLElement>(elementRef: RefObject<T | null>, callback?: () => void) => {
   useEffect(() => {
     const element = elementRef.current;
     if (!element) {
