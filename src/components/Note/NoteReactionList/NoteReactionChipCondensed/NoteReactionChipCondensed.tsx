@@ -1,6 +1,6 @@
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {uniqueId} from "underscore";
+import {useId} from "react";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
@@ -20,7 +20,8 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${r.reactionType}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
-  const anchorId = uniqueId(`reactions-${noteId}-condensed`);
+  const baseId = useId();
+  const anchorId = `reactions-${noteId}-condensed-${baseId}`;
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {

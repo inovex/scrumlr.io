@@ -520,10 +520,6 @@ func (suite *UserServiceTestSuite) TestUpdateUser() {
 			{UserID: user.ID, Board: firstBoardID},
 			{UserID: user.ID, Board: secondBoardID},
 		}, nil)
-	mockUserService.EXPECT().Get(mock.Anything, firstBoardID, suite.userID).
-		Return(&sessions.BoardSession{UserID: user.ID, Board: firstBoardID}, nil)
-	mockUserService.EXPECT().Get(mock.Anything, secondBoardID, suite.userID).
-		Return(&sessions.BoardSession{UserID: user.ID, Board: secondBoardID}, nil)
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockUserService, mockNotesService)
 

@@ -77,7 +77,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel5"
+          id="mini-menu-Cancel-:r0:-0"
         >
           <svg
             class="icon"
@@ -105,7 +105,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save6"
+          id="mini-menu-Save-:r0:-1"
         >
           <svg
             class="icon"

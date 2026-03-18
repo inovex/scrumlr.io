@@ -6,7 +6,7 @@ import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
-import {mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
+import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -160,14 +160,15 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        const user = await API.getUserById(message.data.id);
-        const participant = mapSingleParticipant(message.data, user);
-        dispatch(
-          updatedParticipant({
-            participant,
-            self: getState().auth.user!,
-          })
-        );
+        const participant = findParticipantById(getState().participants, message.data.id);
+        if (participant) {
+          dispatch(
+            updatedParticipant({
+              participant: {...participant, user: message.data},
+              self: getState().auth.user!,
+            })
+          );
+        }
       }
 
       if (message.type === "PARTICIPANTS_UPDATED") {
@@ -179,6 +180,18 @@ export const permittedBoardAccess = createAsyncThunk<
             self: getState().auth.user!,
           })
         );
+      }
+
+      if (message.type === "SESSION_UPDATED") {
+        const participant = findParticipantById(getState().participants, message.data.id);
+        if (participant) {
+          dispatch(
+            updatedParticipant({
+              participant: mapSingleParticipant(message.data, participant.user),
+              self: getState().auth.user!,
+            })
+          );
+        }
       }
 
       if (message.type === "VOTING_CREATED") {

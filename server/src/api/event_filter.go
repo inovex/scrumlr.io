@@ -34,8 +34,8 @@ func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid
 		if updated, ok := bs.votingUpdated(event, userID, isMod); ok {
 			return updated
 		}
-	case realtime.BoardEventParticipantUpdated:
-		_ = bs.participantUpdated(event, isMod)
+	case realtime.BoardEventSessionUpdated:
+		_ = bs.sessionUpdated(event, isMod)
 	case realtime.BoardEventVotesDeleted:
 		if updated, ok := bs.votesDeleted(event, userID); ok {
 			return updated
@@ -189,7 +189,7 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 	}
 }
 
-func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMod bool) bool {
+func (bs *BoardSubscription) sessionUpdated(event *realtime.BoardEvent, isMod bool) bool {
 	participantSession, err := technical_helper.Unmarshal[sessions.BoardSession](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", bs.boardSettings.ID, "err", err)

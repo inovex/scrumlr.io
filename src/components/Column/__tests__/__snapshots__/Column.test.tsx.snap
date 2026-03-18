@@ -770,7 +770,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-👍12"
+                      id="reaction-test-notes-id-1-👍-:r3:"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -785,7 +785,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                     </button>
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-💖13"
+                      id="reaction-test-notes-id-1-💖-:r4:"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -1365,7 +1365,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-2-👍14"
+                      id="reaction-test-notes-id-2-👍-:r5:"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -2161,7 +2161,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                     >
                       <button
                         class="note-reaction-chip__root note-reaction-chip__root--self"
-                        id="reaction-test-notes-id-1-👍6"
+                        id="reaction-test-notes-id-1-👍-:r0:"
                       >
                         <div
                           class="note-reaction-chip__reaction"
@@ -2176,7 +2176,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                       </button>
                       <button
                         class="note-reaction-chip__root note-reaction-chip__root--self"
-                        id="reaction-test-notes-id-1-💖7"
+                        id="reaction-test-notes-id-1-💖-:r1:"
                       >
                         <div
                           class="note-reaction-chip__reaction"
@@ -2756,7 +2756,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                     >
                       <button
                         class="note-reaction-chip__root note-reaction-chip__root--self"
-                        id="reaction-test-notes-id-2-👍8"
+                        id="reaction-test-notes-id-2-👍-:r2:"
                       >
                         <div
                           class="note-reaction-chip__reaction"

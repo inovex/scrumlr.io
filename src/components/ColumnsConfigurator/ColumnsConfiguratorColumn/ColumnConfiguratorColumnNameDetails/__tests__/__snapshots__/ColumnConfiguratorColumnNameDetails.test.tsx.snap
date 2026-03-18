@@ -55,7 +55,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel5"
+          id="mini-menu-Cancel-:r1:-0"
         >
           <svg
             class="icon"
@@ -83,7 +83,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save6"
+          id="mini-menu-Save-:r1:-1"
         >
           <svg
             class="icon"
@@ -140,7 +140,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel3"
+          id="mini-menu-Cancel-:r0:-0"
         >
           <svg
             class="icon"
@@ -168,7 +168,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save4"
+          id="mini-menu-Save-:r0:-1"
         >
           <svg
             class="icon"
