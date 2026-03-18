@@ -1,6 +1,5 @@
 import classNames from "classnames";
-import {useEffect} from "react";
-import {uniqueId} from "underscore";
+import {useEffect, useId} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {Color, getColorClassName, formatColorName} from "constants/colors";
 import {Tooltip} from "components/Tooltip";
@@ -23,8 +22,9 @@ type ColorPickerProps = {
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
+  const baseId = useId();
+  const primColorAnchor = `color-picker-${props.activeColor.toString()}-${baseId}`;
   const colorsWithoutSelectedColor = props.colors.filter((curColor) => curColor !== props.activeColor);
-  const primColorAnchor = uniqueId(`color-picker-${props.activeColor.toString()}`);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -66,8 +66,8 @@ export const ColorPicker = (props: ColorPickerProps) => {
           </button>
           <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.activeColor)} />
         </li>
-        {colorsWithoutSelectedColor.map((color) => {
-          const anchor = uniqueId(`color-picker-${color.toString()}`);
+        {colorsWithoutSelectedColor.map((color, index) => {
+          const anchor = `color-picker-${color.toString()}-${baseId}-${index}`;
           return (
             <li className={`${getColorClassName(color)} color-picker__item`} key={anchor}>
               <button

@@ -1,7 +1,6 @@
 import classNames from "classnames";
-import React from "react";
+import React, {useId} from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {uniqueId} from "underscore";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
@@ -18,7 +17,8 @@ interface NoteReactionChipProps {
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
-  const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
+  const baseId = useId();
+  const anchorId = `reaction-${props.reaction.noteId}-${props.reaction.reactionType}-${baseId}`;
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
 
