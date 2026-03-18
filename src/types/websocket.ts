@@ -1,3 +1,4 @@
+import {Auth} from "store/features";
 import {Board} from "../store/features/board/types";
 import {Column} from "../store/features/columns/types";
 import {ParticipantWithUserId} from "../store/features/participants/types";
@@ -93,7 +94,7 @@ export interface ParticipantCreatedEvent {
 
 export interface ParticipantUpdatedEvent {
   type: "PARTICIPANT_UPDATED";
-  data: ParticipantWithUserId;
+  data: Auth;
 }
 
 export interface ParticipantsUpdatedEvent {
@@ -140,6 +141,11 @@ export interface NoteDragEndEvent {
   };
 }
 
+export interface SessionUpdatedEvent {
+  type: "SESSION_UPDATED";
+  data: ParticipantWithUserId;
+}
+
 export interface DragLockMessage {
   type: "DRAG_LOCK_MESSAGE";
   data: {
@@ -173,4 +179,5 @@ export type ServerEvent =
   | DeleteVotesEvent
   | AddedBoardReactionEvent
   | NoteDragStartEvent
-  | NoteDragEndEvent;
+  | NoteDragEndEvent
+  | SessionUpdatedEvent;
