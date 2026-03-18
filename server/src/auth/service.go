@@ -15,7 +15,6 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	jwx "github.com/lestrrat-go/jwx/v3/jwt"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -31,13 +30,19 @@ import (
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/auth")
 
+const (
+	googleCertUrl    = "https://www.googleapis.com/oauth2/v3/certs"
+	microsoftCertUrl = "https://login.microsoftonline.com/common/discovery/v2.0/keys"
+	appleCertUrl     = "https://appleid.apple.com/auth/keys"
+)
+
 type AuthService interface {
 	Sign(map[string]interface{}) (string, error)
 	Verifier() func(http.Handler) http.Handler
 	Authenticator() func(http.Handler) http.Handler
 	Exists(accountType common.AccountType) bool
-	HandleCallback(ctx context.Context, provider, code string) (*http.Cookie, *common.APIError)
-	GetConfig(provider string) *oauth2.Config
+	HandleCallback(ctx context.Context, provider, code string) (*http.Cookie, error)
+	GetConfig(provider string) (*oauth2.Config, error)
 	fetchExternalUser(ctx context.Context, provider string, token *oauth2.Token) (*UserInformation, error)
 	fetchGithubUser(ctx context.Context, config *oauth2.Config, token *oauth2.Token) (*UserInformation, error)
 }
@@ -61,6 +66,20 @@ type AuthConfiguration struct {
 	unsafeAuth       *jwtauth.JWTAuth
 	auth             *jwtauth.JWTAuth
 	userService      users.UserService
+}
+
+type providerMap struct {
+	identClaim  string
+	nameClaim   string
+	avatarClaim string
+}
+
+var externalProviderConfigs = map[string]providerMap{
+	string(common.Google):    {identClaim: "sub", nameClaim: "name", avatarClaim: "picture"},
+	string(common.Microsoft): {identClaim: "oid", nameClaim: "name", avatarClaim: "avatar_url"},
+	string(common.AzureAd):   {identClaim: "id", nameClaim: "login", avatarClaim: "avatar_url"},
+	string(common.Apple):     {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
+	string(common.TypeOIDC):  {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
 }
 
 type UserInformation struct {
@@ -97,8 +116,11 @@ func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivat
 	return a
 }
 
-func (a *AuthConfiguration) GetConfig(provider string) *oauth2.Config {
-	return a.oauthConfigs[provider]
+func (a *AuthConfiguration) GetConfig(provider string) (*oauth2.Config, error) {
+	if ok := a.oauthConfigs[provider]; ok != nil {
+		return a.oauthConfigs[provider], nil
+	}
+	return nil, errors.New("Error:" + provider + " config does not exists")
 }
 
 func (a *AuthConfiguration) initializeProviders() error {
@@ -112,7 +134,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			Scopes:       []string{"openid", "email", "profile"},
 		}
 		var err error
-		googleJWKS, err = keyfunc.NewDefault([]string{"https://www.googleapis.com/oauth2/v3/certs"})
+		googleJWKS, err = keyfunc.NewDefault([]string{googleCertUrl})
 		if err != nil {
 			return err
 		}
@@ -136,7 +158,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 		}
 
 		var err error
-		microsoftJWKS, err = keyfunc.NewDefault([]string{"https://login.microsoftonline.com/common/discovery/v2.0/keys"})
+		microsoftJWKS, err = keyfunc.NewDefault([]string{microsoftCertUrl})
 		if err != nil {
 			return err
 		}
@@ -169,7 +191,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			Scopes:       []string{"name", "email"},
 		}
 		var err error
-		appleJWKS, err = keyfunc.NewDefault([]string{"https://appleid.apple.com/auth/keys"})
+		appleJWKS, err = keyfunc.NewDefault([]string{appleCertUrl})
 		if err != nil {
 			return err
 		}
@@ -188,31 +210,30 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 			hfn := func(w http.ResponseWriter, r *http.Request) {
 				ctx := r.Context()
 				log := logger.FromContext(ctx)
-				var token jwx.Token
-				var err error
+				token, err := jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie)
 
-				if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
+				if err == nil {
 					// check if user tries to authenticate by a prior authentication key
 					// attempt to migrate JWT to new key
-					var userID string
-					err = token.Get("id", &userID)
+					var tokenUserID string
+					err = token.Get("id", &tokenUserID)
 					if err != nil {
 						log.Errorw("Error getting user ID", "error", err)
 					}
-					var user uuid.UUID
-					user, err = uuid.Parse(userID)
+					var userID uuid.UUID
+					userID, err = uuid.Parse(tokenUserID)
 
 					if err == nil {
 						var ok bool
-						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
+						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, userID); ok {
 							// prepare new JWT
-							tokenString, _ := a.Sign(map[string]interface{}{"id": user})
-							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
+							tokenString, _ := a.Sign(map[string]interface{}{"id": userID})
+							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32, Secure: true, SameSite: http.SameSiteStrictMode}
 							common.SealCookie(r, &cookie)
 							http.SetCookie(w, &cookie)
 
 							// update rotation flag in database for user, ignore errors
-							_, _ = a.userService.SetKeyMigration(ctx, user)
+							_, _ = a.userService.SetKeyMigration(ctx, userID)
 						} else {
 							err = errors.New("not permitted to access key rotation")
 						}
@@ -273,8 +294,8 @@ func (a *AuthConfiguration) initializeJWTAuth() error {
 	return nil
 }
 
-func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code string) (*http.Cookie, *common.APIError) {
-	// Handles the the callback after login at a provider
+func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code string) (*http.Cookie, error) {
+	// Handles the callback after login at a provider
 	ctx, span := tracer.Start(ctx, "scrumlr.auth.service.handle_callback")
 	log := logger.FromContext(ctx)
 	defer span.End()
@@ -282,8 +303,8 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 	span.SetAttributes(
 		attribute.String("scrumlr.auth.service.handle_callback.provider", provider),
 	)
-
-	config := a.GetConfig(provider)
+	// err gets already handled in API Layer
+	config, _ := a.GetConfig(provider)
 	token, err := config.Exchange(ctx, code)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to exchange code")
@@ -334,8 +355,8 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 		Path:     "/",
 		Expires:  time.Now().AddDate(0, 0, 21),
 		HttpOnly: true,
-		Secure:   true,                    // only send over https
-		SameSite: http.SameSiteStrictMode, // prevent csrf
+		Secure:   true,
+		SameSite: http.SameSiteStrictMode,
 	}
 
 	return &cookie, nil
@@ -371,7 +392,7 @@ func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider stri
 	case string(common.Apple):
 		kf = appleJWKS.Keyfunc
 	default:
-		return nil, fmt.Errorf("unsupported provider for token verification: %s", provider)
+		return nil, fmt.Errorf("unsupported provider: %s", provider)
 	}
 
 	// validate the token with the providers pubkey
@@ -390,29 +411,19 @@ func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider stri
 		log.Infof("User logged in: %v", email)
 	}
 	// Map fields to UserInformation struct
-	res := &UserInformation{Provider: common.AccountType(provider)}
-	switch provider {
-	case string(common.Google):
-		res.Ident = fmt.Sprint(claims["sub"])
-		res.Name = fmt.Sprint(claims["name"])
-		res.AvatarURL = fmt.Sprint(claims["picture"])
-	case string(common.AzureAd):
-		res.Ident = fmt.Sprint(claims["id"])
-		res.Name = fmt.Sprint(claims["login"])
-		res.AvatarURL = fmt.Sprint(claims["avatar_url"])
-	case string(common.Microsoft):
-		res.Ident = fmt.Sprint(claims["oid"])
-		res.Name = fmt.Sprint(claims["name"])
-		res.AvatarURL = fmt.Sprint(claims["avatar_url"])
-	case string(common.Apple):
-		res.Ident = fmt.Sprint(claims["sub"])
-		res.Name = fmt.Sprint(claims["name"]) //todo: does this work?
-	case string(common.TypeOIDC):
-		res.Ident = fmt.Sprint(claims["sub"])
-		res.Name = fmt.Sprint(claims["name"])
-
+	config, supported := externalProviderConfigs[provider]
+	if !supported {
+		return nil, fmt.Errorf("provider mapping not configured: %s", provider)
 	}
-	if res.Ident == "" {
+
+	res := &UserInformation{
+		Provider:  common.AccountType(provider),
+		Ident:     fmt.Sprint(claims[config.identClaim]),
+		Name:      fmt.Sprint(claims[config.nameClaim]),
+		AvatarURL: fmt.Sprint(claims[config.avatarClaim]),
+	}
+
+	if res.Ident == "" || res.Ident == "<nil>" {
 		return nil, errors.New("token is missing critical identity claim")
 	}
 	return res, nil
