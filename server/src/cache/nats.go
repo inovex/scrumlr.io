@@ -44,7 +44,7 @@ func NewNats(url string, bucket string) (*Cache, error) {
 	}, nil
 }
 
-func (n *natsClient) Create(ctx context.Context, key string, value interface{}, ttl time.Duration) error {
+func (n *natsClient) Create(ctx context.Context, key string, value any, ttl time.Duration) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.cache.nats.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -71,7 +71,7 @@ func (n *natsClient) Create(ctx context.Context, key string, value interface{}, 
 	return err
 }
 
-func (n *natsClient) Put(ctx context.Context, key string, value interface{}) error {
+func (n *natsClient) Put(ctx context.Context, key string, value any) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.cache.nats.put")
 	defer span.End()
 	log := logger.FromContext(ctx)

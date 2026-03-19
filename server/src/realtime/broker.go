@@ -15,7 +15,7 @@ var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/realtime")
 // that external queue
 type Client interface {
 	// Publish an event to the queue
-	Publish(ctx context.Context, subject string, event interface{}) error
+	Publish(ctx context.Context, subject string, event any) error
 
 	// SubscribeToBoardSessionEvents subscribes to the given topic and return a channel
 	// with the received BoardSessionRequestEventType

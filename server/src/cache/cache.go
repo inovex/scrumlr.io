@@ -11,8 +11,8 @@ import (
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/cache")
 
 type Client interface {
-	Create(ctx context.Context, key string, value interface{}, ttl time.Duration) error
-	Put(ctx context.Context, key string, value interface{}) error
+	Create(ctx context.Context, key string, value any, ttl time.Duration) error
+	Put(ctx context.Context, key string, value any) error
 	Get(ctx context.Context, key string) ([]byte, error)
 	Delete(ctx context.Context, key string) error
 }

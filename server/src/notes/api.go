@@ -9,7 +9,7 @@ import (
 
 // WebSocketConnection interface for testability
 type WebSocketConnection interface {
-	WriteJSON(ctx context.Context, v interface{}) error
+	WriteJSON(ctx context.Context, v any) error
 }
 
 type NotesService interface {

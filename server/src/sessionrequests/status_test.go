@@ -11,7 +11,7 @@ func TestBoardSessionRequestStatusEnum(t *testing.T) {
 	values := []RequestStatus{RequestAccepted, RequestRejected, RequestPending}
 	for _, value := range values {
 		var boardSessionRequestStatus RequestStatus
-		err := boardSessionRequestStatus.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
+		err := boardSessionRequestStatus.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, boardSessionRequestStatus)
 	}

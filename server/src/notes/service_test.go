@@ -16,11 +16,11 @@ import (
 )
 
 type mockWebSocketConnection struct {
-	writes []interface{}
+	writes []any
 	err    error
 }
 
-func (m *mockWebSocketConnection) WriteJSON(_ context.Context, v interface{}) error {
+func (m *mockWebSocketConnection) WriteJSON(_ context.Context, v any) error {
 	m.writes = append(m.writes, v)
 	return m.err
 }

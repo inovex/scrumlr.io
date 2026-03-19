@@ -69,7 +69,7 @@ func createTestAuth() auth.Auth {
 // testAuthService implements auth.Auth interface for testing purposes
 type testAuthService struct{}
 
-func (t *testAuthService) Sign(_ map[string]interface{}) (string, error) {
+func (t *testAuthService) Sign(_ map[string]any) (string, error) {
 	return "test-token", nil
 }
 
@@ -87,7 +87,7 @@ func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
 
 			// Create JWT token and context using jwtauth
 			tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
-			claims := map[string]interface{}{"id": userID}
+			claims := map[string]any{"id": userID}
 			token, _, _ := tokenAuth.Encode(claims)
 
 			// Set the JWT context the way jwtauth expects it
@@ -436,7 +436,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			// Create request with body if needed
 			var req *http.Request
 			if tt.needsRequestBody {
-				var body interface{}
+				var body any
 				switch tt.requestBodyType {
 				case "create":
 					body = createValidBoardTemplateRequest()
