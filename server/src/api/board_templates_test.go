@@ -74,153 +74,153 @@ func Verifier() func(http.Handler) http.Handler {
 }
 
 func Authenticator() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Pass through without authentication for testing
-			next.ServeHTTP(w, r)
-		})
-	}
+  return func(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+      // Pass through without authentication for testing
+      next.ServeHTTP(w, r)
+    })
+  }
 }
 
 // Test suite for AnonymousCustomTemplateCreationContext middleware
 func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
-	userID := uuid.New()
+  userID := uuid.New()
 
-	tests := []struct {
-		name                          string
-		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
-		expectedStatus                int
-		expectedToCallNext            bool
-	}{
-		{
-			name:                          "authenticated user can create templates when flag is disabled",
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
-		},
-		{
-			name:                          "authenticated user can create templates when flag is enabled",
-			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Google,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
-		},
-		{
-			name:                          "anonymous user can create templates when flag is enabled",
-			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusOK,
-			expectedToCallNext:            true,
-		},
-		{
-			name:                          "anonymous user receives 403 forbidden when allowAnonymousCustomTemplates is false",
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-			expectedToCallNext:            false,
-		},
-	}
+  tests := []struct {
+    name                          string
+    allowAnonymousCustomTemplates bool
+    userAccountType               common.AccountType
+    expectedStatus                int
+    expectedToCallNext            bool
+  }{
+    {
+      name:                          "authenticated user can create templates when flag is disabled",
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Google,
+      expectedStatus:                http.StatusOK,
+      expectedToCallNext:            true,
+    },
+    {
+      name:                          "authenticated user can create templates when flag is enabled",
+      allowAnonymousCustomTemplates: true,
+      userAccountType:               common.Google,
+      expectedStatus:                http.StatusOK,
+      expectedToCallNext:            true,
+    },
+    {
+      name:                          "anonymous user can create templates when flag is enabled",
+      allowAnonymousCustomTemplates: true,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusOK,
+      expectedToCallNext:            true,
+    },
+    {
+      name:                          "anonymous user receives 403 forbidden when allowAnonymousCustomTemplates is false",
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+      expectedToCallNext:            false,
+    },
+  }
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			// Create mock user service with test user
-			mockUsers := users.NewMockUserService(t)
-			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
-				ID:          userID,
-				Name:        "Test User",
-				AccountType: tt.userAccountType,
-			}, nil)
+  for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+      // Create mock user service with test user
+      mockUsers := users.NewMockUserService(t)
+      mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
+        ID:          userID,
+        Name:        "Test User",
+        AccountType: tt.userAccountType,
+      }, nil)
 
-			// Create server with test configuration
-			server := &Server{
-				users:                         mockUsers,
-				allowAnonymousCustomTemplates: tt.allowAnonymousCustomTemplates,
-			}
+      // Create server with test configuration
+      server := &Server{
+        users:                         mockUsers,
+        allowAnonymousCustomTemplates: tt.allowAnonymousCustomTemplates,
+      }
 
-			// Create test request with user context
-			req := httptest.NewRequest("POST", "/templates", nil)
-			ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
-			req = req.WithContext(ctx)
+      // Create test request with user context
+      req := httptest.NewRequest("POST", "/templates", nil)
+      ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
+      req = req.WithContext(ctx)
 
-			// Create response recorder
-			rr := httptest.NewRecorder()
+      // Create response recorder
+      rr := httptest.NewRecorder()
 
-			// Track if next handler was called
-			nextCalled := false
-			next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				nextCalled = true
-				w.WriteHeader(http.StatusOK)
-			})
+      // Track if next handler was called
+      nextCalled := false
+      next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        nextCalled = true
+        w.WriteHeader(http.StatusOK)
+      })
 
-			// Call the middleware
-			handler := server.AnonymousCustomTemplateCreationContext(next)
-			handler.ServeHTTP(rr, req)
+      // Call the middleware
+      handler := server.AnonymousCustomTemplateCreationContext(next)
+      handler.ServeHTTP(rr, req)
 
-			// Verify results
-			assert.Equal(t, tt.expectedStatus, rr.Code, "Expected status code %d, got %d", tt.expectedStatus, rr.Code)
-			assert.Equal(t, tt.expectedToCallNext, nextCalled, "Expected next handler called: %v, got: %v", tt.expectedToCallNext, nextCalled)
+      // Verify results
+      assert.Equal(t, tt.expectedStatus, rr.Code, "Expected status code %d, got %d", tt.expectedStatus, rr.Code)
+      assert.Equal(t, tt.expectedToCallNext, nextCalled, "Expected next handler called: %v, got: %v", tt.expectedToCallNext, nextCalled)
 
-			if tt.expectedStatus == http.StatusForbidden {
-				assert.Contains(t, rr.Body.String(), "not authorized to create custom templates anonymously")
-			}
-		})
-	}
+      if tt.expectedStatus == http.StatusForbidden {
+        assert.Contains(t, rr.Body.String(), "not authorized to create custom templates anonymously")
+      }
+    })
+  }
 }
 
 func TestAnonymousCustomTemplateCreationContext_UserNotFound(t *testing.T) {
-	userID := uuid.New()
+  userID := uuid.New()
 
-	// Create mock user service that returns error when user not found
-	mockUsers := users.NewMockUserService(t)
-	mockUsers.EXPECT().Get(mock.Anything, userID).Return(nil, assert.AnError)
+  // Create mock user service that returns error when user not found
+  mockUsers := users.NewMockUserService(t)
+  mockUsers.EXPECT().Get(mock.Anything, userID).Return(nil, assert.AnError)
 
-	server := &Server{
-		users:                         mockUsers,
-		allowAnonymousCustomTemplates: true,
-	}
+  server := &Server{
+    users:                         mockUsers,
+    allowAnonymousCustomTemplates: true,
+  }
 
-	req := httptest.NewRequest("POST", "/templates", nil)
-	ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
-	req = req.WithContext(ctx)
+  req := httptest.NewRequest("POST", "/templates", nil)
+  ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
+  req = req.WithContext(ctx)
 
-	rr := httptest.NewRecorder()
+  rr := httptest.NewRecorder()
 
-	nextCalled := false
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		nextCalled = true
-	})
+  nextCalled := false
+  next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    nextCalled = true
+  })
 
-	handler := server.AnonymousCustomTemplateCreationContext(next)
-	handler.ServeHTTP(rr, req)
+  handler := server.AnonymousCustomTemplateCreationContext(next)
+  handler.ServeHTTP(rr, req)
 
-	// Should return internal server error when user is not found
-	assert.Equal(t, http.StatusInternalServerError, rr.Code)
-	assert.False(t, nextCalled)
+  // Should return internal server error when user is not found
+  assert.Equal(t, http.StatusInternalServerError, rr.Code)
+  assert.False(t, nextCalled)
 }
 
 func TestAnonymousCustomTemplateCreationContext_MissingUserContext(t *testing.T) {
-	server := &Server{
-		allowAnonymousCustomTemplates: true,
-	}
+  server := &Server{
+    allowAnonymousCustomTemplates: true,
+  }
 
-	req := httptest.NewRequest("POST", "/templates", nil)
-	// Note: Not adding user to context to test missing user scenario
+  req := httptest.NewRequest("POST", "/templates", nil)
+  // Note: Not adding user to context to test missing user scenario
 
-	rr := httptest.NewRecorder()
+  rr := httptest.NewRecorder()
 
-	nextCalled := false
-	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		nextCalled = true
-	})
+  nextCalled := false
+  next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    nextCalled = true
+  })
 
-	handler := server.AnonymousCustomTemplateCreationContext(next)
-	handler.ServeHTTP(rr, req)
+  handler := server.AnonymousCustomTemplateCreationContext(next)
+  handler.ServeHTTP(rr, req)
 
-	// Should return internal server error when user context is missing
-	assert.Equal(t, http.StatusInternalServerError, rr.Code)
-	assert.False(t, nextCalled)
+  // Should return internal server error when user context is missing
+  assert.Equal(t, http.StatusInternalServerError, rr.Code)
+  assert.False(t, nextCalled)
 }
 
 // Note: Individual endpoint tests would require proper mocking of the board template service.
@@ -228,108 +228,108 @@ func TestAnonymousCustomTemplateCreationContext_MissingUserContext(t *testing.T)
 
 // Integration test for the middleware applied to all /templates routes
 func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
-	tests := []struct {
-		name                          string
-		method                        string
-		path                          string
-		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
-		expectedStatus                int
-		needsRequestBody              bool
-		requestBodyType               string // "create" or "update"
-	}{
-		// POST /templates
-		{
-			name:                          "POST /templates - anonymous user blocked when flag disabled",
-			method:                        "POST",
-			path:                          "/templates",
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-		},
-		{
-			name:                          "POST /templates - anonymous user allowed when flag enabled",
-			method:                        "POST",
-			path:                          "/templates",
-			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusCreated,
-			needsRequestBody:              true,
-			requestBodyType:               "create",
-		},
-		// GET /templates
-		{
-			name:                          "GET /templates - anonymous user blocked when flag disabled",
-			method:                        "GET",
-			path:                          "/templates",
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-		},
-		// GET /templates/{id}
-		{
-			name:                          "GET /templates/id - anonymous user blocked when flag disabled",
-			method:                        "GET",
-			path:                          "/templates/" + uuid.New().String(),
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-		},
-		// PUT /templates/{id}
-		{
-			name:                          "PUT /templates/id - anonymous user blocked when flag disabled",
-			method:                        "PUT",
-			path:                          "/templates/" + uuid.New().String(),
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-		},
-		// DELETE /templates/{id}
-		{
-			name:                          "DELETE /templates/id - anonymous user blocked when flag disabled",
-			method:                        "DELETE",
-			path:                          "/templates/" + uuid.New().String(),
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
-			expectedStatus:                http.StatusForbidden,
-		},
-		// Authenticated users should always pass
-		{
-			name:                          "Authenticated user always allowed",
-			method:                        "POST",
-			path:                          "/templates",
-			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
-			expectedStatus:                http.StatusCreated,
-			needsRequestBody:              true,
-			requestBodyType:               "create",
-		},
-	}
+  tests := []struct {
+    name                          string
+    method                        string
+    path                          string
+    allowAnonymousCustomTemplates bool
+    userAccountType               common.AccountType
+    expectedStatus                int
+    needsRequestBody              bool
+    requestBodyType               string // "create" or "update"
+  }{
+    // POST /templates
+    {
+      name:                          "POST /templates - anonymous user blocked when flag disabled",
+      method:                        "POST",
+      path:                          "/templates",
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+    },
+    {
+      name:                          "POST /templates - anonymous user allowed when flag enabled",
+      method:                        "POST",
+      path:                          "/templates",
+      allowAnonymousCustomTemplates: true,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusCreated,
+      needsRequestBody:              true,
+      requestBodyType:               "create",
+    },
+    // GET /templates
+    {
+      name:                          "GET /templates - anonymous user blocked when flag disabled",
+      method:                        "GET",
+      path:                          "/templates",
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+    },
+    // GET /templates/{id}
+    {
+      name:                          "GET /templates/id - anonymous user blocked when flag disabled",
+      method:                        "GET",
+      path:                          "/templates/" + uuid.New().String(),
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+    },
+    // PUT /templates/{id}
+    {
+      name:                          "PUT /templates/id - anonymous user blocked when flag disabled",
+      method:                        "PUT",
+      path:                          "/templates/" + uuid.New().String(),
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+    },
+    // DELETE /templates/{id}
+    {
+      name:                          "DELETE /templates/id - anonymous user blocked when flag disabled",
+      method:                        "DELETE",
+      path:                          "/templates/" + uuid.New().String(),
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Anonymous,
+      expectedStatus:                http.StatusForbidden,
+    },
+    // Authenticated users should always pass
+    {
+      name:                          "Authenticated user always allowed",
+      method:                        "POST",
+      path:                          "/templates",
+      allowAnonymousCustomTemplates: false,
+      userAccountType:               common.Google,
+      expectedStatus:                http.StatusCreated,
+      needsRequestBody:              true,
+      requestBodyType:               "create",
+    },
+  }
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			userID := uuid.New()
+  for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+      userID := uuid.New()
 
-			// Create mock user service
-			mockUsers := users.NewMockUserService(t)
-			mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
-				ID:          userID,
-				Name:        "Test User",
-				AccountType: tt.userAccountType,
-			}, nil)
-			// Create mock services for dependencies required by the actual router
-			mockBoardTemplates := boardtemplates.NewMockBoardTemplateService(t)
-			mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
+      // Create mock user service
+      mockUsers := users.NewMockUserService(t)
+      mockUsers.EXPECT().Get(mock.Anything, userID).Return(&users.User{
+        ID:          userID,
+        Name:        "Test User",
+        AccountType: tt.userAccountType,
+      }, nil)
+      // Create mock services for dependencies required by the actual router
+      mockBoardTemplates := boardtemplates.NewMockBoardTemplateService(t)
+      mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
 
-			// Create a simple auth mock that allows all requests to pass
-			mockAuth := auth.NewMockAuthService(t)
-			mockAuth.EXPECT().Verifier().Return(Verifier())
-			mockAuth.EXPECT().Authenticator().Return(Authenticator())
-			// Create mock handlers that return proper template objects
-			templateID := uuid.New()
-			templateName := "Test Template"
-			templateDescription := "Test Description"
-			favourite := false
+      // Create a simple auth mock that allows all requests to pass
+      mockAuth := auth.NewMockAuthService(t)
+      mockAuth.EXPECT().Verifier().Return(Verifier())
+      mockAuth.EXPECT().Authenticator().Return(Authenticator())
+      // Create mock handlers that return proper template objects
+      templateID := uuid.New()
+      templateName := "Test Template"
+      templateDescription := "Test Description"
+      favourite := false
 
 			// Mock template response
 			mockTemplate := &boardtemplates.BoardTemplate{
@@ -340,27 +340,27 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				Favourite:   new(false),
 			}
 
-			// Mock template full response for GetAll
-			mockTemplateFull := &boardtemplates.BoardTemplateFull{
-				Template:        mockTemplate,
-				ColumnTemplates: []*columntemplates.ColumnTemplate{},
-			}
+      // Mock template full response for GetAll
+      mockTemplateFull := &boardtemplates.BoardTemplateFull{
+        Template:        mockTemplate,
+        ColumnTemplates: []*columntemplates.ColumnTemplate{},
+      }
 
-			mockBoardTemplates.EXPECT().Create(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
-			mockBoardTemplates.EXPECT().GetAll(mock.Anything, mock.Anything).Return([]*boardtemplates.BoardTemplateFull{mockTemplateFull}, nil).Maybe()
-			mockBoardTemplates.EXPECT().Get(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
-			mockBoardTemplates.EXPECT().Update(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
-			mockBoardTemplates.EXPECT().Delete(mock.Anything, mock.Anything).Return(nil).Maybe()
+      mockBoardTemplates.EXPECT().Create(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+      mockBoardTemplates.EXPECT().GetAll(mock.Anything, mock.Anything).Return([]*boardtemplates.BoardTemplateFull{mockTemplateFull}, nil).Maybe()
+      mockBoardTemplates.EXPECT().Get(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+      mockBoardTemplates.EXPECT().Update(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+      mockBoardTemplates.EXPECT().Delete(mock.Anything, mock.Anything).Return(nil).Maybe()
 
-			sessionApiMock := sessions.NewMockSessionApi(t)
-			next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(http.StatusOK)
-			})
+      sessionApiMock := sessions.NewMockSessionApi(t)
+      next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+      })
 
-			sessionApiMock.EXPECT().BoardParticipantContext(mock.Anything).Return(next)
-			sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
-			sessionServiceMock := sessions.NewMockSessionService(t)
-			userSessionMock := users.NewMockUserService(t)
+      sessionApiMock.EXPECT().BoardParticipantContext(mock.Anything).Return(next)
+      sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
+      sessionServiceMock := sessions.NewMockSessionService(t)
+      userSessionMock := users.NewMockUserService(t)
 
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
@@ -370,35 +370,35 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
 			authRoutes := routesInitializer.InitializeAuthRoutes(authApi)
 
-			// Use the actual router from router.go with minimal mocked dependencies
-			s := New(
-				"/",        // basePath
-				nil,        // realtime (not needed for templates)
-				nil,        // wsService (not needed for templates)
-				authRoutes, // auth
-				userRoutes,
-				sessionRoutes,
-				mockAuth,
-				nil,                              // boards
-				nil,                              // columns
-				nil,                              // votings
-				mockUsers,                        // users
-				nil,                              // notes
-				nil,                              // reactions
-				nil,                              // sessions
-				nil,                              // sessionRequests
-				nil,                              // health
-				nil,                              // feedback
-				nil,                              // boardReactions
-				mockBoardTemplates,               // boardTemplates
-				mockColumnTemplates,              // columntemplates
-				false,                            // verbose
-				true,                             // checkOrigin
-				false,                            // anonymousLoginDisabled
-				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
-				false,                            // allowAnonymousBoardCreation
-				false,                            // experimentalFileSystemStore
-			)
+      // Use the actual router from router.go with minimal mocked dependencies
+      s := New(
+        "/",        // basePath
+        nil,        // realtime (not needed for templates)
+        nil,        // wsService (not needed for templates)
+        authRoutes, // auth
+        userRoutes,
+        sessionRoutes,
+        mockAuth,
+        nil,                              // boards
+        nil,                              // columns
+        nil,                              // votings
+        mockUsers,                        // users
+        nil,                              // notes
+        nil,                              // reactions
+        nil,                              // sessions
+        nil,                              // sessionRequests
+        nil,                              // health
+        nil,                              // feedback
+        nil,                              // boardReactions
+        mockBoardTemplates,               // boardTemplates
+        mockColumnTemplates,              // columntemplates
+        false,                            // verbose
+        true,                             // checkOrigin
+        false,                            // anonymousLoginDisabled
+        tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
+        false,                            // allowAnonymousBoardCreation
+        false,                            // experimentalFileSystemStore
+      )
 
 			// Create request with body if needed
 			var req *http.Request
@@ -411,28 +411,28 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 					body = createValidBoardTemplateUpdateRequest()
 				}
 
-				bodyBytes, _ := json.Marshal(body)
-				req = httptest.NewRequest(tt.method, tt.path, bytes.NewReader(bodyBytes))
-				req.Header.Set("Content-Type", "application/json")
-			} else {
-				req = httptest.NewRequest(tt.method, tt.path, nil)
-			}
+        bodyBytes, _ := json.Marshal(body)
+        req = httptest.NewRequest(tt.method, tt.path, bytes.NewReader(bodyBytes))
+        req.Header.Set("Content-Type", "application/json")
+      } else {
+        req = httptest.NewRequest(tt.method, tt.path, nil)
+      }
 
-			ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
-			req = req.WithContext(ctx)
+      ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
+      req = req.WithContext(ctx)
 
-			// Create response recorder
-			rr := httptest.NewRecorder()
+      // Create response recorder
+      rr := httptest.NewRecorder()
 
-			// Execute request
-			s.ServeHTTP(rr, req)
+      // Execute request
+      s.ServeHTTP(rr, req)
 
-			// Verify status
-			assert.Equal(t, tt.expectedStatus, rr.Code, "Expected status %d for %s %s, got %d", tt.expectedStatus, tt.method, tt.path, rr.Code)
+      // Verify status
+      assert.Equal(t, tt.expectedStatus, rr.Code, "Expected status %d for %s %s, got %d", tt.expectedStatus, tt.method, tt.path, rr.Code)
 
-			if tt.expectedStatus == http.StatusForbidden {
-				assert.Contains(t, rr.Body.String(), "not authorized to create custom templates anonymously")
-			}
-		})
-	}
+      if tt.expectedStatus == http.StatusForbidden {
+        assert.Contains(t, rr.Body.String(), "not authorized to create custom templates anonymously")
+      }
+    })
+  }
 }
