@@ -181,7 +181,7 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 							// prepare new JWT
 							tokenString, _ := a.Sign(map[string]interface{}{"id": userID})
 							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32, Secure: true, SameSite: http.SameSiteStrictMode}
-							common.SealCookie(r, &cookie)
+							SealCookie(r, &cookie)
 							http.SetCookie(w, &cookie)
 
 							// update rotation flag in database for user, ignore errors

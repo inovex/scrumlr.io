@@ -7,12 +7,12 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/codes"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 )
-
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
@@ -44,9 +44,9 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/notes/%s", common.GetProtocol(r), r.Host, board, note.ID))
+		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/notes/%s", auth.GetProtocol(r), r.Host, board, note.ID))
 	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/notes/%s", common.GetProtocol(r), r.Host, s.basePath, board, note.ID))
+		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/notes/%s", auth.GetProtocol(r), r.Host, s.basePath, board, note.ID))
 	}
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, note)

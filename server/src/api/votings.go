@@ -5,6 +5,7 @@ import (
   "net/http"
 
   "go.opentelemetry.io/otel/codes"
+  "scrumlr.io/server/auth"
   "scrumlr.io/server/common"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
@@ -41,9 +42,9 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
     return
   }
   if s.basePath == "/" {
-    w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/votings/%s", common.GetProtocol(r), r.Host, board, voting.ID))
+    w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/votings/%s", auth.GetProtocol(r), r.Host, board, voting.ID))
   } else {
-    w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/votings/%s", common.GetProtocol(r), r.Host, s.basePath, board, voting.ID))
+    w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/votings/%s", auth.GetProtocol(r), r.Host, s.basePath, board, voting.ID))
   }
 
   render.Status(r, http.StatusCreated)
