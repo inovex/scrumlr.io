@@ -101,7 +101,7 @@ func (suite *NotesServiceTestSuite) expectNoLock() {
 }
 
 func (suite *NotesServiceTestSuite) expectBoardLastModifiedAtTouched() {
-	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(nil)
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(nil)
 }
 
 func (suite *NotesServiceTestSuite) expectPrecondition(stackingAllowed bool, callerRole common.SessionRole) {
@@ -500,7 +500,7 @@ func (suite *NotesServiceTestSuite) Test_Import_UpdateLastModifiedError() {
 
 	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
 		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
-	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(errors.New("cannot update board"))
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(errors.New("cannot update board"))
 
 	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
 
@@ -1081,7 +1081,7 @@ func (suite *NotesServiceTestSuite) Test_Update_BoardLastModifiedUpdateError() {
 		Position: nil,
 		Edited:   true,
 	}).Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Edited: true}, nil)
-	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(errors.New("cannot update board last modified"))
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(errors.New("cannot update board last modified"))
 	suite.expectGetAllEmpty()
 	suite.expectPublish()
 
@@ -1102,7 +1102,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_BoardLastModifiedUpdateError() {
 	suite.expectNoLock()
 	suite.expectPrecondition(true, callerRole)
 	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, false).Return(nil)
-	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(errors.New("cannot update board last modified"))
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(errors.New("cannot update board last modified"))
 	suite.expectPublish()
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})

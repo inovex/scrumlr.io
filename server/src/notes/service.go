@@ -28,7 +28,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 type Service struct {
 	database                 NotesDatabase
 	realtime                 *realtime.Broker
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 	cache                    *cache.Cache
 }
 
@@ -45,7 +45,16 @@ type NotesDatabase interface {
 	GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]DatabaseNote, error)
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker, cache *cache.Cache, boardLastModifiedUpdater common.BoardLastModifiedUpdater) NotesService {
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error
+}
+
+func NewNotesService(
+	db NotesDatabase,
+	rt *realtime.Broker,
+	cache *cache.Cache,
+	boardLastModifiedUpdater BoardLastModifiedUpdater,
+) NotesService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
@@ -125,7 +134,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	}
 
 	notesImportCounter.Add(ctx, 1)
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board, time.Now()); err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", body.Board, "err", err)
 	}
 
@@ -601,7 +610,7 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.update")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
@@ -632,7 +641,7 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.delete")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
