@@ -36,7 +36,7 @@ type Service struct {
 	hash                     hash.Hash
 	database                 BoardDatabase
 	realtime                 *realtime.Broker
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 
 	columnService         columns.ColumnService
 	notesService          notes.NotesService
@@ -46,6 +46,11 @@ type Service struct {
 	votingService         votings.VotingService
 }
 
+type LastModifiedUpdater struct {
+	database BoardDatabase
+	clock    timeprovider.TimeProvider
+}
+
 type BoardDatabase interface {
 	CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error)
 	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
@@ -53,6 +58,10 @@ type BoardDatabase interface {
 	GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error)
 	DeleteBoard(ctx context.Context, id uuid.UUID) error
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
+}
+
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error
 }
 
 func NewBoardService(
@@ -434,7 +443,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		return nil, err
 	}
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
@@ -673,4 +682,8 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 		boardEditable := context.WithValue(ctx, identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
+}
+
+func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
+	return &LastModifiedUpdater{database: database, clock: clock}
 }

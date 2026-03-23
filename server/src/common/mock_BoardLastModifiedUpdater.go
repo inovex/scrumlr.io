@@ -6,6 +6,7 @@ package common
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
@@ -39,16 +40,16 @@ func (_m *MockBoardLastModifiedUpdater) EXPECT() *MockBoardLastModifiedUpdater_E
 }
 
 // UpdateLastModified provides a mock function for the type MockBoardLastModifiedUpdater
-func (_mock *MockBoardLastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID) error {
-	ret := _mock.Called(ctx, boardID)
+func (_mock *MockBoardLastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID, time1 time.Time) error {
+	ret := _mock.Called(ctx, boardID, time1)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateLastModified")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) error); ok {
-		r0 = returnFunc(ctx, boardID)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, time.Time) error); ok {
+		r0 = returnFunc(ctx, boardID, time1)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -63,11 +64,12 @@ type MockBoardLastModifiedUpdater_UpdateLastModified_Call struct {
 // UpdateLastModified is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockBoardLastModifiedUpdater_Expecter) UpdateLastModified(ctx interface{}, boardID interface{}) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
-	return &MockBoardLastModifiedUpdater_UpdateLastModified_Call{Call: _e.mock.On("UpdateLastModified", ctx, boardID)}
+//   - time1 time.Time
+func (_e *MockBoardLastModifiedUpdater_Expecter) UpdateLastModified(ctx interface{}, boardID interface{}, time1 interface{}) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
+	return &MockBoardLastModifiedUpdater_UpdateLastModified_Call{Call: _e.mock.On("UpdateLastModified", ctx, boardID, time1)}
 }
 
-func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
+func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) Run(run func(ctx context.Context, boardID uuid.UUID, time1 time.Time)) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -77,9 +79,14 @@ func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) Run(run func(ctx
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
+		var arg2 time.Time
+		if args[2] != nil {
+			arg2 = args[2].(time.Time)
+		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -90,7 +97,7 @@ func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) Return(err error
 	return _c
 }
 
-func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID) error) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
+func (_c *MockBoardLastModifiedUpdater_UpdateLastModified_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, time1 time.Time) error) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
 	_c.Call.Return(run)
 	return _c
 }

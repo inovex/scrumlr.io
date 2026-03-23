@@ -18,13 +18,12 @@ func TestLastModifiedUpdater_UpdateLastModified(t *testing.T) {
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(now)
 	mockBoardDatabase.EXPECT().
 		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
 		Return(DatabaseBoard{ID: boardID}, nil)
 
 	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID)
+	err := updater.UpdateLastModified(context.Background(), boardID, now)
 
 	assert.NoError(t, err)
 }
@@ -36,13 +35,12 @@ func TestLastModifiedUpdater_UpdateLastModified_DatabaseError(t *testing.T) {
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(now)
 	mockBoardDatabase.EXPECT().
 		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
 		Return(DatabaseBoard{}, dbErr)
 
 	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID)
+	err := updater.UpdateLastModified(context.Background(), boardID, now)
 
 	assert.ErrorIs(t, err, dbErr)
 }

@@ -320,7 +320,7 @@ func (suite *ColumnServiceTestSuite) expectGetAllNotes(note *notes.Note, err err
 }
 
 func (suite *ColumnServiceTestSuite) expectBoardLastModifiedAtUpdated() {
-	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID).Return(nil)
+	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(nil)
 }
 
 func (suite *ColumnServiceTestSuite) expectColumnDeletedAndBroadcast() {

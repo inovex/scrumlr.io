@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
@@ -169,4 +170,9 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		WhereOr("note.stack = _data.id")
 
 	return rankUpdate
+}
+
+func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error {
+	_, err := u.database.UpdateBoard(ctx, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: time})
+	return err
 }

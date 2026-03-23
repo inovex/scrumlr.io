@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -32,18 +33,22 @@ type ColumnDatabase interface {
 	Count(ctx context.Context, board uuid.UUID) (int, error)
 }
 
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error
+}
+
 type Service struct {
 	database                 ColumnDatabase
 	realtime                 *realtime.Broker
 	noteService              notes.NotesService
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater
+	boardLastModifiedUpdater BoardLastModifiedUpdater
 }
 
 func NewColumnService(
 	db ColumnDatabase,
 	rt *realtime.Broker,
 	noteService notes.NotesService,
-	boardLastModifiedUpdater common.BoardLastModifiedUpdater,
+	boardLastModifiedUpdater BoardLastModifiedUpdater,
 ) ColumnService {
 	service := new(Service)
 	service.database = db
@@ -253,7 +258,7 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.update")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
@@ -316,7 +321,7 @@ func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UU
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board); err != nil {
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
