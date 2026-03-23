@@ -22,3 +22,9 @@
     fill: var(--accent-color--light);
   }
 }
+
+[data-theme="dark"] {
+  .avatar > g:last-of-type > g:first-of-type > g:last-of-type {
+    fill: var(--accent-color--dark);
+  }
+}
