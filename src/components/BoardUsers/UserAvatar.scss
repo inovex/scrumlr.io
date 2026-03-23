@@ -110,35 +110,37 @@
     color: styles.$pink--500;
   }
 
-  .user-avatar #Circle-Background {
-    stroke: styles.$navy--600;
+  .user-avatar {
+    .avatar > g:first-of-type > g:first-of-type > use:first-of-type {
+      stroke: styles.$navy--600;
+    }
   }
 
   .user-avatar__ready {
     color: #4ae89f;
-  }
-
-  .user-ready {
-    #Circle-Background {
-      stroke: #4ae89f;
-    }
 
     .circle {
-      fill: color.change(styles.$green--500, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
+      filter: brightness(0.8);
     }
 
     path {
       filter: drop-shadow(0 0 3px styles.$navy--600);
     }
-
-    > .avatar #Circle-Background,
-    .avatar #Color\/Palette\/Blue-01 {
-      fill: styles.$navy--600;
-    }
   }
 
-  .user-avatar__ready .circle {
-    filter: brightness(0.8);
+  .user-ready {
+    .avatar > g:first-of-type {
+      > g:first-of-type {
+        > use:first-of-type {
+          stroke: #4ae89f;
+          fill: styles.$navy--600;
+        }
+
+        > g:last-of-type {
+          fill: styles.$navy--600;
+        }
+      }
+    }
   }
 }
 
