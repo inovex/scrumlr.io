@@ -167,8 +167,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
-		var keyNotFoundErr *cache.KeyNotFound
-		if !errors.As(err, &keyNotFoundErr) {
+		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
 			return nil, common.InternalServerError
@@ -266,8 +265,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
-		var keyNotFoundErr *cache.KeyNotFound
-		if !errors.As(err, &keyNotFoundErr) {
+		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
 			return common.InternalServerError
