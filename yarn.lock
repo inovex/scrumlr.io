@@ -599,6 +599,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.2.8.tgz#d011757f5b80ca5f86321fba0c7b904f96b47b47"
   integrity sha512-OATNM+J4XniKQRlI1e67v3euOnCUiXwpqgMofomKc5JNYOq0JPE6E5uTXMnFaZejKN1Z7s05JrHpmYB7/tg1Fw==
 
+"@gamepark/avataaars@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-3.0.0.tgz#6e85e066693fb75c0082b437bfe8513e77f66917"
+  integrity sha512-MOe/jtEe2UkxQSfZ2TyqfRnihVBpGUeFwbM9aFZYVQoe5Jdw4kRx0bEKHHw2XnXaYJ2UEJOYys4iAdjBTv4tEg==
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
@@ -1946,14 +1951,6 @@ available-typed-arrays@^1.0.6, available-typed-arrays@^1.0.7:
   integrity sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==
   dependencies:
     possible-typed-array-names "^1.0.0"
-
-avataaars@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/avataaars/-/avataaars-2.0.0.tgz#7b45331f5e10ba1308ab6a06d7aa3dcd7832fa00"
-  integrity sha512-VBS14dAvTe1l/HEwSoR5LArV7OqXgbhksBCS3CZZLIOQfv+oM3yVgy0d5QKz/KYqNMmS8emSzD9znlrOhbg2fA==
-  dependencies:
-    lodash ">=4.17.21"
-    prop-types "^15.7.2"
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -4943,7 +4940,7 @@ lodash.truncate@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==
 
-lodash@>=4.17.21, lodash@^4.17.2, lodash@^4.17.23:
+lodash@^4.17.2, lodash@^4.17.23:
   version "4.17.23"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.23.tgz#f113b0378386103be4f6893388c73d0bde7f2c5a"
   integrity sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==
@@ -5533,7 +5530,7 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
-prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
