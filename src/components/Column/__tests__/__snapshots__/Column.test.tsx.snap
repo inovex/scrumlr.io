@@ -210,6 +210,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                           title="test-participants-others-user-name-1"
                         >
                           <svg
+                            backgroundColor="backlog-blue"
                             class="avatar note__user-avatar accent-color__backlog-blue"
                             height="280px"
                             version="1.1"
@@ -775,6 +776,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                           title="test-participants-others-user-name-1"
                         >
                           <svg
+                            backgroundColor="backlog-blue"
                             class="avatar note__user-avatar accent-color__backlog-blue"
                             height="280px"
                             version="1.1"
@@ -1471,6 +1473,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                             title="test-participants-others-user-name-1"
                           >
                             <svg
+                              backgroundColor="backlog-blue"
                               class="avatar note__user-avatar accent-color__backlog-blue"
                               height="280px"
                               version="1.1"
@@ -2036,6 +2039,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                             title="test-participants-others-user-name-1"
                           >
                             <svg
+                              backgroundColor="backlog-blue"
                               class="avatar note__user-avatar accent-color__backlog-blue"
                               height="280px"
                               version="1.1"
