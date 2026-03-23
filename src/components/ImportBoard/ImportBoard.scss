@@ -38,6 +38,10 @@
 }
 
 .import-board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   padding: styles.$spacing--lg styles.$spacing--2xl styles.$spacing--md styles.$spacing--lg;
   border-bottom: 1px solid styles.$gray--200;
 }

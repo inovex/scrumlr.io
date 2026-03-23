@@ -6,7 +6,7 @@ import {BoardImportData, CreateSessionAccessPolicy} from "store/features/board/t
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {Button} from "components/Button";
-import {CheckDoneIcon} from "components/Icon";
+import {CheckDoneIcon, CloseIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import classNames from "classnames";
 import "./ImportBoard.scss";
@@ -101,12 +101,11 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     return (
       <Portal className="import-board__portal" align="center" closeMode="backdrop" onClose={handleCancel} backdrop="blur" hiddenOverflow disabledPadding>
         <div className="import-board">
-          <button className="import-board__close-button" onClick={handleCancel} aria-label="Close modal">
-            <span className="import-board__close-icon">×</span>
-          </button>
-
           <header className="import-board__header">
             <h2 className="import-board__title">{t("ImportBoard.title")}</h2>
+            <button className="import-board__close-button" onClick={handleCancel} aria-label="Close modal">
+              <CloseIcon className="import-board__close-icon" />
+            </button>
           </header>
 
           <main className="import-board__main">
