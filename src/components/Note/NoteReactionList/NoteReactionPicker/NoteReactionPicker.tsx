@@ -122,7 +122,11 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
         </div>
       </div>
 
-      {/* Emoji picker portal with its own focus lock */}
+      {/* Emoji picker portal with its own focus lock.
+          Note the usage of createPortal instead of our own Portal component,
+           because of the dynamic placement.
+          For future work, one could look into using CSS anchor positioning (https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning)
+          */}
       {showPicker &&
         createPortal(
           <ReactFocusLock autoFocus={false}>
