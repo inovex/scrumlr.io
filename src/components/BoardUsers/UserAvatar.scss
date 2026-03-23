@@ -1,6 +1,9 @@
 @use "sass:color";
 @use "constants/styles";
 
+// NOTE: for default avatar styles, refer to components/Avatar
+
+// user avatar container & normal state
 .user-avatar {
   box-sizing: border-box;
   height: 48px;
@@ -9,7 +12,8 @@
   display: inline-block;
   position: relative;
 
-  #Circle-Background {
+  // base background circle border
+  .avatar > g:first-of-type > g:first-of-type > use:first-of-type {
     stroke: styles.$gray--100;
     stroke-width: 24px;
   }
@@ -31,35 +35,49 @@
   }
 }
 
+// ready state (avatar blur & green ring)
 .user-ready {
-  > .avatar #Circle-Background {
-    transform: rotate(90deg) scale(-1, 1);
-    stroke: #1bd47e;
-    stroke-width: 24px;
-    --dasharray: 760;
-    stroke-dasharray: var(--dasharray);
-    stroke-dashoffset: 0;
-    transform-origin: 45.5% 43%;
-  }
+  > .avatar > g:first-of-type {
+    // background group
+    > g:first-of-type {
+      // base circle
+      > use:first-of-type {
+        transform: rotate(90deg) scale(-1, 1);
+        stroke: #1bd47e;
+        stroke-width: 24px;
+        --dasharray: 760;
+        stroke-dasharray: var(--dasharray);
+        stroke-dashoffset: 0;
+        transform-origin: 45.5% 43%;
 
-  > .avatar #Avataaar #Avataaar {
-    transition: all 0.3s ease-in-out;
-    filter: url(#blur) saturate(0.5);
-    opacity: 0.3;
-  }
+        transition: fill 0.15s ease-in-out;
+        fill: color.change(styles.$green--500, $lightness: 100%, $saturation: 0%);
+      }
 
-  > .avatar #Circle-Background,
-  .avatar #Color\/Palette\/Blue-01 {
-    transition: fill 0.15s ease-in-out;
-    fill: color.change(styles.$green--500, $lightness: 100%, $saturation: 0%);
+      // background color fill
+      > g:last-of-type {
+        transition: fill 0.15s ease-in-out;
+        fill: color.change(styles.$green--500, $lightness: 100%, $saturation: 0%);
+      }
+    }
+
+    // character group
+    > g:last-of-type {
+      transition: all 0.3s ease-in-out;
+      filter: url(#blur) saturate(0.5);
+      opacity: 0.3;
+    }
   }
 }
 
+// animation triggers
 .user-avatar--ready-animated {
-  > .avatar #Circle-Background {
+  // circle trigger
+  > .avatar > g:first-of-type > g:first-of-type > use:first-of-type {
     animation: draw 0.45s ease-in-out;
   }
 
+  // checkmark trigger
   > .user-avatar__ready path {
     animation:
       draw 0.6s ease-in-out,
@@ -67,11 +85,11 @@
   }
 }
 
+// raised hand icon
 .user-avatar__raised-hand {
   position: absolute;
   top: -8px;
   right: -8px;
-
   width: 24px;
   height: 24px;
 
