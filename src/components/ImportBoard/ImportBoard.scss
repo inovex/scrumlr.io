@@ -1,19 +1,5 @@
 @use "constants/styles";
 
-.import-board__portal {
-  backdrop-filter: blur(10px);
-  background: rgba(styles.$blue--500, 0.1);
-}
-
-.import-board__centering-wrapper {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow-y: auto;
-}
-
 .import-board {
   position: relative;
   background: styles.$gray--000;
