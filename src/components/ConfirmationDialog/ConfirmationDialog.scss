@@ -2,19 +2,6 @@
 @use "constants/mixins";
 @use "sass:math";
 
-.confirmation-dialog__background {
-  position: fixed;
-  @include mixins.inset-0;
-  background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.confirmation-dialog__wrapper {
-  position: fixed;
-  @include mixins.inset-0;
-  @include mixins.flex-center;
-}
-
 .confirmation-dialog {
   min-width: 220px;
   max-width: 570px;
