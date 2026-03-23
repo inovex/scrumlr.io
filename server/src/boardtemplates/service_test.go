@@ -85,8 +85,6 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	secondColumnName := "column 2"
 	firstColumnDescription := "This is Column 1"
 	secondColumnDescription := "This is Column 2"
-	firstColumnIndex := 0
-	secondColumnIndex := 1
 	visible := true
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
@@ -110,13 +108,13 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 				Name:        firstColumnName,
 				Description: firstColumnDescription,
 				Visible:     &visible,
-				Index:       &firstColumnIndex,
+				Index:       new(0),
 			},
 			{
 				Name:        secondColumnName,
 				Description: secondColumnDescription,
 				Visible:     &visible,
-				Index:       &secondColumnIndex,
+				Index:       new(1),
 			},
 		},
 	})

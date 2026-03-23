@@ -133,12 +133,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Luke"].ID
 	callerId := suite.baseData.Users["Stan"].ID
-	role := common.ModeratorRole
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
 	// when
-	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: &role})
+	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(common.ModeratorRole)})
 
 	// then
 	suite.Nil(err)
@@ -163,13 +162,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 	ctx := context.Background()
 
 	boardId := suite.boards["UpdateAll"].ID
-	ready := false
-	raisedHand := false
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
 	// when
-	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: &ready, RaisedHand: &raisedHand})
+	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: new(false), RaisedHand: new(false)})
 
 	// then
 	suite.Nil(err)

@@ -420,7 +420,6 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 	callerRole := common.ParticipantRole
 	stackAllowed := false
-	txt := "Updated text"
 	pos := suite.pos
 	pos.Rank = 0
 
@@ -428,7 +427,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 	suite.expectPrecondition(stackAllowed, callerRole)
 
 	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
-		Text:     &txt,
+		Text:     new("Updated text"),
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Position: &pos,
@@ -444,7 +443,6 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	callerRole := common.ParticipantRole
 	stackAllowed := true
 	stackIDNote := uuid.NullUUID{Valid: true, UUID: suite.noteID}
-	txt := "Updated text"
 	pos := suite.pos
 	pos.Rank = 0
 	pos.Stack = stackIDNote
@@ -453,7 +451,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	suite.expectPrecondition(stackAllowed, callerRole)
 
 	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
-		Text:     &txt,
+		Text:     new("Updated text"),
 		ID:       suite.noteID,
 		Board:    suite.boardID,
 		Position: &pos,

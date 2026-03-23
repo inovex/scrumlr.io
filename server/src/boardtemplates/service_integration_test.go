@@ -53,27 +53,11 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) initTestData() {
 		"Bob":   {Name: "Bob", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567003"), AccountType: common.Anonymous},
 	}
 
-	updateName := "UpdateTemplate"
-	updateDescription := "This is a description"
-	updateFavourite := false
-
-	deleteName := "DeleteTemplate"
-	deleteDescription := "This is a description"
-	deleteFavourite := true
-
-	name1 := "Template1"
-	description1 := "This is a description"
-	favourite1 := true
-
-	name2 := "Template2"
-	description2 := "This is a description"
-	favourite2 := true
-
 	suite.templates = map[string]BoardTemplate{
-		"Update": {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567101"), Creator: suite.users["Santa"].ID, Name: &updateName, Description: &updateDescription, Favourite: &updateFavourite},
-		"Delete": {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567102"), Creator: suite.users["Santa"].ID, Name: &deleteName, Description: &deleteDescription, Favourite: &deleteFavourite},
-		"Read1":  {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567103"), Creator: suite.users["Stan"].ID, Name: &name1, Description: &description1, Favourite: &favourite1},
-		"Read2":  {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567104"), Creator: suite.users["Stan"].ID, Name: &name2, Description: &description2, Favourite: &favourite2},
+		"Update": {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567101"), Creator: suite.users["Santa"].ID, Name: new("UpdateTemplate"), Description: new("This is a description"), Favourite: new(false)},
+		"Delete": {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567102"), Creator: suite.users["Santa"].ID, Name: new("DeleteTemplate"), Description: new("This is a description"), Favourite: new(true)},
+		"Read1":  {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567103"), Creator: suite.users["Stan"].ID, Name: new("Template1"), Description: new("This is a description"), Favourite: new(true)},
+		"Read2":  {ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567104"), Creator: suite.users["Stan"].ID, Name: new("Template2"), Description: new("This is a description"), Favourite: new(true)},
 	}
 }
 
@@ -109,10 +93,9 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Update() {
 	userId := suite.users["Santa"].ID
 	name := "Updated Template"
 	description := "This description was updated"
-	favourite := true
 
 	boardtemplate, err := suite.service.Update(ctx,
-		BoardTemplateUpdateRequest{ID: id, Name: &name, Description: &description, Favourite: &favourite},
+		BoardTemplateUpdateRequest{ID: id, Name: &name, Description: &description, Favourite: new(true)},
 	)
 
 	assert.Nil(t, err)

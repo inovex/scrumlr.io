@@ -23,9 +23,8 @@ func (h *HashSha512) HashWithSalt(passphrase string) (*string, *string, error) {
 	}
 
 	salt := RandomString(16)
-	encodedPassphrase := h.HashBySalt(passphrase, salt)
 
-	return &encodedPassphrase, &salt, nil
+	return new(h.HashBySalt(passphrase, salt)), new(salt), nil
 }
 
 func (h *HashSha512) HashBySalt(passphrase string, salt string) string {

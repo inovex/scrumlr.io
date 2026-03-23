@@ -25,23 +25,17 @@ import (
 
 // createValidBoardTemplateRequest creates a valid board template request for testing
 func createValidBoardTemplateRequest() boardtemplates.CreateBoardTemplateRequest {
-	name := "Test Template"
-	description := "Test Description"
-	favourite := false
-	visible := true
-	index := 0
-
 	return boardtemplates.CreateBoardTemplateRequest{
-		Name:        &name,
-		Description: &description,
-		Favourite:   &favourite,
+		Name:        new("Test Template"),
+		Description: new("Test Description"),
+		Favourite:   new(false),
 		Columns: []*columntemplates.ColumnTemplateRequest{
 			{
 				Name:        "To Do",
 				Description: "Tasks to be done",
 				Color:       common.ColorBacklogBlue,
-				Visible:     &visible,
-				Index:       &index,
+				Visible:     new(true),
+				Index:       new(0),
 			},
 		},
 	}
@@ -49,14 +43,10 @@ func createValidBoardTemplateRequest() boardtemplates.CreateBoardTemplateRequest
 
 // createValidBoardTemplateUpdateRequest creates a valid board template update request for testing
 func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateRequest {
-	name := "Updated Template"
-	description := "Updated Description"
-	favourite := true
-
 	return boardtemplates.BoardTemplateUpdateRequest{
-		Name:        &name,
-		Description: &description,
-		Favourite:   &favourite,
+		Name:        new("Updated Template"),
+		Description: new("Updated Description"),
+		Favourite:   new(true),
 	}
 }
 
@@ -364,17 +354,14 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 
 			// Create mock handlers that return proper template objects
 			templateID := uuid.New()
-			templateName := "Test Template"
-			templateDescription := "Test Description"
-			favourite := false
 
 			// Mock template response
 			mockTemplate := &boardtemplates.BoardTemplate{
 				ID:          templateID,
 				Creator:     userID,
-				Name:        &templateName,
-				Description: &templateDescription,
-				Favourite:   &favourite,
+				Name:        new("Test Template"),
+				Description: new("Test Description"),
+				Favourite:   new(false),
 			}
 
 			// Mock template full response for GetAll

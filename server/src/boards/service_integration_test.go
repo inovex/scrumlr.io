@@ -109,38 +109,18 @@ func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 		"Santa": {Name: "Santa", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
 	}
 
-	// Board names and descriptions
-	read1Name := "Read1"
-	read1Desc := "This is a board"
-	read2Name := "Read2"
-	read2Desc := "This is also a board"
-	timerName := "TimerUpdate"
-	timerDesc := "This is a board to update the timer"
-	updateName := "Update"
-	updateDesc := "This is a board to update"
-	updateToPassphraseName := "UpdateToPassphrase"
-	updateToPassphraseDesc := "This is a board to update"
-	updateToInviteName := "UpdateToInvite"
-	updateToInviteDesc := "This is a board to update"
-	updateToPublicName := "UpdateToPublic"
-	updateToPublicDesc := "This is a board to update"
-	passphrase := "SuperStrongPassword"
-	salt := "SaltForPassphrase"
-	deleteName := "DeleteBoard"
-	deleteDesc := "This is a board to delete"
-
 	suite.boards = map[string]Board{
-		"Read1":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567101"), Name: &read1Name, Description: &read1Desc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"Read2":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567102"), Name: &read2Name, Description: &read2Desc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"Timer":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567103"), Name: &timerName, Description: &timerDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"Update":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567104"), Name: &updateName, Description: &updateDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdatePublicToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567105"), Name: &updateToPassphraseName, Description: &updateToPassphraseDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdatePublicToInvite":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567106"), Name: &updateToInviteName, Description: &updateToInviteDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdatePassphraseToPublic": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567107"), Name: &updateToPublicName, Description: &updateToPublicDesc, Passphrase: &passphrase, Salt: &salt, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdatePassphraseToInvite": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567108"), Name: &updateToInviteName, Description: &updateToInviteDesc, Passphrase: &passphrase, Salt: &salt, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdateInviteToPublic":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567109"), Name: &updateToPublicName, Description: &updateToPublicDesc, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"UpdateInviteToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710a"), Name: &updateToPassphraseName, Description: &updateToPassphraseDesc, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
-		"Delete":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710b"), Name: &deleteName, Description: &deleteDesc, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Read1":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567101"), Name: new("Read1"), Description: new("This is a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Read2":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567102"), Name: new("Read2"), Description: new("This is also a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Timer":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567103"), Name: new("TimerUpdate"), Description: new("This is a board to update the timer"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Update":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567104"), Name: new("Update"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePublicToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567105"), Name: new("UpdateToPassphrase"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePublicToInvite":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567106"), Name: new("UpdateToInvite"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePassphraseToPublic": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567107"), Name: new("UpdateToPublic"), Description: new("This is a board to update"), Passphrase: new("SuperStrongPassword"), Salt: new("SaltForPassphrase"), AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdatePassphraseToInvite": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567108"), Name: new("UpdateToInvite"), Description: new("This is a board to update"), Passphrase: new("SuperStrongPassword"), Salt: new("SaltForPassphrase"), AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdateInviteToPublic":     {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567109"), Name: new("UpdateToInvite"), Description: new("This is a board to update"), AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"UpdateInviteToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710a"), Name: new("UpdateToPassphrase"), Description: new("This is a board to update"), AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"Delete":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710b"), Name: new("DeleteBoard"), Description: new("This is a board to delete"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 	}
 
 	suite.sessions = map[string]testSession{
@@ -271,11 +251,6 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.boards["Update"].ID
 	name := "New Name"
 	description := "This is a new description"
-	showAuthors := false
-	showNotesOfOtherUsers := false
-	showNoteReactions := false
-	allowStacking := false
-	isLocked := true
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
@@ -286,12 +261,12 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 			Name:                  &name,
 			Description:           &description,
 			AccessPolicy:          nil,
-			ShowAuthors:           &showAuthors,
+			ShowAuthors:           new(false),
 			Passphrase:            nil,
-			ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
-			ShowNoteReactions:     &showNoteReactions,
-			AllowStacking:         &allowStacking,
-			IsLocked:              &isLocked,
+			ShowNotesOfOtherUsers: new(false),
+			ShowNoteReactions:     new(false),
+			AllowStacking:         new(false),
+			IsLocked:              new(true),
 		})
 
 	assert.Nil(t, err)
@@ -300,14 +275,14 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	assert.Equal(t, Public, board.AccessPolicy)
 	assert.NotNil(t, board)
 	assert.Nil(t, board.Salt)
-	assert.Equal(t, allowStacking, board.AllowStacking)
-	assert.Equal(t, isLocked, board.IsLocked)
-	assert.Equal(t, showAuthors, board.ShowAuthors)
-	assert.Equal(t, showNoteReactions, board.ShowNoteReactions)
-	assert.Equal(t, showNotesOfOtherUsers, board.ShowNotesOfOtherUsers)
 
 	suite.assertBoardEventAndDataAndExpectFalse(events, name, description, Public)
 	suite.assertNoteSyncEvent(events)
+	suite.False(board.AllowStacking)
+	suite.False(board.ShowAuthors)
+	suite.False(board.ShowNoteReactions)
+	suite.False(board.ShowNotesOfOtherUsers)
+	suite.True(board.IsLocked)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
@@ -315,7 +290,6 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	ctx := context.Background()
 
 	boardId := suite.boards["UpdatePublicToPassphrase"].ID
-	passphrase := "SuperSecret"
 	accessPolicy := ByPassphrase
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
@@ -325,7 +299,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 		BoardUpdateRequest{
 			ID:           boardId,
 			AccessPolicy: &accessPolicy,
-			Passphrase:   &passphrase,
+			Passphrase:   new("SuperSecret"),
 		})
 
 	assert.Nil(t, err)
@@ -478,7 +452,6 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 
 	boardId := suite.boards["UpdateInviteToPassphrase"].ID
 	accessPolicy := ByPassphrase
-	passphrase := "SuperStrongPassword"
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
@@ -487,7 +460,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 		BoardUpdateRequest{
 			ID:           boardId,
 			AccessPolicy: &accessPolicy,
-			Passphrase:   &passphrase,
+			Passphrase:   new("SuperStrongPassword"),
 		})
 
 	assert.Nil(t, err)

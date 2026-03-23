@@ -405,8 +405,7 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 		var avatar *string
 		if user.Avatar != nil {
 			a, _ := json.Marshal(&user.Avatar)
-			avatarString := string(a)
-			avatar = &avatarString
+			avatar = new(string(a))
 		}
 		err := testDbTemplates.InsertUser(db, user.ID, user.Name, string(user.AccountType), avatar)
 		if err != nil {
