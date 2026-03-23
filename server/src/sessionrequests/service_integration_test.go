@@ -68,10 +68,11 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, ch)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	suite.service = NewSessionRequestService(database, broker, sessionRequestWebsocket, sessionService)

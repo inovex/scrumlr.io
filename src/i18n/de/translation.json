@@ -591,7 +591,8 @@
     "groups": {
       "hair": "Hüte und Haare",
       "facialFeatures": "Rund ums Gesicht",
-      "clothing": "Bekleidung und Accessoires"
+      "clothing": "Bekleidung und Accessoires",
+      "background": "Hintergrund"
     },
     "hairColor": {
       "label": "Haarfarbe",
@@ -774,6 +775,16 @@
       "Bear": "Bär",
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
+    },
+    "backgroundColor": {
+      "label": "Hintergrundfarbe",
+      "backlog-blue": "Blau",
+      "planning-pink": "Pink",
+      "poker-purple": "Lila",
+      "value-violet": "Violett",
+      "goal-green": "Grün",
+      "yielding-yellow": "Gelb",
+      "online-orange": "Orange"
     }
   },
   "ToggleButton": {

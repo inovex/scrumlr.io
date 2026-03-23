@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -22,7 +23,7 @@ type Column struct {
 	Description string `json:"description"`
 
 	// The column color.
-	Color Color `json:"color"`
+	Color common.Color `json:"color"`
 
 	// The column visibility.
 	Visible bool `json:"visible"`
@@ -41,7 +42,7 @@ type ColumnRequest struct {
 	Description string `json:"description"`
 
 	// The column color to set.
-	Color Color `json:"color"`
+	Color common.Color `json:"color"`
 
 	// Sets whether this column should be visible to regular participants.
 	//
@@ -65,7 +66,7 @@ type ColumnUpdateRequest struct {
 	Description string `json:"description"`
 
 	// The column color to set.
-	Color Color `json:"color"`
+	Color common.Color `json:"color"`
 
 	// Sets whether this column should be visible to regular participants.
 	Visible bool `json:"visible"`

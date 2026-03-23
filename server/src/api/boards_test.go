@@ -73,7 +73,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 			accessPolicy := boards.Public
 			visible := true
 			colName := "Lean Coffee"
-			color := columns.Color("backlog-blue")
+			color := common.Color("backlog-blue")
 			ownerID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(` {

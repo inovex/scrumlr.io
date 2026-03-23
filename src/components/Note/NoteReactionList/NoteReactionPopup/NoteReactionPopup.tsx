@@ -98,7 +98,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   );
 
   return (
-    <Portal hiddenOverflow onClick={props.onClose} accentColor={props.colorClassName}>
+    <Portal hiddenOverflow disabledPadding onClick={props.onClose} align="bottom" accentColor={props.colorClassName}>
       <div className="note-reaction-popup__root" ref={rootRef}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />

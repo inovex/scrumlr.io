@@ -102,10 +102,11 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-users")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
+	boardLastModifiedUpdater := common.NewSimpleBoardLastModifiedUpdater(db)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, ch)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	userDatabase := NewUserDatabase(db)
@@ -195,9 +196,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 
 	msg := <-events
 	suite.Equal(realtime.BoardEventParticipantUpdated, msg.Type)
-	sessionData := msg.Data.(map[string]interface{})
-	suite.True(sessionData["connected"].(bool))
-	suite.Equal(string(common.OwnerRole), sessionData["role"].(string))
+	userData, err := technical_helper.Unmarshal[User](msg.Data)
+	suite.Nil(err)
+	suite.Equal(suite.testUserName, userData.Name)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {

@@ -1,20 +1,39 @@
 @use "constants/styles";
 
+// by default, avatars are slightly larger than their background, making the forehead/hair stick out of the border.
+// additionally, the background color is set to a default value.
+// we want to make sure that the avatar is centered within its container, and change the background color to our design accent colors.
+// as the avatar svg components use dynamic ids, but we know the svg composition, we can target them relatively.
 .avatar {
   height: 100%;
   width: 100%;
   overflow: visible;
 
-  #Avataaar {
+  // main SVG wrapper
+  > g:first-of-type {
+    // center overall SVG
     transform: translateY(-20px);
-  }
 
-  #Avataaar #Avataaar {
-    transform: scale(0.85) translate(23px, 55px);
+    // background elements
+    > g:first-of-type {
+      // background color group
+      > g:last-of-type {
+        fill: var(--accent-color--light);
+      }
+
+      // the circle border would go right here as > use:first-of-type
+    }
+
+    // character elements (face, body, clothes)
+    > g:last-of-type {
+      // center character relative to the background
+      transform: scale(0.85) translate(23px, 55px);
+    }
   }
 }
 
-.avatar #Circle-Background,
-.avatar #Color\/Palette\/Blue-01 {
-  fill: var(--accent-color--light);
+[data-theme="dark"] {
+  .avatar > g:first-of-type > g:first-of-type > g:last-of-type {
+    fill: var(--accent-color--dark);
+  }
 }

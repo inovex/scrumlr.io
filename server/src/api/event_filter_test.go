@@ -202,11 +202,11 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestInitEventAsOwner", testInitFilterAsOwner)
 	t.Run("TestInitEventAsModerator", testInitFilterAsModerator)
 	t.Run("TestInitEventAsParticipant", testInitFilterAsParticipant)
-	t.Run("TestRaiseHandShouldBeUpdatedAfterParticipantUpdated", testRaiseHandShouldBeUpdatedAfterParticipantUpdated)
-	t.Run("TestParticipantUpdatedShouldHandleError", testParticipantUpdatedShouldHandleError)
+	t.Run("TestRaiseHandShouldBeUpdatedAfterSessionUpdated", testRaiseHandShouldBeUpdatedAfterSessionUpdated)
+	t.Run("TestSessionUpdatedShouldHandleError", testSessionUpdatedShouldHandleError)
 }
 
-func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
+func testRaiseHandShouldBeUpdatedAfterSessionUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		user := getUserById(session.UserID)
@@ -214,7 +214,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
-		Type: realtime.BoardEventParticipantUpdated,
+		Type: realtime.BoardEventSessionUpdated,
 		Data: sessions.BoardSession{
 			RaisedHand: true,
 			UserID:     originalParticipantSession.UserID,
@@ -222,7 +222,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 		},
 	}
 
-	isUpdated := boardSub.participantUpdated(updateEvent, true)
+	isUpdated := boardSub.sessionUpdated(updateEvent, true)
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		user := getUserById(session.UserID)
@@ -234,14 +234,14 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 	assert.Equal(t, true, updatedParticipantSession.RaisedHand)
 }
 
-func testParticipantUpdatedShouldHandleError(t *testing.T) {
+func testSessionUpdatedShouldHandleError(t *testing.T) {
 
 	updateEvent := &realtime.BoardEvent{
-		Type: realtime.BoardEventParticipantUpdated,
+		Type: realtime.BoardEventSessionUpdated,
 		Data: "SHOULD FAIL",
 	}
 
-	isUpdated := boardSub.participantUpdated(updateEvent, true)
+	isUpdated := boardSub.sessionUpdated(updateEvent, true)
 
 	assert.Equal(t, false, isUpdated)
 }
