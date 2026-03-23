@@ -88,17 +88,18 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-boards")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
+	database := NewBoardDatabase(db, clock)
+	boardLastModifiedUpdater := NewLastModifiedUpdater(database, clock)
 	noteDatabase := notes.NewNotesDatabase(db)
-	noteService := notes.NewNotesService(noteDatabase, broker, ch)
+	noteService := notes.NewNotesService(noteDatabase, broker, ch, boardLastModifiedUpdater)
 	columnDatabase := columns.NewColumnsDatabase(db)
-	columnService := columns.NewColumnService(columnDatabase, broker, noteService)
+	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	wsService := websocket.NewWebSocketService()
 	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
-	database := NewBoardDatabase(db)
 	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
 }
 
@@ -212,8 +213,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 		Owner:        userId,
 		AccessPolicy: accessPolicy,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
-			{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
+			{Name: "Column 1", Description: "This is the first column", Color: common.ColorBacklogBlue},
+			{Name: "Column 2", Description: "This is the second column", Color: common.ColorOnlineOrange},
 		},
 	})
 
@@ -245,8 +246,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
 		AccessPolicy: accessPolicy,
 		Passphrase:   &passphrase,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
-			{Name: "Column 2", Description: "This is the second column", Color: columns.ColorOnlineOrange},
+			{Name: "Column 1", Description: "This is the first column", Color: common.ColorBacklogBlue},
+			{Name: "Column 2", Description: "This is the second column", Color: common.ColorOnlineOrange},
 		},
 	})
 

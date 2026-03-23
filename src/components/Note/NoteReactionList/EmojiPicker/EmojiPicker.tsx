@@ -46,7 +46,7 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
       import(
         /* @vite-ignore */
         `emoji-picker-element/i18n/${lang}.js`
-        ) // .js suffix required because of bundling of dynamic import resolution
+      ) // .js suffix required because of bundling of dynamic import resolution
         .then(({default: i18ndefault}: {default: I18n}) => {
           element.i18n = i18ndefault;
         });

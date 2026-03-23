@@ -37,11 +37,15 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 		}, false, false, nil)
 
 	for _, tt := range testParameterBundles {
+		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
+
+			s.columns = columnMock
+
 			name := "TestColumn"
-			color := columns.Color("backlog-blue")
+			color := common.Color("backlog-blue")
 			visible := true
 			index := 0
 			boardID, _ := uuid.NewRandom()
@@ -68,10 +72,10 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 				Index:   index,
 			}, tt.err)
 
-			s.columns = columnMock
-
+			// when
 			s.createColumn(rr, req.Request())
 
+			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			columnMock.AssertExpectations(suite.T())
 		})
@@ -89,9 +93,13 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 		}, false, false, nil)
 
 	for _, tt := range testParameterBundles {
+		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
+
+			s.columns = columnMock
+
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 			userID, _ := uuid.NewRandom()
@@ -104,9 +112,10 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 
 			columnMock.EXPECT().Delete(mock.Anything, boardID, columnID, userID).Return(tt.err)
 
-			s.columns = columnMock
+			// when
 			s.deleteColumn(rr, req.Request())
 
+			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			columnMock.AssertExpectations(suite.T())
 		})
@@ -125,14 +134,18 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 		}, false, false, nil)
 
 	for _, tt := range testParameterBundles {
+		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
+
+			s.columns = columnMock
+
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -157,10 +170,10 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 				Index:   index,
 			}, tt.err)
 
-			s.columns = columnMock
-
+			// when
 			s.updateColumn(rr, req.Request())
 
+			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			columnMock.AssertExpectations(suite.T())
 		})
@@ -179,6 +192,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 		}, false, false, nil)
 
 	for _, tt := range testParameterBundles {
+		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
@@ -186,7 +200,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "Updated Column Name"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -207,8 +221,10 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 
 			s.columns = columnMock
 
+			// when
 			s.getColumn(rr, req.Request())
 
+			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			columnMock.AssertExpectations(suite.T())
 		})
@@ -228,13 +244,14 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
+			// given
 			s := new(Server)
 			columnsMock := columns.NewMockColumnService(suite.T())
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := columns.Color("online-orange")
+			color := common.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -253,8 +270,10 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 
 			s.columns = columnsMock
 
+			// when
 			s.getColumns(rr, req.Request())
 
+			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			columnsMock.AssertExpectations(suite.T())
 		})

@@ -7,20 +7,28 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/timeprovider"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votings"
 )
+
+var nowDate = time.Date(2126, 2, 12, 10, 0, 0, 0, time.UTC)
 
 type DatabaseBoardTestSuite struct {
 	suite.Suite
-	db       *bun.DB
-	users    map[string]TestUser
-	boards   map[string]DatabaseBoard
-	sessions map[string]TestSession
+	db           *bun.DB
+	users        map[string]TestUser
+	boards       map[string]DatabaseBoard
+	sessions     map[string]TestSession
+	database     BoardDatabase
+	timeProvider *timeprovider.MockTimeProvider
 }
 
 func TestDatabaseBoardTestSuite(t *testing.T) {
@@ -36,16 +44,17 @@ func (suite *DatabaseBoardTestSuite) SetupTest() {
 			Func: suite.seedData,
 		},
 	)
+	suite.timeProvider = timeprovider.NewMockTimeProvider(suite.T())
+	suite.database = NewBoardDatabase(suite.db, suite.timeProvider)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{Name: &name, Description: &description, AccessPolicy: Public},
 	)
 
@@ -59,14 +68,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Public() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 	passphrase := "This is a super secret passphrase"
 	salt := "This is also super secret"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{
 			Name:         &name,
 			Description:  &description,
@@ -86,12 +94,11 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_Passphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	name := "Insert Board"
 	description := "This board was inserted"
 
-	dbBoard, err := database.CreateBoard(context.Background(),
+	dbBoard, err := suite.database.CreateBoard(context.Background(),
 		DatabaseBoardInsert{
 			Name:         &name,
 			Description:  &description,
@@ -109,7 +116,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdatePassphrase"].ID
 	name := "New Name"
@@ -123,7 +129,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -153,7 +159,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdatePublic"].ID
 	name := "New Name"
@@ -165,7 +170,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -193,7 +198,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdateInvite"].ID
 	name := "New Name"
@@ -205,7 +209,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -233,7 +237,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["UpdateInvite"].ID
 	name := "New Name"
@@ -247,7 +250,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	allowStacking := false
 	isLocked := true
 
-	dbBoard, err := database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
@@ -277,13 +280,15 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
+	mockClock := timeprovider.NewMockTimeProvider(t)
 
 	boardId := suite.boards["Timer"].ID
-	startTime := time.Now().UTC().Round(time.Millisecond)
+	mockTime := time.Date(2024, 1, 15, 10, 0, 0, 0, time.UTC)
+	mockClock.EXPECT().Now().Return(mockTime)
+	startTime := mockClock.Now().UTC().Round(time.Millisecond)
 	endTime := startTime.Add(time.Minute * 2)
 
-	dbBoard, err := database.UpdateBoardTimer(context.Background(), DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
+	dbBoard, err := suite.database.UpdateBoardTimer(context.Background(), DatabaseBoardTimerUpdate{ID: boardId, TimerStart: &startTime, TimerEnd: &endTime})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -291,24 +296,133 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
 	assert.Equal(t, &endTime, dbBoard.TimerEnd)
 }
 
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesTimerAndSharedNoteWhenSet() {
+	t := suite.T()
+
+	boardId := suite.boards["Timer"].ID
+	authorID := suite.users["Stan"].id
+	columnID := uuid.New()
+	noteID := uuid.New()
+
+	err := testDbTemplates.InsertColumn(suite.db, columnID, boardId, "Column", "Description", "backlog-blue", true, 0)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertNote(suite.db, noteID, authorID, boardId, columnID, "Shared note", uuid.NullUUID{}, 0)
+	assert.Nil(t, err)
+
+	startTime := nowDate.Add(time.Minute)
+	endTime := startTime.Add(2 * time.Minute)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardId,
+		TimerStart: &startTime,
+		TimerEnd:   &endTime,
+		SharedNote: uuid.NullUUID{UUID: noteID, Valid: true},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, dbBoard.ID)
+	assert.Equal(t, &startTime, dbBoard.TimerStart)
+	assert.Equal(t, &endTime, dbBoard.TimerEnd)
+	assert.True(t, dbBoard.SharedNote.Valid)
+	assert.Equal(t, noteID, dbBoard.SharedNote.UUID)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesVotingWhenClosedVotingExists() {
+	t := suite.T()
+
+	boardID := suite.boards["Timer"].ID
+	votingID := uuid.New()
+
+	err := testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
+	assert.Nil(t, err)
+
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardID,
+		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardID, dbBoard.ID)
+	assert.True(t, dbBoard.ShowVoting.Valid)
+	assert.Equal(t, votingID, dbBoard.ShowVoting.UUID)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteRanksForClosedVoting() {
+	t := suite.T()
+
+	boardID := suite.boards["Timer"].ID
+	columnID := uuid.New()
+	noteAID := uuid.New()
+	noteBID := uuid.New()
+	votingID := uuid.New()
+
+	err := testDbTemplates.InsertColumn(suite.db, columnID, boardID, "Column", "Description", "backlog-blue", true, 0)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertNote(suite.db, noteAID, suite.users["Stan"].id, boardID, columnID, "A", uuid.NullUUID{}, 0)
+	assert.Nil(t, err)
+	err = testDbTemplates.InsertNote(suite.db, noteBID, suite.users["Santa"].id, boardID, columnID, "B", uuid.NullUUID{}, 1)
+	assert.Nil(t, err)
+
+	err = testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
+	assert.Nil(t, err)
+	err = testDbTemplates.InsertVote(suite.db, boardID, votingID, suite.users["Stan"].id, noteAID)
+	assert.Nil(t, err)
+
+	_, err = suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:         boardID,
+		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+	})
+	assert.Nil(t, err)
+
+	var noteA notes.DatabaseNote
+	err = suite.db.NewSelect().Model(&noteA).Where("id = ?", noteAID).Scan(context.Background())
+	assert.Nil(t, err)
+
+	var noteB notes.DatabaseNote
+	err = suite.db.NewSelect().Model(&noteB).Where("id = ?", noteBID).Scan(context.Background())
+	assert.Nil(t, err)
+
+	assert.Equal(t, 1, noteA.Rank)
+	assert.Equal(t, 0, noteB.Rank)
+}
+
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UsesProvidedLastModifiedAt() {
+	t := suite.T()
+
+	boardId := suite.boards["UpdatePassphrase"].ID
+
+	newName := "Updated Name"
+	newLastModifiedAt := nowDate.Add(5 * time.Minute)
+	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
+		ID:             boardId,
+		Name:           &newName,
+		LastModifiedAt: newLastModifiedAt,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, boardId, dbBoard.ID)
+	assert.Equal(t, &newName, dbBoard.Name)
+	assert.Equal(t, newLastModifiedAt, dbBoard.LastModifiedAt)
+}
+
 func (suite *DatabaseBoardTestSuite) Test_Database_Delete() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["Delete"].ID
 
-	err := database.DeleteBoard(context.Background(), boardId)
+	err := suite.database.DeleteBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Get() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
 
 	boardId := suite.boards["Read1"].ID
 
-	dbBoard, err := database.GetBoard(context.Background(), boardId)
+	dbBoard, err := suite.database.GetBoard(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbBoard.ID)
@@ -329,11 +443,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_Get_NotFound() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	boardId := uuid.New()
 
-	dbBoard, err := database.GetBoard(context.Background(), boardId)
+	dbBoard, err := suite.database.GetBoard(context.Background(), boardId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -342,11 +454,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Get_NotFound() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	userId := suite.users["Stan"].id
 
-	dbBoards, err := database.GetBoards(context.Background(), userId)
+	dbBoards, err := suite.database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 2)
@@ -378,11 +488,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 
 func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser_NotFound() {
 	t := suite.T()
-	database := NewBoardDatabase(suite.db)
-
 	userId := uuid.New()
 
-	dbBoards, err := database.GetBoards(context.Background(), userId)
+	dbBoards, err := suite.database.GetBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 0)

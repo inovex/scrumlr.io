@@ -32,6 +32,7 @@ type DatabaseBoard struct {
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
+	LastModifiedAt        time.Time
 }
 
 type DatabaseBoardInsert struct {
@@ -67,6 +68,7 @@ type DatabaseBoardUpdate struct {
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
+	LastModifiedAt        time.Time
 }
 
 type DatabaseFullBoard struct {

@@ -1,6 +1,5 @@
-import React, {ReactNode} from "react";
+import React, {ReactNode, useId} from "react";
 import classNames from "classnames";
-import {uniqueId} from "underscore";
 import FocusLock, {MoveFocusInside} from "react-focus-lock";
 import "./MiniMenu.scss";
 
@@ -27,6 +26,7 @@ type MiniMenuProps = {
 };
 
 export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent, dataCy}: MiniMenuProps) => {
+  const baseId = useId();
   const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
     e.preventDefault(); // fix some issues
     item.onClick?.();
@@ -38,8 +38,8 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
       onBlur={onBlur}
       data-cy={dataCy}
     >
-      {items.map((item) => {
-        const anchor = uniqueId(`mini-menu-${item.label}`);
+      {items.map((item, index) => {
+        const anchor = `mini-menu-${item.label}-${baseId}-${index}`;
         return (
           <button
             data-tooltip-id="scrumlr-tooltip"

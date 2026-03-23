@@ -3,7 +3,9 @@ package boards
 import (
 	"context"
 	"fmt"
+	"time"
 
+	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -13,12 +15,14 @@ import (
 )
 
 type DB struct {
-	db *bun.DB
+	db    *bun.DB
+	clock timeprovider.TimeProvider
 }
 
-func NewBoardDatabase(database *bun.DB) BoardDatabase {
+func NewBoardDatabase(database *bun.DB, clock timeprovider.TimeProvider) BoardDatabase {
 	db := new(DB)
 	db.db = database
+	db.clock = clock
 
 	return db
 }
@@ -47,9 +51,21 @@ func (d *DB) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpda
 
 func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error) {
 	query := d.db.NewUpdate().
-		Model(&update).
-		Column("timer_start", "timer_end", "shared_note")
+		Model(&update)
 
+	if !update.LastModifiedAt.IsZero() {
+		query.Column("last_modified_at")
+	}
+
+	if update.TimerStart != nil {
+		query.Column("timer_start")
+	}
+	if update.TimerEnd != nil {
+		query.Column("timer_end")
+	}
+	if update.SharedNote.Valid {
+		query.Column("shared_note")
+	}
 	if update.Name != nil {
 		query.Column("name")
 	}
@@ -88,7 +104,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 		_, err = query.
 			With("voting", votingQuery).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
-			Set("voting = (SELECT \"id\" FROM \"voting\")").
+			Set("show_voting = (SELECT \"id\" FROM \"voting\")").
 			Where("id = ?", update.ID).
 			Returning("*").
 			Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
@@ -154,4 +170,9 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		WhereOr("note.stack = _data.id")
 
 	return rankUpdate
+}
+
+func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error {
+	_, err := u.database.UpdateBoard(ctx, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: time})
+	return err
 }

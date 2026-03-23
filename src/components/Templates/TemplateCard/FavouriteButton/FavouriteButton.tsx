@@ -1,9 +1,9 @@
+import {useId} from "react";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {getColorClassName} from "constants/colors";
 import {StarIcon as FavouriteIcon} from "components/Icon";
 import {Tooltip} from "components/Tooltip";
-import {uniqueId} from "underscore";
 import "./FavouriteButton.scss";
 
 type FavouriteButtonProps = {
@@ -14,7 +14,8 @@ type FavouriteButtonProps = {
 
 export const FavouriteButton = (props: FavouriteButtonProps) => {
   const {t} = useTranslation();
-  const anchor = uniqueId("favourite-icon-");
+  const baseId = useId();
+  const anchor = `favourite-icon-${baseId}`;
 
   return (
     <>
