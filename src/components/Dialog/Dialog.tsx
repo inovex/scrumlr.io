@@ -14,8 +14,8 @@ export const Dialog: FC<PropsWithChildren<DialogProps>> = ({title, className, on
   const {t} = useTranslation();
 
   return (
-    <Portal onClose={() => onClose?.()}>
-      <aside className={classNames("dialog", className)} {...other} onClick={(e) => e.stopPropagation()}>
+    <Portal onClose={() => onClose?.()} align="here">
+      <aside className={classNames("dialog", className)} {...other}>
         <article className="dialog__content">
           <h2 className="dialog__header-text">{title}</h2>
           {children}

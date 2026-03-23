@@ -1,22 +1,6 @@
 @use "constants/styles";
 @use "constants/mixins";
 
-.settings-dialog__background {
-  position: fixed;
-  @include mixins.inset-0;
-  background-color: rgba($color: styles.$blue--500, $alpha: 0.1);
-  backdrop-filter: blur(10px);
-}
-[data-theme="dark"] .settings-dialog__background {
-  background-color: rgba($color: styles.$pink--500, $alpha: 0.1);
-}
-
-.settings-dialog__wrapper {
-  position: fixed;
-  @include mixins.inset-0;
-  @include mixins.flex-center;
-}
-
 // settings-dialog container
 $settings-dialog-container--sides-small: 32px;
 $settings-dialog-container--sides-large: 92px;
