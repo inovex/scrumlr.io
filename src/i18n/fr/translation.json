@@ -577,7 +577,8 @@
     "groups": {
       "hair": "Chapeaux et coiffure",
       "facialFeatures": "Traits du visage",
-      "clothing": "Vêtements"
+      "clothing": "Vêtements",
+      "background": "Fond"
     },
     "hairColor": {
       "label": "Couleur de cheveux",
@@ -760,6 +761,16 @@
       "Bear": "Ours",
       "SkullOutline": "Crâne contour",
       "Skull": "Crâne"
+    },
+    "backgroundColor": {
+      "label": "Couleur de fond",
+      "backlog-blue": "Bleu",
+      "planning-pink": "Rose vif",
+      "poker-purple": "Lilas",
+      "value-violet": "Violet",
+      "goal-green": "Vert",
+      "yielding-yellow": "Jaune",
+      "online-orange": "Orange"
     }
   },
   "ToggleButton": {

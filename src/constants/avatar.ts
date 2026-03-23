@@ -1,7 +1,8 @@
-import {AccessoriesType, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, HairColorName, MouthType, SkinColor, TopType} from "@gamepark/avataaars";
 import {AvatarConfig} from "types/avatar";
+import {AccessoriesType, ClotheType, EyebrowType, EyeType, FacialHairType, GraphicType, HairColorName, MouthType, SkinColor, TopType} from "@gamepark/avataaars";
 import ClotheColorName from "@gamepark/avataaars/src/avatar/clothes/ClotheColorName";
 import FacialHairColorName from "@gamepark/avataaars/src/avatar/top/facialHair/FacialHairColorName";
+import {COLOR_ORDER} from "constants/colors";
 
 const EXCLUDED_TOP_TYPES = [TopType.PrinceCut]; // prince cut skews the whole avatar for some reason
 
@@ -70,4 +71,5 @@ export const AVATAR_CONFIG: AvatarConfig = {
       },
     },
   ],
+  background: [{values: COLOR_ORDER, key: "backgroundColor"}],
 };

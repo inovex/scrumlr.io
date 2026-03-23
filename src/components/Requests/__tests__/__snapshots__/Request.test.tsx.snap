@@ -15,6 +15,7 @@ exports[`JoinRequest > should render correctly > on multiple join requests 1`] =
         title="user-name-0"
       >
         <svg
+          backgroundColor="poker-purple"
           class="avatar accent-color__poker-purple"
           height="280px"
           version="1.1"
@@ -434,6 +435,7 @@ exports[`JoinRequest > should render correctly > on multiple join requests 1`] =
         title="user-name-1"
       >
         <svg
+          backgroundColor="value-violet"
           class="avatar accent-color__value-violet"
           height="280px"
           version="1.1"
@@ -811,6 +813,7 @@ exports[`JoinRequest > should render correctly > on multiple join requests 1`] =
         title="user-name-2"
       >
         <svg
+          backgroundColor="goal-green"
           class="avatar accent-color__goal-green"
           height="280px"
           version="1.1"
@@ -1325,6 +1328,7 @@ exports[`JoinRequest > should render correctly > on single join request 1`] = `
         title="user-name-0"
       >
         <svg
+          backgroundColor="poker-purple"
           class="avatar accent-color__poker-purple"
           height="280px"
           version="1.1"

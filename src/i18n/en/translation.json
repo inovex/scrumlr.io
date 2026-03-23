@@ -577,7 +577,8 @@
     "groups": {
       "hair": "Hats and hairstyle",
       "facialFeatures": "Facial features",
-      "clothing": "Clothing"
+      "clothing": "Clothing",
+      "background": "Background"
     },
     "hairColor": {
       "label": "Hair color",
@@ -760,6 +761,16 @@
       "Bear": "Bear",
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
+    },
+    "backgroundColor": {
+      "label": "Background color",
+      "backlog-blue": "Blue",
+      "planning-pink": "Pink",
+      "poker-purple": "Purple",
+      "value-violet": "Violet",
+      "goal-green": "Green",
+      "yielding-yellow": "Yellow",
+      "online-orange": "Orange"
     }
   },
   "ToggleButton": {

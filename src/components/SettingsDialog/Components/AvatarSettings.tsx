@@ -12,7 +12,7 @@ import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
-  id?: string;
+  id: string;
 }
 
 export const AvatarSettings = (props: AvatarSettingsProps) => {
@@ -22,7 +22,12 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
 
   let initialState = self.avatar;
   if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(props.id ?? "");
+    initialState = generateRandomProps(props.id);
+  }
+
+  // old authenticated accounts may be missing backgroundColor, so we set it explicitly. It will be persisted when going to the profile settings for the first time
+  if (!initialState.backgroundColor) {
+    initialState = {...initialState, backgroundColor: generateRandomProps(props.id).backgroundColor};
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
@@ -69,7 +74,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         <SettingsCarousel
           carouselItems={group.values}
           currentValue={properties[group.key]}
-          onValueChange={(value) => updateAvatar(group.key, value)}
+          onValueChange={(value) => updateAvatar(group.key, value as AvataaarProps[keyof AvataaarProps])}
           disabled={isDisabled}
           localizationPath={`Avatar.${group.key}.`}
           label={t(`Avatar.${group.key}.label`)}
@@ -82,7 +87,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <Avatar seed={props.id} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
           <ShuffleIcon />
         </button>
@@ -92,7 +97,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
           {Object.entries(AVATAR_CONFIG).map(([label, groups], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
-                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
+                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing" | "background"}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
                 headerClassName="avatar-settings__settings-group-header"
