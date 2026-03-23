@@ -14,9 +14,12 @@ interface TooltipPortalProps {
 export const TooltipPortal = (props: TooltipPortalProps) => {
   if (!props.show) return null;
 
+  // colons (which are included from react useId()) are not allowed in CSS selectors, so we escape them
+  const escapedAnchor = CSS.escape(props.anchor);
+
   return createPortal(
     <div className="tooltip-portal__root">
-      <Tooltip className="tooltip-portal" anchorSelect={`#${props.anchor}`} place={props.place}>
+      <Tooltip className="tooltip-portal" anchorSelect={`#${escapedAnchor}`} place={props.place}>
         {props.children}
       </Tooltip>
     </div>,

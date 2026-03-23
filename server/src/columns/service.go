@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -32,17 +33,28 @@ type ColumnDatabase interface {
 	Count(ctx context.Context, board uuid.UUID) (int, error)
 }
 
-type Service struct {
-	database    ColumnDatabase
-	realtime    *realtime.Broker
-	noteService notes.NotesService
+type BoardLastModifiedUpdater interface {
+	UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error
 }
 
-func NewColumnService(db ColumnDatabase, rt *realtime.Broker, noteService notes.NotesService) ColumnService {
+type Service struct {
+	database                 ColumnDatabase
+	realtime                 *realtime.Broker
+	noteService              notes.NotesService
+	boardLastModifiedUpdater BoardLastModifiedUpdater
+}
+
+func NewColumnService(
+	db ColumnDatabase,
+	rt *realtime.Broker,
+	noteService notes.NotesService,
+	boardLastModifiedUpdater BoardLastModifiedUpdater,
+) ColumnService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
 	service.noteService = noteService
+	service.boardLastModifiedUpdater = boardLastModifiedUpdater
 
 	return service
 }
@@ -246,6 +258,10 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.update")
 	defer span.End()
 
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
+		log.Warnw("unable to update last modified", "board", board, "err", err)
+	}
+
 	columns, err := service.database.GetAll(ctx, board)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
@@ -301,8 +317,13 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 }
 
 func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID, notes []uuid.UUID) {
+	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
 	defer span.End()
+
+	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
+		log.Warnw("unable to update last modified", "board", board, "err", err)
+	}
 
 	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,

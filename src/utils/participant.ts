@@ -1,4 +1,7 @@
-import {Auth, ParticipantWithUser, ParticipantWithUserId} from "../store/features";
+import {Auth, ParticipantsState, ParticipantWithUser, ParticipantWithUserId} from "../store/features";
+
+export const findParticipantById = (state: ParticipantsState, id: string): ParticipantWithUser | undefined =>
+  state.self?.user.id === id ? state.self : state.others?.find((p) => p.user.id === id);
 
 export const mapMultipleParticipants = (participants: ParticipantWithUserId[], userData: Auth[]): ParticipantWithUser[] => {
   const mappedParticipants: ParticipantWithUser[] = participants.map((participant: ParticipantWithUserId) => {

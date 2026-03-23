@@ -6,6 +6,7 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"github.com/google/uuid"
@@ -43,7 +44,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 	boardId := suite.boards["InsertNoIndex"].id
 	name := "Create no index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 0
 
@@ -73,7 +74,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 	boardId := suite.boards["InsertFirst"].id
 	name := "Create first"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 0
 
@@ -104,7 +105,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 	boardId := suite.boards["InsertFirst"].id
 	name := "Create neagtive index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := -1
 	expectedIndex := -1
@@ -136,7 +137,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 	boardId := suite.boards["InsertLast"].id
 	name := "Create last index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 1
 
@@ -167,7 +168,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 	boardId := suite.boards["InsertHigh"].id
 	name := "Create high index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 99
 	expectedIndex := 99
@@ -199,7 +200,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 	boardId := suite.boards["InsertMiddle"].id
 	name := "Create middle index"
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 1
 
@@ -230,7 +231,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
 	boardId := suite.boards["InsertFirst"].id
 	name := ""
 	description := "This is inserted from the test"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := true
 	index := 1
 
@@ -281,7 +282,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Update() {
 	boardId := suite.columns["Update"].Board
 	name := "Column Updated"
 	description := "This column was updated"
-	color := ColorOnlineOrange
+	color := common.ColorOnlineOrange
 	visible := false
 	index := 1
 
@@ -449,18 +450,18 @@ func (suite *DatabaseColumnTestSuite) seedData(db *bun.DB) {
 	// test columns
 	suite.columns = make(map[string]DatabaseColumn, 10)
 	// test columns to insert
-	suite.columns["InsertLast"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertLast"].id, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0}
-	suite.columns["InsertHigh"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertHigh"].id, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0}
-	suite.columns["InsertMiddle0"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertMiddle"].id, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0}
-	suite.columns["InsertMiddle1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertMiddle"].id, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 1}
+	suite.columns["InsertLast"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertLast"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0}
+	suite.columns["InsertHigh"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertHigh"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0}
+	suite.columns["InsertMiddle0"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertMiddle"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0}
+	suite.columns["InsertMiddle1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["InsertMiddle"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 1}
 	// test columns to update
-	suite.columns["Update"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 1", Description: "This is a description", Color: ColorPlanningPink, Visible: true, Index: 0}
-	suite.columns["Update1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 2", Description: "This is a description", Color: ColorYieldingYellow, Visible: true, Index: 1}
-	suite.columns["Delete"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 3", Description: "This is a description", Color: ColorGoalGreen, Visible: true, Index: 2}
+	suite.columns["Update"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorPlanningPink, Visible: true, Index: 0}
+	suite.columns["Update1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 2", Description: "This is a description", Color: common.ColorYieldingYellow, Visible: true, Index: 1}
+	suite.columns["Delete"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Update"].id, Name: "Column 3", Description: "This is a description", Color: common.ColorGoalGreen, Visible: true, Index: 2}
 	// test columns to read
-	suite.columns["Read1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 1", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 0}
-	suite.columns["Read2"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 2", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 1}
-	suite.columns["Read3"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 3", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 2}
+	suite.columns["Read1"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 1", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 0}
+	suite.columns["Read2"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 2", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 1}
+	suite.columns["Read3"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 3", Description: "This is a description", Color: common.ColorBacklogBlue, Visible: true, Index: 2}
 
 	for _, board := range suite.boards {
 		err := testDbTemplates.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
