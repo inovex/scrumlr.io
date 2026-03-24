@@ -1,6 +1,6 @@
 module scrumlr.io/server
 
-go 1.26.0
+go 1.26.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
