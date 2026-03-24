@@ -84,7 +84,7 @@ func (c ColumnSlice) FilterVisibleColumns() []*Column {
 	})
 }
 
-func UnmarshallColumnData(data interface{}) (ColumnSlice, error) {
+func UnmarshallColumnData(data any) (ColumnSlice, error) {
 	columns, err := technical_helper.UnmarshalSlice[Column](data)
 
 	if err != nil {

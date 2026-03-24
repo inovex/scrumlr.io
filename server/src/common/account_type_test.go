@@ -76,7 +76,6 @@ func TestNewAccountType(t *testing.T) {
 	}
 
 	for name, test := range tests {
-		test := test
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			got, gotErr := NewAccountType(test.have)
@@ -97,7 +96,7 @@ func TestAccountTypeEnum(t *testing.T) {
 	values := []AccountType{Anonymous, Google, GitHub, Microsoft, Apple, TypeOIDC}
 	for _, value := range values {
 		var accountType AccountType
-		err := accountType.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
+		err := accountType.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, accountType)
 	}

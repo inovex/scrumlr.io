@@ -84,7 +84,7 @@ $card-description-height: 4 * 20px;
     // position menu over icon
     transform: translate(calc(-50% - styles.$spacing--xl), 2 * -(styles.$spacing--xxs));
 
-    box-shadow: 0 2px 20px 0 rgba(var(styles.$navy--400), 0.12);
+    box-shadow: 0 2px 20px 0 rgba(styles.$navy--400, 0.12);
   }
 }
 

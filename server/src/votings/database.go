@@ -157,13 +157,12 @@ func (d *DB) AddVote(ctx context.Context, board, user, note uuid.UUID) (Database
 		})
 
 	var result DatabaseVote
-	insert := DatabaseVote{Board: board, User: user, Note: note}
 	_, err := d.db.NewInsert().
 		With("openVotingQuery", openVotingQuery).
 		With("currentVoteCount", currentVoteCount).
 		With("currentVotesOnNoteCount", currentVotesOnNoteCount).
 		With("_values", values).
-		Model(&insert).
+		Model(new(DatabaseVote{Board: board, User: user, Note: note})).
 		TableExpr("_values").
 		Column("board", "voting", "user", "note").
 		Returning("*").

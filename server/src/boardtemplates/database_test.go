@@ -64,9 +64,8 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Update() {
 	userId := suite.users["Santa"].id
 	name := "Update Template"
 	description := "This description was updated"
-	favourite := true
 
-	dbTemplate, err := database.Update(context.Background(), DatabaseBoardTemplateUpdate{ID: templateId, Name: &name, Description: &description, Favourite: &favourite})
+	dbTemplate, err := database.Update(context.Background(), DatabaseBoardTemplateUpdate{ID: templateId, Name: &name, Description: &description, Favourite: new(true)})
 
 	assert.Nil(t, err)
 	assert.Equal(t, templateId, dbTemplate.ID)
@@ -183,24 +182,12 @@ func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
 	// test board templates
 	suite.templates = make(map[string]DatabaseBoardTemplate, 4)
 	// test board template to update
-	updateName := "UpdateTemplate"
-	updateDescription := "This is a description"
-	updateFavourite := false
-	suite.templates["Update"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: &updateName, Description: &updateDescription, Favourite: &updateFavourite}
+	suite.templates["Update"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: new("UpdateTemplate"), Description: new("This is a description"), Favourite: new(false)}
 	// test board template to delete
-	deleteName := "DeleteTemplate"
-	deleteDescription := "This is a description"
-	deleteFavourite := true
-	suite.templates["Delete"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: &deleteName, Description: &deleteDescription, Favourite: &deleteFavourite}
+	suite.templates["Delete"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: new("DeleteTemplate"), Description: new("This is a description"), Favourite: new(true)}
 	// test board templates to get
-	name1 := "Template1"
-	description1 := "This is a description"
-	favourite1 := true
-	suite.templates["Read1"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name1, Description: &description1, Favourite: &favourite1}
-	name2 := "Template2"
-	description2 := "This is a description"
-	favourite2 := true
-	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name2, Description: &description2, Favourite: &favourite2}
+	suite.templates["Read1"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: new("Template1"), Description: new("This is a description"), Favourite: new(true)}
+	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: new("Template2"), Description: new("This is a description"), Favourite: new(true)}
 
 	for _, user := range suite.users {
 		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)

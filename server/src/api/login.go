@@ -47,7 +47,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenString, err := s.auth.Sign(map[string]interface{}{"id": user.ID})
+	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to generate token string")
 		span.RecordError(err)
@@ -144,7 +144,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
+	tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
 	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)

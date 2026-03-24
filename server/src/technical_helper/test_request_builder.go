@@ -19,7 +19,7 @@ func NewTestRequestBuilder(method string, target string, body io.Reader) *TestRe
 	return r
 }
 
-func (b *TestRequestBuilder) AddToContext(key, val interface{}) *TestRequestBuilder {
+func (b *TestRequestBuilder) AddToContext(key, val any) *TestRequestBuilder {
 	ctx := context.WithValue(b.Req.Context(), key, val)
 	b.Req = b.Req.WithContext(ctx)
 	return b

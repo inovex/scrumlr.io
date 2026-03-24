@@ -93,14 +93,13 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create() {
 	name := "CreateNoIndex"
 	description := "This is inserted from the test"
 	color := common.ColorYieldingYellow
-	visible := true
 
 	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
 		BoardTemplate: boardId,
 		Name:          name,
 		Description:   description,
 		Color:         color,
-		Visible:       &visible,
+		Visible:       new(true),
 		Index:         nil,
 	})
 
@@ -110,7 +109,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create() {
 	assert.Equal(t, description, template.Description)
 	assert.Equal(t, color, template.Color)
 	assert.Equal(t, 1, template.Index)
-	assert.Equal(t, visible, template.Visible)
+	suite.True(template.Visible)
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex() {
@@ -121,7 +120,6 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex()
 	name := "CreateFirst"
 	description := "This is inserted from the test"
 	color := common.ColorYieldingYellow
-	visible := true
 	index := 0
 
 	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
@@ -129,7 +127,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex()
 		Name:          name,
 		Description:   description,
 		Color:         color,
-		Visible:       &visible,
+		Visible:       new(true),
 		Index:         &index,
 	})
 
@@ -139,7 +137,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_FirstIndex()
 	assert.Equal(t, description, template.Description)
 	assert.Equal(t, color, template.Color)
 	assert.Equal(t, index, template.Index)
-	assert.Equal(t, visible, template.Visible)
+	suite.True(template.Visible)
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() {
@@ -150,7 +148,6 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 	name := "CreateLast"
 	description := "This is inserted from the test"
 	color := common.ColorYieldingYellow
-	visible := true
 	index := 1
 
 	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
@@ -158,7 +155,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 		Name:          name,
 		Description:   description,
 		Color:         color,
-		Visible:       &visible,
+		Visible:       new(true),
 		Index:         &index,
 	})
 
@@ -168,7 +165,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_LastIndex() 
 	assert.Equal(t, description, template.Description)
 	assert.Equal(t, color, template.Color)
 	assert.Equal(t, index, template.Index)
-	assert.Equal(t, visible, template.Visible)
+	suite.True(template.Visible)
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex() {
@@ -179,7 +176,6 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex(
 	name := "CreateMiddle"
 	description := "This is inserted from the test"
 	color := common.ColorYieldingYellow
-	visible := true
 	index := 1
 
 	template, err := suite.service.Create(ctx, ColumnTemplateRequest{
@@ -187,7 +183,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex(
 		Name:          name,
 		Description:   description,
 		Color:         color,
-		Visible:       &visible,
+		Visible:       new(true),
 		Index:         &index,
 	})
 
@@ -197,7 +193,7 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Create_MiddleIndex(
 	assert.Equal(t, description, template.Description)
 	assert.Equal(t, color, template.Color)
 	assert.Equal(t, index, template.Index)
-	assert.Equal(t, visible, template.Visible)
+	suite.True(template.Visible)
 }
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) Test_Update() {

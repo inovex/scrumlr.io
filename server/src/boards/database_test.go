@@ -123,11 +123,6 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	passphrase := "SuperSecret"
 	salt := "TopSecret"
 	accessPolicy := ByPassphrase
-	showAuthors := false
-	showNotesOfOtherUsers := false
-	showNoteReactions := false
-	allowStacking := false
-	isLocked := true
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
@@ -136,11 +131,11 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 		AccessPolicy:          &accessPolicy,
 		Passphrase:            &passphrase,
 		Salt:                  &salt,
-		ShowAuthors:           &showAuthors,
-		ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
-		ShowNoteReactions:     &showNoteReactions,
-		AllowStacking:         &allowStacking,
-		IsLocked:              &isLocked,
+		ShowAuthors:           new(false),
+		ShowNotesOfOtherUsers: new(false),
+		ShowNoteReactions:     new(false),
+		AllowStacking:         new(false),
+		IsLocked:              new(true),
 	})
 
 	assert.Nil(t, err)
@@ -148,13 +143,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	assert.Equal(t, &name, dbBoard.Name)
 	assert.Equal(t, &description, dbBoard.Description)
 	assert.Equal(t, accessPolicy, dbBoard.AccessPolicy)
-	assert.Equal(t, showAuthors, dbBoard.ShowAuthors)
-	assert.Equal(t, showNotesOfOtherUsers, dbBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, showNoteReactions, dbBoard.ShowNoteReactions)
-	assert.Equal(t, allowStacking, dbBoard.AllowStacking)
-	assert.Equal(t, isLocked, dbBoard.IsLocked)
 	assert.Equal(t, &passphrase, dbBoard.Passphrase)
 	assert.Equal(t, &salt, dbBoard.Salt)
+	suite.False(dbBoard.AllowStacking)
+	suite.False(dbBoard.ShowAuthors)
+	suite.False(dbBoard.ShowNoteReactions)
+	suite.False(dbBoard.ShowNotesOfOtherUsers)
+	suite.True(dbBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
@@ -164,22 +159,17 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	name := "New Name"
 	description := "This is a new description"
 	accessPolicy := Public
-	showAuthors := false
-	showNotesOfOtherUsers := false
-	showNoteReactions := false
-	allowStacking := false
-	isLocked := true
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
 		AccessPolicy:          &accessPolicy,
-		ShowAuthors:           &showAuthors,
-		ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
-		ShowNoteReactions:     &showNoteReactions,
-		AllowStacking:         &allowStacking,
-		IsLocked:              &isLocked,
+		ShowAuthors:           new(false),
+		ShowNotesOfOtherUsers: new(false),
+		ShowNoteReactions:     new(false),
+		AllowStacking:         new(false),
+		IsLocked:              new(true),
 	})
 
 	assert.Nil(t, err)
@@ -187,13 +177,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
 	assert.Equal(t, &name, dbBoard.Name)
 	assert.Equal(t, &description, dbBoard.Description)
 	assert.Equal(t, accessPolicy, dbBoard.AccessPolicy)
-	assert.Equal(t, showAuthors, dbBoard.ShowAuthors)
-	assert.Equal(t, showNotesOfOtherUsers, dbBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, showNoteReactions, dbBoard.ShowNoteReactions)
-	assert.Equal(t, allowStacking, dbBoard.AllowStacking)
-	assert.Equal(t, isLocked, dbBoard.IsLocked)
 	assert.Nil(t, dbBoard.Passphrase)
 	assert.Nil(t, dbBoard.Salt)
+	suite.False(dbBoard.AllowStacking)
+	suite.False(dbBoard.ShowAuthors)
+	suite.False(dbBoard.ShowNoteReactions)
+	suite.False(dbBoard.ShowNotesOfOtherUsers)
+	suite.True(dbBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
@@ -203,22 +193,17 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	name := "New Name"
 	description := "This is a new description"
 	accessPolicy := Public
-	showAuthors := false
-	showNotesOfOtherUsers := false
-	showNoteReactions := false
-	allowStacking := false
-	isLocked := true
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
 		AccessPolicy:          &accessPolicy,
-		ShowAuthors:           &showAuthors,
-		ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
-		ShowNoteReactions:     &showNoteReactions,
-		AllowStacking:         &allowStacking,
-		IsLocked:              &isLocked,
+		ShowAuthors:           new(false),
+		ShowNotesOfOtherUsers: new(false),
+		ShowNoteReactions:     new(false),
+		AllowStacking:         new(false),
+		IsLocked:              new(true),
 	})
 
 	assert.Nil(t, err)
@@ -226,13 +211,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPublic() {
 	assert.Equal(t, &name, dbBoard.Name)
 	assert.Equal(t, &description, dbBoard.Description)
 	assert.Equal(t, accessPolicy, dbBoard.AccessPolicy)
-	assert.Equal(t, showAuthors, dbBoard.ShowAuthors)
-	assert.Equal(t, showNotesOfOtherUsers, dbBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, showNoteReactions, dbBoard.ShowNoteReactions)
-	assert.Equal(t, allowStacking, dbBoard.AllowStacking)
-	assert.Equal(t, isLocked, dbBoard.IsLocked)
 	assert.Nil(t, dbBoard.Passphrase)
 	assert.Nil(t, dbBoard.Salt)
+	suite.False(dbBoard.AllowStacking)
+	suite.False(dbBoard.ShowAuthors)
+	suite.False(dbBoard.ShowNoteReactions)
+	suite.False(dbBoard.ShowNotesOfOtherUsers)
+	suite.True(dbBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
@@ -242,26 +227,19 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	name := "New Name"
 	description := "This is a new description"
 	accessPolicy := ByPassphrase
-	passphrase := "SuperSecret"
-	salt := "TopSecret"
-	showAuthors := false
-	showNotesOfOtherUsers := false
-	showNoteReactions := false
-	allowStacking := false
-	isLocked := true
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:                    boardId,
 		Name:                  &name,
 		Description:           &description,
 		AccessPolicy:          &accessPolicy,
-		Passphrase:            &passphrase,
-		Salt:                  &salt,
-		ShowAuthors:           &showAuthors,
-		ShowNotesOfOtherUsers: &showNotesOfOtherUsers,
-		ShowNoteReactions:     &showNoteReactions,
-		AllowStacking:         &allowStacking,
-		IsLocked:              &isLocked,
+		Passphrase:            new("SuperSecret"),
+		Salt:                  new("TopSecret"),
+		ShowAuthors:           new(false),
+		ShowNotesOfOtherUsers: new(false),
+		ShowNoteReactions:     new(false),
+		AllowStacking:         new(false),
+		IsLocked:              new(true),
 	})
 
 	assert.Nil(t, err)
@@ -269,13 +247,13 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	assert.Equal(t, &name, dbBoard.Name)
 	assert.Equal(t, &description, dbBoard.Description)
 	assert.Equal(t, accessPolicy, dbBoard.AccessPolicy)
-	assert.Equal(t, showAuthors, dbBoard.ShowAuthors)
-	assert.Equal(t, showNotesOfOtherUsers, dbBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, showNoteReactions, dbBoard.ShowNoteReactions)
-	assert.Equal(t, allowStacking, dbBoard.AllowStacking)
-	assert.Equal(t, isLocked, dbBoard.IsLocked)
 	assert.NotNil(t, dbBoard.Passphrase)
 	assert.NotNil(t, dbBoard.Salt)
+	suite.False(dbBoard.AllowStacking)
+	suite.False(dbBoard.ShowAuthors)
+	suite.False(dbBoard.ShowNoteReactions)
+	suite.False(dbBoard.ShowNotesOfOtherUsers)
+	suite.True(dbBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {

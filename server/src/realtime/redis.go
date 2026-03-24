@@ -49,7 +49,7 @@ func connectRedis(server RedisServer) (*redisClient, error) {
 	return &redisClient{con: rdb}, err
 }
 
-func encodeEvent(event interface{}) (string, error) {
+func encodeEvent(event any) (string, error) {
 	data, err := json.Marshal(event)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal event: %w", err)
@@ -57,7 +57,7 @@ func encodeEvent(event interface{}) (string, error) {
 	return string(data), nil
 }
 
-func decodeEvent(data string, into interface{}) error {
+func decodeEvent(data string, into any) error {
 	err := json.Unmarshal([]byte(data), into)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal event: %w", err)
@@ -65,7 +65,7 @@ func decodeEvent(data string, into interface{}) error {
 	return nil
 }
 
-func (r *redisClient) Publish(ctx context.Context, subject string, event interface{}) error {
+func (r *redisClient) Publish(ctx context.Context, subject string, event any) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.realtime.redis.publish")
 	defer span.End()
 	log := logger.FromContext(ctx)

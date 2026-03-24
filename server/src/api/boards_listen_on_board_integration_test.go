@@ -21,7 +21,7 @@ import (
 
 type mockConnection struct{}
 
-func (m *mockConnection) WriteJSON(ctx context.Context, data interface{}) error {
+func (m *mockConnection) WriteJSON(ctx context.Context, data any) error {
 	return nil
 }
 

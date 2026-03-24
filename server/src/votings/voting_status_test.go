@@ -11,7 +11,7 @@ func TestVotingStatusEnum(t *testing.T) {
 	values := []VotingStatus{Open, Closed}
 	for _, value := range values {
 		var votingStatus VotingStatus
-		err := votingStatus.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
+		err := votingStatus.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, votingStatus)
 	}

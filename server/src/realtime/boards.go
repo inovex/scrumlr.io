@@ -42,7 +42,7 @@ const (
 
 type BoardEvent struct {
 	Type BoardEventType `json:"type"`
-	Data interface{}    `json:"data,omitempty"`
+	Data any            `json:"data,omitempty"`
 }
 
 func (b *Broker) BroadcastToBoard(ctx context.Context, boardID uuid.UUID, msg BoardEvent) error {

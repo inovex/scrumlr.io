@@ -113,6 +113,5 @@ func randSeq(n int) *string {
 		b[i] = letters[rand.Intn(len(letters))]
 	}
 
-	s := string(b)
-	return &s
+	return new(string(b))
 }

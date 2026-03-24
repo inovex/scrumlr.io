@@ -508,7 +508,6 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 	dbError := "unable to execute"
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -527,7 +526,7 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   &moderatorRole,
+		Role:   new(common.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -539,7 +538,6 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 	dbError := "unable to execute"
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -561,7 +559,7 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   &moderatorRole,
+		Role:   new(common.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -609,7 +607,6 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
@@ -628,7 +625,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   &moderatorRole,
+		Role:   new(common.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -639,7 +636,6 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
@@ -658,7 +654,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   &moderatorRole,
+		Role:   new(common.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -669,7 +665,6 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
@@ -688,7 +683,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   &moderatorRole,
+		Role:   new(common.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -699,7 +694,6 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	ownerRole := common.OwnerRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
@@ -718,7 +712,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   &ownerRole,
+		Role:   new(common.OwnerRole),
 	})
 
 	assert.Nil(t, session)
@@ -836,10 +830,9 @@ func TestConnectSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	dbError := "unable to execute"
-	connected := true
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
+	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -904,10 +897,9 @@ func TestDisconnectSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	dbError := "unable to execute"
-	connected := false
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
+	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(false)}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)

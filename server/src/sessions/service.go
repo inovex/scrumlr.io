@@ -263,11 +263,10 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 		attribute.String("scrumlr.sessions.service.connect.user", userID.String()),
 	)
 
-	var connected = true
 	_, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
-		Connected: &connected,
+		Connected: new(true),
 	})
 
 	if err != nil {
@@ -293,11 +292,10 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 		attribute.String("scrumlr.sessions.service.disconnect.user", userID.String()),
 	)
 
-	var connected = false
 	_, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
-		Connected: &connected,
+		Connected: new(false),
 	})
 
 	if err != nil {

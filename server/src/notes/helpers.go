@@ -30,7 +30,7 @@ func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUI
 	return visibleNotes
 }
 
-func UnmarshallNotaData(data interface{}) (NoteSlice, error) {
+func UnmarshallNotaData(data any) (NoteSlice, error) {
 	notes, err := technical_helper.UnmarshalSlice[Note](data)
 
 	if err != nil {

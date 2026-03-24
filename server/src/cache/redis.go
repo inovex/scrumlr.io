@@ -48,7 +48,7 @@ func NewRedis(server RedisServer) (*Cache, error) {
 
 // Create the entry with the given value
 // If the key exists return an error
-func (r *redisClient) Create(ctx context.Context, key string, value interface{}, ttl time.Duration) error {
+func (r *redisClient) Create(ctx context.Context, key string, value any, ttl time.Duration) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.cache.redis.create")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -72,7 +72,7 @@ func (r *redisClient) Create(ctx context.Context, key string, value interface{},
 	return status.Err()
 }
 
-func (r *redisClient) Put(ctx context.Context, key string, value interface{}) error {
+func (r *redisClient) Put(ctx context.Context, key string, value any) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.cache.redis.put")
 	defer span.End()
 	log := logger.FromContext(ctx)
