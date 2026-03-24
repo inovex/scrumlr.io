@@ -166,13 +166,8 @@ func (suite *BoardTestSuite) TestGetBoards() {
 			s.boards = boardMock
 			userID := uuid.New()
 
-			boardName := "Test Name"
-			boardDescription := "Test Description"
-			firstBoard := suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)
-
-			boardName = "Test Board"
-			boardDescription = "Description for second board"
-			secondBoard := suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)
+			firstBoard := suite.createBoard(new("Test Name"), new("Test Description"), boards.Public, nil, nil)
+			secondBoard := suite.createBoard(new("Test Board"), new("Description for second board"), boards.Public, nil, nil)
 			boardIDs := []uuid.UUID{firstBoard.ID, secondBoard.ID}
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", nil).
@@ -223,9 +218,7 @@ func (suite *BoardTestSuite) TestGetBoard() {
 			s.boards = boardMock
 			boardID := uuid.New()
 
-			boardName := "Test Name"
-			boardDescription := "Test Description"
-			board := suite.createBoard(&boardName, &boardDescription, "", nil, nil)
+			board := suite.createBoard(new("Test Name"), new("Test Description"), "", nil, nil)
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
@@ -332,11 +325,10 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 
 			newName := "UpdatedName"
 			newDescription := "UpdatedDescription"
-			accessPolicy := boards.Public
 			boardReq := boards.BoardUpdateRequest{
 				Name:         &newName,
 				Description:  &newDescription,
-				AccessPolicy: &accessPolicy,
+				AccessPolicy: new(boards.Public),
 				ID:           boardID,
 			}
 

@@ -45,7 +45,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 	name := "Create no index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 0
 
 	dbColumn, err := database.Create(context.Background(),
@@ -54,7 +53,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 		},
 	)
 
@@ -64,7 +63,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
@@ -75,7 +74,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 	name := "Create first"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 0
 
 	dbColumn, err := database.Create(context.Background(),
@@ -84,7 +82,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)
@@ -95,7 +93,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_FirstIndex() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
@@ -106,7 +104,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 	name := "Create neagtive index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := -1
 	expectedIndex := -1
 
@@ -116,7 +113,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)
@@ -127,7 +124,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_NegativeIndex() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, expectedIndex, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
@@ -138,7 +135,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 	name := "Create last index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 1
 
 	dbColumn, err := database.Create(context.Background(),
@@ -147,7 +143,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)
@@ -158,7 +154,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_LastIndex() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
@@ -169,7 +165,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 	name := "Create high index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 99
 	expectedIndex := 99
 
@@ -179,7 +174,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)
@@ -190,7 +185,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_HighIndex() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, expectedIndex, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
@@ -201,7 +196,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 	name := "Create middle index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 1
 
 	dbColumn, err := database.Create(context.Background(),
@@ -210,7 +204,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)
@@ -221,7 +215,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_MiddleIndex() {
 	assert.Equal(t, description, dbColumn.Description)
 	assert.Equal(t, index, dbColumn.Index)
 	assert.Equal(t, color, dbColumn.Color)
-	assert.Equal(t, visible, dbColumn.Visible)
+	suite.True(dbColumn.Visible)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
@@ -232,7 +226,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
 	name := ""
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 1
 
 	dbColumn, err := database.Create(context.Background(),
@@ -241,7 +234,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyName() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		})
 
@@ -256,7 +249,6 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyColor() {
 	boardId := suite.boards["InsertFirst"].id
 	name := ""
 	description := "This is inserted from the test"
-	visible := true
 	index := 1
 
 	dbColumn, err := database.Create(context.Background(),
@@ -265,7 +257,7 @@ func (suite *DatabaseColumnTestSuite) Test_Database_Create_EmptyColor() {
 			Name:        name,
 			Description: description,
 			Color:       "",
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       index,
 		},
 	)

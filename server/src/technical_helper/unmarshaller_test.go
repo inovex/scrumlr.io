@@ -21,8 +21,7 @@ func TestCorrectString(t *testing.T) {
 }
 
 func TestCorrectStringSlice(t *testing.T) {
-	s := "TEST_STRING"
-	given := []*string{&s}
+	given := []*string{new("TEST_STRING")}
 	actual, err := UnmarshalSlice[string](given)
 
 	assert.NoError(t, err)

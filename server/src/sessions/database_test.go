@@ -95,14 +95,13 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Connected() {
 
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
-	connected := true
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(connected, dbSession.Connected)
+	suite.True(dbSession.Connected)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Ready() {
@@ -111,14 +110,13 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Ready() {
 
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
-	ready := true
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &ready})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(ready, dbSession.Connected)
+	suite.True(dbSession.Connected)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_RaisedHand() {
@@ -127,14 +125,13 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_RaisedHand() 
 
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
-	raisedHand := true
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(raisedHand, dbSession.RaisedHand)
+	suite.True(dbSession.RaisedHand)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Banned() {
@@ -143,14 +140,13 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Banned() {
 
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
-	banned := true
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Banned: &banned})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Banned: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(banned, dbSession.Banned)
+	suite.True(dbSession.Banned)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantToModerator() {
@@ -159,14 +155,13 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 
 	userId := suite.users["Luke"].id
 	boardId := suite.boards["Update"].id
-	role := common.ModeratorRole
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.ModeratorRole)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(role, dbSession.Role)
+	suite.Equal(common.ModeratorRole, dbSession.Role)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantToOwner() {
@@ -175,9 +170,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 
 	userId := suite.users["Leia"].id
 	boardId := suite.boards["update"].id
-	role := common.OwnerRole
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.OwnerRole)})
 
 	suite.NotNil(err)
 	suite.Equal(err, sql.ErrNoRows)
@@ -190,9 +184,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ModeratorToOw
 
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
-	role := common.OwnerRole
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.OwnerRole)})
 
 	suite.NotNil(err)
 	suite.Equal(err, sql.ErrNoRows)
@@ -202,9 +195,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ModeratorToOw
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateAllSession() {
 
 	database := NewSessionDatabase(suite.db)
-	ready := true
 
-	dbSessions, err := database.UpdateAll(context.Background(), DatabaseBoardSessionUpdate{Board: suite.boards["UpdateAll"].id, Ready: &ready})
+	dbSessions, err := database.UpdateAll(context.Background(), DatabaseBoardSessionUpdate{Board: suite.boards["UpdateAll"].id, Ready: new(true)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 4)
@@ -427,9 +419,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	database := NewSessionDatabase(suite.db)
 
 	boardId := suite.boards["ReadFilter"].id
-	ready := true
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Ready: &ready})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Ready: new(true)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 2)
@@ -452,9 +443,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	database := NewSessionDatabase(suite.db)
 
 	boardId := suite.boards["ReadFilter"].id
-	raisedHand := true
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: &raisedHand})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: new(true)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 2)
@@ -477,9 +467,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_C
 	database := NewSessionDatabase(suite.db)
 
 	boardId := suite.boards["ReadFilter"].id
-	connected := true
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Connected: &connected})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Connected: new(true)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 2)
@@ -502,9 +491,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	database := NewSessionDatabase(suite.db)
 
 	boardId := suite.boards["ReadFilter"].id
-	role := common.OwnerRole
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Role: &role})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Role: new(common.OwnerRole)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 1)
@@ -518,10 +506,8 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithMultiple
 	database := NewSessionDatabase(suite.db)
 
 	boardId := suite.boards["ReadFilter"].id
-	raisedHand := true
-	connected := true
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: &raisedHand, Connected: &connected})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: new(true), Connected: new(true)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 1)

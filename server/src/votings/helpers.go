@@ -35,7 +35,7 @@ func (v *Voting) UpdateVoting(notes []Note) *VotingUpdated {
 	}
 }
 
-func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
+func UnmarshallVoteData(data any) (*VotingUpdated, error) {
 	vote, err := technical_helper.Unmarshal[VotingUpdated](data)
 
 	if err != nil {

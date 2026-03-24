@@ -755,7 +755,7 @@ func buildBordSubscription(accessPolicy boards.AccessPolicy) BoardSubscription {
 	}
 }
 
-func buildBoardEvent(data interface{}, eventType realtime.BoardEventType) *realtime.BoardEvent {
+func buildBoardEvent(data any, eventType realtime.BoardEventType) *realtime.BoardEvent {
 	return &realtime.BoardEvent{
 		Type: eventType,
 		Data: data,
@@ -790,6 +790,5 @@ func randSeq(n int) *string {
 		b[i] = letters[rand.Intn(len(letters))]
 	}
 
-	s := string(b)
-	return &s
+	return new(string(b))
 }

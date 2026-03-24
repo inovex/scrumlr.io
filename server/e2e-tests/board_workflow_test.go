@@ -102,13 +102,13 @@ func (s *E2ESuite) CreatePublicBoardWithNote() {
 	s.T().Logf("Logged in as: %s (%s)", user.Name, user.ID)
 
 	cols := []columns.ColumnRequest{
-		{Name: "Positive", Color: common.ColorGoalGreen, Visible: ptr(true)},
-		{Name: "Negative", Color: common.ColorOnlineOrange, Visible: ptr(true)},
-		{Name: "Actions", Color: common.ColorPlanningPink, Visible: ptr(true)},
+		{Name: "Positive", Color: common.ColorGoalGreen, Visible: new(true)},
+		{Name: "Negative", Color: common.ColorOnlineOrange, Visible: new(true)},
+		{Name: "Actions", Color: common.ColorPlanningPink, Visible: new(true)},
 	}
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("E2E Test Board"),
+		Name:         new("E2E Test Board"),
 		AccessPolicy: boards.Public,
 		Columns:      cols,
 	})
@@ -150,11 +150,11 @@ func (s *E2ESuite) TestCreateBoardWithPassphrase() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Protected Board"),
+		Name:         new("Protected Board"),
 		AccessPolicy: boards.ByPassphrase,
-		Passphrase:   ptr("secret123"),
+		Passphrase:   new("secret123"),
 		Columns: []columns.ColumnRequest{
-			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: ptr(true)},
+			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: new(true)},
 		},
 	})
 	require.NoError(s.T(), err)
@@ -169,7 +169,7 @@ func (s *E2ESuite) TestUpdateBoard() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Original Name"),
+		Name:         new("Original Name"),
 		AccessPolicy: boards.Public,
 	})
 	require.NoError(s.T(), err)
@@ -178,11 +178,11 @@ func (s *E2ESuite) TestUpdateBoard() {
 		assert.NoError(s.T(), err, "Failed to delete board")
 	}()
 
-	updated, err := s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{Name: ptr("Updated Name")})
+	updated, err := s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{Name: new("Updated Name")})
 	require.NoError(s.T(), err)
 	assert.Equal(s.T(), "Updated Name", *updated.Name)
 
-	updated, err = s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{Description: ptr("New description")})
+	updated, err = s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{Description: new("New description")})
 	require.NoError(s.T(), err)
 	assert.Equal(s.T(), "New description", *updated.Description)
 }
@@ -192,7 +192,7 @@ func (s *E2ESuite) TestGetBoards() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("List Test Board"),
+		Name:         new("List Test Board"),
 		AccessPolicy: boards.Public,
 	})
 	require.NoError(s.T(), err)
@@ -213,7 +213,7 @@ func (s *E2ESuite) TestTimerOperations() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Timer Test Board"),
+		Name:         new("Timer Test Board"),
 		AccessPolicy: boards.Public,
 	})
 	require.NoError(s.T(), err)
@@ -244,7 +244,7 @@ func (s *E2ESuite) TestColumnOperations() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Column Test Board"),
+		Name:         new("Column Test Board"),
 		AccessPolicy: boards.Public,
 	})
 	require.NoError(s.T(), err)
@@ -256,8 +256,8 @@ func (s *E2ESuite) TestColumnOperations() {
 	column, err := s.client.CreateColumn(board.ID, columns.ColumnRequest{
 		Name:    "New Column",
 		Color:   common.ColorBacklogBlue,
-		Visible: ptr(true),
-		Index:   ptr(0),
+		Visible: new(true),
+		Index:   new(0),
 	})
 	require.NoError(s.T(), err)
 	assert.Equal(s.T(), "New Column", column.Name)
@@ -286,10 +286,10 @@ func (s *E2ESuite) TestNoteOperations() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Note Test Board"),
+		Name:         new("Note Test Board"),
 		AccessPolicy: boards.Public,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column", Color: common.ColorBacklogBlue, Visible: ptr(true)},
+			{Name: "Column", Color: common.ColorBacklogBlue, Visible: new(true)},
 		},
 	})
 	require.NoError(s.T(), err)
@@ -313,7 +313,7 @@ func (s *E2ESuite) TestNoteOperations() {
 	assert.Equal(s.T(), "Original text", fetched.Text)
 
 	updated, err := s.client.UpdateNote(board.ID, note.ID, notes.NoteUpdateRequest{
-		Text: ptr("Updated text"),
+		Text: new("Updated text"),
 	})
 	require.NoError(s.T(), err)
 	assert.Equal(s.T(), "Updated text", updated.Text)
@@ -331,10 +331,10 @@ func (s *E2ESuite) TestVotingWorkflow() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Voting Test Board"),
+		Name:         new("Voting Test Board"),
 		AccessPolicy: boards.Public,
 		Columns: []columns.ColumnRequest{
-			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: ptr(true)},
+			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: new(true)},
 		},
 	})
 	require.NoError(s.T(), err)
@@ -386,10 +386,10 @@ func (s *E2ESuite) TestReactionOperations() {
 	require.NoError(s.T(), err)
 
 	board, err := s.client.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Reaction Test Board"),
+		Name:         new("Reaction Test Board"),
 		AccessPolicy: boards.Public,
 		Columns: []columns.ColumnRequest{
-			{Name: "Column", Color: common.ColorBacklogBlue, Visible: ptr(true)},
+			{Name: "Column", Color: common.ColorBacklogBlue, Visible: new(true)},
 		},
 	})
 	require.NoError(s.T(), err)
@@ -435,10 +435,10 @@ func (s *E2ESuite) TestMultipleUsersOnBoard() {
 	require.NoError(s.T(), err)
 
 	board, err := moderatorClient.CreateBoard(boards.CreateBoardRequest{
-		Name:         ptr("Multi-User Board"),
+		Name:         new("Multi-User Board"),
 		AccessPolicy: boards.Public,
 		Columns: []columns.ColumnRequest{
-			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: ptr(true)},
+			{Name: "Ideas", Color: common.ColorBacklogBlue, Visible: new(true)},
 		},
 	})
 	require.NoError(s.T(), err)
@@ -494,14 +494,14 @@ func (s *E2ESuite) TestLockBoard() {
 
 	updated, err := s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{
 		Name:     board.Name,
-		IsLocked: ptr(true),
+		IsLocked: new(true),
 	})
 	require.NoError(s.T(), err)
 	assert.True(s.T(), updated.IsLocked)
 
 	updated, err = s.client.UpdateBoard(board.ID, boards.BoardUpdateRequest{
 		Name:     board.Name,
-		IsLocked: ptr(false),
+		IsLocked: new(false),
 	})
 	require.NoError(s.T(), err)
 	assert.False(s.T(), updated.IsLocked)

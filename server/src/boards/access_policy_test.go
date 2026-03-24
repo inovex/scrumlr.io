@@ -11,7 +11,7 @@ func TestAccessPolicyEnum(t *testing.T) {
 	values := []AccessPolicy{Public, ByPassphrase, ByInvite}
 	for _, value := range values {
 		var accessPolicy AccessPolicy
-		err := accessPolicy.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
+		err := accessPolicy.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, accessPolicy)
 	}

@@ -12,7 +12,7 @@ type webSocketConnection struct {
 	conn *websocket.Conn
 }
 
-func (c *webSocketConnection) WriteJSON(ctx context.Context, data interface{}) error {
+func (c *webSocketConnection) WriteJSON(ctx context.Context, data any) error {
 	return wsjson.Write(ctx, c.conn, data)
 }
 

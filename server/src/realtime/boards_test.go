@@ -154,10 +154,10 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendComplexData() {
 	assert.NotNil(t, event)
 	assert.Equal(t, BoardEventInit, event.Type)
 	assert.NotNil(t, event.Data)
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"Complex": 2.0,
 		"More":    "foo",
-		"Data": map[string]interface{}{
+		"Data": map[string]any{
 			// Mapping int to string here, because JSON stuff.
 			"1": false,
 			"3": true,
@@ -194,10 +194,10 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendComplexData() {
 	assert.NotNil(t, event)
 	assert.Equal(t, BoardEventInit, event.Type)
 	assert.NotNil(t, event.Data)
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"Complex": 2.0,
 		"More":    "foo",
-		"Data": map[string]interface{}{
+		"Data": map[string]any{
 			// Mapping int to string here, because JSON stuff.
 			"1": false,
 			"3": true,

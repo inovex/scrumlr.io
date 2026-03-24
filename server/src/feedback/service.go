@@ -36,7 +36,7 @@ func (service *Service) Create(ctx context.Context, feedbackType string, contact
 
 	log.Info("Webhook URL", service.webhookUrl)
 
-	var jsonData = []byte(fmt.Sprintf(`{
+	var jsonData = fmt.Appendf(nil, `{
     "text": "Scrumlr hat neues Feedback erhalten!",
     "blocks": [
       {
@@ -54,7 +54,7 @@ func (service *Service) Create(ctx context.Context, feedbackType string, contact
         }
       }
     ]
-  }`, feedbackType, time.Now().Format("02.01.2006 15:04"), contact, text))
+  }`, feedbackType, time.Now().Format("02.01.2006 15:04"), contact, text)
 
 	_, err := service.client.Post(service.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
 

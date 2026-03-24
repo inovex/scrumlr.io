@@ -111,18 +111,17 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithoutIndex() {
 	name := "Create no index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 0
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	column, err := suite.columnService.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: &visible})
+	column, err := suite.columnService.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(name, column.Name)
 	suite.Equal(description, column.Description)
 	suite.Equal(color, column.Color)
-	suite.Equal(visible, column.Visible)
+	suite.True(column.Visible)
 	suite.Equal(index, column.Index)
 
 	msg := <-events
@@ -145,7 +144,6 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	name := "Create middle index"
 	description := "This is inserted from the test"
 	color := common.ColorOnlineOrange
-	visible := true
 	index := 1
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
@@ -156,7 +154,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 			Name:        name,
 			Description: description,
 			Color:       color,
-			Visible:     &visible,
+			Visible:     new(true),
 			Index:       &index,
 		},
 	)
@@ -165,7 +163,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	suite.Equal(name, column.Name)
 	suite.Equal(description, column.Description)
 	suite.Equal(color, column.Color)
-	suite.Equal(visible, column.Visible)
+	suite.True(column.Visible)
 	suite.Equal(index, column.Index)
 
 	colunMsg := <-events

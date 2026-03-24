@@ -233,8 +233,6 @@ func TestCreate_ByPassphrase(t *testing.T) {
 
 func TestCreate_ByPassphraseMissing(t *testing.T) {
 	userID := uuid.New()
-	boardName := "Test Board"
-	boardDescription := "A test board"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 
@@ -255,8 +253,8 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
 	result, err := service.Create(context.Background(),
 		CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         new("Test Board"),
+			Description:  new("A test board"),
 			Owner:        userID,
 			AccessPolicy: ByPassphrase,
 			Columns:      nil,
@@ -343,7 +341,6 @@ func TestUpdate(t *testing.T) {
 
 func TestUpdate_EmptyName(t *testing.T) {
 	boardID := uuid.New()
-	updatedName := ""
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 
@@ -362,7 +359,7 @@ func TestUpdate_EmptyName(t *testing.T) {
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("")})
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
@@ -420,8 +417,6 @@ func TestUpdate_ToPassphrase(t *testing.T) {
 
 func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
 	boardID := uuid.New()
-	updatedName := "Updated Board Name"
-	accessPolicy := ByPassphrase
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 
@@ -440,7 +435,7 @@ func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByPassphrase)})
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
@@ -493,9 +488,6 @@ func TestUpdate_ToPublic(t *testing.T) {
 
 func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
 	boardID := uuid.New()
-	updatedName := "Updated Board Name"
-	accessPolicy := Public
-	passphrase := "SuperStrongPassword"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 
@@ -514,7 +506,7 @@ func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(Public), Passphrase: new("SuperStrongPassword")})
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
@@ -567,9 +559,6 @@ func TestUpdate_ToInvite(t *testing.T) {
 
 func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
 	boardID := uuid.New()
-	updatedName := "Updated Board Name"
-	accessPolicy := ByInvite
-	passphrase := "SuperStrongPassword"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 
@@ -588,7 +577,7 @@ func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
 	mockHash := hash.NewMockHash(t)
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByInvite), Passphrase: new("SuperStrongPassword")})
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)

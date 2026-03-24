@@ -11,7 +11,7 @@ func TestSessionRoleEnum(t *testing.T) {
 	values := []SessionRole{ParticipantRole, ModeratorRole, OwnerRole}
 	for _, value := range values {
 		var sessionRole SessionRole
-		err := sessionRole.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
+		err := sessionRole.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, sessionRole)
 	}

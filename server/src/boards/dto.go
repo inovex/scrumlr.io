@@ -44,14 +44,14 @@ type Board struct {
 
 	// The id of a note to share with other users.
 	// FIXME omitempty works only with nil in combination with pointers
-	SharedNote uuid.NullUUID `json:"sharedNote,omitempty"`
+	SharedNote uuid.NullUUID `json:"sharedNote"`
 
-	ShowVoting uuid.NullUUID `json:"showVoting,omitempty"`
+	ShowVoting uuid.NullUUID `json:"showVoting"`
 
 	Passphrase *string `json:"-"`
 	Salt       *string `json:"-"`
 
-	LastModifiedAt time.Time `json:"lastModifiedAt,omitempty"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
 }
 
 func (b *Board) From(board DatabaseBoard) *Board {

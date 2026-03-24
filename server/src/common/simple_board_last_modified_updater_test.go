@@ -53,7 +53,6 @@ func TestSimpleBoardLastModifiedUpdater_UpdateLastModified(t *testing.T) {
 	}
 
 	for name, test := range tests {
-		test := test
 		t.Run(name, func(t *testing.T) {
 			sqlDB, mock, err := sqlmock.New()
 			require.NoError(t, err)
