@@ -2,7 +2,7 @@ package technical_helper
 
 import "encoding/json"
 
-func UnmarshalSlice[T any](data interface{}) ([]*T, error) {
+func UnmarshalSlice[T any](data any) ([]*T, error) {
 	var result []*T
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -15,7 +15,7 @@ func UnmarshalSlice[T any](data interface{}) ([]*T, error) {
 	return result, nil
 }
 
-func Unmarshal[T any](data interface{}) (*T, error) {
+func Unmarshal[T any](data any) (*T, error) {
 	var result *T
 	b, err := json.Marshal(data)
 	if err != nil {

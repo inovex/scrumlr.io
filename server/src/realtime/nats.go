@@ -29,7 +29,7 @@ func NewNats(url string) (*Broker, error) {
 }
 
 // Publish the given event to the given subject
-func (n *natsClient) Publish(ctx context.Context, subject string, event interface{}) error {
+func (n *natsClient) Publish(ctx context.Context, subject string, event any) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.realtime.nats.publish")
 	defer span.End()
 	log := logger.FromContext(ctx)

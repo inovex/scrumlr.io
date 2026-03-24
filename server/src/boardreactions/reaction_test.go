@@ -7,8 +7,7 @@ import (
 )
 
 func TestUnmarshalReaction(t *testing.T) {
-	s := "heart"
-	reaction := Reaction(s)
+	reaction := Reaction("heart")
 
 	assert.NotNil(t, reaction)
 	assert.Equal(t, Heart, reaction)

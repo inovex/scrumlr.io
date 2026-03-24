@@ -2,7 +2,7 @@ package common
 
 import "context"
 
-func ContextWithValues(ctx context.Context, kv ...interface{}) context.Context {
+func ContextWithValues(ctx context.Context, kv ...any) context.Context {
 	if len(kv)%2 != 0 {
 		panic("odd numbers of key-value pairs")
 	}

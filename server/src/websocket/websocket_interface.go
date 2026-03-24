@@ -14,7 +14,7 @@ const (
 
 // Connection abstracts a WebSocket connection
 type Connection interface {
-	WriteJSON(ctx context.Context, data interface{}) error
+	WriteJSON(ctx context.Context, data any) error
 	Read(ctx context.Context) (MessageType, []byte, error)
 	Close(reason string) error
 }
