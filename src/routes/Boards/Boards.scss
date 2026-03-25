@@ -15,25 +15,10 @@ $side-padding--desktop: 14vw;
 .boards__search-area {
   padding: 0 $side-padding--desktop;
   margin-bottom: styles.$spacing--xl;
-  display: flex;
-  gap: styles.$spacing--md;
-  align-items: center;
 }
 
 .boards__search-bar {
-  flex: 1;
-}
-
-.boards__import-button {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: styles.$spacing--sm;
-}
-
-.boards__import-button-icon {
-  width: styles.$icon--large;
-  height: styles.$icon--large;
+  width: 100%;
 }
 
 .boards__mobile-search-bar {
@@ -66,8 +51,6 @@ $side-padding--desktop: 14vw;
   .boards__search-area {
     padding: 0 styles.$spacing--md;
     margin-bottom: styles.$spacing--md;
-    flex-direction: column;
-    align-items: stretch;
   }
 
   .boards__search-bar {
@@ -76,11 +59,6 @@ $side-padding--desktop: 14vw;
 
   .boards__mobile-search-bar {
     display: flex;
-  }
-
-  .boards__import-button {
-    width: 100%;
-    justify-content: center;
   }
 
   .boards__outlet {
