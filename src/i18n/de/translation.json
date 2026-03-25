@@ -385,6 +385,9 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
+    "accessPolicyPublic": "Zugriff geändert zu Offen",
+    "accessPolicyByInvite": "Zugriff geändert zu Mit Zustimmung",
+    "accessPolicyByPassphrase": "Zugriff geändert zu Passwortgeschützt",
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
@@ -479,7 +482,11 @@
     "IsLocked": "Board sperren",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
-    "edit": "bearbeiten"
+    "edit": "bearbeiten",
+    "subtitle": "Die Zugriffseinstellungen eines Boards werden beim Exportieren nicht gespeichert. Zudem kann zur Wiederverwendung eines Boards ausschließlich eine JSON-Datei auf der Template-Seite importiert werden.",
+    "AccessPolicyPublicLabel": "Offen",
+    "AccessPolicyByInviteLabel": "Mit Zustimmung",
+    "AccessPolicyByPassphraseLabel": "Passwortgeschützt"
   },
   "Participants": {
     "Title": "Teilnehmer",

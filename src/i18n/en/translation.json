@@ -384,6 +384,9 @@
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
+    "accessPolicyPublic": "Access changed to Open",
+    "accessPolicyByInvite": "Access changed to With Approval",
+    "accessPolicyByPassphrase": "Access changed to Password Protected",
     "allParticipantsDone": "All participants are ready!",
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
@@ -478,7 +481,11 @@
     "IsLocked": "Lock Board",
     "generatePassword": "Generate password and protect",
     "save": "save",
-    "edit": "edit"
+    "edit": "edit",
+    "subtitle": "Board access settings are not saved when exporting. Additionally, for board reuse, only a JSON file can be imported on the template page.",
+    "AccessPolicyPublicLabel": "Open",
+    "AccessPolicyByInviteLabel": "With Approval",
+    "AccessPolicyByPassphraseLabel": "Password Protected"
   },
   "Participants": {
     "Title": "Participants",

@@ -384,6 +384,9 @@
     "hiddenColumnsVisible": "Les colonnes masquées sont maintenant visibles pour vous !",
     "passwordCopied": "Tableau protégé et mot de passe copié !",
     "boardMadePublic": "Le tableau est maintenant public !",
+    "accessPolicyPublic": "Accès changé en Ouvert",
+    "accessPolicyByInvite": "Accès changé en Avec approbation",
+    "accessPolicyByPassphrase": "Accès changé en Protégé par mot de passe",
     "allParticipantsDone": "Tous les participants sont prêts !",
     "moderatorResetReadyStates": "Voulez-vous réinitialiser l'état de préparation des participants ?",
     "moderatorResetReadyStatesButton": "Réinitialiser !",
@@ -478,7 +481,11 @@
     "IsLocked": "Verrouiller le tableau",
     "generatePassword": "Générer un mot de passe et protéger",
     "save": "enregistrer",
-    "edit": "modifier"
+    "edit": "modifier",
+    "subtitle": "Les paramètres d'accès au tableau ne sont pas enregistrés lors de l'exportation. De plus, pour réutiliser un tableau, seul un fichier JSON peut être importé sur la page des modèles.",
+    "AccessPolicyPublicLabel": "Ouvert",
+    "AccessPolicyByInviteLabel": "Avec approbation",
+    "AccessPolicyByPassphraseLabel": "Protégé par mot de passe"
   },
   "Participants": {
     "Title": "Participants",
