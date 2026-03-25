@@ -73,7 +73,7 @@
     "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.0.16",
     "cross-env": "^10.1.0",
     "cypress": "^15.12.0",
