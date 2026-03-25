@@ -469,10 +469,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
-    "SetAccessPolicyOpen": "Passwortschutz entfernen",
-    "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
@@ -480,7 +477,6 @@
     "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "IsLocked": "Board sperren",
-    "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten",
     "subtitle": "Die Zugriffseinstellungen eines Boards werden beim Exportieren nicht gespeichert. Zudem kann zur Wiederverwendung eines Boards ausschließlich eine JSON-Datei auf der Template-Seite importiert werden.",

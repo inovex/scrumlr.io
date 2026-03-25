@@ -468,10 +468,7 @@
   },
   "BoardSettings": {
     "BoardName": "Nom du tableau",
-    "AccessPolicy": "Politique d'accès",
     "Password": "Mot de passe",
-    "SetAccessPolicyOpen": "Retirer la protection par mot de passe",
-    "SecurePasswordHint": "Veuillez entrer un mot de passe sécurisé",
     "DeleteBoard": "Supprimer le tableau",
     "ShowAuthorOption": "Afficher les auteurs des notes",
     "ShowHiddenColumnsOption": "Afficher les colonnes masquées pour moi",
@@ -479,7 +476,6 @@
     "ShowNoteReactionsOptions": "Afficher les réactions aux notes",
     "AllowNoteRepositioningOption": "Autoriser le repositionnement des notes",
     "IsLocked": "Verrouiller le tableau",
-    "generatePassword": "Générer un mot de passe et protéger",
     "save": "enregistrer",
     "edit": "modifier",
     "subtitle": "Les paramètres d'accès au tableau ne sont pas enregistrés lors de l'exportation. De plus, pour réutiliser un tableau, seul un fichier JSON peut être importé sur la page des modèles.",

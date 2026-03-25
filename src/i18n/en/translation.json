@@ -468,10 +468,7 @@
   },
   "BoardSettings": {
     "BoardName": "Board Name",
-    "AccessPolicy": "Access Policy",
     "Password": "Password",
-    "SetAccessPolicyOpen": "Remove password protection",
-    "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
@@ -479,7 +476,6 @@
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
     "IsLocked": "Lock Board",
-    "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit",
     "subtitle": "Board access settings are not saved when exporting. Additionally, for board reuse, only a JSON file can be imported on the template page.",
