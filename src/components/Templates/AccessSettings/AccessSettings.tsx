@@ -3,19 +3,18 @@ import {SelectOption} from "components/Select/SelectOption/SelectOption";
 import {OpenIcon as GlobeIcon, LockClosedIcon, KeyProtectedIcon} from "components/Icon";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Button} from "components/Button";
 import {AccessPolicy, CreateSessionAccessPolicy} from "store/features";
-import "./AccessSettings.scss";
 import {Input} from "components/Input/Input";
+import {SimpleModal} from "components/Templates";
+import "./AccessSettings.scss";
 
 type AccessSettingsProps = {
   onCancel: () => void;
   onSelectSessionPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
-  cancelLabel?: string;
-  confirmLabel?: string;
+  cancelLabel: string;
+  confirmLabel: string;
 };
 
-// yes, this modal can also be abstracted / generalized if need be
 export const AccessSettings = (props: AccessSettingsProps) => {
   const {t} = useTranslation();
 
@@ -51,43 +50,42 @@ export const AccessSettings = (props: AccessSettingsProps) => {
   };
 
   return (
-    <div className="access-settings">
-      <header className="access-settings__header">
-        <div className="access-settings__title">{t("Templates.AccessSettings.title")}</div>
-      </header>
-      <main className="access-settings__main">
-        <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
-          <SelectOption label={t("Templates.AccessSettings.Options.Public.title")} description={t("Templates.AccessSettings.Options.Public.description")} icon={<GlobeIcon />} />
-          <SelectOption
-            label={t("Templates.AccessSettings.Options.By_Invite.title")}
-            description={t("Templates.AccessSettings.Options.By_Invite.description")}
-            icon={<LockClosedIcon />}
+    <SimpleModal
+      className="access-settings"
+      title={t("Templates.AccessSettings.title")}
+      secondaryButton={{
+        label: props.cancelLabel,
+        onClick: props.onCancel,
+      }}
+      primaryButton={{
+        label: props.confirmLabel,
+        onClick: onStartSession,
+        disabled: disableIfEmptyPassword,
+      }}
+    >
+      <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
+        <SelectOption label={t("Templates.AccessSettings.Options.Public.title")} description={t("Templates.AccessSettings.Options.Public.description")} icon={<GlobeIcon />} />
+        <SelectOption
+          label={t("Templates.AccessSettings.Options.By_Invite.title")}
+          description={t("Templates.AccessSettings.Options.By_Invite.description")}
+          icon={<LockClosedIcon />}
+        />
+        <SelectOption
+          label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
+          description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
+          icon={<KeyProtectedIcon />}
+        >
+          <Input
+            type="password"
+            required
+            placeholder={t("Templates.AccessSettings.Options.By_Passphrase.inputPlaceholder")}
+            input={passwordInput}
+            setInput={setPasswordInput}
+            height="normal"
           />
-          <SelectOption
-            label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
-            description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
-            icon={<KeyProtectedIcon />}
-          >
-            <Input
-              type="password"
-              required
-              placeholder={t("Templates.AccessSettings.Options.By_Passphrase.inputPlaceholder")}
-              input={passwordInput}
-              setInput={setPasswordInput}
-              height="normal"
-            />
-            <p className="access-settings__hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
-          </SelectOption>
-        </Select>
-      </main>
-      <footer className="access-settings__footer">
-        <Button variant="secondary" onClick={props.onCancel}>
-          {props.cancelLabel ?? t("Templates.AccessSettings.Buttons.cancel")}
-        </Button>
-        <Button variant="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
-          {props.confirmLabel ?? t("Templates.AccessSettings.Buttons.start")}
-        </Button>
-      </footer>
-    </div>
+          <p className="access-settings__hint">{t("Templates.AccessSettings.Options.By_Passphrase.hint")}</p>
+        </SelectOption>
+      </Select>
+    </SimpleModal>
   );
 };

@@ -5,10 +5,10 @@ import {importBoard} from "store/features/board/thunks";
 import {BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
-import {Button} from "components/Button";
-import {CheckDoneIcon, CloseIcon} from "components/Icon";
+import {CheckDoneIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import classNames from "classnames";
+import {SimpleModal} from "components/Templates";
 import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
@@ -100,14 +100,19 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   if (step === "file") {
     return (
       <Portal className="import-board__portal" align="center" closeMode="backdrop" onClose={handleCancel} backdrop="blur" hiddenOverflow disabledPadding>
-        <div className="import-board">
-          <header className="import-board__header">
-            <h2 className="import-board__title">{t("ImportBoard.title")}</h2>
-            <button className="import-board__close-button" onClick={handleCancel} aria-label="Close modal">
-              <CloseIcon className="import-board__close-icon" />
-            </button>
-          </header>
-
+        <SimpleModal
+          className="import-board"
+          title={t("ImportBoard.title")}
+          secondaryButton={{
+            label: t("ImportBoard.cancel"),
+            onClick: handleCancel,
+          }}
+          primaryButton={{
+            label: t("ImportBoard.continue"),
+            onClick: handleContinue,
+            disabled: !importData,
+          }}
+        >
           <main className="import-board__main">
             <div
               className={classNames("import-board__dropzone", {
@@ -136,16 +141,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
 
             {fileError && <p className="import-board__error-message">{fileError}</p>}
           </main>
-
-          <footer className="import-board__footer">
-            <Button variant="secondary" onClick={handleCancel}>
-              {t("ImportBoard.cancel")}
-            </Button>
-            <Button variant="primary" onClick={handleContinue} disabled={!importData}>
-              {t("ImportBoard.continue")}
-            </Button>
-          </footer>
-        </div>
+        </SimpleModal>
       </Portal>
     );
   }
