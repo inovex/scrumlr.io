@@ -59,8 +59,8 @@ $padding--default: styles.$spacing--xs;
 }
 
 .import-board-button__icon {
-  width: 40px;
-  height: 40px;
+  width: styles.$icon--default;
+  height: styles.$icon--default;
 
   color: colors.$blue--500;
 }
