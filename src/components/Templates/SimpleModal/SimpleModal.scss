@@ -1,0 +1,60 @@
+@use "constants/styles";
+@use "constants/colors";
+
+.simple-modal {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--xl;
+  overflow-y: auto;
+
+  padding: 40px styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
+
+  border-radius: styles.$rounded--default;
+  background-color: styles.$gray--000;
+
+  box-shadow: 0 6px 32px 0 rgba(colors.$blue--500, 0.26);
+}
+
+.simple-modal__header {
+  display: flex;
+  justify-content: center;
+}
+
+.simple-modal__title {
+  color: colors.$navy--900;
+  font-size: styles.$text--lg;
+  font-weight: 700;
+
+  padding-bottom: styles.$spacing--xxs;
+  border-bottom: 3px solid colors.$blue--500;
+}
+
+.simple-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: styles.$spacing--md;
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .simple-modal {
+    height: 90%;
+    width: 85%;
+    gap: styles.$spacing--md;
+
+    padding: styles.$spacing--xl styles.$spacing--base styles.$spacing--base styles.$spacing--base;
+  }
+}
+
+[data-theme="dark"] {
+  .simple-modal {
+    background-color: styles.$navy--400;
+
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--400, 0.26);
+  }
+
+  .simple-modal__title {
+    color: styles.$gray--000;
+    border-color: styles.$blue--400;
+  }
+}
