@@ -3,12 +3,10 @@ import {Outlet, useLocation, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
-import {Button} from "components/Button";
 import classNames from "classnames";
 import {getTemplates} from "store/features";
 import {useAppDispatch, useAppSelector} from "store";
-import {FileJsonIcon} from "components/Icon";
-import {ImportBoard} from "components/ImportBoard";
+import {ImportBoard, ImportBoardButton} from "components/ImportBoard";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
@@ -69,18 +67,7 @@ export const Boards = () => {
           <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
           {/* import button */}
-          {boardView === "templates" && (
-            <Button
-              className="boards__import-button"
-              variant="secondary"
-              onClick={() => setShowImportModal(true)}
-              disabled={!canCreateBoard}
-              title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : ""}
-            >
-              <FileJsonIcon className="boards__import-button-icon" />
-              {t("ImportBoard.button")}
-            </Button>
-          )}
+          {boardView === "templates" && <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} disabled={!canCreateBoard} />}
 
           {/* mobile search bar */}
           <Input

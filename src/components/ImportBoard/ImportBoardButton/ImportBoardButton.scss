@@ -1,0 +1,73 @@
+@use "constants/styles";
+@use "constants/colors";
+@use "constants/mixins";
+
+$button-height: 64px;
+$padding--default: styles.$spacing--xs;
+
+.import-board-button {
+  all: unset;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  width: auto;
+  height: $button-height;
+  padding: $padding--default;
+  box-sizing: border-box;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: styles.$gray--000;
+
+  &:enabled {
+    @include mixins.default-states($padding: $padding--default);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: styles.$gray--300;
+
+    .import-board-button__icon-container {
+      background-color: styles.$gray--800;
+    }
+
+    .import-board-button__icon {
+      color: styles.$gray--300;
+    }
+
+    .import-board-button__label {
+      color: styles.$gray--800;
+    }
+  }
+}
+
+.import-board-button__icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: colors.$blue--50;
+}
+
+.import-board-button__icon {
+  width: 40px;
+  height: 40px;
+
+  color: colors.$blue--500;
+}
+
+.import-board-button__label {
+  font-size: styles.$text-size--medium;
+  font-weight: 600;
+
+  color: colors.$blue--500;
+}
