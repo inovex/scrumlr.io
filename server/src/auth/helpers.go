@@ -20,9 +20,7 @@ func GetProtocol(r *http.Request) string {
 func SealCookie(r *http.Request, cookie *http.Cookie) {
 	if GetProtocol(r) == "https" {
 		cookie.Secure = true
-		cookie.SameSite = http.SameSiteStrictMode
 	}
-
 	cookie.Domain = GetTopLevelHost(r)
 	cookie.HttpOnly = true
 }
@@ -43,4 +41,18 @@ func GetHostWithoutPort(r *http.Request) string {
 		hostname, _, _ = net.SplitHostPort(hostname)
 	}
 	return hostname
+}
+
+func CreateCookie(name, value, path string, maxAge int, override ...http.SameSite) *http.Cookie {
+	cookie := &http.Cookie{
+		Name:     name,
+		Value:    value,
+		Path:     path,
+		MaxAge:   maxAge,
+		SameSite: http.SameSiteLaxMode, // needs to be LaxMode otherwise cant handle callback from provider
+	}
+	if len(override) > 0 {
+		cookie.SameSite = override[0]
+	}
+	return cookie
 }
