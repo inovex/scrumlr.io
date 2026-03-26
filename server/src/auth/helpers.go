@@ -43,16 +43,16 @@ func GetHostWithoutPort(r *http.Request) string {
 	return hostname
 }
 
-func CreateCookie(name, value, path string, maxAge int, override ...http.SameSite) *http.Cookie {
+func CreateCookie(name, value, path string, maxAge int, override *http.SameSite) *http.Cookie {
 	cookie := &http.Cookie{
 		Name:     name,
 		Value:    value,
 		Path:     path,
 		MaxAge:   maxAge,
-		SameSite: http.SameSiteLaxMode, // needs to be LaxMode otherwise cant handle callback from provider
+		SameSite: http.SameSiteStrictMode,
 	}
-	if len(override) > 0 {
-		cookie.SameSite = override[0]
+	if override != nil {
+		cookie.SameSite = *override
 	}
 	return cookie
 }

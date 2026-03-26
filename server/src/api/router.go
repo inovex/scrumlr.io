@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-  "go.opentelemetry.io/otel"
-  "go.opentelemetry.io/otel/trace"
-  "scrumlr.io/server/websocket"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -31,7 +31,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
-	"github.com/gorilla/websocket"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 

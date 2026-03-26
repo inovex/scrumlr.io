@@ -181,7 +181,7 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
               // prepare new JWT
               tokenString, _ := a.Sign(map[string]interface{}{"id": userID})
 
-              cookie := CreateCookie("jwt", tokenString, "/", math.MaxInt32)
+              cookie := CreateCookie("jwt", tokenString, "/", math.MaxInt32, nil)
 
               SealCookie(r, cookie)
               http.SetCookie(w, cookie)
@@ -304,7 +304,7 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 
   tokenString, _ := a.Sign(map[string]interface{}{"id": internalUser.ID})
 
-  cookie := CreateCookie("jwt", tokenString, "", 121*24*60*60) //maxAge = 21 Days
+  cookie := CreateCookie("jwt", tokenString, "/", 121*24*60*60, nil) //maxAge = 21 Days
   return cookie, nil
 }
 
