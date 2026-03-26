@@ -8,7 +8,7 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
   >
     <button
       class="template-card__favourite favourite-button accent-color__planning-pink"
-      id="favourite-icon-:r1:"
+      id="favourite-icon-_r_1_"
       tabindex="0"
     >
       <svg
@@ -188,7 +188,7 @@ exports[`TemplateCard > should render correctly (recommended) 1`] = `
   >
     <button
       class="template-card__favourite favourite-button accent-color__planning-pink"
-      id="favourite-icon-:r0:"
+      id="favourite-icon-_r_0_"
       tabindex="0"
     >
       <svg

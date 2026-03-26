@@ -33,7 +33,7 @@ export const useTextOverflow = <RefElement extends HTMLElement>(
   label: string
 ): {
   isTextTruncated: {horizontal: boolean; vertical: boolean};
-  textRef: RefObject<RefElement>;
+  textRef: RefObject<RefElement | null>;
 } => {
   const [isTextTruncated, setIsTextTruncated] = useState<{horizontal: boolean; vertical: boolean}>({
     horizontal: false,

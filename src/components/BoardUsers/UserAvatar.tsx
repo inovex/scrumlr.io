@@ -19,7 +19,7 @@ export interface UserAvatarProps {
 
 export const UserAvatar = ({title, badgeText, id, ready, raisedHand, avatar, className, avatarClassName}: UserAvatarProps) => {
   const [readyAnimation, setReadyAnimation] = useState<boolean>(false);
-  const prevReadyRef = useRef<boolean>();
+  const prevReadyRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (ready && prevReadyRef.current === false) {
@@ -27,7 +27,7 @@ export const UserAvatar = ({title, badgeText, id, ready, raisedHand, avatar, cla
       setTimeout(() => setReadyAnimation(false), 600);
     }
 
-    prevReadyRef.current = ready;
+    prevReadyRef.current = Boolean(ready);
   }, [ready]);
 
   return (

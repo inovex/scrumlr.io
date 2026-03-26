@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useRef, useState} from "react";
+import {SubmitEvent, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
@@ -10,7 +10,7 @@ import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
-export const Feedback: React.FC = () => {
+export const Feedback = () => {
   const {t} = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
@@ -31,7 +31,9 @@ export const Feedback: React.FC = () => {
     }
   }, [t, feedbackTypeInput]);
 
-  const onSubmitFeedback = (e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}) => {
+  const onSubmitFeedback = (
+    e: SubmitEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}
+  ) => {
     e.preventDefault();
     setErrorMessage(undefined);
     const {feedbackType, feedback, contact} = e.target;

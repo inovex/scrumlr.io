@@ -1,4 +1,18 @@
-import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, DetailedHTMLProps, FC, PropsWithChildren, ReactElement, useEffect, useRef, useState} from "react";
+import {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  Children,
+  cloneElement,
+  DetailedHTMLProps,
+  FC,
+  JSX,
+  PropsWithChildren,
+  ReactElement,
+  SVGProps,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import classNames from "classnames";
 import "./LegacyButton.scss";
 
@@ -8,8 +22,8 @@ export interface LegacyButtonProps extends DetailedHTMLProps<
 > {
   color?: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text-link";
-  leftIcon?: ReactElement;
-  rightIcon?: ReactElement;
+  leftIcon?: ReactElement<SVGProps<SVGSVGElement>>;
+  rightIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   hideLabel?: boolean;
   block?: boolean;
 }

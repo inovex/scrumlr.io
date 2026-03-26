@@ -17,7 +17,7 @@ export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
 
 type UseEmojiAutocompleteOptions<InputElement extends HTMLInputElement | HTMLTextAreaElement> = {
   /** the ref to the input or textarea element. This is required. */
-  inputRef: RefObject<InputElement>;
+  inputRef: RefObject<InputElement | null>;
   /** the controlled value from the parent component */
   value: string;
   /** the function to update the parent's state */

@@ -1,11 +1,12 @@
 import {Children, cloneElement, DetailedHTMLProps, FC, InputHTMLAttributes, ReactElement, ReactNode} from "react";
 import classNames from "classnames";
+import {TextInputAdornmentProps} from "components/TextInputAdornment";
 import "./TextInput.scss";
 
 export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   type?: "text" | "password";
-  rightAdornment?: ReactElement;
-  leftAdornment?: ReactElement;
+  rightAdornment?: ReactElement<TextInputAdornmentProps>;
+  leftAdornment?: ReactElement<TextInputAdornmentProps>;
   actions?: ReactNode;
 }
 

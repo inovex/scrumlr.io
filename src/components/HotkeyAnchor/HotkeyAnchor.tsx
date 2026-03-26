@@ -30,11 +30,11 @@ export const HotkeyAnchor = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {noteId} = useParams();
-  const note = useRef<string | undefined>();
+  const noteRef = useRef<string | null>(null);
 
   // bugfix for noteId not being updated properly
   useEffect(() => {
-    note.current = noteId;
+    if (noteRef && noteId) noteRef.current = noteId;
   }, [noteId]);
 
   const {
@@ -100,7 +100,7 @@ export const HotkeyAnchor = () => {
       dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.endPresenting"));
     } else {
       dispatch(setFocusInitiator(state.currentUser));
-      if (note.current) dispatch(shareNote(note.current));
+      if (noteRef.current) dispatch(shareNote(noteRef.current));
       dispatch(setModerating(true));
       dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.startPresenting"));
     }
