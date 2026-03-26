@@ -15,6 +15,18 @@
     "uploadFile": "Télécharger un fichier ou glisser ici",
     "importNewBoard": "Importer maintenant"
   },
+  "ImportBoard": {
+    "button": "Importer JSON",
+    "title": "Importer un Tableau",
+    "step1Title": "Sélectionner un Fichier",
+    "dropzone": "Télécharger un fichier ou glisser ici",
+    "successPrefix": "Fichier chargé:",
+    "errorInvalid": "Le fichier n'a pas pu être lu. Veuillez utiliser un export JSON valide.",
+    "continue": "Continuer",
+    "cancel": "Annuler",
+    "back": "Retour",
+    "openBoard": "Ouvrir le Tableau"
+  },
   "Templates": {
     "switchTitle": "Modèles",
     "title": "Choisir un modèle",
@@ -163,6 +175,7 @@
   },
   "ExportBoardOption": {
     "title": "Exporter le tableau",
+    "subtitle": "L'export d'un tableau ne conserve pas les paramètres d'accès. De plus, l'import nécessite impérativement un fichier JSON.",
     "button": "Exporter le tableau",
     "exportAsJson": "Exporter en JSON",
     "exportAsCSV": "Exporter en CSV",
