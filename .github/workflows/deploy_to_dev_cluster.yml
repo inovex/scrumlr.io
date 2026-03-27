@@ -34,7 +34,7 @@ jobs:
           k8s-url: https://kubernetes.default.svc
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Replace template variables
         run: |
