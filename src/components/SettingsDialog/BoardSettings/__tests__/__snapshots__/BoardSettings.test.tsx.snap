@@ -276,7 +276,7 @@ exports[`BoardSettings > should match snapshot 1`] = `
         </button>
         <a
           class="board-settings__open-cheat-sheet-button"
-          href="//hotkeys.pdf"
+          href="/hotkeys.pdf"
           rel="noopener noreferrer"
           target="_blank"
         >
