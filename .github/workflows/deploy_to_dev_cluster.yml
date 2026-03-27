@@ -23,7 +23,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Install kubectl
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v5
         id: install
 
       - name: Set up Kubernetes Auth
