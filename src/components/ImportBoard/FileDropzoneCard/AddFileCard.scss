@@ -20,11 +20,18 @@ $icon-size: 80px;
   padding: 0 40px 14px 40px;
   text-align: center;
 
-  background-color: styles.$blue--100;
+  background-color: styles.$blue--50;
 
   cursor: pointer;
 
   &:hover {
+    background-color: styles.$blue--100;
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
+  }
+
+  &--dragging-over {
+    background-color: styles.$blue--100;
+    border-style: solid;
     box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
   }
 

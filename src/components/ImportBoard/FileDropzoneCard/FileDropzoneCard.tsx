@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {PlusIcon} from "components/Icon";
-import {ChangeEvent, DragEvent, useRef} from "react";
+import {ChangeEvent, DragEvent, useRef, useState} from "react";
 import "./AddFileCard.scss";
 import classNames from "classnames";
 
@@ -13,6 +13,7 @@ const isDragEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivEle
 
 export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDraggingOverDropzone, setIsDraggingOverDropzone] = useState(false);
 
   const {t} = useTranslation();
 
@@ -30,15 +31,22 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setIsDraggingOverDropzone(true);
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDraggingOverDropzone(false);
   };
 
   return (
     <div
-      className={classNames("file-dropzone-card", {"file-dropzone-card--disabled": props.disabled})}
+      className={classNames("file-dropzone-card", {"file-dropzone-card--disabled": props.disabled, "file-dropzone-card--dragging-over": isDraggingOverDropzone})}
       role="button"
       tabIndex={props.disabled ? -1 : 0}
       onClick={() => !props.disabled && fileInputRef.current?.click()}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleFileEvent}
       data-cy="file-dropzone-card"
       aria-disabled={props.disabled}
