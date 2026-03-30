@@ -46,6 +46,7 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
       <PlusIcon className="file-dropzone-card__icon" />
       <input ref={fileInputRef} type="file" accept=".json" hidden onChange={handleFileEvent} className="file-dropzone-card__file-input" aria-label="Select JSON file" />
       <div className="file-dropzone-card__title">{t("ImportBoard.FileDropzoneCard.title")}</div>
+      <div className="file-dropzone-card__description">{t("ImportBoard.FileDropzoneCard.description")}</div>
     </div>
   );
 };

@@ -27,7 +27,11 @@
     "continue": "Continue",
     "cancel": "Cancel",
     "back": "Back",
-    "openBoard": "Open Board"
+    "openBoard": "Open Board",
+    "FileDropzoneCard": {
+      "title": "Add JSON file",
+      "description": "Click or drag a file here to upload (max. 1 file)"
+    }
   },
   "Templates": {
     "switchTitle": "Templates",

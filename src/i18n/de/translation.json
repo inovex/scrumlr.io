@@ -19,7 +19,6 @@
     "button": "JSON Importieren",
     "title": "Sitzung Importieren",
     "step1Title": "Datei Auswählen",
-    "dropzone": "Datei hochladen oder hierher ziehen",
     "successPrefix": "Datei geladen:",
     "loading": "Lade Datei...",
     "errorInvalid": "Die Datei konnte nicht gelesen werden. Bitte verwende einen gültigen JSON-Export.",
@@ -27,7 +26,11 @@
     "continue": "Weiter",
     "cancel": "Abbrechen",
     "back": "Zurück",
-    "openBoard": "Sitzung Öffnen"
+    "openBoard": "Sitzung Öffnen",
+    "FileDropzoneCard": {
+      "title": "Ajouter un fichier JSON",
+      "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
+    }
   },
   "Templates": {
     "switchTitle": "Vorlagen",

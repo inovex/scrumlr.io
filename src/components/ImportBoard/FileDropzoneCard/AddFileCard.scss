@@ -1,6 +1,7 @@
 @use "constants/styles";
 
-$card-height: 220px;
+$card-width: 480px;
+$card-height: 320px;
 $icon-size: 80px;
 
 .file-dropzone-card {
@@ -10,7 +11,7 @@ $icon-size: 80px;
   justify-content: center;
   align-items: center;
 
-  width: 100%;
+  width: $card-width;
   height: $card-height;
   border-radius: styles.$rounded--default;
   border: 3px dashed styles.$blue--500;
@@ -55,9 +56,17 @@ $icon-size: 80px;
 }
 
 .file-dropzone-card__title {
-  font-size: styles.$text--md;
+  font-size: styles.$text--lg;
   font-weight: 600;
   line-height: 28px;
+
+  color: styles.$blue--500;
+}
+
+.file-dropzone-card__description {
+  font-size: styles.$text--base;
+  font-weight: 400;
+  line-height: 24px;
 
   color: styles.$blue--500;
 }
@@ -80,7 +89,8 @@ $icon-size: 80px;
       border-color: styles.$navy--300;
 
       .file-dropzone-card__icon,
-      .file-dropzone-card__title {
+      .file-dropzone-card__title,
+      .file-dropzone-card__description {
         color: styles.$navy--300;
       }
     }

@@ -27,7 +27,11 @@
     "continue": "Continuer",
     "cancel": "Annuler",
     "back": "Retour",
-    "openBoard": "Ouvrir le Tableau"
+    "openBoard": "Ouvrir le Tableau",
+    "FileDropzoneCard": {
+      "title": "",
+      "description": ""
+    }
   },
   "Templates": {
     "switchTitle": "Modèles",
