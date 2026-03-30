@@ -2,7 +2,7 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {ChangeEvent, Fragment, useEffect, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
-import {deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
+import {AccessPolicy, deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
 import {LockOpenIcon, MultipleUserIcon, KeyProtectedIcon, TrashIcon, InfoIcon} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -45,18 +45,20 @@ export const BoardSettings = () => {
     setLocalPolicy(state.board.accessPolicy);
   }, [state.board.accessPolicy]);
 
-  const handlePolicyChange = (policy: "PUBLIC" | "BY_INVITE" | "BY_PASSPHRASE") => {
+  const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
+    PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
+    BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
+    BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
+  };
+
+  const handlePolicyChange = (policy: AccessPolicy) => {
+    if (policy === state.board.accessPolicy) return;
     setLocalPolicy(policy);
-    if (policy === "PUBLIC") {
-      dispatch(editBoard({accessPolicy: "PUBLIC"}));
+    if (policy === "PUBLIC" || policy === "BY_INVITE") {
+      dispatch(editBoard({accessPolicy: policy}));
       setPassword("");
       lastSubmittedPassword.current = "";
-      Toast.success({title: t("Toast.accessPolicyPublic"), autoClose: TOAST_TIMER_SHORT});
-    } else if (policy === "BY_INVITE") {
-      dispatch(editBoard({accessPolicy: "BY_INVITE"}));
-      setPassword("");
-      lastSubmittedPassword.current = "";
-      Toast.success({title: t("Toast.accessPolicyByInvite"), autoClose: TOAST_TIMER_SHORT});
+      Toast.success({title: t("Toast.accessPolicyChanged", {policy: t(POLICY_LABEL_KEYS[policy])}), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
@@ -64,7 +66,9 @@ export const BoardSettings = () => {
     if (password.length >= MIN_PASSWORD_LENGTH && password !== lastSubmittedPassword.current) {
       lastSubmittedPassword.current = password;
       dispatch(editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: password}));
-      navigator.clipboard.writeText(password).then(() => Toast.success({title: t("Toast.accessPolicyByPassphrase"), autoClose: TOAST_TIMER_SHORT}));
+      navigator.clipboard
+        .writeText(password)
+        .then(() => Toast.success({title: t("Toast.accessPolicyChanged", {policy: t(POLICY_LABEL_KEYS.BY_PASSPHRASE)}), autoClose: TOAST_TIMER_SHORT}));
     }
   };
 

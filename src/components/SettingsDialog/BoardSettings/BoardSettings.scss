@@ -124,8 +124,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
   border-radius: styles.$rounded--small;
   flex-shrink: 0;
 
@@ -169,8 +169,8 @@
 
 .board-settings__access-option--selected {
   .board-settings__access-option-indicator {
-    border-color: var(--accent-color--light);
-    background-color: var(--accent-color--light);
+    border-color: styles.$blue--500;
+    background-color: styles.$blue--500;
     box-shadow: inset 0 0 0 3px white;
   }
 }
@@ -178,7 +178,11 @@
 [data-theme="dark"] {
   .board-settings__access-option--selected {
     .board-settings__access-option-indicator {
-      box-shadow: inset 0 0 0 3px styles.$navy--800;
+      border-color: styles.$blue--400;
+      background-color: styles.$blue--400;
+      box-shadow:
+        inset 0 0 0 3px styles.$navy--800,
+        0 0 0 2px styles.$blue--400;
     }
   }
 }
