@@ -1,0 +1,90 @@
+@use "constants/styles";
+
+$card-height: 220px;
+$icon-size: 80px;
+
+.add-file-card {
+  all: unset;
+
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: $card-height;
+  border-radius: styles.$rounded--default;
+  border: 3px dashed styles.$blue--500;
+
+  box-sizing: border-box; // prevent overflow
+  padding: 0 40px 14px 40px;
+  text-align: center;
+
+  background-color: styles.$blue--100;
+
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
+  }
+
+  &:focus {
+    background-color: styles.$gray--000;
+  }
+
+  &:active {
+    background-color: styles.$blue--200;
+  }
+
+  &:disabled {
+    background-color: styles.$gray--300;
+    border-color: styles.$gray--800;
+    box-shadow: none;
+    cursor: unset;
+
+    .add-file-card__icon,
+    .add-file-card__title {
+      color: styles.$gray--800;
+    }
+  }
+}
+
+.add-file-card__icon {
+  width: $icon-size;
+  height: $icon-size;
+  color: styles.$blue--500;
+}
+
+.add-file-card__title {
+  font-size: styles.$text--md;
+  font-weight: 600;
+  line-height: 28px;
+
+  color: styles.$blue--500;
+}
+
+[data-theme="dark"] {
+  .add-file-card {
+    background-color: rgba(styles.$blue--400, 0.08);
+    border-color: styles.$blue--400;
+
+    &:focus {
+      background-color: styles.$navy--600;
+    }
+
+    &:active {
+      background-color: rgba(styles.$blue--400, 0.2);
+    }
+
+    &:disabled {
+      background: styles.$navy--600;
+      border-color: styles.$navy--300;
+
+      .add-file-card__icon,
+      .add-file-card__title {
+        color: styles.$navy--300;
+      }
+    }
+  }
+}

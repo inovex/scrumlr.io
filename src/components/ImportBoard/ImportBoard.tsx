@@ -1,4 +1,4 @@
-import {useState, useRef, ChangeEvent, DragEvent} from "react";
+import {useState, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch} from "store";
 import {importBoard} from "store/features/board/thunks";
@@ -7,8 +7,8 @@ import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {CheckDoneIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
-import classNames from "classnames";
 import {SimpleModal} from "components/Templates";
+import {AddFileCard} from "components/ImportBoard/AddFileCard/AddFileCard";
 import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
@@ -16,8 +16,6 @@ type ImportStep = "file" | "access";
 interface ImportBoardProps {
   onClose: () => void;
 }
-const isDragEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>): event is DragEvent<HTMLDivElement> => "dataTransfer" in event;
-
 export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
@@ -28,17 +26,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>) => {
-    let file: File | null = null;
-    if (isDragEvent(event)) {
-      event.preventDefault();
-      file = event.dataTransfer?.files?.[0] || null;
-    } else {
-      file = event.target.files?.[0] || null;
-    }
-
-    if (!file) return;
-
+  const readFile = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
@@ -54,11 +42,8 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
         setImportData(null);
       }
     };
-    reader.readAsText(file);
-  };
 
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+    reader.readAsText(file);
   };
 
   const handleContinue = () => {
@@ -113,34 +98,18 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
             disabled: !importData,
           }}
         >
-          <main className="import-board__main">
-            <div
-              className={classNames("import-board__dropzone", {
-                "import-board__dropzone--has-file": !!importData,
-              })}
-              onDragOver={handleDragOver}
-              onDrop={handleFileEvent}
-            >
-              {!importData ? (
-                <>
-                  <p className="import-board__dropzone-text">{t("ImportBoard.dropzone")}</p>
-                  <input ref={fileInputRef} type="file" accept=".json" onChange={handleFileEvent} className="import-board__file-input" aria-label="Select JSON file" />
-                  <button className="import-board__browse-button" onClick={() => fileInputRef.current?.click()} type="button">
-                    {t("ImportBoard.button")}
-                  </button>
-                </>
-              ) : (
-                <div className="import-board__file-success">
-                  <CheckDoneIcon className="import-board__success-icon" />
-                  <span className="import-board__file-name">
-                    {t("ImportBoard.successPrefix")} {fileName}
-                  </span>
-                </div>
-              )}
+          {!importData ? (
+            <AddFileCard onFileSelect={readFile} disabled={false} />
+          ) : (
+            <div className="import-board__file-success">
+              <CheckDoneIcon className="import-board__success-icon" />
+              <span className="import-board__file-name">
+                {t("ImportBoard.successPrefix")} {fileName}
+              </span>
             </div>
+          )}
 
-            {fileError && <p className="import-board__error-message">{fileError}</p>}
-          </main>
+          {fileError && <p className="import-board__error-message">{fileError}</p>}
         </SimpleModal>
       </Portal>
     );
