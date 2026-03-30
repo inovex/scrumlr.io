@@ -29,8 +29,8 @@
     "back": "Retour",
     "openBoard": "Ouvrir le Tableau",
     "FileDropzoneCard": {
-      "title": "",
-      "description": ""
+      "title": "Ajouter un fichier JSON",
+      "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
     }
   },
   "Templates": {

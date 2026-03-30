@@ -28,8 +28,8 @@
     "back": "Zurück",
     "openBoard": "Sitzung Öffnen",
     "FileDropzoneCard": {
-      "title": "Ajouter un fichier JSON",
-      "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
+      "title": "JSON Datei hinzufügen",
+      "description": "Datei hier ablegen oder klicken (max. 1 Datei)"
     }
   },
   "Templates": {
