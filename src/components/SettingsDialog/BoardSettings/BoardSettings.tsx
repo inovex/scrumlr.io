@@ -16,6 +16,12 @@ import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 
+const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
+  PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
+  BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
+  BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
+};
+
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
@@ -45,14 +51,8 @@ export const BoardSettings = () => {
     setLocalPolicy(state.board.accessPolicy);
   }, [state.board.accessPolicy]);
 
-  const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
-    PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
-    BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
-    BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
-  };
-
   const handlePolicyChange = (policy: AccessPolicy) => {
-    if (policy === state.board.accessPolicy) return;
+    if (policy === localPolicy) return;
     setLocalPolicy(policy);
     if (policy === "PUBLIC" || policy === "BY_INVITE") {
       dispatch(editBoard({accessPolicy: policy}));
