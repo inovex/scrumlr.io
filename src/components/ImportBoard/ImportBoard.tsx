@@ -21,12 +21,15 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const dispatch = useAppDispatch();
 
   const [step, setStep] = useState<ImportStep>("file");
+  const [isFileLoading, setIsFileLoading] = useState(false);
   const [importData, setImportData] = useState<BoardImportData | null>(null);
   const [fileName, setFileName] = useState<string>("");
   const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const readFile = (file: File) => {
+    setIsFileLoading(true);
+    setFileError(null);
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
@@ -36,11 +39,23 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
         setFileName(file.name);
         setFileError(null);
       } catch (error) {
+        // error due to invalid JSON format
         Toast.error({title: t("Toast.failedImport")});
         setFileError(t("ImportBoard.errorInvalid"));
         setFileName("");
         setImportData(null);
+      } finally {
+        setIsFileLoading(false);
       }
+    };
+
+    // error due to file reading (e.g., file not found, permission denied, etc.)
+    reader.onerror = () => {
+      Toast.error({title: t("Toast.failedImport")});
+      setFileError(t("ImportBoard.errorRead"));
+      setFileName("");
+      setImportData(null);
+      setIsFileLoading(false);
     };
 
     reader.readAsText(file);
