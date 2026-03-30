@@ -12,6 +12,10 @@ on:
     branches: [main]
     types:
       - completed
+
+permissions:
+  contents: read
+
 env:
   BASE_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io
 
@@ -48,7 +52,7 @@ jobs:
         run: yarn lint --max-warnings 0
 
       - name: Test with coverage
-        run: yarn test --coverage --watchAll=false --passWithNoTests
+        run: yarn test --run --coverage --passWithNoTests
 
   test-backend:
       name: Build and Test – Backend
@@ -59,7 +63,7 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: "^1.22"
+          go-version: "^1.26"
           cache: false
 
       - name: Cache Go Modules
@@ -82,11 +86,15 @@ jobs:
         working-directory: ./server/src
         run: go list -m all
 
+      - name: Check Go formatting
+        working-directory: ./server
+        run: make format-check
+
       - name: Go lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v8
         with:
-          version: v1.61
-          skip-pkg-cache: true
+          version: v2.11.4
+          skip-cache: true
           working-directory: ./server/src/
 
       - name: Build server
@@ -104,9 +112,9 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
-          go-version: "^1.22"
+          go-version: "^1.26"
           cache: false
 
       - name: Cache Go Modules
@@ -119,7 +127,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('server/src/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      
+
       - name: Download Go Modules
         if: steps.cache-go-modules.outputs.cache-hit != 'true'
         working-directory: ./server/src
@@ -128,16 +136,16 @@ jobs:
       - name: Verify Go Modules
         working-directory: ./server/src
         run: go list -m all
-      
+
       - name: Get coverage report
         id: coverage
         working-directory: ./server
         run: |
           make test
           sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
-        
+
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -145,12 +153,22 @@ jobs:
         uses: SonarSource/sonarqube-quality-gate-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   package:
+    if: github.event.pull_request.head.repo.fork == false
     needs: [test-frontend, test-backend]
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yml
 
   deploy_to_dev_cluster:
     needs: package
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+      pull-requests: write
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     uses: ./.github/workflows/deploy_to_dev_cluster.yml
     secrets: inherit
@@ -159,11 +177,11 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: paths-filter
         id: docs_changes
         uses: dorny/paths-filter@v3
@@ -178,10 +196,15 @@ jobs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
 
   deploy_github_pages:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: ./.github/workflows/deploy_docs.yml
     secrets: inherit
+
   deployment_health_check:
     needs: deploy_to_dev_cluster
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
@@ -194,40 +217,24 @@ jobs:
         with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
-  postman_tests:
+  e2e_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+      - uses: actions/setup-go@v5
         with:
-          HEALTH_URL: ${{ env.BASE_URL }}/api/health
-      - name: Postman run
-        uses: ./.github/actions/postman_run
-        with:
-          POSTMAN_URL: ${{ env.BASE_URL }}/api
-
-  octomind_end_to_end_test:
-    name: Octomind End to End Test
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deployment_health_check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
-        with:
-          HEALTH_URL: ${{ env.BASE_URL }}/api/health
-      - name: Run tests
-        uses: OctoMind-dev/automagically-action-execute@v2
-        with:
-          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
-          testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+          go-version: "^1.26"
+          cache: true
+          cache-dependency-path: server/e2e-tests/go.sum
+      - name: Run E2E tests
+        working-directory: ./server/e2e-tests
+        env:
+            E2E_BASE_URL: ${{ env.BASE_URL }}/api
+            E2E_INSECURE_SKIP_VERIFY: "true"
+        run: go test ./...
 
   cypress_end_to_end_test:
     name: Cypress End to End Test
@@ -248,4 +255,4 @@ jobs:
             yarn install
             yarn run start
           working-directory: ./
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http://localhost:5173'

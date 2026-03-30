@@ -3,14 +3,14 @@ import {Portal} from "components/Portal";
 import {useTranslation} from "react-i18next";
 import {marked} from "marked";
 
-interface CookiePolicyProps {
+type CookiePolicyProps = {
   decline: () => void;
   accept: () => void;
   onClose: () => void;
   show: boolean;
-}
+};
 
-export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onClose, show}) => {
+export const CookiePolicy = ({decline, accept, onClose, show}: CookiePolicyProps) => {
   const {t} = useTranslation();
 
   if (!show) {
@@ -20,9 +20,8 @@ export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onC
   const body = marked.parse(t("CookiePolicy.body") as string, {async: false}) as string;
 
   return (
-    <Portal onClose={onClose}>
-      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-      <div className="cookie-policy" onClick={(e) => e.stopPropagation()}>
+    <Portal onClose={onClose} align="here">
+      <div className="cookie-policy">
         <div className="cookie-policy__title">
           <h1>{t("CookiePolicy.title")}</h1>
         </div>

@@ -41,12 +41,20 @@ func ForbiddenError(err error) *APIError {
 	}
 }
 
+func ConflictError(err error) *APIError {
+	return &APIError{
+		Err:        err,
+		StatusCode: http.StatusConflict,
+		StatusText: "Conflict",
+		ErrorText:  err.Error(),
+	}
+}
+
 var NotFoundError = &APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 var InternalServerError = &APIError{StatusCode: http.StatusInternalServerError, StatusText: "Internal server error."}
 
 func Throw(w http.ResponseWriter, r *http.Request, err error) {
-	var apiErr *APIError
-	if errors.As(err, &apiErr) {
+	if apiErr, ok := errors.AsType[*APIError](err); ok {
 		_ = render.Render(w, r, apiErr)
 		return
 	}

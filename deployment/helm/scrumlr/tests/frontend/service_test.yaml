@@ -1,0 +1,44 @@
+---
+suite: test frontend service
+templates:
+  - /frontend/service.yaml
+tests:
+  - it: should set name, namespace, apiVersion, kind and app selector
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: scrumlr-frontend
+          namespace: scrumlr
+      - equal:
+          path: spec.selector.app
+          value: scrumlr-frontend
+
+  - it: should set default target port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 8080
+
+  - it: should set target port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.config.listenPort: 9090
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 9090

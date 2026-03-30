@@ -1,0 +1,54 @@
+@use "constants/styles";
+
+$icon-size: 36px;
+
+.favourite-button {
+  all: unset;
+  width: $icon-size;
+  height: $icon-size;
+  border: 2px solid transparent;
+  border-radius: styles.$rounded--full;
+
+  color: rgba(styles.$navy--400, 0.5);
+
+  cursor: pointer;
+
+  &:hover {
+    color: styles.$navy--600;
+    background-color: styles.$gray--300;
+  }
+
+  &--active {
+    color: var(--accent-color--light);
+
+    &:hover {
+      color: var(--accent-color--light);
+    }
+  }
+}
+
+.favourite-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  color: inherit;
+}
+
+[data-theme="dark"] {
+  .favourite-button {
+    color: rgba(styles.$gray--000, 0.7);
+
+    &:hover {
+      color: styles.$gray--000;
+      background-color: styles.$navy--600;
+    }
+
+    &--active {
+      color: var(--accent-color--dark);
+
+      &:hover {
+        color: var(--accent-color--dark);
+      }
+    }
+  }
+}

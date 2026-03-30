@@ -1,7 +1,7 @@
 import {FC, HTMLAttributes, PropsWithChildren} from "react";
 import classNames from "classnames";
 import {Portal} from "components/Portal";
-import {Close} from "components/Icon";
+import {CloseIcon} from "components/Icon";
 import "./Dialog.scss";
 import {useTranslation} from "react-i18next";
 
@@ -14,14 +14,14 @@ export const Dialog: FC<PropsWithChildren<DialogProps>> = ({title, className, on
   const {t} = useTranslation();
 
   return (
-    <Portal onClose={() => onClose?.()}>
-      <aside className={classNames("dialog", className)} {...other} onClick={(e) => e.stopPropagation()}>
+    <Portal onClose={() => onClose?.()} align="here">
+      <aside className={classNames("dialog", className)} {...other}>
         <article className="dialog__content">
           <h2 className="dialog__header-text">{title}</h2>
           {children}
         </article>
         <button onClick={() => onClose?.()} className="dialog__close-button" aria-label={t("ConfirmationDialog.close")}>
-          <Close className="dialog__close-icon" />
+          <CloseIcon className="dialog__close-icon" />
         </button>
       </aside>
     </Portal>

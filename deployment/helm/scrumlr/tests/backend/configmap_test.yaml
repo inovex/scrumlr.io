@@ -1,0 +1,94 @@
+---
+suite: test backend configmap
+templates:
+  - /backend/configmap.yaml
+tests:
+  - it: should set name, namespace, apiVersion and kind
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: scrumlr-backend-configmap
+          namespace: scrumlr
+
+  - it: should set default server port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_PORT
+          value: "8080"
+
+  - it: should set server port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.config.serverPort: 9000
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_PORT
+          value: "9000"
+
+  - it: should set default base path
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: data.SCRUMLR_BASE_PATH
+          value: /api
+
+  - it: should set base path
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.config.basePath: /scrumlr/api/
+    asserts:
+      - equal:
+          path: data.SCRUMLR_BASE_PATH
+          value: /scrumlr/api/
+
+  - it: should set default nats url
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_NATS_URL
+          value: null
+
+  - it: should set nats url
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.config.natsUrl: nats://nats:4222
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_NATS_URL
+          value: nats://nats:4222
+
+  - it: should set extra config
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.extraConfig.SCRUMLR_INSECURE: true
+      backend.extraConfig.Auth_Callback_Host: https://auth.callback
+    asserts:
+      - exists:
+          path: data.SCRUMLR_INSECURE
+      - equal:
+          path: data.SCRUMLR_INSECURE
+          value: "true"
+      - exists:
+          path: data.AUTH_CALLBACK_HOST
+      - equal:
+          path: data.AUTH_CALLBACK_HOST
+          value: https://auth.callback

@@ -1,73 +1,112 @@
 package api
 
 import (
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
 	"net/http"
 	"os"
 	"time"
+
+	"scrumlr.io/server/websocket"
+
+	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
+
+	"scrumlr.io/server/boards"
+
+	"scrumlr.io/server/votings"
+
+	"scrumlr.io/server/boardreactions"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/notes"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
-	"github.com/gorilla/websocket"
+
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessionrequests"
 )
 
 type Server struct {
 	basePath string
 
-	realtime *realtime.Broker
-	auth     auth.Auth
+	realtime  *realtime.Broker
+	wsService websocket.WebSocketInterface
+	auth      auth.Auth
 
-	boards         services.Boards
-	votings        services.Votings
-	users          services.Users
-	notes          services.Notes
-	reactions      services.Reactions
-	sessions       services.BoardSessions
-	health         services.Health
-	feedback       services.Feedback
-	boardReactions services.BoardReactions
-	boardTemplates services.BoardTemplates
+	userRoutes    chi.Router
+	sessionRoutes chi.Router
 
-	upgrader websocket.Upgrader
+	boards          boards.BoardService
+	columns         columns.ColumnService
+	votings         votings.VotingService
+	users           users.UserService
+	notes           notes.NotesService
+	reactions       reactions.ReactionService
+	sessions        sessions.SessionService
+	sessionRequests sessionrequests.SessionRequestService
+	health          health.HealthService
+	feedback        feedback.FeedbackService
+	boardReactions  boardreactions.BoardReactionService
+	boardTemplates  boardtemplates.BoardTemplateService
+	columntemplates columntemplates.ColumnTemplateService
+
+	checkOrigin bool
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
-	anonymousLoginDisabled      bool
-	experimentalFileSystemStore bool
+	anonymousLoginDisabled        bool
+	allowAnonymousCustomTemplates bool
+	allowAnonymousBoardCreation   bool
+	experimentalFileSystemStore   bool
 }
 
 func New(
 	basePath string,
+
 	rt *realtime.Broker,
+	wsService websocket.WebSocketInterface,
 	auth auth.Auth,
 
-	boards services.Boards,
-	votings services.Votings,
-	users services.Users,
-	notes services.Notes,
-	reactions services.Reactions,
-	sessions services.BoardSessions,
-	health services.Health,
-	feedback services.Feedback,
-	boardReactions services.BoardReactions,
-	boardTemplates services.BoardTemplates,
+	userRoutes chi.Router,
+	sessionRoutes chi.Router,
+
+	boards boards.BoardService,
+	columns columns.ColumnService,
+	votings votings.VotingService,
+	users users.UserService,
+	notes notes.NotesService,
+	reactions reactions.ReactionService,
+	sessions sessions.SessionService,
+	sessionRequests sessionrequests.SessionRequestService,
+	health health.HealthService,
+	feedback feedback.FeedbackService,
+	boardReactions boardreactions.BoardReactionService,
+	boardTemplates boardtemplates.BoardTemplateService,
+	columntemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
+	allowAnonymousCustomTemplates bool,
+	allowAnonymousBoardCreation bool,
 	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
@@ -75,6 +114,7 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(otelhttp.NewMiddleware("scrumlr"))
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -96,28 +136,31 @@ func New(
 	s := Server{
 		basePath:                         basePath,
 		realtime:                         rt,
+		wsService:                        wsService,
+		userRoutes:                       userRoutes,
+		sessionRoutes:                    sessionRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
+		columns:                          columns,
 		votings:                          votings,
 		users:                            users,
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
+		columntemplates:                  columntemplates,
 
-		anonymousLoginDisabled:      anonymousLoginDisabled,
-		experimentalFileSystemStore: experimentalFileSystemStore,
-	}
-
-	// initialize websocket upgrader with origin check depending on options
-	s.upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
+		anonymousLoginDisabled:        anonymousLoginDisabled,
+		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
+		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
+		experimentalFileSystemStore:   experimentalFileSystemStore,
+		checkOrigin:                   checkOrigin,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -130,13 +173,6 @@ func New(
 		gothic.Store = store
 	}
 
-	if checkOrigin {
-		s.upgrader.CheckOrigin = nil
-	} else {
-		s.upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true
-		}
-	}
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
@@ -172,32 +208,37 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
-		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
-		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
-		r.Route("/templates/{id}", func(r chi.Router) {
+		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
-			r.Use(s.BoardTemplateContext)
+			r.Use(s.AnonymousCustomTemplateCreationContext)
 
-			r.Get("/", s.getBoardTemplate)
-			r.Put("/", s.updateBoardTemplate)
-			r.Delete("/", s.deleteBoardTemplate)
+			r.Post("/", s.createBoardTemplate)
+			r.Get("/", s.getBoardTemplates)
 
-			r.Route("/columns", func(r chi.Router) {
-				r.Post("/", s.createColumnTemplate)
-				r.Get("/", s.getColumnTemplates)
+			r.Route("/{id}", func(r chi.Router) {
+				r.Use(s.BoardTemplateContext)
 
-				r.Route("/{columnTemplate}", func(r chi.Router) {
-					r.Use(s.ColumnTemplateContext)
+				r.Get("/", s.getBoardTemplate)
+				r.Put("/", s.updateBoardTemplate)
+				r.Delete("/", s.deleteBoardTemplate)
 
-					r.Get("/", s.getColumnTemplate)
-					r.Put("/", s.updateColumnTemplate)
-					r.Delete("/", s.deleteColumnTemplate)
+				r.Route("/columns", func(r chi.Router) {
+					r.Post("/", s.createColumnTemplate)
+					r.Get("/", s.getColumnTemplates)
+
+					r.Route("/{columnTemplate}", func(r chi.Router) {
+						r.Use(s.ColumnTemplateContext)
+
+						r.Get("/", s.getColumnTemplate)
+						r.Put("/", s.updateColumnTemplate)
+						r.Delete("/", s.deleteColumnTemplate)
+					})
 				})
 			})
 		})
 
-		r.Post("/boards", s.createBoard)
-		r.Post("/import", s.importBoard)
+		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)
+		r.With(s.AnonymousBoardCreationContext).Post("/import", s.importBoard)
 		r.Get("/boards", s.getBoards)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
@@ -218,10 +259,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardReactionResources(r)
 		})
 
-		r.Route("/user", func(r chi.Router) {
-			r.Get("/", s.getUser)
-			r.Put("/", s.updateUser)
-		})
+		r.Mount("/", s.userRoutes)
 	})
 }
 
@@ -271,16 +309,9 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 				}),
 			))
 
-			r.Post("/", s.joinBoard)
+			r.Post("/", s.joinBoard) //board
 		})
-		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
-		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
-
-		r.Route("/{session}", func(r chi.Router) {
-			r.Use(s.BoardParticipantContext)
-			r.Get("/", s.getBoardSession)
-			r.Put("/", s.updateBoardSession)
-		})
+		r.Mount("/", s.sessionRoutes)
 	})
 }
 

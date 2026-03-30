@@ -1,0 +1,110 @@
+@use "sass:color";
+@use "constants/styles";
+@use "constants/mixins";
+
+$padding--default: styles.$spacing--xxs styles.$spacing--md styles.$spacing--xxs styles.$spacing--xxs;
+$padding--mobile: 0 0 0 0;
+
+$size-mobile: 56px;
+
+.user-pill {
+  all: unset;
+  user-select: none;
+
+  height: styles.$icon--huge;
+  padding: $padding--default;
+  border-radius: styles.$rounded--large;
+
+  background-color: styles.$gray--000;
+
+  &:enabled {
+    cursor: pointer;
+  }
+}
+
+.user-pill__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: styles.$spacing--sm;
+}
+
+.user-pill__avatar-container {
+  position: relative;
+
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+  border-radius: 100%;
+  background-color: styles.$blue--100;
+
+  user-select: none;
+}
+
+.user-pill__avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 100%;
+
+  background-color: transparent;
+}
+
+.user-pill__avatar {
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+}
+
+.user-pill__name {
+  font-size: styles.$text--base;
+  font-weight: 700;
+
+  color: styles.$navy--600;
+}
+
+.user-pill--no-name {
+  padding: $padding--mobile;
+}
+
+// desktop only styles
+@media screen and (min-width: calc(styles.$breakpoint--smartphone + 1px)) {
+  .user-pill:enabled:not(.user-pill--no-name) {
+    // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
+    @include mixins.default-states($padding: $padding--default);
+  }
+}
+
+// mobile only styles
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .user-pill {
+    height: $size-mobile;
+    padding: $padding--mobile;
+  }
+
+  .user-pill__avatar-container,
+  .user-pill__avatar {
+    width: $size-mobile;
+    height: $size-mobile;
+  }
+
+  .user-pill__name {
+    display: none;
+  }
+}
+
+[data-theme="dark"] {
+  .user-pill {
+    background-color: styles.$navy--400;
+  }
+
+  .user-pill__avatar-container {
+    background-color: styles.$navy--700;
+  }
+
+  .user-pill__name {
+    color: styles.$gray--000;
+  }
+}

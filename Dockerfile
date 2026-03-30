@@ -9,6 +9,10 @@ RUN yarn install --network-timeout 240000
 COPY src/ src/
 COPY public/ public/
 COPY tsconfig.json .
+COPY vite-env.d.ts .
+COPY vite-env-override.d.ts .
+COPY vite.config.ts .
+COPY index.html .
 COPY .prettierrc .
 COPY .eslintignore .
 COPY .eslintrc.json .
@@ -16,7 +20,7 @@ COPY .env .
 
 RUN yarn build
 
-FROM nginxinc/nginx-unprivileged:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.29-alpine
 
 # Toggle visibility of cookie policy, privacy policy, and terms & conditions
 ENV SCRUMLR_SHOW_LEGAL_DOCUMENTS=''

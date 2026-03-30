@@ -6,10 +6,17 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
 	"strconv"
+
+	"go.opentelemetry.io/otel/codes"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/hash"
+	"scrumlr.io/server/sessions"
+
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/votings"
+
+	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/identifiers"
 
@@ -17,18 +24,23 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 )
 
+//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+
 // createBoard creates a new board
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.create")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	owner := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	// parse request
-	var body dto.CreateBoardRequest
+	var body boards.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -36,9 +48,12 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	body.Owner = owner
 
-	b, err := s.boards.Create(r.Context(), body)
+	b, err := s.boards.Create(ctx, body)
 	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
+		span.SetStatus(codes.Error, "failed to create board")
+		span.RecordError(err)
+		log.Errorw("failed to create board", "err", err)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -54,10 +69,17 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 // deleteBoard deletes a board
 func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	err := s.boards.Delete(r.Context(), board)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	err := s.boards.Delete(ctx, board)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to create board")
+		span.RecordError(err)
+		log.Errorw("failed to delete board", "err", err)
 		http.Error(w, "failed to delete board", http.StatusInternalServerError)
 		return
 	}
@@ -67,15 +89,26 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	boardIDs, err := s.boards.GetBoards(r.Context(), user)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	boardIDs, err := s.boards.GetBoards(ctx, user)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get boards")
+		span.RecordError(err)
+		log.Errorw("failed to get boards", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
+
+	OverviewBoards, err := s.boards.BoardOverview(ctx, boardIDs, user)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board overview")
+		span.RecordError(err)
+		log.Errorw("failed to get board overview", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -85,20 +118,28 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
 		s.openBoardSocket(w, r)
 		return
 	}
 
-	board, err := s.boards.Get(r.Context(), boardId)
+	board, err := s.boards.Get(ctx, boardId)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "no board found")
+			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
+
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		log.Errorw("unable to access board", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -117,32 +158,43 @@ type JoinBoardRequest struct {
 
 // joinBoard create a new participant
 func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.join")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
 	boardParam := chi.URLParam(r, "id")
 	board, err := uuid.Parse(boardParam)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to parse board id")
+		span.RecordError(err)
 		log.Errorw("Wrong board id", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	exists, err := s.sessions.SessionExists(r.Context(), board, user)
+	exists, err := s.sessions.Exists(ctx, board, user)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to check session")
+		span.RecordError(err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
 	if exists {
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to check if participant is banned")
+			span.RecordError(err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if banned {
-			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
+			err := errors.New("participant is currently banned from this session")
+			span.SetStatus(codes.Error, "participant is banned")
+			span.RecordError(err)
+			common.Throw(w, r, common.ForbiddenError(err))
 			return
 		}
 
@@ -154,19 +206,24 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := s.boards.Get(r.Context(), board)
+	b, err := s.boards.Get(ctx, board)
 
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		common.Throw(w, r, common.NotFoundError)
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyPublic {
-		_, err := s.sessions.Create(r.Context(), board, user)
+	if b.AccessPolicy == boards.Public {
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to create session")
+			span.RecordError(err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
+
 		if s.basePath == "/" {
 			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
 		} else {
@@ -176,24 +233,33 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByPassphrase {
+	if b.AccessPolicy == boards.ByPassphrase {
 		var body JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to decode body")
+			span.RecordError(err)
+			log.Errorw("Unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
 		if body.Passphrase == "" {
-			common.Throw(w, r, common.BadRequestError(errors.New("missing passphrase")))
+			err := errors.New("missing passphrase")
+			span.SetStatus(codes.Error, "no passphrase provided")
+			span.RecordError(err)
+			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
-		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
+		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(r.Context(), board, user)
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 			if err != nil {
+				span.SetStatus(codes.Error, "failed to create session")
+				span.RecordError(err)
 				common.Throw(w, r, common.InternalServerError)
 				return
 			}
+
 			if s.basePath == "/" {
 				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
 			} else {
@@ -202,14 +268,19 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
-			common.Throw(w, r, common.BadRequestError(errors.New("wrong passphrase")))
+			err := errors.New("wrong passphrase")
+			span.SetStatus(codes.Error, "wrong passphrase provided")
+			span.RecordError(err)
+			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
+	if b.AccessPolicy == boards.ByInvite {
+		sessionExists, err := s.sessionRequests.Exists(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to check session requests")
+			span.RecordError(err)
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
 		}
@@ -224,8 +295,10 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = s.sessions.CreateSessionRequest(r.Context(), board, user)
+		_, err = s.sessionRequests.Create(ctx, board, user)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to create session request")
+			span.RecordError(err)
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
@@ -243,19 +316,27 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 // updateBoard updates a board
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	var body dto.BoardUpdateRequest
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	var body boards.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
 
 	body.ID = boardId
-	board, err := s.boards.Update(r.Context(), body)
+	board, err := s.boards.Update(ctx, body)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board")
+		span.RecordError(err)
+		log.Errorw("Unable to update board", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -265,18 +346,26 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.set")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	var body dto.SetTimerRequest
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	var body boards.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
 
-	board, err := s.boards.SetTimer(r.Context(), boardId, body.Minutes)
+	board, err := s.boards.SetTimer(ctx, boardId, body.Minutes)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to set board timer")
+		span.RecordError(err)
+		log.Errorw("Unable to set board timer", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -286,46 +375,68 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	board, err := s.boards.DeleteTimer(r.Context(), boardId)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	board, err := s.boards.DeleteTimer(ctx, boardId)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete board timer")
+		span.RecordError(err)
+		log.Errorw("Unable to delete board timer", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
+
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, board)
 }
 
 func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	board, err := s.boards.IncrementTimer(r.Context(), boardId)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.increment")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	board, err := s.boards.IncrementTimer(ctx, boardId)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to increment board timer")
+		span.RecordError(err)
+		log.Errorw("Unable to increment board timer", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
+
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, board)
 }
 
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	fullBoard, err := s.boards.FullBoard(r.Context(), boardId)
+	fullBoard, err := s.boards.FullBoard(ctx, boardId)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get full board")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0)
+	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	visibleNotes := make([]*notes.Note, 0)
+	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
 	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
@@ -337,11 +448,11 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *dto.Board          `json:"board"`
-			Participants []*dto.BoardSession `json:"participants"`
-			Columns      []*columns.Column   `json:"columns"`
-			Notes        []*notes.Note       `json:"notes"`
-			Votings      []*votes.Voting     `json:"votings"`
+			Board        *boards.Board            `json:"board"`
+			Participants []*sessions.BoardSession `json:"participants"`
+			Columns      []*columns.Column        `json:"columns"`
+			Notes        []*notes.Note            `json:"notes"`
+			Votings      []*votings.Voting        `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,
@@ -352,8 +463,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, voting := range fullBoard.Votings {
-			if voting.Status == types.VotingStatusClosed {
+		for index, closedVoting := range fullBoard.Votings {
+			if closedVoting.Status == votings.Closed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
 		}
@@ -367,8 +478,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User.ID == note.Author {
-					author = session.User.Name
+				if session.UserID == note.Author {
+					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
+					author = user.Name
 				}
 			}
 
@@ -390,10 +502,10 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				stack,
 			}
 
-			for _, voting := range fullBoard.Votings {
-				if voting.Status == types.VotingStatusClosed {
-					if voting.VotingResults != nil {
-						resultOnNote = append(resultOnNote, strconv.Itoa(voting.VotingResults.Votes[note.ID].Total))
+			for _, closedVoting := range fullBoard.Votings {
+				if closedVoting.Status == votings.Closed {
+					if closedVoting.VotingResults != nil {
+						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
 					} else {
 						resultOnNote = append(resultOnNote, "0")
 					}
@@ -407,6 +519,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		csvWriter := csv.NewWriter(w)
 		err := csvWriter.WriteAll(records)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to respond with csv")
+			span.RecordError(err)
 			log.Errorw("failed to respond with csv", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
@@ -419,46 +533,54 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-	var body dto.ImportBoardRequest
+	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.import")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	owner := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	var body boards.ImportBoardRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Could not read body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
 	body.Board.Owner = owner
-
-	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
 
 	for _, column := range body.Columns {
-		columns = append(columns, dto.ColumnRequest{
+		importColumns = append(importColumns, columns.ColumnRequest{
 			Name:    column.Name,
 			Color:   column.Color,
 			Visible: &column.Visible,
 			Index:   &column.Index,
 		})
 	}
-	b, err := s.boards.Create(r.Context(), dto.CreateBoardRequest{
+	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{
 		Name:         body.Board.Name,
 		Description:  body.Board.Description,
 		AccessPolicy: body.Board.AccessPolicy,
 		Passphrase:   body.Board.Passphrase,
-		Columns:      columns,
+		Columns:      importColumns,
 		Owner:        owner,
 	})
 
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to import board")
+		span.RecordError(err)
 		log.Errorw("Could not import board", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
 
-	cols, err := s.boards.ListColumns(r.Context(), b.ID)
+	cols, err := s.columns.GetAll(ctx, b.ID)
 	if err != nil {
-		_ = s.boards.Delete(r.Context(), b.ID)
-
+		span.SetStatus(codes.Error, "failed to get columns from imported board")
+		span.RecordError(err)
+		_ = s.boards.Delete(ctx, b.ID)
 	}
 
 	type ParentChildNotes struct {
@@ -481,7 +603,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		for i, column := range body.Columns {
 			if parentNote.Position.Column == column.ID {
 
-				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				note, err := s.notes.Import(ctx, notes.NoteImportRequest{
 					Text: parentNote.Text,
 					Position: notes.NotePosition{
 						Column: cols[i].ID,
@@ -492,7 +614,9 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 					User:  parentNote.Author,
 				})
 				if err != nil {
-					_ = s.boards.Delete(r.Context(), b.ID)
+					span.SetStatus(codes.Error, "failed to import notes")
+					span.RecordError(err)
+					_ = s.boards.Delete(ctx, b.ID)
 					common.Throw(w, r, err)
 					return
 				}
@@ -507,7 +631,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, node := range organizedNotes {
 		for _, note := range node.Children {
-			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+			_, err := s.notes.Import(ctx, notes.NoteImportRequest{
 				Text:  note.Text,
 				Board: b.ID,
 				User:  note.Author,
@@ -521,11 +645,12 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				},
 			})
 			if err != nil {
-				_ = s.boards.Delete(r.Context(), b.ID)
+				span.SetStatus(codes.Error, "failed to import note")
+				span.RecordError(err)
+				_ = s.boards.Delete(ctx, b.ID)
 				common.Throw(w, r, err)
 				return
 			}
-
 		}
 	}
 

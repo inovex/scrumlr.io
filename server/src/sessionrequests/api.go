@@ -1,0 +1,19 @@
+package sessionrequests
+
+import (
+	"context"
+	"net/http"
+
+	"github.com/google/uuid"
+)
+
+type SessionRequestService interface {
+	Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error)
+	Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error)
+	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error)
+	GetAll(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error)
+	Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
+	OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request)
+
+	BoardCandidateContext(next http.Handler) http.Handler
+}

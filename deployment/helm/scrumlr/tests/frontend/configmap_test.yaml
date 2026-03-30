@@ -1,0 +1,74 @@
+---
+suite: test frontend configmap
+templates:
+  - /frontend/configmap.yaml
+tests:
+  - it: should set name, namespace, apiVersion and kind
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: scrumlr-frontend-configmap
+          namespace: scrumlr
+
+  - it: should set default listen port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: data.SCRUMLR_LISTEN_PORT
+          value: "8080"
+
+  - it: should set listen port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.config.listenPort: 9000
+    asserts:
+      - equal:
+          path: data.SCRUMLR_LISTEN_PORT
+          value: "9000"
+
+  - it: should set default server url
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_URL
+          value: /api
+
+  - it: should set base path
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.config.serverUrl: /scrumlr/api/
+    asserts:
+      - equal:
+          path: data.SCRUMLR_SERVER_URL
+          value: /scrumlr/api/
+
+  - it: should set extra config
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.extraConfig.SCRUMLR_SHOW_LEGAL_DOCUMENTS: true
+      frontend.extraConfig.Scrumlr_Websocket_Url: ws://scrumlr.websocket
+    asserts:
+      - exists:
+          path: data.SCRUMLR_SHOW_LEGAL_DOCUMENTS
+      - equal:
+          path: data.SCRUMLR_SHOW_LEGAL_DOCUMENTS
+          value: "true"
+      - exists:
+          path: data.SCRUMLR_WEBSOCKET_URL
+      - equal:
+          path: data.SCRUMLR_WEBSOCKET_URL
+          value: ws://scrumlr.websocket

@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
 import {useAppDispatch, useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useTranslation} from "react-i18next";
@@ -30,7 +29,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const viewer = useAppSelector((state) => state.participants!.self!);
 
   // activeTab === undefined -> all are active
-  const [activeTab, setActiveTab] = useState<ReactionType>();
+  const [activeTab, setActiveTab] = useState<string>();
 
   // after scrolling has stopped, divide the scroll offset by the main container width
   // to get which inner container is currently visible.
@@ -52,7 +51,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     current.scrollTo({left: offset, behavior: "smooth"});
   };
 
-  const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: ReactionType) => {
+  const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: string) => {
     e.stopPropagation();
     const index = reactionType ? props.reactionsReduced.findIndex((r) => r.reactionType === reactionType) + 1 : 0;
     setActiveTab(reactionType);
@@ -89,7 +88,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}
               >
-                {REACTION_EMOJI_MAP.get(r.reactionType)?.emoji}
+                {r.reactionType}
               </button>
             </div>
             <div className="note-reaction-popup__row-divider" />
@@ -99,7 +98,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   );
 
   return (
-    <Portal hiddenOverflow onClick={props.onClose} accentColor={props.colorClassName}>
+    <Portal hiddenOverflow disabledPadding onClick={props.onClose} align="bottom" accentColor={props.colorClassName}>
       <div className="note-reaction-popup__root" ref={rootRef}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />

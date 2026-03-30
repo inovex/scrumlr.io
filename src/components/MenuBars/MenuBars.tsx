@@ -1,7 +1,19 @@
 import {animated, useSpring} from "@react-spring/web";
 import classNames from "classnames";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
-import {AddStickerReaction, ArrowLeft, ArrowRight, Close, GeneralSettings, MarkAsDone, Menu, PresenterMode, RaiseHand, Timer, Voting} from "components/Icon";
+import {
+  AddStickerReactionIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CloseIcon,
+  GeneralSettingsIcon,
+  MarkAsDoneIcon,
+  MenuIcon,
+  PresenterModeIcon,
+  RaiseHandIcon,
+  TimerIcon,
+  VotingIcon,
+} from "components/Icon";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -11,7 +23,7 @@ import {useLocation, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 import _ from "underscore";
-import {useTimer} from "../../utils/hooks/useTimerLeft";
+import {useTimer} from "utils/hooks/useTimerLeft";
 import "./MenuBars.scss";
 
 export interface MenuBarsProps {
@@ -193,6 +205,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   /**
    * Logic for "Mark me as Done" tooltip.
    * https://github.com/inovex/scrumlr.io/issues/4269
+   * addendum: updated logic: https://github.com/inovex/scrumlr.io/issues/4846
    */
   const timerExpired = useTimer(state.timerEnd);
   const [isReadyTooltipClass, setIsReadyTooltipClass] = useState("");
@@ -209,7 +222,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       setIsReadyTooltipClass("tooltip-button--content-extended");
       setTimeout(() => setIsReadyTooltipClass(""), 28000);
     };
-    if ((timerExpired || USED_VOTES) && USER_NOT_READY && (state.activeTimer || state.activeVoting)) {
+
+    // during an active voting, if timer expired or votes are used up, show tooltip to non-ready users
+    if (USER_NOT_READY && state.activeVoting && (timerExpired || USED_VOTES)) {
       timer = setTimeout(handleTimeout, 2000);
     }
     if (!USED_VOTES || !state.activeTimer || !USER_NOT_READY || !state.activeVoting) {
@@ -232,7 +247,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   direction="right"
                   onClick={toggleReadyState}
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                  icon={MarkAsDone}
+                  icon={MarkAsDoneIcon}
                   className={isReadyTooltipClass}
                   active={isReady}
                   hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
@@ -242,7 +257,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   direction="right"
                   label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                  icon={RaiseHand}
+                  icon={RaiseHandIcon}
                   onClick={toggleRaiseHand}
                   active={raisedHand}
                   hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
@@ -252,20 +267,20 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   direction="right"
                   label={t("MenuBars.openBoardReactionMenu")}
-                  icon={AddStickerReaction}
+                  icon={AddStickerReactionIcon}
                   onClick={toggleBoardReactionsMenu}
                   active={showBoardReactionsMenu}
                   hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
                 />
               </li>
               <li>
-                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettings} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettingsIcon} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
               </li>
             </ul>
           </section>
 
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
-            <ArrowLeft className="menu-bars__navigation-icon" />
+            <ArrowLeftIcon className="menu-bars__navigation-icon" />
           </button>
         </div>
 
@@ -275,7 +290,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             {isAdmin && (
               <ul className="menu__items">
                 <li>
-                  <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={Timer} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
+                  <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
                 </li>
                 <li>
                   <TooltipButton
@@ -283,7 +298,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                     direction="left"
                     label="Voting"
                     onClick={toggleVotingMenu}
-                    icon={Voting}
+                    icon={VotingIcon}
                     hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
                   />
                 </li>
@@ -292,7 +307,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                     active={state.moderation}
                     direction="left"
                     label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                    icon={PresenterMode}
+                    icon={PresenterModeIcon}
                     onClick={toggleModeration}
                     hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
                   />
@@ -301,7 +316,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             )}
           </section>
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn} aria-hidden>
-            <ArrowRight className="menu-bars__navigation-icon" />
+            <ArrowRightIcon className="menu-bars__navigation-icon" />
           </button>
         </div>
       </aside>
@@ -316,7 +331,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           }}
           aria-label={t("MenuBars.openMenu")}
         >
-          {fabIsExpanded ? <Close aria-hidden /> : <Menu aria-hidden />}
+          {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon aria-hidden />}
         </button>
 
         {/* role=any: toggle ready, toggle raise hand, options */}
@@ -327,7 +342,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           })}
         >
           <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal" style={settingsAnimation}>
-            <TooltipButton disabled={!fabIsExpanded} direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettings} />
+            <TooltipButton disabled={!fabIsExpanded} direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettingsIcon} />
           </animated.li>
           <animated.li
             className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
@@ -340,7 +355,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               active={showBoardReactionsMenu}
               direction="left"
               label={t("MenuBars.openBoardReactionMenu")}
-              icon={AddStickerReaction}
+              icon={AddStickerReactionIcon}
               onClick={toggleBoardReactionsMenu}
             />
           </animated.li>
@@ -353,7 +368,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               active={raisedHand}
               direction="left"
               label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-              icon={RaiseHand}
+              icon={RaiseHandIcon}
               onClick={toggleRaiseHand}
             />
           </animated.li>
@@ -366,7 +381,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               active={isReady}
               direction="left"
               label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-              icon={MarkAsDone}
+              icon={MarkAsDoneIcon}
               onClick={toggleReadyState}
             />
           </animated.li>
@@ -389,15 +404,15 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 active={state.moderation}
                 direction="right"
                 label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                icon={PresenterMode}
+                icon={PresenterModeIcon}
                 onClick={toggleModeration}
               />
             </animated.li>
             <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={votingAnimation}>
-              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Voting" onClick={toggleVotingMenu} icon={Voting} />
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Voting" onClick={toggleVotingMenu} icon={VotingIcon} />
             </animated.li>
             <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={timerAnimation}>
-              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Timer" onClick={toggleTimerMenu} icon={Timer} />
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
             </animated.li>
           </ul>
         )}

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {FC} from "react";
 import {AvataaarProps} from "types/avatar";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {useAppSelector} from "store";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
@@ -21,7 +21,7 @@ export type NoteDialogNoteProps = {
   className?: string;
   colorClassName?: string;
 
-  viewer: Participant;
+  viewer: ParticipantWithUser;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {

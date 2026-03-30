@@ -1,16 +1,17 @@
 import {useEffect, useState} from "react";
 import {animated, Transition} from "@react-spring/web";
-import {Outlet, useLocation, useNavigate, Link} from "react-router";
+import {Link, Outlet, useLocation, useNavigate} from "react-router";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
-import {ArrowLeft, Close} from "components/Icon";
+import {ArrowLeftIcon, CloseIcon, LogoutIcon} from "components/Icon";
 import {MENU_ITEM_CONFIG, MenuEntry, MenuItemConfig, MenuItemConfigOverride, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
+import {signOut} from "store/features/auth/thunks";
 import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
@@ -36,7 +37,8 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const me = useAppSelector((applicationState) => applicationState.participants?.self?.user)!;
+  const dispatch = useAppDispatch();
+  const me = useAppSelector((state) => state.auth.user!);
   const isBoardModerator = useAppSelector((state) => state.participants?.self?.role === "MODERATOR" || state.participants?.self?.role === "OWNER");
 
   const [menuEntries, setMenuEntries] = useState<MenuEntry[]>(createMenuEntries(MENU_ITEM_CONFIG));
@@ -134,37 +136,45 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     );
   };
 
+  const handleLogout = () => {
+    dispatch(signOut());
+    navigate("/login");
+  };
   return (
-    <Portal onClose={() => navigate(`..`)}>
-      <div className="settings-dialog__background" />
-      <div className="settings-dialog__wrapper">
-        <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
-          {(styles) => (
-            <animated.aside
-              aria-modal="true"
-              className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
-              onClick={(e) => e.stopPropagation()}
-              role="dialog"
-              style={styles}
-            >
-              <div className="settings-dialog__sidebar">
-                <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
-                {/* render all menu items */}
-                <nav className="settings-dialog__navigation">{menuEntries.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
-              </div>
-              <article className="settings-dialog__content">
-                <Link to="" className="settings-dialog__back-link">
-                  <ArrowLeft />
-                </Link>
-                <Outlet context={activeMenuItem} />
-              </article>
-              <Link to=".." className="settings-dialog__close-button">
-                <Close className="close-button__icon" />
+    <Portal onClose={() => navigate(`..`)} align="center" backdrop="blur">
+      <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
+        {(styles) => (
+          <animated.aside
+            aria-modal="true"
+            className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
+            role="dialog"
+            style={styles}
+          >
+            <div className="settings-dialog__sidebar">
+              <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
+              {/* render all menu items */}
+              <nav className="settings-dialog__navigation">{menuEntries.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
+              <button className="navigation__item navigation__item--logout accent-color__poker-purple" type="button" onClick={handleLogout}>
+                <span className="navigation-item__icon">
+                  <LogoutIcon />
+                </span>
+                <div className="navigation-item__content">
+                  <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
+                </div>
+              </button>
+            </div>
+            <article className="settings-dialog__content">
+              <Link to="" className="settings-dialog__back-link">
+                <ArrowLeftIcon />
               </Link>
-            </animated.aside>
-          )}
-        </Transition>
-      </div>
+              <Outlet context={activeMenuItem} />
+            </article>
+            <Link to=".." className="settings-dialog__close-button">
+              <CloseIcon className="close-button__icon" />
+            </Link>
+          </animated.aside>
+        )}
+      </Transition>
     </Portal>
   );
 };

@@ -1,0 +1,33 @@
+import {useId} from "react";
+import classNames from "classnames";
+import {useTranslation} from "react-i18next";
+import {getColorClassName} from "constants/colors";
+import {StarIcon as FavouriteIcon} from "components/Icon";
+import {Tooltip} from "components/Tooltip";
+import "./FavouriteButton.scss";
+
+type FavouriteButtonProps = {
+  className?: string;
+  active: boolean;
+  onClick: () => void;
+};
+
+export const FavouriteButton = (props: FavouriteButtonProps) => {
+  const {t} = useTranslation();
+  const baseId = useId();
+  const anchor = `favourite-icon-${baseId}`;
+
+  return (
+    <>
+      <button
+        id={anchor}
+        className={classNames(props.className, "favourite-button", {"favourite-button--active": props.active}, getColorClassName("planning-pink"))}
+        onClick={props.onClick}
+        tabIndex={0}
+      >
+        <FavouriteIcon className="favourite-icon" />
+      </button>
+      <Tooltip anchorSelect={`#${anchor}`} content={props.active ? t("Templates.TemplateCard.removeFavourite") : t("Templates.TemplateCard.addFavourite")} color="backlog-blue" />
+    </>
+  );
+};

@@ -23,6 +23,7 @@ test: Adding missing tests or correcting existing tests
 ## Checklist
 
 - [ ] I have performed a self-review of my own code
+- [ ] I have written and understand every part of this contribution myself - if AI tools were used, I have thoroughly reviewed and verified all changes
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] The light- and dark-theme are both supported and tested
 - [ ] The design was implemented and is responsive for all devices and screen sizes

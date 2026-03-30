@@ -12,7 +12,7 @@ yarn-error.log*
 
 # testing
 /coverage
-server/src/coverage.txt
+server/src/coverage.*
 
 # builds
 build
@@ -32,11 +32,14 @@ debug.log
 ui-debug.log
 
 # vscode
-/.vscode
+**/.vscode
 
 # env files
-server/.env
-deployment/.env
+server/**/.env
+deployment/**/.env
+
+# keys
+**/jwt.key
 
 # script output
 scripts/out

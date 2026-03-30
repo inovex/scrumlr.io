@@ -28,11 +28,15 @@ spec:
       labels:
         app: scrumlr
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: scrumlr
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-server:sha-71c6812
           args:
-            - "/app/main"
             - "-disable-check-origin"
           resources:
             requests:

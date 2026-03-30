@@ -1,62 +1,98 @@
-import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, DetailedHTMLProps, FC, PropsWithChildren, ReactElement, useEffect, useRef, useState} from "react";
 import classNames from "classnames";
+import {Color, getColorClassName} from "constants/colors";
+import {MouseEvent, ReactNode} from "react";
 import "./Button.scss";
 
-export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
-  color?: "primary" | "secondary";
-  variant?: "contained" | "outlined" | "text-link";
-  leftIcon?: ReactElement;
-  rightIcon?: ReactElement;
+type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost";
+type IconStyle = "default" | "embedded";
+type IconPosition = "left" | "right";
+type IconAlignment = "compact" | "spaced"; // compact = close, spaced = far
+
+type ButtonProps = {
+  // Functional Props
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
+  children?: ReactNode;
+  dataCy?: string;
+  id?: string;
+
+  // Style Props
+  variant?: ButtonVariant;
+  color?: Color;
+  className?: string;
+  small?: boolean;
   hideLabel?: boolean;
-  block?: boolean;
-}
+  title?: string; // Tooltip text shown on hover
+  dataTooltipId?: string; // ID for react-tooltip integration
+  dataTooltipContent?: string; // Content for react-tooltip
+  fullWidth?: boolean; // If true, button takes full width of its container. Defaults to false.
 
-export const Button: FC<PropsWithChildren<ButtonProps>> = ({
-  className,
-  variant = "contained",
-  color = "secondary",
-  leftIcon,
-  rightIcon,
-  block = false,
-  hideLabel,
-  children,
-  ...other
-}) => {
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const [label, setLabel] = useState<string>("");
+  // Icon Props
+  icon?: ReactNode;
+  iconStyle?: IconStyle; // Defaults to 'default'
+  iconPosition?: IconPosition; // Defaults to 'right'
+  iconAlignment?: IconAlignment; // Defaults to 'compact' (close)
+};
 
-  useEffect(() => {
-    setLabel(labelRef.current?.textContent as string);
-  }, [labelRef]);
+export const Button = (props: ButtonProps) => {
+  const hasLabel = props.children !== null && props.children !== undefined && props.children !== "";
+  const isIconOnly = !!props.icon && (props.hideLabel || !hasLabel);
 
-  const labelProps = hideLabel ? {"aria-label": label} : {};
+  const iconPos = props.iconPosition ?? "right";
+  const iconAlign = props.iconAlignment ?? "compact";
+  const iconStyle = props.iconStyle ?? "default";
+  const buttonSize = props.small ? "small" : "default";
 
-  if (leftIcon) {
-    const iconProps = Children.only(leftIcon)?.props;
-    leftIcon = cloneElement(leftIcon!, {className: classNames(iconProps?.className, "button__icon", "button__left-icon")});
-  }
+  const isFullWidth = props.fullWidth || iconAlign === "spaced";
 
-  if (rightIcon) {
-    const iconProps = Children.only(rightIcon)?.props;
-    rightIcon = cloneElement(rightIcon!, {className: classNames(iconProps?.className, "button__icon", "button__right-icon")});
-  }
+  const renderButtonContent = () => {
+    const label = !props.hideLabel && hasLabel ? props.children : null;
 
-  let Component: keyof JSX.IntrinsicElements = "button";
-  if (other.href) {
-    Component = "a";
-  }
+    if (!props.icon) return label;
+
+    const iconMarkup = (
+      <div data-size={buttonSize} className={`button__icon-background button__icon-background--${iconStyle}`}>
+        {props.icon}
+      </div>
+    );
+
+    if (isIconOnly) {
+      return iconMarkup;
+    }
+
+    return (
+      <div className="button__content-wrapper" data-align={iconAlign} data-pos={iconPos} data-size={buttonSize}>
+        {iconPos === "left" && iconMarkup}
+        {label}
+        {iconPos !== "left" && iconMarkup}
+      </div>
+    );
+  };
 
   return (
-    <Component
-      className={classNames("button", `button--${color}`, `button--${variant}`, {"button--block": block}, {"button__label--shown": !hideLabel}, className)}
-      {...other}
-      {...labelProps}
+    <button
+      id={props.id}
+      className={classNames(
+        props.className,
+        "button",
+        `button--${props.variant ?? "primary"}`,
+        {
+          "button--small": props.small,
+          "button--full-width": isFullWidth,
+          "button--with-icon": props.icon && !isIconOnly,
+          "button--icon-only": isIconOnly,
+        },
+        getColorClassName(props.color ?? "planning-pink")
+      )}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      title={props.title}
+      data-tooltip-id={props.dataTooltipId}
+      data-tooltip-content={props.dataTooltipContent}
+      data-cy={props.dataCy}
+      aria-label={isIconOnly ? props.title || "Button" : undefined}
     >
-      {leftIcon}
-      <span ref={labelRef} className={classNames("button__label", {"button__label--hidden": hideLabel})}>
-        {children}
-      </span>
-      {rightIcon}
-    </Component>
+      {renderButtonContent()}
+    </button>
   );
 };

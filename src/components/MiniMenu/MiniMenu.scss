@@ -1,21 +1,36 @@
-@import "constants/style";
+@use "constants/styles";
+
+$height--default: 48px;
+$height--small: 36px;
 
 .mini-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $spacing--xxs;
+  gap: styles.$spacing--xxs;
   justify-content: center;
 
   width: fit-content;
   height: fit-content;
-  min-height: 48px;
-  padding-left: $spacing--xxs 2px;
+  min-height: $height--default;
+  padding-left: styles.$spacing--xxs 2px;
 
-  border-radius: $rounded--full;
-  box-shadow: 0 0 20px rgba($navy--400, 0.12);
+  border-radius: styles.$rounded--full;
+  box-shadow: 0 0 20px rgba(styles.$navy--400, 0.12);
 
-  background-color: $gray--000;
+  background-color: styles.$gray--000;
+
+  &--transparent {
+    background: none;
+    box-shadow: none;
+  }
+
+  &--small {
+    min-height: $height--small;
+    height: $height--small;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
 .mini-menu__item {
   all: unset;
@@ -24,63 +39,89 @@
   justify-content: center;
   align-items: center;
 
-  width: 40px;
-  height: 40px;
-  border-radius: $rounded--full;
+  width: styles.$icon--default;
+  height: styles.$icon--default;
+  border-radius: styles.$rounded--full;
 
-  color: $navy--900;
+  color: styles.$navy--900;
+  background-color: transparent;
 
   cursor: pointer;
 
+  &--small {
+    width: styles.$icon--small;
+    height: styles.$icon--small;
+  }
+
   &:hover {
-    background-color: $gray--300;
+    background-color: styles.$gray--300;
   }
 
   &:focus-visible {
-    background-color: $gray--300;
+    background-color: styles.$gray--300;
   }
 
   &--active {
-    color: $gray--000;
-    background-color: $navy--400;
+    color: styles.$gray--000;
+    background-color: styles.$navy--400;
 
     &:hover {
-      background-color: $navy--600;
+      background-color: styles.$navy--600;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    &:hover {
+      background-color: transparent;
     }
   }
 }
 
 .mini-menu:first-child {
-  padding-left: $spacing--xxs;
+  padding-left: styles.$spacing--xxs;
 }
 
 .mini-menu:last-child {
-  padding-right: $spacing--xxs;
+  padding-right: styles.$spacing--xxs;
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .mini-menu__item {
-    color: $gray--000;
+    color: styles.$gray--000;
 
     &:hover {
-      background-color: $navy--600;
+      // TODO check if designs aligns with the other employed mini menus
+      color: styles.$navy--400;
+      background-color: styles.$gray--000;
     }
 
     &:focus-visible {
-      background-color: $navy--600;
+      background-color: styles.$navy--600;
     }
 
     &--active {
-      color: $gray--000;
-      background-color: $navy--600;
+      color: styles.$gray--000;
+      background-color: styles.$navy--600;
 
       &:hover {
-        background-color: $navy--600;
+        background-color: styles.$navy--600;
+      }
+    }
+
+    &:disabled {
+      &:hover {
+        color: styles.$gray--000;
+        background-color: transparent;
       }
     }
   }
   .mini-menu {
-    background-color: $navy--400;
+    background-color: styles.$navy--400;
+
+    &--transparent {
+      background: none; // reset transparent bgc
+    }
   }
 }
 
@@ -89,15 +130,19 @@
   display: none;
 }
 
-@media #{$smartphone} {
+@media #{styles.$smartphone} {
   .mini-menu {
-    flex-direction: column-reverse;
-    align-content: center;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .mini-menu:first-child {
-    padding: $spacing--xxs;
+    &--wrap-to-column {
+      // only wrap if activated
+      flex-direction: column-reverse;
+      align-content: center;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      &:first-child {
+        padding: styles.$spacing--xxs;
+      }
+    }
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS votings DROP COLUMN IF EXISTS is_anonymous;

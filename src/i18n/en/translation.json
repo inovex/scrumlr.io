@@ -1,8 +1,10 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Return to presented note"
+    "ReturnToPresentedNote": "Return to presented note",
+    "VotingIsAnonymous": "Voting is anonymous",
+    "VotingIsNotAnonymous": "Voting is not anonymous"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
@@ -13,18 +15,91 @@
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
   },
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations",
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "start": "Start",
+      "save": "Save",
+      "signInToCreateBoards": "To create a board, sign in using an identity provider."
+    },
+    "TemplateEditor": {
+      "createTitle": "Create a Template",
+      "editTitle": "Edit a Template",
+      "cancel": "Cancel",
+      "saveEdit": "Save",
+      "saveCreate": "Create template",
+      "info": "Changes can be made at any time, including on the board."
+    },
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Column 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "AccessSettings": {
+      "title": "Access Settings",
+      "Options": {
+        "Public": {
+          "title": "Open",
+          "description": "Participants can join easily & quickly via the link – this provides basic security."
+        },
+        "By_Invite": {
+          "title": "Approval",
+          "description": "Participants must be approved before joining – ensuring a high level of security."
+        },
+        "By_Passphrase": {
+          "title": "Password Protected",
+          "description": "Access is only possible with a set password – ensuring a high level of security.",
+          "inputPlaceholder": "Enter password here",
+          "hint": "The password can be changed in the settings later."
+        }
+      },
+      "Buttons": {
+        "cancel": "Go back",
+        "start": "Start Session"
+      }
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
+  },
+  "CreateBoard": {
+    "title": "Create a new Board",
+    "dropdown": {
+      "open": "Open",
+      "password": "Password",
+      "approval": "Approval"
+    },
+    "validation": {
+      "REQUIRED": "Input is required."
+    }
+  },
   "LoginBoard": {
-    "title": "Sign in to scrumlr.io",
-    "anonymousLogin": "Join board anonymously",
-    "usernameValidationError": "Username may not be empty",
-    "termsValidationError": "You must accept the terms and privacy policy",
-    "anonymousLoginDisabledError": "Anonymous accounts are disabled; please use one of the providers above",
+    "title": "Sign in",
+    "subtitleLogin": "Log in and enjoy the benefits",
+    "loginFeature1": "Create and save custom templates",
+    "loginFeature2": "Custom settings are saved in your profile",
+    "subtitleAnonymous": "Log in anonymously",
+    "anonymousLogin": "Join board anonymously without benefits",
     "noLoginAvailable": "There isn't any valid login available",
-    "errorOnRedirect": "An error occurred while redirecting you",
-    "login": "Sign in",
-    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
-    "generateRandomName": "Generate random name",
-    "username": "Username"
+    "dividerWord": "or",
+    "login": "Continue anonymously",
+    "acceptTerms": "By signing up, you agree to our <terms>Terms and Conditions</terms> and <privacy>Privacy Policy</privacy>.",
+    "generateRandomName": "Generate random name"
   },
   "AccessPolicy": {
     "PUBLIC": "Open",
@@ -67,6 +142,13 @@
     "deleteNoteButton": "Delete Note",
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
+    "deleteAccount": "Are you sure you want to delete your account?",
+    "deleteAccountText": "If you delete your account, all related data will also be permanently removed, including:",
+    "deleteAccountItems": "your own created templates \n your notes & votes on other boards",
+    "deleteAccountTextAfterItems": "This action cannot be undone.",
+    "deleteAccountCheck": "I understand and agree to the permanent deletion.",
+    "deleteAccountWarning": "You must confirm the deletion.",
+    "deleteAccountButton": "Delete Account",
     "banParticipant": "Are you sure you want to remove participant '{{user}}' from the session?",
     "unbanParticipant": "Are you sure you want to allow participant '{{user}}' to join the session again?",
     "warning": "This action cannot be undone.",
@@ -84,7 +166,7 @@
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
-    "openPrintView": "Open print view",
+    "openPrintView": "Export PDF",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!",
     "hintHiddenColumns": "The following columns are hidden and will not be exported:",
@@ -114,7 +196,8 @@
     "title": "Share Session",
     "button": "Share board",
     "copyInviteURL": "Copy Invite URL",
-    "inviteUrlCopied": "Invite URL copied"
+    "inviteUrlCopied": "Invite URL copied",
+    "hint": "The password can be changed in the board settings."
   },
   "Column": {
     "settings": "Settings",
@@ -129,7 +212,10 @@
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
     "notes_other": "{{count}} notes",
-    "color": "Change color"
+    "color": "Change color",
+    "Header": {
+      "descriptionPlaceholder": "Add description (optional)"
+    }
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -251,7 +337,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Voting",
-    "showVotesOfOthers": "Anonymous voting",
+    "isAnonymous": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
     "increaseVotes": "Increase number of votes",
@@ -317,7 +403,8 @@
   },
   "Language": {
     "german": "German",
-    "english": "English"
+    "english": "English",
+    "french": "French"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, provided by <inovex>inovex</inovex> with ❤️",
@@ -332,7 +419,8 @@
     "me": "Me",
     "you": "you",
     "userImageAlt": "media provided by {{user}}",
-    "edited": "edited"
+    "edited": "edited",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Previous note",
@@ -354,6 +442,11 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
   },
+  "Input": {
+    "placeholder": {
+      "search": "Search"
+    }
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
     "BoardSettingsDescription": "Name, Access Policy",
@@ -367,7 +460,8 @@
     "ExportBoardDescription": "Share the board",
     "Feedback": "Feedback",
     "FeedbackDescription": "We love to hear from you",
-    "ProfileDescription": "Edit profile"
+    "ProfileDescription": "Edit profile",
+    "Logout": "Logout"
   },
   "BoardSettings": {
     "BoardName": "Board Name",
@@ -432,7 +526,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profile",
-    "UserName": "User Name"
+    "UserName": "User Name",
+    "deleteAccount": "Delete account"
   },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
@@ -465,7 +560,15 @@
     "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
-    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again.",
+    "deleteAccount": "Sorry, but we're having trouble deleting your account. Please try again."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Generate random avatar",
@@ -474,7 +577,8 @@
     "groups": {
       "hair": "Hats and hairstyle",
       "facialFeatures": "Facial features",
-      "clothing": "Clothing"
+      "clothing": "Clothing",
+      "background": "Background"
     },
     "hairColor": {
       "label": "Hair color",
@@ -657,6 +761,16 @@
       "Bear": "Bear",
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
+    },
+    "backgroundColor": {
+      "label": "Background color",
+      "backlog-blue": "Blue",
+      "planning-pink": "Pink",
+      "poker-purple": "Purple",
+      "value-violet": "Violet",
+      "goal-green": "Green",
+      "yielding-yellow": "Yellow",
+      "online-orange": "Orange"
     }
   },
   "ToggleButton": {

@@ -26,11 +26,15 @@ spec:
       labels:
         app: scrumlr-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: scrumlr
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-server
           args:
-            - "/app/main"
             - "-disable-check-origin"
           resources:
             requests:
@@ -39,6 +43,8 @@ spec:
           env:
             - name: SCRUMLR_SERVER_PORT
               value: "8080"
+            - name: SCRUMLR_LOG_LEVEL
+              value: "INFO"
             - name: SCRUMLR_API_HOST
               value: "https://PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
             - name: SCRUMLR_SERVER_NATS_URL
@@ -87,6 +93,10 @@ spec:
                   key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
+            - name: SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES
+              value: "true"
+            - name: SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION
+              value: "true"
           ports:
             - containerPort: 8080
 ---
@@ -118,8 +128,13 @@ spec:
       labels:
         app: frontend-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: frontend
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
           resources:
             requests:
@@ -165,8 +180,13 @@ spec:
       labels:
         app: landing-page-PR_NUMBER
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: landing-page
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io-landing-page/image:latest
           resources:
             requests:
@@ -194,7 +214,7 @@ spec:
       services:
         - name: scrumlr-backend-PR_NUMBER
           port: 8080
-    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`)  || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`))
+    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/legal`) || PathPrefix(`/emoji-data`) || Path(`/timer_finished.mp3`) || Path(`/hotkeys.pdf`))
       kind: Rule
       services:
         - name: scrumlr-frontend-PR_NUMBER
@@ -256,7 +276,7 @@ stringData:
   url: postgres://scrumlr:POSTGRES_DEV_PASSWORD@cluster-PR_NUMBER-rw:5432/scrumlr
 ---
 # nats repository
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: nats
@@ -265,7 +285,7 @@ spec:
   url: https://nats-io.github.io/k8s/helm/charts/
 ---
 # nats deployment
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nats-PR_NUMBER
@@ -274,10 +294,21 @@ spec:
   chart:
     spec:
       chart: nats
-      version: 0.19.12
+      version: 2.12.1
       sourceRef:
         kind: HelmRepository
         name: nats
   install: {}
   interval: 10m0s
   targetNamespace: scrumlr-dev-deployments
+  values:
+    config:
+      cluster:
+        enabled: true
+        replicas: 2
+      jetstream:
+        enabled: true
+        fileStore:
+          enabled: false
+        memoryStore:
+          enabled: true

@@ -7,12 +7,15 @@ import {I18nextProvider} from "react-i18next";
 import {VotingDialog} from "..";
 import i18nTest from "i18nTest";
 
-const mockedUsedNavigate = jest.fn();
+const mockedUsedNavigate = vi.fn();
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useNavigate: () => mockedUsedNavigate,
-}));
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual<typeof import("react-router")>("react-router");
+  return {
+    ...actual,
+    useNavigate: () => mockedUsedNavigate,
+  };
+});
 
 describe("VotingDialog", () => {
   const createVotingDialog = (overwrite?: Partial<ApplicationState>) => {

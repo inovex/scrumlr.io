@@ -1,10 +1,12 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SERVER_WEBSOCKET_URL} from "config";
-import {ServerEvent} from "types/websocket";
+import {ServerEvent, ClientMessage} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
+import i18n from "i18n";
+import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -14,9 +16,50 @@ import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
-import {EditBoardRequest} from "./types";
+import {noteDragStarted, noteDragEnded} from "../dragLocks";
+import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
+import {TemplateWithColumns} from "../templates";
+
+// helper function to handle board deletion redirects
+const redirectToBoardDeletedPage = () => {
+  window.location.replace("/?boardDeleted=true");
+};
 
 let socket: Socket | null = null;
+
+// Function to send WebSocket messages using sockette's json method
+export const sendWebSocketMessage = (message: ClientMessage) => {
+  if (socket) {
+    socket.json(message);
+  }
+};
+
+// creates a board from a template and returns board id if successful
+export const createBoardFromTemplate = createAsyncThunk<
+  string,
+  {
+    templateWithColumns: TemplateWithColumns;
+    accessPolicy: CreateSessionAccessPolicy;
+  }
+>("board/createBoardFromTemplate", async (payload) => {
+  // finally, translate names and descriptions, since only the keys were stored until this point
+  const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
+    template: {
+      ...toBeTranslated.template,
+      name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
+      description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+    },
+    columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
+      ...toBeTranslatedColumn,
+      name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
+      description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+    })),
+  });
+
+  const translatedTemplateWithColumns =
+    payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
+  return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+});
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {
@@ -42,14 +85,16 @@ export const permittedBoardAccess = createAsyncThunk<
       const message: ServerEvent = JSON.parse(evt.data);
 
       if (message.type === "INIT") {
-        const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
+        const {board, columns, notes, reactions, votes, votings, requests} = message.data;
+        const userAuth = await API.getUsers(message.data.board.id);
+        const newParticipants = mapMultipleParticipants(message.data.participants, userAuth);
         dispatch(
           initializeBoard({
             fullBoard: {
               board,
               columns,
               notes: notes ?? [],
-              participants,
+              participants: newParticipants,
               reactions: reactions ?? [],
               requests: requests ?? [],
               votes: votes ?? [],
@@ -71,7 +116,7 @@ export const permittedBoardAccess = createAsyncThunk<
 
       if (message.type === "BOARD_DELETED") {
         dispatch(leaveBoard());
-        window.location.assign("/?boardDeleted=true");
+        redirectToBoardDeletedPage();
       }
 
       if (message.type === "COLUMNS_UPDATED") {
@@ -80,8 +125,9 @@ export const permittedBoardAccess = createAsyncThunk<
       }
 
       if (message.type === "COLUMN_DELETED") {
-        const columnId = message.data;
-        dispatch(deletedColumn(columnId));
+        const {column, notes} = message.data;
+        dispatch(deletedColumn(column));
+        notes.forEach((noteId) => dispatch(deletedNote(noteId)));
       }
 
       if (message.type === "NOTES_UPDATED") {
@@ -89,9 +135,8 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(updatedNotes(notes));
       }
       if (message.type === "NOTE_DELETED") {
-        const noteId = message.data.note;
-        const {deleteStack} = message.data;
-        dispatch(deletedNote({noteId, deleteStack}));
+        const noteIds = message.data;
+        noteIds.forEach((noteId) => dispatch(deletedNote(noteId)));
       }
       if (message.type === "REACTION_ADDED") {
         const reaction = message.data;
@@ -110,13 +155,43 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(syncNotes(notes ?? []));
       }
       if (message.type === "PARTICIPANT_CREATED") {
-        dispatch(createdParticipant(message.data));
+        const user = await API.getUserById(message.data.id);
+        const participant = mapSingleParticipant(message.data, user);
+        dispatch(createdParticipant(participant));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        dispatch(updatedParticipant({participant: message.data, self: getState().auth.user!}));
+        const participant = findParticipantById(getState().participants, message.data.id);
+        if (participant) {
+          dispatch(
+            updatedParticipant({
+              participant: {...participant, user: message.data},
+              self: getState().auth.user!,
+            })
+          );
+        }
       }
+
       if (message.type === "PARTICIPANTS_UPDATED") {
-        dispatch(setParticipants({participants: message.data, self: getState().auth.user!}));
+        const userAuth = await API.getUsers(getState().board.data!.id);
+        const participants = mapMultipleParticipants(message.data, userAuth);
+        dispatch(
+          setParticipants({
+            participants,
+            self: getState().auth.user!,
+          })
+        );
+      }
+
+      if (message.type === "SESSION_UPDATED") {
+        const participant = findParticipantById(getState().participants, message.data.id);
+        if (participant) {
+          dispatch(
+            updatedParticipant({
+              participant: mapSingleParticipant(message.data, participant.user),
+              self: getState().auth.user!,
+            })
+          );
+        }
       }
 
       if (message.type === "VOTING_CREATED") {
@@ -140,6 +215,14 @@ export const permittedBoardAccess = createAsyncThunk<
       if (message.type === "BOARD_REACTION_ADDED") {
         dispatch(addedBoardReaction(message.data));
         setTimeout(() => dispatch(removeBoardReaction(message.data.id)), 5000);
+      }
+      if (message.type === "NOTE_DRAG_START") {
+        const {noteId, userId} = message.data;
+        dispatch(noteDragStarted({noteId, userId}));
+      }
+      if (message.type === "NOTE_DRAG_END") {
+        const {noteId, userId} = message.data;
+        dispatch(noteDragEnded({noteId, userId}));
       }
     },
   });
@@ -270,10 +353,16 @@ export const deleteBoard = createAsyncThunk<
 >("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
-    document.location.pathname = "/";
+    redirectToBoardDeletedPage();
   });
 });
-export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
+export const importBoard = createAsyncThunk<
+  void,
+  string,
+  {
+    state: ApplicationState;
+  }
+>("board/importBoard", async (payload, {dispatch}) => {
   retryable(
     () => API.importBoard(payload),
     dispatch,

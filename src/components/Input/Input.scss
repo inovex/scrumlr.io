@@ -1,0 +1,226 @@
+@use "constants/styles";
+@use "constants/mixins";
+
+$padding--default: styles.$spacing--base;
+$padding--mobile: 12.5px styles.$spacing--base;
+
+.input__root {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--xs;
+
+  width: 100%;
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  width: 100%;
+  padding: $padding--default;
+  border-radius: styles.$rounded--full;
+
+  background-color: styles.$gray--000;
+
+  &--height-small {
+    height: 52px;
+  }
+
+  &--height-normal {
+    height: 60px;
+  }
+
+  &--height-larger {
+    height: 64px;
+  }
+
+  &:not(&--disabled) {
+    // TODO increase padding-left by 8px if no icon is present
+    @include mixins.default-states($padding: $padding--default);
+
+    .input__icon-container {
+      &--error {
+        color: styles.$critical-carmine--light;
+      }
+    }
+
+    // alternatively, this could be split up and put in their respective classes,
+    // which might be more readable but also requires a little bit more code
+    &:hover,
+    &:focus-within,
+
+    // special case for linked hover state (wrap the input group with .input-linked-hover)
+    .input-linked-hover:has(button:hover) &,
+    .input-linked-hover:has(button:active) & {
+      .input__icon-container--search-icon {
+        color: styles.$navy--600;
+      }
+
+      .input__input {
+        color: styles.$navy--600;
+
+        &::selection {
+          background-color: styles.$blue--50;
+        }
+      }
+    }
+
+    &:has(.input__input--invalid) {
+      @include mixins.invalid-state($padding: $padding--default);
+    }
+  }
+
+  &--disabled {
+    background-color: styles.$gray--300;
+
+    .input__icon-container {
+      &--search-icon,
+      &--clear-icon {
+        color: styles.$gray--800;
+      }
+    }
+  }
+}
+
+.input__icon-container {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+
+  &--search-icon {
+    color: styles.$gray--800;
+  }
+
+  &--clear-icon {
+    cursor: pointer;
+  }
+}
+
+.input__input {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+
+  font-size: styles.$text--base;
+  font-weight: 600;
+  line-height: styles.$text--xl;
+
+  color: styles.$gray--800;
+  background-color: styles.$gray--000;
+
+  &[type="password"] {
+    font-size: styles.$text--lg;
+    font-weight: 900;
+    letter-spacing: 0.125em;
+  }
+
+  &:focus {
+    outline: none;
+
+    color: styles.$navy--600;
+  }
+
+  &::placeholder {
+    opacity: 100%;
+    font-size: styles.$text--base;
+    font-weight: 600;
+    letter-spacing: initial;
+  }
+
+  &:disabled {
+    background-color: styles.$gray--300;
+  }
+}
+
+.input__error {
+  font-size: styles.$text--xs;
+  font-weight: 400;
+  line-height: styles.$text--sm;
+
+  color: styles.$critical-carmine--light;
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .input {
+    padding: $padding--mobile;
+
+    &:not(&--disabled) {
+      @include mixins.default-states($padding: $padding--mobile);
+    }
+  }
+}
+
+[data-theme="dark"] {
+  .input {
+    background-color: styles.$navy--400;
+
+    &:not(&--disabled) {
+      .input__icon-container {
+        &--error {
+          color: styles.$critical-carmine--dark;
+        }
+      }
+
+      @mixin dark-active-styles {
+        .input__icon-container--search-icon {
+          color: styles.$gray--000;
+        }
+        .input__input {
+          color: styles.$gray--000;
+        }
+      }
+
+      &:hover,
+      &:focus-within {
+        @include dark-active-styles;
+      }
+
+      // special case for linked hover state (wrap the input group with .input-linked-hover)
+      @at-root {
+        [data-theme="dark"] .input-linked-hover:has(button:hover) .input,
+        [data-theme="dark"] .input-linked-hover:has(button:active) .input {
+          @include dark-active-styles;
+        }
+      }
+    }
+
+    &--disabled {
+      background-color: styles.$navy--700;
+
+      .input__icon-container {
+        &--search-icon,
+        &--clear-icon {
+          color: styles.$navy--300;
+        }
+      }
+    }
+  }
+
+  .input__input {
+    color: styles.$blue--50;
+    background-color: styles.$navy--400;
+
+    &:disabled {
+      color: styles.$navy--300;
+      background-color: styles.$navy--700;
+    }
+  }
+
+  .input__icon-container {
+    &--search-icon,
+    &--clear-icon {
+      color: styles.$blue--50;
+    }
+
+    &--password-hidden,
+    &--password-visible {
+      color: styles.$gray--000;
+    }
+  }
+
+  .input__error {
+    color: styles.$critical-carmine--dark;
+  }
+}

@@ -1,3 +1,4 @@
+---
 version: 2
 updates:
   # Client
@@ -7,6 +8,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     target-branch: "main"
     labels:
@@ -23,6 +26,8 @@ updates:
     directory: "/server/src"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     target-branch: "main"
     labels:
@@ -30,3 +35,19 @@ updates:
     commit-message:
       prefix: "go"
       include: "scope"
+    groups:
+      redis:
+        patterns:
+          - "github.com/redis/go-redis/*"
+      bun:
+        patterns:
+          - "github.com/uptrace/bun"
+          - "github.com/uptrace/bun/*"
+      testcontainers:
+        patterns:
+          - "github.com/testcontainers/*"
+      go/opentelemetry:
+        patterns:
+          - "go.opentelemetry.io/otel"
+          - "go.opentelemetry.io/otel/*"
+          - "go.opentelemetry.io/contrib/*"

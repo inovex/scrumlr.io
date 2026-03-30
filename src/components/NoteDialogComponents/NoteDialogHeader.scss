@@ -1,38 +1,62 @@
-@import "constants/style";
-@import "routes/StackView/StackView.scss";
+@use "constants/styles";
+@use "routes/StackView/StackView";
 
-.note-dialog__header {
-  font-size: calc(24px + 0.8vw);
-  color: $gray--000;
-  width: 100%;
-  height: $stack-view__header-height;
-  min-height: $stack-view__min-height;
-  letter-spacing: $letter-spacing--large;
-  line-height: $line-height--large;
+$header-max-width: 80vw;
+
+.note-dialog-header {
+  display: flex;
+  min-height: StackView.$stack-view__min-height;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  gap: styles.$spacing--base;
+
+  width: $header-max-width;
+  max-width: $header-max-width;
+
+  color: styles.$gray--000;
+
+  letter-spacing: styles.$letter-spacing--large;
   text-align: center;
   cursor: initial;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-shrink: 0;
+}
 
-  h2 {
-    width: max-content;
-    margin: $spacing--lg 0 0 0;
+.note-dialog-header__name {
+  max-width: 100%;
 
-    &::after {
-      content: " ";
-      display: block;
-      height: 6px;
-      background: var(--accent-color--light);
-      border-radius: $rounded--full;
-      margin-top: $spacing--base;
-    }
+  font-size: calc(styles.$text--2xl + 0.8vw);
+  font-weight: 700;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  border-bottom: 6px solid var(--accent-color--light);
+}
+
+.note-dialog-header__description {
+  width: 100%;
+  font-size: styles.$text--lg;
+  font-weight: 600;
+  line-height: 30px;
+
+  // i might be abusing our sweet text area component for our purpose here,
+  // so i have to override some styles from outside
+  color: styles.$gray--000;
+  &:hover {
+    color: styles.$gray--000;
   }
 }
 
-[theme="dark"] {
-  .note-dialog__header > h2::after {
-    background: var(--accent-color--dark);
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .note-dialog-header {
+    max-width: calc(100vw - 60px);
+  }
+}
+
+[data-theme="dark"] {
+  .note-dialog-header__name {
+    border-bottom-color: var(--accent-color--dark);
   }
 }

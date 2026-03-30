@@ -1,5 +1,5 @@
-import {useState, VFC} from "react";
-import {LockClosed, Open as Globe, KeyProtected, Share} from "components/Icon";
+import {useState} from "react";
+import {LockClosedIcon, OpenIcon as GlobeIcon, KeyProtectedIcon, LogoutIcon} from "components/Icon";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppDispatch, useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -13,11 +13,11 @@ import {Tooltip} from "react-tooltip";
 import {leaveBoard} from "store/features";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
-export interface BoardHeaderProps {
+type BoardHeaderProps = {
   currentUserIsModerator: boolean;
-}
+};
 
-export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
+export const BoardHeader = (props: BoardHeaderProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const state = useAppSelector(
@@ -41,7 +41,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             window.location.pathname = "/";
           }}
           onDecline={() => setShowConfirmationDialog(false)}
-          icon={Share}
+          icon={LogoutIcon}
         />
       )}
       <header className="board-header">
@@ -62,9 +62,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <div className="board-header__access-policy-status">
             {
               {
-                BY_INVITE: <LockClosed className="board-header__access-policy-status-icon" />,
-                BY_PASSPHRASE: <KeyProtected className="board-header__access-policy-status-icon" />,
-                PUBLIC: <Globe className="board-header__access-policy-status-icon" />,
+                BY_INVITE: <LockClosedIcon className="board-header__access-policy-status-icon" />,
+                BY_PASSPHRASE: <KeyProtectedIcon className="board-header__access-policy-status-icon" />,
+                PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
               }[state.accessPolicy!]
             }
             <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>

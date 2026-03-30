@@ -1,8 +1,10 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
+    "VotingIsAnonymous": "Abstimmung ist anonym",
+    "VotingIsNotAnonymous": "Abstimmung ist nicht anonym"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
     "extendedConfigurationButton": "Erweiterte Einstellungen",
@@ -13,18 +15,92 @@
     "uploadFile": "Datei hochladen oder hierher ziehen",
     "importNewBoard": "Jetzt importieren"
   },
+  "Templates": {
+    "switchTitle": "Vorlagen",
+    "title": "Wähle eine Vorlage",
+    "savedTemplates": "Deine Vorlagen",
+    "recommendedTemplates": "Unsere Empfehlungen",
+    "CreateTemplateCard": {
+      "create": "Erstelle eine Vorlage"
+    },
+    "TemplateCard": {
+      "addFavourite": "Favorit hinzufügen",
+      "removeFavourite": "Favorit entfernen",
+      "column_one": "{{count}} Spalte",
+      "column_other": "{{count}} Spalten",
+      "start": "Starten",
+      "save": "Speichern",
+      "signInToCreateBoards": "Um ein Board zu erstellen, melde Dich mit einem Identitätsanbieter an."
+    },
+    "TemplateEditor": {
+      "createTitle": "Erstelle eine Vorlage",
+      "editTitle": "Bearbeite eine Vorlage",
+      "cancel": "Abbrechen",
+      "saveEdit": "Speichern",
+      "saveCreate": "Template erstellen",
+      "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Spalte 1",
+      "defaultActionsName": "Aktionen",
+      "indexedColumnName": "Spalte {{index}}",
+      "namePlaceholder": "Titel",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "AccessSettings": {
+      "title": "Zugriffseinstellungen",
+      "Options": {
+        "Public": {
+          "title": "Offen",
+          "description": "Teilnehmende können einfach & schnell über den Link beitreten – bietet grundlegende Sicherheit."
+        },
+        "By_Invite": {
+          "title": "Mit Zustimmung",
+          "description": "Teilnehmende müssen vor dem Beitritt bestätigt werden – gewährleistet eine hohe Sicherheit."
+        },
+        "By_Passphrase": {
+          "title": "Passwortgeschützt",
+          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit.",
+          "inputPlaceholder": "Passwort eingeben",
+          "hint": "Das Passwort kann später in den Einstellungen geändert werden."
+        }
+      },
+      "Buttons": {
+        "cancel": "Zurück",
+        "start": "Sitzung starten"
+      }
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sitzungen",
+    "title": "Wähle eine Sitzung"
+  },
+  "CreateBoard": {
+    "title": "Ein neues Board erstellen",
+    "dropdown": {
+      "open": "Offen",
+      "password": "Passwort",
+      "approval": "Freigabe"
+    },
+    "validation": {
+      "REQUIRED": "Eingabe ist erforderlich."
+    }
+  },
   "LoginBoard": {
-    "title": "Login bei scrumlr.io",
-    "anonymousLogin": "Nehme anonym an der Sitzung teil",
-    "usernameValidationError": "Der Benutzername darf nicht leer sein",
-    "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
-    "anonymousLoginDisabledError": "Anonyme Accounts sind deaktiviert; bitte nutze eine der offiziellen Loginmöglichkeiten oberhalb",
+    "title": "Login",
+    "subtitleLogin": "Einloggen und Vorteile nutzen",
+    "loginFeature1": "Eigene Vorlagen erstellen und dauerhaft speichern",
+    "loginFeature2": "Individuelle Einstellungen werden im Profil gespeichert",
+    "subtitleAnonymous": "Anonym Einloggen",
+    "anonymousLogin": "Anonym fortfahren ohne Vorteile",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
-    "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "login": "Jetzt loslegen",
-    "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
-    "generateRandomName": "Zufälligen Namen erstellen",
-    "username": "Benutzername"
+    "dividerWord": "oder",
+    "login": "Anonym fortfahren",
+    "acceptTerms": "Mit deiner Anmeldung stimmst du unseren <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu.",
+    "generateRandomName": "Zufälligen Namen erstellen"
   },
   "AccessPolicy": {
     "PUBLIC": "Offen",
@@ -67,6 +143,13 @@
     "deleteNoteButton": "Kärtchen löschen",
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
+    "deleteAccount": "Bist du sicher, dass du dein Konto löschen möchtest?",
+    "deleteAccountText": "Wenn du dein Konto löschst, werden alle damit verbundenen Daten ebenfalls dauerhaft entfernt, einschließlich:",
+    "deleteAccountItems": "deine eigenen erstellten Vorlagen \n deine Notizen & Stimmen auf anderen Sitzungen",
+    "deleteAccountTextAfterItems": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteAccountCheck": "Ich verstehe und stimme der dauerhaften Löschung zu.",
+    "deleteAccountWarning": "Du musst die Löschung bestätigen.",
+    "deleteAccountButton": "Konto löschen",
     "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
     "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",
     "warning": "Die Aktion ist nicht umkehrbar.",
@@ -84,7 +167,7 @@
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",
-    "openPrintView": "Druckansicht öffnen",
+    "openPrintView": "PDF exportieren",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
     "copyToClipboardSuccess": "Markdown kopiert!",
     "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:",
@@ -114,7 +197,8 @@
     "title": "Sitzung teilen",
     "button": "Sitzung teilen",
     "copyInviteURL": "URL kopieren",
-    "inviteUrlCopied": "URL wurde kopiert"
+    "inviteUrlCopied": "URL wurde kopiert",
+    "hint": "Das Passwort kann in den Board Einstellungen geändert werden."
   },
   "Column": {
     "settings": "Einstellungen",
@@ -129,7 +213,10 @@
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
     "notes_one": "{{count}} Kärtchen",
     "notes_other": "{{count}} Kärtchen",
-    "color": "Farbe ändern"
+    "color": "Farbe ändern",
+    "Header": {
+      "descriptionPlaceholder": "Beschreibung hinzufügen (optional)"
+    }
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
@@ -251,7 +338,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
-    "showVotesOfOthers": "Anonyme Abstimmung",
+    "isAnonymous": "Anonyme Abstimmung",
     "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
     "numberOfVotes": "Anzahl Stimmen",
     "increaseVotes": "Anzahl Stimmen erhöhen",
@@ -317,7 +404,8 @@
   },
   "Language": {
     "german": "Deutsch",
-    "english": "Englisch"
+    "english": "Englisch",
+    "french": "Französisch"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, mit ❤️ von <inovex>inovex</inovex>",
@@ -332,7 +420,8 @@
     "me": "Ich",
     "you": "dir",
     "userImageAlt": "Von {{user}} hochgeladenes Bild",
-    "edited": "bearbeitet"
+    "edited": "bearbeitet",
+    "isMovingThis": "{{user}}"
   },
   "StackView": {
     "prevNote": "Vorheriges Kärtchen",
@@ -354,6 +443,11 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",
@@ -367,7 +461,8 @@
     "ExportBoardDescription": "Exportiere das Board",
     "Feedback": "Feedback",
     "FeedbackDescription": "Wir würden gerne von dir hören",
-    "ProfileDescription": "Profil bearbeiten"
+    "ProfileDescription": "Profil bearbeiten",
+    "Logout": "Abmelden"
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
@@ -432,7 +527,8 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nutzername"
+    "UserName": "Nutzername",
+    "deleteAccount": "Konto löschen"
   },
   "Error": {
     "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
@@ -465,7 +561,15 @@
     "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
-    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut.",
+    "deleteAccount": "Es tut uns leid, aber wir haben ein Problem beim Löschen deines Kontos. Bitte versuche es erneut."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",
@@ -474,7 +578,8 @@
     "groups": {
       "hair": "Hüte und Haare",
       "facialFeatures": "Rund ums Gesicht",
-      "clothing": "Bekleidung und Accessoires"
+      "clothing": "Bekleidung und Accessoires",
+      "background": "Hintergrund"
     },
     "hairColor": {
       "label": "Haarfarbe",
@@ -657,6 +762,16 @@
       "Bear": "Bär",
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
+    },
+    "backgroundColor": {
+      "label": "Hintergrundfarbe",
+      "backlog-blue": "Blau",
+      "planning-pink": "Pink",
+      "poker-purple": "Lila",
+      "value-violet": "Violett",
+      "goal-green": "Grün",
+      "yielding-yellow": "Gelb",
+      "online-orange": "Orange"
     }
   },
   "ToggleButton": {

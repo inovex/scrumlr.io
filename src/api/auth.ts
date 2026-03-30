@@ -53,7 +53,7 @@ export const AuthAPI = {
    */
   getCurrentUser: async () => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/user`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/users`, {
         method: "GET",
         credentials: "include",
       });

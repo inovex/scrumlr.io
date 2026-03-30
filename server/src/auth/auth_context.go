@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"net/http"
+
 	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/jwtauth/v5"

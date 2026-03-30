@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {FileCsv, FileJson, Duplicate, Printer} from "components/Icon";
+import {FileCsvIcon, FileJsonIcon, DuplicateIcon, PrinterIcon} from "components/Icon";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
@@ -29,37 +29,37 @@ export const ExportBoard = () => {
       <div className="settings-dialog__group">
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
-          icon={FileJson}
-          className="export-board__button-reverse-order"
+          icon={FileJsonIcon}
           onClick={() => {
             exportAsJSON(boardId, boardName);
           }}
           data-testid="export-json"
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
-          icon={FileCsv}
-          className="export-board__button-reverse-order"
+          icon={FileCsvIcon}
           onClick={() => {
             exportAsCSV(boardId, boardName);
           }}
           data-testid="export-csv"
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
-          icon={Printer}
-          className="export-board__button-reverse-order export-board__button-print-view"
+          icon={PrinterIcon}
+          className="export-board__button-print-view"
           onClick={() => {
             window.open(`/board/${boardId}/print`, "_blank");
           }}
+          reverseOrder
         />
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportToClipboard")}
-          icon={Duplicate}
-          className="export-board__button-reverse-order"
+          icon={DuplicateIcon}
           onClick={() => {
             getMarkdownExport(boardId).then((result) => {
               navigator.clipboard.writeText(result).then(() => {
@@ -68,6 +68,7 @@ export const ExportBoard = () => {
             });
           }}
           data-testid="export-markdown"
+          reverseOrder
         />
       </div>
 

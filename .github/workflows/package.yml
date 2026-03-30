@@ -5,30 +5,25 @@ on:
     outputs:
       frontend-image-tag:
         description: The tag of the frontend image
-        value: ${{ jobs.package-frontend.outputs.frontend-image-tag }}
+        value: ${{ jobs.merge-frontend-images.outputs.frontend-image-tag }}
       server-image-tag:
         description: The tag of the server image
-        value: ${{ jobs.package-server.outputs.server-image-tag }}
+        value: ${{ jobs.merge-server-images.outputs.server-image-tag }}
+
+env:
+  FRONTEND_IMAGE: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+  SERVER_IMAGE: ghcr.io/inovex/scrumlr.io/scrumlr-server
 
 jobs:
-  determine-platforms:
-    runs-on: ubuntu-latest
-    outputs:
-      platforms: ${{ steps.platforms.outputs.platforms }}
-    steps:
-      - name: Set platforms
-        id: platforms
-        run: |
-          if [ "${{ github.event_name }}" == "release" ]; then
-            echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
-          else
-            echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
-          fi
   package-frontend:
-    needs: determine-platforms
-    outputs:
-      frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
-    runs-on: ubuntu-latest
+    name: Build frontend (${{ matrix.build_info.platform }})
+    runs-on: ${{ matrix.build_info.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build_info:
+          - { platform: 'linux/amd64', pair: "linux-amd64", runner: 'ubuntu-latest' }
+          - { platform: 'linux/arm64', pair: "linux-arm64", runner: 'ubuntu-24.04-arm' }
     permissions:
       contents: read
       packages: write
@@ -39,19 +34,87 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub container registry
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Frontend image meta information
-        id: meta-frontend
+      - name: Frontend metadata (${{ matrix.build_info.platform }})
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+          images: ${{ env.FRONTEND_IMAGE }}
+          labels: |
+            org.opencontainers.image.authors=info@scrumlr.io
+            org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-frontend
+            org.opencontainers.image.source=https://github.com/inovex/scrumlr.io
+            org.opencontainers.image.vendor=inovex
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.title=scrumlr.io Frontend
+            org.opencontainers.image.description=The web client for scrumlr.io
+
+      - name: Build & push frontend (${{ matrix.build_info.platform }})
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: ${{ matrix.build_info.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.FRONTEND_IMAGE }}
+          cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
+          cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-digests-${{ matrix.build_info.pair }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-frontend-images:
+    name: Merge frontend images
+    runs-on: ubuntu-latest
+    needs:
+      - package-frontend
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: frontend-digests-*
+          merge-multiple: true
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Frontend metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.FRONTEND_IMAGE }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -67,17 +130,11 @@ jobs:
             org.opencontainers.image.title=scrumlr.io Frontend
             org.opencontainers.image.description=The web client for scrumlr.io
 
-      - name: Build and push frontend images
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-frontend.outputs.tags }}
-          labels: ${{ steps.meta-frontend.outputs.labels }}
-          cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
-          cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.FRONTEND_IMAGE }}@sha256:%s ' *)
 
       - name: Set outputs
         id: outputs
@@ -87,10 +144,14 @@ jobs:
           echo frontend-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')" ) >> $GITHUB_OUTPUT
 
   package-server:
-    needs: determine-platforms
-    outputs:
-      server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
-    runs-on: ubuntu-latest
+    name: Build server (${{ matrix.build_info.platform }})
+    runs-on: ${{ matrix.build_info.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        build_info:
+          - { platform: 'linux/amd64', pair: "linux-amd64", runner: 'ubuntu-latest' }
+          - { platform: 'linux/arm64', pair: "linux-arm64", runner: 'ubuntu-24.04-arm' }
     permissions:
       contents: read
       packages: write
@@ -101,19 +162,87 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub container registry
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Server image meta information
-        id: meta-server
+      - name: Server metadata (${{ matrix.build_info.platform }})
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server
+          images: ${{ env.SERVER_IMAGE }}
+          labels: |
+            org.opencontainers.image.authors=info@scrumlr.io
+            org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-server
+            org.opencontainers.image.source=https://github.com/inovex/scrumlr.io
+            org.opencontainers.image.vendor=inovex
+            org.opencontainers.image.licenses=MIT
+            org.opencontainers.image.title=scrumlr.io Server
+            org.opencontainers.image.description=The server for scrumlr.io
+
+      - name: Build & push server (${{ matrix.build_info.platform }})
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server/src
+          file: ./server/src/Dockerfile
+          platforms: ${{ matrix.build_info.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.SERVER_IMAGE }}
+          cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-server:cache
+          cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-server:cache,mode=max
+          outputs: type=image,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-digests-${{ matrix.build_info.pair }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-server-images:
+    name: Merge server images
+    runs-on: ubuntu-latest
+    needs:
+      - package-server
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: server-digests-*
+          merge-multiple: true
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Server metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.SERVER_IMAGE }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -129,17 +258,11 @@ jobs:
             org.opencontainers.image.title=scrumlr.io Server
             org.opencontainers.image.description=The server for scrumlr.io
 
-      - name: Build and push server images
-        uses: docker/build-push-action@v6
-        with:
-          context: ./server/src
-          file: ./server/src/Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-server.outputs.tags }}
-          labels: ${{ steps.meta-server.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.SERVER_IMAGE }}@sha256:%s ' *)
 
       - name: Set outputs
         id: outputs

@@ -25,6 +25,7 @@ jobs:
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
         id: install
+
       - name: Set up Kubernetes Auth
         uses: azure/k8s-set-context@v4
         with:
@@ -54,6 +55,7 @@ jobs:
         with:
           namespace: scrumlr-dev-deployments
           force: true
+          pull-images: false
           manifests: |
             k8s/deployment.yaml
           images: |

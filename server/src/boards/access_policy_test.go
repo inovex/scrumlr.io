@@ -1,0 +1,42 @@
+package boards
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestAccessPolicyEnum(t *testing.T) {
+	values := []AccessPolicy{Public, ByPassphrase, ByInvite}
+	for _, value := range values {
+		var accessPolicy AccessPolicy
+		err := accessPolicy.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
+		assert.Nil(t, err)
+		assert.Equal(t, value, accessPolicy)
+	}
+}
+
+func TestUnmarshalAccessPolicyNil(t *testing.T) {
+	var accessPolicy AccessPolicy
+	err := accessPolicy.UnmarshalJSON(nil)
+	assert.NotNil(t, err)
+}
+
+func TestUnmarshalAccessPolicyEmptyString(t *testing.T) {
+	var accessPolicy AccessPolicy
+	err := accessPolicy.UnmarshalJSON([]byte(""))
+	assert.NotNil(t, err)
+}
+
+func TestUnmarshalAccessPolicyEmptyStringWithQuotation(t *testing.T) {
+	var accessPolicy AccessPolicy
+	err := accessPolicy.UnmarshalJSON([]byte("\"\""))
+	assert.NotNil(t, err)
+}
+
+func TestUnmarshalAccessPolicyRandomValue(t *testing.T) {
+	var accessPolicy AccessPolicy
+	err := accessPolicy.UnmarshalJSON([]byte("\"SOME_RANDOM_VALUE\""))
+	assert.NotNil(t, err)
+}

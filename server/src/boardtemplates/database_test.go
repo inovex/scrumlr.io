@@ -1,0 +1,214 @@
+package boardtemplates
+
+import (
+	"context"
+	"database/sql"
+	"log"
+	"testing"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/initialize/testDbTemplates"
+)
+
+type DatabaseBoardTemplateTestSuite struct {
+	suite.Suite
+	db        *bun.DB
+	users     map[string]TestUser
+	templates map[string]DatabaseBoardTemplate
+}
+
+func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
+	suite.Run(t, new(DatabaseBoardTemplateTestSuite))
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) SetupTest() {
+	suite.db = testDbTemplates.NewBaseTestDB(
+		suite.T(),
+		false,
+		testDbTemplates.AdditionalSeed{
+			Name: "boardtemplates_database_test_data",
+			Func: suite.seedData,
+		},
+	)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Create() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	userId := suite.users["Santa"].id
+	name := "My Template"
+	description := "This is a description"
+
+	dbTemplate, err := database.Create(context.Background(),
+		DatabaseBoardTemplateInsert{Creator: userId, Name: &name, Description: &description},
+	)
+
+	assert.Nil(t, err)
+	assert.Equal(t, userId, dbTemplate.Creator)
+	assert.Equal(t, name, *dbTemplate.Name)
+	assert.Equal(t, description, *dbTemplate.Description)
+	assert.False(t, *dbTemplate.Favourite)
+	assert.NotNil(t, dbTemplate.CreatedAt)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Update() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	templateId := suite.templates["Update"].ID
+	userId := suite.users["Santa"].id
+	name := "Update Template"
+	description := "This description was updated"
+
+	dbTemplate, err := database.Update(context.Background(), DatabaseBoardTemplateUpdate{ID: templateId, Name: &name, Description: &description, Favourite: new(true)})
+
+	assert.Nil(t, err)
+	assert.Equal(t, templateId, dbTemplate.ID)
+	assert.Equal(t, userId, dbTemplate.Creator)
+	assert.Equal(t, name, *dbTemplate.Name)
+	assert.Equal(t, description, *dbTemplate.Description)
+	assert.NotNil(t, dbTemplate.CreatedAt)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Delete() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	templateId := suite.templates["Delete"].ID
+
+	err := database.Delete(context.Background(), templateId)
+
+	assert.Nil(t, err)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Delete_NoTemplate() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	templateId := uuid.New()
+
+	err := database.Delete(context.Background(), templateId)
+
+	assert.Nil(t, err)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Get() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	templateId := suite.templates["Read1"].ID
+	dbTemplate, err := database.Get(context.Background(), templateId)
+
+	assert.Nil(t, err)
+	assert.Equal(t, templateId, dbTemplate.ID)
+	assert.Equal(t, suite.templates["Read1"].Creator, dbTemplate.Creator)
+	assert.Equal(t, suite.templates["Read1"].Name, dbTemplate.Name)
+	assert.Equal(t, suite.templates["Read1"].Description, dbTemplate.Description)
+	assert.Equal(t, suite.templates["Read1"].Favourite, dbTemplate.Favourite)
+	assert.NotNil(t, dbTemplate.CreatedAt)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Get_NotFound() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	dbTemplate, err := database.Get(context.Background(), uuid.New())
+
+	assert.NotNil(t, err)
+	assert.Equal(t, sql.ErrNoRows, err)
+	assert.Equal(t, DatabaseBoardTemplate{}, dbTemplate)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	userId := suite.users["Stan"].id
+
+	dbTemplates, err := database.GetAll(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, dbTemplates, 2)
+
+	firstTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read1"].ID)
+	assert.NotNil(t, firstTemplate)
+	assert.Equal(t, suite.templates["Read1"].ID, firstTemplate.Template.ID)
+	assert.Equal(t, userId, firstTemplate.Template.Creator)
+	assert.Equal(t, suite.templates["Read1"].Name, firstTemplate.Template.Name)
+	assert.Equal(t, suite.templates["Read1"].Description, firstTemplate.Template.Description)
+	assert.NotNil(t, firstTemplate.Template.CreatedAt)
+
+	secondTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read2"].ID)
+	assert.NotNil(t, secondTemplate)
+	assert.Equal(t, suite.templates["Read2"].ID, secondTemplate.Template.ID)
+	assert.Equal(t, userId, secondTemplate.Template.Creator)
+	assert.Equal(t, suite.templates["Read2"].Name, secondTemplate.Template.Name)
+	assert.Equal(t, suite.templates["Read2"].Description, secondTemplate.Template.Description)
+	assert.NotNil(t, secondTemplate.Template.CreatedAt)
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll_NoTemplates() {
+	t := suite.T()
+	database := NewBoardTemplateDatabase(suite.db)
+
+	userId := suite.users["Bob"].id
+
+	dbTemplates, err := database.GetAll(context.Background(), userId)
+
+	assert.Nil(t, err)
+	assert.Len(t, dbTemplates, 0)
+}
+
+type TestUser struct {
+	id          uuid.UUID
+	name        string
+	accountType common.AccountType
+}
+
+func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
+	log.Println("Seeding boardtemplates database test data")
+
+	// tests users
+	suite.users = make(map[string]TestUser, 2)
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
+	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: common.Anonymous}
+
+	// test board templates
+	suite.templates = make(map[string]DatabaseBoardTemplate, 4)
+	// test board template to update
+	suite.templates["Update"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: new("UpdateTemplate"), Description: new("This is a description"), Favourite: new(false)}
+	// test board template to delete
+	suite.templates["Delete"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Santa"].id, Name: new("DeleteTemplate"), Description: new("This is a description"), Favourite: new(true)}
+	// test board templates to get
+	suite.templates["Read1"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: new("Template1"), Description: new("This is a description"), Favourite: new(true)}
+	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: new("Template2"), Description: new("This is a description"), Favourite: new(true)}
+
+	for _, user := range suite.users {
+		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)
+		if err != nil {
+			log.Fatalf("Failed to insert test user %s", err)
+		}
+	}
+
+	for _, template := range suite.templates {
+		err := testDbTemplates.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
+		if err != nil {
+			log.Fatalf("Failed to insert test board templates %s", err)
+		}
+	}
+}
+
+func checkDatabaseBoardTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
+	for _, template := range list {
+		if template.Template.ID == id {
+			return &template
+		}
+	}
+	return nil
+}

@@ -4,13 +4,28 @@ import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {Board} from "store/features/board/types";
 import {Column} from "store/features/columns/types";
 import {Note} from "store/features/notes/types";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser, ParticipantWithUserId} from "store/features/participants/types";
 import {Voting} from "store/features/votings/types";
 import {API} from "../api";
+import {mapMultipleParticipants} from "./participant";
 
 const {t} = i18n;
 
-export type ExportBoardDataType = {board: Board; columns: Column[]; notes: Note[]; participants: Participant[]; votings: Voting[]};
+export type ExportBoardDataType = {
+  board: Board;
+  columns: Column[];
+  notes: Note[];
+  participants: ParticipantWithUser[];
+  votings: Voting[];
+};
+
+export type ExportBoardDataTypeWithUserId = {
+  board: Board;
+  columns: Column[];
+  notes: Note[];
+  participants: ParticipantWithUserId[];
+  votings: Voting[];
+};
 
 export const fileName = (name?: string) => {
   const date = new Date().toJSON().slice(0, 10);
@@ -32,7 +47,14 @@ export const exportAsJSON = async (id: string, name?: string) => {
 
 export const getNoteVotes = (noteId: string, votings: Voting[]) => votings[0].votes?.votesPerNote[noteId]?.total ?? 0;
 
-export const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: string; position: {rank: number}}, votings: Voting[]) => {
+export const compareNotes = (
+  a: {id: string; position: {rank: number}},
+  b: {
+    id: string;
+    position: {rank: number};
+  },
+  votings: Voting[]
+) => {
   if (votings && getNoteVotes(a.id, votings) !== getNoteVotes(b.id, votings)) {
     return getNoteVotes(a.id, votings) > getNoteVotes(b.id, votings) ? -1 : 1;
   }
@@ -41,13 +63,13 @@ export const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: 
 
 export const getChildNotes = (notes: Note[], votings: Voting[], noteId: string) => notes.filter((n) => n.position.stack === noteId).sort((a, b) => compareNotes(a, b, votings));
 
-export const getAuthorName = (authorId: string, participants: Participant[]) => participants.filter((p: Participant) => p.user?.id === authorId)[0].user?.name;
+export const getAuthorName = (authorId: string, participants: ParticipantWithUser[]) => participants.filter((p: ParticipantWithUser) => p.user?.id === authorId)[0].user?.name;
 
 const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
 
 const mdBoardHeader = (boardName: string) => `# ${boardName}\n\n`;
 
-const mdBoardProperties = (board: Board, participants: Participant[]) => {
+const mdBoardProperties = (board: Board, participants: ParticipantWithUser[]) => {
   const linkToBoard = `- [${t("MarkdownExport.linkToBoard")}](${window.location.href.replace("/settings/export", "")})\n`;
   const participantsNumber = `- ${t("MarkdownExport.participants")}: ${participants.length}\n`;
   const authorsHidden = !board.showAuthors ? `- ${t("MarkdownExport.showAuthorsDisabled")}\n` : "";
@@ -110,6 +132,11 @@ const mdTemplate = (boardData: ExportBoardDataType) =>
 
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
-  const json: ExportBoardDataType = await response.json();
-  return `${mdTemplate(json)}`;
+  const jsonResponse: ExportBoardDataTypeWithUserId = await response.json();
+  const userData = await API.getUsers(jsonResponse.board.id);
+  const exportData: ExportBoardDataType = {
+    ...jsonResponse,
+    participants: mapMultipleParticipants(jsonResponse.participants, userData),
+  };
+  return `${mdTemplate(exportData)}`;
 };

@@ -1,0 +1,212 @@
+[
+  {
+    "name": "Lean Coffee",
+    "description": "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
+    "columns": [
+      {
+        "name": "Lean Coffee",
+        "description": "Collect topics, ideas, and questions.",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "Quick Review",
+    "description": "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
+    "columns": [
+      {
+        "name": "Positive",
+        "description": "What went well?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Negative",
+        "description": "What didn't go well?",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "Cycle Check",
+    "description": "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
+    "columns": [
+      {
+        "name": "Start",
+        "description": "What new processes should be tried?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Stop",
+        "description": "What isn't working and should be stopped?",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "Continue",
+        "description": "What is working well and should be continued?",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "Mood",
+    "description": "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
+    "columns": [
+      {
+        "name": "Mad",
+        "description": "What caused frustration or anger?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Sad",
+        "description": "What caused disappointment?",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "Glad",
+        "description": "What brought joy or motivation?",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "Kalm",
+    "description": "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
+    "columns": [
+      {
+        "name": "Keep",
+        "description": "What works well and should be kept?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Add",
+        "description": "What could add value?",
+        "color": "yielding-yellow",
+        "visible": true
+      },
+      {
+        "name": "Less",
+        "description": "What should be done less frequently?",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "More",
+        "description": "What should be done more often?",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "4L",
+    "description": "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
+    "columns": [
+      {
+        "name": "Liked",
+        "description": "What was particularly positive?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Learned",
+        "description": "What knowledge was gained?",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "Learned",
+        "description": "What could habe been improved?",
+        "color": "value-violet",
+        "visible": true
+      },
+      {
+        "name": "Longed for",
+        "description": "What would be desirable for the future?",
+        "color": "planning-pink",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "SWOT",
+    "description": "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
+    "columns": [
+      {
+        "name": "Strengths",
+        "description": "What strengths provide an advantage?",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "Weaknesses",
+        "description": "What weaknesses should be adressed?",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "Opportunities",
+        "description": "What opportunities can be leveraged?",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "Threats",
+        "description": "What challenges should be considered?",
+        "color": "yielding-yellow",
+        "visible": true
+      },
+      {
+        "name": "Actions",
+        "description": "",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  }
+]

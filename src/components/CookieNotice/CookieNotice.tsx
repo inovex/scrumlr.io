@@ -61,9 +61,9 @@ export const CookieNotice = () => {
         setShowCookieNotice(false);
         accept();
       }}
+      align="here"
     >
-      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-      <div className="cookie-notice" onClick={(e) => e.stopPropagation()}>
+      <div className="cookie-notice">
         <div className="cookie-notice__header">
           <h3>Cookies</h3>
         </div>
@@ -80,7 +80,7 @@ export const CookieNotice = () => {
             {t("CookieNotice.decline")}
           </button>
 
-          <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
+          <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept} data-cy="cookie-notice__accept">
             {t("CookieNotice.accept")}
           </button>
         </div>

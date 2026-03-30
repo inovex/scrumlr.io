@@ -1,44 +1,53 @@
-@import "constants/style.scss";
+@use "constants/styles";
 
 .cookie-notice {
-  background: $gray--000;
-  color: $navy--900;
+  background: styles.$gray--000;
+  color: styles.$navy--900;
   position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
-  padding: $spacing--base;
-  box-shadow: 0 -4px 16px rgba($blue--500, 0.16);
+  padding: styles.$spacing--base;
+  box-shadow: 0 -4px 16px rgba(styles.$blue--500, 0.16);
 }
 
 .cookie-notice__buttons {
   display: flex;
+  flex-wrap: wrap;
+  gap: styles.$spacing--xs;
+  margin-top: styles.$spacing--base;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .cookie-notice__button {
   border: none;
-  padding: $spacing--xs $spacing--base;
+  padding: styles.$spacing--xs styles.$spacing--base;
   border-radius: 5px;
-  font-size: $text-size--medium;
+  font-size: styles.$text-size--medium;
   cursor: pointer;
 
   &-accept {
     @extend .cookie-notice__button;
-    background: $blue--500;
-    color: $gray--000;
-    margin: 0 0 $spacing--base $spacing--base;
+    background: styles.$blue--500;
+    color: styles.$gray--000;
   }
   &-decline {
     @extend .cookie-notice__button;
-    background: $gray--300;
-    color: $navy--700;
-    margin: 0 0 $spacing--base $spacing--base;
+    background: styles.$gray--300;
+    color: styles.$navy--700;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
-    background: $gray--300;
-    color: $navy--700;
-    margin: 0 auto $spacing--base 0;
+    background: styles.$gray--300;
+    color: styles.$navy--700;
+    flex: 1;
+
+    @media (max-width: 768px) {
+      flex: none;
+    }
   }
 }
 
@@ -47,8 +56,8 @@
   transform: scale(1.05);
 }
 
-[theme="dark"] {
+[data-theme="dark"] {
   .cookie-notice {
-    box-shadow: 0 -4px 16px rgba($navy--900, 0.48);
+    box-shadow: 0 -4px 16px rgba(styles.$navy--900, 0.48);
   }
 }

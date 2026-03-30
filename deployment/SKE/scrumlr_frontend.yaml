@@ -40,8 +40,13 @@ spec:
       labels:
         app: landing-page
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: landing-page
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io-landing-page/image:sha-3db9234
           resources:
             requests:
@@ -70,8 +75,13 @@ spec:
       labels:
         app: frontend
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: frontend
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.7.1
           resources:
             requests:
@@ -110,7 +120,7 @@ spec:
           port: 8080
       middlewares:
         - name: scrumlr-ratelimit
-    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/manifest.json`) || PathPrefix(`/service-worker.js`))
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/manifest.json`) || PathPrefix(`/service-worker.js`) || PathPrefix(`/emoji-data/`))
       kind: Rule
       services:
         - name: scrumlr-frontend

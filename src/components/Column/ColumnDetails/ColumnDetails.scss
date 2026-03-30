@@ -1,0 +1,232 @@
+@use "constants/styles";
+
+$description-line-height: styles.$line-height--medium;
+$description-target-height: 2 * $description-line-height;
+
+$icon-size: styles.$icon--large;
+
+.column-details {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--sm;
+
+  &--moderator-view:hover .column-details__edit-icon {
+    opacity: 1;
+  }
+}
+
+.column-details__name-and-settings-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px; // to accommodate MiniMenu in opened state
+}
+
+.column-details__name-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+
+  overflow: hidden;
+}
+
+.column-details__name {
+  all: unset; // reset input properties
+
+  align-self: flex-start; // only take as much space as needed
+
+  padding: 0 styles.$spacing--xxs styles.$spacing--xxs 0; // extend border space to bottom, and also slightly to the right
+
+  font-size: styles.$text--lg;
+  font-weight: 700;
+
+  color: styles.$navy--900;
+
+  border-bottom: 3px solid var(--accent-color--light);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &--editing {
+    flex-grow: 1; // in edit mode, actually do take full space
+    border-bottom-style: dashed;
+  }
+
+  &--moderator {
+    &:hover {
+      color: styles.$navy--300;
+      cursor: pointer;
+    }
+  }
+}
+
+.column-details__notes-count {
+  color: styles.$gray--800;
+  font-size: styles.$text--base;
+  font-weight: 600;
+}
+
+.column-details__edit-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+  align-self: center;
+  margin-left: 8px;
+  margin-right: 8px;
+
+  &:hover {
+    color: styles.$gray--800;
+  }
+}
+
+.column-details__settings-icon-container {
+  all: unset;
+
+  width: $icon-size;
+  height: $icon-size;
+
+  cursor: pointer;
+}
+.column-details__settings-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  transform: rotate(90deg);
+}
+
+.column-details__description-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  min-height: $description-target-height;
+
+  &--edit {
+    flex-direction: column;
+  }
+
+  &--empty {
+    min-height: 0;
+  }
+}
+
+.column-details__description-content {
+  position: relative;
+  flex-grow: 1;
+}
+
+.column-details__description {
+  flex-grow: 1;
+  color: styles.$navy--900;
+  font-size: styles.$text--base;
+  font-weight: 600;
+  line-height: $description-line-height;
+  max-height: $description-target-height;
+  overflow: hidden;
+
+  &--expanded {
+    max-height: max-content;
+  }
+
+  &--placeholder {
+    color: styles.$gray--800;
+
+    &-moderator {
+      &:hover {
+        cursor: pointer;
+        color: styles.$navy--200;
+      }
+    }
+  }
+
+  &--moderator {
+    &:hover {
+      cursor: pointer;
+      color: styles.$navy--200 !important;
+    }
+  }
+}
+
+.column-details__description-expand-icon-container {
+  all: unset;
+  align-self: flex-end;
+
+  width: $icon-size;
+  height: $icon-size;
+
+  cursor: pointer;
+}
+
+.column-details__description-expand-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  &--expanded {
+    transform: rotate(180deg);
+  }
+}
+
+.column-details__description-mini-menu {
+  align-self: flex-end;
+}
+
+.text-area.column-details__description--moderator {
+  &:hover {
+    cursor: pointer !important;
+    color: styles.$navy--200 !important;
+  }
+}
+
+[data-theme="dark"] {
+  .column-details__name {
+    color: styles.$gray--000;
+    border-bottom-color: var(--accent-color--dark);
+
+    &--moderator {
+      &:hover {
+        color: styles.$gray--800;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .column-details__description {
+    &--placeholder {
+      color: styles.$gray--700;
+      &-moderator {
+        &:hover {
+          cursor: pointer;
+          color: styles.$navy--200;
+        }
+      }
+    }
+
+    &--moderator {
+      &:hover {
+        cursor: pointer;
+        color: styles.$navy--200 !important;
+      }
+    }
+  }
+
+  .column-details__edit-icon {
+    color: styles.$gray--000;
+
+    &:hover {
+      color: styles.$gray--800;
+    }
+  }
+
+  .column-details__settings-icon-container {
+    color: styles.$gray--000;
+  }
+
+  .column-details__description-expand-icon {
+    color: rgba(styles.$gray--000, 0.7);
+  }
+}

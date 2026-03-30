@@ -3,11 +3,11 @@ import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "store/features/board/types";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
-import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
+import {VisibleIcon, HiddenIcon, DuplicateIcon, RefreshIcon} from "components/Icon";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
-import {Button} from "../Button";
+import {LegacyButton} from "../Button";
 import {ValidationError} from "../ValidationError";
 import {TextInputAction} from "../TextInputAction";
 
@@ -38,8 +38,8 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
             onChange={(e) => onPassphraseChange(e.target.value)}
             rightAdornment={
               <TextInputAdornment title={t("AccessPolicySelection.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
-                {visiblePassphrase && <Visible />}
-                {!visiblePassphrase && <Hidden />}
+                {visiblePassphrase && <VisibleIcon />}
+                {!visiblePassphrase && <HiddenIcon />}
               </TextInputAdornment>
             }
             actions={
@@ -49,10 +49,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
                   onClick={() => onPassphraseChange(generateRandomString())}
                   title={t("AccessPolicySelection.generatePassphrase")}
                 >
-                  <Refresh />
+                  <RefreshIcon />
                 </TextInputAction>
                 <TextInputAction onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase} title={t("AccessPolicySelection.copyPassphraseToClipboard")}>
-                  <Duplicate />
+                  <DuplicateIcon />
                 </TextInputAction>
               </>
             }
@@ -76,23 +76,27 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
-        <Button className="access-policy-selection__access-policy" variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"} onClick={() => onAccessPolicyChange("PUBLIC")}>
+        <LegacyButton
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("PUBLIC")}
+        >
           {t("AccessPolicySelection.publicTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === "BY_PASSPHRASE" ? "contained" : "outlined"}
           onClick={() => onAccessPolicyChange("BY_PASSPHRASE")}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === "BY_INVITE" ? "contained" : "outlined"}
           onClick={() => onAccessPolicyChange("BY_INVITE")}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
-        </Button>
+        </LegacyButton>
       </div>
 
       <div className="access-policy__details">

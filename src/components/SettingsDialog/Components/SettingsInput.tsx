@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, {ChangeEvent, FC, useState} from "react";
-import {Visible, Hidden} from "components/Icon";
+import {VisibleIcon, HiddenIcon} from "components/Icon";
 import "./SettingsInput.scss";
 
 export interface SettingsInputProps {
@@ -64,7 +64,7 @@ export const SettingsInput: FC<SettingsInputProps> = ({
       </label>
       {type === "password" && passwordToggle && value && (
         <button className="settings-input__password-toggle" onClick={togglePasswordVisibility}>
-          {showPassword ? <Visible /> : <Hidden />}
+          {showPassword ? <VisibleIcon /> : <HiddenIcon />}
         </button>
       )}
     </div>

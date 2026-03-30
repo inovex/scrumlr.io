@@ -2,20 +2,23 @@ import {FC, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {DotButton} from "components/DotButton";
-import {Minus} from "components/Icon";
+import {MinusIcon} from "components/Icon";
 import "./RemoveVoteButton.scss";
 import {useAppDispatch} from "store";
 import {deleteVote} from "store/features";
 import {needsHighContrast} from "constants/colors";
+// import {t} from "i18next";
 
 type RemoveVoteProps = {
   noteId: string;
   disabled?: boolean;
   numberOfVotes: number;
   colorClassName?: string;
+  participantNames?: string;
+  isAnonymous?: boolean;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes, colorClassName}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes, colorClassName, participantNames, isAnonymous}) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
@@ -43,10 +46,10 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
         setDoBump(false);
       }}
       dataTooltipId="scrumlr-tooltip"
-      dataTooltipContent={disabled ? t("Votes.VotesOnNote", {count: numberOfVotes}) : t("Votes.RemoveVote")}
+      dataTooltipContent={isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}
     >
       <span className="vote-button-remove__folded-corner" />
-      <Minus className="vote-button-remove__icon" />
+      <MinusIcon className="vote-button-remove__icon" />
       <span className="vote-button-remove__count">{numberOfVotes}</span>
     </DotButton>
   );

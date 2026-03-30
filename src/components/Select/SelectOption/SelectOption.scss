@@ -1,0 +1,92 @@
+@use "constants/styles";
+
+.select-option {
+  display: grid;
+  grid-template-rows: 2px auto auto;
+  grid-template-columns: auto styles.$spacing--sm 1fr styles.$spacing--sm auto;
+  grid-template-areas:
+    "icon . .           . radio"
+    "icon . label       . radio"
+    ".    . description . . ";
+
+  padding: styles.$spacing--base;
+
+  border: 2px solid transparent;
+  border-radius: 12px;
+
+  background-color: styles.$gray--100;
+
+  cursor: pointer;
+  text-align: left;
+
+  &--active {
+    border-color: styles.$blue--500;
+  }
+
+  &--extra {
+    grid-template-rows: 2px auto auto styles.$spacing--sm auto;
+    grid-template-columns: auto styles.$spacing--sm 1fr styles.$spacing--sm auto;
+    grid-template-areas:
+      "icon . .           .     radio"
+      "icon . label       .     radio"
+      ".    . description .     .    "
+      ".    . .           .     .    "
+      ".    . extra       extra extra";
+  }
+}
+
+.select-option__icon-container {
+  grid-area: icon;
+
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+}
+
+.select-option__label {
+  grid-area: label;
+
+  font-size: styles.$text--base;
+  font-weight: 600;
+  line-height: normal;
+
+  color: styles.$navy--400;
+}
+
+.select-option__description {
+  grid-area: description;
+
+  font-size: styles.$text--base;
+  font-weight: 400;
+  line-height: 22px;
+
+  color: styles.$navy--500;
+}
+
+.select-option__radio {
+  grid-area: radio;
+
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 6px;
+}
+
+.select-option__extra-content {
+  grid-area: extra;
+}
+
+[data-theme="dark"] {
+  .select-option {
+    background: styles.$navy--500;
+
+    &--active {
+      border-color: styles.$blue--400;
+    }
+  }
+
+  .select-option__label,
+  .select-option__description,
+  .select-option__icon-container {
+    color: styles.$gray--000;
+  }
+}

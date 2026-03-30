@@ -1,0 +1,18 @@
+---
+backend:
+  config:
+    natsUrl: nats://nats.nats.svc.cluster.local:4222
+  secrets:
+    databaseUrl: postgres://postgres:SuperStrongpassword@postgres-postgresql.postgres.svc.cluster.local:5432/scrumlr?sslmode=disable
+  extraConfig:
+    # Do NOT use this config for production deployments, this flag enables hardcoded, insecure keys
+    SCRUMLR_INSECURE: true
+
+ingress:
+  enabled: true
+  annotations:
+    # Websocket optimization https://kubernetes.github.io/ingress-nginx/user-guide/miscellaneous/#websockets
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "7200"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "7200"
+  hostname: "*"
+  ingressClassName: "nginx"

@@ -1,0 +1,161 @@
+@use "constants/styles";
+
+.new-board__wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.new-board {
+  position: relative;
+  color: styles.$navy--900;
+  padding: styles.$spacing--base;
+
+  a {
+    outline: none;
+
+    svg {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 2px;
+    }
+
+    &:hover svg {
+      filter: styles.$brighten--strongly;
+    }
+
+    &:focus-visible > svg {
+      border: 1px solid styles.$blue--500;
+    }
+  }
+}
+.new-board__mode:last-child {
+  grid-column: 1 / -1;
+  max-width: 100%;
+}
+
+.new-board__mode {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+
+.new-board__mode-selection {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: 16px;
+  justify-items: center;
+  margin-top: 1em;
+}
+
+.new-board__mode-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  opacity: 0;
+  z-index: -1;
+  height: 1px;
+  width: 1px;
+
+  &:focus-visible + .new-board__mode-label {
+    box-shadow: 0 0 0 2px styles.$gray--700;
+  }
+}
+
+.new-board__mode-input:checked + .new-board__mode-label {
+  border: 1px solid styles.$blue--500;
+}
+
+.new-board__mode-input + .new-board__mode-label:hover {
+  box-shadow: 0 4px 8px 2px rgba(styles.$blue--500, 0.3);
+  transform: scale(1.02);
+}
+
+.new-board__mode-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  color: styles.$navy--900;
+  background: styles.$gray--000;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: all 0.08s ease-out;
+  min-height: 76px;
+
+  padding: styles.$spacing--base;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 6px 4px rgba(styles.$navy--900, 0.1);
+}
+
+.new-board__mode-name {
+  font-weight: bold;
+  text-align: center;
+}
+
+.new-board__mode-description {
+  margin-top: 0.4em;
+
+  font-size: styles.$text-size--small;
+  text-align: center;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 292px;
+}
+
+.new-board__actions {
+  display: flex;
+  position: sticky;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+  padding: styles.$spacing--base;
+  background: linear-gradient(0deg, styles.$gray--000 0%, styles.$gray--000 80%, rgba(0, 0, 0, 0) 100%);
+}
+
+.new-board__action + .new-board__action {
+  margin-left: styles.$spacing--base;
+}
+
+[data-theme="dark"] {
+  .new-board {
+    color: styles.$gray--000;
+  }
+
+  .new-board__mode-label {
+    color: styles.$gray--000;
+    background: styles.$navy--500;
+    box-shadow: 0 2px 6px 4px rgba(styles.$navy--900, 0.2);
+  }
+
+  .new-board__mode-input:focus-visible + .new-board__mode-label {
+    box-shadow: 0 0 0 2px styles.$gray--000;
+  }
+
+  .new-board__mode-input + .new-board__mode-label:hover {
+    box-shadow: 0 4px 8px 2px rgba(styles.$blue--500, 0.1);
+  }
+
+  .new-board__actions {
+    background: linear-gradient(0deg, styles.$navy--600 0%, styles.$navy--600 80%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
+@media #{styles.$tablet} {
+  .new-board__mode-selection {
+    grid-template-columns: 1fr 1fr;
+  }
+}

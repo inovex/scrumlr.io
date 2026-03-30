@@ -1,13 +1,13 @@
 import {Request as RequestModel} from "store/features/requests/types";
 import "./Requests.scss";
-import {Participant} from "store/features/participants/types";
+import {ParticipantWithUser} from "store/features/participants/types";
 import {useAppDispatch} from "store";
 import {acceptJoinRequests, rejectJoinRequests, setRaisedHandStatus} from "store/features";
 import {Request} from "./Request";
 
 export interface RequestsProps {
   requests: RequestModel[];
-  participantsWithRaisedHand: Participant[];
+  participantsWithRaisedHand: ParticipantWithUser[];
 }
 
 export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) => {

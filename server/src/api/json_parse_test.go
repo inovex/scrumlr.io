@@ -3,10 +3,12 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/technical_helper"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
@@ -33,10 +35,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 		{
 			name:    "votes.removeVote",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.removeVote },
-		},
-		{
-			name:    "votings.updateVoting",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateVoting },
 		},
 		{
 			name:    "notes.createNote",
@@ -67,10 +65,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoard },
 		},
 		{
-			name:    "board_sessions.updateBoardSessions",
-			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoardSessions },
-		},
-		{
 			name:    "board_session_request.updateBoardSessionRequest",
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoardSessionRequest },
 		},
@@ -80,15 +74,12 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 
-			//loggerConfig := zap.NewNop() // Use a no-op logger for testing
-			//_logger := loggerConfig.Sugar()
-
 			mockUUID := uuid.New()
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
 				}`))
 
-			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, mockUUID).
 				AddToContext(identifiers.UserIdentifier, mockUUID).
 				AddToContext(identifiers.NoteIdentifier, mockUUID).

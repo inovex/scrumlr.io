@@ -1,0 +1,35 @@
+---
+changelog:
+  exclude:
+    authors:
+      - dependabot[bot]
+  categories:
+    - title: "✨ Features"
+      labels:
+        - "feat"
+    - title: "🐛 Fixes"
+      labels:
+        - "Bug (HIGH)"
+        - "Bug (MEDIUM)"
+        - "Bug (LOW)"
+    - title: "🔄 Refactoring"
+      labels:
+        - "refactor"
+    - title: "🎨 Style"
+      labels:
+        - "style"
+    - title: 🌐 Localization
+      labels:
+        - "feat(i18n)"
+    - title: "⚙️ Chores"
+      labels:
+        - "Chore"
+    - title: "📚 Docs"
+      labels:
+        - "docs"
+    - title: "🤖 CI"
+      labels:
+        - "ci"
+    - title: "Miscellaneous"
+      labels:
+        - "*"

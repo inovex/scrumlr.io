@@ -1,10 +1,9 @@
-import {Shuffle} from "components/Icon";
+import {ShuffleIcon} from "components/Icon";
 import classNames from "classnames";
 import {Avatar, generateRandomProps} from "components/Avatar";
 import {Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
-import {isEqual} from "underscore";
 import {AVATAR_CONFIG} from "constants/avatar";
 import {AvataaarProps, AvatarGroup} from "types/avatar";
 import {editSelf} from "store/features";
@@ -13,22 +12,22 @@ import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
-  id?: string;
+  id: string;
 }
 
 export const AvatarSettings = (props: AvatarSettingsProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const state = useAppSelector(
-    (applicationState) => ({
-      participant: applicationState.participants!.self!,
-    }),
-    isEqual
-  );
+  const self = useAppSelector((state) => state.auth.user!);
 
-  let initialState = state.participant?.user.avatar;
+  let initialState = self.avatar;
   if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(props.id ?? "");
+    initialState = generateRandomProps(props.id);
+  }
+
+  // old authenticated accounts may be missing backgroundColor, so we set it explicitly. It will be persisted when going to the profile settings for the first time
+  if (!initialState.backgroundColor) {
+    initialState = {...initialState, backgroundColor: generateRandomProps(props.id).backgroundColor};
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
@@ -46,7 +45,12 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   };
 
   useEffect(() => {
-    dispatch(editSelf({...state.participant.user, avatar: properties}));
+    dispatch(
+      editSelf({
+        auth: {...self, avatar: properties},
+        applyOptimistically: true,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
@@ -70,7 +74,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         <SettingsCarousel
           carouselItems={group.values}
           currentValue={properties[group.key]}
-          onValueChange={(value) => updateAvatar(group.key, value)}
+          onValueChange={(value) => updateAvatar(group.key, value as AvataaarProps[keyof AvataaarProps])}
           disabled={isDisabled}
           localizationPath={`Avatar.${group.key}.`}
           label={t(`Avatar.${group.key}.label`)}
@@ -83,9 +87,9 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <Avatar seed={props.id} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
-          <Shuffle />
+          <ShuffleIcon />
         </button>
       </div>
       <div className="avatar-settings__settings-wrapper">
@@ -93,7 +97,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
           {Object.entries(AVATAR_CONFIG).map(([label, groups], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
-                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
+                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing" | "background"}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
                 headerClassName="avatar-settings__settings-group-header"

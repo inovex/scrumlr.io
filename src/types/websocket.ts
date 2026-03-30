@@ -1,6 +1,7 @@
+import {Auth} from "store/features";
 import {Board} from "../store/features/board/types";
 import {Column} from "../store/features/columns/types";
-import {Participant} from "../store/features/participants/types";
+import {ParticipantWithUserId} from "../store/features/participants/types";
 import {Note} from "../store/features/notes/types";
 import {Vote} from "../store/features/votes/types";
 import {Voting} from "../store/features/votings/types";
@@ -17,7 +18,7 @@ export interface BoardInitEvent {
     reactions?: Reaction[];
     votings?: Voting[];
     votes?: Vote[];
-    participants: Participant[];
+    participants: ParticipantWithUserId[];
     requests?: Request[];
   };
 }
@@ -43,7 +44,7 @@ export interface UpdatedColumnsEvent {
 
 export interface DeletedColumnEvent {
   type: "COLUMN_DELETED";
-  data: string;
+  data: {column: string; notes: string[]};
 }
 
 export interface UpdatedNotesEvent {
@@ -58,10 +59,7 @@ export interface SyncNotesEvent {
 
 export interface DeletedNoteEvent {
   type: "NOTE_DELETED";
-  data: {
-    note: string;
-    deleteStack: boolean;
-  };
+  data: string[];
 }
 
 export interface AddedReactionEvent {
@@ -91,17 +89,17 @@ export interface RequestUpdatedEvent {
 
 export interface ParticipantCreatedEvent {
   type: "PARTICIPANT_CREATED";
-  data: Participant;
+  data: ParticipantWithUserId;
 }
 
 export interface ParticipantUpdatedEvent {
   type: "PARTICIPANT_UPDATED";
-  data: Participant;
+  data: Auth;
 }
 
 export interface ParticipantsUpdatedEvent {
   type: "PARTICIPANTS_UPDATED";
-  data: Participant[];
+  data: ParticipantWithUserId[];
 }
 
 export interface VotingCreatedEvent {
@@ -127,6 +125,37 @@ export interface AddedBoardReactionEvent {
   data: BoardReactionType;
 }
 
+export interface NoteDragStartEvent {
+  type: "NOTE_DRAG_START";
+  data: {
+    noteId: string;
+    userId: string;
+  };
+}
+
+export interface NoteDragEndEvent {
+  type: "NOTE_DRAG_END";
+  data: {
+    noteId: string;
+    userId: string;
+  };
+}
+
+export interface SessionUpdatedEvent {
+  type: "SESSION_UPDATED";
+  data: ParticipantWithUserId;
+}
+
+export interface DragLockMessage {
+  type: "DRAG_LOCK_MESSAGE";
+  data: {
+    action: "ACQUIRE" | "RELEASE";
+    noteId: string;
+  };
+}
+
+export type ClientMessage = DragLockMessage;
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
@@ -148,4 +177,7 @@ export type ServerEvent =
   | VotingCreatedEvent
   | VotingUpdatedEvent
   | DeleteVotesEvent
-  | AddedBoardReactionEvent;
+  | AddedBoardReactionEvent
+  | NoteDragStartEvent
+  | NoteDragEndEvent
+  | SessionUpdatedEvent;

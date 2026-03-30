@@ -1,4 +1,13 @@
-<svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M16.3103 11.8182V8L25 14.3636L16.3103 20.7273V16.9091C12.8655 16.9091 9.7 17.0364 7 22C7 18.85 7.31034 11.8182 16.3103 11.8182Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M7 21V23C7 24.1046 7.89543 25 9 25H21C22.1046 25 23 24.1046 23 23V20" stroke="currentColor" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_14848_27535)">
+<path d="M18.8726 13.053L21.1169 13.053C21.6737 13.053 22.125 13.5043 22.125 14.0611L22.125 23.2888C22.125 23.8456 21.6737 24.2969 21.1169 24.2969L20.3314 24.2969L11.7222 24.2969L10.9366 24.2969C10.3799 24.2969 9.92859 23.8456 9.92859 23.2888L9.92859 14.0611C9.92859 13.5043 10.3799 13.053 10.9366 13.053L13.181 13.053" stroke="currentColor" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M13.7188 9.45312L16.0185 7.16335" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+<path d="M16.0234 7.16406L18.3232 9.45384" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+<path d="M16.0703 17.1797L16.0703 8.55628" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_14848_27535">
+<rect width="22" height="22" fill="currentColor" transform="translate(27 26.6484) rotate(-180)"/>
+</clipPath>
+</defs>
 </svg>

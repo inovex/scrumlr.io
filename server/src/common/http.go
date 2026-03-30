@@ -3,8 +3,9 @@ package common
 import (
 	"net"
 	"net/http"
-	"scrumlr.io/server/logger"
 	"strings"
+
+	"scrumlr.io/server/logger"
 
 	"github.com/weppos/publicsuffix-go/publicsuffix"
 )

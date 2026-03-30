@@ -1,13 +1,14 @@
-@import "constants/style";
+@use "constants/styles";
+@use "constants/mixins";
 
 .note-dialog__scrollbar {
   display: flex;
   flex-direction: column;
 
-  border-radius: $note__border-radius;
+  //border-radius: $note__border-radius;
 
   overflow: hidden;
-  @include scrollbar();
+  @include mixins.scrollbar();
 }
 
 // inner container preventing scrollbar flowing over border radius
@@ -22,18 +23,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: $spacing--base;
-  gap: $spacing--base;
+  gap: styles.$spacing--base;
 }
 
-@media #{$smartphone} {
+@media #{styles.$smartphone} {
   .note-dialog__scrollbar {
     padding-left: 0;
   }
 }
 
-@media screen and (max-width: $breakpoint--desktop) {
+@media screen and (max-width: styles.$breakpoint--desktop) {
   .note-dialog__scrollbar {
-    padding-bottom: $spacing--xl;
+    padding-bottom: styles.$spacing--xl;
   }
 }

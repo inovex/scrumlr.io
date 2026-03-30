@@ -2,14 +2,15 @@ import {ReactElement, useEffect, useRef, useState} from "react";
 import {API} from "api";
 import {useNavigate} from "react-router";
 import {useReactToPrint} from "react-to-print";
-import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
-import {Close, Printer} from "components/Icon";
+import ScrumlrLogo from "assets/scrumlr-logo-light.svg?react";
+import {CloseIcon, PrinterIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
-import {ExportBoardDataType, compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
+import {compareNotes, ExportBoardDataType, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
 import {DEFAULT_URL} from "constants/misc";
 import "./PrintView.scss";
+import {mapMultipleParticipants} from "utils/participant";
 
 interface PrintViewProps {
   boardId: string;
@@ -36,7 +37,13 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
 
   const getBoardData = async () => {
     const response = await API.exportBoard(boardId, "application/json");
-    return response.json();
+    const jsonResponse = await response.json();
+    const userData = await API.getUsers(jsonResponse.board.id);
+    const exportData: ExportBoardDataType = {
+      ...jsonResponse,
+      participants: mapMultipleParticipants(jsonResponse.participants, userData),
+    };
+    return exportData;
   };
 
   useEffect(() => {
@@ -65,11 +72,24 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   };
 
   const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
-    <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
+    <div
+      key={id}
+      className={classNames("print-view__note", {
+        "print-view__note--isChild": isChild,
+        "print-view__note--isTop": isTop,
+      })}
+    >
       <p className="print-view__note-text">{text}</p>
       <div className="print-view__note-info-wrapper">
         <span className="print-view__note-info-author">{boardData?.board.showAuthors ? getAuthorName(authorId, boardData?.participants) : ""}</span>
-        <span className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>{voteLabel(id)}</span>
+        <span
+          className={classNames({
+            "print-view__note-info--isTop": isTop,
+            "print-view__note-info--isChild": isChild,
+          })}
+        >
+          {voteLabel(id)}
+        </span>
       </div>
     </div>
   );
@@ -89,10 +109,10 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     <div className="print-view__container">
       <div className="print-view__button-container">
         <button className="print-view__button" onClick={() => handlePrint(() => printRef.current)} aria-label={t("PrintView.Print")}>
-          <Printer className="print-view__icon-print" />
+          <PrinterIcon className="print-view__icon-print" />
         </button>
         <button className="print-view__button" onClick={handleClose} aria-label={t("PrintView.Close")}>
-          <Close className="print-view__icon-close" />
+          <CloseIcon className="print-view__icon-close" />
         </button>
       </div>
       <div ref={printRef} className="print-view">

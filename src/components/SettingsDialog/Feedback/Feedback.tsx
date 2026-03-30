@@ -1,16 +1,16 @@
-import React, {FormEvent, useEffect, useRef, useState} from "react";
+import {SubmitEvent, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
 import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
-import {TemplateGallery, Praise, Bug} from "components/Icon";
+import {TemplateGalleryIcon, PraiseIcon, BugIcon} from "components/Icon";
 import {useOutletContext} from "react-router";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
-export const Feedback: React.FC = () => {
+export const Feedback = () => {
   const {t} = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
@@ -31,7 +31,9 @@ export const Feedback: React.FC = () => {
     }
   }, [t, feedbackTypeInput]);
 
-  const onSubmitFeedback = (e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}) => {
+  const onSubmitFeedback = (
+    e: SubmitEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}
+  ) => {
     e.preventDefault();
     setErrorMessage(undefined);
     const {feedbackType, feedback, contact} = e.target;
@@ -73,7 +75,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("PRAISE")}
         />
         <label htmlFor="feedbackTypePraise" className="feedback-option__label">
-          <Praise />
+          <PraiseIcon />
           <span>Praise</span>
         </label>
       </div>
@@ -88,7 +90,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("FEATURE_REQUEST")}
         />
         <label htmlFor="feedbackTypeFeatureRequest" className="feedback-option__label">
-          <TemplateGallery />
+          <TemplateGalleryIcon />
           <span>Feature Request</span>
         </label>
       </div>
@@ -103,7 +105,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("BUG_REPORT")}
         />
         <label htmlFor="feedbackTypeBugReport" className="feedback-option__label">
-          <Bug />
+          <BugIcon />
           <span>Bug Report</span>
         </label>
       </div>

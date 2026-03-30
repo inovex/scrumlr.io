@@ -1,37 +1,36 @@
-@import "src/constants/style";
-@import "../SettingsDialog";
-
-$settings__item-height: 48px;
+@use "constants/styles";
+@use "constants/mixins";
+@use "../SettingsDialog";
 
 .profile-settings {
   &__container {
     display: flex;
     flex-direction: column;
-    gap: $spacing--xl;
+    gap: styles.$spacing--xl;
     height: 100%;
     width: 100%;
-    max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
+    max-width: calc(100vw - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
 
     @media screen and (min-width: 450px) {
-      max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+      max-width: calc(380px - (2 * #{SettingsDialog.$settings-dialog-container--sides-small}));
     }
 
     @media screen and (min-width: 920px) {
-      max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+      max-width: calc(544px - (2 * #{SettingsDialog.$settings-dialog-container--sides-large}));
     }
 
     &-wrapper {
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: $spacing--xs;
-      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
-      padding-bottom: $settings-dialog-container--bottom;
+      padding-right: styles.$spacing--xs;
+      margin-right: calc(-1 * (#{styles.$spacing--xs} + 10px));
+      padding-bottom: SettingsDialog.$settings-dialog-container--bottom;
 
-      @include scrollbar();
+      @include mixins.scrollbar();
 
       @media screen and (min-width: 920px) {
-        padding-right: $spacing--lg;
-        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
+        padding-right: styles.$spacing--lg;
+        margin-right: calc(-1 * (#{styles.$spacing--lg} + 10px));
       }
 
       &:focus-visible {
@@ -42,64 +41,6 @@ $settings__item-height: 48px;
 
     > button {
       flex: 0;
-    }
-  }
-}
-
-.profile-settings__hotkey-settings {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.profile-settings__toggle-hotkeys-button {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding-right: $spacing--lg;
-}
-
-.profile-settings__open-cheat-sheet-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: $gray--800;
-  gap: $spacing--xs;
-  margin: $spacing--xs;
-  padding: $spacing--xs;
-  transition: transform 0.08s ease-in-out;
-
-  > svg {
-    width: $icon--medium;
-    height: $icon--medium;
-  }
-
-  > p {
-    margin: 0;
-  }
-
-  &:hover {
-    transform: scale(1.06);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-
-  &:focus-visible {
-    border-radius: $rounded--full;
-    outline: 2px solid var(--accent-color--light);
-  }
-}
-
-[theme="dark"] {
-  .profile-settings__open-cheat-sheet-button {
-    color: $gray--700;
-
-    &:focus-visible {
-      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
     }
   }
 }

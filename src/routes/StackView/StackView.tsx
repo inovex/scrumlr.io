@@ -7,7 +7,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppDispatch, useAppSelector} from "store";
-import {Close, Trash} from "components/Icon";
+import {CloseIcon, TrashIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -55,7 +55,7 @@ export const StackView = () => {
         })),
     _.isEqual
   );
-  const column = columns.find((c) => c.id === note?.position.column);
+  const column = columns.find((c) => c.id === note?.position.column)!;
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the last stack in the previous column
@@ -206,7 +206,7 @@ export const StackView = () => {
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.info({title: t("Toast.noteDeleted"), icon: Trash});
+      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
 
@@ -244,14 +244,18 @@ export const StackView = () => {
 
   return (
     <Portal
+      closeMode="except-selector"
+      closeIgnoreSelector="[data-portal-no-close]"
       onClose={handleClose}
+      backdrop="hardBlur"
       className={classNames("stack-view__portal", colorClassName, {"stack-view__portal-moderation-visible": moderating})}
       hiddenOverflow
-      centered
+      align="center"
       disabledPadding
+      accentColor={column.color}
     >
       <div className={classNames("stack-view", colorClassName)}>
-        <NoteDialogComponents.Header columnName={column?.name ?? ""} />
+        <NoteDialogComponents.Header columnName={column.name} columnDescription={column.description} />
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
           <div className="stack-view__inner-scrollbar">
@@ -269,6 +273,7 @@ export const StackView = () => {
                   {item.parent && item.parent.position.column === column?.id && (
                     <div className="stack-view__notes">
                       <NoteDialogComponents.Note
+                        data-portal-no-close
                         key={item.parent.id}
                         noteId={item.parent.id}
                         text={item.parent.text}
@@ -289,6 +294,7 @@ export const StackView = () => {
                         <NoteDialogComponents.Wrapper>
                           {item.stack?.map((n: StackedNote) => (
                             <NoteDialogComponents.Note
+                              data-portal-no-close
                               key={n.id}
                               noteId={n.id}
                               text={n.text}
@@ -316,7 +322,7 @@ export const StackView = () => {
       </div>
       <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, colorClassName)} />
       <button onClick={handleClose} className="stack-view__close-button" aria-label={t("StackView.close")}>
-        <Close />
+        <CloseIcon />
       </button>
     </Portal>
   );

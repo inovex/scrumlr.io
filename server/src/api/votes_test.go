@@ -5,15 +5,18 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
 
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/technical_helper"
+	"scrumlr.io/server/votings"
+
 	"github.com/google/uuid"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -27,60 +30,46 @@ func TestVoteTestSuite(t *testing.T) {
 
 func (suite *VoteTestSuite) TestAddVote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusCreated,
-		},
-		{
-			name:         "specific error",
-			expectedCode: http.StatusTeapot,
-			err: &common.APIError{
-				Err:        errors.New("check"),
-				StatusCode: http.StatusTeapot,
-				StatusText: "teapot",
-				ErrorText:  "Error",
-			},
-		},
-		{
-			name:         "unexpected error",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("teapot?"),
-		},
-	}
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusCreated, nil, false, false, nil).
+		Append("specific error", http.StatusTeapot, &common.APIError{
+			Err:        errors.New("check"),
+			StatusCode: http.StatusTeapot,
+			StatusText: "teapot",
+			ErrorText:  "Error",
+		}, false, false, nil).
+		Append("unexpected error", http.StatusInternalServerError, errors.New("teapot?"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			mock := new(VotingMock)
+			votingMock := votings.NewMockVotingService(suite.T())
 
 			boardId, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()
 			noteId, _ := uuid.NewRandom()
-			mock.On("AddVote", dto.VoteRequest{
+
+			s.votings = votingMock
+
+			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
+				"note": "%s"
+				}`, noteId.String())))
+			req.Req = logger.InitTestLoggerRequest(req.Request())
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
+				AddToContext(identifiers.UserIdentifier, userId)
+
+			votingMock.EXPECT().AddVote(mock.Anything, votings.VoteRequest{
 				Board: boardId,
 				User:  userId,
 				Note:  noteId,
-			}).Return(&dto.Vote{
+			}).Return(&votings.Vote{
 				Note: noteId,
 			}, tt.err)
-
-			s.votings = mock
-
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
-				"note": "%s"
-				}`, noteId.String())))
-			req.req = logger.InitTestLoggerRequest(req.Request())
-			req.AddToContext(identifiers.BoardIdentifier, boardId).
-				AddToContext(identifiers.UserIdentifier, userId)
 
 			rr := httptest.NewRecorder()
 			s.addVote(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			votingMock.AssertExpectations(suite.T())
 		})
 	}
 
