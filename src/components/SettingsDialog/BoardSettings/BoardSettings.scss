@@ -170,8 +170,7 @@
 .board-settings__access-option--selected {
   .board-settings__access-option-indicator {
     border-color: styles.$blue--500;
-    background-color: styles.$blue--500;
-    box-shadow: inset 0 0 0 3px white;
+    border-width: 6px;
   }
 }
 
@@ -179,10 +178,7 @@
   .board-settings__access-option--selected {
     .board-settings__access-option-indicator {
       border-color: styles.$blue--400;
-      background-color: styles.$blue--400;
-      box-shadow:
-        inset 0 0 0 3px styles.$navy--800,
-        0 0 0 2px styles.$blue--400;
+      box-shadow: 0 0 0 2px styles.$blue--400;
     }
   }
 }
