@@ -3,9 +3,7 @@
 $card-height: 220px;
 $icon-size: 80px;
 
-.add-file-card {
-  all: unset;
-
+.file-dropzone-card {
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
@@ -43,20 +41,20 @@ $icon-size: 80px;
     box-shadow: none;
     cursor: unset;
 
-    .add-file-card__icon,
-    .add-file-card__title {
+    .file-dropzone-card__icon,
+    .file-dropzone-card__title {
       color: styles.$gray--800;
     }
   }
 }
 
-.add-file-card__icon {
+.file-dropzone-card__icon {
   width: $icon-size;
   height: $icon-size;
   color: styles.$blue--500;
 }
 
-.add-file-card__title {
+.file-dropzone-card__title {
   font-size: styles.$text--md;
   font-weight: 600;
   line-height: 28px;
@@ -65,7 +63,7 @@ $icon-size: 80px;
 }
 
 [data-theme="dark"] {
-  .add-file-card {
+  .file-dropzone-card {
     background-color: rgba(styles.$blue--400, 0.08);
     border-color: styles.$blue--400;
 
@@ -81,8 +79,8 @@ $icon-size: 80px;
       background: styles.$navy--600;
       border-color: styles.$navy--300;
 
-      .add-file-card__icon,
-      .add-file-card__title {
+      .file-dropzone-card__icon,
+      .file-dropzone-card__title {
         color: styles.$navy--300;
       }
     }

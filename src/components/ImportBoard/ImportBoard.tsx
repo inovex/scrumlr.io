@@ -8,7 +8,7 @@ import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings
 import {CheckDoneIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {SimpleModal} from "components/Templates";
-import {AddFileCard} from "components/ImportBoard/AddFileCard/AddFileCard";
+import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
 import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
@@ -114,7 +114,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
           }}
         >
           {!importData ? (
-            <AddFileCard onFileSelect={readFile} disabled={false} />
+            <FileDropzoneCard onFileSelect={readFile} disabled={false} />
           ) : (
             <div className="import-board__file-success">
               <CheckDoneIcon className="import-board__success-icon" />
