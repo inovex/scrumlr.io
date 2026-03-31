@@ -10,6 +10,7 @@ import {Toast} from "utils/Toast";
 import {SimpleModal} from "components/Templates";
 import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
 import "./ImportBoard.scss";
+import {FilePreview} from "components/ImportBoard/FilePreview/FilePreview";
 
 type ImportStep = "file" | "access";
 
@@ -59,6 +60,15 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     };
 
     reader.readAsText(file);
+  };
+
+  const handleRemoveFile = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setImportData(null);
+    setFileName("");
+    setFileError(null);
   };
 
   const handleContinue = () => {
@@ -116,12 +126,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
           {!importData ? (
             <FileDropzoneCard onFileSelect={readFile} disabled={false} />
           ) : (
-            <div className="import-board__file-success">
-              <CheckDoneIcon className="import-board__success-icon" />
-              <span className="import-board__file-name">
-                {t("ImportBoard.successPrefix")} {fileName}
-              </span>
-            </div>
+            <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />
           )}
 
           {fileError && <p className="import-board__error-message">{fileError}</p>}
