@@ -20,8 +20,6 @@
     "title": "Import Board",
     "step1Title": "Select File",
     "dropzone": "Upload file or drag here",
-    "successPrefix": "File loaded:",
-    "loading": "Loading file...",
     "errorInvalid": "The file could not be read. Please use a valid JSON export.",
     "errorRead": "The file could not be read. Please check the file and try again.",
     "continue": "Continue",
@@ -31,6 +29,11 @@
     "FileDropzoneCard": {
       "title": "Add JSON file",
       "description": "Click or drag a file here to upload (max. 1 file)"
+    },
+    "FilePreview": {
+      "loadingState": "Loading file...",
+      "uploadedState": "File loaded:",
+      "removeFile": "Remove file"
     }
   },
   "Templates": {

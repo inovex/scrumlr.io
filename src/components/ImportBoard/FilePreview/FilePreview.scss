@@ -76,9 +76,40 @@ $card-height: 320px;
 }
 
 .file-preview__file-state {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: styles.$spacing--xxs;
+}
+
+.file-preview__file-state-text {
   font-size: styles.$text--xs;
   font-weight: 500;
   line-height: styles.$line-height--small;
+}
+
+.file-preview__file-state-ready-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: styles.$icon--small;
+  height: styles.$icon--small;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: colors.$victory-verde--light;
+
+  path {
+    stroke-width: 4px;
+  }
+}
+
+.file-preview__file-state-ready-icon {
+  width: styles.$icon--small;
+  height: styles.$icon--small;
+
+  color: colors.$gray--000;
 }
 
 .file-preview__file-remove-button {

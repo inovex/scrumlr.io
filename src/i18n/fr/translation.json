@@ -20,8 +20,6 @@
     "title": "Importer un Tableau",
     "step1Title": "Sélectionner un Fichier",
     "dropzone": "Télécharger un fichier ou glisser ici",
-    "successPrefix": "Fichier chargé:",
-    "loading": "Chargement...",
     "errorInvalid": "Le fichier n'a pas pu être lu. Veuillez utiliser un export JSON valide.",
     "errorRead": "Le fichier n'a pas pu être lu. Veuillez vérifier le fichier et réessayer.",
     "continue": "Continuer",
@@ -31,6 +29,11 @@
     "FileDropzoneCard": {
       "title": "Ajouter un fichier JSON",
       "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
+    },
+    "FilePreview": {
+      "loadingState": "Téléchargement en cours...",
+      "uploadedState": "Téléchargé",
+      "removeFile": "Supprimer le fichier"
     }
   },
   "Templates": {

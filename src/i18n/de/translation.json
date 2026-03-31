@@ -19,8 +19,6 @@
     "button": "JSON Importieren",
     "title": "Sitzung Importieren",
     "step1Title": "Datei Auswählen",
-    "successPrefix": "Datei geladen:",
-    "loading": "Lade Datei...",
     "errorInvalid": "Die Datei konnte nicht gelesen werden. Bitte verwende einen gültigen JSON-Export.",
     "errorRead": "Die Datei konnte nicht gelesen werden. Bitte überprüfe die Datei und versuche es erneut.",
     "continue": "Weiter",
@@ -30,6 +28,11 @@
     "FileDropzoneCard": {
       "title": "JSON Datei hinzufügen",
       "description": "Datei hier ablegen oder klicken (max. 1 Datei)"
+    },
+    "FilePreview": {
+      "loadingState": "Upload läuft ...",
+      "uploadedState": "Hochgeladen",
+      "removeFile": "Datei entfernen"
     }
   },
   "Templates": {
