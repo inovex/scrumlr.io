@@ -21,7 +21,10 @@
         fill: var(--accent-color--light);
       }
 
-      // the circle border would go right here as > use:first-of-type
+      // circle border
+      > use:first-of-type {
+        stroke: var(--accent-color--light);
+      }
     }
 
     // character elements (face, body, clothes)
@@ -33,7 +36,13 @@
 }
 
 [data-theme="dark"] {
-  .avatar > g:first-of-type > g:first-of-type > g:last-of-type {
-    fill: var(--accent-color--dark);
+  .avatar > g:first-of-type > g:first-of-type {
+    > g:last-of-type {
+      fill: var(--accent-color--dark);
+    }
+
+    > use:first-of-type {
+      stroke: var(--accent-color--dark);
+    }
   }
 }
