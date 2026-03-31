@@ -1,5 +1,7 @@
 import {CheckDoneIcon, CloseIcon, FileJsonIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
+import {Tooltip} from "components/Tooltip";
+import {useId} from "react";
 import "./FilePreview.scss";
 
 type FileState = "loading" | "ready";
@@ -14,6 +16,9 @@ type FilePreviewProps = {
 // file preview currently only supports one file, could be extended if needed
 export const FilePreview = (props: FilePreviewProps) => {
   const {t} = useTranslation();
+
+  const baseId = useId();
+  const anchor = `file-preview-${baseId}`;
 
   return (
     <div className="file-preview">
@@ -35,8 +40,9 @@ export const FilePreview = (props: FilePreviewProps) => {
             )}
           </div>
         </div>
-        <button className="file-preview__file-remove-button" onClick={props.onRemove}>
+        <button id={anchor} className="file-preview__file-remove-button" onClick={props.onRemove}>
           <CloseIcon className="file-preview__file-remove-icon" />
+          <Tooltip anchorSelect={`#${anchor}`} content={t("ImportBoard.FilePreview.removeFile")} color="backlog-blue" />
         </button>
       </div>
     </div>
