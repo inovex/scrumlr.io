@@ -31,9 +31,9 @@
       "description": "Click or drag a file here to upload (max. 1 file)"
     },
     "FilePreview": {
-      "loadingState": "Loading file...",
-      "uploadedState": "File loaded:",
-      "removeFile": "Remove file"
+      "loadingState": "Uploading...",
+      "uploadedState": "Uploaded",
+      "removeFile": "Delete file"
     }
   },
   "Templates": {
