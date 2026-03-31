@@ -56,16 +56,23 @@ $card-height: 320px;
 .file-preview__file-info {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 
   gap: styles.$spacing--xxs;
 
   color: colors.$navy--900;
+
+  overflow: hidden;
 }
 
 .file-preview__file-name {
   font-size: styles.$text--base;
   font-weight: 600;
   line-height: styles.$line-height--medium;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .file-preview__file-state {
@@ -80,11 +87,10 @@ $card-height: 320px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
 
   width: styles.$icon--extralarge;
   height: styles.$icon--extralarge;
-
-  margin-left: auto;
 
   border-radius: styles.$rounded--full;
 
