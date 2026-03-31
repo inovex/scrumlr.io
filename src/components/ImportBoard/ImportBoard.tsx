@@ -5,12 +5,11 @@ import {importBoard} from "store/features/board/thunks";
 import {BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
-import {CheckDoneIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {SimpleModal} from "components/Templates";
 import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
-import "./ImportBoard.scss";
 import {FilePreview} from "components/ImportBoard/FilePreview/FilePreview";
+import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
 
@@ -46,7 +45,10 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
         setFileName("");
         setImportData(null);
       } finally {
-        setIsFileLoading(false);
+        // small artificial delay to give users visual feedback
+        setTimeout(() => {
+          setIsFileLoading(false);
+        }, 500);
       }
     };
 
