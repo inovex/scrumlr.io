@@ -384,6 +384,7 @@
     "hiddenColumnsVisible": "Les colonnes masquées sont maintenant visibles pour vous !",
     "passwordCopied": "Tableau protégé et mot de passe copié !",
     "boardMadePublic": "Le tableau est maintenant public !",
+    "accessPolicyChanged": "Accès changé en {{policy}}",
     "allParticipantsDone": "Tous les participants sont prêts !",
     "moderatorResetReadyStates": "Voulez-vous réinitialiser l'état de préparation des participants ?",
     "moderatorResetReadyStatesButton": "Réinitialiser !",
@@ -465,10 +466,7 @@
   },
   "BoardSettings": {
     "BoardName": "Nom du tableau",
-    "AccessPolicy": "Politique d'accès",
     "Password": "Mot de passe",
-    "SetAccessPolicyOpen": "Retirer la protection par mot de passe",
-    "SecurePasswordHint": "Veuillez entrer un mot de passe sécurisé",
     "DeleteBoard": "Supprimer le tableau",
     "ShowAuthorOption": "Afficher les auteurs des notes",
     "ShowHiddenColumnsOption": "Afficher les colonnes masquées pour moi",
@@ -476,9 +474,12 @@
     "ShowNoteReactionsOptions": "Afficher les réactions aux notes",
     "AllowNoteRepositioningOption": "Autoriser le repositionnement des notes",
     "IsLocked": "Verrouiller le tableau",
-    "generatePassword": "Générer un mot de passe et protéger",
     "save": "enregistrer",
-    "edit": "modifier"
+    "edit": "modifier",
+    "subtitle": "Les paramètres d'accès au tableau ne sont pas enregistrés lors de l'exportation. De plus, pour réutiliser un tableau, seul un fichier JSON peut être importé sur la page des modèles.",
+    "AccessPolicyPublicLabel": "Ouvert",
+    "AccessPolicyByInviteLabel": "Avec approbation",
+    "AccessPolicyByPassphraseLabel": "Protégé par mot de passe"
   },
   "Participants": {
     "Title": "Participants",
