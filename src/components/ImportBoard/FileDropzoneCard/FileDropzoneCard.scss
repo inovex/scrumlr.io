@@ -1,6 +1,5 @@
 @use "constants/styles";
 
-$card-width: 480px;
 $card-height: 320px;
 $icon-size: 80px;
 
@@ -11,7 +10,7 @@ $icon-size: 80px;
   justify-content: center;
   align-items: center;
 
-  width: $card-width;
+  width: 100%;
   height: $card-height;
   border-radius: styles.$rounded--default;
   border: 3px dashed styles.$blue--500;

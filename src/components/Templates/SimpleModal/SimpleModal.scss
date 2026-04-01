@@ -2,12 +2,17 @@
 @use "constants/colors";
 @use "sass:color";
 
+$min-clamp-width: 350px;
+$target-clamp-width: 85vw;
+$max-clamp-width: 600px;
+
 .simple-modal {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--xl;
 
+  width: clamp($min-clamp-width, $target-clamp-width, $max-clamp-width);
   padding: 40px styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
 
   border-radius: styles.$rounded--default;
@@ -71,7 +76,6 @@
 @media screen and (max-width: styles.$breakpoint--smartphone) {
   .simple-modal {
     height: 90%;
-    width: 85%;
     gap: styles.$spacing--md;
 
     padding: styles.$spacing--xl styles.$spacing--base styles.$spacing--base styles.$spacing--base;

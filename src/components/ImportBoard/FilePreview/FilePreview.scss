@@ -1,7 +1,6 @@
 @use "constants/styles";
 @use "constants/colors";
 
-$card-width: 480px;
 $card-height: 320px;
 
 .file-preview {
@@ -9,7 +8,7 @@ $card-height: 320px;
   justify-content: center;
   align-items: center;
 
-  width: $card-width;
+  width: 100%;
   height: $card-height;
 
   padding: styles.$spacing--xl;
