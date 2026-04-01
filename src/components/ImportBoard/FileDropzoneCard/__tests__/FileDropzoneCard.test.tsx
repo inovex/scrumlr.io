@@ -1,4 +1,4 @@
-import {act, fireEvent, screen} from "@testing-library/react";
+import {act, fireEvent} from "@testing-library/react";
 import {vi} from "vitest";
 import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
 import {render} from "testUtils";

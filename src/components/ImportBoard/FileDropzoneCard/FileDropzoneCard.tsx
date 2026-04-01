@@ -17,7 +17,7 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
   const {t} = useTranslation();
 
   const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>) => {
-    let file: File | null = null;
+    let file: File | null;
     if (isDragEvent(event)) {
       event.preventDefault();
       file = event.dataTransfer?.files?.[0] ?? null;
