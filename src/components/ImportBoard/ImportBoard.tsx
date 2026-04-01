@@ -122,7 +122,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
           primaryButton={{
             label: t("ImportBoard.continue"),
             onClick: handleContinue,
-            disabled: !importData,
+            disabled: !importData || isFileLoading,
           }}
         >
           {!importData ? <FileDropzoneCard onFileSelect={readFile} /> : <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />}
