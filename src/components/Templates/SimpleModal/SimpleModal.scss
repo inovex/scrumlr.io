@@ -89,4 +89,17 @@
     color: styles.$gray--000;
     border-color: styles.$blue--400;
   }
+
+  .simple-modal__close-button {
+    background-color: styles.$navy--400;
+    box-shadow: 0 3px 12px 0 rgba(colors.$blue--400, 0.12);
+
+    &:hover {
+      box-shadow: 0 3px 12px 0 rgba(colors.$blue--400, 0.3);
+    }
+  }
+
+  .simple-modal__close-icon {
+    color: styles.$blue--400;
+  }
 }
