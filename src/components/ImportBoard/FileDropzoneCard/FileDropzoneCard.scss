@@ -70,4 +70,10 @@ $icon-size: 80px;
       background-color: rgba(styles.$blue--400, 0.2);
     }
   }
+
+  .file-dropzone-card__icon,
+  .file-dropzone-card__title,
+  .file-dropzone-card__description {
+    color: styles.$blue--400;
+  }
 }
