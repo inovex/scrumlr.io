@@ -4,7 +4,7 @@ import {Tooltip} from "components/Tooltip";
 import {useId} from "react";
 import "./FilePreview.scss";
 
-type FileState = "loading" | "ready";
+export type FileState = "loading" | "ready";
 
 type FilePreviewProps = {
   name: string;
@@ -40,7 +40,7 @@ export const FilePreview = (props: FilePreviewProps) => {
             )}
           </div>
         </div>
-        <button id={anchor} className="file-preview__file-remove-button" onClick={props.onRemove}>
+        <button id={anchor} className="file-preview__file-remove-button" onClick={props.onRemove} data-cy="file-preview__file-remove-button">
           <CloseIcon className="file-preview__file-remove-icon" />
           <Tooltip anchorSelect={`#${anchor}`} content={t("ImportBoard.FilePreview.removeFile")} color="backlog-blue" />
         </button>
