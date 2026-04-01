@@ -47,10 +47,19 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
       onDragLeave={handleDragLeave}
       onDrop={handleFileEvent}
       tabIndex={0}
-      data-cy="file-dropzone-card"
+      data-cy="file-dropzone"
     >
       <PlusIcon className="file-dropzone-card__icon" />
-      <input ref={fileInputRef} type="file" accept=".json" hidden onChange={handleFileEvent} className="file-dropzone-card__file-input" aria-label="Select JSON file" />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        hidden
+        onChange={handleFileEvent}
+        className="file-dropzone-card__file-input"
+        aria-label="Select JSON file"
+        data-cy="file-input"
+      />
       <div className="file-dropzone-card__title">{t("ImportBoard.FileDropzoneCard.title")}</div>
       <div className="file-dropzone-card__description">{t("ImportBoard.FileDropzoneCard.description")}</div>
     </div>
