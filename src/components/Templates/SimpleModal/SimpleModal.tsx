@@ -1,8 +1,8 @@
 import {ReactNode} from "react";
 import {Button} from "components/Button";
-import "./SimpleModal.scss";
 import {CloseIcon} from "components/Icon";
 import classNames from "classnames";
+import "./SimpleModal.scss";
 
 type SimpleModalButtonProps = {
   label: string;
