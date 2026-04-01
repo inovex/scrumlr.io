@@ -1,6 +1,7 @@
 @use "constants/styles";
 @use "constants/colors";
 @use "sass:color";
+@use "sass:math";
 
 $min-clamp-width: 350px;
 $target-clamp-width: 85vw;
@@ -38,8 +39,8 @@ $max-clamp-width: 600px;
 .simple-modal__close-button {
   all: unset;
   position: absolute;
-  top: styles.$icon--default / -2; // translate by half of its negative size to center at corner
-  right: styles.$icon--default / -2;
+  top: math.div(styles.$icon--default, -2); // translate by half of its negative size to center at corner
+  right: math.div(styles.$icon--default, -2);
 
   display: flex;
   align-items: center;
