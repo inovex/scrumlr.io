@@ -9,6 +9,7 @@ import {Toast} from "utils/Toast";
 import {SimpleModal} from "components/Templates";
 import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
 import {FilePreview} from "components/ImportBoard/FilePreview/FilePreview";
+import {WarningIcon} from "components/Icon";
 import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
@@ -35,6 +36,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
       const content = e.target?.result as string;
       try {
         const data = JSON.parse(content) as BoardImportData;
+        throw new Error("test");
         setImportData(data);
         setFileName(file.name);
         setFileError(null);
@@ -127,7 +129,12 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
         >
           {!importData ? <FileDropzoneCard onFileSelect={readFile} /> : <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />}
 
-          {fileError && <p className="import-board__error-message">{fileError}</p>}
+          {fileError && (
+            <div className="import-board__error-container">
+              <WarningIcon className="import-board__error-icon" />
+              <p className="import-board__error-message">{fileError}</p>
+            </div>
+          )}
         </SimpleModal>
       </Portal>
     );
