@@ -36,7 +36,6 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
       const content = e.target?.result as string;
       try {
         const data = JSON.parse(content) as BoardImportData;
-        throw new Error("test");
         setImportData(data);
         setFileName(file.name);
         setFileError(null);
