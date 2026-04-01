@@ -39,7 +39,7 @@ $side-padding--desktop: 14vw;
   border-radius: styles.$rounded--large;
   pointer-events: none;
   white-space: nowrap;
-  border: 2px solid rgba(255, 153, 195, 0.5);
+  border: 2px solid rgba(styles.$pink--200, 0.5);
   transform: rotate(7.76deg);
 }
 

@@ -13,7 +13,7 @@ export const Sessions = () => {
       <Outlet /> {/* settings */}
       <div className="sessions__card">
         <div className="sessions__stan-container">
-          <div className="templates__stan-spacing" />
+          <div className="sessions__stan-spacing" />
           <img className={classNames("sessions__stan", "sessions__stan--dark")} src={StanDark} alt="" />
           <img className={classNames("sessions__stan", "sessions__stan--light")} src={StanLight} alt="" />
         </div>

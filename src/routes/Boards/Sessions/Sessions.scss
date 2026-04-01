@@ -15,14 +15,13 @@ $stan-height: 50vh;
 
 .sessions__teaser {
   padding: styles.$spacing--xl;
+  font-family: "Raleway", sans-serif;
 }
 
 .sessions__teaser-title {
-  font-family: "Raleway", sans-serif;
   font-size: styles.$text--lg;
   font-weight: 700;
   line-height: 32px;
-  letter-spacing: 0;
   margin-bottom: styles.$spacing--md;
   color: styles.$navy--600;
 }
@@ -37,18 +36,20 @@ $stan-height: 50vh;
   width: styles.$icon--large;
   height: styles.$icon--large;
   flex-shrink: 0;
-  margin-top: 4px;
+  margin-top: styles.$spacing--xxs;
   color: styles.$navy--600;
 }
 
 .sessions__teaser-text {
-  font-family: "Raleway", sans-serif;
   font-weight: 400;
-  font-size: 20px;
+  font-size: styles.$text--md;
   line-height: 28px;
-  letter-spacing: 0;
-  margin-top: 4px;
+  margin-top: styles.$spacing--xxs;
   color: styles.$navy--400;
+}
+
+.sessions__stan-spacing {
+  height: styles.$spacing--3xl;
 }
 
 .sessions__stan-container {
