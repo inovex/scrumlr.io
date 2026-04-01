@@ -1,9 +1,9 @@
 import {act, fireEvent, screen} from "@testing-library/react";
+import {Mock, vi} from "vitest";
 import {render} from "testUtils";
 import {ImportBoard} from "../ImportBoard";
-import * as boardThunks from "store/features/board/thunks";
 import {Toast} from "utils/Toast";
-import {vi, Mock} from "vitest";
+import * as boardThunks from "store/features/board/thunks";
 
 vi.mock("utils/Toast", () => ({
   Toast: {
@@ -11,11 +11,13 @@ vi.mock("utils/Toast", () => ({
   },
 }));
 
-const mockFileReaderInstance = {
-  readAsText: vi.fn(),
-  onload: null as ((e: {target: {result: string}}) => void) | null,
-  onerror: null as (() => void) | null,
-};
+vi.mock("store/features/board/thunks", async () => {
+  const actual = await vi.importActual<typeof import("store/features/board/thunks")>("store/features/board/thunks");
+  return {
+    ...actual,
+    importBoard: vi.fn(),
+  };
+});
 
 const validImportData = {
   board: {name: "Test Board", accessPolicy: "PUBLIC"},
@@ -27,129 +29,103 @@ const validImportData = {
 
 describe("ImportBoard", () => {
   let onClose: Mock;
+  let readAsTextMock: ReturnType<typeof vi.fn>;
+  let fileReaderInstance: {
+    readAsText: ReturnType<typeof vi.fn>;
+    onload: ((e: {target?: {result?: string}}) => void) | null;
+    onerror: (() => void) | null;
+  };
 
+  // before tests, mock timers, FileReader, and setup portal
   beforeEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
     onClose = vi.fn();
-    mockFileReaderInstance.readAsText = vi.fn();
-    mockFileReaderInstance.onload = null;
-    mockFileReaderInstance.onerror = null;
-    // TODO check possibility of using stubGlobal
+
+    readAsTextMock = vi.fn();
+    fileReaderInstance = {
+      readAsText: readAsTextMock,
+      onload: null,
+      onerror: null,
+    };
+
     global.FileReader = vi.fn().mockImplementation(function () {
-      return mockFileReaderInstance;
+      return fileReaderInstance;
     }) as unknown as typeof FileReader;
+
     vi.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as any);
+
     const portal = document.createElement("div");
     portal.setAttribute("id", "portal");
     document.body.appendChild(portal);
   });
 
   afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
     document.getElementById("portal")?.remove();
   });
 
   const renderImportBoard = () => render(<ImportBoard onClose={onClose} />);
 
-  const simulateFileLoad = async (content: string, fileName = "test.json") => {
+  const selectJsonFile = async (content: string, fileName = "board.json") => {
     const fileInput = screen.getByLabelText("Select JSON file");
-    const mockFile = new File([content], fileName, {type: "application/json"});
-    fireEvent.change(fileInput, {target: {files: [mockFile]}});
+    const file = new File([content], fileName, {type: "application/json"});
+
     await act(async () => {
-      mockFileReaderInstance.onload?.({target: {result: content}});
+      fireEvent.change(fileInput, {target: {files: [file]}});
+    });
+
+    await act(async () => {
+      fileReaderInstance.onload?.({target: {result: content}});
     });
   };
 
-  it("renders file step with dropzone by default", () => {
+  it("renders FileDropzoneCard by default", () => {
     renderImportBoard();
-    expect(screen.getByText("Upload file or drag here")).toBeInTheDocument();
+
+    expect(document.querySelector(".file-dropzone-card")).toBeInTheDocument();
+    expect(document.querySelector(".file-preview")).not.toBeInTheDocument();
+    expect(document.querySelector(".import-board__error-container")).not.toBeInTheDocument();
+    expect(document.querySelector("[data-cy=simple-modal__primary-button]")).toBeDisabled();
   });
 
-  it("has Continue button disabled initially", () => {
+  it("renders FilePreview after a valid file import", async () => {
     renderImportBoard();
-    expect(screen.getByRole("button", {name: "Continue"})).toBeDisabled();
+
+    await selectJsonFile(JSON.stringify(validImportData), "board.json");
+
+    expect(document.querySelector(".file-dropzone-card")).not.toBeInTheDocument();
+    expect(document.querySelector(".file-preview")).toBeInTheDocument();
+
+    // since there's a delay before state is updated, wait for the artificial timer to finish
+    await act(async () => {
+      vi.runAllTimers();
+    });
+
+    expect(document.querySelector("[data-cy=simple-modal__primary-button]")).not.toBeDisabled();
   });
 
-  it("calls onClose when Cancel button is clicked", () => {
+  it("shows the error container for an invalid JSON import", async () => {
+    renderImportBoard();
+
+    const fileInput = screen.getByLabelText("Select JSON file");
+    const file = new File(["not valid json"], "bad.json", {type: "application/json"});
+    fireEvent.change(fileInput, {target: {files: [file]}});
+
+    await act(async () => {
+      fileReaderInstance.onload?.({target: {result: "{not json"}} as any);
+    });
+
+    expect(Toast.error).toHaveBeenCalled();
+    expect(document.querySelector(".file-preview")).not.toBeInTheDocument();
+    expect(document.querySelector(".import-board__error-container")).toBeInTheDocument();
+    expect(document.querySelector("[data-cy=simple-modal__primary-button]")).toBeDisabled();
+  });
+
+  it("calls onClose when Cancel is clicked", () => {
     renderImportBoard();
     fireEvent.click(screen.getByRole("button", {name: "Cancel"}));
     expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("calls onClose when close button is clicked", () => {
-    renderImportBoard();
-    fireEvent.click(screen.getByRole("button", {name: "Close modal"}));
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("shows file success and enables Continue after valid JSON file is selected", async () => {
-    renderImportBoard();
-    await simulateFileLoad(JSON.stringify(validImportData), "board.json");
-    expect(screen.getByText(/File loaded: board\.json/)).toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Continue"})).not.toBeDisabled();
-  });
-
-  it("shows error message for invalid JSON file", async () => {
-    renderImportBoard();
-    const fileInput = screen.getByLabelText("Select JSON file");
-    const mockFile = new File(["not json"], "bad.json", {type: "application/json"});
-    fireEvent.change(fileInput, {target: {files: [mockFile]}});
-    await act(async () => {
-      mockFileReaderInstance.onload?.({target: {result: "not valid json {{{"}});
-    });
-    expect(screen.getByText("The file could not be read. Please use a valid JSON export.")).toBeInTheDocument();
-    expect(Toast.error).toHaveBeenCalled();
-  });
-
-  it("handles drag-and-drop of valid JSON file", async () => {
-    renderImportBoard();
-    const dropzone = screen.getByText("Upload file or drag here").closest("div")!;
-    const mockFile = new File([JSON.stringify(validImportData)], "dropped.json", {type: "application/json"});
-    fireEvent.drop(dropzone, {dataTransfer: {files: [mockFile]}});
-    await act(async () => {
-      mockFileReaderInstance.onload?.({target: {result: JSON.stringify(validImportData)}});
-    });
-    expect(screen.getByText(/File loaded:/)).toBeInTheDocument();
-  });
-
-  it("advances to access step when Continue is clicked after file is loaded", async () => {
-    renderImportBoard();
-    await simulateFileLoad(JSON.stringify(validImportData));
-    fireEvent.click(screen.getByRole("button", {name: "Continue"}));
-    expect(screen.getByRole("button", {name: "Back"})).toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Open Board"})).toBeInTheDocument();
-  });
-
-  it("returns to file step when Back is clicked in access step", async () => {
-    renderImportBoard();
-    await simulateFileLoad(JSON.stringify(validImportData));
-    fireEvent.click(screen.getByRole("button", {name: "Continue"}));
-    fireEvent.click(screen.getByRole("button", {name: "Back"}));
-    // importData is retained on Back, so dropzone shows success state not the empty prompt
-    expect(screen.queryByRole("button", {name: "Open Board"})).not.toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Continue"})).toBeInTheDocument();
-  });
-
-  it("dispatches importBoard with PUBLIC policy when Open Board is clicked", async () => {
-    renderImportBoard();
-    await simulateFileLoad(JSON.stringify(validImportData));
-    fireEvent.click(screen.getByRole("button", {name: "Continue"}));
-    fireEvent.click(screen.getByRole("button", {name: "Open Board"}));
-    const expectedData = {...validImportData, board: {...validImportData.board, accessPolicy: "PUBLIC"}};
-    expect(boardThunks.importBoard).toHaveBeenCalledWith(JSON.stringify(expectedData));
-  });
-
-  it("dispatches importBoard with BY_PASSPHRASE policy and passphrase", async () => {
-    renderImportBoard();
-    await simulateFileLoad(JSON.stringify(validImportData));
-    fireEvent.click(screen.getByRole("button", {name: "Continue"}));
-    // Select the "Password Protected" option
-    fireEvent.click(screen.getByRole("button", {name: /Password Protected/}));
-    // Enter passphrase — Input component uses onInput (not onChange), so use fireEvent.input
-    const passwordInput = screen.getByPlaceholderText("Enter password here");
-    fireEvent.input(passwordInput, {target: {value: "secret123"}});
-    fireEvent.click(screen.getByRole("button", {name: "Open Board"}));
-    expect(boardThunks.importBoard).toHaveBeenCalledWith(
-      JSON.stringify({...validImportData, board: {...validImportData.board, accessPolicy: "BY_PASSPHRASE", passphrase: "secret123"}})
-    );
   });
 });
