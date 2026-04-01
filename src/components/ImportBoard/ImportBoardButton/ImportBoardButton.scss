@@ -66,8 +66,25 @@ $padding--default: styles.$spacing--xs;
 }
 
 .import-board-button__label {
+  padding-right: styles.$spacing--base;
+
   font-size: styles.$text-size--medium;
   font-weight: 600;
 
   color: colors.$blue--500;
+}
+
+[data-theme="dark"] {
+  .import-board-button {
+    background-color: colors.$navy--400;
+  }
+
+  .import-board-button__icon-container {
+    background-color: colors.$blue--400;
+  }
+
+  .import-board-button__icon,
+  .import-board-button__label {
+    color: colors.$gray--000;
+  }
 }
