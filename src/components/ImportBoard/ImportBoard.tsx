@@ -115,7 +115,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     return (
       <Portal className="import-board__portal" align="center" closeMode="backdrop" onClose={handleCancel} backdrop="blur" hiddenOverflow disabledPadding>
         <SimpleModal
-          className="import-board"
+          className="modal__import-board"
           title={t("ImportBoard.title")}
           secondaryButton={{
             label: t("ImportBoard.cancel"),
@@ -127,14 +127,16 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
             disabled: !importData || isFileLoading,
           }}
         >
-          {!importData ? <FileDropzoneCard onFileSelect={readFile} /> : <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />}
+          <div className="import-board">
+            {!importData ? <FileDropzoneCard onFileSelect={readFile} /> : <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />}
 
-          {fileError && (
-            <div className="import-board__error-container">
-              <WarningIcon className="import-board__error-icon" />
-              <p className="import-board__error-message">{fileError}</p>
-            </div>
-          )}
+            {fileError && (
+              <div className="import-board__error-container">
+                <WarningIcon className="import-board__error-icon" />
+                <p className="import-board__error-message">{fileError}</p>
+              </div>
+            )}
+          </div>
         </SimpleModal>
       </Portal>
     );

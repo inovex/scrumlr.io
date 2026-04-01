@@ -1,6 +1,12 @@
 @use "constants/styles";
 @use "constants/colors";
 
+.import-board {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
 .import-board__error-container {
   display: flex;
   justify-content: flex-start;
