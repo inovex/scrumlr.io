@@ -78,6 +78,11 @@ $max-clamp-width: 600px;
     height: 90%;
     gap: styles.$spacing--md;
   }
+
+  .simple-modal__footer {
+    flex-direction: column;
+    gap: styles.$spacing--base;
+  }
 }
 
 [data-theme="dark"] {
