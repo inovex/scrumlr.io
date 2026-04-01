@@ -42,18 +42,6 @@ $icon-size: 80px;
   &:active {
     background-color: styles.$blue--200;
   }
-
-  &:disabled {
-    background-color: styles.$gray--300;
-    border-color: styles.$gray--800;
-    box-shadow: none;
-    cursor: unset;
-
-    .file-dropzone-card__icon,
-    .file-dropzone-card__title {
-      color: styles.$gray--800;
-    }
-  }
 }
 
 .file-dropzone-card__icon {
@@ -89,17 +77,6 @@ $icon-size: 80px;
 
     &:active {
       background-color: rgba(styles.$blue--400, 0.2);
-    }
-
-    &:disabled {
-      background: styles.$navy--600;
-      border-color: styles.$navy--300;
-
-      .file-dropzone-card__icon,
-      .file-dropzone-card__title,
-      .file-dropzone-card__description {
-        color: styles.$navy--300;
-      }
     }
   }
 }

@@ -125,11 +125,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
             disabled: !importData,
           }}
         >
-          {!importData ? (
-            <FileDropzoneCard onFileSelect={readFile} disabled={false} />
-          ) : (
-            <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />
-          )}
+          {!importData ? <FileDropzoneCard onFileSelect={readFile} /> : <FilePreview state={isFileLoading ? "loading" : "ready"} name={fileName} onRemove={handleRemoveFile} />}
 
           {fileError && <p className="import-board__error-message">{fileError}</p>}
         </SimpleModal>
