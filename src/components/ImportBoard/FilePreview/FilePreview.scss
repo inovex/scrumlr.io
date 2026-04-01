@@ -138,3 +138,40 @@ $card-height: 320px;
 
   color: colors.$navy--400;
 }
+
+[data-theme="dark"] {
+  .file-preview {
+    background-color: colors.$navy--600;
+    border-color: colors.$navy--200;
+  }
+
+  .file-preview__file {
+    background-color: colors.$navy--300;
+  }
+
+  .file-preview__file-icon-container {
+    background-color: colors.$blue--400;
+  }
+
+  .file-preview__file-icon {
+    color: colors.$gray--400;
+  }
+
+  .file-preview__file-name {
+    color: colors.$gray--000;
+  }
+
+  .file-preview__file-state-text {
+    color: colors.$gray--400;
+  }
+
+  .file-preview__file-remove-button {
+    &:hover {
+      background-color: colors.$navy--300; // no effect?
+    }
+  }
+
+  .file-preview__file-remove-icon {
+    color: colors.$gray--000;
+  }
+}
