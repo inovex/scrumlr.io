@@ -35,10 +35,6 @@ $icon-size: 80px;
     box-shadow: 0 6px 32px 0 rgba(styles.$blue--500, 0.26);
   }
 
-  &:focus {
-    background-color: styles.$gray--000;
-  }
-
   &:active {
     background-color: styles.$blue--200;
   }
@@ -70,10 +66,6 @@ $icon-size: 80px;
   .file-dropzone-card {
     background-color: rgba(styles.$blue--400, 0.08);
     border-color: styles.$blue--400;
-
-    &:focus {
-      background-color: styles.$navy--600;
-    }
 
     &:active {
       background-color: rgba(styles.$blue--400, 0.2);
