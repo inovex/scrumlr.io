@@ -96,8 +96,10 @@
     }
   },
   "Sessions": {
-    "switchTitle": "Sitzungen",
-    "title": "Wähle eine Sitzung"
+    "switchTitle": "Historie",
+    "title": "Deine Boards",
+    "savedBoards": "Deine Boards",
+    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden."
   },
   "CreateBoard": {
     "title": "Ein neues Board erstellen",
