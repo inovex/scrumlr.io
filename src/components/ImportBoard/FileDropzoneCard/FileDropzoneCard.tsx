@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {PlusIcon} from "components/Icon";
 import {ChangeEvent, DragEvent, useRef, useState} from "react";
-import "./AddFileCard.scss";
+import "components/ImportBoard/FileDropzoneCard/FileDropzoneCard.scss";
 import classNames from "classnames";
 
 type FileDropzoneCardProps = {
