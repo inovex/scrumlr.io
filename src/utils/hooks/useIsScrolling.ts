@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
  * @param delay the required timespan of not scrolling to be recognized as such
  * @returns boolean whether or not ref container is currently being scrolled
  */
-export const useIsScrolling = (ref: React.RefObject<HTMLDivElement>, delay = 200) => {
+export const useIsScrolling = (ref: React.RefObject<HTMLDivElement | null>, delay = 200) => {
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {

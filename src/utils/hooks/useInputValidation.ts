@@ -25,7 +25,12 @@ type InputValidationResult = {errorType: ValidationErrorType | null; genericErro
  * @returns object containing `errorType` and localized `errorMessage`; if input is valid `errorType` equals `null`.
  * The error message is generic, so if you want more specific once you can use the error type for that.
  */
-export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputValue: string, userInteracted: boolean, options?: ValidationOptions): InputValidationResult => {
+export const useInputValidation = (
+  inputRef: RefObject<HTMLInputElement | null>,
+  inputValue: string,
+  userInteracted: boolean,
+  options?: ValidationOptions
+): InputValidationResult => {
   const {t} = useTranslation();
   const [validationError, setValidationError] = useState<ValidationErrorType | null>(null);
 

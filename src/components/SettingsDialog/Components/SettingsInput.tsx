@@ -16,6 +16,7 @@ export interface SettingsInputProps {
   containerClassName?: string;
   className?: string;
   passwordToggle?: boolean;
+  alwaysShowPasswordToggle?: boolean;
 }
 
 export const SettingsInput: FC<SettingsInputProps> = ({
@@ -31,6 +32,7 @@ export const SettingsInput: FC<SettingsInputProps> = ({
   containerClassName,
   className,
   passwordToggle = false,
+  alwaysShowPasswordToggle = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -62,8 +64,8 @@ export const SettingsInput: FC<SettingsInputProps> = ({
       <label className="settings-input__label" htmlFor={id}>
         {label}
       </label>
-      {type === "password" && passwordToggle && value && (
-        <button className="settings-input__password-toggle" onClick={togglePasswordVisibility}>
+      {type === "password" && passwordToggle && (value || alwaysShowPasswordToggle) && (
+        <button className="settings-input__password-toggle" onMouseDown={(e) => e.preventDefault()} onClick={togglePasswordVisibility}>
           {showPassword ? <VisibleIcon /> : <HiddenIcon />}
         </button>
       )}

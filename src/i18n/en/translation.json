@@ -15,18 +15,6 @@
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
   },
-  "ImportBoard": {
-    "button": "Import JSON",
-    "title": "Import Board",
-    "step1Title": "Select File",
-    "dropzone": "Upload file or drag here",
-    "successPrefix": "File loaded:",
-    "errorInvalid": "The file could not be read. Please use a valid JSON export.",
-    "continue": "Continue",
-    "cancel": "Cancel",
-    "back": "Back",
-    "openBoard": "Open Board"
-  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -106,7 +94,7 @@
     "loginFeature1": "Create and save custom templates",
     "loginFeature2": "Custom settings are saved in your profile",
     "subtitleAnonymous": "Log in anonymously",
-    "anonymousLogin": "Join board anonymously without benefits",
+    "anonymousLogin": "Continue anonymously as a guest (limited features)",
     "noLoginAvailable": "There isn't any valid login available",
     "dividerWord": "or",
     "login": "Continue anonymously",
@@ -175,7 +163,6 @@
   },
   "ExportBoardOption": {
     "title": "Export board",
-    "subtitle": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
@@ -397,6 +384,7 @@
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
+    "accessPolicyChanged": "Access changed to {{policy}}",
     "allParticipantsDone": "All participants are ready!",
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
@@ -479,10 +467,7 @@
   },
   "BoardSettings": {
     "BoardName": "Board Name",
-    "AccessPolicy": "Access Policy",
     "Password": "Password",
-    "SetAccessPolicyOpen": "Remove password protection",
-    "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
@@ -490,9 +475,12 @@
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
     "IsLocked": "Lock Board",
-    "generatePassword": "Generate password and protect",
     "save": "save",
-    "edit": "edit"
+    "edit": "edit",
+    "subtitle": "Board access settings are not saved when exporting. Additionally, for board reuse, only a JSON file can be imported on the template page.",
+    "AccessPolicyPublicLabel": "Open",
+    "AccessPolicyByInviteLabel": "With Approval",
+    "AccessPolicyByPassphraseLabel": "Password Protected"
   },
   "Participants": {
     "Title": "Participants",

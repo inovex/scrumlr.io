@@ -293,8 +293,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__header {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
   margin: styles.$spacing--xl 0;
 }
 
@@ -308,12 +307,6 @@ $settings-dialog-container--bottom: 62px;
   border-bottom: solid 3px var(--accent-color--light);
   padding-bottom: 8px;
   margin: 0;
-}
-
-.settings-dialog__header-subtitle {
-  margin: styles.$spacing--sm 0 0 0;
-  font-size: styles.$text--sm;
-  color: styles.$navy--800;
 }
 
 .settings-dialog__separator {
@@ -333,10 +326,6 @@ $settings-dialog-container--bottom: 62px;
 [data-theme="dark"] {
   .settings-dialog__header-text {
     color: styles.$gray--000;
-  }
-
-  .settings-dialog__header-subtitle {
-    color: styles.$gray--700;
   }
 
   .settings-dialog__separator {
