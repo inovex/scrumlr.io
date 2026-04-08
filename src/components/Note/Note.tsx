@@ -76,9 +76,9 @@ export const Note = (props: NoteProps) => {
   /* eslint-enable */
 
   const isImage = useImageChecker(note?.text ?? "");
+  const {isTextTruncated, textRef} = useTextOverflow<HTMLDivElement>(note?.text ?? "");
 
   const dimensions = useSize(noteRef);
-  const {isTextTruncated, textRef} = useTextOverflow<HTMLDivElement>(note?.text ?? "");
 
   const handleClick = () => {
     if (moderating && isModerator) {
@@ -123,22 +123,18 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__container")}>
-            <div
-              ref={textRef}
-              data-clarity-mask="True"
-              className={classNames("note__text", {
-                "note__text--extended": !showNoteReactions,
-                "note__text--truncated": isTextTruncated.vertical,
-              })}
-            >
-              <NoteTextContent text={note.text} truncate />
+          <main className={classNames("note__container", {"note__container--extended": !showNoteReactions})}>
+            <div data-clarity-mask="True" className="note__text" ref={textRef}>
               {isTextTruncated.vertical && (
-                <span className="note__show-more" role="button" aria-expanded="false" title={t("Note.showMore")}>
-                  {t("Note.showMore")}
-                  <ArrowRightIcon className="note__show-more-icon" />
-                </span>
+                <>
+                  <div className="note__text-spacer" />
+                  <span className="note__show-more" role="button" aria-expanded="false" title={t("Note.showMore")}>
+                    {t("Note.showMore")}
+                    <ArrowRightIcon className="note__show-more-icon" />
+                  </span>
+                </>
               )}
+              <NoteTextContent text={note.text} truncate />
             </div>
             {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
