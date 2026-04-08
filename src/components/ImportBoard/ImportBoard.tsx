@@ -7,9 +7,8 @@ import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {Toast} from "utils/Toast";
 import {SimpleModal} from "components/Templates";
-import {FileDropzoneCard} from "components/ImportBoard/FileDropzoneCard/FileDropzoneCard";
-import {FilePreview} from "components/ImportBoard/FilePreview/FilePreview";
 import {WarningIcon} from "components/Icon";
+import {FileDropzoneCard, FilePreview} from "components/ImportBoard";
 import "./ImportBoard.scss";
 
 type ImportStep = "file" | "access";
