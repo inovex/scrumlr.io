@@ -19,7 +19,6 @@
     "button": "Import JSON",
     "title": "Import Board",
     "step1Title": "Select File",
-    "dropzone": "Upload file or drag here",
     "errorInvalid": "The file could not be read. Please use a valid JSON export.",
     "errorRead": "The file could not be read. Please check the file and try again.",
     "continue": "Continue",
