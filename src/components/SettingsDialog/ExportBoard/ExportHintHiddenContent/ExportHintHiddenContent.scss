@@ -1,4 +1,5 @@
 @use "constants/styles";
+@use "constants/colors";
 
 /*
  * layout:
@@ -9,9 +10,13 @@
   display: grid;
   align-items: center;
 
-  grid-gap: styles.$spacing--xs styles.$spacing--base;
-  padding: 0 styles.$spacing--base;
+  grid-gap: 0 styles.$spacing--xxs;
+  padding: styles.$spacing--xs;
   line-height: styles.$line-height--medium;
+
+  border-radius: styles.$rounded--default;
+
+  background-color: colors.$yellow--100;
 }
 
 .hint-hidden-columns__info-icon {
