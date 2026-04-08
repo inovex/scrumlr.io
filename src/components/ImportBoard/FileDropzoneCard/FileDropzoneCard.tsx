@@ -8,7 +8,7 @@ type FileDropzoneCardProps = {
   onFileSelect: (file: File) => void;
 };
 
-const isDragEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>): event is DragEvent<HTMLDivElement> => "dataTransfer" in event;
+const isDragEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLButtonElement>): event is DragEvent<HTMLButtonElement> => "dataTransfer" in event;
 
 export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -16,7 +16,7 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
 
   const {t} = useTranslation();
 
-  const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLDivElement>) => {
+  const handleFileEvent = (event: ChangeEvent<HTMLInputElement> | DragEvent<HTMLButtonElement>) => {
     let file: File | null;
     if (isDragEvent(event)) {
       event.preventDefault();
@@ -28,20 +28,19 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
     if (file) props.onFileSelect(file);
   };
 
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: DragEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsDraggingOverDropzone(true);
   };
 
-  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (event: DragEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsDraggingOverDropzone(false);
   };
 
   return (
-    <div
+    <button
       className={classNames("file-dropzone-card", {"file-dropzone-card--dragging-over": isDraggingOverDropzone})}
-      role="button"
       onClick={() => fileInputRef.current?.click()}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -62,6 +61,6 @@ export const FileDropzoneCard = (props: FileDropzoneCardProps) => {
       />
       <div className="file-dropzone-card__title">{t("ImportBoard.FileDropzoneCard.title")}</div>
       <div className="file-dropzone-card__description">{t("ImportBoard.FileDropzoneCard.description")}</div>
-    </div>
+    </button>
   );
 };
