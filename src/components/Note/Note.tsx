@@ -128,7 +128,7 @@ export const Note = (props: NoteProps) => {
               {isTextTruncated.vertical && (
                 <>
                   <div className="note__text-spacer" />
-                  <span className="note__show-more" role="button" aria-expanded="false" title={t("Note.showMore")}>
+                  <span className="note__show-more" aria-hidden="true">
                     {t("Note.showMore")}
                     <ArrowRightIcon className="note__show-more-icon" />
                   </span>
