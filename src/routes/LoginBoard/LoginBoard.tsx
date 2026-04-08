@@ -148,7 +148,7 @@ export const LoginBoard = () => {
                 hideLabel
               />
             </div>
-            <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} dataCy="login-board__anonymous-login-button">
+            <Button className="login-board__anonymous-login-button" onClick={handleAnonymousLogin} disabled={!displayName} testId="login-board__anonymous-login-button">
               {t("LoginBoard.login")}
             </Button>
           </div>

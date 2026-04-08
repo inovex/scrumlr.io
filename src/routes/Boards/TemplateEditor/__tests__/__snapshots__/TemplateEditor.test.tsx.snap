@@ -578,12 +578,14 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
         <button
           class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
           data-cy="template-editor__button--return"
+          data-testid="template-editor__button--return"
         >
           Cancel
         </button>
         <button
           class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
           data-cy="template-editor__button--create"
+          data-testid="template-editor__button--create"
           disabled=""
         >
           <div
@@ -1537,12 +1539,14 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
         <button
           class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
           data-cy="template-editor__button--return"
+          data-testid="template-editor__button--return"
         >
           Cancel
         </button>
         <button
           class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
           data-cy="template-editor__button--create"
+          data-testid="template-editor__button--create"
         >
           <div
             class="button__content-wrapper"

@@ -20,7 +20,7 @@ type SimpleModalProps = {
 };
 
 export const SimpleModal = (props: SimpleModalProps) => (
-  <div className={classNames(props.className, "simple-modal")}>
+  <div className={classNames(props.className, "simple-modal")} data-testid="simple-modal">
     <header className="simple-modal__header">
       <button className="simple-modal__close-button" onClick={props.secondaryButton.onClick} aria-label="Close modal">
         <CloseIcon className="simple-modal__close-icon" />
@@ -29,10 +29,10 @@ export const SimpleModal = (props: SimpleModalProps) => (
     </header>
     <main className="simple-modal__main">{props.children}</main>
     <footer className="simple-modal__footer">
-      <Button variant="secondary" onClick={props.secondaryButton.onClick} disabled={props.secondaryButton.disabled} dataCy="simple-modal__secondary-button">
+      <Button variant="secondary" onClick={props.secondaryButton.onClick} disabled={props.secondaryButton.disabled} testId="simple-modal__secondary-button">
         {props.secondaryButton.label}
       </Button>
-      <Button variant="primary" onClick={props.primaryButton.onClick} disabled={props.primaryButton.disabled} dataCy="simple-modal__primary-button">
+      <Button variant="primary" onClick={props.primaryButton.onClick} disabled={props.primaryButton.disabled} testId="simple-modal__primary-button">
         {props.primaryButton.label}
       </Button>
     </footer>
