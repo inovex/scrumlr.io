@@ -45,6 +45,11 @@ vi.mock("components/ImportBoard", () => ({
       <button onClick={onClose}>Close import modal</button>
     </div>
   ),
+  ImportBoardButton: ({className, onClick, disabled}: {className?: string; onClick: () => void; disabled: boolean}) => (
+    <button className={className} onClick={onClick} disabled={disabled}>
+      Import JSON
+    </button>
+  ),
 }));
 
 describe("Boards", () => {
