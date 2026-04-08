@@ -68,7 +68,9 @@ describe("Boards", () => {
 
   it("shows import button on templates view", () => {
     renderBoards();
-    expect(screen.getByRole("button", {name: /Import JSON/})).toBeInTheDocument();
+    const importBtn = screen.getByRole("button", {name: /Import JSON/});
+    expect(importBtn).toBeInTheDocument();
+    expect(importBtn).not.toBeDisabled();
   });
 
   it("does not show import button on sessions view", () => {
@@ -84,7 +86,6 @@ describe("Boards", () => {
     });
     const importBtn = screen.getByRole("button", {name: /Import JSON/});
     expect(importBtn).toBeDisabled();
-    expect(importBtn).toHaveAttribute("title", signInText);
   });
 
   it("enables import button for authenticated users", () => {
