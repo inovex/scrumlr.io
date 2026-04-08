@@ -164,6 +164,7 @@
   },
   "ExportBoardOption": {
     "title": "Sitzung exportieren",
+    "info": "Beim Exportieren eines Boards werden keine Zugriffseinstellungen gespeichert. Zudem ist ein Board-Import ausschließlich mit einer JSON-Datei möglich.",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",

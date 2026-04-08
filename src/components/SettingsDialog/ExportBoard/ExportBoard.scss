@@ -1,1 +1,21 @@
 @use "constants/styles";
+@use "constants/colors";
+
+.export-board__main {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--xl;
+}
+
+.export-board__info {
+  color: colors.$navy--400;
+  font-size: styles.$text--base;
+  font-weight: 500;
+  line-height: styles.$line-height--medium;
+}
+
+[data-theme="dark"] {
+  .export-board__info {
+    color: colors.$gray--400;
+  }
+}
