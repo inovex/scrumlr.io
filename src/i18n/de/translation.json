@@ -115,7 +115,7 @@
     "loginFeature1": "Eigene Vorlagen erstellen und dauerhaft speichern",
     "loginFeature2": "Individuelle Einstellungen werden im Profil gespeichert",
     "subtitleAnonymous": "Anonym Einloggen",
-    "anonymousLogin": "Anonym fortfahren ohne Vorteile",
+    "anonymousLogin": "Als Gast anonym fortfahren (eingeschränkte Funktionen)",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
     "dividerWord": "oder",
     "login": "Anonym fortfahren",
@@ -406,6 +406,7 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
+    "accessPolicyChanged": "Zugriff geändert zu {{policy}}",
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
@@ -487,10 +488,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
-    "SetAccessPolicyOpen": "Passwortschutz entfernen",
-    "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
@@ -498,9 +496,12 @@
     "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "IsLocked": "Board sperren",
-    "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
-    "edit": "bearbeiten"
+    "edit": "bearbeiten",
+    "subtitle": "Die Zugriffseinstellungen eines Boards werden beim Exportieren nicht gespeichert. Zudem kann zur Wiederverwendung eines Boards ausschließlich eine JSON-Datei auf der Template-Seite importiert werden.",
+    "AccessPolicyPublicLabel": "Offen",
+    "AccessPolicyByInviteLabel": "Mit Zustimmung",
+    "AccessPolicyByPassphraseLabel": "Passwortgeschützt"
   },
   "Participants": {
     "Title": "Teilnehmer",

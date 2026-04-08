@@ -2,7 +2,7 @@
 services:
   scrumlr-backend:
     restart: always
-    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-5.0.0}"
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-5.0.1}"
     container_name: scrumlr-backend
     command:
       - "-disable-check-origin"
@@ -53,7 +53,7 @@ services:
 
   scrumlr-frontend:
     restart: always
-    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-5.0.0}"
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-5.0.1}"
     container_name: scrumlr-frontend
     environment:
       SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
@@ -69,7 +69,7 @@ services:
 
   postgres:
     restart: always
-    image: "postgres:${POSTGRES_VERSION:-18.1}"
+    image: "postgres:${POSTGRES_VERSION:-18.3}"
     container_name: postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-scrumlr}
@@ -86,8 +86,9 @@ services:
 
   nats:
     restart: always
-    image: "nats:${NATS_VERSION:-2.12.3}"
+    image: "nats:${NATS_VERSION:-2.12.6}"
     container_name: nats
+    command: ["-js"]
 
   # oidc.localhost:
   #   restart: always
@@ -102,7 +103,7 @@ services:
 
   caddy:
     restart: always
-    image: "caddy:${CADDY_VERSION:-2.10.2}"
+    image: "caddy:${CADDY_VERSION:-2.11.2}"
     container_name: caddy
     environment:
       SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT:-8080}"
