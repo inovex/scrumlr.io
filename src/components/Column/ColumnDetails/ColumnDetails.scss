@@ -134,6 +134,7 @@ $icon-size: styles.$icon--large;
   }
 
   &--placeholder {
+    height: $description-target-height;
     color: styles.$gray--800;
 
     &-moderator {
