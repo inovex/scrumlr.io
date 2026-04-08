@@ -86,14 +86,16 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const handleSelectAccessPolicy = (accessPolicy: CreateSessionAccessPolicy) => {
     if (!importData) return;
 
-    importData.board.accessPolicy = accessPolicy.policy;
+    const updatedData: BoardImportData = {
+      ...importData,
+      board: {
+        ...importData.board,
+        accessPolicy: accessPolicy.policy,
+        passphrase: accessPolicy.policy === "BY_PASSPHRASE" ? accessPolicy.passphrase : undefined,
+      },
+    };
 
-    if (accessPolicy.policy === "BY_PASSPHRASE") {
-      importData.board.passphrase = accessPolicy.passphrase;
-    } else {
-      delete importData.board.passphrase;
-    }
-
+    setImportData(updatedData);
     dispatch(importBoard(importData));
   };
 
