@@ -1,7 +1,5 @@
 @use "constants/styles";
 
-$list-style-type: "– ";
-
 /*
  * layout:
  * | icon text |
@@ -32,8 +30,19 @@ $list-style-type: "– ";
 
 .hint-hidden-columns__columns-list {
   margin: 0;
-  padding-left: styles.$spacing--lg;
-  list-style-type: $list-style-type;
+  padding-left: styles.$spacing--sm;
+}
+
+.hint-hidden-columns__columns-list-item {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  // custom enumeration bullet which can be resized
+  &::before {
+    content: "•";
+    font-size: 0.8em;
+  }
 }
 
 [data-theme="dark"] {
