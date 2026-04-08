@@ -2,10 +2,9 @@
 
 exports[`FileDropzoneCard > renders FileDropzoneCard 1`] = `
 <div>
-  <div
+  <button
     class="file-dropzone-card"
     data-cy="file-dropzone"
-    role="button"
     tabindex="0"
   >
     <svg
@@ -45,6 +44,6 @@ exports[`FileDropzoneCard > renders FileDropzoneCard 1`] = `
     >
       Click or drag a file here to upload (max. 1 file)
     </div>
-  </div>
+  </button>
 </div>
 `;
