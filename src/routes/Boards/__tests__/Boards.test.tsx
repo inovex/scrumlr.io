@@ -5,7 +5,6 @@ import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {ApplicationState} from "store";
-import {resources} from "i18nTest";
 
 const mockLocation = {pathname: "/boards/templates"};
 
@@ -19,44 +18,19 @@ vi.mock("react-router", async () => {
   };
 });
 
-// Mock getTemplates to return a proper thunk that dispatches fulfilled with an empty list.
-vi.mock("store/features/templates/thunks", async () => {
-  const actual = await vi.importActual<typeof import("store/features/templates/thunks")>("store/features/templates/thunks");
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mockGetTemplates: any = () => (dispatch: any) => {
-    dispatch({type: actual.getTemplates.fulfilled.type, payload: []});
-  };
-
-  mockGetTemplates.fulfilled = actual.getTemplates.fulfilled;
-  mockGetTemplates.pending = actual.getTemplates.pending;
-  mockGetTemplates.rejected = actual.getTemplates.rejected;
-  mockGetTemplates.typePrefix = actual.getTemplates.typePrefix;
-
-  return {
-    ...actual,
-    getTemplates: mockGetTemplates,
-  };
-});
-
-vi.mock("components/ImportBoard", () => ({
-  ImportBoard: ({onClose}: {onClose: () => void}) => (
-    <div data-testid="import-board-modal">
-      <button onClick={onClose}>Close import modal</button>
-    </div>
-  ),
-  ImportBoardButton: ({className, onClick, disabled}: {className?: string; onClick: () => void; disabled: boolean}) => (
-    <button className={className} onClick={onClick} disabled={disabled}>
-      Import JSON
-    </button>
-  ),
-}));
-
 describe("Boards", () => {
-  const signInText = resources.en.translation.Templates.TemplateCard.signInToCreateBoards;
-
   beforeEach(() => {
     mockLocation.pathname = "/boards/templates";
+  });
+
+  beforeEach(() => {
+    const portal = document.createElement("div");
+    portal.id = "portal";
+    document.body.appendChild(portal);
+  });
+
+  afterEach(() => {
+    document.getElementById("portal")?.remove();
   });
 
   const renderBoards = (state?: Partial<ApplicationState>) =>
@@ -100,7 +74,7 @@ describe("Boards", () => {
       auth: {user: {id: "user-1", name: "User", isAnonymous: false}, initializationSucceeded: true},
     });
     fireEvent.click(screen.getByRole("button", {name: /Import JSON/}));
-    expect(screen.getByTestId("import-board-modal")).toBeInTheDocument();
+    expect(screen.getByTestId("simple-modal")).toBeInTheDocument();
   });
 
   it("hides import modal when onClose is called", () => {
@@ -108,8 +82,8 @@ describe("Boards", () => {
       auth: {user: {id: "user-1", name: "User", isAnonymous: false}, initializationSucceeded: true},
     });
     fireEvent.click(screen.getByRole("button", {name: /Import JSON/}));
-    expect(screen.getByTestId("import-board-modal")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", {name: "Close import modal"}));
-    expect(screen.queryByTestId("import-board-modal")).not.toBeInTheDocument();
+    expect(screen.getByTestId("simple-modal")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("simple-modal__secondary-button"));
+    expect(screen.queryByTestId("simple-modal")).not.toBeInTheDocument();
   });
 });
