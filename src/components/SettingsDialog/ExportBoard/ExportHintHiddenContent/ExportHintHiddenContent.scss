@@ -23,6 +23,8 @@
 }
 
 .hint-hidden-columns__info-icon {
+  align-self: flex-start;
+
   width: styles.$icon--large;
   height: styles.$icon--large;
 
