@@ -1,10 +1,16 @@
 @use "constants/styles";
 @use "constants/colors";
+@use "constants/mixins";
 
 .export-board__main {
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--xl;
+
+  padding-bottom: styles.$spacing--xl;
+
+  overflow-y: auto;
+  @include mixins.scrollbar();
 }
 
 .export-board__info {
