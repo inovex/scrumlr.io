@@ -17,12 +17,16 @@
   border-radius: styles.$rounded--default;
 
   background-color: colors.$yellow--100;
+
+  color: colors.$navy--500;
+  font-weight: 500;
 }
 
 .hint-hidden-columns__info-icon {
   width: styles.$icon--large;
   height: styles.$icon--large;
-  color: styles.$critical-carmine--light;
+
+  color: colors.$navy--400;
 }
 
 .hint-hidden-columns__info-text {
@@ -51,8 +55,12 @@
 }
 
 [data-theme="dark"] {
-  .hint-hidden-columns__info-text,
-  .hint-hidden-columns__columns-list {
-    color: styles.$gray--000;
+  .hint-hidden-columns__grid-container {
+    color: colors.$gray--400;
+    background-color: rgba(colors.$yellow--400, 0.2);
+  }
+
+  .hint-hidden-columns__info-icon {
+    color: colors.$gray--000;
   }
 }
