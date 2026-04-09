@@ -17,7 +17,7 @@ export const TooltipPortal = (props: TooltipPortalProps) => {
 
   return createPortal(
     <div className="tooltip-portal__root">
-      <Tooltip className="tooltip-portal" anchorId={`${props.anchorId}`} place={props.place}>
+      <Tooltip className="tooltip-portal" anchorId={props.anchorId} place={props.place}>
         {props.children}
       </Tooltip>
     </div>,
