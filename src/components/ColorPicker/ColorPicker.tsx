@@ -64,7 +64,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
           >
             <div className={classNames("color-picker__color-option", "color-picker__color-option--selected", {"color-picker__color-option--small": props.small})} />
           </button>
-          <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.activeColor)} />
+          <Tooltip anchorId={primColorAnchor}>{formatColorName(props.activeColor)}</Tooltip>
         </li>
         {colorsWithoutSelectedColor.map((color, index) => {
           const anchor = `color-picker-${color.toString()}-${baseId}-${index}`;

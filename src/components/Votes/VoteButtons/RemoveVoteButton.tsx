@@ -7,6 +7,7 @@ import "./RemoveVoteButton.scss";
 import {useAppDispatch} from "store";
 import {deleteVote} from "store/features";
 import {needsHighContrast} from "constants/colors";
+import {Tooltip} from "components/Tooltip";
 // import {t} from "i18next";
 
 type RemoveVoteProps = {
@@ -38,19 +39,21 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
   }, [numberOfVotes]);
 
   return (
-    <DotButton
-      className={classNames("vote-button-remove", {bump: doBump}, colorClassName && needsHighContrast(colorClassName) && "vote-button-remove--high-contrast")}
-      disabled={disabled}
-      onClick={dispatchDeleteVote}
-      onAnimationEnd={() => {
-        setDoBump(false);
-      }}
-      dataTooltipId="scrumlr-tooltip"
-      dataTooltipContent={isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}
-    >
-      <span className="vote-button-remove__folded-corner" />
-      <MinusIcon className="vote-button-remove__icon" />
-      <span className="vote-button-remove__count">{numberOfVotes}</span>
-    </DotButton>
+    <>
+      <DotButton
+        id={`vote-button-remove-${noteId}`}
+        className={classNames("vote-button-remove", {bump: doBump}, colorClassName && needsHighContrast(colorClassName) && "vote-button-remove--high-contrast")}
+        disabled={disabled}
+        onClick={dispatchDeleteVote}
+        onAnimationEnd={() => {
+          setDoBump(false);
+        }}
+      >
+        <span className="vote-button-remove__folded-corner" />
+        <MinusIcon className="vote-button-remove__icon" />
+        <span className="vote-button-remove__count">{numberOfVotes}</span>
+      </DotButton>
+      <Tooltip anchorId={`vote-button-remove-${noteId}`}>{isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}</Tooltip>
+    </>
   );
 };

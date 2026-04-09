@@ -3,6 +3,7 @@ import classNames from "classnames";
 import "./DotButton.scss";
 
 type DotButtonProps = {
+  id?: string;
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
@@ -13,6 +14,7 @@ type DotButtonProps = {
 
 export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
   <button
+    id={props.id}
     className={classNames("dot-button", props.className)}
     disabled={props.disabled}
     onClick={(e) => {
