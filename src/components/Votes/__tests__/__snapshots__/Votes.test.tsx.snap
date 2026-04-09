@@ -7,10 +7,8 @@ exports[`Votes > should render correctly > with no votes and active voting 1`] =
     role="none"
   >
     <button
-      aria-label="Add vote"
       class="dot-button vote-button-add"
-      data-tooltip-content="Add vote"
-      data-tooltip-id="scrumlr-tooltip"
+      id="vote-button-add-test-notes-id-1"
     >
       <svg
         class="vote-button-add__icon"
@@ -32,6 +30,9 @@ exports[`Votes > should render correctly > with no votes and active voting 1`] =
         />
       </svg>
     </button>
+    <div
+      class="tooltip-container"
+    />
   </div>
 </div>
 `;
@@ -46,7 +47,7 @@ exports[`Votes > should render correctly > with votes and active voting 1`] = `
   >
     <button
       class="dot-button vote-button-remove"
-      data-tooltip-id="scrumlr-tooltip"
+      id="vote-button-remove-test-notes-id-1"
     >
       <span
         class="vote-button-remove__folded-corner"
@@ -71,12 +72,13 @@ exports[`Votes > should render correctly > with votes and active voting 1`] = `
         1
       </span>
     </button>
+    <div
+      class="tooltip-container"
+    />
     <button
-      aria-label="Multiple votes are not allowed"
       class="dot-button vote-button-add"
-      data-tooltip-content="Multiple votes are not allowed"
-      data-tooltip-id="scrumlr-tooltip"
       disabled=""
+      id="vote-button-add-test-notes-id-1"
     >
       <svg
         class="vote-button-add__icon"
@@ -98,6 +100,9 @@ exports[`Votes > should render correctly > with votes and active voting 1`] = `
         />
       </svg>
     </button>
+    <div
+      class="tooltip-container"
+    />
   </div>
 </div>
 `;
@@ -109,11 +114,9 @@ exports[`Votes > should render correctly > with votes and disabled voting 1`] = 
     role="none"
   >
     <button
-      aria-label="1 vote"
       class="dot-button vote-button-remove"
-      data-tooltip-content="1 vote"
-      data-tooltip-id="scrumlr-tooltip"
       disabled=""
+      id="vote-button-remove-test-notes-id-1"
     >
       <span
         class="vote-button-remove__folded-corner"
@@ -138,6 +141,9 @@ exports[`Votes > should render correctly > with votes and disabled voting 1`] = 
         1
       </span>
     </button>
+    <div
+      class="tooltip-container"
+    />
   </div>
 </div>
 `;

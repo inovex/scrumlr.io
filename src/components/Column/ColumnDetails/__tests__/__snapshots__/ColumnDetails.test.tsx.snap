@@ -75,8 +75,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item"
           data-cy="undefined-item-Cancel"
-          data-tooltip-content="Cancel"
-          data-tooltip-id="scrumlr-tooltip"
+          data-testid="undefined-item-Cancel"
           id="mini-menu-Cancel-_r_0_-0"
         >
           <svg
@@ -98,13 +97,15 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
               stroke-width="1.75"
             />
           </svg>
+          <div
+            class="tooltip-container"
+          />
         </button>
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item"
           data-cy="undefined-item-Save"
-          data-tooltip-content="Save"
-          data-tooltip-id="scrumlr-tooltip"
+          data-testid="undefined-item-Save"
           id="mini-menu-Save-_r_0_-1"
         >
           <svg
@@ -122,6 +123,9 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
               stroke-width="1.75"
             />
           </svg>
+          <div
+            class="tooltip-container"
+          />
         </button>
       </div>
     </div>
