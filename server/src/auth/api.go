@@ -204,10 +204,6 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 	if len(stateSplit) > 1 {
 		targetURL = stateSplit[1]
 	}
-	if api.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/", GetProtocol(r), r.Host))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", GetProtocol(r), r.Host, api.basePath))
-	}
+
 	http.Redirect(w, r, targetURL, http.StatusSeeOther)
 }
