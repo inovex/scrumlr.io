@@ -126,16 +126,18 @@ func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, cookie)
 
 	returnURL := r.URL.Query().Get("state")
-	if !strings.HasPrefix(returnURL, api.hostPath) {
-		log.Errorw("host path not prefix of return url", "expected", api.hostPath, "got", returnURL)
-		span.SetStatus(codes.Error, "host path not prefix of return url")
-		span.RecordError(fmt.Errorf("host path not prefix of return url"))
-		common.Throw(w, r, common.ForbiddenError(errors.New("invalid return url")))
-		return
-	}
 
-	state := nonce
+	state := fmt.Sprintf("%s__%s", nonce, api.basePath)
 	if returnURL != "" {
+
+		if !strings.HasPrefix(returnURL, api.hostPath) {
+			log.Errorw("host path not prefix of return url", "expected", api.hostPath, "got", returnURL)
+			span.SetStatus(codes.Error, "host path not prefix of return url")
+			span.RecordError(fmt.Errorf("host path not prefix of return url"))
+			common.Throw(w, r, common.ForbiddenError(errors.New("invalid return url")))
+			return
+		}
+
 		state = fmt.Sprintf("%s__%s", nonce, returnURL)
 	}
 
@@ -199,11 +201,7 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 	SealCookie(r, cookie)
 	http.SetCookie(w, cookie)
 
-	targetURL := api.basePath
-	stateSplit := strings.Split(state, "__")
-	if len(stateSplit) > 1 {
-		targetURL = stateSplit[1]
-	}
+	targetURL := parts[1]
 
 	http.Redirect(w, r, targetURL, http.StatusSeeOther)
 }
