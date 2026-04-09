@@ -33,6 +33,9 @@
 
 .hint-hidden-columns__info-text {
   grid-column-start: 2; // top right
+
+  font-size: styles.$text--sm;
+  font-weight: 500;
 }
 
 .hint-hidden-columns__columns-list-container {
@@ -42,6 +45,9 @@
 .hint-hidden-columns__columns-list {
   margin: 0;
   padding-left: styles.$spacing--sm;
+
+  font-size: styles.$text--sm;
+  font-weight: 500;
 }
 
 .hint-hidden-columns__columns-list-item {
