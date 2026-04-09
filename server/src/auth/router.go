@@ -17,6 +17,12 @@ type Router struct {
 	authAPI AuthApi
 }
 
+func NewAuthRouter(authAPI AuthApi) *Router {
+	r := new(Router)
+	r.authAPI = authAPI
+	return r
+}
+
 func (r *Router) RegisterRoutes() chi.Router {
 	router := chi.NewRouter()
 
@@ -31,10 +37,4 @@ func (r *Router) RegisterRoutes() chi.Router {
 	})
 
 	return router
-}
-
-func NewAuthRouter(authAPI AuthApi) *Router {
-	r := new(Router)
-	r.authAPI = authAPI
-	return r
 }
