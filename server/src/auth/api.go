@@ -108,6 +108,7 @@ func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "provider does not exist")
 		span.RecordError(fmt.Errorf("provider %s does not exist", provider))
 		common.Throw(w, r, common.BadRequestError(err))
+		return
 	}
 
 	//get redirect url from query param
