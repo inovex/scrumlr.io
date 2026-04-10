@@ -138,6 +138,12 @@ func main() {
 				Required: false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-allowed-redirect-hosts",
+				EnvVars:  []string{"SCRUMLR_AUTH_ALLOWED_REDIRECT_HOSTS"},
+				Usage:    "a comma-separated list of allowed hosts for redirects (e.g. 'scrumlr.io,localhost:3000')",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-google-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_ID"},
 				Usage:    "the client `id` for Google",
@@ -456,7 +462,18 @@ func run(ctx *cli.Context) error {
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
-	apiInitializer := serviceinitialize.NewApiInitializer(ctx.String("address"), basePath)
+	var allowedRedirectHosts []string
+	if ctx.String("auth-allowed-redirect-hosts") != "" {
+		hosts := strings.Split(ctx.String("auth-allowed-redirect-hosts"), ",")
+		for _, h := range hosts {
+			trimmed := strings.TrimSpace(h)
+			if trimmed != "" {
+				allowedRedirectHosts = append(allowedRedirectHosts, trimmed)
+			}
+		}
+	}
+
+	apiInitializer := serviceinitialize.NewApiInitializer(ctx.String("address"), basePath, allowedRedirectHosts)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
 	authApi := apiInitializer.InitializeAuthApi(authService, userService)

@@ -359,7 +359,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionServiceMock := sessions.NewMockSessionService(t)
 			userSessionMock := users.NewMockUserService(t)
 
-			apiInitializer := serviceinitialize.NewApiInitializer("localhost", "/")
+			apiInitializer := serviceinitialize.NewApiInitializer("localhost", "/", nil)
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
 			authApi := apiInitializer.InitializeAuthApi(mockAuth, userSessionMock)
 			routesInitializer := serviceinitialize.NewRoutesInitializer()

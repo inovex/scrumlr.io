@@ -7,19 +7,21 @@ import (
 )
 
 type ApiInitializer struct {
-	basePath string
-	hostPath string
+	basePath             string
+	hostPath             string
+	allowedRedirectHosts []string
 }
 
-func NewApiInitializer(hostPath string, basePath string) ApiInitializer {
+func NewApiInitializer(hostPath string, basePath string, allowedRedirectHosts []string) ApiInitializer {
 	initializer := new(ApiInitializer)
 	initializer.hostPath = hostPath
 	initializer.basePath = basePath
+	initializer.allowedRedirectHosts = allowedRedirectHosts
 	return *initializer
 }
 
 func (init *ApiInitializer) InitializeAuthApi(authService auth.AuthService, userService users.UserService) auth.AuthApi {
-	authApi := auth.NewAuthApi(authService, userService, init.hostPath, init.basePath)
+	authApi := auth.NewAuthApi(authService, userService, init.hostPath, init.basePath, init.allowedRedirectHosts)
 	return authApi
 }
 
