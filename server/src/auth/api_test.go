@@ -24,7 +24,7 @@ func Test_SignInAnonymously(t *testing.T) {
 	bodyBytes, _ := json.Marshal(reqBody)
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/")
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -52,7 +52,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
 	bodyBytes, _ := json.Marshal(reqBody)
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/")
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -65,7 +65,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
 func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/")
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader([]byte("invalid-json")))
 
@@ -76,7 +76,7 @@ func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
 func Test_Logout(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/")
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/logout", nil)
 
@@ -91,7 +91,7 @@ func Test_Logout(t *testing.T) {
 func Test_BeginAuth(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/")
+	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/", []string{"localhost:3000"})
 	rr := httptest.NewRecorder()
 
 	fakeConfig := &oauth2.Config{
@@ -99,7 +99,7 @@ func Test_BeginAuth(t *testing.T) {
 		Endpoint: oauth2.Endpoint{AuthURL: "https://provider.com/auth"},
 	}
 
-	req := technical_helper.NewTestRequestBuilder("GET", "http://localhost:3000/login/google?state=http://localhost:3000:/boards", nil)
+	req := technical_helper.NewTestRequestBuilder("GET", "http://localhost:3000/login/google?state=http://localhost:3000/boards", nil)
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("provider", "google")
 	req.AddToContext(chi.RouteCtxKey, rctx)
@@ -109,15 +109,18 @@ func Test_BeginAuth(t *testing.T) {
 
 	assert.Equal(t, http.StatusTemporaryRedirect, rr.Result().StatusCode)
 
-	loc, _ := rr.Result().Location()
-	assert.Contains(t, loc.String(), fakeConfig.Endpoint.AuthURL)
-	assert.Contains(t, loc.String(), "state=") // Ensure state/nonce is generated
+	loc, err := rr.Result().Location()
+	assert.NoError(t, err)
+	if loc != nil {
+		assert.Contains(t, loc.String(), fakeConfig.Endpoint.AuthURL)
+		assert.Contains(t, loc.String(), "state=") // Ensure state/nonce is generated
+	}
 }
 
 func Test_Callback(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/")
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", []string{"localhost:3000"})
 	rr := httptest.NewRecorder()
 	oauthCookie := &http.Cookie{
 		Name:     "oauth_state",
@@ -143,11 +146,48 @@ func Test_Callback(t *testing.T) {
 
 	assert.Equal(t, http.StatusSeeOther, rr.Result().StatusCode)
 
-	loc, _ := rr.Result().Location()
-	assert.Equal(t, "http://localhost:3000/board", loc.String())
+	loc, err := rr.Result().Location()
+	assert.NoError(t, err)
+	if loc != nil {
+		assert.Equal(t, "http://localhost:3000/board", loc.String())
+	}
 
 	cookies := rr.Result().Cookies()
 	assert.NotEmpty(t, cookies)
 	assert.Equal(t, "jwt", cookies[1].Name)
 	assert.Equal(t, "new-token", cookies[1].Value)
+}
+
+func Test_IsSafeRedirect(t *testing.T) {
+	api := &API{
+		hostPath:             "http://scrumlr.io",
+		allowedRedirectHosts: []string{"localhost:3000", "staging.scrumlr.io"},
+	}
+
+	tests := []struct {
+		url      string
+		expected string
+		safe     bool
+	}{
+		{"/board/123", "/board/123", true},
+		{"/login", "/login", true},
+		{"//evil.com", "", false},
+		{"http://scrumlr.io/board", "http://scrumlr.io/board", true},
+		{"http://localhost:3000/callback", "http://localhost:3000/callback", true},
+		{"http://staging.scrumlr.io/", "http://staging.scrumlr.io/", true},
+		{"http://evil.com", "", false},
+		{"javascript:alert(1)", "", false},
+		{"\\evil.com", "", false}, // Normalized to /evil.com, then rejected because not starting with /
+		{"", "", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.url, func(t *testing.T) {
+			got, safe := api.isSafeRedirect(tt.url)
+			assert.Equal(t, tt.safe, safe)
+			if tt.safe {
+				assert.Equal(t, tt.expected, got)
+			}
+		})
+	}
 }

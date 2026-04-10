@@ -9,6 +9,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -20,10 +21,11 @@ import (
 )
 
 type API struct {
-	service     AuthService
-	userService users.UserService
-	basePath    string
-	hostPath    string
+	service              AuthService
+	userService          users.UserService
+	basePath             string
+	hostPath             string
+	allowedRedirectHosts []string
 }
 
 type AnonymousSignUpRequest struct {
@@ -31,12 +33,13 @@ type AnonymousSignUpRequest struct {
 	Name string
 }
 
-func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string) AuthApi {
+func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string, allowedRedirectHosts []string) AuthApi {
 	api := new(API)
 	api.service = service
 	api.userService = userService
 	api.hostPath = hostPath
 	api.basePath = basePath
+	api.allowedRedirectHosts = allowedRedirectHosts
 	return api
 }
 
@@ -130,16 +133,15 @@ func (api *API) BeginAuth(w http.ResponseWriter, r *http.Request) {
 
 	state := fmt.Sprintf("%s__%s", nonce, api.basePath)
 	if returnURL != "" {
-
-		if !strings.HasPrefix(returnURL, api.hostPath) {
-			log.Errorw("host path not prefix of return url", "expected", api.hostPath, "got", returnURL)
-			span.SetStatus(codes.Error, "host path not prefix of return url")
-			span.RecordError(fmt.Errorf("host path not prefix of return url"))
+		if target, safe := api.isSafeRedirect(returnURL); safe {
+			state = fmt.Sprintf("%s__%s", nonce, target)
+		} else {
+			log.Errorw("invalid return url", "url", returnURL)
+			span.SetStatus(codes.Error, "invalid return url")
+			span.RecordError(fmt.Errorf("invalid return url"))
 			common.Throw(w, r, common.ForbiddenError(errors.New("invalid return url")))
 			return
 		}
-
-		state = fmt.Sprintf("%s__%s", nonce, returnURL)
 	}
 
 	url := config.AuthCodeURL(state)
@@ -202,6 +204,54 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, cookie)
 
 	targetURL := parts[1]
+	if target, safe := api.isSafeRedirect(targetURL); safe {
+		http.Redirect(w, r, target, http.StatusSeeOther)
+		return
+	}
 
-	http.Redirect(w, r, targetURL, http.StatusSeeOther)
+	http.Redirect(w, r, api.basePath, http.StatusSeeOther)
+}
+
+func (api *API) isSafeRedirect(urlStr string) (string, bool) {
+	if urlStr == "" {
+		return "", false
+	}
+
+	// Reject URLs starting with backslash early to prevent evasion
+	if strings.HasPrefix(urlStr, "\\") {
+		return "", false
+	}
+
+	// Normalize backslashes to slashes to prevent some browser redirect tricks
+	normalizedURL := strings.ReplaceAll(urlStr, "\\", "/")
+
+	u, err := url.Parse(normalizedURL)
+	if err != nil {
+		return "", false
+	}
+
+	// Relative redirect (no scheme, no host)
+	if u.Scheme == "" && u.Host == "" {
+		// Ensure it starts with / but not //
+		// Check both original and normalized path to prevent protocol-relative redirects
+		if strings.HasPrefix(u.Path, "/") && !strings.HasPrefix(u.Path, "//") && !strings.HasPrefix(normalizedURL, "//") {
+			return u.String(), true
+		}
+		return "", false
+	}
+
+	// Absolute redirect - check against hostPath and whitelist
+	// hostPath check (as fallback/legacy support)
+	if api.hostPath != "" && strings.HasPrefix(normalizedURL, api.hostPath) {
+		return normalizedURL, true
+	}
+
+	// Check against whitelist
+	for _, allowedHost := range api.allowedRedirectHosts {
+		if u.Host == allowedHost {
+			return normalizedURL, true
+		}
+	}
+
+	return "", false
 }
