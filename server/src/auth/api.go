@@ -170,7 +170,6 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "missing oauth cookie")
 		span.RecordError(fmt.Errorf("missing oauth cookie"))
 		common.Throw(w, r, common.BadRequestError(fmt.Errorf("missing oauth cookie")))
-		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
