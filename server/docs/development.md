@@ -62,9 +62,13 @@ In order to use a provider in a local test environment the following arguments m
 ### Needed for all providers
 
 ```ini
--auth-callback-host     = http://localhost:8080
--session-secret         = <random string>
+-auth-callback-host           = http://localhost:8080
+-auth-allowed-redirect-hosts  = localhost:3000
+-session-secret               = <random string>
 ```
+
+
+> The `auth-allowed-redirect-hosts`-Flag is required if your frontend runs on a different host/port than the backend (e.g. localhost:3000) and you want to use absolute redirect URLs. If left empty, only relative redirects (e.g. `/boards`) are allowed by default for security reasons.
 
 A random string can be generated like the following:
 
