@@ -63,7 +63,7 @@ In order to use a provider in a local test environment the following arguments m
 
 ```ini
 -auth-callback-host           = http://localhost:8080
--auth-allowed-redirect-hosts  = localhost
+-auth-allowed-redirect-hostnames  = localhost
 -session-secret               = <random string>
 ```
 
