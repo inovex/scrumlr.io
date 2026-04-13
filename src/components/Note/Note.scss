@@ -159,12 +159,11 @@ $note__footer-gap: 42px;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   font-size: styles.$text-size--medium;
   line-height: styles.$line-height--medium;
   font-weight: 700;
   color: styles.$navy--400;
-  padding: 0 0 0 8px;
+  padding: 0 0 0 5px;
   background-color: styles.$gray--000;
 
   &::before {
@@ -180,9 +179,13 @@ $note__footer-gap: 42px;
 }
 
 .note__show-more-icon {
-  width: styles.$icon--small;
-  height: styles.$icon--small;
+  width: calc(styles.$icon--small + 4px);
+  height: calc(styles.$icon--small + 4px);
   flex-shrink: 0;
+
+  path {
+    stroke-width: 3px;
+  }
 }
 
 .note__image-wrapper {
