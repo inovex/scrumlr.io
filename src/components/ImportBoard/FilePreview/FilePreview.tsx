@@ -42,7 +42,7 @@ export const FilePreview = (props: FilePreviewProps) => {
         </div>
         <button id={anchor} className="file-preview__file-remove-button" onClick={props.onRemove} data-cy="file-preview__file-remove-button">
           <CloseIcon className="file-preview__file-remove-icon" />
-          <Tooltip anchorSelect={`#${anchor}`} content={t("ImportBoard.FilePreview.removeFile")} color="backlog-blue" />
+          <Tooltip anchorId={anchor}>{t("ImportBoard.FilePreview.removeFile")}</Tooltip>
         </button>
       </div>
     </div>
