@@ -67,7 +67,7 @@ export const Boards = () => {
           <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
           {/* import button */}
-          {boardView === "templates" && <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} disabled={!canCreateBoard} />}
+          {boardView === "templates" && <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} allowImport={canCreateBoard} />}
 
           {/* mobile search bar */}
           <Input

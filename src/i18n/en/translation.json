@@ -17,6 +17,7 @@
   },
   "ImportBoard": {
     "button": "Import JSON",
+    "importNotAllowedForAnonymousUsers": "Importing boards is disabled for anonymous users.",
     "title": "Import Board",
     "step1Title": "Select File",
     "errorInvalid": "The file could not be read. Please use a valid JSON export.",

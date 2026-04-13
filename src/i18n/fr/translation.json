@@ -17,6 +17,7 @@
   },
   "ImportBoard": {
     "button": "Importer JSON",
+    "importNotAllowedForAnonymousUsers": "L'importation de tableaux est désactivée pour les utilisateurs anonymes.",
     "title": "Importer un Tableau",
     "step1Title": "Sélectionner un Fichier",
     "errorInvalid": "Le fichier n'a pas pu être lu. Veuillez utiliser un export JSON valide.",

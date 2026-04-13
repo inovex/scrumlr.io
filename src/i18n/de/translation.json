@@ -17,6 +17,7 @@
   },
   "ImportBoard": {
     "button": "JSON Importieren",
+    "importNotAllowedForAnonymousUsers": "Das Importieren von Boards ist für anonyme Benutzer deaktiviert.",
     "title": "Sitzung Importieren",
     "step1Title": "Datei Auswählen",
     "errorInvalid": "Die Datei konnte nicht gelesen werden. Bitte verwende einen gültigen JSON-Export.",
