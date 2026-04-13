@@ -1,12 +1,11 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, Fragment, useEffect, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
-import {deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
-import {LockClosedIcon, TrashIcon, RefreshIcon, InfoIcon} from "components/Icon";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
+import {AccessPolicy, deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
+import {LockOpenIcon, MultipleUserIcon, KeyProtectedIcon, TrashIcon, InfoIcon} from "components/Icon";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
-import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {isEqual} from "underscore";
@@ -16,6 +15,12 @@ import {useOutletContext} from "react-router";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
+
+const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
+  PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
+  BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
+  BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
+};
 
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();
@@ -35,81 +40,43 @@ export const BoardSettings = () => {
   const [boardName, setBoardName] = useState<string>(state.board.name ?? "");
   const [password, setPassword] = useState<string>("");
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
-  const [isProtectedOnInitialSettingsOpen, setIsProtectedOnInitialSettingsOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
-  const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
-
-  const isByInvite = state.board.accessPolicy === "BY_INVITE";
+  const [localPolicy, setLocalPolicy] = useState(state.board.accessPolicy);
+  const lastSubmittedPassword = useRef("");
 
   useEffect(() => {
     setBoardName(state.board.name ?? "");
   }, [state.board.name]);
 
   useEffect(() => {
-    setIsProtected(state.board.accessPolicy === "BY_PASSPHRASE");
+    setLocalPolicy(state.board.accessPolicy);
   }, [state.board.accessPolicy]);
 
-  const handleSetPassword = (newPassword: string) => {
-    setPassword(newPassword);
-    if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      dispatch(editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
-      navigator.clipboard.writeText(newPassword).then(() => Toast.success({title: t("Toast.passwordCopied"), autoClose: TOAST_TIMER_SHORT}));
-      setIsProtected(true);
-    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
-      dispatch(editBoard({accessPolicy: "PUBLIC"}));
-      setIsProtectedOnInitialSettingsOpen(false);
-      setIsProtected(false);
-      Toast.info({title: t("Toast.boardMadePublic"), autoClose: TOAST_TIMER_SHORT});
+  const handlePolicyChange = (policy: AccessPolicy) => {
+    if (policy === localPolicy) return;
+    setLocalPolicy(policy);
+    if (policy === "PUBLIC" || policy === "BY_INVITE") {
+      dispatch(editBoard({accessPolicy: policy}));
+      setPassword("");
+      lastSubmittedPassword.current = "";
+      Toast.success({title: t("Toast.accessPolicyChanged", {policy: t(POLICY_LABEL_KEYS[policy])}), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
-  const getPasswordManagementButton = () => {
-    if (isProtected) {
-      return (
-        <button
-          className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
-          onClick={() => {
-            handleSetPassword("");
-          }}
-        >
-          <LockClosedIcon />
-          <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
-        </button>
-      );
+  const handlePasswordSubmit = () => {
+    if (password.length >= MIN_PASSWORD_LENGTH && password !== lastSubmittedPassword.current) {
+      lastSubmittedPassword.current = password;
+      dispatch(editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: password}));
+      navigator.clipboard
+        .writeText(password)
+        .then(() => Toast.success({title: t("Toast.accessPolicyChanged", {policy: t(POLICY_LABEL_KEYS.BY_PASSPHRASE)}), autoClose: TOAST_TIMER_SHORT}));
     }
-    if (!password) {
-      return (
-        <button
-          className="board-settings__password-management-button board-settings__generate-password-button"
-          onClick={() => {
-            const pw = generateRandomString();
-            handleSetPassword(pw);
-          }}
-        >
-          <RefreshIcon />
-          <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
-        </button>
-      );
-    }
-    return <span className="board-settings__password-input-hint board-settings__password-management-text">{t("BoardSettings.SecurePasswordHint")}</span>;
   };
 
-  const getAccessPolicyTitle = () => {
-    if (isByInvite)
-      return (
-        <>
-          <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
-          <LockClosedIcon />
-        </>
-      );
-    return !isProtected ? (
-      <span>{t("AccessPolicySelection.publicTitle")}</span>
-    ) : (
-      <>
-        <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-        <LockClosedIcon />
-      </>
-    );
-  };
+  const ACCESS_POLICY_OPTIONS = [
+    {policy: "PUBLIC" as const, icon: <LockOpenIcon />, label: t("BoardSettings.AccessPolicyPublicLabel")},
+    {policy: "BY_INVITE" as const, icon: <MultipleUserIcon />, label: t("BoardSettings.AccessPolicyByInviteLabel")},
+    {policy: "BY_PASSPHRASE" as const, icon: <KeyProtectedIcon />, label: t("BoardSettings.AccessPolicyByPassphraseLabel")},
+  ];
 
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
@@ -130,31 +97,39 @@ export const BoardSettings = () => {
             maxLength={128}
           />
 
-          <div className="board-settings__group-and-button">
-            <div className="settings-dialog__group">
-              <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
-                <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
-              </SettingsButton>
-              {!isByInvite && state.currentUserIsModerator && (
-                <>
-                  <hr className="settings-dialog__separator" />
-                  <SettingsInput
-                    id="boardSettingsPassword"
-                    label={t("BoardSettings.Password")}
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                    submit={() => handleSetPassword(password)}
-                    type="password"
-                    placeholder={!password && !isProtected ? undefined : PLACEHOLDER_PASSWORD}
-                    passwordToggle
-                  />
-                </>
-              )}
-            </div>
-
-            {!isByInvite && state.currentUserIsModerator && getPasswordManagementButton()}
+          <div className="settings-dialog__group board-settings__access-policy-selector">
+            {ACCESS_POLICY_OPTIONS.map(({policy, icon, label}, index) => (
+              <Fragment key={policy}>
+                {index > 0 && <hr className="settings-dialog__separator" />}
+                <button
+                  className={classNames("board-settings__access-option", {"board-settings__access-option--selected": localPolicy === policy})}
+                  onClick={() => state.currentUserIsModerator && handlePolicyChange(policy)}
+                  disabled={!state.currentUserIsModerator}
+                  role="radio"
+                  aria-checked={localPolicy === policy}
+                >
+                  <div className="board-settings__access-option-label">
+                    <span className="board-settings__access-option-icon">{icon}</span>
+                    <span className="board-settings__access-option-text">{label}</span>
+                  </div>
+                  <div className="board-settings__access-option-indicator" />
+                </button>
+              </Fragment>
+            ))}
+            {localPolicy === "BY_PASSPHRASE" && state.currentUserIsModerator && (
+              <div className="board-settings__password-section">
+                <SettingsInput
+                  id="boardSettingsPassword"
+                  label={t("BoardSettings.Password")}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  submit={handlePasswordSubmit}
+                  type="password"
+                  passwordToggle
+                  alwaysShowPasswordToggle
+                />
+              </div>
+            )}
           </div>
           {state.currentUserIsModerator && (
             <>
@@ -249,7 +224,7 @@ export const BoardSettings = () => {
                 >
                   <Toggle active={state.hotkeysAreActive} />
                 </SettingsButton>
-                <a className="board-settings__open-cheat-sheet-button" href={`${import.meta.env.BASE_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
+                <a className="board-settings__open-cheat-sheet-button" href={`${import.meta.env.BASE_URL}hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
                   <p>{t("Hotkeys.cheatSheet")}</p>
                   <InfoIcon />
                 </a>

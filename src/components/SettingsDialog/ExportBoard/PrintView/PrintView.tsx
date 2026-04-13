@@ -2,7 +2,7 @@ import {ReactElement, useEffect, useRef, useState} from "react";
 import {API} from "api";
 import {useNavigate} from "react-router";
 import {useReactToPrint} from "react-to-print";
-import ScrumlrLogo from "assets/scrumlr-logo-light.svg?url";
+import ScrumlrLogo from "assets/scrumlr-logo-light.svg?react";
 import {CloseIcon, PrinterIcon} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";

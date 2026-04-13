@@ -87,180 +87,116 @@
   }
 }
 
-.board-settings__group-and-button {
+.board-settings__access-policy-selector {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-.board-settings__policy-button {
+.board-settings__access-option {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  width: 100%;
+  padding: styles.$spacing--sm styles.$spacing--base;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: styles.$spacing--sm;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:focus-visible {
+    border-radius: styles.$rounded--small;
+  }
 }
 
-.board-settings__policy-button span {
-  cursor: inherit;
+.board-settings__access-option-label {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--sm;
   flex: 1;
 }
 
-.board-settings__policy-button_value {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: center;
-}
-
-.board-settings__policy-button_value span {
-  padding: styles.$spacing--base styles.$spacing--lg styles.$spacing--base 4px;
-  font-weight: bold;
-  letter-spacing: styles.$letter-spacing--medium;
-  font-size: styles.$text-size--medium;
-  letter-spacing: 0.5px;
-  color: styles.$navy--800;
-}
-
-@media screen and (max-width: 920px) {
-  .board-settings__policy-button_value span {
-    max-width: min-content;
-    text-align: right;
-  }
-}
-
-[data-theme="dark"] {
-  .board-settings__policy-button_value span {
-    color: styles.$gray--000;
-  }
-}
-
-.board-settings__policy-button_value svg {
-  width: styles.$icon--medium;
-  height: styles.$icon--medium;
-  color: var(--accent-color--light);
-}
-
-.board-settings__password-button {
-  justify-content: space-between;
-  padding-right: 24px;
-  position: relative;
-  cursor: text;
-}
-
-.board-settings__password-button span {
-  cursor: inherit;
-}
-
-.board-settings__password-button_value {
+.board-settings__access-option-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-}
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  border-radius: styles.$rounded--small;
+  flex-shrink: 0;
 
-.board-settings__password-button_value svg {
-  width: styles.$icon--medium;
-  height: styles.$icon--medium;
-}
-
-.board-settings__show-password-button--enabled {
-  color: var(--accent-color--light);
-  cursor: pointer;
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    filter: brightness(1.4);
-    transform: scale(1.1);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-
-  &:focus-visible {
-    transform: scale(1.1);
+  svg {
+    width: styles.$icon--medium;
+    height: styles.$icon--medium;
+    color: styles.$navy--800;
   }
 }
 
-.board-settings__show-password-button--disabled {
+[data-theme="dark"] {
+  .board-settings__access-option-icon {
+    svg {
+      color: styles.$gray--000;
+    }
+  }
+}
+
+.board-settings__access-option-text {
+  font-size: styles.$text--base;
+  font-weight: 500;
   color: styles.$navy--800;
-  cursor: default;
 }
 
 [data-theme="dark"] {
-  .board-settings__show-password-button--disabled {
+  .board-settings__access-option-text {
     color: styles.$gray--000;
   }
 }
 
-.board-settings__password-button_value-input {
-  background-color: transparent;
-  border: none;
-  padding: styles.$spacing--base;
-  font-weight: bold;
-  letter-spacing: styles.$letter-spacing--medium;
-  font-size: styles.$text-size--medium;
-  text-align: right;
-  max-width: 120px;
+.board-settings__access-option-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid styles.$gray--400;
+  flex-shrink: 0;
+  transition:
+    border-color 0.1s ease,
+    border-width 0.1s ease,
+    background-color 0.1s ease;
+}
+
+.board-settings__access-option--selected {
+  .board-settings__access-option-indicator {
+    border-color: styles.$blue--500;
+    border-width: 6px;
+  }
 }
 
 [data-theme="dark"] {
-  .board-settings__password-button_value-input {
-    color: styles.$gray--000;
+  .board-settings__access-option--selected {
+    .board-settings__access-option-indicator {
+      border-color: styles.$blue--400;
+    }
   }
 }
 
-.board-settings__password-button_value-input:focus-visible {
-  outline: none;
-}
+.board-settings__password-section {
+  padding: styles.$spacing--xs styles.$spacing--base styles.$spacing--sm;
 
-.board-settings__password-management-button,
-.board-settings__password-input-hint {
-  display: flex;
-  align-items: center;
-  padding: 0 styles.$spacing--lg;
-  height: 30px;
-  border: none;
-  background-color: inherit;
-  color: var(--accent-color--light);
-  align-self: center;
-}
-
-.board-settings__password-management-button {
-  cursor: pointer;
-  transition: all 0.08s ease-out;
-  outline: none;
-
-  &:hover {
-    filter: brightness(1.4);
-    transform: scale(1.01);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-
-  &:focus-visible {
-    text-decoration: underline;
+  .settings-input__container {
+    background-color: styles.$gray--100;
   }
 }
 
-.board-settings__remove-protection-button svg {
-  width: styles.$icon--medium;
-  height: styles.$icon--medium;
-  color: var(--accent-color--light);
-}
-
-.board-settings__generate-password-button svg {
-  // TODO remove margin when icon gets updated
-  width: styles.$icon--medium;
-  height: styles.$icon--medium;
-  color: var(--accent-color--light);
-}
-
-.board-settings__password-management-text {
-  padding-left: 4px;
-  font-weight: bold;
-  font-size: styles.$text-size--medium;
-  letter-spacing: styles.$letter-spacing--medium;
+[data-theme="dark"] {
+  .board-settings__password-section {
+    .settings-input__container {
+      background-color: styles.$navy--600;
+    }
+  }
 }
 
 .board-settings__delete-button span {
@@ -276,14 +212,6 @@
 
 .board-settings__delete-button svg {
   color: styles.$critical-carmine--light;
-}
-
-.board-settings__confirmation-dialog {
-  z-index: 0;
-}
-
-.button--centered {
-  align-self: center;
 }
 
 .board-settings__hotkey-settings {
