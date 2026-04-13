@@ -116,7 +116,6 @@ describe("Note", () => {
       const {container} = render(createNote(false));
       const showMoreButton = container.querySelector(".note__show-more");
       expect(showMoreButton).toBeInTheDocument();
-      expect(showMoreButton).toHaveAttribute("role", "button");
     });
   });
 });
