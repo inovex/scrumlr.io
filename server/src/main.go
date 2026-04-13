@@ -138,9 +138,9 @@ func main() {
 				Required: false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
-				Name:     "auth-allowed-redirect-hosts",
-				EnvVars:  []string{"SCRUMLR_AUTH_ALLOWED_REDIRECT_HOSTS"},
-				Usage:    "a comma-separated list of allowed hosts for redirects (e.g. 'scrumlr.io,localhost:3000')",
+				Name:     "auth-allowed-redirect-hostnames",
+				EnvVars:  []string{"SCRUMLR_AUTH_ALLOWED_REDIRECT_HOSTNAMES"},
+				Usage:    "a comma-separated list of allowed hostnames for redirects (e.g. 'scrumlr.io,localhost')",
 				Required: false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
@@ -462,18 +462,18 @@ func run(ctx *cli.Context) error {
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
-	var allowedRedirectHosts []string
-	if ctx.String("auth-allowed-redirect-hosts") != "" {
-		hosts := strings.Split(ctx.String("auth-allowed-redirect-hosts"), ",")
-		for _, h := range hosts {
+	var allowedRedirectHostnames []string
+	if ctx.String("auth-allowed-redirect-hostnames") != "" {
+		hosts := strings.SplitSeq(ctx.String("auth-allowed-redirect-hostnames"), ",")
+		for h := range hosts {
 			trimmed := strings.TrimSpace(h)
 			if trimmed != "" {
-				allowedRedirectHosts = append(allowedRedirectHosts, trimmed)
+				allowedRedirectHostnames = append(allowedRedirectHostnames, trimmed)
 			}
 		}
 	}
 
-	apiInitializer := serviceinitialize.NewApiInitializer(ctx.String("address"), basePath, allowedRedirectHosts)
+	apiInitializer := serviceinitialize.NewApiInitializer(ctx.String("address"), basePath, allowedRedirectHostnames)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
 	authApi := apiInitializer.InitializeAuthApi(authService, userService)

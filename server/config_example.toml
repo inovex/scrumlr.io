@@ -46,9 +46,9 @@ auth-experimental-file-system-store = false
 # Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
 auth-callback-host = ""
 
-# Set the allowed hosts for redirects after authentication (comma-separated list, e.g. "scrumlr.io,localhost:3000")
+# Set the allowed hostnames for redirects after authentication (comma-separated list, e.g. "scrumlr.io,localhost")
 # If empty, only relative redirects are allowed.
-auth-allowed-redirect-hosts = ""
+auth-allowed-redirect-hostnames = ""
 
 # Set the client ID for Google OAuth authentication.
 auth-google-client-id = ""

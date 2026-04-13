@@ -91,7 +91,7 @@ func Test_Logout(t *testing.T) {
 func Test_BeginAuth(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/", []string{"localhost:3000"})
+	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/", []string{"localhost"})
 	rr := httptest.NewRecorder()
 
 	fakeConfig := &oauth2.Config{
@@ -120,7 +120,7 @@ func Test_BeginAuth(t *testing.T) {
 func Test_Callback(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", []string{"localhost:3000"})
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", []string{"localhost"})
 	rr := httptest.NewRecorder()
 	oauthCookie := &http.Cookie{
 		Name:     "oauth_state",
@@ -160,8 +160,8 @@ func Test_Callback(t *testing.T) {
 
 func Test_IsSafeRedirect(t *testing.T) {
 	api := &API{
-		hostPath:             "http://scrumlr.io",
-		allowedRedirectHosts: []string{"localhost:3000", "staging.scrumlr.io"},
+		hostPath:                 "http://scrumlr.io",
+		allowedRedirectHostnames: []string{"localhost", "staging.scrumlr.io", "scrumlr.io"},
 	}
 
 	tests := []struct {

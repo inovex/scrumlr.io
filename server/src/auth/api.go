@@ -10,6 +10,7 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"slices"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -21,11 +22,11 @@ import (
 )
 
 type API struct {
-	service              AuthService
-	userService          users.UserService
-	basePath             string
-	hostPath             string
-	allowedRedirectHosts []string
+	service                  AuthService
+	userService              users.UserService
+	basePath                 string
+	hostPath                 string
+	allowedRedirectHostnames []string
 }
 
 type AnonymousSignUpRequest struct {
@@ -33,13 +34,13 @@ type AnonymousSignUpRequest struct {
 	Name string
 }
 
-func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string, allowedRedirectHosts []string) AuthApi {
+func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string, allowedRedirectHostnames []string) AuthApi {
 	api := new(API)
 	api.service = service
 	api.userService = userService
 	api.hostPath = hostPath
 	api.basePath = basePath
-	api.allowedRedirectHosts = allowedRedirectHosts
+	api.allowedRedirectHostnames = allowedRedirectHostnames
 	return api
 }
 
@@ -240,17 +241,9 @@ func (api *API) isSafeRedirect(urlStr string) (string, bool) {
 		return "", false
 	}
 
-	// Absolute redirect - check against hostPath and whitelist
-	// hostPath check (as fallback/legacy support)
-	if api.hostPath != "" && strings.HasPrefix(normalizedURL, api.hostPath) {
-		return normalizedURL, true
-	}
-
-	// Check against whitelist
-	for _, allowedHost := range api.allowedRedirectHosts {
-		if u.Host == allowedHost {
-			return normalizedURL, true
-		}
+	// Absolute redirect - allow only explicitly allowlisted hosts
+	if slices.Contains(api.allowedRedirectHostnames, u.Hostname()) {
+		return u.String(), true
 	}
 
 	return "", false
