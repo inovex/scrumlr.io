@@ -19,6 +19,8 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReaso
     dispatch(addVote(noteId));
   };
 
+  const voteDisplayText = !disabled ? t("Votes.AddVote") : disabledReason;
+
   return (
     <>
       <DotButton
@@ -26,10 +28,11 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReaso
         className={classNames("vote-button-add", {"vote-button-add--high-contrast": needsHighContrast(colorClassName)})}
         onClick={dispatchAddVote}
         disabled={disabled}
+        label={voteDisplayText}
       >
         <PlusIcon className="vote-button-add__icon" />
       </DotButton>
-      <Tooltip anchorId={`vote-button-add-${noteId}`}>{!disabled ? t("Votes.AddVote") : disabledReason}</Tooltip>
+      <Tooltip anchorId={`vote-button-add-${noteId}`}>{voteDisplayText}</Tooltip>
     </>
   );
 };

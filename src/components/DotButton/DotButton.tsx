@@ -8,8 +8,7 @@ type DotButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
   onAnimationEnd?: () => void;
-  dataTooltipId?: string;
-  dataTooltipContent?: string;
+  label?: string;
 };
 
 export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
@@ -21,10 +20,8 @@ export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
       e.stopPropagation();
       props.onClick?.();
     }}
-    aria-label={props.dataTooltipContent}
     onAnimationEnd={props.onAnimationEnd}
-    data-tooltip-id={props.dataTooltipId}
-    data-tooltip-content={props.dataTooltipContent}
+    aria-label={props.label}
   >
     {props.children}
   </button>

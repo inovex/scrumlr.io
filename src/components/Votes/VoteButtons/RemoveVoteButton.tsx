@@ -38,6 +38,8 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
     setDoBump(true);
   }, [numberOfVotes]);
 
+  const voteDisplayText = isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames;
+
   return (
     <>
       <DotButton
@@ -48,12 +50,13 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
         onAnimationEnd={() => {
           setDoBump(false);
         }}
+        label={voteDisplayText}
       >
         <span className="vote-button-remove__folded-corner" />
         <MinusIcon className="vote-button-remove__icon" />
         <span className="vote-button-remove__count">{numberOfVotes}</span>
       </DotButton>
-      <Tooltip anchorId={`vote-button-remove-${noteId}`}>{isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}</Tooltip>
+      <Tooltip anchorId={`vote-button-remove-${noteId}`}>{voteDisplayText}</Tooltip>
     </>
   );
 };

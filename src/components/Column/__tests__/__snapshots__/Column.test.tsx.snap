@@ -614,6 +614,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                     class="tooltip-container"
                   />
                   <button
+                    aria-label="Multiple votes are not allowed"
                     class="dot-button vote-button-add"
                     disabled=""
                     id="vote-button-add-test-notes-id-1"
@@ -1154,6 +1155,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                   role="none"
                 >
                   <button
+                    aria-label="Add vote"
                     class="dot-button vote-button-add"
                     id="vote-button-add-test-notes-id-2"
                   >
@@ -1882,6 +1884,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                       class="tooltip-container"
                     />
                     <button
+                      aria-label="Multiple votes are not allowed"
                       class="dot-button vote-button-add"
                       disabled=""
                       id="vote-button-add-test-notes-id-1"
@@ -2422,6 +2425,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                     role="none"
                   >
                     <button
+                      aria-label="Add vote"
                       class="dot-button vote-button-add"
                       id="vote-button-add-test-notes-id-2"
                     >
