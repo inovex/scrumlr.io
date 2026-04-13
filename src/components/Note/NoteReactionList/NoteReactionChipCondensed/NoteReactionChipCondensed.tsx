@@ -46,7 +46,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         </div>
         <div className="note-reaction-chip-condensed__amount">{totalAmount}</div>
       </div>
-      <TooltipPortal anchor={anchorId} place="top" show>
+      <TooltipPortal anchorId={anchorId} place="top" show>
         <div className="note-reaction-chip-condensed__tooltip-content">
           {reactionUsersTitle.map((t) => (
             // hash because a unique key is required to make linter happy

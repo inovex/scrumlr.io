@@ -12,7 +12,6 @@ import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {toggleRecommendedFavourite} from "store/features/templates";
-import {Tooltip} from "components/Tooltip";
 import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
@@ -207,7 +206,6 @@ export const Templates = () => {
           </section>
         )}
       </div>
-      <Tooltip id="template-card-tooltip" />
     </>
   );
 };

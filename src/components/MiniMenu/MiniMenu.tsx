@@ -1,6 +1,7 @@
 import React, {ReactNode, useId} from "react";
 import classNames from "classnames";
 import FocusLock, {MoveFocusInside} from "react-focus-lock";
+import {Tooltip} from "components/Tooltip";
 import "./MiniMenu.scss";
 
 export type MiniMenuItem = {
@@ -42,8 +43,6 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
         const anchor = `mini-menu-${item.label}-${baseId}-${index}`;
         return (
           <button
-            data-tooltip-id="scrumlr-tooltip"
-            data-tooltip-content={item.label}
             aria-label={item.label}
             id={anchor}
             className={classNames(item.className, "mini-menu__item", {
@@ -56,8 +55,10 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             onMouseDown={(e) => onClickItem(e, item)}
             disabled={item.disabled}
             data-cy={`${dataCy}-item-${item.label}`}
+            data-testid={`${dataCy}-item-${item.label}`}
           >
             {item.element}
+            <Tooltip anchorId={anchor}>{item.label}</Tooltip>
           </button>
         );
       })}

@@ -48,7 +48,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         <div className="note-reaction-chip__reaction">{props.reaction.reactionType}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
-      <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>
+      <TooltipPortal anchorId={anchorId} place="top" show={props.showTooltip}>
         {reactionUsers}
       </TooltipPortal>
     </>

@@ -203,7 +203,11 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             }}
           />
         )}
-        {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
+        {isNameTextTruncated.horizontal && (
+          <Tooltip anchorId={`col-${props.column.id}-name`} color={props.column.color}>
+            {props.column.name}
+          </Tooltip>
+        )}
       </>
     );
 
