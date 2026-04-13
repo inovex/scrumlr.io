@@ -9,11 +9,13 @@ import i18n from "i18nTest";
 import {I18nextProvider} from "react-i18next";
 import {screen} from "@testing-library/dom";
 
+const NOTE_ID = "test-notes-id-1";
+
 const createVotes = (overwrite?: Partial<ApplicationState>) => {
   return (
     <I18nextProvider i18n={i18n}>
       <Provider store={getTestStore(overwrite)}>
-        <Votes noteId="test-notes-id-1" />
+        <Votes noteId={NOTE_ID} />
       </Provider>
     </I18nextProvider>
   );
@@ -65,7 +67,7 @@ describe("Votes", () => {
   });
 
   it("add vote button should be hidden and remove vote button disabled on locked board", () => {
-    render(
+    const {container} = render(
       createVotes({
         board: {
           status: "ready",
@@ -88,17 +90,17 @@ describe("Votes", () => {
       })
     );
 
-    expect(screen.queryByTitle(i18n.t("Votes.AddVote"))).not.toBeInTheDocument();
-    expect(screen.queryByTitle(i18n.t("Votes.RemoveVote"))).not.toBeInTheDocument();
-    // What`s the indented behaviour here? Should the button be displayed but disabled or not displayed at all?
-    // We have a disparity here between the test and the code.
-    // Also, querying by title does not seem like a great idea imo, class names or ids or even better html attr-* to retrieve elements.
-    // expect(screen.queryByLabelText(i18n.t("Votes.VotesOnNote", {count: 1}))).toBeInTheDocument();
-    // expect(screen.queryByLabelText(i18n.t("Votes.VotesOnNote", {count: 1}))).toBeDisabled();
+    const addVoteButton = container.querySelector(`#vote-button-add-${NOTE_ID}`);
+    const removeVoteButton = container.querySelector(`#vote-button-remove-${NOTE_ID}`);
+
+    expect(addVoteButton).not.toBeInTheDocument();
+
+    expect(removeVoteButton).toBeInTheDocument();
+    expect(removeVoteButton).toBeDisabled();
   });
 
   it("add vote button should be visible and remove vote button not disabled on locked board if participant is moderator", () => {
-    render(
+    const {container} = render(
       createVotes({
         board: {
           status: "ready",
@@ -125,10 +127,14 @@ describe("Votes", () => {
       })
     );
 
-    expect(screen.queryByLabelText(i18n.t("Votes.AddVote"))).toBeInTheDocument();
-    // same as above, what`s the intended behaviour here??
-    // expect(screen.queryByLabelText(i18n.t("Votes.RemoveVote"))).toBeInTheDocument();
-    // expect(screen.queryByLabelText(i18n.t("Votes.RemoveVote"))).not.toBeDisabled();
+    const addVoteButton = container.querySelector(`#vote-button-add-${NOTE_ID}`);
+    const removeVoteButton = container.querySelector(`#vote-button-remove-${NOTE_ID}`);
+
+    expect(addVoteButton).toBeInTheDocument();
+
+    expect(removeVoteButton).toBeInTheDocument();
+    expect(removeVoteButton).toBeEnabled();
+
     expect(screen.queryByLabelText(i18n.t("Votes.VotesOnNote", {count: 1}))).not.toBeInTheDocument();
   });
 });
