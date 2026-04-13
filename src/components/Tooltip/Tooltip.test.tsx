@@ -6,7 +6,7 @@ describe("Tooltip", () => {
     const {queryByText} = render(
       <>
         <button id="test-button">Test Button</button>
-        <Tooltip anchorSelect="#test-button" content="Hello world" />
+        <Tooltip anchorId="test-button">Hello world</Tooltip>
       </>
     );
     expect(queryByText("Hello world")).toBeNull();
@@ -16,7 +16,7 @@ describe("Tooltip", () => {
     render(
       <div>
         <button id="test-button">Test Button</button>
-        <Tooltip anchorSelect="#test-button" content="Hello world" />
+        <Tooltip anchorId="test-button">Hello world</Tooltip>
       </div>
     );
     const button = screen.getByText("Test Button");
@@ -28,7 +28,7 @@ describe("Tooltip", () => {
     render(
       <>
         <button id="test-button">Test Button</button>
-        <Tooltip anchorSelect="#test-button" content="Hello world" />
+        <Tooltip anchorId="test-button">Hello world</Tooltip>
       </>
     );
     const button = screen.getByText("Test Button");
@@ -39,10 +39,8 @@ describe("Tooltip", () => {
   it("should be visible on mouseenter using data attributes", async () => {
     render(
       <div>
-        <button data-tooltip-id="test-tooltip" data-tooltip-content="Hello world">
-          Test Button
-        </button>
-        <Tooltip id="test-tooltip" />
+        <button id="test-tooltip">Test Button</button>
+        <Tooltip anchorId="test-tooltip">Hello world</Tooltip>
       </div>
     );
     const button = screen.getByText("Test Button");
@@ -53,10 +51,8 @@ describe("Tooltip", () => {
   it("should be visible on focus using data attributes", async () => {
     render(
       <>
-        <button data-tooltip-id="test-tooltip" data-tooltip-content="Hello world">
-          Test Button
-        </button>
-        <Tooltip id="test-tooltip" />
+        <button id="test-tooltip">Test Button</button>
+        <Tooltip anchorId="test-tooltip">Hello world</Tooltip>
       </>
     );
     const button = screen.getByText("Test Button");

@@ -2,8 +2,9 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {useAppDispatch, useAppSelector} from "store";
 import {VotingIcon, CloseIcon, FlagFinishIcon, MarkAsDoneIcon} from "components/Icon";
-import "./VoteDisplay.scss";
 import {closeVoting, setUserReadyStatus} from "store/features";
+import {Tooltip} from "components/Tooltip";
+import "./VoteDisplay.scss";
 
 type VoteDisplayProps = {
   usedVotes: number;
@@ -27,22 +28,15 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
       <ul className="vote-display__short-actions">
         {isAdmin && (
           <li className="short-actions__short-action">
-            <button
-              aria-label={t("VoteDisplay.finishActionTooltip")}
-              data-tooltip-id="info-bar__tooltip"
-              data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
-              className="short-action__button"
-              onClick={() => dispatch(closeVoting(voting!))}
-            >
+            <button id="info-bar__finish-action" aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => dispatch(closeVoting(voting!))}>
               <FlagFinishIcon className="short-action__flag-icon" />
             </button>
           </li>
         )}
         <li className="short-actions__short-action">
           <button
+            id="info-bar__done-toggle"
             aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-            data-tooltip-id="info-bar__tooltip"
-            data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             className={classNames("short-action__button", {"short-action__button--ready": isReady})}
             onClick={() => dispatch(setUserReadyStatus({userId: me.user.id, ready: !isReady}))}
           >
@@ -52,6 +46,8 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         </li>
       </ul>
       <VotingIcon />
+      <Tooltip anchorId="info-bar__finish-action">{t("VoteDisplay.finishActionTooltip")}</Tooltip>
+      <Tooltip anchorId="info-bar__done-toggle">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</Tooltip>
     </div>
   );
 };
