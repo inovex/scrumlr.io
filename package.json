@@ -92,7 +92,7 @@
     "happy-dom": "^20.8.9",
     "hash-files": "^1.1.1",
     "husky": "^9.1.7",
-    "i18next-fs-backend": "^2.6.1",
+    "i18next-fs-backend": "^2.6.3",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.1",
     "react-dnd-test-backend": "^15.1.2",
