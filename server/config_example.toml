@@ -50,6 +50,9 @@ auth-callback-host = ""
 # If empty, only relative redirects are allowed.
 auth-allowed-redirect-hostnames = ""
 
+# Set the session secret for the authentication provider. Must be provided if an authentication provider is used.
+session-secret = ""
+
 # Set the client ID for Google OAuth authentication.
 auth-google-client-id = ""
 
