@@ -100,7 +100,7 @@ describe("Button", () => {
   });
 
   it("should render with data-cy attribute for testing", () => {
-    render(<Button dataCy="test-button">Test Button</Button>);
+    render(<Button testId="test-button">Test Button</Button>);
 
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("data-cy", "test-button");
@@ -148,7 +148,7 @@ describe("Button", () => {
         dataTooltipId="complex-tooltip"
         dataTooltipContent="This is a complex button with all features"
         onClick={handleClick}
-        dataCy="complex-test"
+        testId="complex-test"
       >
         Complex Button
       </Button>

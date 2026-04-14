@@ -1,0 +1,90 @@
+@use "constants/styles";
+@use "constants/colors";
+@use "constants/mixins";
+
+$button-height: 64px;
+$padding--default: styles.$spacing--xs;
+
+.import-board-button {
+  all: unset;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  width: auto;
+  height: $button-height;
+  padding: $padding--default;
+  box-sizing: border-box;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: styles.$gray--000;
+
+  &:enabled {
+    @include mixins.default-states($padding: $padding--default);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: styles.$gray--300;
+
+    .import-board-button__icon-container {
+      background-color: styles.$gray--800;
+    }
+
+    .import-board-button__icon {
+      color: styles.$gray--300;
+    }
+
+    .import-board-button__label {
+      color: styles.$gray--800;
+    }
+  }
+}
+
+.import-board-button__icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: colors.$blue--50;
+}
+
+.import-board-button__icon {
+  width: styles.$icon--default;
+  height: styles.$icon--default;
+
+  color: colors.$blue--500;
+}
+
+.import-board-button__label {
+  padding-right: styles.$spacing--base;
+
+  font-size: styles.$text-size--medium;
+  font-weight: 600;
+
+  color: colors.$blue--500;
+}
+
+[data-theme="dark"] {
+  .import-board-button {
+    background-color: colors.$navy--400;
+  }
+
+  .import-board-button__icon-container {
+    background-color: colors.$blue--400;
+  }
+
+  .import-board-button__icon,
+  .import-board-button__label {
+    color: colors.$gray--000;
+  }
+}

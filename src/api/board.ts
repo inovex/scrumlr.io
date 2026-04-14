@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {Board, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
+import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
@@ -35,7 +35,7 @@ export const BoardAPI = {
       throw new Error(`unable to create board: ${error}`);
     }
   },
-  importBoard: async (boardJson: string) => {
+  importBoard: async (boardJson: BoardImportData) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/import`, {
         method: "POST",
@@ -43,7 +43,7 @@ export const BoardAPI = {
         headers: {
           "Content-Type": "application/json",
         },
-        body: boardJson,
+        body: JSON.stringify(boardJson),
       });
 
       if (response.status === 201) {
