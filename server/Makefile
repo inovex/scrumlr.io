@@ -10,7 +10,10 @@ run-docker: ## Run the scrumlr backend in docker
 
 .ONESHELL:
 run-dev: ## Run the scrumlr backend. It starts the needed services in docker
-	cd src && go run . -d postgresql://admin:supersecret@localhost:5432/scrumlr?sslmode=disable
+	cd src && go run . \
+		-d postgresql://admin:supersecret@localhost:5432/scrumlr?sslmode=disable \
+		--auth-callback-host http://localhost:8080 \
+		--auth-allowed-redirect-hostnames localhost
 
 run-docker-dev: ## Run all needed services for the backend in docker
 	docker compose --profile dev up
