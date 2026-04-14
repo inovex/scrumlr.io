@@ -1,4 +1,4 @@
-import {useState, useRef} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch} from "store";
 import {importBoard} from "store/features/board/thunks";
@@ -25,7 +25,6 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const [importData, setImportData] = useState<BoardImportData | null>(null);
   const [fileName, setFileName] = useState<string>("");
   const [fileError, setFileError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const readFile = (file: File) => {
     setIsFileLoading(true);
@@ -65,9 +64,6 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   };
 
   const handleRemoveFile = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     setImportData(null);
     setFileName("");
     setFileError(null);
@@ -96,13 +92,10 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     };
 
     setImportData(updatedData);
-    dispatch(importBoard(importData));
+    dispatch(importBoard(updatedData));
   };
 
   const handleCancel = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
     setStep("file");
     setImportData(null);
     setFileName("");
