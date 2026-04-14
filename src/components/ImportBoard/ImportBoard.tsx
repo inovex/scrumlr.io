@@ -92,7 +92,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     };
 
     setImportData(updatedData);
-    dispatch(importBoard(importData));
+    dispatch(importBoard(updatedData));
   };
 
   const handleCancel = () => {
