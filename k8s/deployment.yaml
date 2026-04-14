@@ -235,7 +235,7 @@ metadata:
 spec:
   secretName: scrumlr-development-certificate-PR_NUMBER
   issuerRef:
-    name: letsencrypt-production
+    name: letsencrypt-staging
     kind: ClusterIssuer
   commonName: PR_NUMBER.development.scrumlr.fra.ics.inovex.io
   dnsNames:
