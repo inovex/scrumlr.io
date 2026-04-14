@@ -1,10 +1,11 @@
-import {PlacesType, Tooltip} from "react-tooltip";
+import {PlacesType} from "react-tooltip";
 import {ReactNode} from "react";
 import {createPortal} from "react-dom";
+import {Tooltip} from "components/Tooltip";
 import "./TooltipPortal.scss";
 
 interface TooltipPortalProps {
-  anchor: string;
+  anchorId: string;
   place: PlacesType;
   show?: boolean;
   children: ReactNode;
@@ -14,12 +15,9 @@ interface TooltipPortalProps {
 export const TooltipPortal = (props: TooltipPortalProps) => {
   if (!props.show) return null;
 
-  // colons (which are included from react useId()) are not allowed in CSS selectors, so we escape them
-  const escapedAnchor = CSS.escape(props.anchor);
-
   return createPortal(
     <div className="tooltip-portal__root">
-      <Tooltip className="tooltip-portal" anchorSelect={`#${escapedAnchor}`} place={props.place}>
+      <Tooltip className="tooltip-portal" anchorId={props.anchorId} place={props.place}>
         {props.children}
       </Tooltip>
     </div>,
