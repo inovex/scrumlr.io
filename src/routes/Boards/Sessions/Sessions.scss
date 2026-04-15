@@ -16,6 +16,18 @@ $stan-height: 50vh;
 .sessions__teaser {
   padding: styles.$spacing--xl;
   font-family: "Raleway", sans-serif;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: styles.$spacing--lg;
+}
+
+.sessions__container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
 }
 
 .sessions__teaser-title {
@@ -82,6 +94,11 @@ $stan-height: 50vh;
   .sessions__teaser-title {
     font-size: styles.$text--md;
     line-height: 24px;
+  }
+
+  .templates__container-header {
+    justify-content: center;
+    gap: styles.$spacing--md;
   }
 }
 

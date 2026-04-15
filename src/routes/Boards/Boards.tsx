@@ -80,13 +80,19 @@ export const Boards = () => {
           {/* desktop search bar */}
           <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
-          {/* mobile search icon - shown between switch and import on mobile */}
-          <button className="boards__mobile-search-icon" onClick={() => setShowMobileSearch((v) => !v)} aria-label={t("Input.placeholder.search")}>
-            <SearchIcon />
-          </button>
+          {/* mobile search icon + import button grouped on the right */}
+          <div className="boards__right-actions">
+            <button
+              className={classNames("boards__mobile-search-icon-container", {"boards__mobile-search-icon-container--active": showMobileSearch})}
+              onClick={() => setShowMobileSearch((v) => !v)}
+              aria-label={t("Input.placeholder.search")}
+            >
+              <SearchIcon />
+            </button>
 
-          {/* import button */}
-          {boardView === "templates" && <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} allowImport={canCreateBoard} />}
+            {/* import button */}
+            <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} allowImport={canCreateBoard} />
+          </div>
 
           {/* mobile search bar (toggled) */}
           {showMobileSearch && (

@@ -18,7 +18,9 @@ export const Sessions = () => {
           <img className={classNames("sessions__stan", "sessions__stan--light")} src={StanLight} alt="" />
         </div>
         <div className="sessions__teaser">
-          <h2 className="sessions__teaser-title">{t("Sessions.savedBoards")}</h2>
+          <header className="sessions__container-header">
+            <div className="templates__container-title">{t("Sessions.savedBoards")}</div>
+          </header>
           <div className="sessions__teaser-info">
             <InfoIcon className="sessions__teaser-icon" />
             <p className="sessions__teaser-text">{t("Sessions.teaserText")}</p>
