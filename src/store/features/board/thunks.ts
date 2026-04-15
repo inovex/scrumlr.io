@@ -17,7 +17,7 @@ import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {noteDragStarted, noteDragEnded} from "../dragLocks";
-import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
+import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "./types";
 import {TemplateWithColumns} from "../templates";
 
 // helper function to handle board deletion redirects
@@ -358,7 +358,7 @@ export const deleteBoard = createAsyncThunk<
 });
 export const importBoard = createAsyncThunk<
   void,
-  string,
+  BoardImportData,
   {
     state: ApplicationState;
   }

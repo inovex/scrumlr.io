@@ -27,7 +27,9 @@ export const FavouriteButton = (props: FavouriteButtonProps) => {
       >
         <FavouriteIcon className="favourite-icon" />
       </button>
-      <Tooltip anchorSelect={`#${anchor}`} content={props.active ? t("Templates.TemplateCard.removeFavourite") : t("Templates.TemplateCard.addFavourite")} color="backlog-blue" />
+      <Tooltip anchorId={anchor} color="backlog-blue">
+        {props.active ? t("Templates.TemplateCard.removeFavourite") : t("Templates.TemplateCard.addFavourite")}
+      </Tooltip>
     </>
   );
 };

@@ -83,10 +83,11 @@ export const LegacyNewBoard = () => {
   };
 
   const onImportBoard = () => {
-    if (completeBoard && accessPolicy === "BY_PASSPHRASE" && passphrase) {
+    if (!completeBoard) return;
+    if (accessPolicy === "BY_PASSPHRASE" && passphrase) {
       completeBoard.board.passphrase = passphrase;
     }
-    dispatch(importBoard(JSON.stringify(completeBoard)));
+    dispatch(importBoard(completeBoard));
   };
 
   const handlePasswordSubmit = (password: string, newAccessPolicy: AccessPolicy) => {

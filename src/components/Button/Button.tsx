@@ -13,7 +13,7 @@ type ButtonProps = {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   children?: ReactNode;
-  dataCy?: string;
+  testId?: string;
   id?: string;
 
   // Style Props
@@ -89,7 +89,8 @@ export const Button = (props: ButtonProps) => {
       title={props.title}
       data-tooltip-id={props.dataTooltipId}
       data-tooltip-content={props.dataTooltipContent}
-      data-cy={props.dataCy}
+      data-cy={props.testId}
+      data-testid={props.testId}
       aria-label={isIconOnly ? props.title || "Button" : undefined}
     >
       {renderButtonContent()}

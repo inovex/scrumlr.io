@@ -8,8 +8,9 @@ import useSound from "use-sound";
 import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
-import "./Timer.scss";
 import {cancelTimer, incrementTimer, setUserReadyStatus} from "store/features";
+import {Tooltip} from "components/Tooltip";
+import "./Timer.scss";
 
 type TimerProps = {
   startTime: Date;
@@ -110,21 +111,14 @@ export const Timer = (props: TimerProps) => {
         <ul className="timer__short-actions">
           {isModerator && (
             <li className="short-actions__short-action">
-              <button
-                data-tooltip-id="info-bar__tooltip"
-                data-tooltip-content={t("Timer.endTimer")}
-                aria-label={t("Timer.endTimer")}
-                className="short-action__button"
-                onClick={() => dispatch(cancelTimer())}
-              >
+              <button id="timer__end-timer" aria-label={t("Timer.endTimer")} className="short-action__button" onClick={() => dispatch(cancelTimer())}>
                 <FlagFinishIcon className="short-action__flag-icon" />
               </button>
             </li>
           )}
           <li className="short-actions__short-action">
             <button
-              data-tooltip-id="info-bar__tooltip"
-              data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+              id="timer__done-toggle"
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady})}
               onClick={() => dispatch(setUserReadyStatus({userId: me!.user.id, ready: !isReady}))}
@@ -137,16 +131,13 @@ export const Timer = (props: TimerProps) => {
         <TimerIcon />
       </div>
       {isModerator && (
-        <button
-          data-tooltip-id="info-bar__tooltip"
-          data-tooltip-content={t("Timer.addOneMinute")}
-          aria-label={t("Timer.addOneMinute")}
-          className="timer__increment-button"
-          onClick={() => dispatch(incrementTimer())}
-        >
+        <button id="timer__increment" aria-label={t("Timer.addOneMinute")} className="timer__increment-button" onClick={() => dispatch(incrementTimer())}>
           <PlusOneIconIcon />
         </button>
       )}
+      <Tooltip anchorId="timer__end-timer">{t("Timer.endTimer")}</Tooltip>
+      <Tooltip anchorId="timer__done-toggle">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</Tooltip>
+      <Tooltip anchorId="timer__increment">{t("Timer.addOneMinute")}</Tooltip>
     </div>
   );
 };
