@@ -36,8 +36,9 @@ i18n
     ns: ["translation", "templates"],
     defaultNS: "translation",
     detection: {
+      lookupQuerystring: "lng",
       lookupLocalStorage: `${LOCALE_STORAGE_KEY}`,
-      order: ["localStorage", "navigator"],
+      order: ["querystring", "localStorage", "navigator"],
       caches: ["localStorage"],
     },
     fallbackLng: "en",
