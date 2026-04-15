@@ -180,15 +180,18 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 						var ok bool
 						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, userID); ok {
 							// prepare new JWT
-							tokenString, _ := a.Sign(map[string]interface{}{"id": userID})
+							tokenString, err := a.Sign(map[string]any{"id": userID})
+							if err != nil {
+								log.Errorw("failed to sign migrated jwt", "err", err)
+							} else {
+								cookie := CreateCookie("jwt", tokenString, "/", math.MaxInt32, nil)
 
-							cookie := CreateCookie("jwt", tokenString, "/", math.MaxInt32, nil)
+								SealCookie(r, cookie)
+								http.SetCookie(w, cookie)
 
-							SealCookie(r, cookie)
-							http.SetCookie(w, cookie)
-
-							// update rotation flag in database for user, ignore errors
-							_, _ = a.userService.SetKeyMigration(ctx, userID)
+								// update rotation flag in database for user, ignore errors
+								_, _ = a.userService.SetKeyMigration(ctx, userID)
+							}
 						} else {
 							err = errors.New("not permitted to access key rotation")
 						}
@@ -303,7 +306,13 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 		return nil, common.InternalServerError
 	}
 
-	tokenString, _ := a.Sign(map[string]interface{}{"id": internalUser.ID})
+	tokenString, err := a.Sign(map[string]any{"id": internalUser.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to sign token")
+		span.RecordError(err)
+		log.Errorw("failed to sign jwt", "err", err)
+		return nil, common.InternalServerError
+	}
 	cookieMaxAge := time.Duration(21) * 24 * time.Hour //maxAge = 21 Days
 	cookie := CreateCookie("jwt", tokenString, "/", int(cookieMaxAge.Seconds()), nil)
 	return cookie, nil

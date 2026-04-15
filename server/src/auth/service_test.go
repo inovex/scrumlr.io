@@ -96,6 +96,25 @@ func Test_AuthConfiguration_Sign(t *testing.T) {
 	assert.NotEmpty(t, token)
 }
 
+func Test_AuthConfiguration_Sign_Failure(t *testing.T) {
+	mockUserService := users.NewMockUserService(t)
+
+	// Initialize with an invalid signer to force failure
+	auth := jwtauth.New("ES512", nil, nil)
+	service := &AuthConfiguration{
+		auth:        auth,
+		userService: mockUserService,
+	}
+
+	claims := map[string]any{
+		"id": uuid.New().String(),
+	}
+
+	token, err := service.Sign(claims)
+	assert.Error(t, err)
+	assert.Empty(t, token)
+}
+
 func Test_ProviderExists(t *testing.T) {
 	mockUserService := users.NewMockUserService(t)
 	testProviderConf := map[string]AuthProviderConfiguration{
@@ -286,4 +305,33 @@ func Test_Verifier(t *testing.T) {
 	cookies := rr.Result().Cookies()
 	assert.NotEmpty(t, cookies)
 	assert.Equal(t, "jwt", cookies[0].Name)
+}
+
+func Test_Verifier_Sign_Failure(t *testing.T) {
+	newAuth := jwtauth.New("HS256", nil, nil) // Invalid for signing
+	oldAuth := jwtauth.New("HS256", []byte("old-secret"), nil)
+	userID := uuid.New()
+	mockUserService := users.NewMockUserService(t)
+	service := AuthConfiguration{
+		unsafeAuth:  oldAuth,
+		auth:        newAuth,
+		userService: mockUserService,
+	}
+
+	handlerCalled := false
+	nextHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		handlerCalled = true
+	})
+
+	mockUserService.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userID).Return(true, nil)
+
+	req := httptest.NewRequest("GET", "/", nil)
+	req.AddCookie(setupCookie(oldAuth, userID))
+	rr := httptest.NewRecorder()
+
+	service.Verifier()(nextHandler).ServeHTTP(rr, req)
+
+	assert.True(t, handlerCalled)
+	cookies := rr.Result().Cookies()
+	assert.Empty(t, cookies)
 }
