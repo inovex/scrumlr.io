@@ -1,12 +1,14 @@
 package auth
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
 
 	"scrumlr.io/server/logger"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/weppos/publicsuffix-go/publicsuffix"
 )
 
@@ -55,4 +57,15 @@ func CreateCookie(name, value, path string, maxAge int, override *http.SameSite)
 		cookie.SameSite = *override
 	}
 	return cookie
+}
+
+func GetClaim(claim string, allClaims jwt.MapClaims) string {
+	if claim == "" {
+		return ""
+	}
+	val, ok := allClaims[claim]
+	if !ok || val == nil {
+		return ""
+	}
+	return fmt.Sprint(val)
 }

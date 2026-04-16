@@ -37,7 +37,7 @@ type providerMap struct {
 var externalProviderConfigs = map[string]providerMap{
 	string(common.Google):    {identClaim: "sub", nameClaim: "name", avatarClaim: "picture"},
 	string(common.Microsoft): {identClaim: "oid", nameClaim: "name", avatarClaim: "avatar_url"},
-	string(common.AzureAd):   {identClaim: "id", nameClaim: "login", avatarClaim: "avatar_url"},
+	string(common.AzureAd):   {identClaim: "oid", nameClaim: "name", avatarClaim: ""},
 	string(common.Apple):     {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
 	string(common.TypeOIDC):  {identClaim: "sub", nameClaim: "name", avatarClaim: ""},
 }

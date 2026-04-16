@@ -195,20 +195,18 @@ func Test_FetchExternalUser_Azure(t *testing.T) {
 	name := "John Doe"
 	provider := common.AzureAd
 	sub := "12345"
-	avatarURL := "http://avatar.com/jdoe"
 	expectedUser := UserInformation{
 		Provider:  provider,
 		Ident:     sub,
 		Name:      name,
-		AvatarURL: avatarURL,
+		AvatarURL: "",
 	}
 
 	mockUserService := users.NewMockUserService(t)
 	tokenExtra := createSignedToken(jwt.MapClaims{
-		"id":         sub,
-		"login":      name,
-		"avatar_url": avatarURL,
-		"email":      "john@example.com",
+		"oid":   sub,
+		"name":  name,
+		"email": "john@example.com",
 	}, privateKey, t, testKID)
 
 	service := NewAuthService(map[string]AuthProviderConfiguration{}, "", "", mockUserService)

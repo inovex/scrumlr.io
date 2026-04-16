@@ -52,6 +52,7 @@ var googleJWKS keyfunc.Keyfunc
 var microsoftJWKS keyfunc.Keyfunc
 var oidcJWKS keyfunc.Keyfunc
 var appleJWKS keyfunc.Keyfunc
+var azureAdJWKS keyfunc.Keyfunc
 
 func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, userService users.UserService) AuthService {
 	a := new(AuthConfiguration)
@@ -112,6 +113,21 @@ func (a *AuthConfiguration) initializeProviders() error {
 
 		var err error
 		microsoftJWKS, err = keyfunc.NewDefault([]string{microsoftCertUrl})
+		if err != nil {
+			return err
+		}
+	}
+	if p, ok := a.providers[string(common.AzureAd)]; ok {
+		a.oauthConfigs[string(common.AzureAd)] = &oauth2.Config{
+			ClientID:     p.ClientId,
+			ClientSecret: p.ClientSecret,
+			RedirectURL:  p.RedirectUri,
+			Endpoint:     endpoints.AzureAD(p.TenantId),
+			Scopes:       []string{"openid", "email", "profile"},
+		}
+
+		var err error
+		azureAdJWKS, err = keyfunc.NewDefault([]string{microsoftCertUrl})
 		if err != nil {
 			return err
 		}
@@ -295,9 +311,12 @@ func (a *AuthConfiguration) HandleCallback(ctx context.Context, provider, code s
 		internalUser, err = a.userService.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	case common.Microsoft:
 		internalUser, err = a.userService.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case common.AzureAd:
+		internalUser, err = a.userService.CreateAzureAdUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	case common.Apple:
 		internalUser, err = a.userService.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-
+	default:
+		return nil, common.InternalServerError
 	}
 
 	if err != nil {
@@ -374,9 +393,9 @@ func (a *AuthConfiguration) fetchExternalUser(ctx context.Context, provider stri
 
 	res := &UserInformation{
 		Provider:  common.AccountType(provider),
-		Ident:     fmt.Sprint(claims[config.identClaim]),
-		Name:      fmt.Sprint(claims[config.nameClaim]),
-		AvatarURL: fmt.Sprint(claims[config.avatarClaim]),
+		Ident:     GetClaim(config.identClaim, claims),
+		Name:      GetClaim(config.nameClaim, claims),
+		AvatarURL: GetClaim(config.avatarClaim, claims),
 	}
 
 	if res.Ident == "" || res.Ident == "<nil>" {
