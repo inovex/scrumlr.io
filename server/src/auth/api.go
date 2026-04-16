@@ -178,6 +178,10 @@ func (api *API) Callback(w http.ResponseWriter, r *http.Request) {
 
 	//format: nonce__returnURL
 	parts := strings.Split(state, "__")
+	if len(parts) < 2 {
+		common.Throw(w, r, common.BadRequestError(errors.New("invalid oauth state format")))
+		return
+	}
 	returnedNonce := parts[0]
 
 	//compare nonce from cookie and request
