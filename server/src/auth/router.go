@@ -11,6 +11,7 @@ type AuthApi interface {
 	Logout(w http.ResponseWriter, r *http.Request)
 	BeginAuth(w http.ResponseWriter, r *http.Request)
 	Callback(w http.ResponseWriter, r *http.Request)
+	AnonymousLoginDisabledContext(next http.Handler) http.Handler
 }
 
 type Router struct {
@@ -28,7 +29,7 @@ func (r *Router) RegisterRoutes() chi.Router {
 
 	router.Group(func(router chi.Router) {
 		router.Delete("/", r.authAPI.Logout)
-		router.Post("/anonymous", r.authAPI.SignInAnonymously)
+		router.With(r.authAPI.AnonymousLoginDisabledContext).Post("/anonymous", r.authAPI.SignInAnonymously)
 
 		router.Route("/{provider}", func(router chi.Router) {
 			router.Get("/", r.authAPI.BeginAuth)

@@ -476,7 +476,7 @@ func run(ctx *cli.Context) error {
 	apiInitializer := serviceinitialize.NewApiInitializer(ctx.String("address"), basePath, allowedRedirectHostnames)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
-	authApi := apiInitializer.InitializeAuthApi(authService, userService)
+	authApi := apiInitializer.InitializeAuthApi(authService, userService, ctx.Bool("disable-anonymous-login"))
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	authRoutes := routesInitializer.InitializeAuthRoutes(authApi)

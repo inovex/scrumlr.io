@@ -175,20 +175,6 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
-
-		if s.anonymousLoginDisabled {
-			log.Errorw("not allowed to login anonymously")
-			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
-			return
-		}
-
-		next.ServeHTTP(w, r)
-	})
-}
-
 func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)

@@ -27,6 +27,7 @@ type API struct {
 	basePath                 string
 	hostPath                 string
 	allowedRedirectHostnames []string
+	anonymousLoginDisabled   bool
 }
 
 type AnonymousSignUpRequest struct {
@@ -34,14 +35,29 @@ type AnonymousSignUpRequest struct {
 	Name string
 }
 
-func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string, allowedRedirectHostnames []string) AuthApi {
+func NewAuthApi(service AuthService, userService users.UserService, hostPath, basePath string, allowedRedirectHostnames []string, anonymousLoginDisabled bool) AuthApi {
 	api := new(API)
 	api.service = service
 	api.userService = userService
 	api.hostPath = hostPath
 	api.basePath = basePath
 	api.allowedRedirectHostnames = allowedRedirectHostnames
+	api.anonymousLoginDisabled = anonymousLoginDisabled
 	return api
+}
+
+func (api *API) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		if api.anonymousLoginDisabled {
+			log.Errorw("not allowed to login anonymously")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 func (api *API) SignInAnonymously(w http.ResponseWriter, r *http.Request) {

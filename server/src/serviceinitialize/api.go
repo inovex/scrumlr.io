@@ -20,8 +20,8 @@ func NewApiInitializer(hostPath string, basePath string, allowedRedirectHostname
 	return *initializer
 }
 
-func (init *ApiInitializer) InitializeAuthApi(authService auth.AuthService, userService users.UserService) auth.AuthApi {
-	authApi := auth.NewAuthApi(authService, userService, init.hostPath, init.basePath, init.allowedRedirectHostnames)
+func (init *ApiInitializer) InitializeAuthApi(authService auth.AuthService, userService users.UserService, anonymousLoginDisabled bool) auth.AuthApi {
+	authApi := auth.NewAuthApi(authService, userService, init.hostPath, init.basePath, init.allowedRedirectHostnames, anonymousLoginDisabled)
 	return authApi
 }
 

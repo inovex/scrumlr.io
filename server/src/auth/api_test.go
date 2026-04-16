@@ -24,7 +24,7 @@ func Test_SignInAnonymously(t *testing.T) {
 	bodyBytes, _ := json.Marshal(reqBody)
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, false)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -52,7 +52,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
 	bodyBytes, _ := json.Marshal(reqBody)
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, false)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader(bodyBytes))
 
@@ -65,7 +65,7 @@ func Test_SignInAnonymously_Service_Failure(t *testing.T) {
 func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, false)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/login/anonymous", bytes.NewReader([]byte("invalid-json")))
 
@@ -76,7 +76,7 @@ func Test_SignInAnonymously_Invalid_Body(t *testing.T) {
 func Test_Logout(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil)
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, false)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/logout", nil)
 
@@ -91,7 +91,7 @@ func Test_Logout(t *testing.T) {
 func Test_BeginAuth(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/", []string{"localhost"})
+	api := NewAuthApi(mockService, mockUserService, "http://localhost:3000", "/", []string{"localhost"}, false)
 	rr := httptest.NewRecorder()
 
 	fakeConfig := &oauth2.Config{
@@ -120,7 +120,7 @@ func Test_BeginAuth(t *testing.T) {
 func Test_Callback(t *testing.T) {
 	mockService := NewMockAuthService(t)
 	mockUserService := users.NewMockUserService(t)
-	api := NewAuthApi(mockService, mockUserService, "http:", "/", []string{"localhost"})
+	api := NewAuthApi(mockService, mockUserService, "http:", "/", []string{"localhost"}, false)
 	rr := httptest.NewRecorder()
 	oauthCookie := &http.Cookie{
 		Name:     "oauth_state",
@@ -190,4 +190,33 @@ func Test_IsSafeRedirect(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_AnonymousLoginDisabledContext(t *testing.T) {
+	mockService := NewMockAuthService(t)
+	mockUserService := users.NewMockUserService(t)
+
+	t.Run("allowed", func(t *testing.T) {
+		api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, false)
+		rr := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/login/anonymous", nil)
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		api.AnonymousLoginDisabledContext(next).ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusOK, rr.Code)
+	})
+
+	t.Run("forbidden", func(t *testing.T) {
+		api := NewAuthApi(mockService, mockUserService, "http:", "/", nil, true)
+		rr := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/login/anonymous", nil)
+		next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+
+		api.AnonymousLoginDisabledContext(next).ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusForbidden, rr.Code)
+	})
 }
