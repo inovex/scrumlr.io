@@ -50,7 +50,9 @@ describe("Boards", () => {
   it("does not show import button on sessions view", () => {
     mockLocation.pathname = "/boards/sessions";
     renderBoards();
-    expect(screen.queryByRole("button", {name: /Import JSON/})).not.toBeInTheDocument();
+    const importBtn = screen.getByRole("button", {name: /Import JSON/});
+    expect(importBtn).toBeInTheDocument();
+    expect(importBtn).not.toBeDisabled();
   });
 
   it("disables import button for anonymous users when board creation is not allowed", () => {

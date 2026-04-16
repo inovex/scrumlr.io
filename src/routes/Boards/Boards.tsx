@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation, useParams} from "react-router";
+import {Outlet, useLocation, useNavigate, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
@@ -7,6 +7,8 @@ import classNames from "classnames";
 import {getTemplates} from "store/features";
 import {useAppDispatch, useAppSelector} from "store";
 import {ImportBoard, ImportBoardButton} from "components/ImportBoard";
+import {Switch} from "components/Switch/Switch";
+import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
@@ -15,8 +17,8 @@ type BoardView = "templates" | "sessions" | "create" | "edit";
 export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const {id: editTemplateId} = useParams();
-  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
@@ -27,6 +29,7 @@ export const Boards = () => {
 
   const [searchBarInput, setSearchBarInput] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
@@ -63,21 +66,45 @@ export const Boards = () => {
 
       {viewType === "overview" && (
         <div className="boards__search-area">
+          {/* view toggle */}
+          <div className="boards__switch-wrapper">
+            <Switch
+              leftText={t("Templates.switchTitle")}
+              rightText={t("Sessions.switchTitle")}
+              activeDirection={boardView === "templates" ? "left" : "right"}
+              toggle={() => navigate(boardView === "templates" ? "/boards/sessions" : "/boards/templates")}
+            />
+            <span className="boards__coming-soon-badge">Coming Soon</span>
+          </div>
+
           {/* desktop search bar */}
           <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
-          {/* import button */}
-          {boardView === "templates" && <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} allowImport={canCreateBoard} />}
+          {/* mobile search icon + import button grouped on the right */}
+          <div className="boards__right-actions">
+            <button
+              className={classNames("boards__mobile-search-icon-container", {"boards__mobile-search-icon-container--active": showMobileSearch})}
+              onClick={() => setShowMobileSearch((v) => !v)}
+              aria-label={t("Input.placeholder.search")}
+            >
+              <SearchIcon />
+            </button>
 
-          {/* mobile search bar */}
-          <Input
-            className="boards__mobile-search-bar"
-            type="search"
-            height="normal"
-            placeholder={t("Input.placeholder.search")}
-            input={searchBarInput}
-            setInput={setSearchBarInput}
-          />
+            {/* import button */}
+            <ImportBoardButton className="boards__import-button" onClick={() => setShowImportModal(true)} allowImport={canCreateBoard} />
+          </div>
+
+          {/* mobile search bar (toggled) */}
+          {showMobileSearch && (
+            <Input
+              className="boards__mobile-search-bar"
+              type="search"
+              height="normal"
+              placeholder={t("Input.placeholder.search")}
+              input={searchBarInput}
+              setInput={setSearchBarInput}
+            />
+          )}
         </div>
       )}
 
