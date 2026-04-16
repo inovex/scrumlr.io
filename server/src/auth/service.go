@@ -52,7 +52,6 @@ var googleJWKS keyfunc.Keyfunc
 var microsoftJWKS keyfunc.Keyfunc
 var oidcJWKS keyfunc.Keyfunc
 var appleJWKS keyfunc.Keyfunc
-var azureAdJWKS keyfunc.Keyfunc
 
 func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, userService users.UserService) AuthService {
 	a := new(AuthConfiguration)
@@ -127,7 +126,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 		}
 
 		var err error
-		azureAdJWKS, err = keyfunc.NewDefault([]string{microsoftCertUrl})
+		microsoftJWKS, err = keyfunc.NewDefault([]string{microsoftCertUrl})
 		if err != nil {
 			return err
 		}
