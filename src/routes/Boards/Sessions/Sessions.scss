@@ -25,7 +25,6 @@ $stan-height: 50vh;
 .sessions__container-header {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
   gap: 0;
 }
@@ -96,7 +95,7 @@ $stan-height: 50vh;
     line-height: 24px;
   }
 
-  .templates__container-header {
+  .sessions__container-header {
     justify-content: center;
     gap: styles.$spacing--md;
   }
