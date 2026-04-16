@@ -456,8 +456,8 @@ func run(ctx *cli.Context) error {
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
 	authService := initializer.InitializeAuthService(providersMap, unsafeKeyWithNewlines, keyWithNewlines, userService)
-	if err != nil {
-		return fmt.Errorf("unable to setup authentication: %w", err)
+	if authService == nil {
+		return errors.New("unable to setup authentication")
 	}
 
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
