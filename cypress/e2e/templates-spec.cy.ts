@@ -1,8 +1,20 @@
 /// <reference types="cypress" />
 /// <reference path="../support/index.d.ts" />
 
+const uniqueTemplateName = (prefix: string) => `${prefix} ${Date.now()}-${Cypress._.random(1000,9999)}`
+
+
+const getTemplateByName = (templateName: string): Cypress.Chainable<JQuery<HTMLElement>> =>
+  cy
+    .get("[data-cy='template-card--CUSTOM']")
+    .filter(`:has(input[value="${templateName}"])`);
+
+
 describe("templates", () => {
-  beforeEach(cy.login)
+  beforeEach (() => {
+    cy.login()
+    cy.visit("/boards/templates")
+  })
 
   it("should create board from recommended template", () => {
     cy
@@ -23,33 +35,39 @@ describe("templates", () => {
   })
 
   it("should create a new template with default settings", () => {
+    const templateName = uniqueTemplateName("Custom Template")
     cy
-      .createCustomTemplate("Custom Template")
-
+      .createCustomTemplate(templateName)
     cy
       .url()
       .should("include", "/boards/templates") // we're so back
 
-    cy.get("[data-cy='template-card--CUSTOM']")
-      .should("have.length", 1)
+    getTemplateByName(templateName).should("exist");
   });
 
   it("should delete custom template", () => {
+    const templateName = uniqueTemplateName("Delete Template")
     cy
-      .createCustomTemplate("Del Template")
+      .createCustomTemplate(templateName)
 
-    cy.selectMiniMenu("template-card__menu", "Delete")
-
-    cy.get("[data-cy='template-card--CUSTOM']")
+    getTemplateByName(templateName)
+      .within(() => {
+        cy.selectMiniMenu("template-card__menu", "Delete")
+      });
+    cy.get('.template-card')
+      .filter(`:has(input[value="${templateName}"])`)
       .should("not.exist")
   });
 
   it("should edit custom template", () => {
+        const templateName = uniqueTemplateName("Edit Template")
     cy
-      .createCustomTemplate("Edit Template")
+      .createCustomTemplate(templateName)
 
-    cy
-      .selectMiniMenu("template-card__menu", "Edit")
+    getTemplateByName(templateName)
+      .within(() => {
+        cy.selectMiniMenu("template-card__menu", "Edit")
+      });
 
     cy
       .get("[data-cy='columns-configurator-column__color-picker']")
@@ -64,7 +82,6 @@ describe("templates", () => {
       .get("[data-cy='columns-configurator-column__icon--visibility']")
       .click({multiple:true})
 
-    // cannot get it to work, oh well
     cy
       .get("[data-cy='columns-configurator-column__drag-element']")
       .first()
