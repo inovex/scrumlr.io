@@ -2,6 +2,7 @@ import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import "./HeaderBar.scss";
+import i18n from "i18n";
 
 type HeaderBarProps = {
   renderTitle: () => string;
@@ -19,7 +20,7 @@ export const HeaderBar = (props: HeaderBarProps) => {
         {/* logo - - - profile */}
         <div className="header-bar__scrumlr-logo-container">
           {/* this still needs fixing bc that uses other styles */}
-          <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
+          <a className="new-board__scrumlr-logo-href" href={`/${i18n.language}/`} aria-label={t("BoardHeader.returnToHomepage")}>
             <ScrumlrLogo className="new-board__scrumlr-logo" />
           </a>
         </div>
