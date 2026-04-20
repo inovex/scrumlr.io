@@ -23,7 +23,9 @@ updates:
   - package-ecosystem: "gomod"
     allow:
       - dependency-type: "direct"
-    directory: "/server/src"
+    directories:
+      - "/server/src"
+      - "/server/e2e-tests"
     schedule:
       interval: "daily"
     cooldown:

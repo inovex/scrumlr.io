@@ -15,6 +15,27 @@
     "uploadFile": "Télécharger un fichier ou glisser ici",
     "importNewBoard": "Importer maintenant"
   },
+  "ImportBoard": {
+    "button": "Importer JSON",
+    "importNotAllowedForAnonymousUsers": "L'importation de tableaux est désactivée pour les utilisateurs anonymes.",
+    "title": "Importer un Tableau",
+    "step1Title": "Sélectionner un Fichier",
+    "errorInvalid": "Le fichier n'a pas pu être lu. Veuillez utiliser un export JSON valide.",
+    "errorRead": "Le fichier n'a pas pu être lu. Veuillez vérifier le fichier et réessayer.",
+    "continue": "Continuer",
+    "cancel": "Annuler",
+    "back": "Retour",
+    "openBoard": "Ouvrir le Tableau",
+    "FileDropzoneCard": {
+      "title": "Ajouter un fichier JSON",
+      "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
+    },
+    "FilePreview": {
+      "loadingState": "Téléchargement en cours...",
+      "uploadedState": "Téléchargé",
+      "removeFile": "Supprimer le fichier"
+    }
+  },
   "Templates": {
     "switchTitle": "Modèles",
     "title": "Choisir un modèle",
@@ -74,8 +95,10 @@
     }
   },
   "Sessions": {
-    "switchTitle": "Sessions",
-    "title": "Choisir une session"
+    "switchTitle": "Histoire",
+    "title": "Vos Boards",
+    "savedBoards": "Vos sessions",
+    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés."
   },
   "CreateBoard": {
     "title": "Créer un nouveau tableau",

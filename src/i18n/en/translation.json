@@ -15,6 +15,27 @@
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
   },
+  "ImportBoard": {
+    "button": "Import JSON",
+    "importNotAllowedForAnonymousUsers": "Importing boards is disabled for anonymous users.",
+    "title": "Import Board",
+    "step1Title": "Select File",
+    "errorInvalid": "The file could not be read. Please use a valid JSON export.",
+    "errorRead": "The file could not be read. Please check the file and try again.",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "back": "Back",
+    "openBoard": "Open Board",
+    "FileDropzoneCard": {
+      "title": "Add JSON file",
+      "description": "Click or drag a file here to upload (max. 1 file)"
+    },
+    "FilePreview": {
+      "loadingState": "Uploading...",
+      "uploadedState": "Uploaded",
+      "removeFile": "Delete file"
+    }
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -74,8 +95,10 @@
     }
   },
   "Sessions": {
-    "switchTitle": "Sessions",
-    "title": "Choose a session"
+    "switchTitle": "History",
+    "title": "Your Boards",
+    "savedBoards": "Your boards",
+    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved."
   },
   "CreateBoard": {
     "title": "Create a new Board",

@@ -26,8 +26,7 @@ exports[`Timer > should render correctly 1`] = `
         <button
           aria-label="End timer"
           class="short-action__button"
-          data-tooltip-content="End timer"
-          data-tooltip-id="info-bar__tooltip"
+          id="timer__end-timer"
         >
           <svg
             class="short-action__flag-icon"
@@ -52,8 +51,7 @@ exports[`Timer > should render correctly 1`] = `
         <button
           aria-label="Mark me as done"
           class="short-action__button"
-          data-tooltip-content="Mark me as done"
-          data-tooltip-id="info-bar__tooltip"
+          id="timer__done-toggle"
         >
           <svg
             class="short-action__check-icon"
@@ -138,8 +136,7 @@ exports[`Timer > should render correctly 1`] = `
   <button
     aria-label="Increase timer by one minute"
     class="timer__increment-button"
-    data-tooltip-content="Increase timer by one minute"
-    data-tooltip-id="info-bar__tooltip"
+    id="timer__increment"
   >
     <svg
       fill="none"
@@ -161,5 +158,14 @@ exports[`Timer > should render correctly 1`] = `
       />
     </svg>
   </button>
+  <div
+    class="tooltip-container"
+  />
+  <div
+    class="tooltip-container"
+  />
+  <div
+    class="tooltip-container"
+  />
 </div>
 `;

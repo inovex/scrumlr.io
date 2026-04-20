@@ -15,9 +15,14 @@ exports[`Export Boad Tests > render ExportBoard correctly 1`] = `
           <h2
             class="settings-dialog__header-text"
           >
-             
+
             Export board
           </h2>
+          <p
+            class="settings-dialog__header-subtitle"
+          >
+            Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.
+          </p>
         </div>
         <main
           class="export-board__main"
@@ -208,9 +213,14 @@ exports[`Export Boad Tests > render ExportBoard correctly 1`] = `
         <h2
           class="settings-dialog__header-text"
         >
-           
+
           Export board
         </h2>
+        <p
+          class="settings-dialog__header-subtitle"
+        >
+          Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.
+        </p>
       </div>
       <main
         class="export-board__main"

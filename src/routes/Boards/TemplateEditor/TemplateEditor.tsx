@@ -276,7 +276,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
               className={classNames("template-editor__button", "template-editor__button--return")}
               variant="secondary"
               onClick={cancelAndGoBack}
-              dataCy="template-editor__button--return"
+              testId="template-editor__button--return"
             >
               {t("Templates.TemplateEditor.cancel")}
             </Button>
@@ -286,7 +286,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
               icon={<PlusIcon />}
               onClick={saveTemplate}
               disabled={!validForm}
-              dataCy="template-editor__button--create"
+              testId="template-editor__button--create"
             >
               {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
             </Button>

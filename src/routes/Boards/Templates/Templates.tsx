@@ -12,7 +12,6 @@ import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {toggleRecommendedFavourite} from "store/features/templates";
-import {Tooltip} from "components/Tooltip";
 import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
@@ -146,7 +145,12 @@ export const Templates = () => {
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
         <Portal className={classNames("templates__portal")} hiddenOverflow align="center" onClose={onLeaveSessionPolicy}>
-          <AccessSettings onCancel={onLeaveSessionPolicy} onSelectSessionPolicy={onSelectSessionPolicy} />
+          <AccessSettings
+            onCancel={onLeaveSessionPolicy}
+            onSelectSessionPolicy={onSelectSessionPolicy}
+            cancelLabel={t("Templates.AccessSettings.Buttons.cancel")}
+            confirmLabel={t("Templates.AccessSettings.Buttons.start")}
+          />
         </Portal>
       ) : null}
       <div className="templates" ref={templatesRef}>
@@ -202,7 +206,6 @@ export const Templates = () => {
           </section>
         )}
       </div>
-      <Tooltip id="template-card-tooltip" />
     </>
   );
 };

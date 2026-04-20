@@ -101,7 +101,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         disabled={props.disabled}
         dataTooltipId={props.disabled ? "template-card-tooltip" : undefined}
         dataTooltipContent={props.disabled ? props.disabledReason : undefined}
-        dataCy="template-card__start-button"
+        testId="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
       </Button>
