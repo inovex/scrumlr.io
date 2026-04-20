@@ -73,18 +73,37 @@ describe("templates", () => {
       });
 
     cy
-      .get("[data-cy='columns-configurator-column__color-picker']")
+      .get("[data-cy='columns-configurator__column']")
       .first()
-      .click()
+      .as("firstColumn");
+
+    cy.get("@firstColumn").within(() => {
+      cy
+        .get("[data-cy='columns-configurator-column__color-picker']")
+        .click();
+      cy
+        .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
+          .click();
+    });
 
     cy
-      .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
-      .click()
+      .get("@firstColumn")
+      .should("have.class", "accent-color__goal-green");
+
+
+    cy.get("@firstColumn").within(() => {
+      cy
+        .get("[data-cy='columns-configurator-column__icon--visibility']")
+        .first()
+        .click()
+    });
 
     cy
-      .get("[data-cy='columns-configurator-column__icon--visibility']")
-      .click({multiple:true})
+      .get("@firstColumn")
+      .should("have.class", "columns-configurator-column--hidden");
 
+
+    // cannot get it to work :(
     cy
       .get("[data-cy='columns-configurator-column__drag-element']")
       .first()
