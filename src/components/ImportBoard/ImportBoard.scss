@@ -1,0 +1,53 @@
+@use "constants/styles";
+@use "constants/colors";
+
+.import-board {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--lg;
+}
+
+.import-board__error-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  width: 100%;
+  padding: styles.$spacing--xs;
+
+  border-radius: styles.$rounded--small;
+
+  background-color: rgba(colors.$critical-carmine--light, 0.1);
+}
+
+.import-board__error-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+
+  color: colors.$navy--400;
+}
+
+.import-board__error-message {
+  margin: 0;
+
+  color: colors.$navy--400;
+
+  font-size: styles.$text--base;
+  font-weight: 500;
+  line-height: normal;
+}
+
+[data-theme="dark"] {
+  .import-board__error-container {
+    background-color: rgba(colors.$critical-carmine--dark, 0.3);
+  }
+
+  .import-board__error-icon {
+    color: colors.$gray--000;
+  }
+
+  .import-board__error-message {
+    color: colors.$gray--000;
+  }
+}

@@ -13,7 +13,7 @@ describe("templates", () => {
       .first()
       .click()
       // select access setting (default public) and click button to start session
-      .get("[data-cy='access-settings__start-button']")
+      .get("[data-testid='simple-modal__primary-button']")
       .click()
 
     cy

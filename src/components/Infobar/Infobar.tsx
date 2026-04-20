@@ -29,12 +29,12 @@ export const InfoBar = () => {
   return (
     <aside className="info-bar">
       {state.activeVoting && state.isVotingAnonymous && (
-        <span className="info-bar__icon" data-tooltip-id="info-bar__tooltip" data-tooltip-content={t("InfoBar.VotingIsAnonymous")}>
+        <span id="info-bar__voting-anonymous" className="info-bar__icon">
           <HiddenIcon />
         </span>
       )}
       {state.activeVoting && !state.isVotingAnonymous && (
-        <span className="info-bar__icon" data-tooltip-id="info-bar__tooltip" data-tooltip-content={t("InfoBar.VotingIsNotAnonymous")}>
+        <span id="info-bar__voting-not-anonymous" className="info-bar__icon">
           <VisibleIcon />
         </span>
       )}
@@ -44,16 +44,17 @@ export const InfoBar = () => {
 
       {state.sharedNote && viewer?.user.id !== focusInitiator?.user.id && (
         <Link
+          id="info-bar__return-to-shared-note"
           aria-label={t("InfoBar.ReturnToPresentedNote")}
           className="info-bar__return-to-shared-note-button"
-          data-tooltip-id="info-bar__tooltip"
-          data-tooltip-content={t("InfoBar.ReturnToPresentedNote")}
           to={`note/${state.sharedNote}/stack`}
         >
           <ShareIcon />
         </Link>
       )}
-      <Tooltip id="info-bar__tooltip" />
+      <Tooltip anchorId="info-bar__voting-anonymous">{t("InfoBar.VotingIsAnonymous")}</Tooltip>
+      <Tooltip anchorId="info-bar__voting-not-anonymous">{t("InfoBar.VotingIsNotAnonymous")}</Tooltip>
+      <Tooltip anchorId="info-bar__return-to-shared-note">{t("InfoBar.ReturnToPresentedNote")}</Tooltip>
     </aside>
   );
 };

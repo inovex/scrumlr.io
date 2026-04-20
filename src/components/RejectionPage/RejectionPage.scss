@@ -147,7 +147,7 @@
 }
 
 // display or hide light/dark logos.
-[theme="light"] {
+[data-theme="light"] {
   .rejection-page__background-form--dark,
   .rejection-page__logo-stan--dark {
     display: none;

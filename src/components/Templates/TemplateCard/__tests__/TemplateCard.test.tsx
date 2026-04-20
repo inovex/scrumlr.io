@@ -78,9 +78,10 @@ const openMiniMenu = (container: HTMLElement & Element) => {
   expect(miniMenu).toBeInTheDocument();
 };
 
-// helper function which clicks a mini menu item by querying it by label
+// helper function which clicks a mini menu item by querying it by test id
 const clickMiniMenuItem = (container: HTMLElement & Element, label: string) => {
-  const miniMenuButton = container.querySelector<HTMLButtonElement>(`.mini-menu__item[data-tooltip-content="${label}"]`);
+  const dataCy = "template-card__menu";
+  const miniMenuButton = container.querySelector<HTMLButtonElement>(`.mini-menu__item[data-testid="${dataCy}-item-${label}"]`);
   expect(miniMenuButton).toBeInTheDocument();
   act(() => fireEvent.mouseDown(miniMenuButton!));
 };

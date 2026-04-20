@@ -1,5 +1,9 @@
 @use "constants/styles";
 
+.tooltip-container {
+  // this is important in order for the tooltip not to affect the layout of other elements, e.g. when placed within a flex container with gap
+  display: contents;
+}
 .tooltip-container .tooltip {
   background-color: styles.$blue--100;
   border-radius: styles.$rounded--full;
@@ -18,6 +22,6 @@
 }
 
 [data-theme="dark"] .tooltip-container .tooltip {
-  background-color: styles.$navy--300;
+  background-color: styles.$navy--200;
   color: styles.$gray--000;
 }
