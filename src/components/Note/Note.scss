@@ -11,6 +11,9 @@ $note__text-margin-top--small: 6px;
 $note__footer-height: 38px;
 $note__footer-gap: 42px;
 
+$note__text-lines: 3;
+$note__text-line-height: styles.$line-height--medium;
+
 .note__root {
   position: relative;
   container-type: inline-size;
@@ -132,11 +135,8 @@ $note__footer-gap: 42px;
 }
 
 .note__text {
-  --lines: 3;
-  --lh: #{styles.$line-height--medium};
-
-  line-height: var(--lh);
-  max-height: calc(var(--lines) * var(--lh));
+  line-height: $note__text-line-height;
+  max-height: $note__text-lines * $note__text-line-height;
   overflow: hidden;
   position: relative;
   word-break: break-word;
@@ -145,7 +145,7 @@ $note__footer-gap: 42px;
 .note__text-spacer {
   float: right;
   width: 0;
-  height: calc((var(--lines) - 1) * var(--lh));
+  height: ($note__text-lines - 1) * $note__text-line-height;
 }
 
 .note__marker-edited {
@@ -179,8 +179,8 @@ $note__footer-gap: 42px;
 }
 
 .note__show-more-icon {
-  width: calc(styles.$icon--small + 4px);
-  height: calc(styles.$icon--small + 4px);
+  width: styles.$icon--small + 4px;
+  height: styles.$icon--small + 4px;
   flex-shrink: 0;
 
   path {
