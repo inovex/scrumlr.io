@@ -38,6 +38,7 @@ describe("templates", () => {
     const templateName = uniqueTemplateName("Custom Template")
     cy
       .createCustomTemplate(templateName)
+
     cy
       .url()
       .should("include", "/boards/templates") // we're so back
@@ -54,7 +55,9 @@ describe("templates", () => {
       .within(() => {
         cy.selectMiniMenu("template-card__menu", "Delete")
       });
-    cy.get('.template-card')
+
+    cy
+      .get('.template-card')
       .filter(`:has(input[value="${templateName}"])`)
       .should("not.exist")
   });
@@ -92,6 +95,5 @@ describe("templates", () => {
     cy
       .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
       .click()
-
   });
 })
