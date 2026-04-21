@@ -66,6 +66,7 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 		span.RecordError(err)
 		log.Errorw("unable to get board template", err)
 		common.Throw(w, r, common.InternalServerError)
+		return
 	}
 
 	render.Status(r, http.StatusOK)
