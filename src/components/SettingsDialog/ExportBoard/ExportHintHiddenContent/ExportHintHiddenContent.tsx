@@ -20,7 +20,9 @@ const ExportHintHiddenContent = () => {
             <div className="hint-hidden-columns__columns-list-container">
               <ul className="hint-hidden-columns__columns-list">
                 {hiddenColumns.map((hiddenCol) => (
-                  <li key={hiddenCol.id}>{hiddenCol.name}</li>
+                  <li key={hiddenCol.id} className="hint-hidden-columns__columns-list-item">
+                    {hiddenCol.name}
+                  </li>
                 ))}
               </ul>
             </div>

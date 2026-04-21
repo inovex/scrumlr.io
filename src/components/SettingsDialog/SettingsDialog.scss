@@ -310,12 +310,6 @@ $settings-dialog-container--bottom: 62px;
   margin: 0;
 }
 
-.settings-dialog__header-subtitle {
-  margin: styles.$spacing--sm 0 0 0;
-  font-size: styles.$text--sm;
-  color: styles.$navy--800;
-}
-
 .settings-dialog__separator {
   margin: 0 0 0 5%;
   width: 90%;
@@ -333,10 +327,6 @@ $settings-dialog-container--bottom: 62px;
 [data-theme="dark"] {
   .settings-dialog__header-text {
     color: styles.$gray--000;
-  }
-
-  .settings-dialog__header-subtitle {
-    color: styles.$gray--700;
   }
 
   .settings-dialog__separator {
