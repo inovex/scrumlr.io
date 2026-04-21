@@ -349,18 +349,17 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "notes not found")
-			span.RecordError(err)
-			return nil, common.NotFoundError
+		span.RecordError(err)
+
+		if errors.Is(err, sql.ErrNoRows) {
+			return Notes(notes), nil
 		}
 
 		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
 		return nil, common.InternalServerError
 	}
-	return Notes(notes), err
+	return Notes(notes), nil
 }
 
 func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {

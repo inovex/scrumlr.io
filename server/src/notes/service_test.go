@@ -738,9 +738,8 @@ func (suite *NotesServiceTestSuite) Test_GetAll_NotFound() {
 
 	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
 
-	suite.Nil(notes)
-	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+	suite.Empty(notes)
+	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll_DatabaseError() {
