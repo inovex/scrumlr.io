@@ -298,6 +298,19 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Equal(t, suite.notes[24].Edited, notes[0].Edited)
 }
 
+func (suite *NoteServiceIntegrationTestSuite) Test_GetAll_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := uuid.New()
+	columnId := uuid.New()
+
+	notes, err := suite.noteService.GetAll(ctx, boardId, columnId)
+
+	assert.Empty(t, notes)
+	assert.Nil(t, err)
+}
+
 func (suite *NoteServiceIntegrationTestSuite) Test_GetStack() {
 	t := suite.T()
 	ctx := context.Background()
