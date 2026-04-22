@@ -1,6 +1,7 @@
-import {useTranslation, getI18n} from "react-i18next";
+import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
+import {withCurrentLanguageQuery} from "i18n/url";
 import "./HeaderBar.scss";
 
 type HeaderBarProps = {
@@ -11,8 +12,7 @@ type HeaderBarProps = {
 
 export const HeaderBar = (props: HeaderBarProps) => {
   const {t} = useTranslation();
-  const activeLanguage = getI18n().language;
-  const redirectHomeURL = `/${  activeLanguage  }/`;
+  const redirectHomeURL = withCurrentLanguageQuery(""); // empty string only adds current language
   const {loginBoard = false} = props;
 
   return (
