@@ -80,6 +80,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       ref={combinedRef}
       style={style}
       {...attributes}
+      data-cy="columns-configurator__column"
     >
       <ColumnConfiguratorColumnNameDetails
         className="columns-configurator-column__name-details"

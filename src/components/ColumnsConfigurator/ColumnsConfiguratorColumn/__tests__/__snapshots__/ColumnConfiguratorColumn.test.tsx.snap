@@ -7,6 +7,7 @@ exports[`ColumnConfiguratorColumn render > should render correctly 1`] = `
     aria-disabled="false"
     aria-roledescription="sortable"
     class="columns-configurator-column columns-configurator-column--border-ghost columns-configurator-column--even accent-color__backlog-blue"
+    data-cy="columns-configurator__column"
     role="button"
     style="--stripe-offset: 0px;"
     tabindex="0"
