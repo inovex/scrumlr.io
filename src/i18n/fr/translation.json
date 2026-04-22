@@ -186,7 +186,7 @@
   },
   "ExportBoardOption": {
     "title": "Exporter le tableau",
-    "subtitle": "L'export d'un tableau ne conserve pas les paramètres d'accès. De plus, l'import nécessite impérativement un fichier JSON.",
+    "info": "L'export d'un tableau ne conserve pas les paramètres d'accès. De plus, l'import nécessite impérativement un fichier JSON.",
     "button": "Exporter le tableau",
     "exportAsJson": "Exporter en JSON",
     "exportAsCSV": "Exporter en CSV",
