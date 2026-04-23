@@ -186,7 +186,7 @@
   },
   "ExportBoardOption": {
     "title": "Export board",
-    "subtitle": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
+    "info": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
