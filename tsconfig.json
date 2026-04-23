@@ -26,8 +26,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
-    "ignoreDeprecations": "5.0",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
