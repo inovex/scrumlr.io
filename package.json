@@ -102,7 +102,7 @@
     "sass": "^1.99.0",
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1",
-    "typescript": "^5.8.3",
+    "typescript": "^6.0.2",
     "vite": "^8.0.8",
     "vite-plugin-svgr": "^4.5.0",
     "vite-tsconfig-paths": "^6.1.1",
