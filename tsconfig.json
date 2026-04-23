@@ -30,16 +30,16 @@
     "noUnusedParameters": false,
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
     "paths": {
-      "api/*": ["src/api/*"],
-      "assets/*": ["src/assets/*"],
-      "components/*": ["src/components/*"],
-      "constants/*": ["src/constants/*"],
-      "i18n/*": ["src/i18n/*"],
-      "routes/*": ["src/routes/*"],
-      "store/*": ["src/store/*"],
-      "types/*": ["src/types/*"],
-      "utils/*": ["src/utils/*"],
-      "*": ["src/*"]
+      "api/*": ["./src/api/*"],
+      "assets/*": ["./src/assets/*"],
+      "components/*": ["./src/components/*"],
+      "constants/*": ["./src/constants/*"],
+      "i18n/*": ["./src/i18n/*"],
+      "routes/*": ["./src/routes/*"],
+      "store/*": ["./src/store/*"],
+      "types/*": ["./src/types/*"],
+      "utils/*": ["./src/utils/*"],
+      "*": ["./src/*"]
     }
   },
   "include": ["src", "vite-env.d.ts" ,"vite-env-override.d.ts"]
