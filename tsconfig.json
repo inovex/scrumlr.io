@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "src/",
     "target": "esnext",
     "lib": [
       "dom",
@@ -33,15 +32,16 @@
     "noUnusedParameters": false,
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
     "paths": {
-      "api/*": ["api/*"],
-      "assets/*": ["assets/*"],
-      "components/*": ["components/*"],
-      "constants/*": ["constants/*"],
-      "i18n/*": ["i18n/*"],
-      "routes/*": ["routes/*"],
-      "store/*": ["store/*"],
-      "types/*": ["types/*"],
-      "utils/*": ["utils/*"]
+      "api/*": ["src/api/*"],
+      "assets/*": ["src/assets/*"],
+      "components/*": ["src/components/*"],
+      "constants/*": ["src/constants/*"],
+      "i18n/*": ["src/i18n/*"],
+      "routes/*": ["src/routes/*"],
+      "store/*": ["src/store/*"],
+      "types/*": ["src/types/*"],
+      "utils/*": ["src/utils/*"],
+      "*": ["src/*"]
     }
   },
   "include": ["src", "vite-env.d.ts" ,"vite-env-override.d.ts"]
