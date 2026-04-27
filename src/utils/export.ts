@@ -32,16 +32,28 @@ export const fileName = (name?: string) => {
   return `${date}_${name}`;
 };
 
+const getBoardExportData = async (id: string) => {
+  const response = await API.exportBoard(id, "application/json");
+  const jsonResponse: ExportBoardDataTypeWithUserId = await response.json();
+  const userData = await API.getUsers(jsonResponse.board.id);
+  const exportData: ExportBoardDataType = {
+    ...jsonResponse,
+    participants: mapMultipleParticipants(jsonResponse.participants, userData).map(removeParticipantId),
+  };
+  return exportData;
+};
+
 export const exportAsCSV = async (id: string, name?: string) => {
   const response = await API.exportBoard(id, "text/csv");
   const blob = await response.blob();
   saveAs(blob, `${fileName(name ?? DEFAULT_BOARD_NAME)}.csv`);
 };
 
+const removeParticipantId = ({id, ...rest}: ParticipantWithUser & {id?: string}) => rest as ParticipantWithUser;
+
 export const exportAsJSON = async (id: string, name?: string) => {
-  const response = await API.exportBoard(id, "application/json");
-  const json = await response.json();
-  const blob = new Blob([JSON.stringify(json)], {type: "application/json"});
+  const exportData = await getBoardExportData(id);
+  const blob = new Blob([JSON.stringify(exportData)], {type: "application/json"});
   saveAs(blob, `${fileName(name ?? DEFAULT_BOARD_NAME)}.json`);
 };
 
@@ -131,12 +143,6 @@ const mdTemplate = (boardData: ExportBoardDataType) =>
   mdBoardHeader(boardData.board.name || DEFAULT_BOARD_NAME) + mdBoardProperties(boardData.board, boardData.participants) + mdColumns(boardData) + mdBranding();
 
 export const getMarkdownExport = async (id: string) => {
-  const response = await API.exportBoard(id, "application/json");
-  const jsonResponse: ExportBoardDataTypeWithUserId = await response.json();
-  const userData = await API.getUsers(jsonResponse.board.id);
-  const exportData: ExportBoardDataType = {
-    ...jsonResponse,
-    participants: mapMultipleParticipants(jsonResponse.participants, userData),
-  };
+  const exportData = await getBoardExportData(id);
   return `${mdTemplate(exportData)}`;
 };
