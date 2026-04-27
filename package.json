@@ -38,7 +38,7 @@
     "react-focus-lock": "^2.13.7",
     "react-helmet-async": "^3.0.0",
     "react-hotkeys-hook": "^5.2.4",
-    "react-i18next": "^17.0.0",
+    "react-i18next": "^17.0.2",
     "react-redux": "^9.2.0",
     "react-router": "^7.14.0",
     "react-snowfall": "^2.4.0",
