@@ -2,7 +2,7 @@ FROM node:22-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
 RUN corepack enable
 RUN yarn install --immutable --network-timeout 240000
