@@ -6,13 +6,13 @@ updates:
     allow:
       - dependency-type: "direct"
     directory: "/"
-    schedule:
+    schedule: &schedule
       interval: daily
-    cooldown:
+    cooldown: &cooldown
       default-days: 10
     open-pull-requests-limit: 10
     target-branch: "main"
-    labels:
+    labels: &dependency_labels
       - "Dependencies"
     versioning-strategy: increase
     commit-message:
@@ -21,23 +21,18 @@ updates:
 
   # Server
   - package-ecosystem: "gomod"
+    directory: "/server/src"
     allow:
       - dependency-type: "direct"
-    directories:
-      - "/server/src"
-      - "/server/e2e-tests"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 10
+    schedule: *schedule
+    cooldown: *cooldown
     open-pull-requests-limit: 10
     target-branch: "main"
-    labels:
-      - "Dependencies"
-    commit-message:
+    labels: *dependency_labels
+    commit-message: &go_commit_message
       prefix: "go"
       include: "scope"
-    groups:
+    groups: &go_groups
       redis:
         patterns:
           - "github.com/redis/go-redis/*"
@@ -53,3 +48,16 @@ updates:
           - "go.opentelemetry.io/otel"
           - "go.opentelemetry.io/otel/*"
           - "go.opentelemetry.io/contrib/*"
+
+  # Server e2e tests, which requires src modules indirectly
+  - package-ecosystem: "gomod"
+    directory: "/server/e2e-tests"
+    allow:
+      - dependency-type: "all"
+    schedule: *schedule
+    cooldown: *cooldown
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels: *dependency_labels
+    commit-message: *go_commit_message
+    groups: *go_groups
