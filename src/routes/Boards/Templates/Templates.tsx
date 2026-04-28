@@ -145,7 +145,12 @@ export const Templates = () => {
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
         <Portal className={classNames("templates__portal")} hiddenOverflow align="center" onClose={onLeaveSessionPolicy}>
-          <AccessSettings onCancel={onLeaveSessionPolicy} onSelectSessionPolicy={onSelectSessionPolicy} />
+          <AccessSettings
+            onCancel={onLeaveSessionPolicy}
+            onSelectSessionPolicy={onSelectSessionPolicy}
+            cancelLabel={t("Templates.AccessSettings.Buttons.cancel")}
+            confirmLabel={t("Templates.AccessSettings.Buttons.start")}
+          />
         </Portal>
       ) : null}
       <div className="templates" ref={templatesRef}>

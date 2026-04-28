@@ -26,53 +26,57 @@ export const ExportBoard = () => {
         <h2 className="settings-dialog__header-text"> {t("ExportBoardOption.title")}</h2>
       </div>
 
-      <div className="settings-dialog__group">
-        <SettingsButton
-          label={t("ExportBoardOption.exportAsJson")}
-          icon={FileJsonIcon}
-          onClick={() => {
-            exportAsJSON(boardId, boardName);
-          }}
-          data-testid="export-json"
-          reverseOrder
-        />
-        <hr className="settings-dialog__separator" />
-        <SettingsButton
-          label={t("ExportBoardOption.exportAsCSV")}
-          icon={FileCsvIcon}
-          onClick={() => {
-            exportAsCSV(boardId, boardName);
-          }}
-          data-testid="export-csv"
-          reverseOrder
-        />
-        <hr className="settings-dialog__separator" />
-        <SettingsButton
-          label={t("ExportBoardOption.openPrintView")}
-          icon={PrinterIcon}
-          className="export-board__button-print-view"
-          onClick={() => {
-            window.open(`/board/${boardId}/print`, "_blank");
-          }}
-          reverseOrder
-        />
-        <hr className="settings-dialog__separator" />
-        <SettingsButton
-          label={t("ExportBoardOption.exportToClipboard")}
-          icon={DuplicateIcon}
-          onClick={() => {
-            getMarkdownExport(boardId).then((result) => {
-              navigator.clipboard.writeText(result).then(() => {
-                Toast.success({title: t("ExportBoardOption.copyToClipboardSuccess"), autoClose: TOAST_TIMER_SHORT});
-              });
-            });
-          }}
-          data-testid="export-markdown"
-          reverseOrder
-        />
-      </div>
+      <main className="export-board__main">
+        <div className="export-board__info">{t("ExportBoardOption.info")}</div>
 
-      <ExportHintHiddenContent />
+        <div className="settings-dialog__group">
+          <SettingsButton
+            label={t("ExportBoardOption.exportAsJson")}
+            icon={FileJsonIcon}
+            onClick={() => {
+              exportAsJSON(boardId, boardName);
+            }}
+            data-testid="export-json"
+            reverseOrder
+          />
+          <hr className="settings-dialog__separator" />
+          <SettingsButton
+            label={t("ExportBoardOption.exportAsCSV")}
+            icon={FileCsvIcon}
+            onClick={() => {
+              exportAsCSV(boardId, boardName);
+            }}
+            data-testid="export-csv"
+            reverseOrder
+          />
+          <hr className="settings-dialog__separator" />
+          <SettingsButton
+            label={t("ExportBoardOption.openPrintView")}
+            icon={PrinterIcon}
+            className="export-board__button-print-view"
+            onClick={() => {
+              window.open(`/board/${boardId}/print`, "_blank");
+            }}
+            reverseOrder
+          />
+          <hr className="settings-dialog__separator" />
+          <SettingsButton
+            label={t("ExportBoardOption.exportToClipboard")}
+            icon={DuplicateIcon}
+            onClick={() => {
+              getMarkdownExport(boardId).then((result) => {
+                navigator.clipboard.writeText(result).then(() => {
+                  Toast.success({title: t("ExportBoardOption.copyToClipboardSuccess"), autoClose: TOAST_TIMER_SHORT});
+                });
+              });
+            }}
+            data-testid="export-markdown"
+            reverseOrder
+          />
+        </div>
+
+        <ExportHintHiddenContent />
+      </main>
     </div>
   );
 };

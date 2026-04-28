@@ -13,39 +13,49 @@ Cypress.Commands.add("changeLanguageToEnglish", () => {
 
 Cypress.Commands.add("login", () => {
   const AGENT_NAME = "Cypress Agent"
-  cy.visit("/")
-  cy.acceptCookies()
+  cy.session(AGENT_NAME, () => {
+    cy.visit("/")
+    cy.acceptCookies()
 
-  cy
-    .get<HTMLAnchorElement>("a.homepage__start-button")
-    .focus()
-    .click()
+    cy
+      .get<HTMLAnchorElement>("a.homepage__start-button")
+      .focus()
+      .click()
 
-  cy
-    .url()
-    .should("include", "/login")
+    cy
+      .url()
+      .should("include", "/login")
 
-  cy
-    .get("[data-cy='login-board__anonymous-toggle']")
-    .focus()
-    .click()
+    cy
+      .get("[data-cy='login-board__anonymous-toggle']")
+      .focus()
+      .click()
 
-  cy
-    .get<HTMLInputElement>("input[data-cy='login-board__username']")
-    .focus()
-    .clear()
-    .type(AGENT_NAME)
-    .should("have.value", AGENT_NAME)
+    cy
+      .get<HTMLInputElement>("input[data-cy='login-board__username']")
+      .focus()
+      .clear()
+      .type(AGENT_NAME)
+      .should("have.value", AGENT_NAME)
 
-  cy
-    .get<HTMLButtonElement>("button[data-cy='login-board__anonymous-login-button']")
-    .first()
-    .focus()
-    .click()
+    cy
+      .get<HTMLButtonElement>("button[data-cy='login-board__anonymous-login-button']")
+      .first()
+      .focus()
+      .click()
 
-  cy
-    .url()
-    .should("include", "/boards/templates")
+    cy
+      .url()
+      .should("include", "/boards/templates")
+  },
+  {
+    validate() {
+      cy
+        .request("/api/users")
+        .its("status")
+        .should("eq", 200)
+    },
+  })
 })
 
 // from templates view, creates a new template with given name and default columns.

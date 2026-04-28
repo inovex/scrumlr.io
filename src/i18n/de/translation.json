@@ -15,6 +15,27 @@
     "uploadFile": "Datei hochladen oder hierher ziehen",
     "importNewBoard": "Jetzt importieren"
   },
+  "ImportBoard": {
+    "button": "JSON Importieren",
+    "importNotAllowedForAnonymousUsers": "Das Importieren von Boards ist für anonyme Benutzer deaktiviert.",
+    "title": "Sitzung Importieren",
+    "step1Title": "Datei Auswählen",
+    "errorInvalid": "Die Datei konnte nicht gelesen werden. Bitte verwende einen gültigen JSON-Export.",
+    "errorRead": "Die Datei konnte nicht gelesen werden. Bitte überprüfe die Datei und versuche es erneut.",
+    "continue": "Weiter",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "openBoard": "Sitzung Öffnen",
+    "FileDropzoneCard": {
+      "title": "JSON Datei hinzufügen",
+      "description": "Datei hier ablegen oder klicken (max. 1 Datei)"
+    },
+    "FilePreview": {
+      "loadingState": "Upload läuft ...",
+      "uploadedState": "Hochgeladen",
+      "removeFile": "Datei entfernen"
+    }
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -75,8 +96,10 @@
     }
   },
   "Sessions": {
-    "switchTitle": "Sitzungen",
-    "title": "Wähle eine Sitzung"
+    "switchTitle": "Historie",
+    "title": "Deine Boards",
+    "savedBoards": "Deine Boards",
+    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden."
   },
   "CreateBoard": {
     "title": "Ein neues Board erstellen",
@@ -164,6 +187,7 @@
   },
   "ExportBoardOption": {
     "title": "Sitzung exportieren",
+    "info": "Beim Exportieren eines Boards werden keine Zugriffseinstellungen gespeichert. Zudem ist ein Board-Import ausschließlich mit einer JSON-Datei möglich.",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",

@@ -163,7 +163,7 @@
 }
 
 // display or hide light/dark logos.
-[theme="light"] {
+[data-theme="light"] {
   .not-found__background-form--dark,
   .not-found__logo-stan--dark {
     display: none;

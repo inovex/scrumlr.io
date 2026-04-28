@@ -1,0 +1,176 @@
+@use "constants/styles";
+@use "constants/colors";
+
+$card-height: 320px;
+
+.file-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: $card-height;
+
+  padding: styles.$spacing--xl;
+
+  border-radius: styles.$rounded--default;
+  border: 2px solid styles.$gray--500;
+
+  background-color: colors.$gray--100;
+}
+
+.file-preview__file {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: styles.$spacing--base;
+
+  width: 100%;
+  padding: styles.$spacing--xs;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: colors.$gray--000;
+}
+
+.file-preview__file-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+
+  border-radius: styles.$rounded--full;
+  background-color: colors.$blue--500;
+}
+
+.file-preview__file-icon {
+  width: styles.$icon--huge;
+  height: styles.$icon--huge;
+
+  color: colors.$gray--000;
+}
+
+.file-preview__file-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  gap: styles.$spacing--xxs;
+
+  color: colors.$navy--900;
+
+  overflow: hidden;
+}
+
+.file-preview__file-name {
+  font-size: styles.$text--base;
+  font-weight: 600;
+  line-height: styles.$line-height--medium;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.file-preview__file-state {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: styles.$spacing--xxs;
+}
+
+.file-preview__file-state-text {
+  font-size: styles.$text--xs;
+  font-weight: 500;
+  line-height: styles.$line-height--small;
+}
+
+.file-preview__file-state-ready-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: styles.$icon--small;
+  height: styles.$icon--small;
+
+  border-radius: styles.$rounded--full;
+
+  background-color: colors.$victory-verde--light;
+
+  path {
+    stroke-width: 4px;
+  }
+}
+
+.file-preview__file-state-ready-icon {
+  width: styles.$icon--small;
+  height: styles.$icon--small;
+
+  color: colors.$gray--000;
+}
+
+.file-preview__file-remove-button {
+  all: unset;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
+
+  border-radius: styles.$rounded--full;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: colors.$gray--300;
+  }
+}
+
+.file-preview__file-remove-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+
+  color: colors.$navy--400;
+}
+
+[data-theme="dark"] {
+  .file-preview {
+    background-color: colors.$navy--600;
+    border-color: colors.$navy--200;
+  }
+
+  .file-preview__file {
+    background-color: colors.$navy--300;
+  }
+
+  .file-preview__file-icon-container {
+    background-color: colors.$blue--400;
+  }
+
+  .file-preview__file-icon {
+    color: colors.$gray--400;
+  }
+
+  .file-preview__file-name {
+    color: colors.$gray--000;
+  }
+
+  .file-preview__file-state-text {
+    color: colors.$gray--400;
+  }
+
+  .file-preview__file-remove-button {
+    &:hover {
+      background-color: colors.$navy--400;
+    }
+  }
+
+  .file-preview__file-remove-icon {
+    color: colors.$gray--000;
+  }
+}
