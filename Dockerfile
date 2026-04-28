@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock .yarnrc.yml ./
 
 RUN corepack enable
-RUN yarn install --immutable --network-timeout 240000
+RUN yarn install --immutable --mode=skip-build --network-timeout 240000
 
 COPY src/ src/
 COPY public/ public/

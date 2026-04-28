@@ -40,7 +40,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install --immutable --mode=skip-build
 
       - name: Build client
         run: CI=false yarn build
@@ -254,7 +254,7 @@ jobs:
         with:
           browser: chrome
           start: |
-            yarn install
+            yarn install --immutable --mode=skip-build
             yarn run start
           working-directory: ./
           wait-on: 'http://localhost:5173'
