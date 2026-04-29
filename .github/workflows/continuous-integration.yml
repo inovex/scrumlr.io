@@ -262,7 +262,7 @@ jobs:
         uses: cypress-io/github-action@v7
         with:
           browser: chrome
-          install-command: yarn install --immutable --mode=skip-build
+          install-command: yarn install --immutable
           start: yarn run start
           working-directory: ./
           wait-on: 'http://localhost:5173'
