@@ -59,9 +59,9 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	// build the response
 	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s", common.GetProtocol(r), r.Host, b.ID))
+		w.Header().Set("Location", fmt.Sprintf("/boards/%s", b.ID))
 	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s", common.GetProtocol(r), r.Host, s.basePath, b.ID))
+		w.Header().Set("Location", fmt.Sprintf("%s/boards/%s", s.basePath, b.ID))
 	}
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
@@ -199,9 +199,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if s.basePath == "/" {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user), http.StatusSeeOther)
+			http.Redirect(w, r, fmt.Sprintf("/boards/%s/participants/%s", board, user), http.StatusSeeOther)
 		} else {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user), http.StatusSeeOther)
+			http.Redirect(w, r, fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user), http.StatusSeeOther)
 		}
 		return
 	}
@@ -225,9 +225,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
+			w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
 		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
+			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
 		}
 		w.WriteHeader(http.StatusCreated)
 		return
@@ -261,9 +261,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
+				w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
 			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
+				w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
 			}
 			w.WriteHeader(http.StatusCreated)
 			return
@@ -287,9 +287,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 		if sessionExists {
 			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
+				w.Header().Set("Location", fmt.Sprintf("/boards/%s/requests/%s", board, user))
 			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
+				w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/requests/%s", s.basePath, board, user))
 			}
 			w.WriteHeader(http.StatusSeeOther)
 			return
@@ -303,9 +303,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
+			w.Header().Set("Location", fmt.Sprintf("/boards/%s/requests/%s", board, user))
 		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
+			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/requests/%s", s.basePath, board, user))
 		}
 		w.WriteHeader(http.StatusSeeOther)
 		return
