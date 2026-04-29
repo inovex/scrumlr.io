@@ -1,10 +1,11 @@
-FROM node:iron-alpine AS build-stage
+FROM node:22-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
-RUN yarn install --network-timeout 240000
+RUN corepack enable
+RUN yarn install --immutable --mode=skip-build --network-timeout 240000
 
 COPY src/ src/
 COPY public/ public/

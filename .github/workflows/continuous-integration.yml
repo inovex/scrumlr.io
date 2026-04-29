@@ -31,22 +31,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - name: Enable Corepack # to enable yarn berry
+        run: corepack enable
 
-      - uses: actions/cache@v4
-        id: yarn-cache
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          node-version: '22'
+
+      - name: Install dependencies
+        run: yarn install --immutable --mode=skip-build
 
       - name: Build client
-        run: |
-          yarn install
-          CI=false yarn build
+        run: CI=false yarn build
 
       - name: Lint code
         run: yarn lint --max-warnings 0
@@ -244,15 +241,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable # to enable yarn berry
+
       - name: Start server
         run: docker compose --profile build up -d
         working-directory: server
+
       - name: Setup client and run tests
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
           start: |
-            yarn install
+            yarn install --immutable --mode=skip-build
             yarn run start
           working-directory: ./
           wait-on: 'http://localhost:5173'
