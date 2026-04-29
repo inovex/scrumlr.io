@@ -15,7 +15,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/lestrrat-go/jwx/v3 v3.0.13
 	github.com/markbates/goth v1.82.0
-	github.com/nats-io/nats.go v1.50.0
+	github.com/nats-io/nats.go v1.51.0
 	github.com/peterldowns/pgtestdb v0.1.1
 	github.com/redis/go-redis/extra/redisotel/v9 v9.18.0
 	github.com/redis/go-redis/v9 v9.18.0
