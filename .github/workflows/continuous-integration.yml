@@ -263,7 +263,7 @@ jobs:
         with:
           browser: chrome
           install-command: yarn install --immutable
-          cache-key: cypress-binary-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          package-manager-cache: false
           start: yarn run start
           working-directory: ./
           wait-on: 'http://localhost:5173'
