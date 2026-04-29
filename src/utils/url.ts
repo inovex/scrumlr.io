@@ -1,6 +1,6 @@
 import {LANGUAGE_QUERY_PARAM} from "constants/i18n";
 
-const TEMPORARY_BASE_URL = "https://temporary-base.com";
+const TEMPORARY_BASE_URL = "https://scrumlr.io";
 const ABSOLUTE_URL_PATTERN = /^[a-zA-Z][a-zA-Z\d+.-]*:/;
 
 /**
