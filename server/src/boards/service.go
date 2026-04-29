@@ -7,23 +7,22 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
-
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
@@ -127,7 +126,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("unable to get boards of user: %w", err)
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -146,7 +145,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	span.SetAttributes(
 		attribute.String("scrumlr.boards.service.create.user", body.Owner.String()),
 		attribute.String("scrumlr.boards.service.create.access_policy", string(body.AccessPolicy)),
-		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
+		attribute.Int("scrumlr.boards.service.create.columns.count", len(body.Columns)),
 	)
 
 	// map request on board object to insert into database
@@ -154,20 +153,20 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			err := ErrPassphraseForbidden
 			span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 			span.RecordError(err)
-			return nil, common.BadRequestError(err)
+			return nil, err
 		}
 
 		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			err := ErrPassphraseRequired
 			span.SetStatus(codes.Error, "passphrase not set")
 			span.RecordError(err)
-			return nil, common.BadRequestError(err)
+			return nil, err
 		}
 
 		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
@@ -186,7 +185,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("unable to create board for owner: %w", err)
 	}
 
 	// create the columns
@@ -381,13 +380,11 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		attribute.String("scrumlr.boards.service.board.update.board", body.ID.String()),
 	)
 
-	if body.Name != nil {
-		if len(*body.Name) == 0 {
-			err := errors.New("name cannot be empty")
-			span.SetStatus(codes.Error, "name cannot be empty")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
+	if body.Name != nil && len(*body.Name) == 0 {
+		err := errors.New("name cannot be empty")
+		span.SetStatus(codes.Error, "name cannot be empty")
+		span.RecordError(err)
+		return nil, ErrNameEmpty
 	}
 
 	update := DatabaseBoardUpdate{
@@ -412,14 +409,14 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, ErrPassphraseForbidden
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
 				span.SetStatus(codes.Error, "no passphrase provided")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, ErrPassphraseRequired
 			}
 
 			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
@@ -639,6 +636,9 @@ func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
 	})
 }
 
+// This middleware checks if the user has a moderator session for the board and if the board is locked. If the user is not a moderator and the board is locked, it returns a forbidden error. Otherwise, it adds the board's editability status to the context and calls the next handler.
+// NOTE: The BoardEditableContext needs to be outsourced to the API layer -> more refactoring work required
+
 func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx, span := tracer.Start(r.Context(), "scrumlr.boards.service.board.editable")
@@ -667,7 +667,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			span.SetStatus(codes.Error, "failed to get board settings")
 			span.RecordError(err)
 			log.Errorw("unable to verify board settings", "err", err)
-			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings"))) //replace this with domain error
 			return
 		}
 
@@ -675,7 +675,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			span.SetStatus(codes.Error, "not allowed to edit board")
 			span.RecordError(err)
 			log.Errorw("not allowed to edit board", "err", err)
-			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board"))) //replace this with domain error
 			return
 		}
 

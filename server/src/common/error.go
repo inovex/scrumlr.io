@@ -54,9 +54,11 @@ var NotFoundError = &APIError{StatusCode: http.StatusNotFound, StatusText: "Reso
 var InternalServerError = &APIError{StatusCode: http.StatusInternalServerError, StatusText: "Internal server error."}
 
 func Throw(w http.ResponseWriter, r *http.Request, err error) {
+	//If it is an APIError, it uses render.Render to send that specific error to the user. An APIError contains a specific HTTP status code and a user-friendly message.
 	if apiErr, ok := errors.AsType[*APIError](err); ok {
 		_ = render.Render(w, r, apiErr)
 		return
 	}
+	// Branch B (Unknown Error): If the error is just a standard string error (like a database connection failure or a null pointer), it returns a generic InternalServerError.
 	_ = render.Render(w, r, InternalServerError)
 }
