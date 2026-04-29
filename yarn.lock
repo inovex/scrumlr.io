@@ -8711,6 +8711,9 @@ __metadata:
     vite-plugin-svgr: "npm:^5.2.0"
     vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.0.16"
+  dependenciesMeta:
+    cypress:
+      built: true
   languageName: unknown
   linkType: soft
 

@@ -108,6 +108,11 @@
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.16"
   },
+  "dependenciesMeta": {
+    "cypress": {
+      "built": true
+    }
+  },
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
