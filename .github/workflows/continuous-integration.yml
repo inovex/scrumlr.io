@@ -34,10 +34,12 @@ jobs:
       - name: Enable Corepack # to enable yarn berry
         run: corepack enable
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js with cache
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
@@ -245,16 +247,22 @@ jobs:
       - name: Enable Corepack
         run: corepack enable # to enable yarn berry
 
+      - name: Setup Node.js with cache
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
       - name: Start server
         run: docker compose --profile build up -d
         working-directory: server
 
       - name: Setup client and run tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           browser: chrome
-          start: |
-            yarn install --immutable --mode=skip-build
-            yarn run start
+          install-command: yarn install --immutable --mode=skip-build
+          start: yarn run start
           working-directory: ./
           wait-on: 'http://localhost:5173'
