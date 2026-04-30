@@ -1,132 +1,95 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
+import js from "@eslint/js";
+import globals from "globals";
 import onlyWarn from "eslint-plugin-only-warn";
 import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import _import from "eslint-plugin-import";
-import globals from "globals";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import importPlugin from "eslint-plugin-import";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import prettier from "eslint-config-prettier";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
+export default defineConfig([
+  globalIgnores([
+    "node_modules/",
+    "build/",
+    "dist/",
+    "server/",
+    "docs/.astro/",
+    "docs/dist/",
+    "scripts/",
+    "cypress/screenshots/",
+    "src/service-worker.js",
+  ]),
 
-export default defineConfig([globalIgnores([
-    "node_modules/**/*",
-    "build/**/*",
-    "server/**/*",
-    "**/__tests__/*",
-    "scripts/**/*",
-    "**/service-worker.js",
-]), {
-    extends: fixupConfigRules(compat.extends(
-        "airbnb",
-        "airbnb-typescript",
-        "airbnb/hooks",
-        "plugin:@typescript-eslint/recommended",
-        "prettier",
-        "plugin:import/errors",
-        "plugin:import/warnings",
-        "plugin:import/typescript",
-    )),
+  js.configs.recommended,
 
-    plugins: {
-        "only-warn": onlyWarn,
-        react,
-        "react-hooks": fixupPluginRules(reactHooks),
-        "@typescript-eslint": fixupPluginRules(typescriptEslint),
-        import: fixupPluginRules(_import),
-    },
+  {
+    files: ["src/**/*.{ts,tsx}", "cypress/**/*.{ts,tsx}", "*.config.{ts,js,mjs}"],
 
     languageOptions: {
-        globals: {
-            ...globals.browser,
+      parser: tsParser,
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.es2024,
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+        project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
 
-        parser: tsParser,
-        ecmaVersion: 12,
-        sourceType: "module",
-
-        parserOptions: {
-            ecmaFeatures: {
-                jsx: true,
-            },
-
-            project: "./tsconfig.json",
-        },
+    plugins: {
+      "only-warn": onlyWarn,
+      react,
+      "jsx-a11y": jsxA11y,
+      import: importPlugin,
+      "@typescript-eslint": tsPlugin,
     },
 
     settings: {
-        "import/resolver": {
-            typescript: {},
-        },
-
-        react: {
-            version: "detect",
-        },
+      react: {
+        version: "detect",
+      },
+      "import/resolver": {
+        typescript: true,
+      },
     },
 
     rules: {
-        "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": ["error"],
+      ...tsPlugin.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      ...react.configs["jsx-runtime"].rules,
+      ...jsxA11y.configs.recommended.rules,
+      ...importPlugin.configs.recommended.rules,
+      ...importPlugin.configs.typescript.rules,
 
-        "react/jsx-filename-extension": ["warn", {
-            extensions: [".tsx"],
-        }],
-
-        "import/extensions": ["error", "ignorePackages", {
-            ts: "never",
-            tsx: "never",
-        }],
-
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
-        "react/prop-types": "off",
-
-        "import/no-extraneous-dependencies": ["error", {
-            devDependencies: true,
-        }],
-
-        "max-len": ["warn", {
-            code: 180,
-        }],
-
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "react/jsx-uses-react": "off",
-        "react/react-in-jsx-scope": "off",
-
-        "import/newline-after-import": ["error", {
-            count: 1,
-        }],
-
-        "import/prefer-default-export": "off",
-        "import/no-cycle": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
-        "react/jsx-props-no-spreading": "off",
-        "react/destructuring-assignment": "off",
-        "react/button-has-type": "off",
-
-        "react/function-component-definition": ["warn", {
-            namedComponents: "arrow-function",
-            unnamedComponents: "arrow-function",
-        }],
-
-        "react/jsx-no-bind": "off",
-        "react/require-default-props": "off",
-        "jsx-a11y/label-has-associated-control": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
-        "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "no-plusplus": "off",
-        "no-param-reassign": "off",
-        "jsx-a11y/anchor-is-valid": "off",
+      "@typescript-eslint/no-duplicate-enum-values": "off" // temp
     },
-}]);
+  },
+
+  {
+    files: ["src/**/*.{test,spec}.{ts,tsx}", "src/**/__tests__/**/*.{ts,tsx}", "src/setupTests.ts"],
+    languageOptions: {
+      globals: {
+        ...globals.vitest,
+      },
+    },
+  },
+
+  {
+    files: ["*.config.{ts,js,mjs}", "vite-env*.d.ts"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
+  prettier,
+]);
