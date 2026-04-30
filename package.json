@@ -23,13 +23,13 @@
     "classnames": "^2.5.1",
     "emoji-picker-element": "^1.29.1",
     "file-saver": "^2.0.5",
-    "i18next": "^26.0.5",
+    "i18next": "^26.0.6",
     "i18next-browser-languagedetector": "^8.2.1",
     "js-cookie": "^3.0.5",
     "js-md5": "^0.8.3",
     "linkify-react": "^4.3.2",
     "linkifyjs": "^4.3.2",
-    "marked": "18.0.1",
+    "marked": "18.0.2",
     "plausible-tracker": "^0.3.9",
     "qrcode.react": "^4.2.0",
     "query-string": "^9.3.1",
@@ -44,7 +44,7 @@
     "react-snowfall": "^2.4.0",
     "react-textarea-autosize": "^8.5.9",
     "react-to-print": "^3.3.0",
-    "react-toastify": "^11.0.5",
+    "react-toastify": "^11.1.0",
     "react-tooltip": "^5.30.1",
     "sockette": "^2.0.6",
     "underscore": "^1.13.8",
@@ -74,7 +74,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/coverage-v8": "^4.1.4",
     "cross-env": "^10.1.0",
     "cypress": "^15.14.0",
     "eslint": "^8.57.1",
@@ -101,12 +101,17 @@
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.99.0",
     "stylelint": "^16.26.1",
-    "stylelint-config-standard": "^39.0.1",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
-    "vite": "^8.0.8",
+    "vite": "^8.0.9",
     "vite-plugin-svgr": "^5.2.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.4"
+  },
+  "dependenciesMeta": {
+    "cypress": {
+      "built": true
+    }
   },
   "scripts": {
     "start": "vite",
@@ -133,5 +138,5 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@4.14.1"
 }
