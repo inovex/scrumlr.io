@@ -19,13 +19,44 @@ updates:
       prefix: "yarn"
       include: "scope"
 
-  # Server
+  # Server: src module
   - package-ecosystem: "gomod"
     allow:
       - dependency-type: "direct"
-    directories:
-      - "/server/src"
-      - "/server/e2e-tests"
+    directory: "/server/src"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    commit-message:
+      prefix: "go"
+      include: "scope"
+    groups:
+      redis:
+        patterns:
+          - "github.com/redis/go-redis/*"
+      bun:
+        patterns:
+          - "github.com/uptrace/bun"
+          - "github.com/uptrace/bun/*"
+      testcontainers:
+        patterns:
+          - "github.com/testcontainers/*"
+      go/opentelemetry:
+        patterns:
+          - "go.opentelemetry.io/otel"
+          - "go.opentelemetry.io/otel/*"
+          - "go.opentelemetry.io/contrib/*"
+
+  # Server: e2e-tests module
+  - package-ecosystem: "gomod"
+    allow:
+      - dependency-type: "all"  # has indirect dependencies which refer to the src module, so we update all to keep them in sync
+    directory: "/server/e2e-tests"
     schedule:
       interval: "daily"
     cooldown:
