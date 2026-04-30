@@ -44,7 +44,7 @@
     "react-snowfall": "^2.4.0",
     "react-textarea-autosize": "^8.5.9",
     "react-to-print": "^3.3.0",
-    "react-toastify": "^11.0.5",
+    "react-toastify": "^11.1.0",
     "react-tooltip": "^5.30.1",
     "sockette": "^2.0.6",
     "underscore": "^1.13.8",
