@@ -52,6 +52,9 @@
     "use-sound": "^5.0.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.5",
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -90,6 +93,7 @@
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "4.6.2",
+    "globals": "^17.5.0",
     "happy-dom": "^20.9.0",
     "hash-files": "^1.1.1",
     "husky": "^9.1.7",
