@@ -106,7 +106,7 @@
     "vite": "^8.0.9",
     "vite-plugin-svgr": "^5.2.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.4"
   },
   "dependenciesMeta": {
     "cypress": {
