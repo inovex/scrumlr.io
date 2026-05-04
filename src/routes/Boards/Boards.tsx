@@ -51,7 +51,7 @@ export const Boards = () => {
       case "templates":
         return t("Templates.title");
       case "history":
-        return t("Sessions.title");
+        return t("History.title");
       case "create":
         return t("Templates.TemplateEditor.createTitle");
       case "edit":
@@ -70,7 +70,7 @@ export const Boards = () => {
           <div className="boards__switch-wrapper">
             <Switch
               leftText={t("Templates.switchTitle")}
-              rightText={t("Sessions.switchTitle")}
+              rightText={t("History.switchTitle")}
               activeDirection={boardView === "templates" ? "left" : "right"}
               toggle={() => navigate(boardView === "templates" ? "/boards/history" : "/boards/templates")}
             />

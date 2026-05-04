@@ -94,11 +94,10 @@
       }
     }
   },
-  "Sessions": {
+  "History": {
     "switchTitle": "History",
     "title": "Your Boards",
-    "savedBoards": "Your boards",
-    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved."
+    "savedBoards": "Your boards"
   },
   "CreateBoard": {
     "title": "Create a new Board",

@@ -18,7 +18,7 @@ export const History = () => {
         </div>
         <div className="history_container">
           <header className="history__container-header">
-            <div className="templates__container-title">{t("Sessions.savedBoards")}</div>
+            <div className="templates__container-title">{t("History.savedBoards")}</div>
           </header>
           <div className="history__card-container" />
         </div>
