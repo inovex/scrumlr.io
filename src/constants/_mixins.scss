@@ -6,10 +6,17 @@
 
 // tooltip
 @mixin tooltip {
-  z-index: styles.$tooltip-z-index;
+  max-width: 250px;
   border-radius: styles.$rounded--large;
-  max-width: 80%;
+
+  padding: styles.$spacing--xs styles.$spacing--base;
+
   font-size: styles.$text--sm;
+  font-weight: 600;
+  word-wrap: break-word;
+  white-space: normal;
+
+  z-index: styles.$tooltip-z-index;
 }
 
 @mixin tooltip--light {
