@@ -2,7 +2,7 @@
 
 $stan-height: 50vh;
 
-.sessions__card {
+.sessions {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,9 +13,8 @@ $stan-height: 50vh;
   overflow: visible;
 }
 
-.sessions__teaser {
+.sessions__container {
   padding: styles.$spacing--xl;
-  font-family: "Raleway", sans-serif;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -27,36 +26,8 @@ $stan-height: 50vh;
   flex-direction: row;
   align-items: center;
   gap: 0;
-}
 
-.sessions__teaser-title {
-  font-size: styles.$text--lg;
-  font-weight: 700;
-  line-height: 32px;
-  margin-bottom: styles.$spacing--md;
-  color: styles.$navy--600;
-}
-
-.sessions__teaser-info {
-  display: flex;
-  gap: styles.$spacing--sm;
-  align-items: flex-start;
-}
-
-.sessions__teaser-icon {
-  width: styles.$icon--large;
-  height: styles.$icon--large;
-  flex-shrink: 0;
-  margin-top: styles.$spacing--xxs;
-  color: styles.$navy--600;
-}
-
-.sessions__teaser-text {
-  font-weight: 400;
-  font-size: styles.$text--md;
-  line-height: 28px;
-  margin-top: styles.$spacing--xxs;
-  color: styles.$navy--400;
+  padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
 }
 
 .sessions__stan-spacing {
@@ -90,11 +61,6 @@ $stan-height: 50vh;
 }
 
 @media screen and (max-width: styles.$breakpoint--smartphone) {
-  .sessions__teaser-title {
-    font-size: styles.$text--md;
-    line-height: 24px;
-  }
-
   .sessions__container-header {
     justify-content: center;
     gap: styles.$spacing--md;
@@ -102,20 +68,8 @@ $stan-height: 50vh;
 }
 
 [data-theme="dark"] {
-  .sessions__card {
+  .sessions {
     background-color: styles.$navy--700;
-  }
-
-  .sessions__teaser-title {
-    color: styles.$blue--50;
-  }
-
-  .sessions__teaser-icon {
-    color: styles.$blue--50;
-  }
-
-  .sessions__teaser-text {
-    color: styles.$blue--50;
   }
 
   .sessions__stan {
