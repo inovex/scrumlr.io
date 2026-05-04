@@ -1,11 +1,12 @@
 import {FC, useState} from "react";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {TrashIcon, EjectIcon} from "components/Icon";
-import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useAppDispatch} from "store";
 import {deleteNote, unstackNote} from "store/features";
+import {Tooltip} from "components/Tooltip";
+import "./NoteDialogNoteOptions.scss";
 
 type NoteDialogNoteOptionsProps = {
   isStackedNote: boolean;
@@ -58,7 +59,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         {props.isStackedNote && (
           <li className="note-dialog__note-option">
             <button
-              data-tooltip-id="scrumlr-tooltip"
+              id={`note-option-unstack-button-${props.noteId}`}
               data-tooltip-content={t("NoteDialogUnstackNoteButton.title")}
               aria-label={t("NoteDialogUnstackNoteButton.title")}
               className="note-option__button"
@@ -74,10 +75,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         {showDeleteButton && (
           <li className="note-dialog__note-option">
             <button
-              data-tooltip-id="scrumlr-tooltip"
-              data-tooltip-content={
-                props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")
-              }
+              id={`note-option-delete-button-${props.noteId}`}
               aria-label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
               className="note-option__button"
               onClick={() => {
@@ -113,6 +111,12 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           warning
         />
       )}
+      <Tooltip anchorId={`note-option-unstack-button-${props.noteId}`} place="left">
+        {props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
+      </Tooltip>
+      <Tooltip anchorId={`note-option-delete-button-${props.noteId}`} place="left">
+        {props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
+      </Tooltip>
     </>
   );
 };

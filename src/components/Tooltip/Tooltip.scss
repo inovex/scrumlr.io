@@ -1,20 +1,12 @@
 @use "constants/styles";
+@use "constants/mixins";
 
 .tooltip-container {
   // this is important in order for the tooltip not to affect the layout of other elements, e.g. when placed within a flex container with gap
   display: contents;
 }
 .tooltip-container .tooltip {
-  background-color: styles.$blue--100;
-  border-radius: styles.$rounded--full;
-  color: styles.$navy--900;
-  font-size: styles.$text--sm;
-  font-weight: 600;
-  padding: styles.$spacing--xs styles.$spacing--base;
-  z-index: 9999;
-  word-wrap: break-word;
-  white-space: normal;
-  max-width: 250px;
+  @include mixins.tooltip--light;
 
   &--colored {
     background-color: var(--accent-color--100);
@@ -22,6 +14,9 @@
 }
 
 [data-theme="dark"] .tooltip-container .tooltip {
-  background-color: styles.$navy--200;
-  color: styles.$gray--000;
+  @include mixins.tooltip--light;
+
+  &--colored {
+    background-color: var(--accent-color--100);
+  }
 }

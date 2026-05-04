@@ -2,11 +2,13 @@ import {PlacesType} from "react-tooltip";
 import {ReactNode} from "react";
 import {createPortal} from "react-dom";
 import {Tooltip} from "components/Tooltip";
+import {Color} from "constants/colors";
 import "./TooltipPortal.scss";
 
 interface TooltipPortalProps {
   anchorId: string;
   place: PlacesType;
+  color?: Color;
   show?: boolean;
   children: ReactNode;
 }
@@ -17,7 +19,7 @@ export const TooltipPortal = (props: TooltipPortalProps) => {
 
   return createPortal(
     <div className="tooltip-portal__root">
-      <Tooltip className="tooltip-portal" anchorId={props.anchorId} place={props.place}>
+      <Tooltip className="tooltip-portal" anchorId={props.anchorId} place={props.place} color={props.color}>
         {props.children}
       </Tooltip>
     </div>,
