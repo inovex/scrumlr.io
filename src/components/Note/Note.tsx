@@ -10,7 +10,9 @@ import {ParticipantWithUser} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {Sortable} from "components/DragAndDrop/Sortable";
+import {ArrowRightIcon} from "components/Icon";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
@@ -74,6 +76,7 @@ export const Note = (props: NoteProps) => {
   /* eslint-enable */
 
   const isImage = useImageChecker(note?.text ?? "");
+  const {isTextTruncated, textRef} = useTextOverflow<HTMLDivElement>(note?.text ?? "");
 
   const dimensions = useSize(noteRef);
 
@@ -120,8 +123,17 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__container")}>
-            <div data-clarity-mask="True" className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+          <main className={classNames("note__container", {"note__container--extended": !showNoteReactions})}>
+            <div data-clarity-mask="True" className="note__text" ref={textRef}>
+              {isTextTruncated.vertical && (
+                <>
+                  <div className="note__text-spacer" />
+                  <span className="note__show-more" aria-hidden="true">
+                    {t("Note.showMore")}
+                    <ArrowRightIcon className="note__show-more-icon" />
+                  </span>
+                </>
+              )}
               <NoteTextContent text={note.text} truncate />
             </div>
             {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
