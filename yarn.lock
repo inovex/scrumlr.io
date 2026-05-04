@@ -560,29 +560,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.0.0":
-  version: 1.6.0
-  resolution: "@floating-ui/core@npm:1.6.0"
+"@floating-ui/core@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "@floating-ui/core@npm:1.7.5"
   dependencies:
-    "@floating-ui/utils": "npm:^0.2.1"
-  checksum: 10c0/667a68036f7dd5ed19442c7792a6002ca02d1799221c4396691bbe0b6008b48f6ccad581225e81fa266bb91232f6c66838a5f825f554217e1ec886178b93381b
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10c0/f9c52205e198b231d63a387b09c659aab08c46a1899e0b0bbe147b8b4f048b546f15ba17cb5d2a471da9534f1883d979425e13e5c4ceee67be63e4b0abd4db5d
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.6.1":
-  version: 1.6.2
-  resolution: "@floating-ui/dom@npm:1.6.2"
+"@floating-ui/dom@npm:1.7.6":
+  version: 1.7.6
+  resolution: "@floating-ui/dom@npm:1.7.6"
   dependencies:
-    "@floating-ui/core": "npm:^1.0.0"
-    "@floating-ui/utils": "npm:^0.2.0"
-  checksum: 10c0/3c97daeb231d88f443ad92800a8d0256c91da16bce4d3e04d9daa4ba6e9484e16ccc91782913ab8d38067de3f789b051e3a78690acca7baf4aeb276afc418808
+    "@floating-ui/core": "npm:^1.7.5"
+    "@floating-ui/utils": "npm:^0.2.11"
+  checksum: 10c0/5c098e0d7b58c9bc769f276cca1766994c2c9c70c92d091a61bba8b3e9be53c011e0a79a8457fc2fb2f3d91697a26eb52e0a4962ef936dc963b45f58613c212f
   languageName: node
   linkType: hard
 
-"@floating-ui/utils@npm:^0.2.0, @floating-ui/utils@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@floating-ui/utils@npm:0.2.1"
-  checksum: 10c0/ee77756712cf5b000c6bacf11992ffb364f3ea2d0d51cc45197a7e646a17aeb86ea4b192c0b42f3fbb29487aee918a565e84f710b8c3645827767f406a6b4cc9
+"@floating-ui/utils@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "@floating-ui/utils@npm:0.2.11"
+  checksum: 10c0/f4bcea1559bdbb721ecc8e8ead423ac58d6a5b6e70b602cf0810ba6ad4ed1c77211b207faa88b278a9042f0c743133de08a203ed6741c1b6443423332884d5b3
   languageName: node
   linkType: hard
 
@@ -2728,7 +2728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:*, classnames@npm:^2.3.0, classnames@npm:^2.5.1":
+"classnames@npm:*, classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
@@ -2804,7 +2804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.1.1":
+"clsx@npm:2.1.1, clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
@@ -7576,16 +7576,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^5.30.1":
-  version: 5.30.1
-  resolution: "react-tooltip@npm:5.30.1"
+"react-tooltip@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "react-tooltip@npm:6.0.0"
   dependencies:
-    "@floating-ui/dom": "npm:^1.6.1"
-    classnames: "npm:^2.3.0"
+    "@floating-ui/dom": "npm:1.7.6"
+    clsx: "npm:2.1.1"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10c0/479c44f366070daa61ffc9458f7788964cea875eb7c1c4fcccd964fa93ca9bbf59c9e0c140f47c288b84d9db9c7b7ab3815c74e0d8ea698c3e00f8aea8db1411
+  checksum: 10c0/b155ec1381ecb62e96cef8374c50b31703c32f34273df241530d0c2c42974d1751b0716537da363b0ecdc1f202d74164ac1bf0e6340cab3f5efe8b54af91c56d
   languageName: node
   linkType: hard
 
@@ -8167,7 +8167,7 @@ __metadata:
     react-textarea-autosize: "npm:^8.5.9"
     react-to-print: "npm:^3.3.0"
     react-toastify: "npm:^11.1.0"
-    react-tooltip: "npm:^5.30.1"
+    react-tooltip: "npm:^6.0.0"
     redux-mock-store: "npm:^1.5.4"
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.99.0"
