@@ -12,7 +12,7 @@ import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
-type BoardView = "templates" | "sessions" | "create" | "edit";
+type BoardView = "templates" | "history" | "create" | "edit";
 
 export const Boards = () => {
   const {t} = useTranslation();
@@ -23,7 +23,7 @@ export const Boards = () => {
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
-  const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
+  const viewType = ["templates", "history"].includes(boardView) ? "overview" : "edit";
   // for edit route, expand location prefix used for settings with the edit template uuid
   const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
 
@@ -50,7 +50,7 @@ export const Boards = () => {
     switch (boardView) {
       case "templates":
         return t("Templates.title");
-      case "sessions":
+      case "history":
         return t("Sessions.title");
       case "create":
         return t("Templates.TemplateEditor.createTitle");
@@ -72,7 +72,7 @@ export const Boards = () => {
               leftText={t("Templates.switchTitle")}
               rightText={t("Sessions.switchTitle")}
               activeDirection={boardView === "templates" ? "left" : "right"}
-              toggle={() => navigate(boardView === "templates" ? "/boards/sessions" : "/boards/templates")}
+              toggle={() => navigate(boardView === "templates" ? "/boards/history" : "/boards/templates")}
             />
             <span className="boards__coming-soon-badge">Coming Soon</span>
           </div>

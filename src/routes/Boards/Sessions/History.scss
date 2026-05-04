@@ -2,7 +2,7 @@
 
 $stan-height: 50vh;
 
-.sessions {
+.history {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@ $stan-height: 50vh;
   overflow: visible;
 }
 
-.sessions__container {
+.history__container {
   padding: styles.$spacing--xl;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@ $stan-height: 50vh;
   gap: styles.$spacing--lg;
 }
 
-.sessions__container-header {
+.history__container-header {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -30,11 +30,11 @@ $stan-height: 50vh;
   padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
 }
 
-.sessions__stan-spacing {
+.history__stan-spacing {
   height: styles.$spacing--3xl;
 }
 
-.sessions__stan-container {
+.history__stan-container {
   position: absolute;
   right: 0;
   height: $stan-height;
@@ -42,7 +42,7 @@ $stan-height: 50vh;
   transform: translateX(100%);
 }
 
-.sessions__stan {
+.history__stan {
   height: 100%;
 
   &--dark {
@@ -55,24 +55,24 @@ $stan-height: 50vh;
 }
 
 @media screen and (max-width: styles.$breakpoint--desktop) {
-  .sessions__stan-container {
+  .history__stan-container {
     display: none;
   }
 }
 
 @media screen and (max-width: styles.$breakpoint--smartphone) {
-  .sessions__container-header {
+  .history__container-header {
     justify-content: center;
     gap: styles.$spacing--md;
   }
 }
 
 [data-theme="dark"] {
-  .sessions {
+  .history {
     background-color: styles.$navy--700;
   }
 
-  .sessions__stan {
+  .history__stan {
     &--dark {
       display: none;
     }
