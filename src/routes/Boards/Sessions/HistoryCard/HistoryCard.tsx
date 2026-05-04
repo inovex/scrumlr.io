@@ -1,3 +1,8 @@
+import {HistoryBoard} from "routes/Boards/Sessions";
 import "./HistoryCard.scss";
 
-export const HistoryCard = () => <div>Hello HistoryCard</div>;
+type HistoryCardProps = {
+  board: HistoryBoard;
+};
+
+export const HistoryCard = (props: HistoryCardProps) => <div>Hello HistoryCard</div>;
