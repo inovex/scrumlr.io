@@ -12,6 +12,8 @@
 
 	@landingLangRequested {
 		path_regexp landingLocaleRoot ^/(?:[a-z]{2})?/?$
+		# Allow any 2-letter lng code to avoid Caddy updates for each new locale.
+		# Tradeoff: unsupported locales may still redirect to /xx and rely on app routing behavior.
 		expression {query.lng} != "en" && {query.lng} =~ "^[a-z]{2}$"
 	}
 	handle @landingLangRequested {
@@ -21,29 +23,10 @@
 	@api {
 		path /api*
 	}
-	handle @api {
-		reverse_proxy scrumlr-backend:{$SCRUMLR_SERVER_PORT}
-	}
-
-	@landing {
-		path / /_astro* /assets*
-	}
-	handle @landing {
-		reverse_proxy scrumlr-landing-page:8080
-	}
-
-	@landingLocalePrefix {
-		path_regexp landingLocalePrefix ^/[a-z]{2}(?:/.*)?$
-	}
-	handle @landingLocalePrefix {
-		reverse_proxy scrumlr-landing-page:8080
-	}
+	reverse_proxy @api scrumlr-backend:{$SCRUMLR_SERVER_PORT}
 
 	@frontend {
-		path /static* /locales* /login* /board* /new* /timer_finished.mp3 /hotkeys.pdf /legal/* /manifest.json /service-worker.js /emoji-data/*
+		path / /static* /locales* /login* /board* /new* /timer_finished.mp3 /hotkeys.pdf /legal/* /manifest.json /service-worker.js /emoji-data/*
 	}
-	handle @frontend {
-		reverse_proxy scrumlr-frontend:{$SCRUMLR_LISTEN_PORT}
-	}
+	reverse_proxy @frontend scrumlr-frontend:{$SCRUMLR_LISTEN_PORT}
 }
-
