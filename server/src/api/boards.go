@@ -215,21 +215,31 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
+	respondParticipantCreated := func(boardID, userID uuid.UUID) error {
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{
+			Board: boardID,
+			User:  userID,
+			Role:  common.ParticipantRole,
+		})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
 			common.Throw(w, r, common.InternalServerError)
-			return
+			return err
 		}
-
 		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
+			w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", boardID, userID))
 		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
+			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, boardID, userID))
 		}
 		w.WriteHeader(http.StatusCreated)
+		return nil
+	}
+
+	if b.AccessPolicy == boards.Public {
+		if err := respondParticipantCreated(board, user); err != nil {
+			return
+		}
 		return
 	}
 
@@ -252,20 +262,9 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
-			if err != nil {
-				span.SetStatus(codes.Error, "failed to create session")
-				span.RecordError(err)
-				common.Throw(w, r, common.InternalServerError)
+			if err := respondParticipantCreated(board, user); err != nil {
 				return
 			}
-
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
-			}
-			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
 			err := errors.New("wrong passphrase")
