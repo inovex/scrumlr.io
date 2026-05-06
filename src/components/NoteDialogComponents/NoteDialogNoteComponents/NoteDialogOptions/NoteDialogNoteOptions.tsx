@@ -60,7 +60,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <li className="note-dialog__note-option">
             <button
               id={`note-option-unstack-button-${props.noteId}`}
-              data-tooltip-content={t("NoteDialogUnstackNoteButton.title")}
               aria-label={t("NoteDialogUnstackNoteButton.title")}
               className="note-option__button"
               onClick={() => {
