@@ -48,7 +48,7 @@ export const History = () => {
           <img className={classNames("history__stan", "history__stan--dark")} src={StanDark} alt="" />
           <img className={classNames("history__stan", "history__stan--light")} src={StanLight} alt="" />
         </div>
-        <div className="history_container">
+        <div className="history__container">
           <header className="history__container-header">
             <div className="templates__container-title">{t("History.savedBoards")}</div>
           </header>

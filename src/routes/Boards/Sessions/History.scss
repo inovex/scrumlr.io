@@ -1,6 +1,7 @@
 @use "constants/styles";
 
 $stan-height: 50vh;
+$max-card-width: 500px;
 
 .history {
   position: relative;
@@ -14,7 +15,6 @@ $stan-height: 50vh;
 }
 
 .history__container {
-  padding: styles.$spacing--xl;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -28,6 +28,16 @@ $stan-height: 50vh;
   gap: 0;
 
   padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
+}
+
+.history__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
+  gap: styles.$spacing--md;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 0 styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
 }
 
 .history__stan-spacing {
