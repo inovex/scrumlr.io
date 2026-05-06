@@ -6,10 +6,6 @@ inputs:
   HEALTH_URL:
     description: URL which the reachability check will run against
     required: true
-  HEALTH_CA_CERT:
-    description: Optional PEM-encoded CA certificate used to validate HEALTH_URL TLS certificate
-    required: false
-    default: ""
 
 runs:
   using: "composite"
@@ -27,26 +23,17 @@ runs:
       id: wait-for-cluster
       env:
         INPUTS_HEALTH_URL: ${{ inputs.HEALTH_URL }}
-        INPUTS_HEALTH_CA_CERT: ${{ inputs.HEALTH_CA_CERT }}
       run: |
         # Run cluster health check
         # Disable cancelation of script on first error (since cluster might be not reachable -> curl would return error code != 0)
         set +e
-
-        cert_file=""
-        curl_tls_args=()
-        if [ -n "$INPUTS_HEALTH_CA_CERT" ]; then
-          cert_file=$(mktemp)
-          printf '%s\n' "$INPUTS_HEALTH_CA_CERT" > "$cert_file"
-          curl_tls_args=(--cacert "$cert_file")
-        fi
 
         retry=1
         max_retries=5
         lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do
-          response=$(curl --max-time 10 -s -o /dev/null -w "%{http_code}" "${curl_tls_args[@]}" -- "$INPUTS_HEALTH_URL")
+          response=$(curl --max-time 10 -s -k -o /dev/null -w "%{http_code}" -- "$INPUTS_HEALTH_URL")
           lastCurlExitCode=$?
           if [ $response = "204" ]; then
             echo "Cluster is healthy! Continuing..."
@@ -56,10 +43,6 @@ runs:
           sleep $((5 * retry))
           retry=$((retry + 1))
         done
-
-        if [ -n "$cert_file" ]; then
-          rm -f "$cert_file"
-        fi
 
         set -e # re-enable cancelation on error
 
