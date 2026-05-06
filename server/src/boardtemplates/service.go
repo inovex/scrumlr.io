@@ -109,7 +109,7 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 
 	templates, err := service.database.GetAll(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board templates")
+		span.SetStatus(codes.Error, "failed to get board templates")
 		span.RecordError(err)
 		log.Errorw("unable to list board templates", "user", user, "err", err)
 		return nil, err

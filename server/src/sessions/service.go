@@ -109,7 +109,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	if sessionOfCaller.Role == role.ParticipantRole && body.User != body.Caller {
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
-		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
+		return nil, ErrForbiddenSessionChange
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
@@ -205,10 +205,10 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(sql.ErrNoRows, err) {
 			span.SetStatus(codes.Error, "session not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, ErrSessionNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to get session")

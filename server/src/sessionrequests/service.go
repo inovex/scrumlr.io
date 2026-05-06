@@ -137,7 +137,7 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "board session request not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, ErrSessionRequestNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to get board session request")
@@ -165,7 +165,7 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 			f := (RequestStatus)(statusQuery)
 			filters = append(filters, f)
 		} else {
-			err := common.BadRequestError(errors.New("invalid status filter"))
+			err := ErrInvalidBoardStatusFilter
 			span.SetStatus(codes.Error, "invalide status filter")
 			span.RecordError(err)
 			return nil, err
@@ -228,6 +228,8 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 	})
 
 }
+
+// this needs to be moved to the API layer
 
 func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

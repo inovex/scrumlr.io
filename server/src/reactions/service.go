@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -11,7 +12,6 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -55,13 +55,13 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 		span.SetStatus(codes.Error, "failed to get reaction")
 		span.RecordError(err)
 
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			log.Errorw("Unable to get reaction", "userId", id, "err", err)
-			return nil, common.NotFoundError
+			return nil, ErrReactionNotFound
 		}
 
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("unable to get reaction: %w", err)
 	}
 
 	return new(Reaction).From(reaction), err
@@ -81,7 +81,7 @@ func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*React
 		span.SetStatus(codes.Error, "failed to get reactions for board")
 		span.RecordError(err)
 		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get reactions: %w", err)
 	}
 
 	return Reactions(reactions), err
@@ -103,7 +103,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 		span.SetStatus(codes.Error, "failed to get current reactions")
 		span.RecordError(err)
 		log.Errorw("Unable to get current reactions for note", body.Note, "boardId", body.Board)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get current reactions: %w", err)
 	}
 
 	for _, currentReaction := range currentReactions {
@@ -111,7 +111,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 			span.SetStatus(codes.Error, "multiple reactions not allowed")
 			span.RecordError(err)
 			log.Errorw("Cannot make multiple reactions on the same note by the same user", "user", body.User, "note", body.Note)
-			return nil, common.ConflictError(errors.New("cannot make multiple reactions on the same note by the same user"))
+			return nil, ErrReactionAlreadyExists
 		}
 	}
 
@@ -125,7 +125,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 		span.SetStatus(codes.Error, "failed to create reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to create reaction: %w", err)
 	}
 
 	service.addReaction(ctx, body.Board, reaction)
@@ -155,7 +155,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 		span.SetStatus(codes.Error, "cannot remove reaction from other user")
 		span.RecordError(err)
 		log.Errorw("Unable to remove reaction from other users", "reactionUserId", reaction.User, "user", user)
-		return common.ForbiddenError(errors.New("forbidden"))
+		return ErrForbiddenReactionDelete
 	}
 
 	err = service.database.Delete(ctx, id)
@@ -163,7 +163,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 		span.SetStatus(codes.Error, "failed to delete reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
-		return common.InternalServerError
+		return fmt.Errorf("failed to delete reaction: %w", err)
 	}
 
 	service.deleteReaction(ctx, board, id)
@@ -194,7 +194,7 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 		span.SetStatus(codes.Error, "cannot update reaction from other user")
 		span.RecordError(err)
 		log.Errorw("Unable to update reaction from other users", "reactionUserId", currentReaction.User, "user", user)
-		return nil, common.ForbiddenError(errors.New("forbidden"))
+		return nil, ErrForbiddenReactionUpdate
 	}
 
 	reaction, err := service.database.Update(ctx, id, DatabaseReactionUpdate{ReactionType: body.ReactionType})
@@ -202,7 +202,7 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 		span.SetStatus(codes.Error, "failed to update reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to update reaction", "id", id, "type", body.ReactionType, "error", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to update reaction: %w", err)
 	}
 
 	service.updateReaction(ctx, board, reaction)

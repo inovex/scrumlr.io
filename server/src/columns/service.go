@@ -3,6 +3,7 @@ package columns
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -14,7 +15,6 @@ import (
 	"scrumlr.io/server/notes"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 
 	"scrumlr.io/server/realtime"
@@ -74,7 +74,7 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get index")
 		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get index: %w", err)
 	}
 
 	if body.Index == nil {
@@ -198,10 +198,10 @@ func (service *Service) Get(ctx context.Context, boardID, columnID uuid.UUID) (*
 	)
 	column, err := service.database.Get(ctx, boardID, columnID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "no column found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, ErrColumnNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to get column")
@@ -247,7 +247,7 @@ func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, e
 		span.SetStatus(codes.Error, "failed to get column count")
 		span.RecordError(err)
 		log.Errorw("failed to get column count", "board", boardID, "error", err)
-		return count, common.InternalServerError
+		return count, fmt.Errorf("failed to get column count: %w", err)
 	}
 
 	return count, err
