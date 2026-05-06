@@ -10,7 +10,6 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 )
 
@@ -52,7 +51,7 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get index")
 		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get index: %w", err)
 	}
 
 	if body.Index == nil {
