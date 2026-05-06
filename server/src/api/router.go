@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"scrumlr.io/server/websocket"
@@ -22,13 +21,11 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	gorillaSessions "github.com/gorilla/sessions"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
@@ -75,7 +72,6 @@ type Server struct {
 	anonymousLoginDisabled        bool
 	allowAnonymousCustomTemplates bool
 	allowAnonymousBoardCreation   bool
-	experimentalFileSystemStore   bool
 }
 
 func New(
@@ -107,7 +103,6 @@ func New(
 	anonymousLoginDisabled bool,
 	allowAnonymousCustomTemplates bool,
 	allowAnonymousBoardCreation bool,
-	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -159,18 +154,7 @@ func New(
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
-		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
-	}
-
-	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
-	// this might be required when using some OIDC providers which exceed the 4KB limit.
-	// see https://github.com/markbates/goth/pull/141
-	if s.experimentalFileSystemStore {
-		logger.Get().Infow("using experimental file system store")
-		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
-		store.MaxLength(0x8000) // 32KB should be plenty of space
-		gothic.Store = store
 	}
 
 	if s.basePath == "/" {
@@ -193,6 +177,9 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
 			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
+
+			// Apple uses response_mode=form_post, so its callback is a POST request.
+			r.Post("/apple/callback", s.verifyAppleCallback)
 
 			r.Route("/{provider}", func(r chi.Router) {
 				r.Get("/", s.beginAuthProviderVerification)

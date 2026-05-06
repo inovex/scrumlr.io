@@ -10,10 +10,10 @@ import (
 
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
-	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/auth/providers"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
@@ -100,13 +100,12 @@ func (t *testAuthService) Exists(_ common.AccountType) bool {
 	return true
 }
 
-func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
-	return &auth.UserInformation{
-		Provider:  accountType,
-		Ident:     "test-user",
-		Name:      "Test User",
-		AvatarURL: "",
-	}, nil
+func (t *testAuthService) GetProvider(_ string) (providers.Provider, bool) {
+	return nil, false
+}
+
+func (t *testAuthService) SessionSecret() string {
+	return "test-secret"
 }
 
 // Test suite for AnonymousCustomTemplateCreationContext middleware
@@ -417,7 +416,6 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				false,                            // anonymousLoginDisabled
 				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
 				false,                            // allowAnonymousBoardCreation
-				false,                            // experimentalFileSystemStore
 			)
 
 			// Create request with body if needed

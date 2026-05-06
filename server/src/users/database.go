@@ -164,7 +164,7 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 				return err
 			}
 
-			if extUser.Name == user.Name && user.Name != name {
+			if name != "" && extUser.Name == user.Name && user.Name != name {
 				_, err = tx.NewUpdate().
 					Table("users").
 					Set("name = ?", name).
@@ -176,12 +176,11 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 				}
 			}
 
-			_, err = tx.NewUpdate().
-				Table(table).
-				Set("name = ?", name).
-				Set("avatar_url = ?", avatarUrl).
-				Where("id = ?", id).
-				Exec(ctx)
+			update := tx.NewUpdate().Table(table).Set("avatar_url = ?", avatarUrl)
+			if name != "" {
+				update = update.Set("name = ?", name)
+			}
+			_, err = update.Where("id = ?", id).Exec(ctx)
 
 			return err
 		}
@@ -190,7 +189,6 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			return err
 		}
 
-		// add new external user to the database
 		insert := DatabaseUserInsert{Name: name, AccountType: accountType}
 		_, err = tx.NewInsert().
 			Model(&insert).

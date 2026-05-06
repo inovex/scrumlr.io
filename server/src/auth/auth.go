@@ -2,31 +2,20 @@ package auth
 
 import (
 	"crypto/ecdsa"
-	"crypto/rand"
-	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
 	"math"
 	"net/http"
 	"strings"
 
+	"scrumlr.io/server/auth/providers"
 	"scrumlr.io/server/users"
 
 	"github.com/uptrace/bun"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
 	"github.com/lestrrat-go/jwx/v3/jwt"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/apple"
-	"github.com/markbates/goth/providers/azureadv2"
-	"github.com/markbates/goth/providers/github"
-	"github.com/markbates/goth/providers/google"
-	"github.com/markbates/goth/providers/microsoftonline"
-	oidc "github.com/markbates/goth/providers/openidConnect"
 	"golang.org/x/crypto/ssh"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
@@ -38,7 +27,8 @@ type Auth interface {
 	Verifier() func(http.Handler) http.Handler
 	Authenticator() func(http.Handler) http.Handler
 	Exists(accountType common.AccountType) bool
-	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
+	GetProvider(name string) (providers.Provider, bool)
+	SessionSecret() string
 }
 
 type AuthProviderConfiguration struct {
@@ -49,133 +39,98 @@ type AuthProviderConfiguration struct {
 	DiscoveryUri   string
 	UserIdentScope string
 	UserNameScope  string
+	TeamId         string
+	KeyId          string
 }
 
 type AuthConfiguration struct {
-	providers        map[string]AuthProviderConfiguration
-	unsafePrivateKey string
-	privateKey       string
-	unsafeAuth       *jwtauth.JWTAuth
-	auth             *jwtauth.JWTAuth
-	database         *bun.DB
-	userService      users.UserService
+	providerConfigs   map[string]AuthProviderConfiguration
+	providerInstances map[string]providers.Provider
+	sessionSecret     string
+	unsafePrivateKey  string
+	privateKey        string
+	unsafeAuth        *jwtauth.JWTAuth
+	auth              *jwtauth.JWTAuth
+	database          *bun.DB
+	userService       users.UserService
 }
 
-type UserInformation struct {
-	Provider               common.AccountType
-	Ident, Name, AvatarURL string
-}
-
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService users.UserService) (Auth, error) {
-	a := new(AuthConfiguration)
-	a.providers = providers
-	a.unsafePrivateKey = unsafePrivateKey
-	a.database = database
-	a.userService = userService
-	a.privateKey = privateKey
+func NewAuthConfiguration(providerCfgs map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey, sessionSecret string, database *bun.DB, userService users.UserService) (Auth, error) {
+	a := &AuthConfiguration{
+		providerConfigs:  providerCfgs,
+		sessionSecret:    sessionSecret,
+		unsafePrivateKey: unsafePrivateKey,
+		privateKey:       privateKey,
+		database:         database,
+		userService:      userService,
+	}
 	if err := a.initializeProviders(); err != nil {
 		return nil, err
 	}
 	if err := a.initializeJWTAuth(); err != nil {
 		return nil, err
 	}
-
 	return a, nil
 }
 
 func (a *AuthConfiguration) initializeProviders() error {
-	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(common.Google)]; ok {
-		p := google.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"openid",
-			"profile",
-		)
-		p.SetName(strings.ToLower((string)(common.Google)))
-		providers = append(providers, p)
+	a.providerInstances = make(map[string]providers.Provider)
+
+	if cfg, ok := a.providerConfigs[string(common.Google)]; ok {
+		p, err := providers.NewGoogleProvider(cfg.ClientId, cfg.ClientSecret, cfg.RedirectUri)
+		if err != nil {
+			return fmt.Errorf("Google provider init failed: %w", err)
+		}
+		a.providerInstances[string(common.Google)] = p
 	}
-	if provider, ok := a.providers[(string)(common.GitHub)]; ok {
-		p := github.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"user",
-		)
-		p.SetName(strings.ToLower((string)(common.GitHub)))
-		providers = append(providers, p)
+
+	if cfg, ok := a.providerConfigs[string(common.GitHub)]; ok {
+		a.providerInstances[string(common.GitHub)] = providers.NewGitHubProvider(cfg.ClientId, cfg.ClientSecret, cfg.RedirectUri)
 	}
-	if provider, ok := a.providers[(string)(common.Microsoft)]; ok {
-		p := microsoftonline.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"User.Read",
-		)
-		p.SetName(strings.ToLower((string)(common.Microsoft)))
-		providers = append(providers, p)
+
+	if cfg, ok := a.providerConfigs[string(common.Microsoft)]; ok {
+		p, err := providers.NewMicrosoftProvider(cfg.ClientId, cfg.ClientSecret, cfg.RedirectUri)
+		if err != nil {
+			return fmt.Errorf("Microsoft provider init failed: %w", err)
+		}
+		a.providerInstances[string(common.Microsoft)] = p
 	}
-	if provider, ok := a.providers[(string)(common.AzureAd)]; ok {
-		p := azureadv2.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			azureadv2.ProviderOptions{
-				Tenant: azureadv2.TenantType(provider.TenantId),
-				Scopes: []azureadv2.ScopeType{"User.Read"},
-			},
-		)
-		p.SetName(strings.ToLower((string)(common.AzureAd)))
-		providers = append(providers, p)
+
+	if cfg, ok := a.providerConfigs[string(common.AzureAd)]; ok {
+		p, err := providers.NewAzureADProvider(cfg.ClientId, cfg.ClientSecret, cfg.RedirectUri, cfg.TenantId)
+		if err != nil {
+			return fmt.Errorf("Azure AD provider init failed: %w", err)
+		}
+		a.providerInstances[string(common.AzureAd)] = p
 	}
-	if provider, ok := a.providers[(string)(common.Apple)]; ok {
-		providers = append(providers, apple.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			nil,
-			apple.ScopeName,
-			apple.ScopeEmail,
-		))
+
+	if cfg, ok := a.providerConfigs[string(common.Apple)]; ok {
+		p, err := providers.NewAppleProvider(cfg.ClientId, cfg.TeamId, cfg.KeyId, cfg.ClientSecret, cfg.RedirectUri)
+		if err != nil {
+			return fmt.Errorf("Apple provider init failed: %w", err)
+		}
+		a.providerInstances[string(common.Apple)] = p
 	}
-	if provider, ok := a.providers[(string)(common.TypeOIDC)]; ok {
-		p, err := oidc.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			provider.DiscoveryUri,
-			provider.UserIdentScope,
-			provider.UserNameScope,
-		)
+
+	if cfg, ok := a.providerConfigs[string(common.TypeOIDC)]; ok {
+		p, err := providers.NewGenericOIDCProvider(cfg.ClientId, cfg.ClientSecret, cfg.RedirectUri, cfg.DiscoveryUri)
 		if err != nil {
 			logger.Get().Errorw("OIDC provider setup failed", "error", err)
+		} else {
+			a.providerInstances[string(common.TypeOIDC)] = p
 		}
-
-		p.SetName(strings.ToLower((string)(common.TypeOIDC)))
-		providers = append(providers, p)
-	}
-	goth.UseProviders(providers...)
-	gothic.GetProviderName = func(r *http.Request) (string, error) {
-		return chi.URLParam(r, "provider"), nil
-	}
-	gothic.SetState = func(r *http.Request) string {
-		nonceBytes := make([]byte, 64)
-		_, err := io.ReadFull(rand.Reader, nonceBytes)
-		if err != nil {
-			panic("gothic: source of randomness unavailable: " + err.Error())
-		}
-		nonce := base64.URLEncoding.EncodeToString(nonceBytes)
-
-		state := r.URL.Query().Get("state")
-		if len(state) > 0 {
-			return fmt.Sprintf("%s__%s", nonce, state)
-		}
-
-		return nonce
 	}
 
 	return nil
+}
+
+func (a *AuthConfiguration) GetProvider(name string) (providers.Provider, bool) {
+	p, ok := a.providerInstances[strings.ToUpper(name)]
+	return p, ok
+}
+
+func (a *AuthConfiguration) SessionSecret() string {
+	return a.sessionSecret
 }
 
 func (a *AuthConfiguration) Sign(claims map[string]any) (string, error) {
@@ -193,8 +148,6 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 				var err error
 
 				if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
-					// check if user tries to authenticate by a prior authentication key
-					// attempt to migrate JWT to new key
 					var userID string
 					err = token.Get("id", &userID)
 					if err != nil {
@@ -206,20 +159,16 @@ func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 					if err == nil {
 						var ok bool
 						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
-							// prepare new JWT
 							tokenString, _ := a.Sign(map[string]any{"id": user})
 							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
 							common.SealCookie(r, &cookie)
 							http.SetCookie(w, &cookie)
-
-							// update rotation flag in database for user, ignore errors
 							_, _ = a.userService.SetKeyMigration(ctx, user)
 						} else {
 							err = errors.New("not permitted to access key rotation")
 						}
 					}
 				} else {
-					// attempt to verify request by new key
 					token, err = jwtauth.VerifyRequest(a.auth, r, jwtauth.TokenFromCookie)
 				}
 
@@ -237,37 +186,8 @@ func (a *AuthConfiguration) Authenticator() func(http.Handler) http.Handler {
 }
 
 func (a *AuthConfiguration) Exists(accountType common.AccountType) bool {
-	if _, ok := a.providers[string(accountType)]; ok {
-		return true
-	}
-	return false
-}
-
-func (a *AuthConfiguration) ExtractUserInformation(accountType common.AccountType, user *goth.User) (*UserInformation, error) {
-	ident := user.UserID
-	name := user.NickName
-	avatar := user.AvatarURL
-
-	if ident == "" {
-		return nil, fmt.Errorf("unable to extract identifier information for user")
-	}
-
-	if name == "" {
-		name = user.Name
-	}
-
-	if name == "" {
-		return nil, fmt.Errorf("unable to extract name information for user %q", ident)
-	}
-
-	result := &UserInformation{
-		Provider:  accountType,
-		Ident:     ident,
-		Name:      name,
-		AvatarURL: avatar,
-	}
-
-	return result, nil
+	_, ok := a.providerInstances[string(accountType)]
+	return ok
 }
 
 func (a *AuthConfiguration) initializeJWTAuth() error {

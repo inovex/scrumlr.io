@@ -34,7 +34,6 @@ type UserServiceIntegrationTestsuite struct {
 	ctx                  context.Context
 	testUserName         string
 
-	// Additional test-specific data
 	updateUser   testDbTemplates.TestUser
 	deleteUser   testDbTemplates.TestUser
 	updateBoard  testDbTemplates.TestBoard

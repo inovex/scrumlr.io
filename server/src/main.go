@@ -123,13 +123,6 @@ func main() {
 				Required: false,
 				Value:    true,
 			}),
-			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:     "auth-enable-experimental-file-system-store",
-				EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
-				Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
-				Required: false,
-				Value:    false,
-			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
 				Aliases:  []string{"c"},
@@ -200,7 +193,19 @@ func main() {
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-apple-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_SECRET"},
-				Usage:    "the client `secret` for Apple",
+				Usage:    "the ES256 private key (.p8) for Apple Sign-in",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-apple-team-id",
+				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_TEAM_ID"},
+				Usage:    "the Apple developer team `id`",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-apple-key-id",
+				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_KEY_ID"},
+				Usage:    "the Apple Sign-in key `id`",
 				Required: false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
@@ -389,11 +394,15 @@ func run(ctx *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if ctx.String("auth-apple-client-id") != "" && ctx.String("auth-apple-client-secret") != "" && ctx.String("auth-callback-host") != "" {
+	if ctx.String("auth-apple-client-id") != "" && ctx.String("auth-apple-client-secret") != "" &&
+		ctx.String("auth-apple-team-id") != "" && ctx.String("auth-apple-key-id") != "" &&
+		ctx.String("auth-callback-host") != "" {
 		logger.Get().Info("Using apple authentication.")
 		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-apple-client-id"),
 			ClientSecret: ctx.String("auth-apple-client-secret"),
+			TeamId:       ctx.String("auth-apple-team-id"),
+			KeyId:        ctx.String("auth-apple-key-id"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
@@ -438,7 +447,7 @@ func run(ctx *cli.Context) error {
 
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, ctx.String("session-secret"), bun, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -479,7 +488,6 @@ func run(ctx *cli.Context) error {
 		ctx.Bool("disable-anonymous-login"),
 		ctx.Bool("allow-anonymous-custom-templates"),
 		ctx.Bool("allow-anonymous-board-creation"),
-		ctx.Bool("auth-enable-experimental-file-system-store"),
 	)
 
 	listen := fmt.Sprintf("%s:%d", ctx.String("address"), ctx.Int("port"))

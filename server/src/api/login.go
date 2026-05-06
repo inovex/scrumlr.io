@@ -4,19 +4,18 @@ import (
 	"fmt"
 	"math"
 	"net/http"
-	"strings"
 	"time"
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/users"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
-	"github.com/markbates/goth/gothic"
+	"github.com/google/uuid"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 )
-
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
 type AnonymousSignUpRequest struct {
@@ -24,7 +23,6 @@ type AnonymousSignUpRequest struct {
 	Name string
 }
 
-// signInAnonymously create a new anonymous user
 func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
 	defer span.End()
@@ -41,7 +39,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	user, err := s.users.CreateAnonymous(ctx, body.Name)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create anonyoums user")
+		span.SetStatus(codes.Error, "failed to create anonymous user")
 		span.RecordError(err)
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -83,82 +81,171 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-// beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
-	gothic.BeginAuthHandler(w, r)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.begin_auth")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	providerName := chi.URLParam(r, "provider")
+	provider, ok := s.auth.GetProvider(providerName)
+	if !ok {
+		span.SetStatus(codes.Error, "provider not configured")
+		log.Warnw("unknown auth provider requested", "provider", providerName)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	state, err := auth.GenerateState(r.URL.Query().Get("state"), s.auth.SessionSecret())
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to generate state")
+		span.RecordError(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	authURL, err := provider.AuthURL(w, r, state)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to build auth URL")
+		span.RecordError(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, authURL, http.StatusFound)
 }
 
-// verifyAuthProviderCallback will verify the auth provider call, create or update a user and redirect to the page provider with the state
 func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_auth_provider")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
-	externalUser, err := gothic.CompleteUserAuth(w, r)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to complete user auth")
-		span.RecordError(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("could not complete user auth", "err", err)
+	providerName := chi.URLParam(r, "provider")
+	provider, ok := s.auth.GetProvider(providerName)
+	if !ok {
+		span.SetStatus(codes.Error, "provider not configured")
+		log.Warnw("unknown auth provider in callback", "provider", providerName)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	provider, err := common.NewAccountType(externalUser.Provider)
+	state := r.URL.Query().Get("state")
+	redirectURL, err := auth.VerifyState(state, s.auth.SessionSecret())
 	if err != nil {
-		span.SetStatus(codes.Error, "user provider not supported")
+		span.SetStatus(codes.Error, "invalid state")
 		span.RecordError(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("unsupported user provider", "err", err)
+		log.Warnw("state verification failed", "err", err)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
+	userInfo, err := provider.Exchange(ctx, r)
 	if err != nil {
-		span.SetStatus(codes.Error, "insufficient user information from external auth source")
+		span.SetStatus(codes.Error, "provider exchange failed")
 		span.RecordError(err)
+		log.Errorw("provider exchange failed", "provider", providerName, "err", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("insufficient user information from external auth source", "err", err)
+		return
+	}
+
+	accountType, err := common.NewAccountType(providerName)
+	if err != nil {
+		span.SetStatus(codes.Error, "unsupported provider type")
+		span.RecordError(err)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	var internalUser *users.User
-	switch provider {
+	switch accountType {
 	case common.Google:
-		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
 	case common.GitHub:
-		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
 	case common.Microsoft:
-		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
 	case common.AzureAd:
-		internalUser, err = s.users.CreateAzureAdUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Apple:
-		internalUser, err = s.users.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+		internalUser, err = s.users.CreateAzureAdUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
 	case common.TypeOIDC:
-		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	}
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("could not create user", "err", err)
+		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
+	default:
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create user")
+		span.RecordError(err)
+		log.Errorw("could not create user", "provider", providerName, "err", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	s.issueAuthCookieAndRedirect(w, r, internalUser.ID, redirectURL)
+}
+
+func (s *Server) verifyAppleCallback(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_apple")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	if err := r.ParseForm(); err != nil {
+		span.SetStatus(codes.Error, "failed to parse form")
+		span.RecordError(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	state := r.FormValue("state")
+	redirectURL, err := auth.VerifyState(state, s.auth.SessionSecret())
+	if err != nil {
+		span.SetStatus(codes.Error, "invalid state")
+		span.RecordError(err)
+		log.Warnw("Apple callback state verification failed", "err", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	provider, ok := s.auth.GetProvider("apple")
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	userInfo, err := provider.Exchange(ctx, r)
+	if err != nil {
+		span.SetStatus(codes.Error, "Apple exchange failed")
+		span.RecordError(err)
+		log.Errorw("Apple provider exchange failed", "err", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	internalUser, err := s.users.CreateAppleUser(ctx, userInfo.Subject, userInfo.Name, userInfo.Picture)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create Apple user")
+		span.RecordError(err)
+		log.Errorw("could not create Apple user", "err", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	s.issueAuthCookieAndRedirect(w, r, internalUser.ID, redirectURL)
+}
+
+func (s *Server) issueAuthCookieAndRedirect(w http.ResponseWriter, r *http.Request, userID uuid.UUID, redirectURL string) {
+	tokenString, _ := s.auth.Sign(map[string]any{"id": userID})
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
 	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
-	state := gothic.GetState(r)
-	stateSplit := strings.Split(state, "__")
-	if len(stateSplit) > 1 {
-		w.Header().Set("Location", stateSplit[1])
-		w.WriteHeader(http.StatusSeeOther)
+	if redirectURL != "" {
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+		return
 	}
+
 	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
+		http.Redirect(w, r, fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host), http.StatusSeeOther)
 	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
+		http.Redirect(w, r, fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath), http.StatusSeeOther)
 	}
-	w.WriteHeader(http.StatusSeeOther)
 }
