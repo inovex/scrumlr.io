@@ -108,7 +108,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
-		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
+		return nil, ErrForbiddenSessionChange
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
@@ -121,17 +121,17 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 
 	if body.Role != nil {
 		if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
-			err := common.ForbiddenError(errors.New("cannot promote role"))
+			err := ErrForbiddenRolePromotion
 			span.SetStatus(codes.Error, "cannot promote role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to change owner role"))
+			err := ErrForbiddenOwnerChange
 			span.SetStatus(codes.Error, "not allowed to change owner role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to promote to owner role"))
+			err := ErrForbiddenOwnerPromotion
 			span.SetStatus(codes.Error, "not allowed to promote to owner role")
 			span.RecordError(err)
 			return nil, err
@@ -204,10 +204,10 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(sql.ErrNoRows, err) {
 			span.SetStatus(codes.Error, "session not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, ErrSessionNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to get session")

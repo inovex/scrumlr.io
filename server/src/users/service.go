@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"strings"
 
@@ -66,7 +67,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, ErrInvalidUserName
 	}
 
 	span.SetAttributes(
@@ -107,7 +108,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -125,7 +126,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, ErrInvalidUserName
 	}
 
 	span.SetAttributes(
@@ -140,17 +141,17 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	})
 
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(sql.ErrNoRows, err) {
 			span.SetStatus(codes.Error, "user to update not found")
 			span.RecordError(err)
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
-			return nil, common.NotFoundError
+			return nil, ErrUserNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to update user")
 		span.RecordError(err)
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to update user: %w", err)
 	}
 
 	service.updatedUser(ctx, user)
@@ -187,7 +188,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete user")
 		span.RecordError(err)
 		log.Errorw("failed to delete user", "user", id, "err", err)
-		return common.InternalServerError
+		return fmt.Errorf("failed to delete user: %w", err)
 	}
 
 	deletedUserCounter.Add(ctx, 1)
@@ -205,16 +206,16 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(sql.ErrNoRows, err) {
 			span.SetStatus(codes.Error, "user not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, ErrUserNotFound
 		}
 
 		span.SetStatus(codes.Error, "failed to get user")
 		span.RecordError(err)
 		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	return new(User).From(user), err
@@ -230,7 +231,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)
 		log.Errorw("unable to get users", "board", boardID, "err", err)
-		return nil, common.InternalServerError
+		return nil, fmt.Errorf("failed to get users: %w", err)
 	}
 
 	return UserSlice(users), nil
