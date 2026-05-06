@@ -105,7 +105,7 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
     steps:
       - uses: actions/checkout@v4
         with:
