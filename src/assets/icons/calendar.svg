@@ -1,0 +1,29 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7 13L25 13" stroke="#373E4F" stroke-width="1.75" stroke-miterlimit="10" stroke-linecap="round"/>
+<mask id="mask0_15961_63265" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="9" y="15" width="15" height="8">
+<path d="M9 15.0001H23.25V23H9V15.0001Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_15961_63265)">
+<path d="M10.5039 16H11.4539H10.5039Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M10.5039 16H11.4539" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M10.5039 19H11.4539H10.5039Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M10.5039 19H11.4539" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M10.5039 22H11.4539H10.5039Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M10.5039 22H11.4539" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M15.4126 16H16.3626H15.4126Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M15.4126 16H16.3626" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M15.4126 19H16.3626H15.4126Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M15.4126 19H16.3626" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M15.4126 22H16.3626H15.4126Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M15.4126 22H16.3626" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M20.3208 15.9999H21.2708H20.3208Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M20.3208 15.9999H21.2708" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M20.3208 19H21.2708H20.3208Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M20.3208 19H21.2708" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M20.3208 22H21.2708H20.3208Z" fill="#373E4F" fill-opacity="0.5"/>
+<path d="M20.3208 22H21.2708" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+<path d="M11 6L11 10" stroke="#373E4F" stroke-width="1.75" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M21 6L21 10" stroke="#373E4F" stroke-width="1.75" stroke-miterlimit="10" stroke-linecap="round"/>
+<rect x="6.875" y="7.875" width="18.25" height="17.25" rx="1.125" stroke="#373E4F" stroke-width="1.75"/>
+</svg>

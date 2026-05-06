@@ -54,7 +54,7 @@ export const History = () => {
           </header>
           <div className="history__card-container">
             {TEST_HISTORY_BOARDS.map((hb) => (
-              <HistoryCard key={hb.id} board={hb} />
+              <HistoryCard key={hb.id} board={hb} favourite={false} />
             ))}
           </div>
         </div>
