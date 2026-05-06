@@ -1,0 +1,72 @@
+@use "constants/styles";
+@use "constants/colors";
+
+$card-height: 220px;
+
+.history-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: 36px auto 10px 46px;
+  grid-template-columns: 36px styles.$spacing--xs 1fr auto 36px;
+  grid-template-areas:
+    "fav-icon   .  head          head         menu"
+    ".          .  description   description   ."
+    ".          .  .             .             ."
+    "col-icon   .  info          locked        button";
+
+  width: 100%;
+  height: $card-height;
+  border-radius: styles.$rounded--default;
+  padding: styles.$spacing--base;
+
+  background-color: styles.$gray--000;
+  box-shadow: 0 6px 9px 0 rgba(styles.$blue--500, 0.1);
+}
+
+.history-card__favourite {
+  grid-area: fav-icon;
+}
+
+.history-card__head {
+  grid-area: head;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.history-card__menu {
+  grid-area: menu;
+}
+
+.history-card__description {
+  grid-area: description;
+}
+
+.history-card__icon--columns {
+  grid-area: col-icon;
+}
+
+.history-card__info-footer {
+  grid-area: info;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.history-card__info-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.history-card__info-item-data-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-card__icon--locked {
+  grid-area: locked;
+}
+
+.history-card__button--start {
+  grid-area: button;
+}
