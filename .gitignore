@@ -14,7 +14,7 @@ yarn-error.log*
 # testing
 /coverage
 server/src/coverage.*
-src/utils/test/localstorage/ # mocked localstorage file
+src/utils/test/localstorage
 
 # builds
 build
