@@ -31,6 +31,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Corepack # for yarn berry
+        run: |
+          npm install -g corepack@0.34.7 --force --ignore-scripts
+          corepack enable
+          corepack install
+
       - name: Setup Node.js with cache
         uses: actions/setup-node@v6
         with:
@@ -38,11 +44,6 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
-      - name: Install Corepack # for yarn berry
-        run: |
-          npm install -g corepack@0.34.7 --force --ignore-scripts
-          corepack enable
-          corepack install
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
@@ -247,6 +248,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Corepack # for yarn berry
+        run: |
+          npm install -g corepack@0.34.7 --force --ignore-scripts
+          corepack enable
+          corepack install
+
       - name: Setup Node.js with cache
         uses: actions/setup-node@v6
         with:
@@ -254,11 +261,6 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
-      - name: Install Corepack # for yarn berry
-        run: |
-          npm install -g corepack@0.34.7 --force --ignore-scripts
-          corepack enable
-          corepack install
 
       - name: Start server
         run: docker compose --profile build up -d
