@@ -1,10 +1,13 @@
-FROM node:22-alpine AS build-stage
+FROM node:26-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock .yarnrc.yml ./
 
-RUN corepack enable
+# starting from node 26, corepack isn't shipped anymore and has to manually be added in order for yarn modern to work
+RUN npm install -g corepack@latest --force --ignore-scripts && \
+    corepack enable && \
+    corepack prepare yarn@stable --activate
 RUN yarn install --immutable --mode=skip-build --network-timeout 240000
 
 COPY src/ src/
