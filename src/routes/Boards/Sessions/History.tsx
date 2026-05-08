@@ -32,7 +32,7 @@ const TEST_HISTORY_BOARDS: HistoryBoard[] = [
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     modifiedAt: new Date("2026-01-01T01:00:00.000Z"),
     notes: 42,
-    isLocked: false,
+    isLocked: true,
     userRole: "OWNER",
   },
 ];

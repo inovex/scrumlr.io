@@ -66,7 +66,7 @@ export const HistoryCard = (props: HistoryCardProps) => (
       </div>
     </div>
 
-    <KeyWithLockIcon className={classNames("history-card__icon", "history-card__icon--locked")} />
+    {props.board.isLocked && <KeyWithLockIcon className={classNames("history-card__icon", "history-card__icon--locked")} />}
 
     <Button
       className={classNames("history-card__button", "history-card__button--start")}
