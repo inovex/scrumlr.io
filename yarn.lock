@@ -7406,15 +7406,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.4":
-  version: 17.0.4
-  resolution: "react-i18next@npm:17.0.4"
+"react-i18next@npm:^17.0.6":
+  version: 17.0.7
+  resolution: "react-i18next@npm:17.0.7"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 26.0.1"
+    i18next: ">= 26.0.10"
     react: ">= 16.8.0"
     typescript: ^5 || ^6
   peerDependenciesMeta:
@@ -7424,7 +7424,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/bfee7ff0194c218fd77f1bacfe83770ad7ab607c8b420b5ce7bac219afb898fe8befc2dcc42313886950914e2734d3921e4b465466eb3ecc967da4e3acbcf9ea
+  checksum: 10c0/4a1cee24696a3a27ca3642a12fc08ffe5d1ce21cab7ee908488805c90b4e15ab30f17452b39bec32a5b02375d4f6155cfd301d23f24506667b5bfc64fcb7e72f
   languageName: node
   linkType: hard
 
@@ -8074,7 +8074,7 @@ __metadata:
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
     react-hotkeys-hook: "npm:^5.2.4"
-    react-i18next: "npm:^17.0.4"
+    react-i18next: "npm:^17.0.6"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.14.2"
     react-snowfall: "npm:^2.4.0"
