@@ -7,7 +7,7 @@ $card-height: 220px;
   position: relative;
   display: grid;
   grid-template-rows: 36px auto 10px 46px;
-  grid-template-columns: 36px styles.$spacing--xs 1fr auto 36px;
+  grid-template-columns: 36px styles.$spacing--xxs 1fr auto 36px;
   grid-template-areas:
     "fav-icon   .  head          head         menu"
     ".          .  description   description   ."
@@ -23,6 +23,11 @@ $card-height: 220px;
   box-shadow: 0 6px 9px 0 rgba(styles.$blue--500, 0.1);
 }
 
+.history-card__icon {
+  width: 36px;
+  height: 36px;
+}
+
 .history-card__favourite {
   grid-area: fav-icon;
 }
@@ -32,10 +37,29 @@ $card-height: 220px;
 
   display: flex;
   flex-direction: row;
+
+  gap: styles.$spacing--xs;
+
+  align-items: center;
+}
+
+.history-card__title {
+  font-size: styles.$text--lg;
+  font-weight: 700;
+  line-height: styles.$line-height--large;
+
+  color: styles.$navy--900;
+}
+
+.history-card__access-policy {
+  width: styles.$icon--medium;
+  height: styles.$icon--medium;
 }
 
 .history-card__menu {
   grid-area: menu;
+
+  transform: rotate(90deg);
 }
 
 .history-card__description {
@@ -44,6 +68,7 @@ $card-height: 220px;
 
 .history-card__icon--columns {
   grid-area: col-icon;
+  align-self: center;
 }
 
 .history-card__info-footer {
@@ -51,11 +76,41 @@ $card-height: 220px;
 
   display: flex;
   flex-direction: row;
+
+  align-items: center;
+
+  gap: styles.$spacing--md;
 }
 
 .history-card__info-item {
   display: flex;
   flex-direction: row;
+
+  gap: styles.$spacing--xxs;
+}
+
+.history-card__info-item-data-container {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.history-card__info-item-data-title {
+  font-size: styles.$text--sm;
+  font-weight: 600;
+  line-height: styles.$line-height--small;
+
+  color: styles.$navy--400;
+}
+
+.history-card__info-item-data-subtitle {
+  font-size: styles.$text--xs;
+  font-weight: 600;
+  line-height: styles.$line-height--small;
+
+  color: styles.$gray--800;
 }
 
 .history-card__info-item-data-container {
@@ -65,6 +120,7 @@ $card-height: 220px;
 
 .history-card__icon--locked {
   grid-area: locked;
+  align-self: center;
 }
 
 .history-card__button--start {
