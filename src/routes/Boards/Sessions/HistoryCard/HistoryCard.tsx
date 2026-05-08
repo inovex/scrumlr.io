@@ -5,6 +5,7 @@ import {CalendarIcon, ColumnsIcon, KeyWithLockIcon, MultipleUserIcon, NextIcon, 
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
 import "./HistoryCard.scss";
+import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
 
 type HistoryCardProps = {
   board: HistoryBoard;
@@ -26,7 +27,7 @@ export const HistoryCard = (props: HistoryCardProps) => (
 
       <OpenIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />
 
-      <div className="history-card__user-role-chip">{props.board.userRole}</div>
+      <UserRoleChip className="history-card__user-role-chip" userRole={props.board.userRole} />
     </div>
 
     <MenuIcon className={classNames("history-card__menu", "history-card__icon", "history-card__icon--menu")} />

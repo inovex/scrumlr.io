@@ -1,0 +1,39 @@
+@use "constants/styles";
+
+.access-policy-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: styles.$spacing--xxs;
+
+  padding: 6px 12px 6px 8px;
+  border-radius: styles.$rounded--large;
+
+  &--participant {
+    background-color: styles.$gray--300;
+  }
+
+  &--moderator {
+    background-color: styles.$pink--100;
+  }
+
+  &--owner {
+    background-color: styles.$blue--50;
+  }
+}
+
+.access-policy-chip__icon {
+  width: 20px;
+  height: 20px;
+
+  color: styles.$navy--400;
+}
+
+.access-policy-chip__label {
+  font-size: styles.$text--sm;
+  font-weight: 700;
+  line-height: styles.$line-height--medium;
+
+  color: styles.$navy--400;
+}
