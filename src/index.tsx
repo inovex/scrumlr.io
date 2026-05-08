@@ -6,7 +6,7 @@ import {CookieNotice} from "components/CookieNotice";
 import {store} from "store";
 import Router from "routes/Router";
 import {I18nextProvider} from "react-i18next";
-import {ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify/unstyled";
 import i18n from "i18n";
 import {LoadingScreen} from "components/LoadingScreen";
 import {Html} from "components/Html";
