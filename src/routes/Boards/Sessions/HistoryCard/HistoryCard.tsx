@@ -43,7 +43,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
       <MenuIcon className={classNames("history-card__menu", "history-card__icon", "history-card__icon--menu")} />
 
-      <TextArea className={classNames("history-card__description")} input={props.board.description} setInput={() => {}} rows={4} readOnly border="none" embedded />
+      <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
 
       <div className={classNames("history-card__info-footer")}>
         <div className="history-card__info-item">

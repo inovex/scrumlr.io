@@ -6,6 +6,8 @@ $card-breakpoint--compact: 970px;
 $card-height--default: 220px;
 $card-height--mobile: 292px;
 
+$description-height: 3 * styles.$line-height--medium;
+
 .history-card {
   --card-height: $card-height--default;
 
@@ -73,11 +75,14 @@ $card-height--mobile: 292px;
 .history-card__description {
   grid-area: description;
 
-  // override some TextArea properties
-  color: styles.$navy--900;
   font-size: styles.$text--sm;
   font-weight: 500;
-  line-height: styles.$line-height--medium;
+  line-height: 20px;
+
+  min-height: $description-height;
+  max-height: $description-height;
+
+  color: styles.$navy--900;
 }
 
 .history-card__info-footer {
