@@ -40,7 +40,8 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
   const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
 
-  const renderMenu = () => showMiniMenu ? (
+  const renderMenu = () =>
+    showMiniMenu ? (
       <MiniMenu
         className={classNames("history-card__menu", "history-card__menu--open")}
         items={[
@@ -79,7 +80,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
         dataCy="template-card__menu"
       />
     ) : (
-      <MenuIcon className={classNames("history-card__menu", "history-card__icon", "history-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+      <div className="history-card__menu-icon-container">
+        <MenuIcon className={classNames("history-card__icon", "history-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+      </div>
     );
 
   return (
