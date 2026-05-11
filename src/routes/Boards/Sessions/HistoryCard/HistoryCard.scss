@@ -7,12 +7,12 @@ $card-height: 220px;
   position: relative;
   display: grid;
   grid-template-rows: 36px auto 10px 46px;
-  grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto;
+  grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto auto;
   grid-template-areas:
-    "fav-icon   .  head          head          .  menu"
-    ".          .  description   description   .  ."
-    ".          .  .             .             .  ."
-    "col-icon   .  info          locked        .  button";
+    "fav-icon   .  head          head          .           .            menu"
+    ".          .  description   description   description description  ."
+    ".          .  .             .             .           .            ."
+    "col-icon   .  info          locked        .           button       button";
 
   width: 100%;
   height: $card-height;
@@ -65,6 +65,12 @@ $card-height: 220px;
 
 .history-card__description {
   grid-area: description;
+
+  // override some TextArea properties
+  color: styles.$navy--900;
+  font-size: styles.$text--sm;
+  font-weight: 500;
+  line-height: styles.$line-height--medium;
 }
 
 .history-card__icon--columns {
