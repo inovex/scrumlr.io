@@ -7,8 +7,10 @@ import {
   ColumnsIcon,
   Duplicate2Icon,
   EditIcon,
+  KeyProtectedIcon,
   KeyWithLockIcon,
   LinkIcon,
+  LockClosedIcon,
   MultipleUserIcon,
   NextIcon,
   NoteIcon,
@@ -31,8 +33,8 @@ type HistoryCardProps = {
 
 const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
   PUBLIC: <OpenIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />,
-  BY_PASSPHRASE: <KeyWithLockIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")} />,
-  BY_INVITE: <MultipleUserIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")} />,
+  BY_PASSPHRASE: <LockClosedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")} />,
+  BY_INVITE: <KeyProtectedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")} />,
 };
 
 export const HistoryCard = (props: HistoryCardProps) => {
