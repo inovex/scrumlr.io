@@ -1,5 +1,5 @@
 import {act, render, screen} from "@testing-library/react";
-import {ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify/unstyled";
 import {Toast, Options} from "utils/Toast";
 
 const testOptions: Options = {

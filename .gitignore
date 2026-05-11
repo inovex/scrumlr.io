@@ -5,6 +5,7 @@ node_modules/
 package-lock.json
 
 # npm & yarn package manager
+.yarn/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

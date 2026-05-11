@@ -11,6 +11,9 @@ $note__text-margin-top--small: 6px;
 $note__footer-height: 38px;
 $note__footer-gap: 42px;
 
+$note__text-lines: 3;
+$note__text-line-height: styles.$line-height--medium;
+
 .note__root {
   position: relative;
   container-type: inline-size;
@@ -132,17 +135,57 @@ $note__footer-gap: 42px;
 }
 
 .note__text {
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  line-height: $note__text-line-height;
+  max-height: $note__text-lines * $note__text-line-height;
   overflow: hidden;
-  text-overflow: ellipsis;
+  position: relative;
+  word-break: break-word;
+}
 
-  display: -webkit-box;
+.note__text-spacer {
+  float: right;
+  width: 0;
+  height: ($note__text-lines - 1) * $note__text-line-height;
 }
 
 .note__marker-edited {
   color: styles.$gray--700;
   font-size: styles.$text--sm;
+}
+
+.note__show-more {
+  float: right;
+  clear: right;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: styles.$text-size--medium;
+  line-height: styles.$line-height--medium;
+  font-weight: 700;
+  color: styles.$navy--400;
+  padding: 0 0 0 5px;
+  background-color: styles.$gray--000;
+
+  &::before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 128px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, styles.$gray--000);
+    pointer-events: none;
+  }
+}
+
+.note__show-more-icon {
+  width: styles.$icon--small + 4px;
+  height: styles.$icon--small + 4px;
+  flex-shrink: 0;
+
+  path {
+    stroke-width: 3px;
+  }
 }
 
 .note__image-wrapper {
@@ -240,5 +283,14 @@ $note__footer-gap: 42px;
 
   .note__text {
     color: styles.$gray--000;
+  }
+
+  .note__show-more {
+    color: styles.$gray--200;
+    background-color: styles.$navy--400;
+
+    &::before {
+      background: linear-gradient(to right, transparent, styles.$navy--400);
+    }
   }
 }
