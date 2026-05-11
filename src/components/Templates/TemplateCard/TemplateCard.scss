@@ -78,14 +78,33 @@ $card-description-height: 4 * 20px;
   height: 20px;
 }
 
+.template-card__menu-icon-container {
+  grid-area: menu;
+  justify-self: end;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
+
+  border-radius: styles.$rounded--full;
+  cursor: pointer;
+
+  &:hover {
+    background-color: styles.$gray--300;
+  }
+}
+
 .template-card__menu {
   grid-area: menu;
 
   &--open {
     // position menu over icon
     position: absolute;
-    top: -2 * styles.$spacing--xxs;
-    right: 0;
+    top: -1 * styles.$spacing--xxs;
+    right: -1 * styles.$spacing--xxs;
 
     box-shadow: 0 2px 20px 0 rgba(styles.$navy--400, 0.12);
   }
