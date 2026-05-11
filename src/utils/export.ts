@@ -32,6 +32,8 @@ export const fileName = (name?: string) => {
   return `${date}_${name}`;
 };
 
+const removeParticipantId = ({id, ...rest}: ParticipantWithUser & {id?: string}) => rest as ParticipantWithUser;
+
 const getBoardExportData = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
   const jsonResponse: ExportBoardDataTypeWithUserId = await response.json();
@@ -48,8 +50,6 @@ export const exportAsCSV = async (id: string, name?: string) => {
   const blob = await response.blob();
   saveAs(blob, `${fileName(name ?? DEFAULT_BOARD_NAME)}.csv`);
 };
-
-const removeParticipantId = ({id, ...rest}: ParticipantWithUser & {id?: string}) => rest as ParticipantWithUser;
 
 export const exportAsJSON = async (id: string, name?: string) => {
   const exportData = await getBoardExportData(id);
