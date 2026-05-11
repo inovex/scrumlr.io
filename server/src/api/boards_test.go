@@ -53,6 +53,30 @@ func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *st
 	}
 }
 
+func (suite *BoardTestSuite) setupRootJoinBoardRequest() (*Server, *boards.MockBoardService, *sessions.MockSessionService, *sessionrequests.MockSessionRequestService, uuid.UUID, uuid.UUID, *http.Request) {
+	s := new(Server)
+	s.basePath = "/"
+
+	boardMock := boards.NewMockBoardService(suite.T())
+	sessionMock := sessions.NewMockSessionService(suite.T())
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
+
+	s.boards = boardMock
+	s.sessions = sessionMock
+	s.sessionRequests = sessionRequestMock
+
+	boardID := uuid.New()
+	userID := uuid.New()
+
+	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
+		AddToContext(identifiers.UserIdentifier, userID)
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("id", boardID.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	return s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req.Request()
+}
+
 func (suite *BoardTestSuite) TestCreateBoard() {
 
 	testParameterBundles := *TestParameterBundles{}.
@@ -312,31 +336,13 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 }
 
 func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ExistingSessionRedirectsToParticipant() {
-	s := new(Server)
-	s.basePath = "/"
-
-	boardMock := boards.NewMockBoardService(suite.T())
-	sessionMock := sessions.NewMockSessionService(suite.T())
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
-
-	s.boards = boardMock
-	s.sessions = sessionMock
-	s.sessionRequests = sessionRequestMock
-
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
-		AddToContext(identifiers.UserIdentifier, userID)
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
 	sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, nil)
 
 	rr := httptest.NewRecorder()
-	s.joinBoard(rr, req.Request())
+	s.joinBoard(rr, req)
 
 	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
 	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), rr.Result().Header.Get("Location"))
@@ -346,25 +352,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ExistingSessionRedirects
 }
 
 func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreateSessionErrorReturnsInternalServerError() {
-	s := new(Server)
-	s.basePath = "/"
-
-	boardMock := boards.NewMockBoardService(suite.T())
-	sessionMock := sessions.NewMockSessionService(suite.T())
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
-
-	s.boards = boardMock
-	s.sessions = sessionMock
-	s.sessionRequests = sessionRequestMock
-
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
-		AddToContext(identifiers.UserIdentifier, userID)
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
@@ -373,7 +361,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreateSessionError
 		Return(nil, errors.New("failed to create session"))
 
 	rr := httptest.NewRecorder()
-	s.joinBoard(rr, req.Request())
+	s.joinBoard(rr, req)
 
 	suite.Equal(http.StatusInternalServerError, rr.Result().StatusCode)
 	boardMock.AssertExpectations(suite.T())
@@ -382,25 +370,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreateSessionError
 }
 
 func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreatesParticipantLocation() {
-	s := new(Server)
-	s.basePath = "/"
-
-	boardMock := boards.NewMockBoardService(suite.T())
-	sessionMock := sessions.NewMockSessionService(suite.T())
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
-
-	s.boards = boardMock
-	s.sessions = sessionMock
-	s.sessionRequests = sessionRequestMock
-
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
-		AddToContext(identifiers.UserIdentifier, userID)
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
@@ -409,7 +379,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreatesParticipant
 		Return(new(sessions.BoardSession), nil)
 
 	rr := httptest.NewRecorder()
-	s.joinBoard(rr, req.Request())
+	s.joinBoard(rr, req)
 
 	suite.Equal(http.StatusCreated, rr.Result().StatusCode)
 	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), rr.Result().Header.Get("Location"))
@@ -419,25 +389,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_PublicCreatesParticipant
 }
 
 func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ByInviteExistingRequestLocation() {
-	s := new(Server)
-	s.basePath = "/"
-
-	boardMock := boards.NewMockBoardService(suite.T())
-	sessionMock := sessions.NewMockSessionService(suite.T())
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
-
-	s.boards = boardMock
-	s.sessions = sessionMock
-	s.sessionRequests = sessionRequestMock
-
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
-		AddToContext(identifiers.UserIdentifier, userID)
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
@@ -445,7 +397,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ByInviteExistingRequestL
 	sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
 
 	rr := httptest.NewRecorder()
-	s.joinBoard(rr, req.Request())
+	s.joinBoard(rr, req)
 
 	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
 	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), rr.Result().Header.Get("Location"))
@@ -455,25 +407,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ByInviteExistingRequestL
 }
 
 func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ByInviteCreatesRequestLocation() {
-	s := new(Server)
-	s.basePath = "/"
-
-	boardMock := boards.NewMockBoardService(suite.T())
-	sessionMock := sessions.NewMockSessionService(suite.T())
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
-
-	s.boards = boardMock
-	s.sessions = sessionMock
-	s.sessionRequests = sessionRequestMock
-
-	boardID := uuid.New()
-	userID := uuid.New()
-
-	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
-		AddToContext(identifiers.UserIdentifier, userID)
-	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("id", boardID.String())
-	req.AddToContext(chi.RouteCtxKey, rctx)
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
@@ -482,7 +416,7 @@ func (suite *BoardTestSuite) TestJoinBoard_RootBasePath_ByInviteCreatesRequestLo
 	sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), nil)
 
 	rr := httptest.NewRecorder()
-	s.joinBoard(rr, req.Request())
+	s.joinBoard(rr, req)
 
 	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
 	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), rr.Result().Header.Get("Location"))
