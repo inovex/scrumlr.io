@@ -1,11 +1,17 @@
 @use "constants/styles";
 @use "constants/colors";
 
-$card-height: 220px;
+$card-breakpoint--compact: 970px;
+
+$card-height--default: 220px;
+$card-height--mobile: 292px;
 
 .history-card {
+  --card-height: $card-height--default;
+
   position: relative;
   display: grid;
+
   grid-template-rows: 36px auto 10px 46px;
   grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto auto;
   grid-template-areas:
@@ -15,7 +21,7 @@ $card-height: 220px;
     "info       info  info          locked        .           button       button";
 
   width: 100%;
-  height: $card-height;
+  height: var(--card-height);
   border-radius: styles.$rounded--default;
   padding: styles.$spacing--base;
 
@@ -127,4 +133,28 @@ $card-height: 220px;
 
 .history-card__button--start {
   grid-area: button;
+}
+
+@container (max-width: #{$card-breakpoint--compact}) {
+  .history-card {
+    --card-height: $card-height--mobile;
+
+    grid-template-rows: 36px auto 10px auto 46px;
+    grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto auto;
+    grid-template-areas:
+      "fav-icon   .     head          head          .           .            menu"
+      ".          .     description   description   description description  ."
+      ".          .     .             .             .           .            ."
+      "info       info  info          info          info        info         info"
+      ".          .     .             locked        .           button       button";
+  }
+
+  .history-card__info-footer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: styles.$spacing--sm;
+
+    align-items: start;
+    justify-items: start;
+  }
 }

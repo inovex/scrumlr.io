@@ -1,7 +1,7 @@
 @use "constants/styles";
 
 $stan-height: 50vh;
-$max-card-width: 500px;
+$max-card-width: 970px;
 
 .history {
   position: relative;
@@ -28,6 +28,10 @@ $max-card-width: 500px;
   gap: 0;
 
   padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
+}
+
+.history__card-wrapper {
+  container-type: inline-size;
 }
 
 .history__card-container {
