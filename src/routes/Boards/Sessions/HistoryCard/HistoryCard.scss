@@ -9,10 +9,10 @@ $card-height: 220px;
   grid-template-rows: 36px auto 10px 46px;
   grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto auto;
   grid-template-areas:
-    "fav-icon   .  head          head          .           .            menu"
-    ".          .  description   description   description description  ."
-    ".          .  .             .             .           .            ."
-    "col-icon   .  info          locked        .           button       button";
+    "fav-icon   .     head          head          .           .            menu"
+    ".          .     description   description   description description  ."
+    ".          .     .             .             .           .            ."
+    "info       info  info          locked        .           button       button";
 
   width: 100%;
   height: $card-height;
@@ -26,6 +26,7 @@ $card-height: 220px;
 .history-card__icon {
   width: 36px;
   height: 36px;
+  align-self: center;
 }
 
 .history-card__favourite {
@@ -71,11 +72,6 @@ $card-height: 220px;
   font-size: styles.$text--sm;
   font-weight: 500;
   line-height: styles.$line-height--medium;
-}
-
-.history-card__icon--columns {
-  grid-area: col-icon;
-  align-self: center;
 }
 
 .history-card__info-footer {
@@ -127,7 +123,6 @@ $card-height: 220px;
 
 .history-card__icon--locked {
   grid-area: locked;
-  align-self: center;
 }
 
 .history-card__button--start {

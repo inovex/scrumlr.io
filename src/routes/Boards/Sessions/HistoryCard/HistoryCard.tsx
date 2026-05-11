@@ -45,12 +45,13 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
       <TextArea className={classNames("history-card__description")} input={props.board.description} setInput={() => {}} rows={4} readOnly border="none" embedded />
 
-      <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
-
       <div className={classNames("history-card__info-footer")}>
-        <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
-          <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
-          <div className="history-card__info-item-data-subtitle">{props.board.columns.join(", ")}</div>
+        <div className="history-card__info-item">
+          <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
+          <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
+            <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
+            <div className="history-card__info-item-data-subtitle">{props.board.columns.join(", ")}</div>
+          </div>
         </div>
 
         <div className="history-card__info-item">
