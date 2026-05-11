@@ -211,12 +211,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
-		if err == sql.ErrNoRows {
-			common.Throw(w, r, common.NotFoundError)
-		} else {
-			log.Errorw("unable to get board", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-		}
+		common.Throw(w, r, common.NotFoundError)
 		return
 	}
 
@@ -361,7 +356,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to decode body")
 		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
-		common.Throw(w, r, common.BadRequestError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
