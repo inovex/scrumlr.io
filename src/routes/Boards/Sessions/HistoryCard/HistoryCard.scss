@@ -58,6 +58,10 @@ $description-height: 3 * styles.$line-height--medium;
   line-height: styles.$line-height--large;
 
   color: styles.$navy--900;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .history-card__access-policy {
@@ -69,6 +73,17 @@ $description-height: 3 * styles.$line-height--medium;
   grid-area: menu;
   justify-self: end;
 
+  &--open {
+    // position menu over icon
+    position: absolute;
+    top: -2 * styles.$spacing--xxs;
+    right: 0;
+
+    box-shadow: 0 2px 20px 0 rgba(styles.$navy--400, 0.12);
+  }
+}
+
+.history-card__icon--menu {
   transform: rotate(90deg);
 }
 
@@ -145,13 +160,13 @@ $description-height: 3 * styles.$line-height--medium;
     --card-height: $card-height--mobile;
 
     grid-template-rows: 36px auto 10px auto 46px;
-    grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto auto;
+    grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto 12px auto;
     grid-template-areas:
-      "fav-icon   .     head          head          .           .            menu"
-      ".          .     description   description   description description  ."
-      ".          .     .             .             .           .            ."
-      "info       info  info          info          info        info         info"
-      ".          .     .             locked        .           button       button";
+      "fav-icon   .     head          head          head        head         .           menu"
+      ".          .     description   description   description description  description ."
+      ".          .     .             .             .           .            .           ."
+      "info       info  info          info          info        info         info        info"
+      ".          .     .             locked        .           button       button      button";
   }
 
   .history-card__info-footer {

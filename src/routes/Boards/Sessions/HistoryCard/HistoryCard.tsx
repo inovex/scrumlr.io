@@ -1,12 +1,27 @@
 import {HistoryBoard} from "routes/Boards/Sessions";
 import {FavouriteButton} from "components/Templates";
 import classNames from "classnames";
-import {CalendarIcon, ColumnsIcon, KeyWithLockIcon, MultipleUserIcon, NextIcon, NoteIcon, OpenIcon, ThreeDotsIcon as MenuIcon} from "components/Icon";
+import {
+  CalendarIcon,
+  CloseIcon,
+  ColumnsIcon,
+  Duplicate2Icon,
+  EditIcon,
+  KeyWithLockIcon,
+  LinkIcon,
+  MultipleUserIcon,
+  NextIcon,
+  NoteIcon,
+  OpenIcon,
+  ThreeDotsIcon as MenuIcon,
+  TrashIcon,
+} from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
 import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
 import {AccessPolicy} from "store/features";
-import {ReactElement} from "react";
+import {ReactElement, useState} from "react";
+import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -21,7 +36,51 @@ const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
 };
 
 export const HistoryCard = (props: HistoryCardProps) => {
+  const [showMiniMenu, setShowMiniMenu] = useState(false);
+
   const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
+
+  const renderMenu = () => showMiniMenu ? (
+      <MiniMenu
+        className={classNames("history-card__menu", "history-card__menu--open")}
+        items={[
+          {
+            label: "Delete",
+            element: <TrashIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: "Copy Link",
+            element: <LinkIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: "Create a template",
+            element: <Duplicate2Icon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: "Edit",
+            element: <EditIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {label: "Close", element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
+        ]}
+        focusBehaviour="moveFocus"
+        onBlur={() => setShowMiniMenu(false)}
+        dataCy="template-card__menu"
+      />
+    ) : (
+      <MenuIcon className={classNames("history-card__menu", "history-card__icon", "history-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+    );
 
   return (
     <div className="history-card">
@@ -41,7 +100,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <UserRoleChip className="history-card__user-role-chip" userRole={props.board.userRole} />
       </div>
 
-      <MenuIcon className={classNames("history-card__menu", "history-card__icon", "history-card__icon--menu")} />
+      {renderMenu()}
 
       <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
 
