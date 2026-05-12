@@ -35,6 +35,8 @@ $description-height: 3 * styles.$line-height--medium;
   width: 36px;
   height: 36px;
   align-self: center;
+
+  flex-shrink: 0;
 }
 
 .history-card__favourite {
@@ -140,12 +142,19 @@ $description-height: 3 * styles.$line-height--medium;
 .history-card__info-item-data-container {
   display: flex;
   flex-direction: column;
-
   align-items: flex-start;
   justify-content: center;
+
+  overflow: hidden;
 }
 
 .history-card__info-item-data-title {
+  width: 100%;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   font-size: styles.$text--sm;
   font-weight: 600;
   line-height: styles.$line-height--small;
@@ -154,6 +163,11 @@ $description-height: 3 * styles.$line-height--medium;
 }
 
 .history-card__info-item-data-subtitle {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   font-size: styles.$text--xs;
   font-weight: 600;
   line-height: styles.$line-height--small;
@@ -189,11 +203,13 @@ $description-height: 3 * styles.$line-height--medium;
   }
 
   .history-card__info-footer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    // doing the layout as a grid with `grid-template-columns: repeat(2, 1fr)` would be nice, but it struggles with overlapping, so we flex wrap instead
+    flex-wrap: wrap;
     gap: styles.$spacing--sm;
+  }
 
-    align-items: start;
-    justify-items: start;
+  .history-card__info-item {
+    flex: 0 0 calc(50% - (#{styles.$spacing--sm} / 2)); // setting max width to half of available space to accommodate 2 items per row
+    overflow: hidden;
   }
 }
