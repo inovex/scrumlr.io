@@ -24,6 +24,8 @@ import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/
 import {AccessPolicy} from "store/features";
 import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {Tooltip} from "components/Tooltip";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -39,6 +41,9 @@ const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
 
 export const HistoryCard = (props: HistoryCardProps) => {
   const [showMiniMenu, setShowMiniMenu] = useState(false);
+
+  const joinedColumnsNames = props.board.columns.join(", ");
+  const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
 
   const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
 
@@ -114,7 +119,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
           <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
           <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
             <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
-            <div className="history-card__info-item-data-subtitle">{props.board.columns.join(", ")}</div>
+            <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
+              {joinedColumnsNames}
+            </div>
           </div>
         </div>
 
@@ -143,7 +150,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
         </div>
       </div>
 
-      {props.board.isLocked && <KeyWithLockIcon className={classNames("history-card__icon", "history-card__icon--locked")} />}
+      {props.board.isLocked && <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />}
 
       <Button
         className={classNames("history-card__button", "history-card__button--start")}
@@ -155,6 +162,14 @@ export const HistoryCard = (props: HistoryCardProps) => {
       >
         Go to Session
       </Button>
+      <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
+        Read Only
+      </Tooltip>
+      {isColumnsSubtitleTruncated.horizontal && (
+        <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
+          {joinedColumnsNames}
+        </Tooltip>
+      )}
     </div>
   );
 };
