@@ -44,6 +44,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
   const joinedColumnsNames = props.board.columns.join(", ");
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
+  const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
 
   const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
 
@@ -103,7 +104,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
       />
 
       <div className={classNames("history-card__head")}>
-        <div className="history-card__title">{props.board.name}</div>
+        <div ref={boardNameRef} id={`history-card__title::${props.board.id}`} className="history-card__title">
+          {props.board.name}
+        </div>
 
         {renderAccessPolicyIcon(props.board.accessPolicy)}
 
@@ -162,6 +165,11 @@ export const HistoryCard = (props: HistoryCardProps) => {
       >
         Go to Session
       </Button>
+      {isBoardNameTruncated.horizontal && (
+        <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
+          {props.board.name}
+        </Tooltip>
+      )}
       <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
         Read Only
       </Tooltip>
