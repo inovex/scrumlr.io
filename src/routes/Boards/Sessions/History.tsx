@@ -19,6 +19,7 @@ export type HistoryBoard = {
   notes: number;
   isLocked: boolean;
   userRole: ParticipantRole;
+  favourite: boolean; // todo add to board table schema
 };
 
 const TEST_HISTORY_BOARDS: HistoryBoard[] = [
@@ -34,6 +35,22 @@ const TEST_HISTORY_BOARDS: HistoryBoard[] = [
     notes: 42,
     isLocked: true,
     userRole: "OWNER",
+    favourite: true,
+  },
+  {
+    id: "2",
+    name: "Test Board 2",
+    description:
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+    accessPolicy: "BY_PASSPHRASE",
+    columns: ["Start", "Stop", "Continue", "Actions"],
+    participants: 12,
+    createdAt: new Date("2026-01-01T00:00:00.000Z"),
+    modifiedAt: new Date("2026-01-01T01:00:00.000Z"),
+    notes: 5,
+    isLocked: false,
+    userRole: "PARTICIPANT",
+    favourite: false,
   },
 ];
 
@@ -58,9 +75,11 @@ export const History = () => {
             <div className="templates__container-title">{t("History.savedBoards")}</div>
           </header>
           <div className="history__card-container">
-            {TEST_HISTORY_BOARDS.filter(matchSearchInput).map((hb) => (
-              <HistoryCard board={hb} favourite={false} />
-            ))}
+            {TEST_HISTORY_BOARDS.filter(matchSearchInput)
+              .sort((a, b) => Number(b.favourite) - Number(a.favourite)) // move favourites to the top using the fact that true is 1 and false is 0
+              .map((hb) => (
+                <HistoryCard key={hb.id} board={hb} />
+              ))}
           </div>
         </section>
       </div>

@@ -30,7 +30,6 @@ import "./HistoryCard.scss";
 
 type HistoryCardProps = {
   board: HistoryBoard;
-  favourite: boolean;
 };
 
 const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
@@ -97,7 +96,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
     <div className="history-card">
       <FavouriteButton
         className="history-card__favourite"
-        active={props.favourite}
+        active={props.board.favourite}
         onClick={() => {
           throw new Error("Not implemented yet");
         }}
