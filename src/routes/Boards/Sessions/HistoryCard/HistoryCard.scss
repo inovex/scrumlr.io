@@ -142,7 +142,12 @@ $description-height: 3 * styles.$line-height--medium;
   display: flex;
   flex-direction: row;
 
+  // divide the remaining space equally among 4 items (factoring in the 3 gaps)
+  flex: 0 1 calc((100% - (3 * #{styles.$spacing--md})) / 4);
+
   gap: styles.$spacing--xxs;
+
+  min-width: 0;
 }
 
 .history-card__info-item-data-container {
@@ -230,7 +235,7 @@ $description-height: 3 * styles.$line-height--medium;
   }
 
   .history-card__info-item {
-    flex: 0 0 calc(50% - (#{styles.$spacing--sm} / 2)); // setting max width to half of available space to accommodate 2 items per row
+    flex: 0 1 calc((100% - #{styles.$spacing--sm}) / 2); // set flex basis to half of available space (factoring in the gap) to accommodate 2 items per row
     overflow: hidden;
   }
 }
