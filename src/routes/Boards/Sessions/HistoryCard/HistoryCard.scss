@@ -194,6 +194,8 @@ $description-height: 3 * styles.$line-height--medium;
 .history-card__locked-icon-container {
   grid-area: locked;
 
+  visibility: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,6 +208,12 @@ $description-height: 3 * styles.$line-height--medium;
 
   &:hover {
     background-color: styles.$gray--300;
+  }
+
+  // instead of conditionally rendering in TSX, we conditionally change the visibility
+  // this is because we want to reserve the space in any case, so there's no available width change, which would lead to layout shifts
+  &--is-locked {
+    visibility: visible;
   }
 }
 

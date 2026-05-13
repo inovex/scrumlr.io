@@ -153,11 +153,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
           </div>
         </div>
 
-        {props.board.isLocked && (
-          <div className="history-card__locked-icon-container">
-            <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
-          </div>
-        )}
+        <div className={classNames("history-card__locked-icon-container", {"history-card__locked-icon-container--is-locked": props.board.isLocked})}>
+          <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
+        </div>
 
         <Button
           className={classNames("history-card__button", "history-card__button--start")}
