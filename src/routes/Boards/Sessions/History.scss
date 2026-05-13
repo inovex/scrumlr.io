@@ -19,6 +19,8 @@ $max-card-width: 970px;
   flex-direction: column;
   flex: 1;
   gap: styles.$spacing--lg;
+
+  overflow: hidden;
 }
 
 .history__container-header {
