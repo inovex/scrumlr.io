@@ -36,6 +36,7 @@ type UserDatabase interface {
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
 	GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
+	GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error)
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)

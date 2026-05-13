@@ -45,7 +45,7 @@ func (suite *DatabaseUserTestSuite) SetupTest() {
 	)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreatAnonymousUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -60,7 +60,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAppleUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreatAppleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -75,7 +75,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAppleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAzureAdUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreatAzureAdUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -90,7 +90,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAzureAdUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatGitHubUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreatGitHubUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -300,6 +300,79 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersEmpty() {
 	assert.Nil(t, err)
 	assert.Empty(t, dbUser)
 }
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDs() {
+	t := suite.T()
+
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.Nil(t, err)
+	assert.Equal(t, len(userIDs), len(dbUsers))
+	assert.ElementsMatch(t, userIDs, dbUsers)
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsNoContent() {
+	t := suite.T()
+
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, len(dbUsers))
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsMissingUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	missingID := uuid.New()
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+		missingID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.NoError(t, err)
+
+	expected := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+	assert.ElementsMatch(t, expected, dbUsers)
+	assert.NotContains(t, dbUsers, missingID)
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsDuplicateUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+		suite.users["Friend"].ID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.NoError(t, err)
+
+	expected := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+	assert.ElementsMatch(t, expected, dbUsers)
+}
 
 func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
 	t := suite.T()
@@ -314,7 +387,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -326,7 +399,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseTrue() {
 	assert.True(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -338,7 +411,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseFalse() {
 	assert.False(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -350,7 +423,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioTrue() {
 	assert.True(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -362,7 +435,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioFalse() {
 	assert.False(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasSetKeyMigration() {
+func (suite *DatabaseUserTestSuite) TestDatabasSetKeyMigration() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 

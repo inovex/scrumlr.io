@@ -94,7 +94,24 @@ func (db *DB) GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]Datab
 		return []DatabaseUser{}, err
 	}
 	return users, err
+}
 
+func (db *DB) GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error) {
+	if len(ids) == 0 {
+		return []uuid.UUID{}, nil
+	}
+	existingIDs := make([]uuid.UUID, 0, len(ids))
+
+	err := db.db.NewSelect().
+		Table("users").
+		Column("id").
+		Where("id IN (?)", bun.List(ids)).
+		Scan(ctx, &existingIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return existingIDs, err
 }
 
 func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
