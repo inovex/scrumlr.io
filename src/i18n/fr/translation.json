@@ -97,7 +97,8 @@
   "History": {
     "switchTitle": "Histoire",
     "title": "Vos Boards",
-    "savedBoards": "Vos sessions"
+    "savedBoards": "Vos sessions",
+    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés."
   },
   "CreateBoard": {
     "title": "Créer un nouveau tableau",

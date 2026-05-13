@@ -66,6 +66,37 @@ $max-card-width: 970px;
   }
 }
 
+// following teaser styles are temporary while the history is not yet fully implemented
+.history__teaser-info {
+  display: flex;
+  gap: styles.$spacing--sm;
+  align-items: flex-start;
+}
+
+.history__teaser-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  flex-shrink: 0;
+  margin-top: styles.$spacing--xxs;
+  color: styles.$navy--600;
+}
+
+.history__teaser-text {
+  font-weight: 400;
+  font-size: styles.$text--md;
+  line-height: 28px;
+  margin-top: styles.$spacing--xxs;
+  color: styles.$navy--400;
+}
+
+[data-theme="dark"] {
+  .history__teaser-title,
+  .history__teaser-icon,
+  .history__teaser-text {
+    color: styles.$blue--50;
+  }
+}
+
 @media screen and (max-width: styles.$breakpoint--desktop) {
   .history__stan-container {
     display: none;
