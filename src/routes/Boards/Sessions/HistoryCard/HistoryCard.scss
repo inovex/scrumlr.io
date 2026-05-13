@@ -180,8 +180,22 @@ $description-height: 3 * styles.$line-height--medium;
   flex-direction: column;
 }
 
-.history-card__icon--locked {
+.history-card__locked-icon-container {
   grid-area: locked;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: styles.$icon--extralarge;
+  height: styles.$icon--extralarge;
+
+  border-radius: styles.$rounded--full;
+  cursor: pointer;
+
+  &:hover {
+    background-color: styles.$gray--300;
+  }
 }
 
 .history-card__button--start {
