@@ -76,7 +76,7 @@ $side-padding--desktop: 14vw;
   display: flex;
   justify-content: stretch;
   padding: 0 $side-padding--desktop;
-  overflow-y: auto;
+  overflow: hidden auto;
 
   &--extended-top {
     margin-top: 0;
