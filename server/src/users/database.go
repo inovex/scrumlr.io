@@ -81,7 +81,7 @@ func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	return user, err
 }
 
-func (db *DB) GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
+func (db *DB) GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
 	var users []DatabaseUser
 
 	err := db.db.NewSelect().

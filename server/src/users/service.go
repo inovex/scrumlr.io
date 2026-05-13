@@ -35,7 +35,7 @@ type UserDatabase interface {
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
-	GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
+	GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
@@ -364,7 +364,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.multiple")
 	defer span.End()
 
-	users, err := service.database.GetUsers(ctx, boardID)
+	users, err := service.database.GetUsersByBoardID(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)

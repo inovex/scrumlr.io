@@ -274,7 +274,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersWithSessions() {
 	boardID := suite.boards["Update"].id
 
 	// call the method under test
-	users, err := database.GetUsers(context.Background(), boardID)
+	users, err := database.GetUsersByBoardID(context.Background(), boardID)
 	assert.Nil(t, err)
 	assert.Len(t, users, 3)
 
@@ -295,7 +295,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersEmpty() {
 	database := NewUserDatabase(suite.db)
 	boardID := uuid.New()
 
-	dbUser, err := database.GetUsers(context.Background(), boardID)
+	dbUser, err := database.GetUsersByBoardID(context.Background(), boardID)
 
 	assert.Nil(t, err)
 	assert.Empty(t, dbUser)

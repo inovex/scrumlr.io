@@ -695,12 +695,12 @@ func (_c *MockUserDatabase_GetUser_Call) RunAndReturn(run func(ctx context.Conte
 	return _c
 }
 
-// GetUsers provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
+// GetUsersByBoardID provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
 	ret := _mock.Called(ctx, boardID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetUsers")
+		panic("no return value specified for GetUsersByBoardID")
 	}
 
 	var r0 []DatabaseUser
@@ -723,19 +723,19 @@ func (_mock *MockUserDatabase) GetUsers(ctx context.Context, boardID uuid.UUID) 
 	return r0, r1
 }
 
-// MockUserDatabase_GetUsers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUsers'
-type MockUserDatabase_GetUsers_Call struct {
+// MockUserDatabase_GetUsersByBoardID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUsersByBoardID'
+type MockUserDatabase_GetUsersByBoardID_Call struct {
 	*mock.Call
 }
 
-// GetUsers is a helper method to define mock.On call
+// GetUsersByBoardID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockUserDatabase_Expecter) GetUsers(ctx interface{}, boardID interface{}) *MockUserDatabase_GetUsers_Call {
-	return &MockUserDatabase_GetUsers_Call{Call: _e.mock.On("GetUsers", ctx, boardID)}
+func (_e *MockUserDatabase_Expecter) GetUsersByBoardID(ctx interface{}, boardID interface{}) *MockUserDatabase_GetUsersByBoardID_Call {
+	return &MockUserDatabase_GetUsersByBoardID_Call{Call: _e.mock.On("GetUsersByBoardID", ctx, boardID)}
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -753,12 +753,12 @@ func (_c *MockUserDatabase_GetUsers_Call) Run(run func(ctx context.Context, boar
 	return _c
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) Return(databaseUsers []DatabaseUser, err error) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) Return(databaseUsers []DatabaseUser, err error) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Return(databaseUsers, err)
 	return _c
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Return(run)
 	return _c
 }

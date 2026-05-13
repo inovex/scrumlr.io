@@ -80,7 +80,7 @@ func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
 func (suite *UserServiceTestSuite) TestGetBoardUsers() {
 	boardID := uuid.New()
 	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
-	suite.mockUserDatabase.EXPECT().GetUsers(mock.Anything, boardID).Return([]DatabaseUser{
+	suite.mockUserDatabase.EXPECT().GetUsersByBoardID(mock.Anything, boardID).Return([]DatabaseUser{
 		{ID: userIDs[0]},
 		{ID: userIDs[1]},
 		{ID: userIDs[2]},
