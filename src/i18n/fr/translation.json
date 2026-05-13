@@ -98,7 +98,26 @@
     "switchTitle": "Histoire",
     "title": "Gérer tes tableux",
     "savedBoards": "Dernièrement utilisés",
-    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés."
+    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés.",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} colonne",
+        "amountColumns_other": "{{count}} colonnes",
+        "amountParticipants_one": "{{count}} participant",
+        "amountParticipants_other": "{{count}} participants",
+        "amountNotes_one": "{{count}} notes",
+        "amountNotes_other": "{{count}} notes",
+        "lastUpdated": "Dernière mise à jour: {{date}}"
+      },
+      "Menu": {
+        "delete": "Supprimer",
+        "copyLink": "Copier le lien",
+        "createTemplate": "Créer un modèle",
+        "edit": "Modifier",
+        "close": "Fermer"
+      },
+      "readOnly": "Verrouillé"
+    }
   },
   "CreateBoard": {
     "title": "Créer un nouveau tableau",

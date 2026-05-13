@@ -99,7 +99,26 @@
     "switchTitle": "Historie",
     "title": "Verwalte deine Boards",
     "savedBoards": "Zuletzt verwendet",
-    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden."
+    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden.",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} Spalte",
+        "amountColumns_other": "{{count}} Spalten",
+        "amountParticipants_one": "{{count}} Teilnehmer",
+        "amountParticipants_other": "{{count}} Teilnehmer",
+        "amountNotes_one": "{{count}} Kärtchen",
+        "amountNotes_other": "{{count}} Kärtchen",
+        "lastUpdated": "Zuletzt bearbeitet: {{date}}"
+      },
+      "Menu": {
+        "delete": "Löschen",
+        "copyLink": "Link kopieren",
+        "createTemplate": "Vorlage erstellen",
+        "edit": "Bearbeiten",
+        "close": "Schließen"
+      },
+      "readOnly": "Schreibgeschützt"
+    }
   },
   "CreateBoard": {
     "title": "Ein neues Board erstellen",

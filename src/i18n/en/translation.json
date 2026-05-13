@@ -98,7 +98,26 @@
     "switchTitle": "History",
     "title": "Manage your boards",
     "savedBoards": "Recently used",
-    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved."
+    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved.",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} Column",
+        "amountColumns_other": "{{count}} Columns",
+        "amountParticipants_one": "{{count}} Participant",
+        "amountParticipants_other": "{{count}} Participants",
+        "amountNotes_one": "{{count}} Note",
+        "amountNotes_other": "{{count}} Notes",
+        "lastUpdated": "Last updated: {{date}}"
+      },
+      "Menu": {
+        "delete": "Delete",
+        "copyLink": "Copy link",
+        "createTemplate": "Create a template",
+        "edit": "Edit",
+        "close": "Close"
+      },
+      "readOnly": "Read only"
+    }
   },
   "CreateBoard": {
     "title": "Create a new Board",

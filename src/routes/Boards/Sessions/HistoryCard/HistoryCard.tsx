@@ -26,6 +26,7 @@ import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
+import {useTranslation} from "react-i18next";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -39,6 +40,8 @@ const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
 };
 
 export const HistoryCard = (props: HistoryCardProps) => {
+  const {t} = useTranslation();
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const joinedColumnsNames = props.board.columns.join(", ");
@@ -53,34 +56,34 @@ export const HistoryCard = (props: HistoryCardProps) => {
         className={classNames("history-card__menu", "history-card__menu--open")}
         items={[
           {
-            label: "Delete",
+            label: t("History.HistoryCard.Menu.delete"),
             element: <TrashIcon />,
             onClick: () => {
               throw new Error("Not implemented yet");
             },
           },
           {
-            label: "Copy Link",
+            label: t("History.HistoryCard.Menu.copyLink"),
             element: <LinkIcon />,
             onClick: () => {
               throw new Error("Not implemented yet");
             },
           },
           {
-            label: "Create a template",
+            label: t("History.HistoryCard.Menu.createTemplate"),
             element: <Duplicate2Icon />,
             onClick: () => {
               throw new Error("Not implemented yet");
             },
           },
           {
-            label: "Edit",
+            label: t("History.HistoryCard.Menu.edit"),
             element: <EditIcon />,
             onClick: () => {
               throw new Error("Not implemented yet");
             },
           },
-          {label: "Close", element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
         focusBehaviour="moveFocus"
         onBlur={() => setShowMiniMenu(false)}
@@ -121,7 +124,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           <div className="history-card__info-item">
             <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
-              <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountColumns", {count: props.board.columns.length})}</div>
               <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
                 {joinedColumnsNames}
               </div>
@@ -134,21 +137,23 @@ export const HistoryCard = (props: HistoryCardProps) => {
               <div className="history-card__info-item-data-title">
                 {props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"})}
               </div>
-              <div className="history-card__info-item-data-subtitle">Last Changed: {props.board.modifiedAt.toLocaleDateString()}</div>
+              <div className="history-card__info-item-data-subtitle">
+                {t("History.HistoryCard.Info.lastUpdated", {date: props.board.modifiedAt.toLocaleDateString(), interpolation: {escapeValue: false}})}
+              </div>
             </div>
           </div>
 
           <div className="history-card__info-item">
             <MultipleUserIcon className={classNames("history-card__icon", "history-card__icon--participants")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--participants">
-              <div className="history-card__info-item-data-title">{props.board.participants} Participants</div>
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountParticipants", {count: props.board.participants})}</div>
             </div>
           </div>
 
           <div className="history-card__info-item">
             <NoteIcon className={classNames("history-card__icon", "history-card__icon--notes")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--notes">
-              <div className="history-card__info-item-data-title">{props.board.participants} Notes</div>
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountNotes", {count: props.board.notes})}</div>
             </div>
           </div>
         </div>
@@ -173,7 +178,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           </Tooltip>
         )}
         <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
-          Read Only
+          {t("History.HistoryCard.readOnly")}
         </Tooltip>
         {isColumnsSubtitleTruncated.horizontal && (
           <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
