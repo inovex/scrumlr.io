@@ -1,4 +1,4 @@
-import {Outlet} from "react-router";
+import {Outlet, useOutletContext} from "react-router";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import StanDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
@@ -39,6 +39,11 @@ const TEST_HISTORY_BOARDS: HistoryBoard[] = [
 
 export const History = () => {
   const {t} = useTranslation();
+
+  const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
+
+  const matchSearchInput = (historyBoard: HistoryBoard) => historyBoard.name.toLowerCase().includes(searchBarInput.toLowerCase());
+
   return (
     <>
       <Outlet /> {/* settings */}
@@ -53,7 +58,7 @@ export const History = () => {
             <div className="templates__container-title">{t("History.savedBoards")}</div>
           </header>
           <div className="history__card-container">
-            {TEST_HISTORY_BOARDS.map((hb) => (
+            {TEST_HISTORY_BOARDS.filter(matchSearchInput).map((hb) => (
               <HistoryCard board={hb} favourite={false} />
             ))}
           </div>
