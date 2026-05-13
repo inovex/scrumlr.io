@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
 
 	"scrumlr.io/server/realtime"
 )
@@ -55,7 +54,7 @@ func TestAddVote_VoteLimit(t *testing.T) {
 
 	assert.Nil(t, vote)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
+	assert.Equal(t, ErrVotingNotFound, err)
 }
 
 func TestAddVote_Failed(t *testing.T) {
@@ -218,7 +217,7 @@ func TestCreateVoting_SecondVoting(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
+	assert.Equal(t, ErrOnlyOneOpenVoting, err)
 }
 
 func TestCreateVoting_Failed(t *testing.T) {
@@ -226,13 +225,13 @@ func TestCreateVoting_Failed(t *testing.T) {
 	votingLimit := 10
 	allowMultiple := false
 	showVotes := false
-	dbError := "cannot create voting"
+	dbError := errors.New("cannot create voting")
 
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().GetOpenVoting(mock.Anything, boardId).
 		Return(DatabaseVoting{}, sql.ErrNoRows)
 	mockDb.EXPECT().Create(mock.Anything, DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
-		Return(DatabaseVoting{}, errors.New(dbError))
+		Return(DatabaseVoting{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -248,7 +247,7 @@ func TestCreateVoting_Failed(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestCloseVoting(t *testing.T) {
@@ -291,17 +290,17 @@ func TestCloseVoting_NotFound(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+	assert.Equal(t, ErrVotingNotFound, err)
 }
 
 func TestCloseVoting_Failed(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
-	dbError := "failed to close"
+	dbError := errors.New("failed to close")
 
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
-		Return(DatabaseVoting{}, errors.New(dbError))
+		Return(DatabaseVoting{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -312,20 +311,20 @@ func TestCloseVoting_Failed(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestCloseVoting_FailedToGetVotes(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
 	status := Closed
-	dbError := "failed to get votes"
+	dbError := errors.New("failed to get votes")
 
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
 	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingID}).
-		Return([]DatabaseVote{}, errors.New(dbError))
+		Return([]DatabaseVote{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -336,7 +335,7 @@ func TestCloseVoting_FailedToGetVotes(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetVoting_Open(t *testing.T) {
@@ -385,17 +384,17 @@ func TestGetVoting_Open_NotFound(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+	assert.Equal(t, ErrVotingNotFound, err)
 }
 
 func TestGetVoting_Open_FailedToGetVoting(t *testing.T) {
 	boardId := uuid.New()
 	votingId := uuid.New()
-	dbError := "failed to get voting"
+	dbError := errors.New("failed to get voting")
 
 	mockDb := NewMockVotingDatabase(t)
 	mockDb.EXPECT().Get(mock.Anything, boardId, votingId).
-		Return(DatabaseVoting{}, errors.New(dbError))
+		Return(DatabaseVoting{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -406,7 +405,7 @@ func TestGetVoting_Open_FailedToGetVoting(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetVoting_Closed(t *testing.T) {
