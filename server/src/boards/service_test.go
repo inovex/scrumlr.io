@@ -264,7 +264,7 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
+	assert.ErrorIs(t, err, ErrPassphraseRequired)
 }
 
 func TestDelete(t *testing.T) {
@@ -363,7 +363,7 @@ func TestUpdate_EmptyName(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name cannot be empty")), err)
+	assert.ErrorIs(t, err, ErrNameEmpty)
 }
 
 func TestUpdate_ToPassphrase(t *testing.T) {
@@ -439,7 +439,7 @@ func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")), err)
+	assert.ErrorIs(t, err, ErrPassphraseRequired)
 }
 
 func TestUpdate_ToPublic(t *testing.T) {
@@ -510,7 +510,7 @@ func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	assert.ErrorIs(t, err, ErrPassphraseForbidden)
 }
 
 func TestUpdate_ToInvite(t *testing.T) {
@@ -581,7 +581,7 @@ func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	assert.ErrorIs(t, err, ErrPassphraseForbidden)
 }
 
 func TestSetTimer(t *testing.T) {
