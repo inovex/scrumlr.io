@@ -197,24 +197,28 @@ $description-height: 3 * styles.$line-height--medium;
   visibility: hidden;
 
   display: flex;
+  align-self: center;
   align-items: center;
   justify-content: center;
 
-  width: styles.$icon--extralarge;
-  height: styles.$icon--extralarge;
+  width: 46px;
+  height: 46px;
 
+  background-color: styles.$gray--300;
   border-radius: styles.$rounded--full;
-  cursor: pointer;
 
-  &:hover {
-    background-color: styles.$gray--300;
-  }
+  cursor: pointer;
 
   // instead of conditionally rendering in TSX, we conditionally change the visibility
   // this is because we want to reserve the space in any case, so there's no available width change, which would lead to layout shifts
   &--is-locked {
     visibility: visible;
   }
+}
+
+.history-card__icon--locked {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 }
 
 .history-card__button--start {
@@ -277,10 +281,13 @@ $description-height: 3 * styles.$line-height--medium;
     color: styles.$gray--800;
   }
 
-  .history-card__menu-icon-container,
-  .history-card__locked-icon-container {
+  .history-card__menu-icon-container {
     &:hover {
       background-color: styles.$navy--500;
     }
+  }
+
+  .history-card__locked-icon-container {
+    background-color: styles.$navy--500;
   }
 }
