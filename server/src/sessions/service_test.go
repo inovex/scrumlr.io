@@ -61,7 +61,7 @@ func TestGetSession_NotFound(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+	assert.Equal(t, ErrSessionNotFound, err)
 }
 
 func TestGetSession_DatabaseError(t *testing.T) {
@@ -630,7 +630,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change other users session")), err)
+	assert.Equal(t, ErrForbiddenSessionChange, err)
 }
 
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
@@ -659,7 +659,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("cannot promote role")), err)
+	assert.Equal(t, ErrForbiddenRolePromotion, err)
 }
 
 func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
@@ -688,7 +688,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change owner role")), err)
+	assert.Equal(t, ErrForbiddenOwnerChange, err)
 }
 
 func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
@@ -717,7 +717,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to promote to owner role")), err)
+	assert.Equal(t, ErrForbiddenOwnerPromotion, err)
 }
 
 func TestUpdateAllSessions(t *testing.T) {
