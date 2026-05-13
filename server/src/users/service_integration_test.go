@@ -264,7 +264,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+	suite.Equal(ErrUserNotFound, err)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
