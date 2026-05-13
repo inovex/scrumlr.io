@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"database/sql"
 	"encoding/csv"
 	"errors"
@@ -549,6 +550,29 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
+	b, err := s.createImportedBoard(ctx, owner, body)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import board")
+		span.RecordError(err)
+		log.Errorw("Could not import board", "err", err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	if err := s.processImportedNotes(ctx, b.ID, body); err != nil {
+		span.SetStatus(codes.Error, "failed to import notes or columns")
+		span.RecordError(err)
+		_ = s.boards.Delete(ctx, b.ID)
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, b)
+}
+
+func (s *Server) createImportedBoard(ctx context.Context, owner uuid.UUID, body boards.ImportBoardRequest) (*boards.Board, error) {
+	body.Board.Owner = owner
 	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
 
 	for _, column := range body.Columns {
@@ -567,73 +591,147 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		Columns:      importColumns,
 		Owner:        owner,
 	})
+	return b, err
+}
 
+type parentChildNotes struct {
+	Parent   notes.Note
+	Children []notes.Note
+}
+
+func (s *Server) replaceDeletedParticipants(ctx context.Context, body boards.ImportBoardRequest) (boards.ImportBoardRequest, error) {
+	if len(body.Notes) == 0 {
+		return body, nil
+	}
+
+	//get participant list and make it unique
+	participants := make([]uuid.UUID, 0, len(body.Notes))
+	seen := make(map[uuid.UUID]struct{}, len(body.Notes))
+
+	for _, n := range body.Notes {
+		if _, exists := seen[n.Author]; exists {
+			continue
+		}
+		seen[n.Author] = struct{}{}
+		participants = append(participants, n.Author)
+	}
+
+	//run them through the checker
+	existingParticipants, err := s.users.GetExistingUserIDs(ctx, participants)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to import board")
-		span.RecordError(err)
-		log.Errorw("Could not import board", "err", err)
-		common.Throw(w, r, err)
-		return
+		return body, err
 	}
 
-	cols, err := s.columns.GetAll(ctx, b.ID)
+	// no participant was deleted
+	if len(existingParticipants) == len(participants) {
+		return body, nil
+	}
+
+	diffMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
+	for _, item := range existingParticipants {
+		diffMap[item] = struct{}{}
+	}
+
+	deletedParticipants := make([]uuid.UUID, 0, len(participants))
+
+	for _, item := range participants {
+		if _, found := diffMap[item]; !found {
+			deletedParticipants = append(deletedParticipants, item)
+		}
+	}
+
+	// create a map of deleted users and newly created ones.
+	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
+
+	for _, deletedID := range deletedParticipants {
+		name := "deleted user " + deletedID.String()[:5]
+		user, err := s.users.CreateAnonymous(ctx, name)
+		if err != nil {
+			// todo: delete already created users
+			return body, err
+		}
+		participantMapping[deletedID] = user.ID
+	}
+
+	for i, note := range body.Notes {
+		if replacementID, exists := participantMapping[note.Author]; exists {
+			body.Notes[i].Author = replacementID
+		}
+	}
+	return body, nil
+}
+
+func (s *Server) processImportedNotes(ctx context.Context, boardID uuid.UUID, body boards.ImportBoardRequest) error {
+	cols, err := s.columns.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns from imported board")
-		span.RecordError(err)
-		_ = s.boards.Delete(ctx, b.ID)
+		return err
 	}
 
-	type ParentChildNotes struct {
-		Parent   notes.Note
-		Children []notes.Note
+	body, err = s.replaceDeletedParticipants(ctx, body)
+	if err != nil {
+		return err
 	}
+
+	//todo:  have fallback mechanism that deletes users again if anything else fails
+	//perhaps one funciton that is called to revert the import
+
+	parentNotes, childNotes := organizeNotes(body.Notes)
+
+	colMap := make(map[uuid.UUID]uuid.UUID)
+	for i, col := range body.Columns {
+		colMap[col.ID] = cols[i].ID
+	}
+
+	var organizedNotes []parentChildNotes
+	for parentID, parentNote := range parentNotes {
+		newColID, exists := colMap[parentNote.Position.Column]
+		if !exists {
+			continue // Skip if column mapping is invalid
+		}
+
+		note, err := s.notes.Import(ctx, notes.NoteImportRequest{
+			Text: parentNote.Text,
+			Position: notes.NotePosition{
+				Column: newColID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+			Board: boardID,
+			User:  parentNote.Author,
+		})
+		if err != nil {
+			return err
+		}
+
+		organizedNotes = append(organizedNotes, parentChildNotes{
+			Parent:   *note,
+			Children: childNotes[parentID],
+		})
+	}
+
+	return s.importChildNotes(ctx, boardID, organizedNotes)
+}
+
+func organizeNotes(importNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {
 	parentNotes := make(map[uuid.UUID]notes.Note)
 	childNotes := make(map[uuid.UUID][]notes.Note)
 
-	for _, note := range body.Notes {
+	for _, note := range importNotes {
 		if !note.Position.Stack.Valid {
 			parentNotes[note.ID] = note
 		} else {
 			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
 		}
 	}
+	return parentNotes, childNotes
+}
 
-	var organizedNotes []ParentChildNotes
-	for parentID, parentNote := range parentNotes {
-		for i, column := range body.Columns {
-			if parentNote.Position.Column == column.ID {
-
-				note, err := s.notes.Import(ctx, notes.NoteImportRequest{
-					Text: parentNote.Text,
-					Position: notes.NotePosition{
-						Column: cols[i].ID,
-						Stack:  uuid.NullUUID{},
-						Rank:   0,
-					},
-					Board: b.ID,
-					User:  parentNote.Author,
-				})
-				if err != nil {
-					span.SetStatus(codes.Error, "failed to import notes")
-					span.RecordError(err)
-					_ = s.boards.Delete(ctx, b.ID)
-					common.Throw(w, r, err)
-					return
-				}
-				parentNote = *note
-			}
-		}
-		organizedNotes = append(organizedNotes, ParentChildNotes{
-			Parent:   parentNote,
-			Children: childNotes[parentID],
-		})
-	}
-
+func (s *Server) importChildNotes(ctx context.Context, boardID uuid.UUID, organizedNotes []parentChildNotes) error {
 	for _, node := range organizedNotes {
 		for _, note := range node.Children {
 			_, err := s.notes.Import(ctx, notes.NoteImportRequest{
 				Text:  note.Text,
-				Board: b.ID,
+				Board: boardID,
 				User:  note.Author,
 				Position: notes.NotePosition{
 					Column: node.Parent.Position.Column,
@@ -645,15 +743,9 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				},
 			})
 			if err != nil {
-				span.SetStatus(codes.Error, "failed to import note")
-				span.RecordError(err)
-				_ = s.boards.Delete(ctx, b.ID)
-				common.Throw(w, r, err)
-				return
+				return err
 			}
 		}
 	}
-
-	render.Status(r, http.StatusCreated)
-	render.Respond(w, r, b)
+	return nil
 }
