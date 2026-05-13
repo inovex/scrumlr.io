@@ -119,12 +119,12 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_DatabaseError() {
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 
-	suite.expectGetAllNotes(nil, common.NotFoundError)
+	suite.expectGetAllNotes(nil, ErrColumnNotFound)
 
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+	suite.Equal(ErrColumnNotFound, err)
 }
 
 func (suite *ColumnServiceTestSuite) TestUpdateColumn() {
@@ -257,7 +257,7 @@ func (suite *ColumnServiceTestSuite) TestGetCount_DatabaseError() {
 	columnCount, err := suite.service.GetCount(context.Background(), suite.boardID)
 
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 	suite.Equal(count, columnCount)
 }
 
