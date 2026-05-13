@@ -7414,13 +7414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "react-hotkeys-hook@npm:5.2.4"
+"react-hotkeys-hook@npm:^5.3.0":
+  version: 5.3.2
+  resolution: "react-hotkeys-hook@npm:5.3.2"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/8163a22d5add0033ae30951bb93d48f0a894670d6272668744ef18e98f20df792fff2fb0cb03834a2322bafbc99bca277ac9dacd5676705a65ec4bc13767785b
+  checksum: 10c0/a1e9edf31dc7c9804153e9ce2b64cdde5e997190b429354d8e561163f692b1cabad911343ef7e192a498160742608c53a7b9c5bb9cfa2ca832c4b482c33d8c83
   languageName: node
   linkType: hard
 
@@ -8093,7 +8093,7 @@ __metadata:
     react-dom: "npm:^19.2.5"
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
-    react-hotkeys-hook: "npm:^5.2.4"
+    react-hotkeys-hook: "npm:^5.3.0"
     react-i18next: "npm:^17.0.6"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.14.2"
