@@ -31,7 +31,6 @@ $max-card-width: 970px;
 }
 
 .history__card-container {
-  container-type: inline-size;
   display: grid;
   // place cards next to each other if width limit is exceeded
   grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));

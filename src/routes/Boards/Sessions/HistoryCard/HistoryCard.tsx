@@ -93,94 +93,96 @@ export const HistoryCard = (props: HistoryCardProps) => {
     );
 
   return (
-    <div className="history-card">
-      <FavouriteButton
-        className="history-card__favourite"
-        active={props.board.favourite}
-        onClick={() => {
-          throw new Error("Not implemented yet");
-        }}
-      />
+    <div className="history-card__wrapper">
+      <div className="history-card">
+        <FavouriteButton
+          className="history-card__favourite"
+          active={props.board.favourite}
+          onClick={() => {
+            throw new Error("Not implemented yet");
+          }}
+        />
 
-      <div className={classNames("history-card__head")}>
-        <div ref={boardNameRef} id={`history-card__title::${props.board.id}`} className="history-card__title">
-          {props.board.name}
+        <div className={classNames("history-card__head")}>
+          <div ref={boardNameRef} id={`history-card__title::${props.board.id}`} className="history-card__title">
+            {props.board.name}
+          </div>
+
+          {renderAccessPolicyIcon(props.board.accessPolicy)}
+
+          <UserRoleChip className="history-card__user-role-chip" userRole={props.board.userRole} />
         </div>
 
-        {renderAccessPolicyIcon(props.board.accessPolicy)}
+        {renderMenu()}
 
-        <UserRoleChip className="history-card__user-role-chip" userRole={props.board.userRole} />
-      </div>
+        <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
 
-      {renderMenu()}
+        <div className={classNames("history-card__info-footer")}>
+          <div className="history-card__info-item">
+            <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
+              <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
+              <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
+                {joinedColumnsNames}
+              </div>
+            </div>
+          </div>
 
-      <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
+          <div className="history-card__info-item">
+            <CalendarIcon className={classNames("history-card__icon", "history-card__icon--calendar")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--timestamps">
+              <div className="history-card__info-item-data-title">
+                {props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"})}
+              </div>
+              <div className="history-card__info-item-data-subtitle">Last Changed: {props.board.modifiedAt.toLocaleDateString()}</div>
+            </div>
+          </div>
 
-      <div className={classNames("history-card__info-footer")}>
-        <div className="history-card__info-item">
-          <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
-          <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
-            <div className="history-card__info-item-data-title">Columns: {props.board.columns.length}</div>
-            <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
-              {joinedColumnsNames}
+          <div className="history-card__info-item">
+            <MultipleUserIcon className={classNames("history-card__icon", "history-card__icon--participants")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--participants">
+              <div className="history-card__info-item-data-title">{props.board.participants} Participants</div>
+            </div>
+          </div>
+
+          <div className="history-card__info-item">
+            <NoteIcon className={classNames("history-card__icon", "history-card__icon--notes")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--notes">
+              <div className="history-card__info-item-data-title">{props.board.participants} Notes</div>
             </div>
           </div>
         </div>
 
-        <div className="history-card__info-item">
-          <CalendarIcon className={classNames("history-card__icon", "history-card__icon--calendar")} />
-          <div className="history-card__info-item-data-container history-card__info-item-data-container--timestamps">
-            <div className="history-card__info-item-data-title">
-              {props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"})}
-            </div>
-            <div className="history-card__info-item-data-subtitle">Last Changed: {props.board.modifiedAt.toLocaleDateString()}</div>
+        {props.board.isLocked && (
+          <div className="history-card__locked-icon-container">
+            <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
           </div>
-        </div>
+        )}
 
-        <div className="history-card__info-item">
-          <MultipleUserIcon className={classNames("history-card__icon", "history-card__icon--participants")} />
-          <div className="history-card__info-item-data-container history-card__info-item-data-container--participants">
-            <div className="history-card__info-item-data-title">{props.board.participants} Participants</div>
-          </div>
-        </div>
-
-        <div className="history-card__info-item">
-          <NoteIcon className={classNames("history-card__icon", "history-card__icon--notes")} />
-          <div className="history-card__info-item-data-container history-card__info-item-data-container--notes">
-            <div className="history-card__info-item-data-title">{props.board.participants} Notes</div>
-          </div>
-        </div>
+        <Button
+          className={classNames("history-card__button", "history-card__button--start")}
+          small
+          icon={<NextIcon />}
+          onClick={() => {
+            throw new Error("Not implemented yet");
+          }}
+        >
+          Go to Session
+        </Button>
+        {isBoardNameTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
+            {props.board.name}
+          </Tooltip>
+        )}
+        <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
+          Read Only
+        </Tooltip>
+        {isColumnsSubtitleTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
+            {joinedColumnsNames}
+          </Tooltip>
+        )}
       </div>
-
-      {props.board.isLocked && (
-        <div className="history-card__locked-icon-container">
-          <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
-        </div>
-      )}
-
-      <Button
-        className={classNames("history-card__button", "history-card__button--start")}
-        small
-        icon={<NextIcon />}
-        onClick={() => {
-          throw new Error("Not implemented yet");
-        }}
-      >
-        Go to Session
-      </Button>
-      {isBoardNameTruncated.horizontal && (
-        <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
-          {props.board.name}
-        </Tooltip>
-      )}
-      <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
-        Read Only
-      </Tooltip>
-      {isColumnsSubtitleTruncated.horizontal && (
-        <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
-          {joinedColumnsNames}
-        </Tooltip>
-      )}
     </div>
   );
 };

@@ -2,11 +2,17 @@
 @use "constants/colors";
 
 $card-breakpoint--compact: 970px;
+$card-breakpoint--medium: 680px;
 
 $card-height--default: 220px;
 $card-height--mobile: 292px;
 
 $description-height: 3 * styles.$line-height--medium;
+
+.history-card__wrapper {
+  // wrapper can be used to measure the card's dimensions
+  container-type: inline-size;
+}
 
 .history-card {
   --card-height: $card-height--default;
@@ -202,6 +208,7 @@ $description-height: 3 * styles.$line-height--medium;
   grid-area: button;
 }
 
+// compact style by wrapping the info container in a 2x2 grid
 @container (max-width: #{$card-breakpoint--compact}) {
   .history-card {
     --card-height: $card-height--mobile;
@@ -225,6 +232,18 @@ $description-height: 3 * styles.$line-height--medium;
   .history-card__info-item {
     flex: 0 0 calc(50% - (#{styles.$spacing--sm} / 2)); // setting max width to half of available space to accommodate 2 items per row
     overflow: hidden;
+  }
+}
+
+// not as compact as above (button next to info) but still more than the default (wrapped info)
+@container (min-width: #{$card-breakpoint--medium}) and (max-width: #{$card-breakpoint--compact}) {
+  .history-card {
+    grid-template-areas:
+      "fav-icon   .     head          head          head        head         .           menu"
+      ".          .     description   description   description description  description ."
+      ".          .     .             .             .           .            .           ."
+      "info       info  info          .             .           .            .           ."
+      "info       info  info          locked        .           button       button      button";
   }
 }
 
