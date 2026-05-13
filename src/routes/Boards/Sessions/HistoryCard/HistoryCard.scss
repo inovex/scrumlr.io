@@ -227,3 +227,28 @@ $description-height: 3 * styles.$line-height--medium;
     overflow: hidden;
   }
 }
+
+[data-theme="dark"] {
+  .history-card {
+    background-color: styles.$navy--400;
+    box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);
+  }
+
+  .history-card__icon,
+  .history-card__title,
+  .history-card__description,
+  .history-card__info-item-data-title {
+    color: styles.$gray--000;
+  }
+
+  .history-card__info-item-data-subtitle {
+    color: styles.$gray--800;
+  }
+
+  .history-card__menu-icon-container,
+  .history-card__locked-icon-container {
+    &:hover {
+      background-color: styles.$navy--500;
+    }
+  }
+}

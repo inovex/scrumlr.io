@@ -1,6 +1,10 @@
 @use "constants/styles";
+@use "sass:color";
 
 .access-policy-chip {
+  --chip-accent-color: #{styles.$navy--400};
+  --chip-accent-background-color: unset;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -10,30 +14,47 @@
   padding: 6px 12px 6px 8px;
   border-radius: styles.$rounded--large;
 
-  &--participant {
-    background-color: styles.$gray--300;
-  }
+  color: var(--chip-accent-color);
+  background-color: var(--chip-accent-background-color);
 
+  &--participant {
+    --chip-accent-background-color: #{styles.$gray--300};
+  }
   &--moderator {
-    background-color: styles.$pink--100;
+    --chip-accent-background-color: #{styles.$pink--100};
   }
 
   &--owner {
-    background-color: styles.$blue--50;
+    --chip-accent-background-color: #{styles.$blue--50};
   }
 }
 
 .access-policy-chip__icon {
   width: 20px;
   height: 20px;
-
-  color: styles.$navy--400;
 }
 
 .access-policy-chip__label {
   font-size: styles.$text--sm;
   font-weight: 700;
   line-height: styles.$line-height--medium;
+}
 
-  color: styles.$navy--400;
+[data-theme="dark"] {
+  .access-policy-chip {
+    &--participant {
+      --chip-accent-color: #{styles.$gray--300};
+      --chip-accent-background-color: #{styles.$navy--200};
+    }
+
+    &--moderator {
+      --chip-accent-color: #{styles.$pink--100};
+      --chip-accent-background-color: #{color.change(styles.$pink--400, $alpha: 0.24)};
+    }
+
+    &--owner {
+      --chip-accent-color: #{styles.$blue--50};
+      --chip-accent-background-color: #{color.change(styles.$blue--400, $alpha: 0.24)};
+    }
+  }
 }

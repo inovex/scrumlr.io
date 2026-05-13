@@ -105,8 +105,6 @@ $card-description-height: 4 * 20px;
     position: absolute;
     top: -1 * styles.$spacing--xxs;
     right: -1 * styles.$spacing--xxs;
-
-    box-shadow: 0 2px 20px 0 rgba(styles.$navy--400, 0.12);
   }
 }
 
@@ -180,9 +178,9 @@ $card-description-height: 4 * 20px;
     color: styles.$gray--000;
   }
 
-  .template-card__menu {
-    &--open {
-      box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);
+  .template-card__menu-icon-container {
+    &:hover {
+      background-color: styles.$navy--500;
     }
   }
 
