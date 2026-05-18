@@ -1531,6 +1531,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-localstorage@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@types/node-localstorage@npm:1.3.3"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/a33f2fe7c95c67a91219a85ea342dc1f201e1be2aed0883be55da32051ea8c814f6aeb420819d0f6b495b5027c61587aba378c6ca8a6368e435af51530bec48b
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:>=20.0.0, @types/node@npm:^25.6.0":
   version: 25.6.0
   resolution: "@types/node@npm:25.6.0"
@@ -6494,12 +6503,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:18.0.2":
-  version: 18.0.2
-  resolution: "marked@npm:18.0.2"
+"marked@npm:18.0.3":
+  version: 18.0.3
+  resolution: "marked@npm:18.0.3"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/d04f58c0dee158a8069dad88de549b0039f2af7e1f0fd078aa783f360655e39296662f6c722dc6dd94c1c9ce9ba7ca9355ee1d8d77dd7b9a2f8162ebac6d9bbd
+  checksum: 10c0/f2943a439acf17942058f8e4c51373e0f8aa88194b55625ffa22db7955b9c2752fe9bdd4a31498f667d30e5667bab2c27e3f2f56a1045f53b693f000a6199840
   languageName: node
   linkType: hard
 
@@ -6699,6 +6708,15 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 10c0/9d9032b405cbe42f72a105259d9eb679376470c102df4a2dbaa51e07d59bf741dcffb85897087ea9d8318b9cabb824a8978af51508ae142f0239ae1e6a3c2329
+  languageName: node
+  linkType: hard
+
+"node-localstorage@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "node-localstorage@npm:3.0.5"
+  dependencies:
+    write-file-atomic: "npm:^5.0.1"
+  checksum: 10c0/ab042511e44bbeb0c18df4418bd0ec65fe574fa4bf492d8b7f2d96a0eccad722f9a26147cdf5c42c1c9d64da7b64b343f39a2d9862b7d7f4543fcb4ebec6f7da
   languageName: node
   linkType: hard
 
@@ -7078,9 +7096,9 @@ __metadata:
   linkType: hard
 
 "picomatch@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "picomatch@npm:2.3.1"
-  checksum: 10c0/26c02b8d06f03206fc2ab8d16f19960f2ff9e81a658f831ecb656d8f17d9edc799e8364b1f4a7873e89d9702dff96204be0fa26fe4181f6843f040f819dac4be
+  version: 2.3.2
+  resolution: "picomatch@npm:2.3.2"
+  checksum: 10c0/a554d1709e59be97d1acb9eaedbbc700a5c03dbd4579807baed95100b00420bc729335440ef15004ae2378984e2487a7c1cebd743cfdb72b6fa9ab69223c0d61
   languageName: node
   linkType: hard
 
@@ -7396,25 +7414,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "react-hotkeys-hook@npm:5.2.4"
+"react-hotkeys-hook@npm:^5.3.0":
+  version: 5.3.2
+  resolution: "react-hotkeys-hook@npm:5.3.2"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/8163a22d5add0033ae30951bb93d48f0a894670d6272668744ef18e98f20df792fff2fb0cb03834a2322bafbc99bca277ac9dacd5676705a65ec4bc13767785b
+  checksum: 10c0/a1e9edf31dc7c9804153e9ce2b64cdde5e997190b429354d8e561163f692b1cabad911343ef7e192a498160742608c53a7b9c5bb9cfa2ca832c4b482c33d8c83
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.4":
-  version: 17.0.4
-  resolution: "react-i18next@npm:17.0.4"
+"react-i18next@npm:^17.0.6":
+  version: 17.0.7
+  resolution: "react-i18next@npm:17.0.7"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 26.0.1"
+    i18next: ">= 26.0.10"
     react: ">= 16.8.0"
     typescript: ^5 || ^6
   peerDependenciesMeta:
@@ -7424,7 +7442,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/bfee7ff0194c218fd77f1bacfe83770ad7ab607c8b420b5ce7bac219afb898fe8befc2dcc42313886950914e2734d3921e4b465466eb3ecc967da4e3acbcf9ea
+  checksum: 10c0/4a1cee24696a3a27ca3642a12fc08ffe5d1ce21cab7ee908488805c90b4e15ab30f17452b39bec32a5b02375d4f6155cfd301d23f24506667b5bfc64fcb7e72f
   languageName: node
   linkType: hard
 
@@ -8022,6 +8040,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/lodash": "npm:^4.17.24"
     "@types/node": "npm:^25.6.0"
+    "@types/node-localstorage": "npm:^1.3.3"
     "@types/qrcode.react": "npm:^3.0.0"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
@@ -8062,7 +8081,8 @@ __metadata:
     linkify-react: "npm:^4.3.2"
     linkifyjs: "npm:^4.3.2"
     lint-staged: "npm:^16.4.0"
-    marked: "npm:18.0.2"
+    marked: "npm:18.0.3"
+    node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
     prettier: "npm:^3.8.3"
     qrcode.react: "npm:^4.2.0"
@@ -8073,8 +8093,8 @@ __metadata:
     react-dom: "npm:^19.2.5"
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
-    react-hotkeys-hook: "npm:^5.2.4"
-    react-i18next: "npm:^17.0.4"
+    react-hotkeys-hook: "npm:^5.3.0"
+    react-i18next: "npm:^17.0.6"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.14.2"
     react-snowfall: "npm:^2.4.0"
@@ -8813,11 +8833,11 @@ __metadata:
   linkType: hard
 
 "systeminformation@npm:^5.31.1":
-  version: 5.31.3
-  resolution: "systeminformation@npm:5.31.3"
+  version: 5.31.6
+  resolution: "systeminformation@npm:5.31.6"
   bin:
     systeminformation: lib/cli.js
-  checksum: 10c0/f093cea323845522b71c5cdb8ec1919dbaff9a6c01fe77638dc4d30d936f827acd776112cb93b6f0af6294ab1c177b0a0bf44ae5b1c072c1b43597d86a00423f
+  checksum: 10c0/fb0c9dae20e47277d26f3dd374f14c846567adba15a2bf9715e0a871f912424d31b75f6c27e0c8b819abc3fcd285ae8c1f6468acd8a161f18a1a39b632a01923
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
@@ -9872,6 +9892,16 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 10c0/56fece1a4018c6a6c8e28fbc88c87e0fbf4ea8fd64fc6c63b18f4acc4bd13e0ad2515189786dd2c30d3eec9663d70f4ecf699330002f8ccb547e4a18231fc9f0
+  languageName: node
+  linkType: hard
+
+"write-file-atomic@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "write-file-atomic@npm:5.0.1"
+  dependencies:
+    imurmurhash: "npm:^0.1.4"
+    signal-exit: "npm:^4.0.1"
+  checksum: 10c0/e8c850a8e3e74eeadadb8ad23c9d9d63e4e792bd10f4836ed74189ef6e996763959f1249c5650e232f3c77c11169d239cbfc8342fc70f3fe401407d23810505d
   languageName: node
   linkType: hard
 
