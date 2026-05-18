@@ -1,5 +1,5 @@
-import {toast, ToastOptions} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {toast, ToastOptions} from "react-toastify/unstyled";
+import "react-toastify/ReactToastify.css";
 import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";

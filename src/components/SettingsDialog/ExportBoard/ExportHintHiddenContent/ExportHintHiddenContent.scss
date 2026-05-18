@@ -1,6 +1,5 @@
 @use "constants/styles";
-
-$list-style-type: "– ";
+@use "constants/colors";
 
 /*
  * layout:
@@ -11,20 +10,32 @@ $list-style-type: "– ";
   display: grid;
   align-items: center;
 
-  grid-gap: styles.$spacing--xs styles.$spacing--base;
-  margin-top: styles.$spacing--lg;
-  padding: 0 styles.$spacing--base;
+  grid-gap: 0 styles.$spacing--xxs;
+  padding: styles.$spacing--xs;
   line-height: styles.$line-height--medium;
+
+  border-radius: styles.$rounded--default;
+
+  background-color: colors.$yellow--100;
+
+  color: colors.$navy--500;
+  font-weight: 500;
 }
 
 .hint-hidden-columns__info-icon {
+  align-self: flex-start;
+
   width: styles.$icon--large;
   height: styles.$icon--large;
-  color: styles.$critical-carmine--light;
+
+  color: colors.$navy--400;
 }
 
 .hint-hidden-columns__info-text {
   grid-column-start: 2; // top right
+
+  font-size: styles.$text--sm;
+  font-weight: 500;
 }
 
 .hint-hidden-columns__columns-list-container {
@@ -33,13 +44,31 @@ $list-style-type: "– ";
 
 .hint-hidden-columns__columns-list {
   margin: 0;
-  padding-left: styles.$spacing--lg;
-  list-style-type: $list-style-type;
+  padding-left: styles.$spacing--sm;
+
+  font-size: styles.$text--sm;
+  font-weight: 500;
+}
+
+.hint-hidden-columns__columns-list-item {
+  display: flex;
+  align-items: center;
+  gap: styles.$spacing--xs;
+
+  // custom enumeration bullet which can be resized
+  &::before {
+    content: "•";
+    font-size: 1em;
+  }
 }
 
 [data-theme="dark"] {
-  .hint-hidden-columns__info-text,
-  .hint-hidden-columns__columns-list {
-    color: styles.$gray--000;
+  .hint-hidden-columns__grid-container {
+    color: colors.$gray--400;
+    background-color: rgba(colors.$yellow--400, 0.2);
+  }
+
+  .hint-hidden-columns__info-icon {
+    color: colors.$gray--000;
   }
 }

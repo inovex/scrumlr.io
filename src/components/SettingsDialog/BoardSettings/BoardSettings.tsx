@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, Fragment, useEffect, useRef, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {AccessPolicy, deleteBoard, editBoard, setHotkeyState, setShowHiddenColumns} from "store/features";
-import {LockOpenIcon, MultipleUserIcon, KeyProtectedIcon, TrashIcon, InfoIcon} from "components/Icon";
+import {OpenIcon, LockClosedIcon, KeyProtectedIcon, TrashIcon, InfoIcon} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {Toggle} from "components/Toggle";
@@ -73,8 +73,8 @@ export const BoardSettings = () => {
   };
 
   const ACCESS_POLICY_OPTIONS = [
-    {policy: "PUBLIC" as const, icon: <LockOpenIcon />, label: t("BoardSettings.AccessPolicyPublicLabel")},
-    {policy: "BY_INVITE" as const, icon: <MultipleUserIcon />, label: t("BoardSettings.AccessPolicyByInviteLabel")},
+    {policy: "PUBLIC" as const, icon: <OpenIcon />, label: t("BoardSettings.AccessPolicyPublicLabel")},
+    {policy: "BY_INVITE" as const, icon: <LockClosedIcon />, label: t("BoardSettings.AccessPolicyByInviteLabel")},
     {policy: "BY_PASSPHRASE" as const, icon: <KeyProtectedIcon />, label: t("BoardSettings.AccessPolicyByPassphraseLabel")},
   ];
 

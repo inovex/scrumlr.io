@@ -1,10 +1,14 @@
-FROM node:iron-alpine AS build-stage
+FROM node:26-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
-RUN yarn install --network-timeout 240000
+# starting from node 26, corepack isn't shipped anymore and has to manually be added in order for yarn modern to work
+RUN npm install -g corepack@latest --ignore-scripts && \
+    corepack enable && \
+    corepack install
+RUN yarn install --immutable --mode=skip-build --network-timeout 240000
 
 COPY src/ src/
 COPY public/ public/

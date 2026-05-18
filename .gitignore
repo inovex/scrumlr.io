@@ -5,6 +5,7 @@ node_modules/
 package-lock.json
 
 # npm & yarn package manager
+.yarn/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -13,6 +14,7 @@ yarn-error.log*
 # testing
 /coverage
 server/src/coverage.*
+src/utils/test/localstorage
 
 # builds
 build

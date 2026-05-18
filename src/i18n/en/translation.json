@@ -186,7 +186,7 @@
   },
   "ExportBoardOption": {
     "title": "Export board",
-    "subtitle": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
+    "info": "Access settings are not preserved when exporting a board. Additionally, boards can only be imported via JSON file.",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
@@ -445,7 +445,8 @@
     "you": "you",
     "userImageAlt": "media provided by {{user}}",
     "edited": "edited",
-    "isMovingThis": "{{user}}"
+    "isMovingThis": "{{user}}",
+    "showMore": "Show more"
   },
   "StackView": {
     "prevNote": "Previous note",
@@ -559,6 +560,7 @@
     "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
     "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
     "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
+    "importBoard": "Sorry, but we're having trouble importing the board. Please try again.",
     "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
     "createColumn": "Sorry, but we're having trouble adding the column. Please try again.",
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",

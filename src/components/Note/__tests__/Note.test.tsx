@@ -9,6 +9,7 @@ import {ApplicationState} from "store";
 import {BoardState} from "store/features/board/types";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
+import * as useTextOverflowModule from "utils/hooks/useTextOverflow";
 
 const NOTE_ID = "test-notes-id-1";
 
@@ -94,6 +95,27 @@ describe("Note", () => {
       const board = createBoardData({showAuthors: true});
       const {container} = render(createNote(false, {board: board}));
       expect(container.getElementsByClassName("note__marker-edited").length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("show more button", () => {
+    it("should not render show more button when text is not truncated", () => {
+      vi.spyOn(useTextOverflowModule, "useTextOverflow").mockReturnValue({
+        isTextTruncated: {horizontal: false, vertical: false},
+        textRef: {current: null},
+      });
+      const {container} = render(createNote(false));
+      expect(container.querySelector(".note__show-more")).not.toBeInTheDocument();
+    });
+
+    it("should render show more button when text is vertically truncated", () => {
+      vi.spyOn(useTextOverflowModule, "useTextOverflow").mockReturnValue({
+        isTextTruncated: {horizontal: false, vertical: true},
+        textRef: {current: null},
+      });
+      const {container} = render(createNote(false));
+      const showMoreButton = container.querySelector(".note__show-more");
+      expect(showMoreButton).toBeInTheDocument();
     });
   });
 });

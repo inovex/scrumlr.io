@@ -1,8 +1,20 @@
 /// <reference types="cypress" />
 /// <reference path="../support/index.d.ts" />
 
+const uniqueTemplateName = (prefix: string) => `${prefix} ${Date.now()}-${Cypress._.random(1000,9999)}`
+
+
+const getTemplateByName = (templateName: string): Cypress.Chainable<JQuery<HTMLElement>> =>
+  cy
+    .get("[data-cy='template-card--CUSTOM']")
+    .filter(`:has(input[value="${templateName}"])`);
+
+
 describe("templates", () => {
-  beforeEach(cy.login)
+  beforeEach (() => {
+    cy.login()
+    cy.visit("/boards/templates")
+  })
 
   it("should create board from recommended template", () => {
     cy
@@ -23,48 +35,75 @@ describe("templates", () => {
   })
 
   it("should create a new template with default settings", () => {
+    const templateName = uniqueTemplateName("Custom Template")
     cy
-      .createCustomTemplate("Custom Template")
+      .createCustomTemplate(templateName)
 
     cy
       .url()
       .should("include", "/boards/templates") // we're so back
 
-    cy.get("[data-cy='template-card--CUSTOM']")
-      .should("have.length", 1)
+    getTemplateByName(templateName).should("exist");
   });
 
   it("should delete custom template", () => {
+    const templateName = uniqueTemplateName("Delete Template")
     cy
-      .createCustomTemplate("Del Template")
+      .createCustomTemplate(templateName)
 
-    cy.selectMiniMenu("template-card__menu", "Delete")
+    getTemplateByName(templateName)
+      .within(() => {
+        cy.selectMiniMenu("template-card__menu", "Delete")
+      });
 
-    cy.get("[data-cy='template-card--CUSTOM']")
+    cy
+      .get('.template-card')
+      .filter(`:has(input[value="${templateName}"])`)
       .should("not.exist")
   });
 
   it("should edit custom template", () => {
+        const templateName = uniqueTemplateName("Edit Template")
     cy
-      .createCustomTemplate("Edit Template")
+      .createCustomTemplate(templateName)
+
+    getTemplateByName(templateName)
+      .within(() => {
+        cy.selectMiniMenu("template-card__menu", "Edit")
+      });
 
     cy
-      .selectMiniMenu("template-card__menu", "Edit")
-
-    cy
-      .get("[data-cy='columns-configurator-column__color-picker']")
+      .get("[data-cy='columns-configurator__column']")
       .first()
-      .click()
+      .as("firstColumn");
+
+    cy.get("@firstColumn").within(() => {
+      cy
+        .get("[data-cy='columns-configurator-column__color-picker']")
+        .click();
+      cy
+        .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
+          .click();
+    });
 
     cy
-      .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
-      .click()
+      .get("@firstColumn")
+      .should("have.class", "accent-color__goal-green");
+
+
+    cy.get("@firstColumn").within(() => {
+      cy
+        .get("[data-cy='columns-configurator-column__icon--visibility']")
+        .first()
+        .click()
+    });
 
     cy
-      .get("[data-cy='columns-configurator-column__icon--visibility']")
-      .click({multiple:true})
+      .get("@firstColumn")
+      .should("have.class", "columns-configurator-column--hidden");
 
-    // cannot get it to work, oh well
+
+    // cannot get it to work :(
     cy
       .get("[data-cy='columns-configurator-column__drag-element']")
       .first()
@@ -75,6 +114,5 @@ describe("templates", () => {
     cy
       .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
       .click()
-
   });
 })
