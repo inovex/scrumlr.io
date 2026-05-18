@@ -614,7 +614,7 @@ func uniqueImportedNoteAuthors(importNotes []notes.Note) []uuid.UUID {
 	return participants
 }
 
-func deletedImportedParticipants(participants []uuid.UUID, existingParticipants []uuid.UUID) []uuid.UUID {
+func deletedImportedParticipants(participants, existingParticipants []uuid.UUID) []uuid.UUID {
 	existingParticipantMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
 	for _, participant := range existingParticipants {
 		existingParticipantMap[participant] = struct{}{}
