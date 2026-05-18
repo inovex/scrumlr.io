@@ -650,20 +650,17 @@ func (s *Server) replaceDeletedParticipants(ctx context.Context, body boards.Imp
 
 	participants := uniqueImportedNoteAuthors(body.Notes)
 
-	//run them through the checker
 	existingParticipants, err := s.users.GetExistingUserIDs(ctx, participants)
 	if err != nil {
 		return body, nil, err
 	}
 
-	// no participant was deleted
 	if len(existingParticipants) == len(participants) {
 		return body, nil, nil
 	}
 
 	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
 
-	// create a map of deleted users and newly created ones.
 	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
 	createdParticipants := make([]uuid.UUID, 0, len(deletedParticipants))
 
@@ -715,7 +712,7 @@ func (s *Server) processImportedNotes(ctx context.Context, boardID uuid.UUID, bo
 	for parentID, parentNote := range parentNotes {
 		newColID, exists := colMap[parentNote.Position.Column]
 		if !exists {
-			continue // Skip if column mapping is invalid
+			continue
 		}
 
 		note, err := s.notes.Import(ctx, notes.NoteImportRequest{
