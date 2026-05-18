@@ -41,34 +41,38 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
         value="sample name 1"
       />
     </div>
-    <svg
-      class="template-card__menu template-card__icon template-card__icon--menu"
-      data-cy="template-card__menu"
-      fill="none"
-      height="32"
-      viewBox="0 0 32 32"
-      width="32"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      class="template-card__menu-icon-container"
     >
-      <circle
-        cx="6.5"
-        cy="16"
-        fill="currentColor"
-        r="2.5"
-      />
-      <circle
-        cx="16"
-        cy="16"
-        fill="currentColor"
-        r="2.5"
-      />
-      <circle
-        cx="25.5"
-        cy="16"
-        fill="currentColor"
-        r="2.5"
-      />
-    </svg>
+      <svg
+        class="template-card__icon template-card__icon--menu"
+        data-cy="template-card__menu"
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="6.5"
+          cy="16"
+          fill="currentColor"
+          r="2.5"
+        />
+        <circle
+          cx="16"
+          cy="16"
+          fill="currentColor"
+          r="2.5"
+        />
+        <circle
+          cx="25.5"
+          cy="16"
+          fill="currentColor"
+          r="2.5"
+        />
+      </svg>
+    </div>
     <textarea
       class="template-card__description"
       disabled=""
