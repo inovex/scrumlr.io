@@ -45,8 +45,13 @@ export const HistoryCard = (props: HistoryCardProps) => {
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const joinedColumnsNames = props.board.columns.join(", ");
+  const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
+  const formattedModifiedAtDate = props.board.modifiedAt.toLocaleDateString();
+
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
   const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
+  const {isTextTruncated: isCreatedAtDateTruncated, textRef: createAtDateRef} = useTextOverflow<HTMLDivElement>(formattedCreatedAtDate);
+  const {isTextTruncated: isModifiedAtDateTruncated, textRef: modifiedAtDateRef} = useTextOverflow<HTMLDivElement>(formattedModifiedAtDate);
 
   const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
 
@@ -134,11 +139,11 @@ export const HistoryCard = (props: HistoryCardProps) => {
           <div className="history-card__info-item">
             <CalendarIcon className={classNames("history-card__icon", "history-card__icon--calendar")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--timestamps">
-              <div className="history-card__info-item-data-title">
-                {props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"})}
+              <div ref={createAtDateRef} id={`history-card__info-item-data-title--createdAt::${props.board.id}`} className="history-card__info-item-data-title">
+                {formattedCreatedAtDate}
               </div>
-              <div className="history-card__info-item-data-subtitle">
-                {t("History.HistoryCard.Info.lastUpdated", {date: props.board.modifiedAt.toLocaleDateString(), interpolation: {escapeValue: false}})}
+              <div ref={modifiedAtDateRef} id={`history-card__info-item-data-subtitle--modifiedAt::${props.board.id}`} className="history-card__info-item-data-subtitle">
+                {t("History.HistoryCard.Info.lastUpdated", {date: formattedModifiedAtDate, interpolation: {escapeValue: false}})}
               </div>
             </div>
           </div>
@@ -183,6 +188,16 @@ export const HistoryCard = (props: HistoryCardProps) => {
         {isColumnsSubtitleTruncated.horizontal && (
           <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
             {joinedColumnsNames}
+          </Tooltip>
+        )}
+        {isCreatedAtDateTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-title--createdAt::${props.board.id}`} color="backlog-blue">
+            {formattedCreatedAtDate}
+          </Tooltip>
+        )}
+        {isModifiedAtDateTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-subtitle--modifiedAt::${props.board.id}`} color="backlog-blue">
+            {formattedModifiedAtDate}
           </Tooltip>
         )}
       </div>
