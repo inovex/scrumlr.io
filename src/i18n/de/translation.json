@@ -617,6 +617,16 @@
     "TYPE_MISMATCH": "type mismatch",
     "RANGE": "range"
   },
+  "TimeDifference": {
+    "now": "Gerade eben",
+    "minutes_one": "vor {{count}} Minute",
+    "minutes_other": "vor {{count}} Minuten",
+    "hours_one": "vor {{count}} Stunde",
+    "hours_other": "vor {{count}} Stunden",
+    "days_one": "vor {{count}} Tag",
+    "days_other": "vor {{count}} Tagen",
+    "yesterday": "Gestern"
+  },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",
     "prevOption": "Vorherige Option",

@@ -28,6 +28,7 @@ import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";
+import {getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -45,11 +46,24 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
   const locale = useAppSelector((state) => state.view.language) ?? "en";
 
+  const localizeTimeDifference = (date: Date, now = new Date()) => {
+    const dateThreshold = 3; // "x days ago" before the full date is shown
+    const isYesterday = isDateYesterday(date);
+
+    const diff = getTimeDifference(date, now);
+    if (diff.seconds < 60) return t("TimeDifference.now");
+    if (diff.minutes < 60) return t("TimeDifference.minutes", {count: diff.minutes});
+    if (isYesterday) return t("TimeDifference.yesterday");
+    if (diff.hours < 24) return t("TimeDifference.hours", {count: diff.hours});
+    if (diff.days < dateThreshold) return t("TimeDifference.days", {count: diff.days});
+    return date.toLocaleDateString(locale, {year: "numeric", month: "2-digit", day: "2-digit"});
+  };
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const joinedColumnsNames = props.board.columns.join(", ");
   const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
-  const formattedModifiedAtDate = props.board.modifiedAt.toLocaleDateString(locale);
+  const formattedModifiedAtDate = localizeTimeDifference(props.board.modifiedAt);
 
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
   const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);

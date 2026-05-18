@@ -47,7 +47,7 @@ const TEST_HISTORY_BOARDS: HistoryBoard[] = [
     columns: ["Start", "Stop", "Continue", "Actions"],
     participants: 12,
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
-    modifiedAt: new Date("2026-01-01T01:00:00.000Z"),
+    modifiedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 1),
     notes: 5,
     isLocked: false,
     userRole: "PARTICIPANT",
