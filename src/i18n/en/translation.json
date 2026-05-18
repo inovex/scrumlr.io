@@ -807,6 +807,9 @@
     "title": "Oops!",
     "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
     "banned": "We're sorry, but it looks like you have been excluded from this session.",
+    "bannedRetryHint": "If you have been re-admitted, you can try to rejoin. We will also check automatically every 30 seconds.",
+    "retry": "Try to rejoin",
+    "retrying": "Retrying...",
     "button": "Back to Homepage"
   },
   "Votes": {
