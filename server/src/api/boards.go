@@ -599,57 +599,82 @@ type parentChildNotes struct {
 	Children []notes.Note
 }
 
-func (s *Server) replaceDeletedParticipants(ctx context.Context, body boards.ImportBoardRequest) (boards.ImportBoardRequest, error) {
-	if len(body.Notes) == 0 {
-		return body, nil
-	}
+func uniqueImportedNoteAuthors(importNotes []notes.Note) []uuid.UUID {
+	participants := make([]uuid.UUID, 0, len(importNotes))
+	seen := make(map[uuid.UUID]struct{}, len(importNotes))
 
-	//get participant list and make it unique
-	participants := make([]uuid.UUID, 0, len(body.Notes))
-	seen := make(map[uuid.UUID]struct{}, len(body.Notes))
-
-	for _, n := range body.Notes {
-		if _, exists := seen[n.Author]; exists {
+	for _, note := range importNotes {
+		if _, exists := seen[note.Author]; exists {
 			continue
 		}
-		seen[n.Author] = struct{}{}
-		participants = append(participants, n.Author)
+		seen[note.Author] = struct{}{}
+		participants = append(participants, note.Author)
 	}
+
+	return participants
+}
+
+func deletedImportedParticipants(participants []uuid.UUID, existingParticipants []uuid.UUID) []uuid.UUID {
+	existingParticipantMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
+	for _, participant := range existingParticipants {
+		existingParticipantMap[participant] = struct{}{}
+	}
+
+	deletedParticipants := make([]uuid.UUID, 0, len(participants))
+	for _, participant := range participants {
+		if _, found := existingParticipantMap[participant]; !found {
+			deletedParticipants = append(deletedParticipants, participant)
+		}
+	}
+
+	return deletedParticipants
+}
+
+func (s *Server) cleanupImportedParticipants(ctx context.Context, userIDs []uuid.UUID) {
+	if len(userIDs) == 0 {
+		return
+	}
+
+	log := logger.FromContext(ctx)
+	for _, userID := range userIDs {
+		if err := s.users.Delete(ctx, userID); err != nil {
+			log.Errorw("failed to cleanup imported placeholder user", "user", userID, "err", err)
+		}
+	}
+}
+
+func (s *Server) replaceDeletedParticipants(ctx context.Context, body boards.ImportBoardRequest) (boards.ImportBoardRequest, []uuid.UUID, error) {
+	if len(body.Notes) == 0 {
+		return body, nil, nil
+	}
+
+	participants := uniqueImportedNoteAuthors(body.Notes)
 
 	//run them through the checker
 	existingParticipants, err := s.users.GetExistingUserIDs(ctx, participants)
 	if err != nil {
-		return body, err
+		return body, nil, err
 	}
 
 	// no participant was deleted
 	if len(existingParticipants) == len(participants) {
-		return body, nil
+		return body, nil, nil
 	}
 
-	diffMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
-	for _, item := range existingParticipants {
-		diffMap[item] = struct{}{}
-	}
-
-	deletedParticipants := make([]uuid.UUID, 0, len(participants))
-
-	for _, item := range participants {
-		if _, found := diffMap[item]; !found {
-			deletedParticipants = append(deletedParticipants, item)
-		}
-	}
+	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
 
 	// create a map of deleted users and newly created ones.
 	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
+	createdParticipants := make([]uuid.UUID, 0, len(deletedParticipants))
 
 	for _, deletedID := range deletedParticipants {
 		name := "deleted user " + deletedID.String()[:5]
 		user, err := s.users.CreateAnonymous(ctx, name)
 		if err != nil {
-			// todo: delete already created users
-			return body, err
+			s.cleanupImportedParticipants(ctx, createdParticipants)
+			return body, nil, err
 		}
+		createdParticipants = append(createdParticipants, user.ID)
 		participantMapping[deletedID] = user.ID
 	}
 
@@ -658,22 +683,26 @@ func (s *Server) replaceDeletedParticipants(ctx context.Context, body boards.Imp
 			body.Notes[i].Author = replacementID
 		}
 	}
-	return body, nil
+	return body, createdParticipants, nil
 }
 
-func (s *Server) processImportedNotes(ctx context.Context, boardID uuid.UUID, body boards.ImportBoardRequest) error {
+func (s *Server) processImportedNotes(ctx context.Context, boardID uuid.UUID, body boards.ImportBoardRequest) (err error) {
 	cols, err := s.columns.GetAll(ctx, boardID)
 	if err != nil {
 		return err
 	}
 
-	body, err = s.replaceDeletedParticipants(ctx, body)
+	var createdParticipants []uuid.UUID
+	body, createdParticipants, err = s.replaceDeletedParticipants(ctx, body)
 	if err != nil {
 		return err
 	}
 
-	//todo:  have fallback mechanism that deletes users again if anything else fails
-	//perhaps one funciton that is called to revert the import
+	defer func() {
+		if err != nil {
+			s.cleanupImportedParticipants(ctx, createdParticipants)
+		}
+	}()
 
 	parentNotes, childNotes := organizeNotes(body.Notes)
 
@@ -709,7 +738,12 @@ func (s *Server) processImportedNotes(ctx context.Context, boardID uuid.UUID, bo
 		})
 	}
 
-	return s.importChildNotes(ctx, boardID, organizedNotes)
+	err = s.importChildNotes(ctx, boardID, organizedNotes)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func organizeNotes(importNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {

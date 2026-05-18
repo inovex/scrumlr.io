@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -22,7 +23,9 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/users"
 )
 
 type BoardTestSuite struct {
@@ -451,4 +454,73 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 			boardMock.AssertExpectations(suite.T())
 		})
 	}
+}
+
+func (suite *BoardTestSuite) TestProcessImportedNotes_CleansUpCreatedParticipantsOnImportFailure() {
+	s := new(Server)
+	columnsMock := columns.NewMockColumnService(suite.T())
+	notesMock := notes.NewMockNotesService(suite.T())
+	usersMock := users.NewMockUserService(suite.T())
+
+	s.columns = columnsMock
+	s.notes = notesMock
+	s.users = usersMock
+
+	ctx := context.Background()
+	boardID := uuid.New()
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	deletedAuthorID := uuid.New()
+	replacementAuthorID := uuid.New()
+
+	body := boards.ImportBoardRequest{
+		Columns: []columns.Column{{ID: importColumnID}},
+		Notes: []notes.Note{{
+			ID:     uuid.New(),
+			Author: deletedAuthorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+		}},
+	}
+
+	columnsMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
+	usersMock.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{deletedAuthorID}).Return([]uuid.UUID{}, nil)
+	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+deletedAuthorID.String()[:5]).Return(&users.User{ID: replacementAuthorID}, nil)
+	notesMock.EXPECT().Import(mock.Anything, mock.Anything).Return(nil, errors.New("import failed"))
+	usersMock.EXPECT().Delete(mock.Anything, replacementAuthorID).Return(nil)
+
+	err := s.processImportedNotes(ctx, boardID, body)
+
+	suite.Error(err)
+}
+
+func (suite *BoardTestSuite) TestReplaceDeletedParticipants_CleansUpOnAnonymousCreationFailure() {
+	s := new(Server)
+	usersMock := users.NewMockUserService(suite.T())
+	s.users = usersMock
+
+	ctx := context.Background()
+	firstDeletedAuthorID := uuid.New()
+	secondDeletedAuthorID := uuid.New()
+	firstReplacementAuthorID := uuid.New()
+
+	body := boards.ImportBoardRequest{
+		Notes: []notes.Note{
+			{ID: uuid.New(), Author: firstDeletedAuthorID},
+			{ID: uuid.New(), Author: secondDeletedAuthorID},
+		},
+	}
+
+	usersMock.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{firstDeletedAuthorID, secondDeletedAuthorID}).Return([]uuid.UUID{}, nil)
+	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+firstDeletedAuthorID.String()[:5]).Return(&users.User{ID: firstReplacementAuthorID}, nil)
+	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+secondDeletedAuthorID.String()[:5]).Return(nil, errors.New("create failed"))
+	usersMock.EXPECT().Delete(mock.Anything, firstReplacementAuthorID).Return(nil)
+
+	_, _, err := s.replaceDeletedParticipants(ctx, body)
+
+	suite.Error(err)
 }
