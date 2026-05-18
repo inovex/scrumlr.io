@@ -116,7 +116,8 @@
         "edit": "Edit",
         "close": "Close"
       },
-      "readOnly": "Read only"
+      "readOnly": "Read only",
+      "openBoardButton": "Go to Session"
     }
   },
   "CreateBoard": {

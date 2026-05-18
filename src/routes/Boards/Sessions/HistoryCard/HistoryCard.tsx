@@ -170,7 +170,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
             throw new Error("Not implemented yet");
           }}
         >
-          Go to Session
+          {t("History.HistoryCard.openBoardButton")}
         </Button>
         {isBoardNameTruncated.horizontal && (
           <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">

@@ -117,7 +117,8 @@
         "edit": "Bearbeiten",
         "close": "Schließen"
       },
-      "readOnly": "Schreibgeschützt"
+      "readOnly": "Schreibgeschützt",
+      "openBoardButton": "Session öffnen"
     }
   },
   "CreateBoard": {
