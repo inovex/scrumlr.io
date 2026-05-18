@@ -107,7 +107,7 @@
         "amountParticipants_other": "{{count}} participants",
         "amountNotes_one": "{{count}} notes",
         "amountNotes_other": "{{count}} notes",
-        "lastUpdated": "Dernière mise à jour: {{date}}"
+        "lastUpdated": "Mis à jour: {{date}}"
       },
       "Menu": {
         "delete": "Supprimer",
