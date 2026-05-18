@@ -367,6 +367,6 @@ export const importBoard = createAsyncThunk<
     () => API.importBoard(payload),
     dispatch,
     () => importBoard(payload),
-    "deleteBoard"
+    "importBoard"
   ).then((boardID) => window.location.assign(`/board/${boardID}`));
 });
