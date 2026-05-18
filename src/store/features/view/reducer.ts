@@ -7,6 +7,7 @@ import {
   THEME_STORAGE_KEY,
 } from "constants/storage";
 import {createReducer} from "@reduxjs/toolkit";
+import i18n from "i18next";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
 import {setHotkeyState, setLanguage, setModerating, setRoute} from "./actions";
@@ -50,6 +51,9 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.moderating = action.payload;
     })
     .addCase(setLanguage, (state, action) => {
+      i18n.changeLanguage(action.payload).then(() => {
+        document.documentElement.lang = action.payload!;
+      });
       state.language = action.payload;
     })
     .addCase(setTheme.fulfilled, (state, action) => {
