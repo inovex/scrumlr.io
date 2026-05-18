@@ -7,11 +7,11 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {shallowEqual} from "react-redux";
-import "./BoardHeader.scss";
-import {ShareButton} from "components/ShareButton";
-import {Tooltip} from "react-tooltip";
 import {leaveBoard} from "store/features";
-import {DEFAULT_BOARD_NAME} from "../../constants/misc";
+import {DEFAULT_BOARD_NAME} from "constants/misc";
+import {Tooltip} from "components/Tooltip";
+import {ShareButton} from "components/ShareButton";
+import "./BoardHeader.scss";
 
 type BoardHeaderProps = {
   currentUserIsModerator: boolean;
@@ -27,6 +27,8 @@ export const BoardHeader = (props: BoardHeaderProps) => {
     }),
     shallowEqual
   );
+
+  const boardName = state.name || DEFAULT_BOARD_NAME;
 
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
@@ -50,14 +52,13 @@ export const BoardHeader = (props: BoardHeaderProps) => {
         </button>
 
         <button
+          id="board-header__name-and-settings"
           className="board-header_name-and-settings"
           onClick={() => {
             setShowMenu(!showMenu);
           }}
           aria-haspopup
           aria-pressed={showMenu}
-          id="board-header__name-and-settings"
-          data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
         >
           <div className="board-header__access-policy-status">
             {
@@ -71,16 +72,10 @@ export const BoardHeader = (props: BoardHeaderProps) => {
           </div>
           <div className="board-header__name-container">
             <h1 data-clarity-mask="True" className="board-header__name">
-              {state.name || DEFAULT_BOARD_NAME}
+              {boardName}
             </h1>
           </div>
-          <Tooltip
-            anchorSelect="#board-header__name-and-settings"
-            float
-            variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
-            delayShow={500}
-            style={{zIndex: 999}}
-          />
+          <Tooltip anchorId="board-header__name-and-settings">{boardName}</Tooltip>
         </button>
 
         <div className="board-header__users">
