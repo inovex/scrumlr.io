@@ -6503,12 +6503,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:18.0.2":
-  version: 18.0.2
-  resolution: "marked@npm:18.0.2"
+"marked@npm:18.0.3":
+  version: 18.0.3
+  resolution: "marked@npm:18.0.3"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/d04f58c0dee158a8069dad88de549b0039f2af7e1f0fd078aa783f360655e39296662f6c722dc6dd94c1c9ce9ba7ca9355ee1d8d77dd7b9a2f8162ebac6d9bbd
+  checksum: 10c0/f2943a439acf17942058f8e4c51373e0f8aa88194b55625ffa22db7955b9c2752fe9bdd4a31498f667d30e5667bab2c27e3f2f56a1045f53b693f000a6199840
   languageName: node
   linkType: hard
 
@@ -7414,13 +7414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.2.4":
-  version: 5.2.4
-  resolution: "react-hotkeys-hook@npm:5.2.4"
+"react-hotkeys-hook@npm:^5.3.0":
+  version: 5.3.2
+  resolution: "react-hotkeys-hook@npm:5.3.2"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/8163a22d5add0033ae30951bb93d48f0a894670d6272668744ef18e98f20df792fff2fb0cb03834a2322bafbc99bca277ac9dacd5676705a65ec4bc13767785b
+  checksum: 10c0/a1e9edf31dc7c9804153e9ce2b64cdde5e997190b429354d8e561163f692b1cabad911343ef7e192a498160742608c53a7b9c5bb9cfa2ca832c4b482c33d8c83
   languageName: node
   linkType: hard
 
@@ -8081,7 +8081,7 @@ __metadata:
     linkify-react: "npm:^4.3.2"
     linkifyjs: "npm:^4.3.2"
     lint-staged: "npm:^16.4.0"
-    marked: "npm:18.0.2"
+    marked: "npm:18.0.3"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
     prettier: "npm:^3.8.3"
@@ -8093,7 +8093,7 @@ __metadata:
     react-dom: "npm:^19.2.5"
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
-    react-hotkeys-hook: "npm:^5.2.4"
+    react-hotkeys-hook: "npm:^5.3.0"
     react-i18next: "npm:^17.0.6"
     react-redux: "npm:^9.2.0"
     react-router: "npm:^7.14.2"
@@ -8833,11 +8833,11 @@ __metadata:
   linkType: hard
 
 "systeminformation@npm:^5.31.1":
-  version: 5.31.3
-  resolution: "systeminformation@npm:5.31.3"
+  version: 5.31.6
+  resolution: "systeminformation@npm:5.31.6"
   bin:
     systeminformation: lib/cli.js
-  checksum: 10c0/f093cea323845522b71c5cdb8ec1919dbaff9a6c01fe77638dc4d30d936f827acd776112cb93b6f0af6294ab1c177b0a0bf44ae5b1c072c1b43597d86a00423f
+  checksum: 10c0/fb0c9dae20e47277d26f3dd374f14c846567adba15a2bf9715e0a871f912424d31b75f6c27e0c8b819abc3fcd285ae8c1f6468acd8a161f18a1a39b632a01923
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
