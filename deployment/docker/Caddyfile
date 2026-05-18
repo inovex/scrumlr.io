@@ -2,26 +2,6 @@
 	log {
 		output stdout
 	}
-	# English is the default locale, so canonical URLs stay unprefixed (/ instead of /en).
-	@landingLangEn {
-		path_regexp landingLocaleRoot ^/(?:[a-z]{2})?/?$
-		query lng=en
-	}
-	handle @landingLangEn {
-		redir * / 302
-	}
-
-	@landingLangRequested {
-		path_regexp landingLocaleRoot ^/(?:[a-z]{2})?/?$
-		# On root or locale-root paths, redirect to /<lng> when the lng query parameter is a valid 2-letter code and not en.
-		# Allow any 2-letter lng code to avoid Caddy updates for each new locale.
-		# Tradeoff: unsupported locales may still redirect to /xx and rely on app routing behavior.
-		expression {query.lng} != "en" && {query.lng} =~ "^[a-z]{2}$"
-	}
-	handle @landingLangRequested {
-		redir * /{query.lng} 302
-	}
-
 	@api {
 		path /api*
 	}
