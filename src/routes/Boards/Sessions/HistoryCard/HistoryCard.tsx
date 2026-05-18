@@ -27,6 +27,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
+import {useAppSelector} from "store";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -42,11 +43,13 @@ const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
 export const HistoryCard = (props: HistoryCardProps) => {
   const {t} = useTranslation();
 
+  const locale = useAppSelector((state) => state.view.language) ?? "en";
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const joinedColumnsNames = props.board.columns.join(", ");
-  const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(undefined, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
-  const formattedModifiedAtDate = props.board.modifiedAt.toLocaleDateString();
+  const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
+  const formattedModifiedAtDate = props.board.modifiedAt.toLocaleDateString(locale);
 
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
   const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
