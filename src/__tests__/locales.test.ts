@@ -2,15 +2,16 @@ import fs from "fs";
 import {join} from "path";
 
 describe("locales", () => {
-  const translation = JSON.parse(fs.readFileSync(join(__dirname, "../i18n/en/translation.json")).toString());
+  const i18nPath = join(__dirname, "../i18n/");
+  const translation = JSON.parse(fs.readFileSync(join(i18nPath, "en/translation.json")).toString());
 
-  fs.readdirSync(join(__dirname, "../i18n/")).forEach((languageCode) => {
-    const languageFolderPath = join(__dirname, "../i18n/", languageCode);
+  fs.readdirSync(i18nPath).forEach((languageCode) => {
+    const languageFolderPath = join(i18nPath, languageCode);
 
-    // bugfix for filtering unwanted files, e.g., .DS_Store on macOS
-    const isDirectory = fs.statSync(languageFolderPath).isDirectory();
+    // Only validate locale directories that actually provide a translation file.
+    const hasTranslation = fs.existsSync(join(languageFolderPath, "translation.json"));
 
-    if (isDirectory && languageCode !== "en") {
+    if (hasTranslation && languageCode !== "en") {
       const anotherTranslation = JSON.parse(fs.readFileSync(join(languageFolderPath, "translation.json")).toString());
 
       const keys = Object.keys(translation);
