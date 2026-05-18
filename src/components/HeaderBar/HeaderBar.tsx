@@ -1,6 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
+import {withCurrentLanguageQuery} from "i18n/url";
 import "./HeaderBar.scss";
 
 type HeaderBarProps = {
@@ -11,6 +12,7 @@ type HeaderBarProps = {
 
 export const HeaderBar = (props: HeaderBarProps) => {
   const {t} = useTranslation();
+  const redirectHomeURL = withCurrentLanguageQuery(""); // empty string only adds current language
   const {loginBoard = false} = props;
 
   return (
@@ -19,7 +21,7 @@ export const HeaderBar = (props: HeaderBarProps) => {
         {/* logo - - - profile */}
         <div className="header-bar__scrumlr-logo-container">
           {/* this still needs fixing bc that uses other styles */}
-          <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
+          <a className="new-board__scrumlr-logo-href" href={redirectHomeURL} aria-label={t("BoardHeader.returnToHomepage")}>
             <ScrumlrLogo className="new-board__scrumlr-logo" />
           </a>
         </div>
