@@ -11,6 +11,7 @@ import {leaveBoard} from "store/features";
 import {DEFAULT_BOARD_NAME} from "constants/misc";
 import {Tooltip} from "components/Tooltip";
 import {ShareButton} from "components/ShareButton";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import "./BoardHeader.scss";
 
 type BoardHeaderProps = {
@@ -32,6 +33,8 @@ export const BoardHeader = (props: BoardHeaderProps) => {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+
+  const {isTextTruncated, textRef} = useTextOverflow<HTMLHeadingElement>(boardName);
 
   return (
     <>
@@ -71,11 +74,11 @@ export const BoardHeader = (props: BoardHeaderProps) => {
             <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
-            <h1 data-clarity-mask="True" className="board-header__name">
+            <h1 ref={textRef} data-clarity-mask="True" className="board-header__name">
               {boardName}
             </h1>
           </div>
-          <Tooltip anchorId="board-header__name-and-settings">{boardName}</Tooltip>
+          {isTextTruncated.horizontal && <Tooltip anchorId="board-header__name-and-settings">{boardName}</Tooltip>}
         </button>
 
         <div className="board-header__users">
