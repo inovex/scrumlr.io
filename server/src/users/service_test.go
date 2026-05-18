@@ -90,6 +90,21 @@ func (suite *UserServiceTestSuite) TestGetExistingUserIDs() {
 	suite.NotNil(user)
 }
 
+func (suite *UserServiceTestSuite) TestGetExistingUserIDsError() {
+	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
+	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().GetExistingUserIDs(mock.Anything, userIDs).Return(nil, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.GetExistingUserIDs(context.Background(), userIDs)
+
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
+}
+
 func (suite *UserServiceTestSuite) TestGetBoardUsers() {
 	boardID := uuid.New()
 	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
