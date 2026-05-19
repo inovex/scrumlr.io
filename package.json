@@ -45,7 +45,7 @@
     "react-textarea-autosize": "^8.5.9",
     "react-to-print": "^3.3.0",
     "react-toastify": "^11.1.0",
-    "react-tooltip": "^5.30.1",
+    "react-tooltip": "^6.0.0",
     "sockette": "^2.0.6",
     "underscore": "^1.13.8",
     "use-long-press": "^3.3.0",

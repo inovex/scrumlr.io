@@ -58,7 +58,9 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             data-testid={`${dataCy}-item-${item.label}`}
           >
             {item.element}
-            <Tooltip anchorId={anchor}>{item.label}</Tooltip>
+            <Tooltip anchorId={anchor} color="backlog-blue">
+              {item.label}
+            </Tooltip>
           </button>
         );
       })}
