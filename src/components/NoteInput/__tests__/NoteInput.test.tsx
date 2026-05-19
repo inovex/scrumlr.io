@@ -1,12 +1,12 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import {NoteInput} from "components/NoteInput";
 import {I18nextProvider} from "react-i18next";
-import i18nTest from "i18nTest";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
-import i18n from "i18nTest";
 import getTestParticipant from "utils/test/getTestParticipant";
 import getTestApplicationState from "utils/test/getTestApplicationState";
+import i18nTest from "i18nTest";
+import i18n from "i18next";
 
 vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
