@@ -72,6 +72,7 @@ export default defineConfig([
       ...importPlugin.configs.typescript.rules,
 
       "no-undef": "off", // not recommended in TS
+      "react/prop-types": "off", // TS handles this
       "@typescript-eslint/no-duplicate-enum-values": "off", // temp
       "@typescript-eslint/no-unused-vars": [
         "error",
