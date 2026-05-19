@@ -59,8 +59,6 @@ export const Column = ({id, name, description, color, visible, index}: ColumnPro
 
   useEffect(() => {
     updateOffset();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnCount]);
 
   return (

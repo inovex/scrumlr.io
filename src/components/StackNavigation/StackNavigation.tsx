@@ -62,7 +62,6 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   });
 
   return (
-    /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
     <div className="stack-view__navigation">
       <button
         disabled={currentIndex === 0 && prevColumnStack === undefined}

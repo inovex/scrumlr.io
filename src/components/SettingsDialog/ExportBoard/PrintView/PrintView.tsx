@@ -50,14 +50,12 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     if (!boardData) {
       getBoardData().then((data) => setBoardData(data));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (boardData) {
       handlePrint(() => printRef.current);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardData]);
 
   const currDate = new Date();

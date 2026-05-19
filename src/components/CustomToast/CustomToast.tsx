@@ -120,7 +120,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
               if (index > 1) return false;
               return (
                 <button
-                  // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   className={
                     index === 0
