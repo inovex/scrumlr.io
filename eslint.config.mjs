@@ -34,6 +34,8 @@ export default defineConfig([
       globals: {
         ...globals.browser,
         ...globals.es2024,
+        ...globals.vitest,
+        ...globals.node
       },
       parserOptions: {
         ecmaFeatures: {
@@ -69,6 +71,7 @@ export default defineConfig([
       ...importPlugin.configs.recommended.rules,
       ...importPlugin.configs.typescript.rules,
 
+      "no-undef": "off", // not recommended in TS
       "@typescript-eslint/no-duplicate-enum-values": "off", // temp
       "@typescript-eslint/no-unused-vars": [
         "error",
