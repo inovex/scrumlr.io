@@ -73,6 +73,7 @@ export default defineConfig([
 
       "no-undef": "off", // not recommended in TS
       "react/prop-types": "off", // TS handles this
+      "react/display-name": "off", // occurs in anonymous function components, like React.memo, and can help with debugging, but is not important
       "@typescript-eslint/no-duplicate-enum-values": "off", // temp
       "@typescript-eslint/no-unused-vars": [
         "error",
