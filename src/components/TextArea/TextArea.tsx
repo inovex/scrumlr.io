@@ -6,7 +6,7 @@ import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import "./TextArea.scss";
 
-type TextAreaProps = {
+export type TextAreaProps = {
   className?: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
