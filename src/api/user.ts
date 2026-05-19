@@ -22,7 +22,7 @@ export const UserAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update user: ${error}`);
+      throw new Error(`unable to update user: ${error}`, {cause: error});
     }
   },
 
@@ -45,7 +45,7 @@ export const UserAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to delete user: ${error}`);
+      throw new Error(`unable to delete user: ${error}`, {cause: error});
     }
   },
 
@@ -60,7 +60,7 @@ export const UserAPI = {
       }
       throw new Error(`unable to fetch user with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to fetch user: ${error}`);
+      throw new Error(`unable to fetch user: ${error}`, {cause: error});
     }
   },
 
@@ -76,7 +76,7 @@ export const UserAPI = {
       }
       throw new Error(`unable to fetch user with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to fetch user: ${error}`);
+      throw new Error(`unable to fetch user: ${error}`, {cause: error});
     }
   },
 };

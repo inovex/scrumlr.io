@@ -39,7 +39,7 @@ export const InfoAPI = {
 
       throw new Error(`responded with status code ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to fetch current user: ${error}`);
+      throw new Error(`unable to fetch current user: ${error}`, {cause: error});
     }
   },
 };

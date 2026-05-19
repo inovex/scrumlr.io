@@ -28,7 +28,7 @@ export const ColumnAPI = {
 
       throw new Error(`unable to update column with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update column: ${error}`);
+      throw new Error(`unable to update column: ${error}`, {cause: error});
     }
   },
   deleteColumn: async (boardId: string, columnId: string) => {
@@ -45,7 +45,7 @@ export const ColumnAPI = {
 
       throw new Error(`unable to update column with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update column: ${error}`);
+      throw new Error(`unable to update column: ${error}`, {cause: error});
     }
   },
   createColumn: async (boardId: string, column: {name: string; color: string; visible: boolean; index: number}) => {
@@ -62,7 +62,7 @@ export const ColumnAPI = {
 
       throw new Error(`unable to create column with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create column: ${error}`);
+      throw new Error(`unable to create column: ${error}`, {cause: error});
     }
   },
 };

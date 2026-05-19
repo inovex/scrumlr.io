@@ -15,7 +15,7 @@ export const TemplatesAPI = {
 
       throw new Error(`get all templates request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates with error: ${error}`, {cause: error});
     }
   },
 
@@ -32,7 +32,7 @@ export const TemplatesAPI = {
 
       throw new Error(`get template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates with error: ${error}`, {cause: error});
     }
   },
 
@@ -57,7 +57,7 @@ export const TemplatesAPI = {
 
       throw new Error(`create template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create template with error: ${error}`);
+      throw new Error(`unable to create template with error: ${error}`, {cause: error});
     }
   },
 
@@ -75,7 +75,7 @@ export const TemplatesAPI = {
 
       throw new Error(`edit template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to edit template with error: ${error}`);
+      throw new Error(`unable to edit template with error: ${error}`, {cause: error});
     }
   },
 
@@ -92,7 +92,7 @@ export const TemplatesAPI = {
 
       throw new Error(`get all templates request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates with error: ${error}`, {cause: error});
     }
   },
 };
