@@ -20,7 +20,7 @@ export const TemplateColumnsAPI = {
   },
 
   createTemplateColumn: async (templateId: string, templateColumn: TemplateColumn) => {
-    const {id, ...templateColumnWithoutId} = templateColumn;
+    const {id: _id, ...templateColumnWithoutId} = templateColumn;
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns`, {
         method: "POST",

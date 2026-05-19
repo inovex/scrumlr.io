@@ -38,8 +38,8 @@ export const TemplatesAPI = {
 
   createTemplate: async (templateWithColumns: TemplateWithColumns) => {
     // strip UUIDs as they'll get assigned by the backend
-    const {id: templateId, creator, ...strippedTemplate} = templateWithColumns.template;
-    const strippedColumnTemplates = templateWithColumns.columns.map(({id: columnId, template, ...columnRest}) => columnRest);
+    const {id: _templateId, creator: _creator, ...strippedTemplate} = templateWithColumns.template;
+    const strippedColumnTemplates = templateWithColumns.columns.map(({id: _columnId, template: _template, ...columnRest}) => columnRest);
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/templates`, {
         method: "POST",

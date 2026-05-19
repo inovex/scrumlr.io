@@ -47,7 +47,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
 
   const rows = props.rows ?? ROWS_DEFAULT;
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
+  const {value: _value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
     inputRef: internalRef,
     value: props.input,
     onValueChange: props.setInput,

@@ -69,7 +69,15 @@ export default defineConfig([
       ...importPlugin.configs.recommended.rules,
       ...importPlugin.configs.typescript.rules,
 
-      "@typescript-eslint/no-duplicate-enum-values": "off" // temp
+      "@typescript-eslint/no-duplicate-enum-values": "off", // temp
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ]
     },
   },
 
