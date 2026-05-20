@@ -293,11 +293,11 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 
 func validateUsername(name string) error {
 	if strings.TrimSpace(name) == "" {
-		return errors.New("name may not be empty")
+		return ErrEmptyUserName
 	}
 
 	if strings.Contains(name, "\n") {
-		return errors.New("name may not contain newline characters")
+		return ErrNewLineUserName
 	}
 
 	return nil

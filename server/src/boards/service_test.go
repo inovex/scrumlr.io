@@ -80,7 +80,7 @@ func TestGet_DatabaseError(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestCreate(t *testing.T) {
