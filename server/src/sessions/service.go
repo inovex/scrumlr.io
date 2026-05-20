@@ -204,7 +204,7 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if errors.Is(sql.ErrNoRows, err) {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "session not found")
 			span.RecordError(err)
 			return nil, ErrSessionNotFound
