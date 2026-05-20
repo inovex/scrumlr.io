@@ -34,7 +34,9 @@ func mapError(err error) error {
 		errors.Is(err, sessionrequests.ErrInvalidBoardStatusFilter),
 		errors.Is(err, votings.ErrVotingLimitNegative),
 		errors.Is(err, votings.ErrVoteLimitTooHigh),
-		errors.Is(err, users.ErrInvalidUserName):
+		errors.Is(err, users.ErrInvalidUserName),
+		errors.Is(err, users.ErrEmptyUserName),
+		errors.Is(err, users.ErrNewLineUserName):
 		return common.BadRequestError(err)
 
 	// 403 Forbidden

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"testing"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 
@@ -59,7 +60,7 @@ func (suite *UserServiceTestSuite) TestGetUser_NotFound() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrUserNotFound, err)
+	suite.ErrorIs(err, ErrUserNotFound)
 }
 
 func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
@@ -147,7 +148,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
@@ -160,8 +161,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	expectedErr := common.BadRequestError(errors.New("name may not be empty"))
-	suite.Equal(expectedErr, err)
+	suite.ErrorIs(err, ErrEmptyUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
@@ -174,8 +174,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	expectedErr := common.BadRequestError(errors.New("name may not contain newline characters"))
-	suite.Equal(expectedErr, err)
+	suite.ErrorIs(err, ErrNewLineUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser() {
@@ -220,7 +219,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
@@ -234,7 +233,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser() {
@@ -279,7 +278,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
@@ -293,7 +292,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
@@ -338,7 +337,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
@@ -352,7 +351,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
@@ -397,7 +396,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
@@ -411,7 +410,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
@@ -456,7 +455,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
@@ -470,7 +469,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
@@ -515,7 +514,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
@@ -529,7 +528,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser() {
@@ -584,7 +583,7 @@ func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
@@ -597,7 +596,7 @@ func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(ErrInvalidUserName, err)
+	suite.ErrorIs(err, ErrInvalidUserName)
 }
 
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {

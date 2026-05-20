@@ -50,7 +50,7 @@ func TestGetReaction_NotFound(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrReactionNotFound, err)
+	assert.ErrorIs(t, err, ErrReactionNotFound)
 }
 
 func TestGetReaction_DatabaseError(t *testing.T) {
@@ -183,7 +183,7 @@ func TestCreateReaction_Multiple(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrReactionAlreadyExists, err)
+	assert.ErrorIs(t, err, ErrReactionAlreadyExists)
 }
 
 func TestCreateReaction_Failed(t *testing.T) {
@@ -274,7 +274,7 @@ func TestDeleteReaction_NotFound(t *testing.T) {
 	err := service.Delete(context.Background(), boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrReactionNotFound, err)
+	assert.ErrorIs(t, err, ErrReactionNotFound)
 }
 
 func TestDeleteReaction_Forbidden(t *testing.T) {
@@ -295,7 +295,7 @@ func TestDeleteReaction_Forbidden(t *testing.T) {
 	err := service.Delete(context.Background(), boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrForbiddenReactionDelete, err)
+	assert.ErrorIs(t, err, ErrForbiddenReactionDelete)
 }
 
 func TestDeleteReaction_DatabaseError(t *testing.T) {
@@ -369,7 +369,7 @@ func TestUpdateReaction_NotFound(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrReactionNotFound, err)
+	assert.ErrorIs(t, err, ErrReactionNotFound)
 }
 
 func TestUpdateReaction_Forbidden(t *testing.T) {
@@ -391,7 +391,7 @@ func TestUpdateReaction_Forbidden(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, ErrForbiddenReactionUpdate, err)
+	assert.ErrorIs(t, err, ErrForbiddenReactionUpdate)
 }
 
 func TestUpdateReaction_DatabaseError(t *testing.T) {

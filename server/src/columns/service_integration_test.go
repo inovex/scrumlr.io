@@ -267,7 +267,7 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	suite.Nil(column)
 	assert.NotNil(t, err)
-	suite.Equal(ErrColumnNotFound, err)
+	suite.ErrorIs(err, ErrColumnNotFound)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetAll() {
