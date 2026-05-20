@@ -82,7 +82,9 @@ export default defineConfig([
           varsIgnorePattern: "^_",
           caughtErrorsIgnorePattern: "^_",
         },
-      ]
+      ],
+
+      "jsx-a11y/no-autofocus": "off"
     },
   },
 
