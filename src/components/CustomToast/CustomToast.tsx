@@ -1,5 +1,5 @@
 import "./CustomToast.scss";
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, FunctionComponent, SVGProps, useEffect, useRef, useState} from "react";
 import {CloseIcon} from "components/Icon";
 import {ToastTypes} from "utils/Toast";
 import classNames from "classnames";
@@ -12,7 +12,7 @@ export interface CustomToastProps {
   buttons?: string[];
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
-  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   iconName?: string;
   type?: ToastTypes;
 }
@@ -61,7 +61,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         setIsSingleToastTitle(false);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, isMobile]);
 
   const isSingleToast = (!buttons || buttons?.length <= 1) && isSingleToastTitle && !message && !hintMessage;
@@ -106,8 +105,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             name="checkbox"
             onClick={(e) => {
               e.stopPropagation();
-              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              hintOnClick && hintOnClick();
+              hintOnClick?.();
             }}
           />
           {hintMessage}
