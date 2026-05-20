@@ -73,7 +73,7 @@ export const LegacyNewBoard = () => {
           setAccessPolicy("BY_PASSPHRASE");
         }
         setImportBoard(data);
-      } catch (error) {
+      } catch (_error) {
         Toast.error({title: t("Toast.failedImport")});
         setFile(new File([], ""));
       }
