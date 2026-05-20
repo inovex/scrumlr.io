@@ -3,7 +3,8 @@
 exports[`VotingDialog > should match the snapshot with active voting 1`] = `
 <div
   class="portal"
-  role="dialog"
+  role="presentation"
+  tabindex="-1"
 >
   <div
     data-focus-guard="true"
@@ -83,7 +84,8 @@ exports[`VotingDialog > should match the snapshot with active voting 1`] = `
 exports[`VotingDialog > should match the snapshot with no active voting 1`] = `
 <div
   class="portal"
-  role="dialog"
+  role="presentation"
+  tabindex="-1"
 >
   <div
     data-focus-guard="true"

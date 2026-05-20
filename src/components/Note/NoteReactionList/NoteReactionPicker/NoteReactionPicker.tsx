@@ -52,6 +52,7 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
   }, [location, props]);
 
   const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement> | Event, unicode: string) => {
+    e.stopPropagation();
     dispatch(addRecentEmoji({reactionType: unicode}));
     props.handleClickReaction(e as React.MouseEvent<HTMLButtonElement>, unicode);
 
@@ -89,12 +90,7 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
 
   return (
     <>
-      <div
-        className="note-reaction-picker__root"
-        onClick={(e) => e.stopPropagation()} // Prevent all clicks from bubbling up
-        role="toolbar"
-        aria-label="Emoji reaction picker"
-      >
+      <div className="note-reaction-picker__root" aria-label="Emoji reaction picker">
         {/* Quick reactions: 3 permanent + 3 recent */}
         <div className="note-reaction-picker__quick-reactions">
           {quickReactions.map((reaction) => {
@@ -132,8 +128,6 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
           <ReactFocusLock autoFocus={false}>
             <div
               className="note-reaction-picker__picker-portal"
-              onClick={(e) => e.stopPropagation()}
-              role="dialog"
               aria-label="Emoji picker"
               style={{
                 position: "fixed",

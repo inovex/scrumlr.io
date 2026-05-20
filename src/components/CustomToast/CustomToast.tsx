@@ -94,12 +94,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       )}
       {message && <div className="toast__message">{message}</div>}
       {hintMessage && (
-        <label
-          className="toast__hint"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <label className="toast__hint">
           <input
             type="checkbox"
             name="checkbox"

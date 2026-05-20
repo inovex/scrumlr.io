@@ -3,7 +3,8 @@
 exports[`Dialog > should match snapshot 1`] = `
 <div
   class="portal"
-  role="dialog"
+  role="presentation"
+  tabindex="-1"
 >
   <div
     data-focus-guard="true"

@@ -11,13 +11,12 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (c
       placeholder="Title"
       value="Default Name"
     />
-    <div
+    <button
       class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-      role="button"
       tabindex="0"
     >
       Default Description
-    </div>
+    </button>
   </div>
 </div>
 `;
@@ -211,13 +210,12 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (v
       placeholder="Title"
       value="Default Name"
     />
-    <div
+    <button
       class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback column-configurator-column-name-details__inline-description--has-content"
-      role="button"
       tabindex="0"
     >
       Default Description
-    </div>
+    </button>
   </div>
 </div>
 `;
