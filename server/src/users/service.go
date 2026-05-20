@@ -280,7 +280,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	})
 
 	if err != nil {
-		if errors.Is(sql.ErrNoRows, err) {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "user to update not found")
 			span.RecordError(err)
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
@@ -345,7 +345,7 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
-		if errors.Is(sql.ErrNoRows, err) {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "user not found")
 			span.RecordError(err)
 			return nil, ErrUserNotFound

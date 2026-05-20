@@ -141,7 +141,7 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 	}
 
 	openVoting, err := service.GetOpen(ctx, body.Board)
-	if openVoting != nil || (err != nil && errors.Is(err, sql.ErrNoRows) == false) {
+	if openVoting != nil || (err != nil && !errors.Is(err, sql.ErrNoRows)) {
 		if openVoting != nil {
 			span.SetStatus(codes.Error, "only one open voting per session is allowed")
 			span.RecordError(err)
