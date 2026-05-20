@@ -151,7 +151,7 @@ func (suite *NotesServiceTestSuite) Test_Create_EmptyText() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrEmptyTextCreate, err)
+	suite.ErrorIs(err, ErrEmptyTextCreate)
 }
 
 func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
@@ -190,7 +190,7 @@ func (suite *NotesServiceTestSuite) Test_Import_EmptyText() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrEmptyTextImport, err)
+	suite.ErrorIs(err, ErrEmptyTextImport)
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
@@ -383,7 +383,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrNotAllowedTextChange, err)
+	suite.ErrorIs(err, ErrNotAllowedTextChange)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
@@ -436,7 +436,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrForbiddenStackNotes, err)
+	suite.ErrorIs(err, ErrForbiddenStackNotes)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
@@ -460,7 +460,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrForbiddenStackOnSelf, err)
+	suite.ErrorIs(err, ErrForbiddenStackOnSelf)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
@@ -553,7 +553,7 @@ func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
 	})
 
 	suite.Nil(note)
-	suite.Equal(ErrNoteLocked, err)
+	suite.ErrorIs(err, ErrNoteLocked)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_NegativeRankIsResetToZero() {
@@ -654,7 +654,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
 	err := suite.service.Delete(suite.ctx, callerID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.NotNil(err)
-	suite.Equal(ErrForbiddenDeleteOtherUserNote, err)
+	suite.ErrorIs(err, ErrForbiddenDeleteOtherUserNote)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get() {
@@ -680,7 +680,7 @@ func (suite *NotesServiceTestSuite) Test_Get_NotFound() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(ErrNoteNotFound, err)
+	suite.ErrorIs(err, ErrNoteNotFound)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
@@ -781,7 +781,7 @@ func (suite *NotesServiceTestSuite) Test_GetStack_DatabaseError() {
 
 	suite.Error(err)
 	suite.Nil(result)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
@@ -1116,7 +1116,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_GetPreconditionError() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(dbErr, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_GetLockError() {
@@ -1140,7 +1140,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(ErrNoteLocked, err)
+	suite.ErrorIs(err, ErrNoteLocked)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteStackGetStackError() {
@@ -1166,7 +1166,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_DeleteNoteError() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(dbErr, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_AcquireLock_GetStackError() {

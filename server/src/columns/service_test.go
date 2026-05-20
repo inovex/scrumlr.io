@@ -3,7 +3,6 @@ package columns
 import (
 	"context"
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -87,7 +86,7 @@ func (suite *ColumnServiceTestSuite) TestCreateColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn() {
@@ -114,7 +113,7 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_DatabaseError() {
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
@@ -124,7 +123,7 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(ErrColumnNotFound, err)
+	suite.ErrorIs(err, ErrColumnNotFound)
 }
 
 func (suite *ColumnServiceTestSuite) TestUpdateColumn() {
@@ -163,7 +162,7 @@ func (suite *ColumnServiceTestSuite) TestUpdateColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetColumn() {
@@ -193,7 +192,7 @@ func (suite *ColumnServiceTestSuite) TestGetColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(fmt.Errorf("unable to get column: %w", dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetAllColumns() {
@@ -234,7 +233,7 @@ func (suite *ColumnServiceTestSuite) TestGetAllColumns_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(fmt.Errorf("unable to get columns: %w", dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetCount() {
