@@ -18,7 +18,7 @@ COPY vite-env-override.d.ts .
 COPY vite.config.ts .
 COPY index.html .
 COPY .prettierrc .
-COPY eslint.config.mjs
+COPY eslint.config.mjs .
 COPY .env .
 
 RUN yarn build
