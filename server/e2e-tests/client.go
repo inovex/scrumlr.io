@@ -38,7 +38,7 @@ func NewClient(cfg *E2ETestConfig) *Client {
 		baseURL: cfg.Server.BaseURL,
 	}
 
-	if v := strings.ToLower(os.Getenv("E2E_INSECURE_SKIP_VERIFY")); v == "true" {
+	if strings.ToLower(os.Getenv("E2E_INSECURE_SKIP_VERIFY")) == "true" {
 		insecureHTTPClient(c.http)
 	}
 

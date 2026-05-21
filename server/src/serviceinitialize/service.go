@@ -66,7 +66,7 @@ func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesS
 	return columnService
 }
 
-func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionService {
+func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionCreater {
 	boardreactionService := boardreactions.NewBoardReactionService(init.broker)
 
 	return boardreactionService
@@ -93,7 +93,7 @@ func (init *ServiceInitializer) InitializeFeedbackService(webhookUrl string) fee
 }
 
 func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
-	healthDb := health.NewHealthDatabase(init.db)
+	healthDb := health.NewHealthChecker(init.db)
 	healthService := health.NewHealthService(healthDb, init.broker)
 
 	return healthService

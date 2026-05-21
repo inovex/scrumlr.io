@@ -10,7 +10,7 @@ type DB struct {
 	db *bun.DB
 }
 
-func NewHealthDatabase(database *bun.DB) HealthDatabase {
+func NewHealthChecker(database *bun.DB) HealthChecker {
 	db := new(DB)
 	db.db = database
 

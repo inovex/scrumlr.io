@@ -664,7 +664,7 @@ func (_c *MockNotesService_GetStack_Call) RunAndReturn(run func(ctx context.Cont
 }
 
 // HandleWebSocketMessage provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage) {
+func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage) {
 	_mock.Called(ctx, boardID, userID, conn, data)
 	return
 }
@@ -678,13 +678,13 @@ type MockNotesService_HandleWebSocketMessage_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-//   - conn WebSocketConnection
+//   - conn WebSocketConnector
 //   - data json.RawMessage
 func (_e *MockNotesService_Expecter) HandleWebSocketMessage(ctx interface{}, boardID interface{}, userID interface{}, conn interface{}, data interface{}) *MockNotesService_HandleWebSocketMessage_Call {
 	return &MockNotesService_HandleWebSocketMessage_Call{Call: _e.mock.On("HandleWebSocketMessage", ctx, boardID, userID, conn, data)}
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -698,9 +698,9 @@ func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context
 		if args[2] != nil {
 			arg2 = args[2].(uuid.UUID)
 		}
-		var arg3 WebSocketConnection
+		var arg3 WebSocketConnector
 		if args[3] != nil {
-			arg3 = args[3].(WebSocketConnection)
+			arg3 = args[3].(WebSocketConnector)
 		}
 		var arg4 json.RawMessage
 		if args[4] != nil {
@@ -722,7 +722,7 @@ func (_c *MockNotesService_HandleWebSocketMessage_Call) Return() *MockNotesServi
 	return _c
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
 	_c.Run(run)
 	return _c
 }
