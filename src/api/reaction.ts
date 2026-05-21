@@ -19,7 +19,7 @@ export const ReactionAPI = {
 
       throw new Error(`create reaction request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to add reaction with error: ${error}`, {cause: error});
+      throw new Error(`unable to add reaction`, {cause: error});
     }
   },
 
@@ -36,7 +36,7 @@ export const ReactionAPI = {
 
       throw new Error(`create reaction request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to remove reaction with error: ${error}`, {cause: error});
+      throw new Error(`unable to remove reaction`, {cause: error});
     }
   },
   updateReaction: async (board: string, reaction: string, reactionType: string) => {
@@ -53,7 +53,7 @@ export const ReactionAPI = {
 
       throw new Error(`patch reaction request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to patch reaction with error: ${error}`, {cause: error});
+      throw new Error(`unable to patch reaction`, {cause: error});
     }
   },
 };

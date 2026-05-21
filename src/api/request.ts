@@ -16,7 +16,7 @@ export const RequestAPI = {
 
       throw new Error(`request update resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update join request: ${error}`, {cause: error});
+      throw new Error(`unable to accept join request`, {cause: error});
     }
   },
 
@@ -34,7 +34,7 @@ export const RequestAPI = {
 
       throw new Error(`request update resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update join request: ${error}`, {cause: error});
+      throw new Error(`unable to reject join request`, {cause: error});
     }
   },
 };

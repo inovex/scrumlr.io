@@ -15,7 +15,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`get all template columns request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates columns with error: ${error}`, {cause: error});
+      throw new Error(`unable to get all templates columns`, {cause: error});
     }
   },
 
@@ -34,7 +34,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`add template column request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to add template column with error: ${error}`, {cause: error});
+      throw new Error(`unable to add template column`, {cause: error});
     }
   },
 
@@ -52,7 +52,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`edit template column request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to edit template column with error: ${error}`, {cause: error});
+      throw new Error(`unable to edit template column`, {cause: error});
     }
   },
 
@@ -69,7 +69,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`delete template column request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to delete template column with error: ${error}`, {cause: error});
+      throw new Error(`unable to delete template column`, {cause: error});
     }
   },
 };

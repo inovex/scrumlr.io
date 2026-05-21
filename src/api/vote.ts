@@ -25,7 +25,7 @@ export const VoteAPI = {
 
       throw new Error(`add vote request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`, {cause: error});
+      throw new Error(`unable to add vote`, {cause: error});
     }
   },
 
@@ -52,7 +52,7 @@ export const VoteAPI = {
 
       throw new Error(`delete vote request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`, {cause: error});
+      throw new Error(`unable to delete vote`, {cause: error});
     }
   },
 };

@@ -23,7 +23,7 @@ export const VotingAPI = {
 
       throw new Error(`create voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create voting: ${error}`, {cause: error});
+      throw new Error(`unable to create voting`, {cause: error});
     }
   },
 
@@ -40,7 +40,7 @@ export const VotingAPI = {
 
       throw new Error(`change voting status request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to change voting status: ${error}`, {cause: error});
+      throw new Error(`unable to change voting status`, {cause: error});
     }
   },
 };

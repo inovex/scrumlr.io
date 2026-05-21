@@ -15,7 +15,7 @@ export const AuthAPI = {
         credentials: "include",
       });
     } catch (error) {
-      throw new Error(`unable to sign out with error: ${error}`, {cause: error});
+      throw new Error(`unable to sign out`, {cause: error});
     }
   },
 
@@ -42,7 +42,7 @@ export const AuthAPI = {
 
       throw new Error(`sign in request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to sign in with error: ${error}`, {cause: error});
+      throw new Error(`unable to sign in`, {cause: error});
     }
   },
 
@@ -62,7 +62,7 @@ export const AuthAPI = {
         return (await response.json()) as AuthDto;
       }
     } catch (error) {
-      throw new Error(`unable to fetch current user: ${error}`, {cause: error});
+      throw new Error(`unable to fetch current user`, {cause: error});
     }
 
     return undefined;
