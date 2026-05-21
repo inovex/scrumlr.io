@@ -38,7 +38,7 @@ func (db *DB) Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, err
 	err := db.db.NewSelect().
 		Model(&tBoard).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	return tBoard, err
 }
