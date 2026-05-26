@@ -19,7 +19,7 @@ type BoardReactionServiceIntegrationTestSuite struct {
 	natsContainer        *nats.NATSContainer
 	natsConnectionString string
 	broker               *realtime.Broker
-	service              BoardReactionService
+	service              BoardReactionCreater
 }
 
 func TestBoardReactionServiceIntegrationTestsuite(t *testing.T) {

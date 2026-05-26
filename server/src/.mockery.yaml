@@ -49,7 +49,7 @@ packages:
       dir: health
     interfaces:
       HealthService:
-      HealthDatabase:
+      HealthDatabaseChecker:
 
   scrumlr.io/server/sessions:
     config:

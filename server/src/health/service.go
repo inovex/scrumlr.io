@@ -6,16 +6,16 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-type HealthDatabase interface {
+type HealthDatabaseChecker interface {
 	IsHealthy(ctx context.Context) bool
 }
 
 type Service struct {
-	database HealthDatabase
+	database HealthDatabaseChecker
 	realtime *realtime.Broker
 }
 
-func NewHealthService(db HealthDatabase, rt *realtime.Broker) HealthService {
+func NewHealthService(db HealthDatabaseChecker, rt *realtime.Broker) HealthService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
