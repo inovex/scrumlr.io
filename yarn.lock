@@ -6426,10 +6426,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "linkifyjs@npm:4.3.2"
-  checksum: 10c0/1a85e6b368304a4417567fe5e38651681e3e82465590836942d1b4f3c834cc35532898eb1e2479f6337d9144b297d418eb708b6be8ed0b3dc3954a3588e07971
+"linkifyjs@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "linkifyjs@npm:4.3.3"
+  checksum: 10c0/0eac293927f1465d13625c8c67c83c50d7fda9137c255a4a2ff5970ea4e9ba57de4846b170326e54b9e4e82be24f3705572bc50773737be9b13af5f1e4577798
   languageName: node
   linkType: hard
 
@@ -8254,7 +8254,7 @@ __metadata:
     js-cookie: "npm:^3.0.7"
     js-md5: "npm:^0.8.3"
     linkify-react: "npm:^4.3.3"
-    linkifyjs: "npm:^4.3.2"
+    linkifyjs: "npm:^4.3.3"
     lint-staged: "npm:^16.4.0"
     marked: "npm:18.0.3"
     node-localstorage: "npm:^3.0.5"
