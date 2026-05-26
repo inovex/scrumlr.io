@@ -7,6 +7,7 @@ data:
   SCRUMLR_SERVER_PORT: {{ .Values.backend.config.serverPort | quote }}
   SCRUMLR_BASE_PATH: {{ .Values.backend.config.basePath | quote }}
   SCRUMLR_SERVER_NATS_URL: {{ .Values.backend.config.natsUrl | quote }}
+  SCRUMLR_SERVER_BASE_URL: {{ .Values.backend.config.serverBaseUrl | quote }}
   {{- range $key, $val := .Values.backend.extraConfig }}
   {{ $key | upper }}: {{ $val | quote }}
   {{- end }}

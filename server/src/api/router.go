@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"scrumlr.io/server/websocket"
@@ -43,6 +44,7 @@ import (
 
 type Server struct {
 	basePath string
+	baseURL  string
 
 	realtime  *realtime.Broker
 	wsService websocket.WebSocketInterface
@@ -80,6 +82,7 @@ type Server struct {
 
 func New(
 	basePath string,
+	baseURL string,
 
 	rt *realtime.Broker,
 	wsService websocket.WebSocketInterface,
@@ -135,6 +138,7 @@ func New(
 
 	s := Server{
 		basePath:                         basePath,
+		baseURL:                          baseURL,
 		realtime:                         rt,
 		wsService:                        wsService,
 		userRoutes:                       userRoutes,
@@ -378,4 +382,14 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+// absURL constructs an absolute URL from a path using the configured baseURL.
+// It strips any trailing slash from baseURL and, if basePath is not "/", prepends it.
+func (s *Server) absURL(path string) string {
+	base := strings.TrimRight(s.baseURL, "/")
+	if s.basePath != "/" {
+		base += s.basePath
+	}
+	return base + path
 }

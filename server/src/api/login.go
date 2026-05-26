@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"math"
 	"net/http"
 	"strings"
@@ -155,10 +154,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		w.Header().Set("Location", stateSplit[1])
 		w.WriteHeader(http.StatusSeeOther)
 	}
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
-	}
+	w.Header().Set("Location", s.absURL("/"))
 	w.WriteHeader(http.StatusSeeOther)
 }
+

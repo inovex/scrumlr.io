@@ -2,6 +2,7 @@
 backend:
   config:
     natsUrl: nats://nats.nats.svc.cluster.local:4222
+    serverBaseUrl: "http://localhost:8080"
   secrets:
     databaseUrl: postgres://postgres:SuperStrongpassword@postgres-postgresql.postgres.svc.cluster.local:5432/scrumlr?sslmode=disable
   extraConfig:

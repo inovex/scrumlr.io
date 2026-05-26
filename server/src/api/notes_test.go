@@ -49,6 +49,8 @@ func (suite *NotesTestSuite) TestCreateNote() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
+			s.baseURL = "http://example.com"
+			s.basePath = "/"
 			noteMock := notes.NewMockNotesService(suite.T())
 
 			s.notes = noteMock
@@ -57,6 +59,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			boardID, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()
 			colId, _ := uuid.NewRandom()
+			noteID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
@@ -72,6 +75,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				Text:   testText,
 				Column: colId,
 			}).Return(&notes.Note{
+				ID:   noteID,
 				Text: testText,
 			}, tt.err)
 
@@ -79,6 +83,9 @@ func (suite *NotesTestSuite) TestCreateNote() {
 
 			s.createNote(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			if tt.err == nil {
+				suite.Equal(fmt.Sprintf("http://example.com/boards/%s/notes/%s", boardID, noteID), rr.Result().Header.Get("Location"))
+			}
 			noteMock.AssertExpectations(suite.T())
 		})
 	}
