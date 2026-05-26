@@ -27,6 +27,8 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const boardParticipantsPath = "/boards/%s/participants/%s"
+
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // createBoard creates a new board
@@ -194,7 +196,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, s.absURL(fmt.Sprintf("/boards/%s/participants/%s", board, user)), http.StatusSeeOther)
+		http.Redirect(w, r, s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
@@ -216,7 +218,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/participants/%s", board, user)))
+		w.Header().Set("Location", s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
@@ -248,7 +250,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/participants/%s", board, user)))
+			w.Header().Set("Location", s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
