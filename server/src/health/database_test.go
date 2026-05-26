@@ -25,7 +25,7 @@ func (suite *DatabaseHealthTestSuite) SetupTest() {
 
 func (suite *DatabaseHealthTestSuite) Test_Database_IsHealthy() {
 	t := suite.T()
-	database := NewHealthChecker(suite.db)
+	database := NewHealthDatabaseChecker(suite.db)
 
 	healthy := database.IsHealthy(context.Background())
 

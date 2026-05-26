@@ -11,7 +11,7 @@ import (
 )
 
 func TestDatabaseHealthy(t *testing.T) {
-	mockHealthDb := NewMockHealthChecker(t)
+	mockHealthDb := NewMockHealthDatabaseChecker(t)
 	mockHealthDb.EXPECT().IsHealthy(mock.Anything).Return(true)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -25,7 +25,7 @@ func TestDatabaseHealthy(t *testing.T) {
 }
 
 func TestDatabaseNotHealthy(t *testing.T) {
-	mockHealthDb := NewMockHealthChecker(t)
+	mockHealthDb := NewMockHealthDatabaseChecker(t)
 	mockHealthDb.EXPECT().IsHealthy(mock.Anything).Return(false)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -39,7 +39,7 @@ func TestDatabaseNotHealthy(t *testing.T) {
 }
 
 func TestRealtimeHealthy(t *testing.T) {
-	mockHealthDb := NewMockHealthChecker(t)
+	mockHealthDb := NewMockHealthDatabaseChecker(t)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, "health", "test").Return(nil)
@@ -53,7 +53,7 @@ func TestRealtimeHealthy(t *testing.T) {
 }
 
 func TestRealtimeNotHealthy(t *testing.T) {
-	mockHealthDb := NewMockHealthChecker(t)
+	mockHealthDb := NewMockHealthDatabaseChecker(t)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, "health", "test").Return(errors.New("Failed to publish"))

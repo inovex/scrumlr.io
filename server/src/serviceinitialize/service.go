@@ -93,7 +93,7 @@ func (init *ServiceInitializer) InitializeFeedbackService(webhookUrl string) fee
 }
 
 func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
-	healthDb := health.NewHealthChecker(init.db)
+	healthDb := health.NewHealthDatabaseChecker(init.db)
 	healthService := health.NewHealthService(healthDb, init.broker)
 
 	return healthService
