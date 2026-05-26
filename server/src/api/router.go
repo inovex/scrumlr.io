@@ -386,6 +386,7 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 // absURL constructs an absolute URL from a path using the configured baseURL.
 // It strips any trailing slash from baseURL and, if basePath is not "/", prepends it.
+// Note: baseURL must NOT include the basePath (e.g. "https://scrumlr.io", not "https://scrumlr.io/api").
 func (s *Server) absURL(path string) string {
 	base := strings.TrimRight(s.baseURL, "/")
 	if s.basePath != "/" {

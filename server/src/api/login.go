@@ -153,6 +153,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	if len(stateSplit) > 1 {
 		w.Header().Set("Location", stateSplit[1])
 		w.WriteHeader(http.StatusSeeOther)
+		return
 	}
 	w.Header().Set("Location", s.absURL("/"))
 	w.WriteHeader(http.StatusSeeOther)
