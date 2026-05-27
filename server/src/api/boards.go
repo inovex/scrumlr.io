@@ -479,7 +479,13 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
 				if session.UserID == note.Author {
-					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
+					user, err := s.users.Get(ctx, session.UserID)
+					if err != nil {
+						span.SetStatus(codes.Error, "failed to get note author user")
+						span.RecordError(err)
+						common.Throw(w, r, err)
+						return
+					}
 					author = user.Name
 				}
 			}
