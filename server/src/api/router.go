@@ -61,7 +61,7 @@ type Server struct {
 	sessionRequests sessionrequests.SessionRequestService
 	health          health.HealthService
 	feedback        feedback.FeedbackService
-	boardReactions  boardreactions.BoardReactionService
+	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
@@ -98,7 +98,7 @@ func New(
 	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
-	boardReactions boardreactions.BoardReactionService,
+	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
 
