@@ -39,7 +39,7 @@ func (_m *MockClient) EXPECT() *MockClient_Expecter {
 }
 
 // Create provides a mock function for the type MockClient
-func (_mock *MockClient) Create(ctx context.Context, key string, value interface{}, ttl time.Duration) error {
+func (_mock *MockClient) Create(ctx context.Context, key string, value any, ttl time.Duration) error {
 	ret := _mock.Called(ctx, key, value, ttl)
 
 	if len(ret) == 0 {
@@ -47,7 +47,7 @@ func (_mock *MockClient) Create(ctx context.Context, key string, value interface
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, interface{}, time.Duration) error); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, any, time.Duration) error); ok {
 		r0 = returnFunc(ctx, key, value, ttl)
 	} else {
 		r0 = ret.Error(0)
@@ -63,13 +63,13 @@ type MockClient_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - key string
-//   - value interface{}
+//   - value any
 //   - ttl time.Duration
 func (_e *MockClient_Expecter) Create(ctx interface{}, key interface{}, value interface{}, ttl interface{}) *MockClient_Create_Call {
 	return &MockClient_Create_Call{Call: _e.mock.On("Create", ctx, key, value, ttl)}
 }
 
-func (_c *MockClient_Create_Call) Run(run func(ctx context.Context, key string, value interface{}, ttl time.Duration)) *MockClient_Create_Call {
+func (_c *MockClient_Create_Call) Run(run func(ctx context.Context, key string, value any, ttl time.Duration)) *MockClient_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -79,9 +79,9 @@ func (_c *MockClient_Create_Call) Run(run func(ctx context.Context, key string, 
 		if args[1] != nil {
 			arg1 = args[1].(string)
 		}
-		var arg2 interface{}
+		var arg2 any
 		if args[2] != nil {
-			arg2 = args[2].(interface{})
+			arg2 = args[2].(any)
 		}
 		var arg3 time.Duration
 		if args[3] != nil {
@@ -102,7 +102,7 @@ func (_c *MockClient_Create_Call) Return(err error) *MockClient_Create_Call {
 	return _c
 }
 
-func (_c *MockClient_Create_Call) RunAndReturn(run func(ctx context.Context, key string, value interface{}, ttl time.Duration) error) *MockClient_Create_Call {
+func (_c *MockClient_Create_Call) RunAndReturn(run func(ctx context.Context, key string, value any, ttl time.Duration) error) *MockClient_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -233,7 +233,7 @@ func (_c *MockClient_Get_Call) RunAndReturn(run func(ctx context.Context, key st
 }
 
 // Put provides a mock function for the type MockClient
-func (_mock *MockClient) Put(ctx context.Context, key string, value interface{}) error {
+func (_mock *MockClient) Put(ctx context.Context, key string, value any) error {
 	ret := _mock.Called(ctx, key, value)
 
 	if len(ret) == 0 {
@@ -241,7 +241,7 @@ func (_mock *MockClient) Put(ctx context.Context, key string, value interface{})
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, interface{}) error); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, any) error); ok {
 		r0 = returnFunc(ctx, key, value)
 	} else {
 		r0 = ret.Error(0)
@@ -257,12 +257,12 @@ type MockClient_Put_Call struct {
 // Put is a helper method to define mock.On call
 //   - ctx context.Context
 //   - key string
-//   - value interface{}
+//   - value any
 func (_e *MockClient_Expecter) Put(ctx interface{}, key interface{}, value interface{}) *MockClient_Put_Call {
 	return &MockClient_Put_Call{Call: _e.mock.On("Put", ctx, key, value)}
 }
 
-func (_c *MockClient_Put_Call) Run(run func(ctx context.Context, key string, value interface{})) *MockClient_Put_Call {
+func (_c *MockClient_Put_Call) Run(run func(ctx context.Context, key string, value any)) *MockClient_Put_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -272,9 +272,9 @@ func (_c *MockClient_Put_Call) Run(run func(ctx context.Context, key string, val
 		if args[1] != nil {
 			arg1 = args[1].(string)
 		}
-		var arg2 interface{}
+		var arg2 any
 		if args[2] != nil {
-			arg2 = args[2].(interface{})
+			arg2 = args[2].(any)
 		}
 		run(
 			arg0,
@@ -290,7 +290,7 @@ func (_c *MockClient_Put_Call) Return(err error) *MockClient_Put_Call {
 	return _c
 }
 
-func (_c *MockClient_Put_Call) RunAndReturn(run func(ctx context.Context, key string, value interface{}) error) *MockClient_Put_Call {
+func (_c *MockClient_Put_Call) RunAndReturn(run func(ctx context.Context, key string, value any) error) *MockClient_Put_Call {
 	_c.Call.Return(run)
 	return _c
 }

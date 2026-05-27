@@ -18,7 +18,7 @@ type natsClient struct {
 	store jetstream.KeyValue
 }
 
-func NewNats(url string, bucket string) (*Cache, error) {
+func NewNats(url, bucket string) (*Cache, error) {
 	nc, err := nats.Connect(url)
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect to nats server %s: %w", url, err)

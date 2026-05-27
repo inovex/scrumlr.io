@@ -62,8 +62,8 @@ type MockClient_Publish_Call struct {
 // Publish is a helper method to define mock.On call
 //   - ctx context.Context
 //   - subject string
-//   - event interface{}
-func (_e *MockClient_Expecter) Publish(ctx any, subject any, event any) *MockClient_Publish_Call {
+//   - event any
+func (_e *MockClient_Expecter) Publish(ctx interface{}, subject interface{}, event interface{}) *MockClient_Publish_Call {
 	return &MockClient_Publish_Call{Call: _e.mock.On("Publish", ctx, subject, event)}
 }
 
@@ -136,7 +136,7 @@ type MockClient_SubscribeToBoardEvents_Call struct {
 // SubscribeToBoardEvents is a helper method to define mock.On call
 //   - ctx context.Context
 //   - subject string
-func (_e *MockClient_Expecter) SubscribeToBoardEvents(ctx any, subject any) *MockClient_SubscribeToBoardEvents_Call {
+func (_e *MockClient_Expecter) SubscribeToBoardEvents(ctx interface{}, subject interface{}) *MockClient_SubscribeToBoardEvents_Call {
 	return &MockClient_SubscribeToBoardEvents_Call{Call: _e.mock.On("SubscribeToBoardEvents", ctx, subject)}
 }
 
@@ -204,7 +204,7 @@ type MockClient_SubscribeToBoardSessionEvents_Call struct {
 // SubscribeToBoardSessionEvents is a helper method to define mock.On call
 //   - ctx context.Context
 //   - subject string
-func (_e *MockClient_Expecter) SubscribeToBoardSessionEvents(ctx any, subject any) *MockClient_SubscribeToBoardSessionEvents_Call {
+func (_e *MockClient_Expecter) SubscribeToBoardSessionEvents(ctx interface{}, subject interface{}) *MockClient_SubscribeToBoardSessionEvents_Call {
 	return &MockClient_SubscribeToBoardSessionEvents_Call{Call: _e.mock.On("SubscribeToBoardSessionEvents", ctx, subject)}
 }
 

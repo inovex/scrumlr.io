@@ -575,13 +575,13 @@ func (service *Service) UpdatedBoard(ctx context.Context, board DatabaseBoard) {
 		Data: new(Board).From(board),
 	})
 
-	err_msg, err := service.SyncBoardSettingChange(ctx, board.ID)
+	err := service.SyncBoardSettingChange(ctx, board.ID)
 	if err != nil {
-		logger.Get().Errorw(err_msg, "err", err)
+		logger.Get().Errorw("unable to sync board setting change", "err", err)
 	}
 }
 
-func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid.UUID) (string, error) {
+func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid.UUID) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.sync")
 	defer span.End()
 
@@ -589,13 +589,11 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 		attribute.String("scrumlr.boards.service.board.sync.board", boardID.String()),
 	)
 
-	var err_msg string
 	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		err_msg = "unable to retrieve columns, following a updated board call"
-		return err_msg, err
+		return fmt.Errorf("unable to retrieve columns, following a updated board call: %w", err)
 	}
 
 	var columnsID []uuid.UUID
@@ -607,8 +605,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		err_msg = "unable to retrieve notes, following a updated board call"
-		return err_msg, err
+		return fmt.Errorf("unable to retrieve notes, following a updated board call: %w", err)
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -619,11 +616,10 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		err_msg = "unable to broadcast notes, following a updated board call"
-		return err_msg, err
+		return fmt.Errorf("unable to broadcast notes, following a updated board call: %w", err)
 	}
 
-	return "", err
+	return nil
 }
 
 func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
