@@ -1,4 +1,4 @@
-package api
+package technical_helper
 
 import (
 	"testing"

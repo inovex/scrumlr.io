@@ -21,6 +21,7 @@ import (
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/technical_helper"
 )
 
 func main() {
@@ -357,7 +358,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-google-client-id"),
 			ClientSecret: ctx.String("auth-google-client-secret"),
-			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/google/callback"}),
+			RedirectUri:  technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/google/callback"}),
 		}
 	}
 	if ctx.String("auth-github-client-id") != "" && ctx.String("auth-github-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -365,7 +366,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-github-client-id"),
 			ClientSecret: ctx.String("auth-github-client-secret"),
-			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/github/callback"}),
+			RedirectUri:  technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/github/callback"}),
 		}
 	}
 	if ctx.String("auth-microsoft-client-id") != "" && ctx.String("auth-microsoft-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -373,7 +374,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-microsoft-client-id"),
 			ClientSecret: ctx.String("auth-microsoft-client-secret"),
-			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/microsoft/callback"}),
+			RedirectUri:  technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/microsoft/callback"}),
 		}
 	}
 	if ctx.String("auth-azure-ad-tenant-id") != "" && ctx.String("auth-azure-ad-client-id") != "" && ctx.String("auth-azure-ad-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -382,7 +383,7 @@ func run(ctx *cli.Context) error {
 			TenantId:     ctx.String("auth-azure-ad-tenant-id"),
 			ClientId:     ctx.String("auth-azure-ad-client-id"),
 			ClientSecret: ctx.String("auth-azure-ad-client-secret"),
-			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/azure_ad/callback"}),
+			RedirectUri:  technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/azure_ad/callback"}),
 		}
 	}
 	if ctx.String("auth-apple-client-id") != "" && ctx.String("auth-apple-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -390,7 +391,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-apple-client-id"),
 			ClientSecret: ctx.String("auth-apple-client-secret"),
-			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/apple/callback"}),
+			RedirectUri:  technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/apple/callback"}),
 		}
 	}
 	if ctx.String("auth-oidc-discovery-url") != "" && ctx.String("auth-oidc-client-id") != "" && ctx.String("auth-oidc-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -398,7 +399,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       ctx.String("auth-oidc-client-id"),
 			ClientSecret:   ctx.String("auth-oidc-client-secret"),
-			RedirectUri:    api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/oidc/callback"}),
+			RedirectUri:    technical_helper.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/oidc/callback"}),
 			DiscoveryUri:   ctx.String("auth-oidc-discovery-url"),
 			UserIdentScope: ctx.String("auth-oidc-user-ident-scope"),
 			UserNameScope:  ctx.String("auth-oidc-user-name-scope"),
