@@ -349,10 +349,6 @@ func run(ctx *cli.Context) error {
 		if !strings.HasPrefix(basePath, "/") {
 			return errors.New("base path must start with '/'")
 		}
-
-		if len(basePath) > 1 {
-			basePath = strings.TrimSuffix(basePath, "/")
-		}
 	}
 
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
@@ -361,7 +357,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-google-client-id"),
 			ClientSecret: ctx.String("auth-google-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/google/callback"}),
 		}
 	}
 	if ctx.String("auth-github-client-id") != "" && ctx.String("auth-github-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -369,7 +365,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-github-client-id"),
 			ClientSecret: ctx.String("auth-github-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/github/callback"}),
 		}
 	}
 	if ctx.String("auth-microsoft-client-id") != "" && ctx.String("auth-microsoft-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -377,7 +373,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-microsoft-client-id"),
 			ClientSecret: ctx.String("auth-microsoft-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/microsoft/callback"}),
 		}
 	}
 	if ctx.String("auth-azure-ad-tenant-id") != "" && ctx.String("auth-azure-ad-client-id") != "" && ctx.String("auth-azure-ad-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -386,7 +382,7 @@ func run(ctx *cli.Context) error {
 			TenantId:     ctx.String("auth-azure-ad-tenant-id"),
 			ClientId:     ctx.String("auth-azure-ad-client-id"),
 			ClientSecret: ctx.String("auth-azure-ad-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/azure_ad/callback"}),
 		}
 	}
 	if ctx.String("auth-apple-client-id") != "" && ctx.String("auth-apple-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -394,7 +390,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
 			ClientId:     ctx.String("auth-apple-client-id"),
 			ClientSecret: ctx.String("auth-apple-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:  api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/apple/callback"}),
 		}
 	}
 	if ctx.String("auth-oidc-discovery-url") != "" && ctx.String("auth-oidc-client-id") != "" && ctx.String("auth-oidc-client-secret") != "" && ctx.String("auth-callback-host") != "" {
@@ -402,7 +398,7 @@ func run(ctx *cli.Context) error {
 		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       ctx.String("auth-oidc-client-id"),
 			ClientSecret:   ctx.String("auth-oidc-client-secret"),
-			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(ctx.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			RedirectUri:    api.PathJoiner([]string{ctx.String("auth-callback-host"), basePath, "/login/oidc/callback"}),
 			DiscoveryUri:   ctx.String("auth-oidc-discovery-url"),
 			UserIdentScope: ctx.String("auth-oidc-user-ident-scope"),
 			UserNameScope:  ctx.String("auth-oidc-user-name-scope"),

@@ -112,6 +112,8 @@ func New(
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
+	r.Use(middleware.CleanPath)
+	r.Use(middleware.StripSlashes)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(otelhttp.NewMiddleware("scrumlr"))
