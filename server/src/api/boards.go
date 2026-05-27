@@ -252,11 +252,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{
-				Board: board,
-				User:  board,
-				Role:  common.ParticipantRole,
-			})
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
