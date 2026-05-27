@@ -280,16 +280,15 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 		columnIds = append(columnIds, column.ID)
 	}
 
-	var err_msg string
-	err_msg, err = service.syncNotesOnColumnChange(ctx, board, columnIds)
+	err = service.syncNotesOnColumnChange(ctx, board, columnIds)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to sync columns")
 		span.RecordError(err)
-		log.Errorw(err_msg, "err", err)
+		log.Errorw("unable to sync notes on column change", "err", err)
 	}
 }
 
-func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uuid.UUID, columnIds []uuid.UUID) (string, error) {
+func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uuid.UUID, columnIds []uuid.UUID) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.sync")
 	defer span.End()
 
@@ -297,8 +296,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		err_msg := "unable to retrieve notes, following a updated columns call"
-		return err_msg, err
+		return fmt.Errorf("unable to retrieve notes, following a updated columns call: %w", err)
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -309,11 +307,10 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		err_msg := "unable to broadcast notes, following a updated columns call"
-		return err_msg, err
+		return fmt.Errorf("unable to broadcast notes, following a updated columns call: %w", err)
 	}
 
-	return "", err
+	return nil
 }
 
 func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID, notes []uuid.UUID) {

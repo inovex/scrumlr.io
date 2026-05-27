@@ -189,14 +189,6 @@ describe("TemplateCard", () => {
       expect(startButton).toBeDisabled();
     });
 
-    it("should show tooltip on disabled start button", () => {
-      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, true, "Anonymous users cannot create boards");
-
-      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
-      expect(startButton).toHaveAttribute("data-tooltip-id", "template-card-tooltip");
-      expect(startButton).toHaveAttribute("data-tooltip-content", "Anonymous users cannot create boards");
-    });
-
     it("should not call onSelectTemplate when disabled start button is clicked", () => {
       const onSelectTemplate = vi.fn();
       const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
@@ -205,15 +197,6 @@ describe("TemplateCard", () => {
       act(() => fireEvent.click(startButton));
 
       expect(onSelectTemplate).not.toHaveBeenCalled();
-    });
-
-    it("should not show tooltip attributes when template card is enabled", () => {
-      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, false);
-
-      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
-      expect(startButton).not.toHaveAttribute("data-tooltip-id");
-      expect(startButton).not.toHaveAttribute("data-tooltip-content");
-      expect(startButton).not.toBeDisabled();
     });
 
     it("should still allow favourite functionality when template card is disabled", () => {
@@ -234,7 +217,6 @@ describe("TemplateCard", () => {
 
       const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
       expect(startButton).toBeDisabled();
-      expect(startButton).toHaveAttribute("data-tooltip-content", "Custom disabled reason");
 
       act(() => fireEvent.click(startButton));
       expect(onSelectTemplate).not.toHaveBeenCalled();

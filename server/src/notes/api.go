@@ -7,8 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// WebSocketConnection interface for testability
-type WebSocketConnection interface {
+// WebSocketConnector interface for testability
+type WebSocketConnector interface {
 	WriteJSON(ctx context.Context, v any) error
 }
 
@@ -28,5 +28,5 @@ type NotesService interface {
 	GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error)
 	IsLocked(ctx context.Context, noteID uuid.UUID) bool
 
-	HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnection, data json.RawMessage)
+	HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)
 }
