@@ -1,7 +1,8 @@
-import React, {ReactNode, useId} from "react";
+import {ReactNode, useId, MouseEvent} from "react";
 import classNames from "classnames";
-import FocusLock, {MoveFocusInside} from "react-focus-lock";
+import FocusLock, {AutoFocusInside} from "react-focus-lock";
 import {Tooltip} from "components/Tooltip";
+import {useOnBlur} from "utils/hooks/useOnBlur";
 import "./MiniMenu.scss";
 
 export type MiniMenuItem = {
@@ -28,19 +29,24 @@ type MiniMenuProps = {
 
 export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent, dataCy}: MiniMenuProps) => {
   const baseId = useId();
-  const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
+  const onClickItem = (e: MouseEvent, item: MiniMenuItem) => {
     e.preventDefault(); // fix some issues
     item.onClick?.();
   };
 
+  const menuRef = useOnBlur<HTMLDivElement>(() => {
+    onBlur?.();
+  });
+
   const renderMenu = () => (
     <div
+      ref={menuRef}
       className={classNames(className, "mini-menu", {"mini-menu--small": small, "mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})}
-      onBlur={onBlur}
       data-cy={dataCy}
     >
       {items.map((item, index) => {
         const anchor = `mini-menu-${item.label}-${baseId}-${index}`;
+        const isLastItem = index === items.length - 1;
         return (
           <button
             aria-label={item.label}
@@ -51,11 +57,11 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
               "mini-menu__item--disabled": item.disabled,
             })}
             key={item.label}
-            // mouse down instead of click because it has precedence over blur
-            onMouseDown={(e) => onClickItem(e, item)}
+            onClick={(e) => onClickItem(e, item)}
             disabled={item.disabled}
             data-cy={`${dataCy}-item-${item.label}`}
             data-testid={`${dataCy}-item-${item.label}`}
+            data-autofocus={isLastItem}
           >
             {item.element}
             <Tooltip anchorId={anchor} color="backlog-blue">
@@ -74,7 +80,7 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
     case "trap":
       return <FocusLock autoFocus>{renderMenu()}</FocusLock>;
     case "moveFocus":
-      return <MoveFocusInside>{renderMenu()}</MoveFocusInside>;
+      return <AutoFocusInside>{renderMenu()}</AutoFocusInside>;
     default:
       return <>{renderMenu()}</>;
   }

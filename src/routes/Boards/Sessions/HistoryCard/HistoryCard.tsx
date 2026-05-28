@@ -107,7 +107,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           },
           {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
-        focusBehaviour="moveFocus"
+        focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
       />

@@ -57,7 +57,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
           {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
-        focusBehaviour="moveFocus"
+        focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
       />
