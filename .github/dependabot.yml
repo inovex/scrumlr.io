@@ -18,6 +18,16 @@ updates:
     commit-message:
       prefix: "yarn"
       include: "scope"
+    groups:
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint/*"
+      react:
+        patterns:
+          - "react"
+          - "@types/react"
+          - "react-dom"
+          - "@types/react-dom"
 
   # Server: src module
   - package-ecosystem: "gomod"

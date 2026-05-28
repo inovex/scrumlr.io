@@ -123,6 +123,7 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
       data-testid="template-card__start-button"
+      id="template-card__start-button--test-templates-id-1"
     >
       <div
         class="button__content-wrapper"
@@ -276,6 +277,7 @@ exports[`TemplateCard > should render correctly (recommended) 1`] = `
       class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
       data-cy="template-card__start-button"
       data-testid="template-card__start-button"
+      id="template-card__start-button--test-templates-id-1"
     >
       <div
         class="button__content-wrapper"

@@ -8,6 +8,7 @@ import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
 import {useAppSelector} from "store";
 import {ThreeDotsIcon as MenuIcon, ColumnsIcon, NextIcon, CloseIcon, TrashIcon, EditIcon} from "components/Icon";
+import {Tooltip} from "components/Tooltip";
 import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
@@ -92,17 +93,17 @@ export const TemplateCard = (props: TemplateCardProps) => {
         </div>
       </div>
       <Button
+        id={`template-card__start-button--${template.id}`}
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
         onClick={props.disabled ? undefined : () => props.onSelectTemplate({template, columns})}
         disabled={props.disabled}
-        dataTooltipId={props.disabled ? "template-card-tooltip" : undefined}
-        dataTooltipContent={props.disabled ? props.disabledReason : undefined}
         testId="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
       </Button>
+      {props.disabled && <Tooltip anchorId={`template-card__start-button--${template.id}`}>{props.disabledReason}</Tooltip>}
     </div>
   );
 };

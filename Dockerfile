@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock .yarnrc.yml ./
 
 # starting from node 26, corepack isn't shipped anymore and has to manually be added in order for yarn modern to work
-RUN npm install -g corepack@latest --ignore-scripts && \
+RUN npm install -g corepack@0.35.0 --ignore-scripts && \
     corepack enable && \
     corepack install
 RUN yarn install --immutable --mode=skip-build --network-timeout 240000
