@@ -146,13 +146,11 @@ backend:
   ## @param backend.config.serverPort Server port for the backend
   ## @param backend.config.basePath Base path for the backend
   ## @param backend.config.natsUrl Url to reach the nats server
-  ## @param backend.config.serverBaseUrl Public base URL of the server (required). Used for Location headers and redirects.
   ##
   config:
     serverPort: 8080
     basePath: /api
     natsUrl:
-    serverBaseUrl: "https://scrumlr.io"
   ## @param backend.extraConfig Extra configuration values as a map
   ##
   extraConfig: {}

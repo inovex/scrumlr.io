@@ -155,7 +155,6 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Location", s.absURL("/"))
+	w.Header().Set("Location", s.buildRelativeURL("/"))
 	w.WriteHeader(http.StatusSeeOther)
 }
-

@@ -393,8 +393,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 
 			// Use the actual router from router.go with minimal mocked dependencies
 			s := New(
-				"/",                              // basePath
-				"http://localhost:8080",          // baseURL
+				"/",      // basePath
 				nil,      // realtime (not needed for templates)
 				nil,      // wsService (not needed for templates)
 				mockAuth, // auth

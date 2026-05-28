@@ -67,7 +67,6 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			s.baseURL = "http://example.com"
 			s.basePath = "/"
 			boardMock := boards.NewMockBoardService(suite.T())
 
@@ -115,7 +114,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 
 			suite.Equal(te.expectedCode, rr.Result().StatusCode)
 			if te.err == nil {
-				suite.Equal(fmt.Sprintf("http://example.com/boards/%s", createdBoard.ID), rr.Result().Header.Get("Location"))
+				suite.Equal(fmt.Sprintf("/boards/%s", createdBoard.ID), rr.Result().Header.Get("Location"))
 			}
 			boardMock.AssertExpectations(suite.T())
 		})
@@ -264,7 +263,6 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			s.baseURL = "http://example.com"
 			s.basePath = "/"
 			boardMock := boards.NewMockBoardService(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
@@ -311,7 +309,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				switch te.expectedCode {
 				case http.StatusSeeOther, http.StatusCreated:
 					location := rr.Result().Header.Get("Location")
-					suite.True(strings.HasPrefix(location, "http://example.com/boards/"), "Location header should use configured baseURL, got: %s", location)
+					suite.True(strings.HasPrefix(location, "/boards/"), "Location header should use configured baseURL, got: %s", location)
 					suite.False(strings.Contains(location, "r.Host"), "Location header must not contain r.Host")
 				}
 			}

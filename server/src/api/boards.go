@@ -60,7 +60,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// build the response
-	w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s", b.ID)))
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s", b.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
 }
@@ -196,7 +196,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
+		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
@@ -218,7 +218,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Header().Set("Location", s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)))
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
@@ -250,7 +250,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			w.Header().Set("Location", s.absURL(fmt.Sprintf(boardParticipantsPath, board, user)))
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
@@ -272,7 +272,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if sessionExists {
-			w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
 			w.WriteHeader(http.StatusSeeOther)
 			return
 		}
@@ -284,7 +284,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}

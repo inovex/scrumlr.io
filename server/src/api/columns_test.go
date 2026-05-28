@@ -40,7 +40,6 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			s.baseURL = "http://example.com"
 			s.basePath = "/"
 			columnMock := columns.NewMockColumnService(suite.T())
 
@@ -81,7 +80,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			if tt.err == nil {
-				suite.Equal(fmt.Sprintf("http://example.com/boards/%s/columns/%s", boardID, columnID), rr.Result().Header.Get("Location"))
+				suite.Equal(fmt.Sprintf("/boards/%s/columns/%s", boardID, columnID), rr.Result().Header.Get("Location"))
 			}
 			columnMock.AssertExpectations(suite.T())
 		})

@@ -43,7 +43,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/columns/%s", board, column.ID)))
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/columns/%s", board, column.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, column)
 }

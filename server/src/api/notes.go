@@ -44,7 +44,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, err)
 		return
 	}
-	w.Header().Set("Location", s.absURL(fmt.Sprintf("/boards/%s/notes/%s", board, note.ID)))
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/notes/%s", board, note.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, note)
 }

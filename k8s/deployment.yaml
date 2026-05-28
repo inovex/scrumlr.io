@@ -51,8 +51,6 @@ spec:
               value: nats://nats-PR_NUMBER:4222
             - name: SCRUMLR_AUTH_CALLBACK_HOST
               value: "https://PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
-            - name: SCRUMLR_SERVER_BASE_URL
-              value: "https://PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
             - name: SCRUMLR_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:

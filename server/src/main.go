@@ -131,12 +131,6 @@ func main() {
 				Value:    false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
-				Name:     "server-base-url",
-				EnvVars:  []string{"SCRUMLR_SERVER_BASE_URL"},
-				Usage:    "the public base URL of the server including protocol and port if non-standard (e.g. https://scrumlr.io or http://localhost:8080). Used for Location headers and redirects. --port controls the bind port only.",
-				Required: true,
-			}),
-			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
 				Aliases:  []string{"c"},
 				EnvVars:  []string{"SCRUMLR_AUTH_CALLBACK_HOST"},
@@ -460,7 +454,6 @@ func run(ctx *cli.Context) error {
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	s := api.New(
 		basePath,
-		ctx.String("server-base-url"),
 		rt,
 		wsService,
 		authConfig,
