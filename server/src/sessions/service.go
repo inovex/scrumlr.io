@@ -145,6 +145,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		ShowHiddenColumns: body.ShowHiddenColumns,
 		Role:              body.Role,
 		Banned:            body.Banned,
+		Favourite:         body.Favourite,
 	})
 
 	if err != nil {

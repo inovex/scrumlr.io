@@ -325,7 +325,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
-		numColumns, err := service.columnService.GetCount(ctx, id)
+		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get columns")
 			span.RecordError(err)
@@ -333,15 +333,20 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
+		notes, err := service.notesService.GetAll(ctx, id)
+
 		participantNum := len(boardSessions)
 		for _, session := range boardSessions {
 			if session.UserID == user {
 				sessionCreated := session.CreatedAt
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        board,
-					Participants: participantNum,
+					Columns:      boardColumns,
 					CreatedAt:    sessionCreated,
-					Columns:      numColumns,
+					Participants: participantNum,
+					Role:         session.Role,
+					Favourite:    session.Favourite,
+					NoteCount:    len(notes),
 				})
 			}
 		}

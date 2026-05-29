@@ -37,6 +37,9 @@ type BoardSession struct {
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
 
+	// Flag indicates whether user has marked the board as one of their favourites.
+	Favourite bool `json:"favourite"`
+
 	Board uuid.UUID `json:"-"`
 }
 
@@ -68,9 +71,10 @@ type BoardSessionUpdateRequest struct {
 	// The banned state of the participant
 	Banned *bool `json:"banned"`
 
-	Board  uuid.UUID `json:"-"`
-	User   uuid.UUID `json:"-"`
-	Caller uuid.UUID `json:"-"`
+	Board     uuid.UUID `json:"-"`
+	User      uuid.UUID `json:"-"`
+	Caller    uuid.UUID `json:"-"`
+	Favourite *bool     `json:"favourite"`
 }
 
 // BoardSessionsUpdateRequest represents the request to update all participants.
@@ -95,6 +99,7 @@ func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
 	b.CreatedAt = session.CreatedAt
 	b.Banned = session.Banned
 	b.Board = session.Board
+	b.Favourite = session.Favourite
 	return b
 }
 
