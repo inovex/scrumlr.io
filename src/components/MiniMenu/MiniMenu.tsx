@@ -1,7 +1,7 @@
 import {ReactNode, useId, MouseEvent} from "react";
 import classNames from "classnames";
 import FocusLock, {AutoFocusInside} from "react-focus-lock";
-import {Tooltip} from "components/Tooltip";
+import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import "./MiniMenu.scss";
 
@@ -64,9 +64,10 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             data-autofocus={isLastItem}
           >
             {item.element}
-            <Tooltip anchorId={anchor} color="backlog-blue">
+            {/* wrap in portal to force tooltip placement despite missing space */}
+            <TooltipPortal anchorId={anchor} color="backlog-blue" place="top" show>
               {item.label}
-            </Tooltip>
+            </TooltipPortal>
           </button>
         );
       })}
