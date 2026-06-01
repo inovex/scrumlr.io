@@ -53,6 +53,7 @@ type Board struct {
 	Salt       *string `json:"-"`
 
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	CreatedAt      time.Time `json:"createdAt"`
 }
 
 func (b *Board) From(board DatabaseBoard) *Board {
@@ -72,6 +73,7 @@ func (b *Board) From(board DatabaseBoard) *Board {
 	b.Passphrase = board.Passphrase
 	b.Salt = board.Salt
 	b.LastModifiedAt = board.LastModifiedAt
+	b.CreatedAt = board.CreatedAt
 	return b
 }
 

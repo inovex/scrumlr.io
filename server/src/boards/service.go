@@ -348,11 +348,10 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 				if session.Role == common.ParticipantRole {
 					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
 				}
-				sessionCreated := session.CreatedAt
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        board,
 					Columns:      boardColumns,
-					CreatedAt:    sessionCreated,
+					CreatedAt:    board.CreatedAt,
 					Participants: participantNum,
 					Role:         session.Role,
 					Favourite:    session.Favourite,
