@@ -334,10 +334,20 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		}
 
 		notes, err := service.notesService.GetAll(ctx, id)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get notes")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
+		}
 
 		participantNum := len(boardSessions)
 		for _, session := range boardSessions {
+			// Participants should not be able to see hidden collumns
 			if session.UserID == user {
+				if session.Role == common.ParticipantRole {
+					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
+				}
 				sessionCreated := session.CreatedAt
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        board,
