@@ -156,6 +156,77 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardConcurrentFirstC
 	}
 }
 
+// This test is here to prove the existance of a race condition. You can run it by running the following command:
+// SCRUMLR_ENABLE_RACE_REPRO=1 go test -race ./api -run TestBoardsListenIntegrationTestSuite/TestStartListeningOnBoardConcurrentClientMutationRace -count=1
+func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardConcurrentClientMutationRace() {
+	// This test intentionally reproduces a race between broadcasting board events
+	// to all connected clients and mutating the same clients map due to users
+	// connecting or disconnecting at the same time.
+	if os.Getenv("SCRUMLR_ENABLE_RACE_REPRO") == "" {
+		suite.T().Skip("set SCRUMLR_ENABLE_RACE_REPRO=1 to run this intentional race reproduction")
+	}
+
+	// Run the same broadcast-versus-mutation scenario multiple times to make the
+	// timing window large enough for the race detector and runtime checks.
+	for range 100 {
+		eventChan := make(chan *realtime.BoardEvent)
+		bs := &BoardSubscription{
+			subscription: eventChan,
+			clients:      make(map[uuid.UUID]websocket.Connection),
+		}
+
+		// Pre-populate many clients so a single broadcast spends noticeable time
+		// iterating the map, matching a busy board with many connected users.
+		for range 1000 {
+			bs.clients[uuid.New()] = &mockConnection{}
+		}
+
+		start := make(chan struct{})
+		var ready sync.WaitGroup
+		var done sync.WaitGroup
+
+		ready.Add(2)
+		done.Add(3)
+
+		go func() {
+			defer done.Done()
+			ready.Done()
+			<-start
+			bs.startListeningOnBoard()
+		}()
+
+		go func() {
+			defer done.Done()
+			ready.Done()
+			<-start
+
+			// Simulate connect/disconnect churn while the listener goroutine is
+			// ranging over the same map to broadcast events.
+			for range 2000 {
+				userID := uuid.New()
+				bs.clients[userID] = &mockConnection{}
+				delete(bs.clients, userID)
+			}
+		}()
+
+		go func() {
+			defer done.Done()
+			ready.Wait()
+			close(start)
+
+			// Trigger multiple broadcasts so the listener repeatedly iterates the
+			// clients map while the mutation goroutine keeps changing it.
+			for range 200 {
+				eventChan <- &realtime.BoardEvent{Type: realtime.BoardEventBoardDeleted}
+			}
+
+			close(eventChan)
+		}()
+
+		done.Wait()
+	}
+}
+
 func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardBroadcastsEvents() {
 	eventChan := make(chan *realtime.BoardEvent, 10)
 	client1ID := uuid.New()
