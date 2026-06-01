@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"os"
+	"sync"
 	"testing"
 	"time"
 
@@ -97,6 +99,61 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardAddsClientToExis
 	assert.Len(suite.T(), s.boardSubscriptions[boardID].clients, 2)
 	assert.Equal(suite.T(), conn1, s.boardSubscriptions[boardID].clients[userID1])
 	assert.Equal(suite.T(), conn2, s.boardSubscriptions[boardID].clients[userID2])
+}
+
+// This test is here to prove the existance of a race condition. You can run it by running the following command:
+// SCRUMLR_ENABLE_RACE_REPRO=1 go test -race ./api -run TestBoardsListenIntegrationTestSuite/TestListenOnBoardConcurrentFirstConnectionsRace -count=1
+func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardConcurrentFirstConnectionsRace() {
+	// This test intentionally reproduces a race in listenOnBoard. Keep it opt-in so
+	// the regular test suite stays green until the production code is fixed.
+	if os.Getenv("SCRUMLR_ENABLE_RACE_REPRO") == "" {
+		suite.T().Skip("set SCRUMLR_ENABLE_RACE_REPRO=1 to run this intentional race reproduction")
+	}
+
+	boardID := uuid.New()
+	fullBoard := boards.FullBoard{
+		Board: &boards.Board{ID: boardID},
+	}
+	eventChan := make(chan *realtime.BoardEvent)
+	defer close(eventChan)
+
+	mockRealtimeClient := realtime.NewMockClient(suite.T())
+	mockRealtimeClient.EXPECT().SubscribeToBoardEvents(mock.Anything, mock.Anything).Return(eventChan, nil)
+
+	// Run the same simultaneous first-connection scenario multiple times to make the
+	// timing window wide enough for the race detector and runtime checks to catch it.
+	for range 200 {
+		s := &Server{
+			boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
+			realtime:           &realtime.Broker{Con: mockRealtimeClient},
+		}
+
+		// Use a barrier so both goroutines call listenOnBoard for the same board at
+		// nearly the same moment, matching two users opening the board together.
+		start := make(chan struct{})
+		var ready sync.WaitGroup
+		var done sync.WaitGroup
+
+		ready.Add(2)
+		done.Add(2)
+
+		for range 2 {
+			go func() {
+				defer done.Done()
+				userID := uuid.New()
+				conn := &mockConnection{}
+
+				ready.Done()
+				<-start
+
+				s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
+			}()
+		}
+
+		ready.Wait()
+		close(start)
+		done.Wait()
+	}
 }
 
 func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardBroadcastsEvents() {
