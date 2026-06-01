@@ -20,7 +20,7 @@ $description-height: 3 * styles.$line-height--medium;
   position: relative;
   display: grid;
 
-  grid-template-rows: 36px auto 10px 46px;
+  grid-template-rows: 36px auto styles.$spacing--xl 46px;
   grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto 36px;
   grid-template-areas:
     "fav-icon   .     head          head          .           .            menu"
@@ -31,7 +31,7 @@ $description-height: 3 * styles.$line-height--medium;
   width: 100%;
   height: var(--card-height);
   border-radius: styles.$rounded--default;
-  padding: styles.$spacing--base;
+  padding: styles.$spacing--md;
 
   background-color: styles.$gray--000;
   box-shadow: 0 6px 9px 0 rgba(styles.$blue--500, 0.1);
@@ -230,13 +230,16 @@ $description-height: 3 * styles.$line-height--medium;
   .history-card {
     --card-height: $card-height--mobile;
 
-    grid-template-rows: 36px auto 10px auto 46px;
+    padding: styles.$spacing--base;
+
+    grid-template-rows: 36px auto styles.$spacing--base auto styles.$spacing--base 46px;
     grid-template-columns: 36px styles.$spacing--xxs 1fr auto 12px auto 12px 36px;
     grid-template-areas:
       "fav-icon   .     head          head          head        head         .           menu"
       ".          .     description   description   description description  description ."
       ".          .     .             .             .           .            .           ."
       "info       info  info          info          info        info         info        info"
+      ".          .     .             .             .           .            .           ."
       ".          .     .             locked        .           button       button      button";
   }
 
@@ -255,6 +258,9 @@ $description-height: 3 * styles.$line-height--medium;
 // not as compact as above (button next to info) but still more than the default (wrapped info)
 @container (min-width: #{$card-breakpoint--medium}) and (max-width: #{$card-breakpoint--compact}) {
   .history-card {
+    padding: styles.$spacing--md;
+
+    grid-template-rows: 36px auto styles.$spacing--base auto 46px;
     grid-template-areas:
       "fav-icon   .     head          head          head        head         .           menu"
       ".          .     description   description   description description  description ."
