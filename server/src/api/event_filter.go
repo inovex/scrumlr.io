@@ -16,7 +16,10 @@ import (
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
+	// we could avoid this lock by refactoring [eventFilter] to not operate on bs.boardParticipants directly so we can use a copy.
+	bs.mu.RLock()
 	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	bs.mu.RUnlock()
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
 		if updated, ok := bs.columnsUpdated(event, userID, isMod); ok {
@@ -50,12 +53,16 @@ func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID u
 	updateColumns, err := columns.UnmarshallColumnData(event.Data)
 
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
+		bs.mu.RUnlock()
 		return nil, false
 	}
 
 	if isMod {
+		bs.mu.Lock()
 		bs.boardColumns = updateColumns
+		bs.mu.Unlock()
 		return event, true
 	} else {
 		return &realtime.BoardEvent{
@@ -68,14 +75,21 @@ func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID u
 func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
 	noteSlice, err := notes.UnmarshallNotaData(event.Data)
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse notesUpdated or eventNotesSync in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
+		bs.mu.RUnlock()
 		return nil, false
 	}
 	if isMod {
+		bs.mu.Lock()
 		bs.boardNotes = noteSlice
+		bs.mu.Unlock()
 		return event, true
 	} else {
 		var columnVisibility []notes.ColumnVisability
+		bs.mu.RLock()
+		// defer unlock since the return value reads from bs
+		defer bs.mu.RUnlock()
 		for _, column := range bs.boardColumns {
 			columnVisibility = append(columnVisibility, notes.ColumnVisability{
 				ID:      column.ID,
@@ -92,11 +106,15 @@ func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uui
 func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool) (*realtime.BoardEvent, bool) {
 	boardSettings, err := technical_helper.Unmarshal[boards.Board](event.Data)
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
+		bs.mu.RUnlock()
 		return nil, false
 	}
 	if isMod {
+		bs.mu.Lock()
 		bs.boardSettings = boardSettings
+		bs.mu.Unlock()
 		event.Data = boardSettings
 		return event, true
 	} else {
@@ -108,7 +126,9 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 	//filter deleted votes after user
 	votes, err := technical_helper.UnmarshalSlice[votings.Vote](event.Data)
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
+		bs.mu.RUnlock()
 		return nil, false
 	}
 
@@ -124,7 +144,9 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
 	voting, err := votings.UnmarshallVoteData(event.Data)
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
+		bs.mu.RUnlock()
 		return nil, false
 	}
 
@@ -134,6 +156,7 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 		return event, true
 	} else {
 
+		bs.mu.RLock()
 		var noteSlice notes.NoteSlice
 		for _, note := range bs.boardNotes {
 			n := votings.Note{
@@ -162,6 +185,9 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 		}
 
 		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
+		// no more reads on bs after this point -> unlock
+		bs.mu.RUnlock()
+
 		filteredvotingNotesIDs := make([]votings.Note, 0, len(filteredVotingNotes))
 		for _, note := range filteredVotingNotes {
 			filteredvotingNotesIDs = append(filteredvotingNotesIDs, votings.Note{
@@ -192,13 +218,20 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 func (bs *BoardSubscription) sessionUpdated(event *realtime.BoardEvent, isMod bool) bool {
 	participantSession, err := technical_helper.Unmarshal[sessions.BoardSession](event.Data)
 	if err != nil {
+		bs.mu.RLock()
 		logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
+		bs.mu.RUnlock()
 		return false
 	}
 
 	if isMod {
 		// Cache the changes of when a participant got updated
-		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
+		bs.mu.RLock()
+		sessionsCopy := make([]*sessions.BoardSession, len(bs.boardParticipants))
+		copy(sessionsCopy, bs.boardParticipants)
+		bs.mu.RUnlock()
+
+		updatedSessions := technical_helper.MapSlice(sessionsCopy, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
 			if boardSession.UserID == participantSession.UserID {
 				return participantSession
 			} else {
@@ -206,7 +239,9 @@ func (bs *BoardSubscription) sessionUpdated(event *realtime.BoardEvent, isMod bo
 			}
 		})
 
+		bs.mu.Lock()
 		bs.boardParticipants = updatedSessions
+		bs.mu.Unlock()
 	}
 	return true
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"scrumlr.io/server/websocket"
@@ -70,6 +71,9 @@ type Server struct {
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
+
+	// mutex to protect Server subscriptions. DO NOT use it to protect anything inside a BoardSubscription or BoardSessionRequestSubscription
+	boardSubscriptionsMu sync.RWMutex
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        bool

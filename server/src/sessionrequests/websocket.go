@@ -3,6 +3,7 @@ package sessionrequests
 import (
 	"context"
 	"net/http"
+	"sync"
 
 	"scrumlr.io/server/websocket"
 
@@ -15,12 +16,16 @@ import (
 type BoardSessionRequestSubscription struct {
 	clients       map[uuid.UUID]websocket.Connection
 	subscriptions map[uuid.UUID]chan *realtime.BoardSessionRequestEventType
+
+	mu sync.RWMutex
 }
 
 type sessionRequestWebsocket struct {
 	websocketService                 websocket.WebSocketInterface
 	realtime                         *realtime.Broker
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+
+	subscriptionMu sync.RWMutex
 }
 
 func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
@@ -33,9 +38,15 @@ func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, r
 }
 
 func (session *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest(userId uuid.UUID) {
-	msg := <-session.subscriptions[userId]
+	session.mu.RLock()
+	ch := session.subscriptions[userId]
+	session.mu.RUnlock()
+	// if ch is nil we block forever -> potential memory leak?
+	msg := <-ch
 	logger.Get().Debugw("message received", "message", msg)
+	session.mu.RLock()
 	conn := session.clients[userId]
+	session.mu.RUnlock()
 	err := conn.WriteJSON(context.Background(), msg)
 	if err != nil {
 		logger.Get().Warnw("failed to send message", "message", msg, "err", err)
@@ -65,7 +76,14 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 		if err != nil {
 			if socket.websocketService.IsNormalClose(err) {
 				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
-				delete(socket.boardSessionRequestSubscriptions[boardId].clients, userID)
+				socket.subscriptionMu.RLock()
+				bs := socket.boardSessionRequestSubscriptions[boardId]
+				socket.subscriptionMu.RUnlock()
+				if bs != nil {
+					bs.mu.Lock()
+					delete(bs.clients, userID)
+					bs.mu.Unlock()
+				}
 			}
 			break
 		}
@@ -73,6 +91,7 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 }
 
 func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection) {
+	socket.subscriptionMu.Lock()
 	if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
 		socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
 			clients:       make(map[uuid.UUID]websocket.Connection),
@@ -81,11 +100,20 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 	}
 
 	b := socket.boardSessionRequestSubscriptions[boardID]
+	socket.subscriptionMu.Unlock()
+	b.mu.Lock()
 	b.clients[userID] = conn
 
 	// if not already done, start listening to board session request changes
+	startListener := false
+
 	if _, exist := b.subscriptions[userID]; !exist {
+		// TODO: avoid locking while performing IO
 		b.subscriptions[userID] = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
+		startListener = true
+	}
+	b.mu.Unlock()
+	if startListener {
 		go b.startListeningOnBoardSessionRequest(userID)
 	}
 }
