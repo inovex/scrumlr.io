@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -101,28 +100,20 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardAddsClientToExis
 	assert.Equal(suite.T(), conn2, s.boardSubscriptions[boardID].clients[userID2])
 }
 
-// This test is here to prove the existance of a race condition. You can run it by running the following command:
-// SCRUMLR_ENABLE_RACE_REPRO=1 go test -race ./api -run TestBoardsListenIntegrationTestSuite/TestListenOnBoardConcurrentFirstConnectionsRace -count=1
-func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardConcurrentFirstConnectionsRace() {
-	// This test intentionally reproduces a race in listenOnBoard. Keep it opt-in so
-	// the regular test suite stays green until the production code is fixed.
-	if os.Getenv("SCRUMLR_ENABLE_RACE_REPRO") == "" {
-		suite.T().Skip("set SCRUMLR_ENABLE_RACE_REPRO=1 to run this intentional race reproduction")
-	}
-
+// TestListenOnBoardConcurrentFirstConnections is a regression test that can find race conditions when the -race flag is set.
+func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardConcurrentFirstConnections() {
 	boardID := uuid.New()
 	fullBoard := boards.FullBoard{
 		Board: &boards.Board{ID: boardID},
 	}
-	eventChan := make(chan *realtime.BoardEvent)
-	defer close(eventChan)
 
-	mockRealtimeClient := realtime.NewMockClient(suite.T())
-	mockRealtimeClient.EXPECT().SubscribeToBoardEvents(mock.Anything, mock.Anything).Return(eventChan, nil)
-
-	// Run the same simultaneous first-connection scenario multiple times to make the
-	// timing window wide enough for the race detector and runtime checks to catch it.
+	// Run the same simultaneous first-connection scenario repeatedly to keep
+	// pressure on the shared subscription maps
 	for range 200 {
+		eventChan := make(chan *realtime.BoardEvent)
+		mockRealtimeClient := realtime.NewMockClient(suite.T())
+		mockRealtimeClient.EXPECT().SubscribeToBoardEvents(mock.Anything, mock.Anything).Return(eventChan, nil)
+
 		s := &Server{
 			boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
 			realtime:           &realtime.Broker{Con: mockRealtimeClient},
@@ -153,26 +144,49 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardConcurrentFirstC
 		ready.Wait()
 		close(start)
 		done.Wait()
+
+		// confirm that both clients did connect
+		bs := s.boardSubscriptions[boardID]
+		if assert.NotNil(suite.T(), bs) {
+			bs.mu.RLock()
+			assert.Len(suite.T(), bs.clients, 2)
+			bs.mu.RUnlock()
+		}
+
+		close(eventChan)
 	}
 }
 
-// This test is here to prove the existance of a race condition. You can run it by running the following command:
-// SCRUMLR_ENABLE_RACE_REPRO=1 go test -race ./api -run TestBoardsListenIntegrationTestSuite/TestStartListeningOnBoardConcurrentClientMutationRace -count=1
-func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardConcurrentClientMutationRace() {
-	// This test intentionally reproduces a race between broadcasting board events
-	// to all connected clients and mutating the same clients map due to users
-	// connecting or disconnecting at the same time.
-	if os.Getenv("SCRUMLR_ENABLE_RACE_REPRO") == "" {
-		suite.T().Skip("set SCRUMLR_ENABLE_RACE_REPRO=1 to run this intentional race reproduction")
-	}
-
-	// Run the same broadcast-versus-mutation scenario multiple times to make the
-	// timing window large enough for the race detector and runtime checks.
+// TestStartListeningOnBoardConcurrentClientChurn is a regression test that can find race conditions when the -race flag is set.
+func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardConcurrentClientChurn() {
+	// Run the same broadcast-versus-client-churn scenario repeatedly and only use
+	// the synchronized production code paths for client registration.
 	for range 100 {
 		eventChan := make(chan *realtime.BoardEvent)
+		boardID := uuid.New()
+		fullBoard := boards.FullBoard{
+			Board: &boards.Board{
+				ID:                    boardID,
+				ShowNotesOfOtherUsers: true,
+				ShowAuthors:           true,
+			},
+			BoardSessions: []*sessions.BoardSession{},
+			Columns:       []*columns.Column{},
+			Notes:         []*notes.Note{},
+			Reactions:     []*reactions.Reaction{},
+		}
 		bs := &BoardSubscription{
-			subscription: eventChan,
-			clients:      make(map[uuid.UUID]websocket.Connection),
+			subscription:      eventChan,
+			clients:           make(map[uuid.UUID]websocket.Connection),
+			boardSettings:     fullBoard.Board,
+			boardParticipants: fullBoard.BoardSessions,
+			boardColumns:      fullBoard.Columns,
+			boardNotes:        fullBoard.Notes,
+			boardReactions:    fullBoard.Reactions,
+		}
+
+		s := &Server{
+			boardSubscriptions: map[uuid.UUID]*BoardSubscription{boardID: bs},
 		}
 
 		// Pre-populate many clients so a single broadcast spends noticeable time
@@ -200,12 +214,16 @@ func (suite *BoardsListenIntegrationTestSuite) TestStartListeningOnBoardConcurre
 			ready.Done()
 			<-start
 
-			// Simulate connect/disconnect churn while the listener goroutine is
-			// ranging over the same map to broadcast events.
+			// Simulate users joining while broadcasts are in flight. Route the
+			// writes through listenOnBoard so the test follows the same lock
+			// protocol as production code.
 			for range 2000 {
 				userID := uuid.New()
-				bs.clients[userID] = &mockConnection{}
+				s.listenOnBoard(context.Background(), boardID, userID, &mockConnection{}, fullBoard)
+
+				bs.mu.Lock()
 				delete(bs.clients, userID)
+				bs.mu.Unlock()
 			}
 		}()
 
