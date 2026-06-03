@@ -209,7 +209,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	assert.Nil(t, sessionRequests)
 	mockSessionRequestDb.AssertNotCalled(t, "GetBoardSessionRequests")
 	assert.NotNil(t, err)
-	assert.Equal(t, "invalid status filter", err.Error())
+	assert.ErrorIs(t, ErrInvalidBoardStatusFilter, err)
 }
 
 func TestCreateSessionRequest(t *testing.T) {
