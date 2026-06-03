@@ -1,13 +1,33 @@
 package sessions
 
-import "errors"
+import "fmt"
+
+type SessionError struct {
+	Category SessionErrorCategory
+	Message  string
+}
+
+type SessionErrorCategory string
+
+const (
+	NotFound  SessionErrorCategory = "NOT_FOUND"
+	Forbidden SessionErrorCategory = "FORBIDDEN"
+)
+
+func (e SessionError) Error() string {
+	return fmt.Sprintf("session error [%s]: %s", e.Category, e.Message)
+}
+
+func (e SessionError) Status() string {
+	return string(e.Category)
+}
 
 var (
 	// Forbidden Errors
-	ErrForbiddenSessionChange  = errors.New("not allowed to change other users session")
-	ErrForbiddenRolePromotion  = errors.New("cannot promote role")
-	ErrForbiddenOwnerChange    = errors.New("not allowed to change owner role")
-	ErrForbiddenOwnerPromotion = errors.New("not allowed to promote to owner role")
+	ErrForbiddenSessionChange  = SessionError{Category: Forbidden, Message: "not allowed to change other users session"}
+	ErrForbiddenRolePromotion  = SessionError{Category: Forbidden, Message: "cannot promote role"}
+	ErrForbiddenOwnerChange    = SessionError{Category: Forbidden, Message: "not allowed to change owner role"}
+	ErrForbiddenOwnerPromotion = SessionError{Category: Forbidden, Message: "not allowed to promote to owner role"}
 	// Not Found Errors
-	ErrSessionNotFound = errors.New("session not found")
+	ErrSessionNotFound = SessionError{Category: NotFound, Message: "session not found"}
 )

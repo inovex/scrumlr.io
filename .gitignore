@@ -45,3 +45,6 @@ deployment/**/.env
 
 # script output
 scripts/out
+
+#coverage files
+*coverage.txt
