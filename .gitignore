@@ -15,6 +15,7 @@ yarn-error.log*
 /coverage
 **/coverage.*
 src/utils/test/localstorage
+*coverage.txt
 
 # builds
 build

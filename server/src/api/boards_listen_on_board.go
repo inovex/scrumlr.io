@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"scrumlr.io/server/websocket"
 
@@ -33,6 +34,9 @@ type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
 	Data boards.FullBoard        `json:"data"`
 }
+
+const MaxRetries = 10
+const SleepBetweenRetries = time.Second * 2
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")
@@ -123,7 +127,24 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
-		b.subscription = s.realtime.GetBoardChannel(ctx, boardID)
+		var ch chan *realtime.BoardEvent
+		var err error
+
+		// retry loop to establish the subscription safely
+		for i := 0; i < MaxRetries; i++ {
+			ch, err = s.realtime.GetBoardChannel(ctx, boardID)
+			if err == nil {
+				break
+			}
+			logger.FromContext(ctx).Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
+			time.Sleep(SleepBetweenRetries) // wait before retrying
+		}
+		// if it completely fails after retries, abort and don't start the goroutine
+		if err != nil {
+			logger.FromContext(ctx).Errorw("could not establish board subscription after retries", "board", boardID, "err", err)
+			return
+		}
+		b.subscription = ch
 		go b.startListeningOnBoard()
 	}
 }
