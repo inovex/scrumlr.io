@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"strings"
 
@@ -49,6 +50,8 @@ type Service struct {
 	notesService   notes.NotesService
 }
 
+type createDBUserFunc func(ctx context.Context) (DatabaseUser, error)
+
 func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService, notesService notes.NotesService) UserService {
 	service := new(Service)
 	service.database = db
@@ -59,200 +62,82 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "users.service.CreateAnonymous")
+func (service *Service) CreatePlatformUser(ctx context.Context, platform common.AccountType, name string, specificCounter metric.Int64Counter, dbCall createDBUserFunc) (*User, error) {
+	platformName := strings.ToLower(string(platform))
+	traceName := fmt.Sprintf("scrumlr.users.service.create.%s", platformName)
+
+	ctx, span := tracer.Start(ctx, traceName)
 	defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
+	// Validation
+	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.BadRequestError(err)
 	}
-
+	//common attributes
 	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.anonymous.type", string(common.Anonymous)),
-		attribute.String("scrumlr.users.service.create.anonymous.name", name),
+		attribute.String(traceName+".type", string(platform)),
+		attribute.String(traceName+".name", name),
 	)
 
-	user, err := service.database.CreateAnonymousUser(ctx, name)
+	//execute the specific database call for the platform
+	user, err := dbCall(ctx)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, err
+		return nil, common.InternalServerError
 	}
 
+	// common telemetry
 	userCreatedCounter.Add(ctx, 1)
-	anonymousUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	if specificCounter != nil {
+		specificCounter.Add(ctx, 1)
+	}
+
+	return new(User).From(user), nil
+}
+
+func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User, error) {
+	return service.CreatePlatformUser(ctx, common.Anonymous, name, anonymousUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateAnonymousUser(new_ctx, name)
+	})
 }
 
 func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.apple")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.apple.type", string(common.Apple)),
-		attribute.String("scrumlr.users.service.create.apple.name", name),
-	)
-
-	user, err := service.database.CreateAppleUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	appleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.Apple, name, appleUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateAppleUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.azuread")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.azuread.type", string(common.AzureAd)),
-		attribute.String("scrumlr.users.service.create.azuread.name", name),
-	)
-
-	user, err := service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	azureAdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.AzureAd, name, azureAdUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateAzureAdUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.github")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.github.type", string(common.GitHub)),
-		attribute.String("scrumlr.users.service.create.github.name", name),
-	)
-
-	user, err := service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	githubUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.GitHub, name, githubUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateGitHubUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.google")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.google.type", string(common.Google)),
-		attribute.String("scrumlr.users.service.create.google.name", name),
-	)
-
-	user, err := service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	googleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.Google, name, googleUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateGoogleUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.microsoft")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.microsoft.type", string(common.Microsoft)),
-		attribute.String("scrumlr.users.service.create.microsoft.name", name),
-	)
-
-	user, err := service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	microsoftUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.Microsoft, name, microsoftUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateMicrosoftUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.oidc")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.oidc.type", string(common.TypeOIDC)),
-		attribute.String("scrumlr.users.service.create.oidc.name", name),
-	)
-
-	user, err := service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	oicdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return service.CreatePlatformUser(ctx, common.TypeOIDC, name, oidcUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
+		return service.database.CreateOIDCUser(new_ctx, id, name, avatarUrl)
+	})
 }
 
 func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {

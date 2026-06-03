@@ -15,7 +15,7 @@ var anonymousUserCreatedCounter, _ = meter.Int64Counter(
 )
 
 var appleUserCreatedCounter, _ = meter.Int64Counter(
-	"scrumlr.users.aplle.created.counter",
+	"scrumlr.users.apple.created.counter",
 	metric.WithDescription("Number of apple users created"),
 	metric.WithUnit("users"),
 )
@@ -40,13 +40,13 @@ var googleUserCreatedCounter, _ = meter.Int64Counter(
 
 var microsoftUserCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.users.microsoft.created.counter",
-	metric.WithDescription("Number of anonymous users created"),
+	metric.WithDescription("Number of microsoft users created"),
 	metric.WithUnit("users"),
 )
 
-var oicdUserCreatedCounter, _ = meter.Int64Counter(
-	"scrumlr.users.oicd.created.counter",
-	metric.WithDescription("Number of anonymous users created"),
+var oidcUserCreatedCounter, _ = meter.Int64Counter(
+	"scrumlr.users.oidc.created.counter",
+	metric.WithDescription("Number of OIDC users created"),
 	metric.WithUnit("users"),
 )
 
