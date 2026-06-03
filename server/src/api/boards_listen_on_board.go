@@ -128,6 +128,16 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 
 	b := s.boardSubscriptions[boardID]
 	s.boardSubscriptionsMu.Unlock()
+
+	b.mu.RLock()
+	// checking first and assigning the channel later is a ckeck-then-act race, but the alternative is to lock while performing I/O...
+	startListener := b.subscription == nil
+	b.mu.RUnlock()
+	var boardChannel chan *realtime.BoardEvent
+	if startListener {
+		boardChannel = s.realtime.GetBoardChannel(ctx, boardID)
+	}
+
 	// lock since we mutate b.clients
 	b.mu.Lock()
 	b.clients[userID] = conn
@@ -138,11 +148,8 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 	b.boardReactions = initEventData.Reactions
 
 	// if not already done, start listening to board changes
-	startListener := false
-	if b.subscription == nil {
-		// TODO: avoid hoding lock while performing IO
-		b.subscription = s.realtime.GetBoardChannel(ctx, boardID)
-		startListener = true
+	if startListener {
+		b.subscription = boardChannel
 	}
 	// do not simply defer unlock since we don't need the lock for starting the goroutine and it makes the scope of the lock more explicit
 	b.mu.Unlock()
@@ -155,7 +162,7 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 	for boardEvent := range bs.subscription {
 		bs.mu.RLock()
 		logger.Get().Debugw("board event received", "boardEvent", boardEvent)
-		// make a shallow connections so we can iterate without having to keep a lock
+		// make a shallow connections copy so we can iterate without having to keep a lock
 		connections := make(map[uuid.UUID]websocket.Connection, len(bs.clients))
 		maps.Copy(connections, bs.clients)
 		bs.mu.RUnlock()

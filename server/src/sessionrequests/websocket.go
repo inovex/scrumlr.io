@@ -101,19 +101,25 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 
 	b := socket.boardSessionRequestSubscriptions[boardID]
 	socket.subscriptionMu.Unlock()
+
+	b.mu.RLock()
+	// checking first and assigning the channel later is a ckeck-then-act race, but the alternative is to lock while performing I/O...
+	_, shouldNotStartListener := b.subscriptions[userID]
+	b.mu.RUnlock()
+	var boardSessionRequestChannel chan *realtime.BoardSessionRequestEventType
+	if !shouldNotStartListener {
+		boardSessionRequestChannel = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
+	}
+
 	b.mu.Lock()
 	b.clients[userID] = conn
 
 	// if not already done, start listening to board session request changes
-	startListener := false
-
-	if _, exist := b.subscriptions[userID]; !exist {
-		// TODO: avoid locking while performing IO
-		b.subscriptions[userID] = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
-		startListener = true
+	if !shouldNotStartListener {
+		b.subscriptions[userID] = boardSessionRequestChannel
 	}
 	b.mu.Unlock()
-	if startListener {
+	if !shouldNotStartListener {
 		go b.startListeningOnBoardSessionRequest(userID)
 	}
 }
