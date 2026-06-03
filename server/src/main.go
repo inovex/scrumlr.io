@@ -398,7 +398,7 @@ func run(ctx *cli.Context) error {
 		}
 	}
 	if ctx.String("auth-oidc-discovery-url") != "" && ctx.String("auth-oidc-client-id") != "" && ctx.String("auth-oidc-client-secret") != "" && ctx.String("auth-callback-host") != "" {
-		logger.Get().Info("Using oicd authentication.")
+		logger.Get().Info("Using oidc authentication.")
 		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       ctx.String("auth-oidc-client-id"),
 			ClientSecret:   ctx.String("auth-oidc-client-secret"),

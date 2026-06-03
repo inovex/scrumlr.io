@@ -110,8 +110,8 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser() {
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 	name := "Stan"
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
@@ -120,7 +120,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(errors.New(dbError), err)
+	suite.Equal(common.InternalServerError, err)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
@@ -133,7 +133,8 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(errors.New("name may not be empty"), err)
+	expectedErr := common.BadRequestError(errors.New("name may not be empty"))
+	suite.Equal(expectedErr, err)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
@@ -146,7 +147,8 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(errors.New("name may not contain newline characters"), err)
+	expectedErr := common.BadRequestError(errors.New("name may not contain newline characters"))
+	suite.Equal(expectedErr, err)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser() {
