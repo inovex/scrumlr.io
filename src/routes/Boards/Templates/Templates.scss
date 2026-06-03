@@ -46,6 +46,7 @@ $max-card-width: 500px;
 
 .templates__container-arrow-button {
   all: unset;
+  display: none;
   width: styles.$icon--large;
   height: styles.$icon--large;
 }
@@ -117,6 +118,10 @@ $max-card-width: 500px;
 
   .templates__container-title {
     font-size: styles.$text--md;
+  }
+
+  .templates__container-arrow-button {
+    display: inline-block;
   }
 
   .templates__container-arrow {
