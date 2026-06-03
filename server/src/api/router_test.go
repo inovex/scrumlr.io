@@ -51,12 +51,6 @@ func (suite *RouterTestSuite) TestAbsURL() {
 			expected: "/api/",
 		},
 		{
-			name:     "trailing slash in baseURL is stripped",
-			basePath: "/",
-			input:    "/boards/123",
-			expected: "/boards/123",
-		},
-		{
 			name:     "local development configuration",
 			basePath: "/",
 			input:    "/boards/abc",

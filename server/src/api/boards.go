@@ -28,6 +28,7 @@ import (
 )
 
 const boardParticipantsPath = "/boards/%s/participants/%s"
+const boardsRequestsPath = "/boards/%s/requests/%s"
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
@@ -272,7 +273,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if sessionExists {
-			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 			w.WriteHeader(http.StatusSeeOther)
 			return
 		}
@@ -284,7 +285,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/requests/%s", board, user)))
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}

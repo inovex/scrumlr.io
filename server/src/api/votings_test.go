@@ -43,7 +43,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			s.basePath = "/"
 			votingMock := votings.NewMockVotingService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
+			boardId := uuid.New()
 			votingID := uuid.New()
 			s.votings = votingMock
 

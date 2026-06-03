@@ -49,8 +49,8 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			color := common.Color("backlog-blue")
 			visible := true
 			index := 0
-			boardID, _ := uuid.NewRandom()
-			userID, _ := uuid.NewRandom()
+			boardID := uuid.New()
+			userID := uuid.New()
 			columnID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(

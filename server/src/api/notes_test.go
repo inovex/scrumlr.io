@@ -55,9 +55,9 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			s.notes = noteMock
 
 			testText := "asdf"
-			boardID, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			colId, _ := uuid.NewRandom()
+			boardID := uuid.New()
+			userId := uuid.New()
+			colId := uuid.New()
 			noteID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
