@@ -43,11 +43,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/columns/%s", common.GetProtocol(r), r.Host, board, column.ID))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/columns/%s", common.GetProtocol(r), r.Host, s.basePath, board, column.ID))
-	}
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/columns/%s", board, column.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, column)
 }
