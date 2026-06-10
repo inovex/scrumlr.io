@@ -411,7 +411,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveNoteToOtherStack() 
 	assert.NotNil(t, dbNote.CreatedAt)
 }
 
-func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveWithinStack() { //TODO
+func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveWithinStack() {
 	t := suite.T()
 	database := NewNotesDatabase(suite.db)
 
