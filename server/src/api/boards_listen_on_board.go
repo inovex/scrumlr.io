@@ -36,7 +36,7 @@ type InitEvent struct {
 }
 
 const MaxRetries = 10
-const SleepBetweenRetries = time.Second * 2
+var SleepBetweenRetries = time.Second * 2
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")

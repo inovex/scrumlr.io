@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/urfave/cli/v2"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
