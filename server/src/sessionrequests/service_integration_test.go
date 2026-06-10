@@ -89,7 +89,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Create() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	request, err := suite.service.Create(ctx, boardId, userId)
 
@@ -112,7 +113,8 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Update() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Santa"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	request, err := suite.service.Update(ctx, BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 

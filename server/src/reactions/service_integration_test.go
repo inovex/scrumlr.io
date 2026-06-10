@@ -119,7 +119,8 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create() {
 	noteId := suite.notes["Insert"].id
 	userId := suite.users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	reaction, err := suite.reactionService.Create(ctx, ReactionCreateRequest{Board: boardId, Note: noteId, User: userId, ReactionType: Joy})
 
@@ -178,7 +179,8 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
 	reactionId := suite.reactions["Update"].ID
 	userId := suite.users["Santa"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	reaction, err := suite.reactionService.Update(ctx, boardId, userId, reactionId, ReactionUpdateTypeRequest{ReactionType: Thinking})
 
@@ -239,9 +241,10 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
 	reactionId := suite.reactions["Delete"].ID
 	userId := suite.users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.reactionService.Delete(ctx, boardId, userId, reactionId)
+	err = suite.reactionService.Delete(ctx, boardId, userId, reactionId)
 
 	assert.Nil(t, err)
 

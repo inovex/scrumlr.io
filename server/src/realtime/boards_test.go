@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/testcontainers/testcontainers-go/modules/redis"
@@ -52,7 +53,8 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendNil() {
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: nil})
 	assert.Nil(t, err)
@@ -72,7 +74,8 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendNil() {
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: nil})
 	assert.Nil(t, err)
@@ -92,7 +95,8 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendData() {
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
 	assert.Nil(t, err)
@@ -113,7 +117,8 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendData() {
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{Type: BoardEventInit, Data: "not nil string data"})
 	assert.Nil(t, err)
@@ -134,7 +139,8 @@ func (suite *RealtimeBoardTestSuite) Test_Nats_Board_SendComplexData() {
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{
 		Type: BoardEventInit,
@@ -174,7 +180,8 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_SendComplexData() {
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardChannel(ctx, boardId)
+	eventChannel, err := broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	err = broker.BroadcastToBoard(ctx, boardId, BoardEvent{
 		Type: BoardEventInit,
@@ -223,10 +230,12 @@ func (suite *RealtimeBoardTestSuite) Test_Redis_Board_FirstSubscriberContextCanc
 
 	// Subscriber 1: user who will close the tab
 	ctx1, cancel1 := context.WithCancel(context.Background())
-	ch1 := broker.GetBoardChannel(ctx1, boardId)
+	ch1, err := broker.GetBoardChannel(ctx1, boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	// Subscriber 2: admin who stays on the board
-	ch2 := broker.GetBoardChannel(context.Background(), boardId)
+	ch2, err := broker.GetBoardChannel(context.Background(), boardId)
+	require.NoError(t, err, "failed to subscribe to board channel")
 
 	// User closes browser tab → context cancelled
 	cancel1()
