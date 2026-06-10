@@ -14,6 +14,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
@@ -44,6 +45,7 @@ type Service struct {
 	sessionRequestService sessionrequests.SessionRequestService
 	reactionService       reactions.ReactionService
 	votingService         votings.VotingService
+	userService           users.UserService
 }
 
 type LastModifiedUpdater struct {
@@ -73,6 +75,7 @@ func NewBoardService(
 	noteService notes.NotesService,
 	reactionService reactions.ReactionService,
 	votingService votings.VotingService,
+	userService users.UserService,
 	clock timeprovider.TimeProvider,
 	hash hash.Hash,
 ) BoardService {
@@ -87,6 +90,7 @@ func NewBoardService(
 	b.notesService = noteService
 	b.reactionService = reactionService
 	b.votingService = votingService
+	b.userService = userService
 	b.boardLastModifiedUpdater = NewLastModifiedUpdater(db, clock)
 
 	return b
@@ -682,4 +686,236 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 
 func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
 	return &LastModifiedUpdater{database: database, clock: clock}
+}
+
+func (service *Service) Import(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
+	defer span.End()
+
+	b, err := service.createImportedBoard(ctx, owner, body)
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import board")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	err = service.processImportedNotes(ctx, b.ID, body)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import notes or columns")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	return b, nil
+}
+
+func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error) {
+	body.Board.Owner = owner
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
+
+	for _, column := range body.Columns {
+		importColumns = append(importColumns, columns.ColumnRequest{
+			Name:    column.Name,
+			Color:   column.Color,
+			Visible: &column.Visible,
+			Index:   &column.Index,
+		})
+	}
+	b, err := service.Create(ctx, CreateBoardRequest{
+		Name:         body.Board.Name,
+		Description:  body.Board.Description,
+		AccessPolicy: body.Board.AccessPolicy,
+		Passphrase:   body.Board.Passphrase,
+		Columns:      importColumns,
+		Owner:        owner,
+	})
+	return b, err
+}
+
+type parentChildNotes struct {
+	Parent   notes.Note
+	Children []notes.Note
+}
+
+func uniqueImportedNoteAuthors(importNotes []notes.Note) []uuid.UUID {
+	participants := make([]uuid.UUID, 0, len(importNotes))
+	seen := make(map[uuid.UUID]struct{}, len(importNotes))
+
+	for _, note := range importNotes {
+		if _, exists := seen[note.Author]; exists {
+			continue
+		}
+		seen[note.Author] = struct{}{}
+		participants = append(participants, note.Author)
+	}
+
+	return participants
+}
+
+func deletedImportedParticipants(participants, existingParticipants []uuid.UUID) []uuid.UUID {
+	existingParticipantMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
+	for _, participant := range existingParticipants {
+		existingParticipantMap[participant] = struct{}{}
+	}
+
+	deletedParticipants := make([]uuid.UUID, 0, len(participants))
+	for _, participant := range participants {
+		if _, found := existingParticipantMap[participant]; !found {
+			deletedParticipants = append(deletedParticipants, participant)
+		}
+	}
+
+	return deletedParticipants
+}
+
+func (service *Service) cleanupImportedParticipants(ctx context.Context, userIDs []uuid.UUID) {
+	if len(userIDs) == 0 {
+		return
+	}
+
+	log := logger.FromContext(ctx)
+	for _, userID := range userIDs {
+		if err := service.userService.Delete(ctx, userID); err != nil {
+			log.Errorw("failed to cleanup imported placeholder user", "user", userID, "err", err)
+		}
+	}
+}
+
+func (service *Service) replaceDeletedParticipants(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, []uuid.UUID, error) {
+	if len(body.Notes) == 0 {
+		return body, nil, nil
+	}
+
+	participants := uniqueImportedNoteAuthors(body.Notes)
+
+	existingParticipants, err := service.userService.GetExistingUserIDs(ctx, participants)
+	if err != nil {
+		return body, nil, err
+	}
+
+	if len(existingParticipants) == len(participants) {
+		return body, nil, nil
+	}
+
+	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
+
+	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
+	createdParticipants := make([]uuid.UUID, 0, len(deletedParticipants))
+
+	for _, deletedID := range deletedParticipants {
+		name := "deleted user " + deletedID.String()[:5]
+		user, err := service.userService.CreateAnonymous(ctx, name)
+		if err != nil {
+			service.cleanupImportedParticipants(ctx, createdParticipants)
+			return body, nil, err
+		}
+		createdParticipants = append(createdParticipants, user.ID)
+		participantMapping[deletedID] = user.ID
+	}
+
+	for i, note := range body.Notes {
+		if replacementID, exists := participantMapping[note.Author]; exists {
+			body.Notes[i].Author = replacementID
+		}
+	}
+	return body, createdParticipants, nil
+}
+
+func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, body ImportBoardRequest) (err error) {
+	cols, err := service.columnService.GetAll(ctx, boardID)
+	if err != nil {
+		return err
+	}
+
+	var createdParticipants []uuid.UUID
+	body, createdParticipants, err = service.replaceDeletedParticipants(ctx, body)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err != nil {
+			service.cleanupImportedParticipants(ctx, createdParticipants)
+		}
+	}()
+
+	parentNotes, childNotes := organizeNotes(body.Notes)
+
+	colMap := make(map[uuid.UUID]uuid.UUID)
+	for i, col := range body.Columns {
+		colMap[col.ID] = cols[i].ID
+	}
+
+	var organizedNotes []parentChildNotes
+	for parentID, parentNote := range parentNotes {
+		newColID, exists := colMap[parentNote.Position.Column]
+		if !exists {
+			continue
+		}
+
+		note, err := service.notesService.Import(ctx, notes.NoteImportRequest{
+			Text: parentNote.Text,
+			Position: notes.NotePosition{
+				Column: newColID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+			Board: boardID,
+			User:  parentNote.Author,
+		})
+		if err != nil {
+			return err
+		}
+
+		organizedNotes = append(organizedNotes, parentChildNotes{
+			Parent:   *note,
+			Children: childNotes[parentID],
+		})
+	}
+
+	err = service.importChildNotes(ctx, boardID, organizedNotes)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func organizeNotes(importNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {
+	parentNotes := make(map[uuid.UUID]notes.Note)
+	childNotes := make(map[uuid.UUID][]notes.Note)
+
+	for _, note := range importNotes {
+		if !note.Position.Stack.Valid {
+			parentNotes[note.ID] = note
+		} else {
+			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
+		}
+	}
+	return parentNotes, childNotes
+}
+
+func (service *Service) importChildNotes(ctx context.Context, boardID uuid.UUID, organizedNotes []parentChildNotes) error {
+	for _, node := range organizedNotes {
+		for _, note := range node.Children {
+			_, err := service.notesService.Import(ctx, notes.NoteImportRequest{
+				Text:  note.Text,
+				Board: boardID,
+				User:  note.Author,
+				Position: notes.NotePosition{
+					Column: node.Parent.Position.Column,
+					Rank:   note.Position.Rank,
+					Stack: uuid.NullUUID{
+						UUID:  node.Parent.ID,
+						Valid: true,
+					},
+				},
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

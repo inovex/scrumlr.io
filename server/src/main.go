@@ -443,7 +443,7 @@ func run(ctx *cli.Context) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)

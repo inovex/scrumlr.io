@@ -20,6 +20,7 @@ type BoardService interface {
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
+	Import(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error)
 
 	BoardEditableContext(next http.Handler) http.Handler
 }

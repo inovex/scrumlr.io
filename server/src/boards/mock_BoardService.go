@@ -563,6 +563,80 @@ func (_c *MockBoardService_GetBoards_Call) RunAndReturn(run func(ctx context.Con
 	return _c
 }
 
+// Import provides a mock function for the type MockBoardService
+func (_mock *MockBoardService) Import(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error) {
+	ret := _mock.Called(ctx, owner, body)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Import")
+	}
+
+	var r0 *Board
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ImportBoardRequest) (*Board, error)); ok {
+		return returnFunc(ctx, owner, body)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ImportBoardRequest) *Board); ok {
+		r0 = returnFunc(ctx, owner, body)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Board)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, ImportBoardRequest) error); ok {
+		r1 = returnFunc(ctx, owner, body)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockBoardService_Import_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Import'
+type MockBoardService_Import_Call struct {
+	*mock.Call
+}
+
+// Import is a helper method to define mock.On call
+//   - ctx context.Context
+//   - owner uuid.UUID
+//   - body ImportBoardRequest
+func (_e *MockBoardService_Expecter) Import(ctx interface{}, owner interface{}, body interface{}) *MockBoardService_Import_Call {
+	return &MockBoardService_Import_Call{Call: _e.mock.On("Import", ctx, owner, body)}
+}
+
+func (_c *MockBoardService_Import_Call) Run(run func(ctx context.Context, owner uuid.UUID, body ImportBoardRequest)) *MockBoardService_Import_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 ImportBoardRequest
+		if args[2] != nil {
+			arg2 = args[2].(ImportBoardRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardService_Import_Call) Return(board *Board, err error) *MockBoardService_Import_Call {
+	_c.Call.Return(board, err)
+	return _c
+}
+
+func (_c *MockBoardService_Import_Call) RunAndReturn(run func(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error)) *MockBoardService_Import_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // IncrementTimer provides a mock function for the type MockBoardService
 func (_mock *MockBoardService) IncrementTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
 	ret := _mock.Called(ctx, id)

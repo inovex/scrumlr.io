@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
@@ -85,6 +86,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
+
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-boards")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
@@ -100,7 +102,9 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
-	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
+	userDatabase := users.NewUserDatabase(db)
+	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
+	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
