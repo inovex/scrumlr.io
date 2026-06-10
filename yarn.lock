@@ -2608,11 +2608,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.9.0":
-  version: 2.9.17
-  resolution: "baseline-browser-mapping@npm:2.9.17"
+  version: 2.10.35
+  resolution: "baseline-browser-mapping@npm:2.10.35"
   bin:
-    baseline-browser-mapping: dist/cli.js
-  checksum: 10c0/c0d344bc43aabe2d2f26de1b5831423ae7dc5da5ffb0f68404d07847901f1df81f3645a939dd76b1b7328fded13bcd72d86da46913839d10d20e51df162639de
+    baseline-browser-mapping: dist/cli.cjs
+  checksum: 10c0/e92c222d626293925e89c3d5b4a9359f985796e28c37d473ad55b33ef7ed5f9b26cfebbc8620df57512b66049f87120403776f2e603b1a686c469c96047db2b0
   languageName: node
   linkType: hard
 
@@ -2800,9 +2800,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001759":
-  version: 1.0.30001765
-  resolution: "caniuse-lite@npm:1.0.30001765"
-  checksum: 10c0/2bab28b322ec040dde2b6f56019ffd1e0bbd719111e45f58cb0fb06a783812d8ba8df65755320fd253aa1926dffc7bf0864adc11f6b231ac2b3a5b8221199c29
+  version: 1.0.30001797
+  resolution: "caniuse-lite@npm:1.0.30001797"
+  checksum: 10c0/8357f6a70432ad1f1dd39ceeabe6fa7597c76ff45cda2994e4aca3e625bdeb3154b4dfd90b984d343883b2fe4e6abf901739f9f11aa2dfd0254c1de3282ccb76
   languageName: node
   linkType: hard
 
