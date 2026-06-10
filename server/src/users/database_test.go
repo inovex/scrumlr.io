@@ -45,7 +45,7 @@ func (suite *DatabaseUserTestSuite) SetupTest() {
 	)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabaseCreatAnonymousUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAnonymousUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -60,7 +60,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreatAnonymousUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabaseCreatAppleUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAppleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -75,7 +75,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreatAppleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabaseCreatAzureAdUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAzureAdUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -90,7 +90,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreatAzureAdUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabaseCreatGitHubUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateGitHubUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -387,7 +387,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAnonymousUserTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -399,7 +399,7 @@ func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseTrue() {
 	assert.True(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAnonymousUserFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -411,7 +411,7 @@ func (suite *DatabaseUserTestSuite) TestDatabasIsAnonymousUseFalse() {
 	assert.False(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAvailableForKeyMigrationTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -423,7 +423,7 @@ func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioTrue() {
 	assert.True(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAvailableForKeyMigrationFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -435,7 +435,7 @@ func (suite *DatabaseUserTestSuite) TestDatabasIsAvailableForKeyMigratioFalse() 
 	assert.False(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TestDatabasSetKeyMigration() {
+func (suite *DatabaseUserTestSuite) TestDatabaseSetKeyMigration() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 

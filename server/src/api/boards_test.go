@@ -33,6 +33,22 @@ type BoardTestSuite struct {
 	suite.Suite
 }
 
+type importBoardFixture struct {
+	boardName        string
+	boardDescription string
+	columnName       string
+	columnVisible    bool
+	columnIndex      int
+	columnColor      common.Color
+
+	ownerID         uuid.UUID
+	importColumnID  uuid.UUID
+	createdBoardID  uuid.UUID
+	createdColumnID uuid.UUID
+	authorID        uuid.UUID
+	importedNoteID  uuid.UUID
+}
+
 func TestBoardTestSuite(t *testing.T) {
 	suite.Run(t, new(BoardTestSuite))
 }
@@ -487,6 +503,7 @@ func (suite *BoardTestSuite) TestProcessImportedNotes_CleansUpCreatedParticipant
 	createdColumnID := uuid.New()
 	deletedAuthorID := uuid.New()
 	replacementAuthorID := uuid.New()
+	importError := errors.New("import failed")
 
 	body := boards.ImportBoardRequest{
 		Columns: []columns.Column{{ID: importColumnID}},
@@ -505,12 +522,14 @@ func (suite *BoardTestSuite) TestProcessImportedNotes_CleansUpCreatedParticipant
 	columnsMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
 	usersMock.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{deletedAuthorID}).Return([]uuid.UUID{}, nil)
 	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+deletedAuthorID.String()[:5]).Return(&users.User{ID: replacementAuthorID}, nil)
-	notesMock.EXPECT().Import(mock.Anything, mock.Anything).Return(nil, errors.New("import failed"))
+	notesMock.EXPECT().Import(mock.Anything, mock.Anything).Return(nil, importError)
 	usersMock.EXPECT().Delete(mock.Anything, replacementAuthorID).Return(nil)
 
 	err := s.processImportedNotes(ctx, boardID, body)
 
 	suite.Error(err)
+	suite.Equal(importError, err)
+
 }
 
 func (suite *BoardTestSuite) TestReplaceDeletedParticipants_CleansUpOnAnonymousCreationFailure() {
@@ -522,6 +541,7 @@ func (suite *BoardTestSuite) TestReplaceDeletedParticipants_CleansUpOnAnonymousC
 	firstDeletedAuthorID := uuid.New()
 	secondDeletedAuthorID := uuid.New()
 	firstReplacementAuthorID := uuid.New()
+	createError := errors.New("create failed")
 
 	body := boards.ImportBoardRequest{
 		Notes: []notes.Note{
@@ -532,28 +552,13 @@ func (suite *BoardTestSuite) TestReplaceDeletedParticipants_CleansUpOnAnonymousC
 
 	usersMock.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{firstDeletedAuthorID, secondDeletedAuthorID}).Return([]uuid.UUID{}, nil)
 	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+firstDeletedAuthorID.String()[:5]).Return(&users.User{ID: firstReplacementAuthorID}, nil)
-	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+secondDeletedAuthorID.String()[:5]).Return(nil, errors.New("create failed"))
+	usersMock.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+secondDeletedAuthorID.String()[:5]).Return(nil, createError)
 	usersMock.EXPECT().Delete(mock.Anything, firstReplacementAuthorID).Return(nil)
 
 	_, _, err := s.replaceDeletedParticipants(ctx, body)
 
 	suite.Error(err)
-}
-
-type importBoardFixture struct {
-	boardName        string
-	boardDescription string
-	columnName       string
-	columnVisible    bool
-	columnIndex      int
-	columnColor      common.Color
-
-	ownerID         uuid.UUID
-	importColumnID  uuid.UUID
-	createdBoardID  uuid.UUID
-	createdColumnID uuid.UUID
-	authorID        uuid.UUID
-	importedNoteID  uuid.UUID
+	suite.Equal(createError, err)
 }
 
 func newImportBoardFixture() importBoardFixture {
