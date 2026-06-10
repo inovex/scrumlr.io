@@ -34,6 +34,15 @@ func (m *MockRealTimeBroker) GetBoardChannel(ctx context.Context, boardID uuid.U
 	return ch, args.Error(1)
 }
 
+func (m *MockRealTimeBroker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *realtime.BoardSessionRequestEventType, error) {
+	args := m.Called(ctx, board, user)
+	var ch chan *realtime.BoardSessionRequestEventType
+	if args.Get(0) != nil {
+		ch = args.Get(0).(chan *realtime.BoardSessionRequestEventType)
+	}
+	return ch, args.Error(1)
+}
+
 func (m *mockConnection) WriteJSON(ctx context.Context, data any) error {
 	return nil
 }
@@ -218,7 +227,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 	// fast forwarding time to let the test run instantly
 	originalDelay := SleepBetweenRetries
 
-	SleepBetweenRetries = time.Millisecond * 1
+	SleepBetweenRetries = time.Millisecond * 10
 
 	defer func() { SleepBetweenRetries = originalDelay }()
 
@@ -255,7 +264,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 	// fast forwarding time to let the test run instantly
 	originalDelay := SleepBetweenRetries
 
-	SleepBetweenRetries = time.Millisecond * 1
+	SleepBetweenRetries = time.Millisecond * 10
 
 	defer func() { SleepBetweenRetries = originalDelay }()
 

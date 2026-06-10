@@ -37,4 +37,5 @@ type Broker struct {
 // Defined as an interface so tests can inject mocks.
 type BrokerInterface interface {
 	GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *BoardEvent, error)
+	GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *BoardSessionRequestEventType, error)
 }
