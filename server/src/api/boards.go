@@ -27,6 +27,9 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const boardParticipantsPath = "/boards/%s/participants/%s"
+const boardsRequestsPath = "/boards/%s/requests/%s"
+
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // createBoard creates a new board
@@ -58,11 +61,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// build the response
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("/boards/%s", b.ID))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s/boards/%s", s.basePath, b.ID))
-	}
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s", b.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
 }
@@ -198,11 +197,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if s.basePath == "/" {
-			http.Redirect(w, r, fmt.Sprintf("/boards/%s/participants/%s", board, user), http.StatusSeeOther)
-		} else {
-			http.Redirect(w, r, fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user), http.StatusSeeOther)
-		}
+		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
@@ -224,11 +219,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
-		}
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
@@ -259,11 +250,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 				common.Throw(w, r, common.InternalServerError)
 				return
 			}
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("/boards/%s/participants/%s", board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/participants/%s", s.basePath, board, user))
-			}
+
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
 
@@ -286,11 +274,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if sessionExists {
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("/boards/%s/requests/%s", board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/requests/%s", s.basePath, board, user))
-			}
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 			w.WriteHeader(http.StatusSeeOther)
 			return
 		}
@@ -302,11 +286,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("/boards/%s/requests/%s", board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/requests/%s", s.basePath, board, user))
-		}
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}
@@ -479,7 +459,13 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
 				if session.UserID == note.Author {
-					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
+					user, err := s.users.Get(ctx, session.UserID)
+					if err != nil {
+						span.SetStatus(codes.Error, "failed to get note author user")
+						span.RecordError(err)
+						common.Throw(w, r, err)
+						return
+					}
 					author = user.Name
 				}
 			}
