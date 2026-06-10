@@ -71,6 +71,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			boardMock := boards.NewMockBoardService(suite.T())
 
 			s.boards = boardMock
@@ -92,6 +93,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
       }`, accessPolicy, colName, visible, color))).
 				AddToContext(identifiers.UserIdentifier, ownerID)
 
+			createdBoard := suite.createBoard(nil, nil, accessPolicy, nil, nil)
 			boardMock.EXPECT().Create(mock.Anything, boards.CreateBoardRequest{
 				Name:         nil,
 				Description:  nil,
@@ -108,13 +110,16 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 					},
 				},
 				Owner: ownerID,
-			}).Return(suite.createBoard(nil, nil, accessPolicy, nil, nil), te.err)
+			}).Return(createdBoard, te.err)
 
 			rr := httptest.NewRecorder()
 
 			s.createBoard(rr, req.Request())
 
 			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			if te.err == nil {
+				suite.Equal(fmt.Sprintf("/boards/%s", createdBoard.ID), rr.Result().Header.Get("Location"))
+			}
 			boardMock.AssertExpectations(suite.T())
 		})
 	}
@@ -262,6 +267,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			boardMock := boards.NewMockBoardService(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
 			sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
@@ -303,6 +309,14 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			s.joinBoard(rr, req.Request())
 
 			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			if te.err == nil {
+				switch te.expectedCode {
+				case http.StatusSeeOther, http.StatusCreated:
+					location := rr.Result().Header.Get("Location")
+					suite.True(strings.HasPrefix(location, "/boards/"), "Location header should use configured baseURL, got: %s", location)
+					suite.False(strings.Contains(location, "r.Host"), "Location header must not contain r.Host")
+				}
+			}
 			boardMock.AssertExpectations(suite.T())
 			sessionMock.AssertExpectations(suite.T())
 		})
