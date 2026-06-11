@@ -7,12 +7,12 @@ $card-description-height: 4 * 20px;
   position: relative;
   display: grid;
   grid-template-rows: 40px auto 10px 46px;
-  grid-template-columns: 36px styles.$spacing--xs 1fr auto 36px;
+  grid-template-columns: 36px styles.$spacing--xxs 1fr auto 36px;
   grid-template-areas:
-    "fav-icon   .  head          head         menu"
+    "fav-icon   .  head          head          menu"
     ".          .  description   description   ."
     ".          .  .             .             ."
-    "col-icon   .  columns       start         start";
+    "col-icon   .  columns       button        button";
 
   width: 100%;
   height: $card-height;
@@ -164,7 +164,7 @@ $card-description-height: 4 * 20px;
 }
 
 .template-card__start-button {
-  grid-area: start;
+  grid-area: button;
   justify-self: end;
 }
 
