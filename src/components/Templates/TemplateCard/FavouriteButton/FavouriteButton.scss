@@ -9,6 +9,7 @@ $container-size: 36px;
   justify-content: center;
   align-items: center;
 
+  box-sizing: border-box;
   width: $container-size;
   height: $container-size;
   border: 2px solid transparent;

@@ -61,9 +61,9 @@ $card-description-height: 4 * 20px;
 
   width: 100%;
 
-  font-size: styles.$text--md;
+  font-size: styles.$text--lg;
   font-weight: 700;
-  line-height: 24px; // decreased line height to change distance to bottom border
+  line-height: styles.$line-height--large;
 
   color: styles.$navy--900;
 
