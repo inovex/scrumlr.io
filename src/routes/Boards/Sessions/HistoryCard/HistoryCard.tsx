@@ -121,7 +121,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
     <div className="history-card__wrapper">
       <div className="history-card">
         <FavouriteButton
-          className="history-card__favourite"
+          className="history-card__icon history-card__favourite"
           active={props.board.favourite}
           onClick={() => {
             throw new Error("Not implemented yet");

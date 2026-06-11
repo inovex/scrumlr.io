@@ -3,7 +3,10 @@
 $container-size: 36px;
 
 .favourite-button {
-  all: unset;
+  // reset button properties, like all: unset but without overriding outside style changes
+  margin: 0;
+  padding: 0;
+  background: none;
 
   display: flex;
   justify-content: center;

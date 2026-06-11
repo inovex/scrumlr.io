@@ -6,7 +6,7 @@ $card-description-height: 4 * 20px;
 .template-card {
   position: relative;
   display: grid;
-  grid-template-rows: 36px auto 10px 46px;
+  grid-template-rows: 40px auto 10px 46px;
   grid-template-columns: 36px styles.$spacing--xs 1fr auto 36px;
   grid-template-areas:
     "fav-icon   .  head          head         menu"
@@ -25,6 +25,9 @@ $card-description-height: 4 * 20px;
 
 .template-card__favourite {
   grid-area: fav-icon;
+
+  align-self: center;
+  justify-self: center;
 }
 
 .template-card__icon {
