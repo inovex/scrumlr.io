@@ -35,13 +35,25 @@ type HistoryCardProps = {
   board: HistoryBoard;
 };
 
-const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
-  PUBLIC: <OpenIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />,
-  BY_PASSPHRASE: <LockClosedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")} />,
-  BY_INVITE: <KeyProtectedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")} />,
-};
-
 export const HistoryCard = (props: HistoryCardProps) => {
+  const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
+    PUBLIC: (
+      <OpenIcon id={`history-card__access-policy::${props.board.id}`} className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />
+    ),
+    BY_PASSPHRASE: (
+      <LockClosedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")}
+      />
+    ),
+    BY_INVITE: (
+      <KeyProtectedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")}
+      />
+    ),
+  };
+
   const {t} = useTranslation();
 
   const locale = useAppSelector((state) => state.view.language) ?? "en";
@@ -194,6 +206,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
         >
           {t("History.HistoryCard.openBoardButton")}
         </Button>
+        <Tooltip anchorId={`history-card__access-policy::${props.board.id}`} color="backlog-blue">
+          {t(`AccessPolicy.${props.board.accessPolicy}`)}
+        </Tooltip>
         {isBoardNameTruncated.horizontal && (
           <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
             {props.board.name}
