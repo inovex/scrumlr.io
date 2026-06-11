@@ -17,7 +17,7 @@ $card-description-height: 4 * 20px;
   width: 100%;
   height: $card-height;
   border-radius: styles.$rounded--default;
-  padding: styles.$spacing--base;
+  padding: styles.$spacing--md;
 
   background-color: styles.$gray--000;
   box-shadow: 0 6px 9px 0 rgba(styles.$blue--500, 0.1);
