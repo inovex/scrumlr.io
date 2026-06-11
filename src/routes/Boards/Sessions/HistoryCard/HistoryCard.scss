@@ -143,8 +143,9 @@ $description-height: 3 * styles.$line-height--medium;
   display: flex;
   flex-direction: row;
 
-  // divide the remaining space equally among 4 items (factoring in the 3 gaps)
-  flex: 0 1 calc((100% - (3 * #{styles.$spacing--md})) / 4);
+  // left align the info items, with the tradeoff that the the space isn't used ideally divided (ellipsis may be displayed despite there being space to the right)
+  $info-item-basis: 175px;
+  flex: 0 1 $info-item-basis;
 
   gap: styles.$spacing--xxs;
 
