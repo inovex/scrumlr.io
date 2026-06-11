@@ -52,9 +52,15 @@ export const InfoBar = () => {
           <ShareIcon />
         </Link>
       )}
-      <Tooltip anchorId="info-bar__voting-anonymous">{t("InfoBar.VotingIsAnonymous")}</Tooltip>
-      <Tooltip anchorId="info-bar__voting-not-anonymous">{t("InfoBar.VotingIsNotAnonymous")}</Tooltip>
-      <Tooltip anchorId="info-bar__return-to-shared-note">{t("InfoBar.ReturnToPresentedNote")}</Tooltip>
+      <Tooltip anchorId="info-bar__voting-anonymous" color="backlog-blue">
+        {t("InfoBar.VotingIsAnonymous")}
+      </Tooltip>
+      <Tooltip anchorId="info-bar__voting-not-anonymous" color="backlog-blue">
+        {t("InfoBar.VotingIsNotAnonymous")}
+      </Tooltip>
+      <Tooltip anchorId="info-bar__return-to-shared-note" color="backlog-blue">
+        {t("InfoBar.ReturnToPresentedNote")}
+      </Tooltip>
     </aside>
   );
 };

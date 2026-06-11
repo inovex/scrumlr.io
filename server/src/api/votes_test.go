@@ -45,9 +45,9 @@ func (suite *VoteTestSuite) TestAddVote() {
 			s := new(Server)
 			votingMock := votings.NewMockVotingService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			noteId, _ := uuid.NewRandom()
+			boardId := uuid.New()
+			userId := uuid.New()
+			noteId := uuid.New()
 
 			s.votings = votingMock
 

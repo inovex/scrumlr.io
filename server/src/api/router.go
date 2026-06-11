@@ -61,7 +61,7 @@ type Server struct {
 	sessionRequests sessionrequests.SessionRequestService
 	health          health.HealthService
 	feedback        feedback.FeedbackService
-	boardReactions  boardreactions.BoardReactionService
+	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
@@ -98,7 +98,7 @@ func New(
 	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
-	boardReactions boardreactions.BoardReactionService,
+	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
 
@@ -378,4 +378,14 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+// buildRelativeURL constructs an relative URL from path and the basePath.
+// If basePath is not "/", it prepends it.
+func (s *Server) buildRelativeURL(path string) string {
+	result := ""
+	if s.basePath != "/" {
+		result += s.basePath
+	}
+	return result + path
 }

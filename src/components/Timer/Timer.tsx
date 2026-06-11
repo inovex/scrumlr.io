@@ -135,9 +135,15 @@ export const Timer = (props: TimerProps) => {
           <PlusOneIconIcon />
         </button>
       )}
-      <Tooltip anchorId="timer__end-timer">{t("Timer.endTimer")}</Tooltip>
-      <Tooltip anchorId="timer__done-toggle">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</Tooltip>
-      <Tooltip anchorId="timer__increment">{t("Timer.addOneMinute")}</Tooltip>
+      <Tooltip anchorId="timer__end-timer" color="backlog-blue">
+        {t("Timer.endTimer")}
+      </Tooltip>
+      <Tooltip anchorId="timer__done-toggle" color="backlog-blue">
+        {isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+      </Tooltip>
+      <Tooltip anchorId="timer__increment" color="backlog-blue">
+        {t("Timer.addOneMinute")}
+      </Tooltip>
     </div>
   );
 };

@@ -38,7 +38,7 @@ func (db *DB) Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, err
 	err := db.db.NewSelect().
 		Model(&tBoard).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	return tBoard, err
 }
@@ -80,22 +80,22 @@ func (db *DB) GetAll(ctx context.Context, user uuid.UUID) ([]DatabaseBoardTempla
 
 func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error) {
 	// General Settings
-	query_settings := db.db.NewUpdate().Model(&board)
+	querySettings := db.db.NewUpdate().Model(&board)
 
 	if board.Name != nil {
-		query_settings.Column("name")
+		querySettings.Column("name")
 	}
 
 	if board.Description != nil {
-		query_settings.Column("description")
+		querySettings.Column("description")
 	}
 
 	if board.Favourite != nil {
-		query_settings.Column("favourite")
+		querySettings.Column("favourite")
 	}
 
 	var boardTemplate DatabaseBoardTemplate
-	_, err := query_settings.
+	_, err := querySettings.
 		Where("id = ?", board.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, "Result", &boardTemplate), &boardTemplate)
