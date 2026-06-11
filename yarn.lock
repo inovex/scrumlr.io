@@ -6433,21 +6433,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^17.0.6":
-  version: 17.0.6
-  resolution: "lint-staged@npm:17.0.6"
+"lint-staged@npm:^17.0.7":
+  version: 17.0.7
+  resolution: "lint-staged@npm:17.0.7"
   dependencies:
     listr2: "npm:^10.2.1"
     picomatch: "npm:^4.0.4"
     string-argv: "npm:^0.3.2"
-    tinyexec: "npm:1.2.2"
+    tinyexec: "npm:^1.2.4"
     yaml: "npm:^2.9.0"
   dependenciesMeta:
     yaml:
       optional: true
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/9defc7020b890d745f7623d68863831fc72b242ca2b818e81e22d2203b304001470779a5c7eaa0d1bbbbf6a967a78b84a3f54107f42f2e41cd69497b2c14cbe9
+  checksum: 10c0/c4e7100becb327d817999a231b8d345e6be389c555d9cd8d668797d2670832ad15c4e5085b61895e3fbf937f0fbd6be5c78ca76a4599ed332227f37270ebe8eb
   languageName: node
   linkType: hard
 
@@ -8290,7 +8290,7 @@ __metadata:
     js-md5: "npm:^0.8.3"
     linkify-react: "npm:^4.3.3"
     linkifyjs: "npm:^4.3.3"
-    lint-staged: "npm:^17.0.6"
+    lint-staged: "npm:^17.0.7"
     marked: "npm:18.0.4"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
@@ -9108,17 +9108,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyexec@npm:1.2.2":
-  version: 1.2.2
-  resolution: "tinyexec@npm:1.2.2"
-  checksum: 10c0/8bcb4969c572c21d570c033e29cb896e26d96e49e58f4fe07a532d3d65e10bdfae59733bf8a6a0fd9b611543c4ed3b890c939c3234489599296fb92515eb4625
-  languageName: node
-  linkType: hard
-
 "tinyexec@npm:^1.0.2":
   version: 1.0.4
   resolution: "tinyexec@npm:1.0.4"
   checksum: 10c0/d4a5bbcf6bdb23527a4b74c4aa566f41432167112fe76f420ec7e3a90a3ecfd3a7d944383e2719fc3987b69400f7b928daf08700d145fb527c2e80ec01e198bd
+  languageName: node
+  linkType: hard
+
+"tinyexec@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "tinyexec@npm:1.2.4"
+  checksum: 10c0/153b8db6b080194b558ff145b9cffc36b80a6e07babd644dcfbe49c807eee668c876049d28bdee90b96304476f883352f2dad91b3f86bc23832532f4363e66ff
   languageName: node
   linkType: hard
 
