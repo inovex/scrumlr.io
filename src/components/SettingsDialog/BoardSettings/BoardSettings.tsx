@@ -233,13 +233,16 @@ export const BoardSettings = () => {
                 </a>
               </div>
 
-              <SettingsButton
-                className={classNames("board-settings__delete-button")}
-                label={t("BoardSettings.DeleteBoard")}
-                onClick={() => setShowConfirmationDialog(true)}
-                icon={TrashIcon}
-                reverseOrder
-              />
+              {/* only owner may delete board */}
+              {state.userRole === "OWNER" && (
+                <SettingsButton
+                  className={classNames("board-settings__delete-button")}
+                  label={t("BoardSettings.DeleteBoard")}
+                  onClick={() => setShowConfirmationDialog(true)}
+                  icon={TrashIcon}
+                  reverseOrder
+                />
+              )}
             </>
           )}
 
