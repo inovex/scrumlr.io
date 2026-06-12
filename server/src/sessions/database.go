@@ -143,6 +143,15 @@ func (database *SessionDB) ModeratorExists(ctx context.Context, board, user uuid
 		Exists(ctx)
 }
 
+func (database *SessionDB) OwnerExists(ctx context.Context, board, user uuid.UUID) (bool, error) {
+	return database.db.NewSelect().
+		Table("board_sessions").
+		Where("\"board\" = ?", board).
+		Where("\"user\" = ?", user).
+		Where("role = ?", common.OwnerRole).
+		Exists(ctx)
+}
+
 func (database *SessionDB) IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
