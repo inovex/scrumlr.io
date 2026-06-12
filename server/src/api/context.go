@@ -103,8 +103,9 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 			return
 		}
 
+		// TODO: Permission Context: while it's technically a 404 looking at the database logic, what we really want to return is a 403 forbidden
 		if !exists {
-			common.Throw(w, r, common.NotFoundError) // todo 404 or 403?
+			common.Throw(w, r, common.NotFoundError)
 			return
 		}
 
@@ -132,6 +133,7 @@ func (s *Server) BoardOwnerContext(next http.Handler) http.Handler {
 			return
 		}
 
+		// TODO: Permission Context: while it's technically a 404 looking at the database logic, what we really want to return is a 403 forbidden
 		if !exists {
 			common.Throw(w, r, common.NotFoundError)
 			return
