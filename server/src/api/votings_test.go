@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -39,9 +40,11 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			votingMock := votings.NewMockVotingService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
+			boardId := uuid.New()
+			votingID := uuid.New()
 			s.votings = votingMock
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(`{
@@ -57,6 +60,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 				ShowVotesOfOthers:  false,
 				Board:              boardId,
 			}).Return(&votings.Voting{
+				ID:                 votingID,
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 			}, tt.err)
@@ -64,6 +68,9 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			rr := httptest.NewRecorder()
 			s.createVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			if tt.err == nil {
+				suite.Equal(fmt.Sprintf("/boards/%s/votings/%s", boardId, votingID), rr.Result().Header.Get("Location"))
+			}
 			votingMock.AssertExpectations(suite.T())
 			votingMock.AssertNumberOfCalls(suite.T(), "Create", 1)
 		})

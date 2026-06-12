@@ -40,6 +40,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 		// given
 		suite.Run(tt.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			columnMock := columns.NewMockColumnService(suite.T())
 
 			s.columns = columnMock
@@ -48,8 +49,9 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			color := common.Color("backlog-blue")
 			visible := true
 			index := 0
-			boardID, _ := uuid.NewRandom()
-			userID, _ := uuid.NewRandom()
+			boardID := uuid.New()
+			userID := uuid.New()
+			columnID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(
 				`{"name": "%s", "color": "%s", "visible": %t, "index": %d}`, name, color, visible, index,
@@ -65,7 +67,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 				Board:   boardID,
 				User:    userID,
 			}).Return(&columns.Column{
-				ID:      uuid.UUID{},
+				ID:      columnID,
 				Name:    name,
 				Color:   color,
 				Visible: visible,
@@ -77,6 +79,9 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 
 			// then
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			if tt.err == nil {
+				suite.Equal(fmt.Sprintf("/boards/%s/columns/%s", boardID, columnID), rr.Result().Header.Get("Location"))
+			}
 			columnMock.AssertExpectations(suite.T())
 		})
 	}
