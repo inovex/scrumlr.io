@@ -512,10 +512,433 @@ func (suite *BoardServiceTestSuite) TestUpdateLastModified_DatabaseError() {
 	suite.ErrorIs(err, dbErr)
 }
 
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+	boardID := uuid.New()
+
+	boardName := "Imported board"
+	boardDescription := "Imported board description"
+	columnName := "Start"
+	columnColor := common.ColorGoalGreen
+	columnVisible := true
+	columnIndex := 0
+	importColumnID := uuid.New()
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      importColumnID,
+			Name:    columnName,
+			Color:   columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           boardID,
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    owner,
+		Name:    columnName,
+		Color:   columnColor,
+		Visible: &columnVisible,
+		Index:   &columnIndex,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	board, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.NotNil(board)
+	suite.Equal(boardID, board.ID)
+	suite.Equal(boardName, *board.Name)
+	suite.Equal(boardDescription, *board.Description)
+	suite.Equal(Public, board.AccessPolicy)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_CreateFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	boardName := "Imported board"
+	boardDescription := "Imported board description"
+	columnName := "Start"
+	columnColor := common.ColorGoalGreen
+	columnVisible := true
+	columnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    columnName,
+			Color:   columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{}, errors.New("create failed"))
+
+	board, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Equal(common.InternalServerError, err)
+}
+
 func (suite *BoardServiceTestSuite) TestImportSuccess() {
-	suite.Equal(true, true)
-	//todo
-	// also all other cases for that function perhaps steal from api/boards_test
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+	boardID := uuid.New()
+
+	boardName := "Imported board"
+	boardDescription := "Imported board description"
+	columnName := "Start"
+	columnColor := common.ColorGoalGreen
+	columnVisible := true
+	columnIndex := 0
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      importColumnID,
+			Name:    columnName,
+			Color:   columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+		Notes: []notes.Note{},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           boardID,
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    owner,
+		Name:    columnName,
+		Color:   columnColor,
+		Visible: &columnVisible,
+		Index:   &columnIndex,
+	}).Return(&columns.Column{ID: createdColumnID}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.NotNil(board)
+	suite.Equal(boardID, board.ID)
+}
+
+func (suite *BoardServiceTestSuite) TestImport_FailsWhenCreateImportedBoardFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	boardName := "Imported board"
+	boardDescription := "Imported board description"
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    "Start",
+			Color:   common.ColorGoalGreen,
+			Visible: true,
+			Index:   0,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{}, errors.New("create failed"))
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Equal(common.InternalServerError, err)
+}
+
+func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+	boardID := uuid.New()
+
+	boardName := "Imported board"
+	boardDescription := "Imported board description"
+	columnName := "Start"
+	columnColor := common.ColorGoalGreen
+	columnVisible := true
+	columnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &boardName,
+			Description:  &boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    columnName,
+			Color:   columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           boardID,
+		Name:         &boardName,
+		Description:  &boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    owner,
+		Name:    columnName,
+		Color:   columnColor,
+		Visible: &columnVisible,
+		Index:   &columnIndex,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	getColumnsErr := errors.New("failed to get imported columns")
+	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).Return(nil, getColumnsErr)
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Equal(getColumnsErr, err)
+
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+	boardID := uuid.New()
+	parentID := uuid.New()
+	columnID := uuid.New()
+
+	organizedNotes := []parentChildNotes{{
+		Parent: notes.Note{
+			ID: parentID,
+			Position: notes.NotePosition{
+				Column: columnID,
+			},
+		},
+		Children: []notes.Note{
+			{
+				Author: uuid.New(),
+				Text:   "child-1",
+				Position: notes.NotePosition{
+					Rank: 1,
+				},
+			},
+			{
+				Author: uuid.New(),
+				Text:   "child-2",
+				Position: notes.NotePosition{
+					Rank: 2,
+				},
+			},
+		},
+	}}
+
+	for _, child := range organizedNotes[0].Children {
+		notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+			Text:  child.Text,
+			Board: boardID,
+			User:  child.Author,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   child.Position.Rank,
+				Stack: uuid.NullUUID{
+					UUID:  parentID,
+					Valid: true,
+				},
+			},
+		}).Return(&notes.Note{ID: uuid.New()}, nil).Once()
+	}
+
+	err := service.importChildNotes(ctx, boardID, organizedNotes)
+
+	suite.NoError(err)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnFirstFailure() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+	boardID := uuid.New()
+	parentID := uuid.New()
+	columnID := uuid.New()
+	firstChildAuthor := uuid.New()
+	secondChildAuthor := uuid.New()
+	importErr := errors.New("import child note failed")
+
+	organizedNotes := []parentChildNotes{{
+		Parent: notes.Note{
+			ID:       parentID,
+			Position: notes.NotePosition{Column: columnID},
+		},
+		Children: []notes.Note{
+			{
+				Author:   firstChildAuthor,
+				Text:     "child-1",
+				Position: notes.NotePosition{Rank: 1},
+			},
+			{
+				Author:   secondChildAuthor,
+				Text:     "child-2",
+				Position: notes.NotePosition{Rank: 2},
+			},
+		},
+	}}
+
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "child-1",
+		Board: boardID,
+		User:  firstChildAuthor,
+		Position: notes.NotePosition{
+			Column: columnID,
+			Rank:   1,
+			Stack:  uuid.NullUUID{UUID: parentID, Valid: true},
+		},
+	}).Return(nil, importErr).Once()
+
+	err := service.importChildNotes(ctx, boardID, organizedNotes)
+
+	suite.Error(err)
+	suite.Equal(importErr, err)
+	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.MatchedBy(func(req notes.NoteImportRequest) bool {
+		return req.Text == "child-2" && req.User == secondChildAuthor
+	}))
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+	boardID := uuid.New()
+
+	organizedNotes := []parentChildNotes{
+		{
+			Parent:   notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			Children: []notes.Note{},
+		},
+		{
+			Parent:   notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			Children: nil,
+		},
+	}
+
+	err := service.importChildNotes(ctx, boardID, organizedNotes)
+
+	suite.NoError(err)
+	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.Anything)
+	notesMock.AssertExpectations(suite.T())
 }
 
 func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedParticipantsOnImportFailure() {
