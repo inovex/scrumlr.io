@@ -2850,6 +2850,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer-image-size@npm:^0.6.4":
+  version: 0.6.4
+  resolution: "buffer-image-size@npm:0.6.4"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/7158205c8726caa521d3ae6ef7bc341eff211ff86f7278d122e45062e1720afef2f7ad8e845edc96c04f499b292c4ec8a74df9836a25074881260ba00b863448
+  languageName: node
+  linkType: hard
+
 "buffer@npm:^5.7.1":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
@@ -5269,17 +5278,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^20.9.0":
-  version: 20.9.0
-  resolution: "happy-dom@npm:20.9.0"
+"happy-dom@npm:^20.10.1":
+  version: 20.10.3
+  resolution: "happy-dom@npm:20.10.3"
   dependencies:
     "@types/node": "npm:>=20.0.0"
     "@types/whatwg-mimetype": "npm:^3.0.2"
     "@types/ws": "npm:^8.18.1"
+    buffer-image-size: "npm:^0.6.4"
     entities: "npm:^7.0.1"
     whatwg-mimetype: "npm:^3.0.0"
-    ws: "npm:^8.18.3"
-  checksum: 10c0/4fb814057b85d13d9459c1af39de28d6e7504ba99c12123179e6c69d8c3e1cbd8c48c4104c7d793e89d7aa1b5f360a8e72ad56d33cc23cc6f42a27e2fbd25748
+    ws: "npm:^8.21.0"
+  checksum: 10c0/d3d1766645ee802f012982d4ddcb6e3817548b40466c91b4216a241bcaf80b18e3417d08503d59ebc10be2a3299f5f3dcf327081bc47b13895c3c22c6dbb00fa
   languageName: node
   linkType: hard
 
@@ -5548,15 +5558,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.3.0":
-  version: 26.3.0
-  resolution: "i18next@npm:26.3.0"
+"i18next@npm:^26.3.1":
+  version: 26.3.1
+  resolution: "i18next@npm:26.3.1"
   peerDependencies:
     typescript: ^5 || ^6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/e5dc29171d9a05746b31ad68e179ce2f36459c0a20d2d6733837961fe9492d1b48706804fa12059aa91dbb004655cb54ade817eb9e72371649f26d6dba1ca211
+  checksum: 10c0/8f26cb9a09b648edde395a58c2fe890dd996cb81a969d0a05da178b9cb4ce3dee009f9c677a480bb58b5a9d8bbf762fd226111626b015e9bbd66b96132dbba39
   languageName: node
   linkType: hard
 
@@ -6834,12 +6844,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:18.0.4":
-  version: 18.0.4
-  resolution: "marked@npm:18.0.4"
+"marked@npm:18.0.5":
+  version: 18.0.5
+  resolution: "marked@npm:18.0.5"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/f54dcbb39d3acdcd0356f7629b42811eec56db5f6daef7404e582cdf800f5b598b681f9f8a187e7f51262e37c607f5e0cd9880e56b5c8160a49c3f7828e9e459
+  checksum: 10c0/22763935a0a243c41851b010a086ea85a09951e379948b6aa629b6cecdcd66e3a5e8c4acac2f6b29c183c20609d3e5102495270207dfd5f4c46ddd773a4ddb9b
   languageName: node
   linkType: hard
 
@@ -7832,9 +7842,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.16.0":
-  version: 7.16.0
-  resolution: "react-router@npm:7.16.0"
+"react-router@npm:^7.17.0":
+  version: 7.17.0
+  resolution: "react-router@npm:7.17.0"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -7844,7 +7854,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/a3d7825c945183dd16f9cb7cf7c16bed859f78cf3049b467d6c9b84bdf0f7357027e821b1f3e187cecfb41e82c0f0bb625432e0ef9aa9d94b778a533204f6b7c
+  checksum: 10c0/dfa9b0182edba6fab14ef5ac297b292068e71e05bf7e07c6b45fe073d77002089e8e164542364232a8bbb0c7d3ec47b57b78db3984c4383e12308f2d31ad404a
   languageName: node
   linkType: hard
 
@@ -7894,16 +7904,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^6.0.5":
-  version: 6.0.5
-  resolution: "react-tooltip@npm:6.0.5"
+"react-tooltip@npm:^6.0.7":
+  version: 6.0.7
+  resolution: "react-tooltip@npm:6.0.7"
   dependencies:
     "@floating-ui/dom": "npm:1.7.6"
     clsx: "npm:2.1.1"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10c0/c822eadcc2462021e64378e1a2d701bba6885c2cfb871cd83de4209b9ddd9a708c743ce04ae005971dbf5583e62095315a03975907b354c9c5caa014237f0232
+  checksum: 10c0/9570b6a518fda0b418064caae82789d2c086bfb6d5b0ad8e566dce40712df57ff9231036e6f7c369285ca2b895857d09c7be384fe306595011556e3f7bab0d28
   languageName: node
   linkType: hard
 
@@ -8474,10 +8484,10 @@ __metadata:
     eslint-plugin-react-hooks: "npm:7.1.1"
     file-saver: "npm:^2.0.5"
     globals: "npm:^17.5.0"
-    happy-dom: "npm:^20.9.0"
+    happy-dom: "npm:^20.10.1"
     hash-files: "npm:^1.1.1"
     husky: "npm:^9.1.7"
-    i18next: "npm:^26.3.0"
+    i18next: "npm:^26.3.1"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-fs-backend: "npm:^2.6.6"
     js-cookie: "npm:^3.0.8"
@@ -8485,7 +8495,7 @@ __metadata:
     linkify-react: "npm:^4.3.3"
     linkifyjs: "npm:^4.3.3"
     lint-staged: "npm:^17.0.7"
-    marked: "npm:18.0.4"
+    marked: "npm:18.0.5"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
     prettier: "npm:^3.8.3"
@@ -8500,12 +8510,12 @@ __metadata:
     react-hotkeys-hook: "npm:^5.3.0"
     react-i18next: "npm:^17.0.8"
     react-redux: "npm:^9.3.0"
-    react-router: "npm:^7.16.0"
+    react-router: "npm:^7.17.0"
     react-snowfall: "npm:^2.4.0"
     react-textarea-autosize: "npm:^8.5.9"
     react-to-print: "npm:^3.3.0"
     react-toastify: "npm:^11.1.0"
-    react-tooltip: "npm:^6.0.5"
+    react-tooltip: "npm:^6.0.7"
     redux-mock-store: "npm:^1.5.4"
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.100.0"
@@ -10405,9 +10415,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.18.3":
-  version: 8.19.0
-  resolution: "ws@npm:8.19.0"
+"ws@npm:^8.21.0":
+  version: 8.21.0
+  resolution: "ws@npm:8.21.0"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -10416,7 +10426,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10c0/4741d9b9bc3f9c791880882414f96e36b8b254e34d4b503279d6400d9a4b87a033834856dbdd94ee4b637944df17ea8afc4bce0ff4a1560d2166be8855da5b04
+  checksum: 10c0/ef4a243476283fc49bc7550966c4af4aa0eef56273837211e700de3b664e08604a760cdddcb5ba43c049140e74ccfec5b0ee0bb439e08c2adf9138902fdde5f9
   languageName: node
   linkType: hard
 
