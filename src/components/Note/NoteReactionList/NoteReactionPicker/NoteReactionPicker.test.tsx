@@ -56,11 +56,11 @@ describe("NoteReactionPicker", () => {
     const moreButton = screen.getByRole("button", {name: "More emojis"});
     await userEvent.click(moreButton);
 
-    expect(screen.getByRole("dialog", {name: "Emoji picker"})).toBeInTheDocument();
+    expect(screen.queryByLabelText("Emoji picker")).toBeInTheDocument();
 
     fireEvent.keyDown(document, {key: "Escape"});
     expect(closeReactionBarFunction).not.toHaveBeenCalled();
-    expect(screen.queryByRole("dialog", {name: "Emoji picker"})).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Emoji picker")).not.toBeInTheDocument();
   });
 
   it("opens emoji picker when more button is clicked", async () => {
@@ -69,7 +69,7 @@ describe("NoteReactionPicker", () => {
 
     await userEvent.click(moreButton);
 
-    expect(screen.getByRole("dialog", {name: "Emoji picker"})).toBeInTheDocument();
+    expect(screen.queryByLabelText("Emoji picker")).toBeInTheDocument();
   });
 
   it("closes emoji picker when more button is clicked again", async () => {
@@ -77,10 +77,10 @@ describe("NoteReactionPicker", () => {
     const moreButton = screen.getByRole("button", {name: "More emojis"});
 
     await userEvent.click(moreButton);
-    expect(screen.getByRole("dialog", {name: "Emoji picker"})).toBeInTheDocument();
+    expect(screen.queryByLabelText("Emoji picker")).toBeInTheDocument();
 
     await userEvent.click(moreButton);
-    expect(screen.queryByRole("dialog", {name: "Emoji picker"})).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Emoji picker")).not.toBeInTheDocument();
   });
 
   it("renders recent emojis from store", () => {

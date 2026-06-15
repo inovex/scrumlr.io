@@ -73,7 +73,7 @@ export const LegacyNewBoard = () => {
           setAccessPolicy("BY_PASSPHRASE");
         }
         setImportBoard(data);
-      } catch (error) {
+      } catch (_error) {
         Toast.error({title: t("Toast.failedImport")});
         setFile(new File([], ""));
       }
@@ -146,7 +146,7 @@ export const LegacyNewBoard = () => {
 
               <div className="new-board__mode-selection">
                 {Object.keys(legacyColumnTemplates).map((key) => (
-                  <label key={key} className="new-board__mode">
+                  <label key={key} className="new-board__mode" aria-label={legacyColumnTemplates[key].name}>
                     <input
                       className="new-board__mode-input"
                       type="radio"
@@ -164,7 +164,7 @@ export const LegacyNewBoard = () => {
                     </div>
                   </label>
                 ))}
-                <label className="new-board__mode">
+                <label className="new-board__mode" aria-label={t("LecacyNewBoard.importBoard")}>
                   <input
                     className="new-board__mode-input"
                     type="file"

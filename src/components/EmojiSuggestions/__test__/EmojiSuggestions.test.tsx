@@ -44,7 +44,7 @@ describe("EmojiSuggestions", () => {
       })
     );
 
-    const element = container.getElementsByClassName("emoji-suggestions__element");
+    const element = container.getElementsByClassName("emoji-suggestions__element-button");
     element.item(0)?.dispatchEvent(new MouseEvent("mousedown", {bubbles: true}));
 
     expect(acceptSuggestion).toHaveBeenCalledWith("😂");
@@ -67,7 +67,7 @@ describe("EmojiSuggestions", () => {
         )
       );
 
-      const element = container.getElementsByClassName("emoji-suggestions__element");
+      const element = container.getElementsByClassName("emoji-suggestions__element-button");
 
       element.item(2)?.dispatchEvent(new MouseEvent("mousedown", {bubbles: true}));
       expect(acceptSuggestion).toHaveBeenCalledWith("👍🏽");

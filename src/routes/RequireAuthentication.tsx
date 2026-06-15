@@ -28,7 +28,6 @@ export const RequireAuthentication: FC<PropsWithChildren> = ({children}) => {
   }
 
   if (user) {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>;
   }
   return <Navigate to="/login" state={{from: normalizedLocation}} />;

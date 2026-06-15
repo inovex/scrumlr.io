@@ -48,6 +48,7 @@
 }
 
 .column-configurator-column-name-details__inline-description {
+  all: unset;
   color: styles.$gray--800;
   font-size: styles.$text--xs;
   font-weight: 500;
