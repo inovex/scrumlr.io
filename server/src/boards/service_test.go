@@ -40,6 +40,12 @@ type BoardServiceTestSuite struct {
 	broker             *realtime.Broker
 	mockClock          *timeprovider.MockTimeProvider
 	mockHash           *hash.MockHash
+	boardName          string
+	boardDescription   string
+	columnName         string
+	columnColor        common.Color
+	boardID            uuid.UUID
+	updatedAt          time.Time
 }
 
 func TestNotesServiceTestSuite(t *testing.T) {
@@ -64,28 +70,36 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockHash = hash.NewMockHash(suite.T())
 
 	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+
+	suite.boardName = "Test Board"
+	suite.boardDescription = "A test board"
+	suite.columnName = "Test Column"
+
+	suite.columnColor = common.ColorGoalGreen
+
+	suite.boardID = uuid.New()
+
+	suite.updatedAt = time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 }
 
 func (suite *BoardServiceTestSuite) TestGet() {
-	boardID := uuid.New()
 
-	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	result, err := suite.service.Get(context.Background(), boardID)
+	result, err := suite.service.Get(context.Background(), suite.boardID)
 
 	suite.NoError(err)
 	suite.NotNil(result)
-	suite.Equal(boardID, result.ID)
+	suite.Equal(suite.boardID, result.ID)
 }
 
 func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
-	boardID := uuid.New()
 	dbError := errors.New("database error")
 
-	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
 		Return(DatabaseBoard{}, dbError)
 
-	result, err := suite.service.Get(context.Background(), boardID)
+	result, err := suite.service.Get(context.Background(), suite.boardID)
 
 	suite.Error(err)
 	suite.Nil(result)
@@ -93,44 +107,39 @@ func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
 }
 
 func (suite *BoardServiceTestSuite) TestCreate() {
-	boardID := uuid.New()
 	userID := uuid.New()
-	boardName := "Test Board"
-	boardDescription := "A test board"
 	accessPolicy := Public
 	index := 0
-
-	columnName := "Test Column"
 	columnDescription := "Test Column Description"
 
-	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything,
 		columns.ColumnRequest{
-			Board:       boardID,
-			Name:        columnName,
+			Board:       suite.boardID,
+			Name:        suite.columnName,
 			Description: columnDescription,
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
 			User:        userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			Owner:        userID,
 			AccessPolicy: accessPolicy,
 			Columns: []columns.ColumnRequest{
 				{
-					Board:       boardID,
-					Name:        columnName,
+					Board:       suite.boardID,
+					Name:        suite.columnName,
 					Description: columnDescription,
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
@@ -140,58 +149,53 @@ func (suite *BoardServiceTestSuite) TestCreate() {
 			}})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
-	suite.Equal(boardName, *board.Name)
-	suite.Equal(boardDescription, *board.Description)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
 	suite.Equal(accessPolicy, board.AccessPolicy)
 	suite.Nil(board.Passphrase)
 	suite.Nil(board.Salt)
 }
 
 func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
-	boardID := uuid.New()
 	userID := uuid.New()
-	boardName := "Test Board"
-	boardDescription := "A test board"
 	accessPolicy := ByPassphrase
 	passPhrase := "SuperStrongPassword"
 	salt := "Salt"
 	index := 0
-
-	columnName := "Test Column"
 	columnDescription := "Test Column Description"
 
-	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}).
-		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}, nil)
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything,
 		columns.ColumnRequest{
-			Board:       boardID,
-			Name:        columnName,
+			Board:       suite.boardID,
+			Name:        suite.columnName,
 			Description: columnDescription,
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
 			User:        userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
 	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			Owner:        userID,
 			AccessPolicy: accessPolicy,
 			Passphrase:   &passPhrase,
 			Columns: []columns.ColumnRequest{
 				{
-					Board:       boardID,
-					Name:        columnName,
+					Board:       suite.boardID,
+					Name:        suite.columnName,
 					Description: columnDescription,
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
@@ -201,9 +205,9 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 			}})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
-	suite.Equal(boardName, *board.Name)
-	suite.Equal(boardDescription, *board.Description)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
 	suite.Equal(accessPolicy, board.AccessPolicy)
 	suite.Equal(passPhrase, *board.Passphrase)
 	suite.Equal(salt, *board.Salt)
@@ -229,50 +233,47 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphraseMissing() {
 }
 
 func (suite *BoardServiceTestSuite) TestDelete() {
-	boardID := uuid.New()
 
-	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
+	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, suite.boardID).Return(nil)
 
-	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	expectedTopic := fmt.Sprintf("board.%s", suite.boardID)
 	expectedEvent := realtime.BoardEvent{Type: realtime.BoardEventBoardDeleted}
 	suite.mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil)
 
-	err := suite.service.Delete(context.Background(), boardID)
+	err := suite.service.Delete(context.Background(), suite.boardID)
 
 	suite.NoError(err)
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate() {
-	boardID := uuid.New()
+
 	updatedName := "Updated Board Name"
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName}, nil)
 	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	suite.noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	suite.mockClock.EXPECT().Now().Return(updatedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
+	suite.Equal(suite.boardID, board.ID)
 	suite.Equal(updatedName, *board.Name)
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_EmptyName() {
-	boardID := uuid.New()
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("")})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("")})
 
 	suite.Nil(board)
 	suite.NotNil(err)
@@ -280,34 +281,33 @@ func (suite *BoardServiceTestSuite) TestUpdate_EmptyName() {
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
-	boardID := uuid.New()
+
 	updatedName := "Updated Board Name"
 	accessPolicy := ByPassphrase
 	passphrase := "SuperStrongPassword"
 	salt := "ThisIsTheSalt"
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
 	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	suite.noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	suite.mockClock.EXPECT().Now().Return(updatedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 	suite.mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
+	suite.Equal(suite.boardID, board.ID)
 	suite.Equal(updatedName, *board.Name)
 	suite.Equal(passphrase, *board.Passphrase)
 	suite.Equal(salt, *board.Salt)
@@ -315,9 +315,8 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_WithoutPassphrase() {
-	boardID := uuid.New()
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByPassphrase)})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByPassphrase)})
 
 	suite.Nil(board)
 	suite.NotNil(err)
@@ -325,39 +324,37 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_WithoutPassphrase() 
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPublic() {
-	boardID := uuid.New()
+
 	updatedName := "Updated Board Name"
 	accessPolicy := Public
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
 	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	suite.noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	suite.mockClock.EXPECT().Now().Return(updatedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
+	suite.Equal(suite.boardID, board.ID)
 	suite.Equal(updatedName, *board.Name)
 	suite.Equal(accessPolicy, board.AccessPolicy)
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPublic_WithPassphrase() {
-	boardID := uuid.New()
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(Public), Passphrase: new("SuperStrongPassword")})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(Public), Passphrase: new("SuperStrongPassword")})
 
 	suite.Nil(board)
 	suite.NotNil(err)
@@ -365,34 +362,32 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPublic_WithPassphrase() {
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToInvite() {
-	boardID := uuid.New()
+
 	updatedName := "Updated Board Name"
 	accessPolicy := ByInvite
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
 	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{}, nil)
-	suite.noteMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*notes.Note{}, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{}, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*notes.Note{}, nil)
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	suite.mockClock.EXPECT().Now().Return(updatedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
 
 	suite.Nil(err)
-	suite.Equal(boardID, board.ID)
+	suite.Equal(suite.boardID, board.ID)
 	suite.Equal(updatedName, *board.Name)
 	suite.Equal(accessPolicy, board.AccessPolicy)
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToInvite_WithPassphrase() {
-	boardID := uuid.New()
 
-	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByInvite), Passphrase: new("SuperStrongPassword")})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByInvite), Passphrase: new("SuperStrongPassword")})
 
 	suite.Nil(board)
 	suite.NotNil(err)
@@ -400,69 +395,67 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToInvite_WithPassphrase() {
 }
 
 func (suite *BoardServiceTestSuite) TestSetTimer() {
-	boardID := uuid.New()
+
 	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(5))
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
-		Return(DatabaseBoard{ID: boardID, TimerEnd: &timerEnd}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
+		Return(DatabaseBoard{ID: suite.boardID, TimerEnd: &timerEnd}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
 	suite.mockClock.EXPECT().Now().Return(timerStart)
 
-	result, err := suite.service.SetTimer(context.Background(), boardID, 5)
+	result, err := suite.service.SetTimer(context.Background(), suite.boardID, 5)
 
 	suite.NoError(err)
 	suite.NotNil(result)
-	suite.Equal(boardID, result.ID)
+	suite.Equal(suite.boardID, result.ID)
 }
 
 func (suite *BoardServiceTestSuite) TestDeleteTimer() {
-	boardID := uuid.New()
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: nil, TimerEnd: nil}).
-		Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: nil, TimerEnd: nil}).
+		Return(DatabaseBoard{ID: suite.boardID}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	result, err := suite.service.DeleteTimer(context.Background(), boardID)
+	result, err := suite.service.DeleteTimer(context.Background(), suite.boardID)
 
 	suite.NoError(err)
-	suite.Equal(boardID, result.ID)
+	suite.Equal(suite.boardID, result.ID)
 	suite.Equal((*time.Time)(nil), result.TimerStart)
 	suite.Equal((*time.Time)(nil), result.TimerEnd)
 }
 
 func (suite *BoardServiceTestSuite) TestIncrementTimer() {
-	boardID := uuid.New()
+
 	now := time.Now().Local()
 	updatedTimer := now.Add(time.Duration(1) * time.Minute)
 	updatedTimerEnd := updatedTimer.Add(time.Minute * time.Duration(1))
 
-	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
-		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
-	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
-		Return(DatabaseBoard{ID: boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{ID: suite.boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
+		Return(DatabaseBoard{ID: suite.boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
 
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
 	suite.mockClock.EXPECT().Now().Return(now)
 
-	result, err := suite.service.IncrementTimer(context.Background(), boardID)
+	result, err := suite.service.IncrementTimer(context.Background(), suite.boardID)
 
 	suite.NoError(err)
-	suite.Equal(boardID, result.ID)
+	suite.Equal(suite.boardID, result.ID)
 	suite.Equal(updatedTimerEnd, *result.TimerEnd)
 }
 
 func (suite *BoardServiceTestSuite) TestDelete_BroadcastsCorrectEvent() {
-	boardID := uuid.New()
 
-	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
+	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, suite.boardID).Return(nil)
 
 	// Verify the exact event that's broadcasted
-	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	expectedTopic := fmt.Sprintf("board.%s", suite.boardID)
 	expectedEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 		Data: nil, // Board deletion event has no data
@@ -472,7 +465,7 @@ func (suite *BoardServiceTestSuite) TestDelete_BroadcastsCorrectEvent() {
 	suite.mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil).Once()
 
 	// Act
-	err := suite.service.Delete(context.Background(), boardID)
+	err := suite.service.Delete(context.Background(), suite.boardID)
 
 	// Assert
 	suite.NoError(err)
@@ -482,32 +475,32 @@ func (suite *BoardServiceTestSuite) TestDelete_BroadcastsCorrectEvent() {
 }
 
 func (suite *BoardServiceTestSuite) TestUpdateLastModified() {
-	boardID := uuid.New()
+
 	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockClock := timeprovider.NewMockTimeProvider(suite.T())
 	suite.mockBoardDatabase.EXPECT().
-		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
-		Return(DatabaseBoard{ID: boardID}, nil)
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, LastModifiedAt: now}).
+		Return(DatabaseBoard{ID: suite.boardID}, nil)
 
 	updater := NewLastModifiedUpdater(suite.mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID, now)
+	err := updater.UpdateLastModified(context.Background(), suite.boardID, now)
 
 	suite.NoError(err)
 }
 
 func (suite *BoardServiceTestSuite) TestUpdateLastModified_DatabaseError() {
-	boardID := uuid.New()
+
 	dbErr := errors.New("database error")
 	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
 	mockClock := timeprovider.NewMockTimeProvider(suite.T())
 	suite.mockBoardDatabase.EXPECT().
-		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, LastModifiedAt: now}).
 		Return(DatabaseBoard{}, dbErr)
 
 	updater := NewLastModifiedUpdater(suite.mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID, now)
+	err := updater.UpdateLastModified(context.Background(), suite.boardID, now)
 
 	suite.ErrorIs(err, dbErr)
 }
@@ -521,64 +514,59 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
 
 	ctx := context.Background()
 	owner := uuid.New()
-	boardID := uuid.New()
 
-	boardName := "Imported board"
-	boardDescription := "Imported board description"
-	columnName := "Start"
-	columnColor := common.ColorGoalGreen
 	columnVisible := true
 	columnIndex := 0
 	importColumnID := uuid.New()
 
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
 			ID:      importColumnID,
-			Name:    columnName,
-			Color:   columnColor,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
 			Visible: columnVisible,
 			Index:   columnIndex,
 		}},
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
-		Name:         &boardName,
-		Description:  &boardDescription,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{
-		ID:           boardID,
-		Name:         &boardName,
-		Description:  &boardDescription,
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   boardID,
+		Board:   suite.boardID,
 		User:    owner,
-		Name:    columnName,
-		Color:   columnColor,
+		Name:    suite.columnName,
+		Color:   suite.columnColor,
 		Visible: &columnVisible,
 		Index:   &columnIndex,
 	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: boardID,
+		Board: suite.boardID,
 		User:  owner,
 		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
 
 	board, err := service.createImportedBoard(ctx, owner, body)
 
 	suite.NoError(err)
 	suite.NotNil(board)
-	suite.Equal(boardID, board.ID)
-	suite.Equal(boardName, *board.Name)
-	suite.Equal(boardDescription, *board.Description)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
 	suite.Equal(Public, board.AccessPolicy)
 }
 
@@ -592,31 +580,27 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_CreateFails() {
 	ctx := context.Background()
 	owner := uuid.New()
 
-	boardName := "Imported board"
-	boardDescription := "Imported board description"
-	columnName := "Start"
-	columnColor := common.ColorGoalGreen
 	columnVisible := true
 	columnIndex := 0
 
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
 			ID:      uuid.New(),
-			Name:    columnName,
-			Color:   columnColor,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
 			Visible: columnVisible,
 			Index:   columnIndex,
 		}},
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
-		Name:         &boardName,
-		Description:  &boardDescription,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{}, errors.New("create failed"))
 
@@ -636,12 +620,7 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 
 	ctx := context.Background()
 	owner := uuid.New()
-	boardID := uuid.New()
 
-	boardName := "Imported board"
-	boardDescription := "Imported board description"
-	columnName := "Start"
-	columnColor := common.ColorGoalGreen
 	columnVisible := true
 	columnIndex := 0
 	importColumnID := uuid.New()
@@ -649,14 +628,14 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
 			ID:      importColumnID,
-			Name:    columnName,
-			Color:   columnColor,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
 			Visible: columnVisible,
 			Index:   columnIndex,
 		}},
@@ -664,38 +643,38 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
-		Name:         &boardName,
-		Description:  &boardDescription,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{
-		ID:           boardID,
-		Name:         &boardName,
-		Description:  &boardDescription,
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   boardID,
+		Board:   suite.boardID,
 		User:    owner,
-		Name:    columnName,
-		Color:   columnColor,
+		Name:    suite.columnName,
+		Color:   suite.columnColor,
 		Visible: &columnVisible,
 		Index:   &columnIndex,
 	}).Return(&columns.Column{ID: createdColumnID}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: boardID,
+		Board: suite.boardID,
 		User:  owner,
 		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
 
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
 
 	board, err := service.Import(ctx, owner, body)
 
 	suite.NoError(err)
 	suite.NotNil(board)
-	suite.Equal(boardID, board.ID)
+	suite.Equal(suite.boardID, board.ID)
 }
 
 func (suite *BoardServiceTestSuite) TestImport_FailsWhenCreateImportedBoardFails() {
@@ -709,12 +688,10 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenCreateImportedBoardFails
 	ctx := context.Background()
 	owner := uuid.New()
 
-	boardName := "Imported board"
-	boardDescription := "Imported board description"
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
@@ -727,8 +704,8 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenCreateImportedBoardFails
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
-		Name:         &boardName,
-		Description:  &boardDescription,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{}, errors.New("create failed"))
 
@@ -748,58 +725,53 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 
 	ctx := context.Background()
 	owner := uuid.New()
-	boardID := uuid.New()
 
-	boardName := "Imported board"
-	boardDescription := "Imported board description"
-	columnName := "Start"
-	columnColor := common.ColorGoalGreen
 	columnVisible := true
 	columnIndex := 0
 
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
 			ID:      uuid.New(),
-			Name:    columnName,
-			Color:   columnColor,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
 			Visible: columnVisible,
 			Index:   columnIndex,
 		}},
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
-		Name:         &boardName,
-		Description:  &boardDescription,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{
-		ID:           boardID,
-		Name:         &boardName,
-		Description:  &boardDescription,
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
 		AccessPolicy: Public,
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   boardID,
+		Board:   suite.boardID,
 		User:    owner,
-		Name:    columnName,
-		Color:   columnColor,
+		Name:    suite.columnName,
+		Color:   suite.columnColor,
 		Visible: &columnVisible,
 		Index:   &columnIndex,
 	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: boardID,
+		Board: suite.boardID,
 		User:  owner,
 		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: boardID, UserID: owner, Role: common.OwnerRole}, nil)
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
 
 	getColumnsErr := errors.New("failed to get imported columns")
-	suite.columnMock.EXPECT().GetAll(mock.Anything, boardID).Return(nil, getColumnsErr)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return(nil, getColumnsErr)
 
 	board, err := service.Import(ctx, owner, body)
 
@@ -813,7 +785,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 	service := &Service{notesService: notesMock}
 
 	ctx := context.Background()
-	boardID := uuid.New()
+
 	parentID := uuid.New()
 	columnID := uuid.New()
 
@@ -845,7 +817,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 	for _, child := range organizedNotes[0].Children {
 		notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
 			Text:  child.Text,
-			Board: boardID,
+			Board: suite.boardID,
 			User:  child.Author,
 			Position: notes.NotePosition{
 				Column: columnID,
@@ -858,7 +830,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 		}).Return(&notes.Note{ID: uuid.New()}, nil).Once()
 	}
 
-	err := service.importChildNotes(ctx, boardID, organizedNotes)
+	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
 
 	suite.NoError(err)
 	notesMock.AssertExpectations(suite.T())
@@ -869,7 +841,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 	service := &Service{notesService: notesMock}
 
 	ctx := context.Background()
-	boardID := uuid.New()
+
 	parentID := uuid.New()
 	columnID := uuid.New()
 	firstChildAuthor := uuid.New()
@@ -897,7 +869,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 
 	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
 		Text:  "child-1",
-		Board: boardID,
+		Board: suite.boardID,
 		User:  firstChildAuthor,
 		Position: notes.NotePosition{
 			Column: columnID,
@@ -906,7 +878,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 		},
 	}).Return(nil, importErr).Once()
 
-	err := service.importChildNotes(ctx, boardID, organizedNotes)
+	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
 
 	suite.Error(err)
 	suite.Equal(importErr, err)
@@ -921,7 +893,6 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
 	service := &Service{notesService: notesMock}
 
 	ctx := context.Background()
-	boardID := uuid.New()
 
 	organizedNotes := []parentChildNotes{
 		{
@@ -934,7 +905,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
 		},
 	}
 
-	err := service.importChildNotes(ctx, boardID, organizedNotes)
+	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
 
 	suite.NoError(err)
 	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.Anything)
@@ -952,7 +923,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedPart
 	}
 
 	ctx := context.Background()
-	boardID := uuid.New()
+
 	importColumnID := uuid.New()
 	createdColumnID := uuid.New()
 	deletedAuthorID := uuid.New()
@@ -973,13 +944,13 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedPart
 		}},
 	}
 
-	columnsMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
+	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{deletedAuthorID}).Return([]uuid.UUID{}, nil)
 	suite.userService.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+deletedAuthorID.String()[:5]).Return(&users.User{ID: replacementAuthorID}, nil)
 	notesMock.EXPECT().Import(mock.Anything, mock.Anything).Return(nil, importError)
 	suite.userService.EXPECT().Delete(mock.Anything, replacementAuthorID).Return(nil)
 
-	err := service.processImportedNotes(ctx, boardID, body)
+	err := service.processImportedNotes(ctx, suite.boardID, body)
 
 	suite.Error(err)
 	suite.Equal(importError, err)
