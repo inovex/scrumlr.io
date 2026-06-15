@@ -23,9 +23,7 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/users"
 )
 
 type BoardTestSuite struct {
@@ -542,22 +540,6 @@ func (f importBoardFixture) body(includeNotes bool) (string, error) {
 	return string(raw), nil
 }
 
-func (f importBoardFixture) createRequest() boards.CreateBoardRequest {
-	return boards.CreateBoardRequest{
-		Name:         &f.boardName,
-		Description:  &f.boardDescription,
-		AccessPolicy: boards.Public,
-		Passphrase:   nil,
-		Columns: []columns.ColumnRequest{{
-			Name:    f.columnName,
-			Color:   f.columnColor,
-			Visible: &f.columnVisible,
-			Index:   &f.columnIndex,
-		}},
-		Owner: f.ownerID,
-	}
-}
-
 func importBoardRequest(ownerID uuid.UUID, body string) *http.Request {
 	return technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(body)).
 		AddToContext(identifiers.UserIdentifier, ownerID).
@@ -568,34 +550,15 @@ func (suite *BoardTestSuite) TestImportBoardSuccess() {
 	s := new(Server)
 
 	boardMock := boards.NewMockBoardService(suite.T())
-	columnMock := columns.NewMockColumnService(suite.T())
-	notesMock := notes.NewMockNotesService(suite.T())
-	usersMock := users.NewMockUserService(suite.T())
 
 	s.boards = boardMock
-	s.columns = columnMock
-	s.notes = notesMock
-	s.users = usersMock
 
 	fixture := newImportBoardFixture()
 	body, err := fixture.body(true)
 	suite.Require().NoError(err)
 	req := importBoardRequest(fixture.ownerID, body)
 
-	boardMock.EXPECT().Create(mock.Anything, fixture.createRequest()).Return(&boards.Board{ID: fixture.createdBoardID}, nil)
-
-	columnMock.EXPECT().GetAll(mock.Anything, fixture.createdBoardID).Return([]*columns.Column{{ID: fixture.createdColumnID}}, nil)
-	usersMock.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{fixture.authorID}).Return([]uuid.UUID{fixture.authorID}, nil)
-	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
-		Text:  "Imported note",
-		Board: fixture.createdBoardID,
-		User:  fixture.authorID,
-		Position: notes.NotePosition{
-			Column: fixture.createdColumnID,
-			Stack:  uuid.NullUUID{},
-			Rank:   0,
-		},
-	}).Return(&notes.Note{ID: uuid.New(), Author: fixture.authorID}, nil)
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(&boards.Board{ID: fixture.createdBoardID}, nil)
 
 	rr := httptest.NewRecorder()
 
@@ -603,9 +566,6 @@ func (suite *BoardTestSuite) TestImportBoardSuccess() {
 
 	suite.Equal(http.StatusCreated, rr.Result().StatusCode)
 	boardMock.AssertExpectations(suite.T())
-	columnMock.AssertExpectations(suite.T())
-	notesMock.AssertExpectations(suite.T())
-	usersMock.AssertExpectations(suite.T())
 }
 
 func (suite *BoardTestSuite) TestImportBoardFailedDecodingBody() {
@@ -631,7 +591,7 @@ func (suite *BoardTestSuite) TestImportBoardCreateFailure() {
 	suite.Require().NoError(err)
 	req := importBoardRequest(fixture.ownerID, body)
 
-	boardMock.EXPECT().Create(mock.Anything, fixture.createRequest()).Return(nil, &common.APIError{
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(nil, &common.APIError{
 		Err:        errors.New("failed to create board"),
 		StatusCode: http.StatusInternalServerError,
 		StatusText: "failed",
@@ -649,19 +609,15 @@ func (suite *BoardTestSuite) TestImportBoardCreateFailure() {
 func (suite *BoardTestSuite) TestImportBoardProcessImportedNotesFailure() {
 	s := new(Server)
 	boardMock := boards.NewMockBoardService(suite.T())
-	columnMock := columns.NewMockColumnService(suite.T())
 
 	s.boards = boardMock
-	s.columns = columnMock
 
 	fixture := newImportBoardFixture()
 	body, err := fixture.body(false)
 	suite.Require().NoError(err)
 	req := importBoardRequest(fixture.ownerID, body)
 
-	boardMock.EXPECT().Create(mock.Anything, fixture.createRequest()).Return(&boards.Board{ID: fixture.createdBoardID}, nil)
-	columnMock.EXPECT().GetAll(mock.Anything, fixture.createdBoardID).Return(nil, errors.New("failed to get imported columns"))
-	boardMock.EXPECT().Delete(mock.Anything, fixture.createdBoardID).Return(nil)
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(nil, errors.New("failed to get imported columns"))
 
 	rr := httptest.NewRecorder()
 
@@ -669,5 +625,4 @@ func (suite *BoardTestSuite) TestImportBoardProcessImportedNotesFailure() {
 
 	suite.Equal(http.StatusInternalServerError, rr.Result().StatusCode)
 	boardMock.AssertExpectations(suite.T())
-	columnMock.AssertExpectations(suite.T())
 }
