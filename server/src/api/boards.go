@@ -254,6 +254,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
+
 		} else {
 			err := errors.New("wrong passphrase")
 			span.SetStatus(codes.Error, "wrong passphrase provided")
