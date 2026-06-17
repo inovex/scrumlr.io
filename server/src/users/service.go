@@ -108,7 +108,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
+		return nil, CreateUserError(Internal, TypeNone, fmt.Sprintf("failed to create user: %v", err), err)
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -126,7 +126,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, ErrInvalidUserName
+		return nil, CreateUserError(BadRequest, InvalidUserName, "failed to validate username", err)
 	}
 
 	span.SetAttributes(
@@ -145,13 +145,13 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 			span.SetStatus(codes.Error, "user to update not found")
 			span.RecordError(err)
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
-			return nil, ErrUserNotFound
+			return nil, CreateUserError(NotFound, UserNotFound, "user not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to update user")
 		span.RecordError(err)
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to update user: %v", err), Err: err}
+		return nil, CreateUserError(Internal, TypeNone, fmt.Sprintf("failed to update user: %v", err), err)
 	}
 
 	service.updatedUser(ctx, user)
@@ -188,7 +188,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete user")
 		span.RecordError(err)
 		log.Errorw("failed to delete user", "user", id, "err", err)
-		return UserError{Category: Internal, Message: fmt.Sprintf("failed to delete user: %v", err), Err: err}
+		return CreateUserError(Internal, TypeNone, fmt.Sprintf("failed to delete user: %v", err), err)
 	}
 
 	deletedUserCounter.Add(ctx, 1)
@@ -209,13 +209,13 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "user not found")
 			span.RecordError(err)
-			return nil, ErrUserNotFound
+			return nil, CreateUserError(NotFound, UserNotFound, "user not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get user")
 		span.RecordError(err)
 		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to get user: %v", err), Err: err}
+		return nil, CreateUserError(Internal, TypeNone, fmt.Sprintf("failed to get user: %v", err), err)
 	}
 
 	return new(User).From(user), err
@@ -231,7 +231,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)
 		log.Errorw("unable to get users", "board", boardID, "err", err)
-		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to get users: %v", err), Err: err}
+		return nil, CreateUserError(Internal, TypeNone, fmt.Sprintf("failed to get users: %v", err), err)
 	}
 
 	return UserSlice(users), nil
@@ -293,11 +293,11 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 
 func validateUsername(name string) error {
 	if strings.TrimSpace(name) == "" {
-		return ErrEmptyUserName
+		return CreateUserError(BadRequest, EmptyUserName, "name may not be empty", nil)
 	}
 
 	if strings.Contains(name, "\n") {
-		return ErrNewLineUserName
+		return CreateUserError(BadRequest, NewLineUserName, "name may not contain newline characters", nil)
 	}
 
 	return nil

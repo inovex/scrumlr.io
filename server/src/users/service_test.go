@@ -60,7 +60,12 @@ func (suite *UserServiceTestSuite) TestGetUser_NotFound() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrUserNotFound)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(NotFound, userErr.Category)
+	suite.Equal(UserNotFound, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
@@ -133,7 +138,11 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrEmptyUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(EmptyUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
@@ -146,7 +155,11 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrNewLineUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(NewLineUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser() {
@@ -191,7 +204,12 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
@@ -205,7 +223,12 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser() {
@@ -250,7 +273,11 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
@@ -264,7 +291,11 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
@@ -309,7 +340,11 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
@@ -323,7 +358,11 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
@@ -368,7 +407,11 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
@@ -382,7 +425,11 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
@@ -427,7 +474,11 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
@@ -441,7 +492,11 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
@@ -486,7 +541,11 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
@@ -500,7 +559,11 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser() {
@@ -555,7 +618,11 @@ func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
@@ -568,7 +635,11 @@ func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrInvalidUserName)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal(InvalidUserName, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {
