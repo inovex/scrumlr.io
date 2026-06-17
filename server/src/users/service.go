@@ -108,7 +108,7 @@ func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -136,7 +136,7 @@ func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarU
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -164,7 +164,7 @@ func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -192,7 +192,7 @@ func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUr
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -220,7 +220,7 @@ func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avata
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -248,7 +248,7 @@ func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to create user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to create user: %v", err), Err: err}
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -290,7 +290,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 		span.SetStatus(codes.Error, "failed to update user")
 		span.RecordError(err)
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, fmt.Errorf("failed to update user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to update user: %v", err), Err: err}
 	}
 
 	service.updatedUser(ctx, user)
@@ -327,7 +327,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete user")
 		span.RecordError(err)
 		log.Errorw("failed to delete user", "user", id, "err", err)
-		return fmt.Errorf("failed to delete user: %w", err)
+		return UserError{Category: Internal, Message: fmt.Sprintf("failed to delete user: %v", err), Err: err}
 	}
 
 	deletedUserCounter.Add(ctx, 1)
@@ -354,7 +354,7 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 		span.SetStatus(codes.Error, "failed to get user")
 		span.RecordError(err)
 		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, fmt.Errorf("failed to get user: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to get user: %v", err), Err: err}
 	}
 
 	return new(User).From(user), err
@@ -370,7 +370,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)
 		log.Errorw("unable to get users", "board", boardID, "err", err)
-		return nil, fmt.Errorf("failed to get users: %w", err)
+		return nil, UserError{Category: Internal, Message: fmt.Sprintf("failed to get users: %v", err), Err: err}
 	}
 
 	return UserSlice(users), nil
