@@ -33,17 +33,16 @@ jobs:
 
       - name: Install Corepack # for yarn berry
         run: |
-          npm install -g corepack@0.34.7 --ignore-scripts
+          npm install -g corepack@0.35.0 --ignore-scripts
           corepack enable
           corepack install
 
       - name: Setup Node.js with cache
         uses: actions/setup-node@v6
         with:
-          node-version: '26'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
-
+          node-version: "26"
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
 
       - name: Install dependencies
         run: yarn install --immutable --mode=skip-build
@@ -58,9 +57,9 @@ jobs:
         run: yarn test --run --coverage --passWithNoTests
 
   test-backend:
-      name: Build and Test – Backend
-      runs-on: ubuntu-latest
-      steps:
+    name: Build and Test – Backend
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -109,11 +108,11 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - uses: actions/setup-go@v6
         with:
@@ -180,7 +179,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -235,8 +234,8 @@ jobs:
       - name: Run E2E tests
         working-directory: ./server/e2e-tests
         env:
-            E2E_BASE_URL: ${{ env.BASE_URL }}/api
-            E2E_INSECURE_SKIP_VERIFY: "true"
+          E2E_BASE_URL: ${{ env.BASE_URL }}/api
+          E2E_INSECURE_SKIP_VERIFY: "true"
         run: go test ./...
 
   cypress_end_to_end_test:
@@ -250,17 +249,16 @@ jobs:
 
       - name: Install Corepack # for yarn berry
         run: |
-          npm install -g corepack@0.34.7 --ignore-scripts
+          npm install -g corepack@0.35.0 --ignore-scripts
           corepack enable
           corepack install
 
       - name: Setup Node.js with cache
         uses: actions/setup-node@v6
         with:
-          node-version: '26'
-          cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
-
+          node-version: "26"
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
 
       - name: Start server
         run: docker compose --profile build up -d
@@ -273,4 +271,4 @@ jobs:
           install-command: yarn install --immutable
           start: yarn run start
           working-directory: ./
-          wait-on: 'http://localhost:5173'
+          wait-on: "http://localhost:5173"

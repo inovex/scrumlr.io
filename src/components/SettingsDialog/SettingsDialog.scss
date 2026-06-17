@@ -106,7 +106,7 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 8px;
+  gap: styles.$spacing--xs;
 }
 
 .settings-dialog__close-button {
@@ -200,16 +200,15 @@ $settings-dialog-container--bottom: 62px;
 
 .navigation__item {
   height: 56px;
-  width: 252px;
-  margin: 0 styles.$spacing--xl;
+  margin: 0 styles.$spacing--lg;
   border-radius: styles.$rounded--full;
   text-decoration: none;
   color: styles.$navy--900;
   outline: none;
   display: flex;
   flex-direction: row;
-  gap: 16px;
-  padding: 8px;
+  gap: styles.$spacing--base;
+  padding: styles.$spacing--xs;
   cursor: pointer;
 
   &:hover {
@@ -243,7 +242,7 @@ $settings-dialog-container--bottom: 62px;
   justify-content: center;
   align-self: center;
   gap: 2px;
-  overflow: hidden;
+  min-width: 0;
 }
 
 .navigation-item__name {
@@ -257,11 +256,15 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .navigation-item__description {
-  font-size: styles.$text--xs;
-  line-height: styles.$text--base;
-  font-weight: 500;
   margin: 0;
-  width: max-content;
+  min-width: 0;
+  max-width: 100%;
+  font-size: styles.$text--xs;
+  font-weight: 500;
+  line-height: styles.$text--base;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .navigation__item {
@@ -284,6 +287,7 @@ $settings-dialog-container--bottom: 62px;
 .navigation-item__icon {
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
   border-radius: styles.$rounded--full;
   background: var(--accent-color--light);
   color: styles.$gray--000;
@@ -320,7 +324,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__header-text {
   border-bottom: solid 3px var(--accent-color--light);
-  padding-bottom: 8px;
+  padding-bottom: styles.$spacing--xs;
   margin: 0;
 }
 
