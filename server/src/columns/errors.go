@@ -6,11 +6,13 @@ type ColumnErrorCategory string
 
 const (
 	NotFound ColumnErrorCategory = "NOT_FOUND"
+	Internal ColumnErrorCategory = "INTERNAL"
 )
 
 type ColumnError struct {
 	Category ColumnErrorCategory
 	Message  string
+	Err      error
 }
 
 func (e ColumnError) Error() string {
@@ -19,6 +21,10 @@ func (e ColumnError) Error() string {
 
 func (e ColumnError) Status() string {
 	return string(e.Category)
+}
+
+func (e ColumnError) Unwrap() error {
+	return e.Err
 }
 
 var (

@@ -150,7 +150,7 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 
 		span.SetStatus(codes.Error, "failed to get open votings")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to get open votings: %w", err)
+		return nil, VotingError{Category: Internal, Message: fmt.Sprintf("failed to get open votings: %v", err), Err: err}
 	}
 
 	voting, err := service.database.Create(ctx, DatabaseVotingInsert{
@@ -166,7 +166,7 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 		span.SetStatus(codes.Error, "failed to create voting")
 		span.RecordError(err)
 		log.Errorw("unable to create voting", "board", body.Board, "error", err)
-		return nil, fmt.Errorf("failed to create voting: %w", err)
+		return nil, VotingError{Category: Internal, Message: fmt.Sprintf("failed to create voting: %v", err), Err: err}
 	}
 
 	service.createdVoting(ctx, body.Board, voting)
@@ -201,7 +201,7 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 		span.SetStatus(codes.Error, "failed to close voting")
 		span.RecordError(err)
 		log.Errorw("unable to close voting", "err", err)
-		return nil, fmt.Errorf("failed to close voting: %w", err)
+		return nil, VotingError{Category: Internal, Message: fmt.Sprintf("failed to close voting: %v", err), Err: err}
 	}
 
 	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
@@ -236,7 +236,7 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 		span.SetStatus(codes.Error, "failed to get voting")
 		span.RecordError(err)
 		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, fmt.Errorf("failed to get voting: %w", err)
+		return nil, VotingError{Category: Internal, Message: fmt.Sprintf("failed to get voting: %v", err), Err: err}
 	}
 
 	if voting.Status == Open {

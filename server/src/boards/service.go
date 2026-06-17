@@ -136,7 +136,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, fmt.Errorf("unable to get boards of user: %w", err)
+		return nil, BoardError{Category: Internal, Message: fmt.Sprintf("unable to get boards of user: %v", err), Err: err}
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -171,7 +171,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, fmt.Errorf("unable to create board for owner: %w", err)
+		return nil, BoardError{Category: Internal, Message: fmt.Sprintf("unable to create board for owner: %v", err), Err: err}
 	}
 
 	if _, err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
@@ -512,7 +512,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
 				log.Error("failed to encode passphrase")
-				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
+				return nil, BoardError{Category: Internal, Message: fmt.Sprintf("failed to encode passphrase: %v", err), Err: err}
 			}
 
 			update.Passphrase = passphrase
@@ -678,7 +678,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve columns, following a updated board call: %w", err)
+		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to retrieve columns, following a updated board call: %v", err), Err: err}
 	}
 
 	var columnsID []uuid.UUID
@@ -690,7 +690,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve notes, following a updated board call: %w", err)
+		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to retrieve notes, following a updated board call: %v", err), Err: err}
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -701,7 +701,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to broadcast notes, following a updated board call: %w", err)
+		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to broadcast notes, following a updated board call: %v", err), Err: err}
 	}
 
 	return nil

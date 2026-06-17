@@ -74,7 +74,7 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get index")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to get index: %w", err)
+		return nil, ColumnError{Category: Internal, Message: fmt.Sprintf("failed to get index: %v", err), Err: err}
 	}
 
 	if body.Index == nil {
@@ -100,7 +100,7 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 		span.SetStatus(codes.Error, "failed to create column")
 		span.RecordError(err)
 		log.Errorw("unable to create column", "err", err)
-		return nil, err
+		return nil, ColumnError{Category: Internal, Message: fmt.Sprintf("unable to create column: %v", err), Err: err}
 	}
 
 	service.updatedColumns(ctx, body.Board)
@@ -207,7 +207,7 @@ func (service *Service) Get(ctx context.Context, boardID, columnID uuid.UUID) (*
 		span.SetStatus(codes.Error, "failed to get column")
 		span.RecordError(err)
 		log.Errorw("unable to get column", "board", boardID, "column", columnID, "error", err)
-		return nil, fmt.Errorf("unable to get column: %w", err)
+		return nil, ColumnError{Category: Internal, Message: fmt.Sprintf("unable to get column: %v", err), Err: err}
 	}
 
 	return new(Column).From(column), err
@@ -227,7 +227,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
 		log.Errorw("unable to get columns", "board", boardID, "error", err)
-		return nil, fmt.Errorf("unable to get columns: %w", err)
+		return nil, ColumnError{Category: Internal, Message: fmt.Sprintf("unable to get columns: %v", err), Err: err}
 	}
 
 	return Columns(columns), err
@@ -247,7 +247,7 @@ func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, e
 		span.SetStatus(codes.Error, "failed to get column count")
 		span.RecordError(err)
 		log.Errorw("failed to get column count", "board", boardID, "error", err)
-		return count, fmt.Errorf("failed to get column count: %w", err)
+		return count, ColumnError{Category: Internal, Message: fmt.Sprintf("failed to get column count: %v", err), Err: err}
 	}
 
 	return count, err
@@ -296,7 +296,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve notes, following a updated columns call: %w", err)
+		return ColumnError{Category: Internal, Message: fmt.Sprintf("unable to retrieve notes, following an updated columns call: %v", err), Err: err}
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -307,7 +307,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to broadcast notes, following a updated columns call: %w", err)
+		return ColumnError{Category: Internal, Message: fmt.Sprintf("unable to broadcast notes, following an updated columns call: %v", err), Err: err}
 	}
 
 	return nil

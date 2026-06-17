@@ -143,7 +143,7 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 		span.SetStatus(codes.Error, "failed to get board session request")
 		span.RecordError(err)
 		log.Errorw("failed to load board session request", "board", boardID, "user", userID, "err", err)
-		return nil, fmt.Errorf("failed to load board session request: %w", err)
+		return nil, SessionRequestError{Category: Internal, Message: fmt.Sprintf("failed to load board session request: %v", err), Err: err}
 	}
 
 	return new(BoardSessionRequest).From(request), err
@@ -177,7 +177,7 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 		span.SetStatus(codes.Error, "failed to get board session requests")
 		span.RecordError(err)
 		log.Errorw("failed to load board session requests", "board", boardID, "err", err)
-		return nil, fmt.Errorf("failed to load board session requests: %w", err)
+		return nil, SessionRequestError{Category: Internal, Message: fmt.Sprintf("failed to load board session requests: %v", err), Err: err}
 	}
 
 	return BoardSessionRequests(requests), nil

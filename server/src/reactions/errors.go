@@ -8,11 +8,13 @@ const (
 	NotFound  ReactionErrorCategory = "NOT_FOUND"
 	Conflict  ReactionErrorCategory = "CONFLICT"
 	Forbidden ReactionErrorCategory = "FORBIDDEN"
+	Internal  ReactionErrorCategory = "INTERNAL"
 )
 
 type ReactionError struct {
 	Category ReactionErrorCategory
 	Message  string
+	Err      error
 }
 
 func (e ReactionError) Error() string {
@@ -21,6 +23,10 @@ func (e ReactionError) Error() string {
 
 func (e ReactionError) Status() string {
 	return string(e.Category)
+}
+
+func (e ReactionError) Unwrap() error {
+	return e.Err
 }
 
 var (

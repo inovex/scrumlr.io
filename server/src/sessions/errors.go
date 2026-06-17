@@ -5,6 +5,7 @@ import "fmt"
 type SessionError struct {
 	Category SessionErrorCategory
 	Message  string
+	Err      error
 }
 
 type SessionErrorCategory string
@@ -12,6 +13,7 @@ type SessionErrorCategory string
 const (
 	NotFound  SessionErrorCategory = "NOT_FOUND"
 	Forbidden SessionErrorCategory = "FORBIDDEN"
+	Internal  SessionErrorCategory = "INTERNAL"
 )
 
 func (e SessionError) Error() string {
@@ -20,6 +22,10 @@ func (e SessionError) Error() string {
 
 func (e SessionError) Status() string {
 	return string(e.Category)
+}
+
+func (e SessionError) Unwrap() error {
+	return e.Err
 }
 
 var (
