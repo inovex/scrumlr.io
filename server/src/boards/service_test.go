@@ -27,6 +27,8 @@ import (
 
 type BoardServiceTestSuite struct {
 	suite.Suite
+
+	service            BoardService
 	mockBoardDatabase  *MockBoardDatabase
 	sessionsMock       *sessions.MockSessionService
 	sessionRequestMock *sessionrequests.MockSessionRequestService
@@ -35,17 +37,20 @@ type BoardServiceTestSuite struct {
 	reactionMock       *reactions.MockReactionService
 	votingMock         *votings.MockVotingService
 	userService        *users.MockUserService
-	service            BoardService
-	mockBroker         *realtime.MockClient
-	broker             *realtime.Broker
-	mockClock          *timeprovider.MockTimeProvider
-	mockHash           *hash.MockHash
-	boardName          string
-	boardDescription   string
-	columnName         string
-	columnColor        common.Color
-	boardID            uuid.UUID
-	updatedAt          time.Time
+
+	broker     *realtime.Broker
+	mockBroker *realtime.MockClient
+	mockClock  *timeprovider.MockTimeProvider
+	mockHash   *hash.MockHash
+
+	boardID   uuid.UUID
+	userID    uuid.UUID
+	updatedAt time.Time
+
+	boardName        string
+	boardDescription string
+	columnName       string
+	columnColor      common.Color
 }
 
 func TestNotesServiceTestSuite(t *testing.T) {
@@ -71,15 +76,14 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 
 	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
 
+	suite.boardID = uuid.New()
+	suite.userID = uuid.New()
+	suite.updatedAt = time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
+
 	suite.boardName = "Test Board"
 	suite.boardDescription = "A test board"
 	suite.columnName = "Test Column"
-
 	suite.columnColor = common.ColorGoalGreen
-
-	suite.boardID = uuid.New()
-
-	suite.updatedAt = time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 }
 
 func (suite *BoardServiceTestSuite) TestGet() {
@@ -107,7 +111,6 @@ func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
 }
 
 func (suite *BoardServiceTestSuite) TestCreate() {
-	userID := uuid.New()
 	accessPolicy := Public
 	index := 0
 	columnDescription := "Test Column Description"
@@ -123,18 +126,18 @@ func (suite *BoardServiceTestSuite) TestCreate() {
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
-			User:        userID,
+			User:        suite.userID,
 		}).
 		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
 			Name:         &suite.boardName,
 			Description:  &suite.boardDescription,
-			Owner:        userID,
+			Owner:        suite.userID,
 			AccessPolicy: accessPolicy,
 			Columns: []columns.ColumnRequest{
 				{
@@ -144,7 +147,7 @@ func (suite *BoardServiceTestSuite) TestCreate() {
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
-					User:        userID,
+					User:        suite.userID,
 				},
 			}})
 
@@ -158,7 +161,6 @@ func (suite *BoardServiceTestSuite) TestCreate() {
 }
 
 func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
-	userID := uuid.New()
 	accessPolicy := ByPassphrase
 	passPhrase := "SuperStrongPassword"
 	salt := "Salt"
@@ -176,12 +178,12 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
-			User:        userID,
+			User:        suite.userID,
 		}).
 		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
 	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
 
@@ -189,7 +191,7 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 		CreateBoardRequest{
 			Name:         &suite.boardName,
 			Description:  &suite.boardDescription,
-			Owner:        userID,
+			Owner:        suite.userID,
 			AccessPolicy: accessPolicy,
 			Passphrase:   &passPhrase,
 			Columns: []columns.ColumnRequest{
@@ -200,7 +202,7 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
-					User:        userID,
+					User:        suite.userID,
 				},
 			}})
 
@@ -214,13 +216,12 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 }
 
 func (suite *BoardServiceTestSuite) TestCreate_ByPassphraseMissing() {
-	userID := uuid.New()
 
 	result, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
 			Name:         new("Test Board"),
 			Description:  new("A test board"),
-			Owner:        userID,
+			Owner:        suite.userID,
 			AccessPolicy: ByPassphrase,
 			Columns:      nil,
 			Passphrase:   nil,
