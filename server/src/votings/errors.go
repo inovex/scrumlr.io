@@ -5,6 +5,7 @@ import "fmt"
 type VotingError struct {
 	Category VotingErrorCategory
 	Message  string
+	Err      error
 }
 
 type VotingErrorCategory string
@@ -12,6 +13,7 @@ type VotingErrorCategory string
 const (
 	NotFound   VotingErrorCategory = "NOT_FOUND"
 	BadRequest VotingErrorCategory = "BAD_REQUEST"
+	Internal   VotingErrorCategory = "INTERNAL"
 )
 
 func (e VotingError) Error() string {
@@ -20,6 +22,10 @@ func (e VotingError) Error() string {
 
 func (e VotingError) Status() string {
 	return string(e.Category)
+}
+
+func (e VotingError) Unwrap() error {
+	return e.Err
 }
 
 var (

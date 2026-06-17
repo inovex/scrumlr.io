@@ -5,6 +5,7 @@ import "fmt"
 type UserError struct {
 	Category UserErrorCategory
 	Message  string
+	Err      error
 }
 
 type UserErrorCategory string
@@ -12,6 +13,7 @@ type UserErrorCategory string
 const (
 	NotFound   UserErrorCategory = "NOT_FOUND"
 	BadRequest UserErrorCategory = "BAD_REQUEST"
+	Internal   UserErrorCategory = "INTERNAL"
 )
 
 func (e UserError) Error() string {
@@ -20,6 +22,10 @@ func (e UserError) Error() string {
 
 func (e UserError) Status() string {
 	return string(e.Category)
+}
+
+func (e UserError) Unwrap() error {
+	return e.Err
 }
 
 var (

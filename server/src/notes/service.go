@@ -90,7 +90,7 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		span.SetStatus(codes.Error, "failed to create note")
 		span.RecordError(err)
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
-		return nil, fmt.Errorf("failed to create note: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to create note: %v", err), Err: err}
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -131,7 +131,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		span.SetStatus(codes.Error, "failed to import note")
 		span.RecordError(err)
 		log.Errorw("Could not import notes", "err", err)
-		return nil, fmt.Errorf("failed to import note: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to import note: %v", err), Err: err}
 	}
 
 	notesImportCounter.Add(ctx, 1)
@@ -156,7 +156,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get preconditions")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to get preconditions: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to get preconditions: %v", err), Err: err}
 	}
 
 	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole && body.Text != nil {
@@ -171,7 +171,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return nil, fmt.Errorf("failed to get lock: %w", err)
+			return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to get lock: %v", err), Err: err}
 		}
 	}
 
@@ -231,7 +231,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		span.SetStatus(codes.Error, "failed to update note")
 		span.RecordError(err)
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
-		return nil, fmt.Errorf("failed to update note: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to update note: %v", err), Err: err}
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -269,7 +269,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return fmt.Errorf("failed to get lock: %w", err)
+			return NoteError{Category: Internal, Message: fmt.Sprintf("failed to get lock: %v", err), Err: err}
 		}
 	}
 
@@ -289,7 +289,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get note stack")
 			span.RecordError(err)
-			return fmt.Errorf("failed to get note stack: %w", err)
+			return NoteError{Category: Internal, Message: fmt.Sprintf("failed to get note stack: %v", err), Err: err}
 		}
 
 		for _, s := range stack {
@@ -334,7 +334,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
 		span.SetStatus(codes.Error, "failed to get note")
 		span.RecordError(err)
 		log.Errorw("unable to get note", "note", id, "error", err)
-		return nil, fmt.Errorf("failed to get note: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to get note: %v", err), Err: err}
 	}
 	return new(Note).From(note), err
 }
@@ -353,7 +353,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 		span.RecordError(err)
 		span.SetStatus(codes.Error, "failed to get notes")
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, fmt.Errorf("failed to get notes: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to get notes: %v", err), Err: err}
 	}
 	return Notes(notes), nil
 }
@@ -558,7 +558,7 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
 		log.Errorw("unable to get notes", "error", err)
-		return nil, fmt.Errorf("failed to get notes: %w", err)
+		return nil, NoteError{Category: Internal, Message: fmt.Sprintf("failed to get notes: %v", err), Err: err}
 	}
 	return Notes(notes), nil
 }

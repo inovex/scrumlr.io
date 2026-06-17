@@ -8,11 +8,13 @@ const (
 	BadRequest BoardErrorCategory = "BAD_REQUEST"
 	Forbidden  BoardErrorCategory = "FORBIDDEN"
 	NotFound   BoardErrorCategory = "NOT_FOUND"
+	Internal   BoardErrorCategory = "INTERNAL"
 )
 
 type BoardError struct {
 	Category BoardErrorCategory
 	Message  string
+	Err      error
 }
 
 func (e BoardError) Error() string {
@@ -21,6 +23,10 @@ func (e BoardError) Error() string {
 
 func (e BoardError) Status() string {
 	return string(e.Category)
+}
+
+func (e BoardError) Unwrap() error {
+	return e.Err
 }
 
 var (
