@@ -957,33 +957,3 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedPart
 	suite.Equal(importError, err)
 
 }
-
-func (suite *BoardServiceTestSuite) TestReplaceDeletedParticipants_CleansUpOnAnonymousCreationFailure() {
-
-	service := &Service{
-		userService: suite.userService,
-	}
-
-	ctx := context.Background()
-	firstDeletedAuthorID := uuid.New()
-	secondDeletedAuthorID := uuid.New()
-	firstReplacementAuthorID := uuid.New()
-	createError := errors.New("create failed")
-
-	body := ImportBoardRequest{
-		Notes: []notes.Note{
-			{ID: uuid.New(), Author: firstDeletedAuthorID},
-			{ID: uuid.New(), Author: secondDeletedAuthorID},
-		},
-	}
-
-	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{firstDeletedAuthorID, secondDeletedAuthorID}).Return([]uuid.UUID{}, nil)
-	suite.userService.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+firstDeletedAuthorID.String()[:5]).Return(&users.User{ID: firstReplacementAuthorID}, nil)
-	suite.userService.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+secondDeletedAuthorID.String()[:5]).Return(nil, createError)
-	suite.userService.EXPECT().Delete(mock.Anything, firstReplacementAuthorID).Return(nil)
-
-	_, _, err := service.replaceDeletedParticipants(ctx, body)
-
-	suite.Error(err)
-	suite.Equal(createError, err)
-}

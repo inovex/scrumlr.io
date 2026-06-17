@@ -769,57 +769,35 @@ func deletedImportedParticipants(participants, existingParticipants []uuid.UUID)
 	return deletedParticipants
 }
 
-func (service *Service) cleanupImportedParticipants(ctx context.Context, userIDs []uuid.UUID) {
-	if len(userIDs) == 0 {
-		return
-	}
-
-	log := logger.FromContext(ctx)
-	for _, userID := range userIDs {
-		if err := service.userService.Delete(ctx, userID); err != nil {
-			log.Errorw("failed to cleanup imported placeholder user", "user", userID, "err", err)
-		}
-	}
-}
-
-func (service *Service) replaceDeletedParticipants(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, []uuid.UUID, error) {
+func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, error) {
 	if len(body.Notes) == 0 {
-		return body, nil, nil
+		return body, nil
 	}
 
 	participants := uniqueImportedNoteAuthors(body.Notes)
 
 	existingParticipants, err := service.userService.GetExistingUserIDs(ctx, participants)
 	if err != nil {
-		return body, nil, err
+		return body, err
 	}
 
 	if len(existingParticipants) == len(participants) {
-		return body, nil, nil
+		return body, nil
 	}
 
 	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
 
 	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
-	createdParticipants := make([]uuid.UUID, 0, len(deletedParticipants))
 
 	for _, deletedID := range deletedParticipants {
-		name := "deleted user " + deletedID.String()[:5]
-		user, err := service.userService.CreateAnonymous(ctx, name)
-		if err != nil {
-			service.cleanupImportedParticipants(ctx, createdParticipants)
-			return body, nil, err
-		}
-		createdParticipants = append(createdParticipants, user.ID)
-		participantMapping[deletedID] = user.ID
+
+		// todo: check if there are notes that do no longer belong to anyone
+		// if so: check if they have child nodes -> make child node parent
+		// delete note
+		// send message if note gets deleted
 	}
 
-	for i, note := range body.Notes {
-		if replacementID, exists := participantMapping[note.Author]; exists {
-			body.Notes[i].Author = replacementID
-		}
-	}
-	return body, createdParticipants, nil
+	return body, nil
 }
 
 func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, body ImportBoardRequest) (err error) {
@@ -828,17 +806,10 @@ func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.U
 		return err
 	}
 
-	var createdParticipants []uuid.UUID
-	body, createdParticipants, err = service.replaceDeletedParticipants(ctx, body)
+	body, err = service.deleteNotesOfDeletedUsers(ctx, body)
 	if err != nil {
 		return err
 	}
-
-	defer func() {
-		if err != nil {
-			service.cleanupImportedParticipants(ctx, createdParticipants)
-		}
-	}()
 
 	parentNotes, childNotes := organizeNotes(body.Notes)
 
