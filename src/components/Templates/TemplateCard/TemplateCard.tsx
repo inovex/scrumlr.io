@@ -57,16 +57,14 @@ export const TemplateCard = (props: TemplateCardProps) => {
           {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
-        focusBehaviour="moveFocus"
+        focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
       />
     ) : (
-      <MenuIcon
-        className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")}
-        onClick={() => setShowMiniMenu(true)}
-        data-cy="template-card__menu"
-      />
+      <div className="template-card__menu-icon-container">
+        <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} data-cy="template-card__menu" />
+      </div>
     );
   };
 

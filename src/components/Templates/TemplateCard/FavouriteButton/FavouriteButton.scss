@@ -1,11 +1,20 @@
 @use "constants/styles";
 
-$icon-size: 36px;
+$container-size: 36px;
 
 .favourite-button {
-  all: unset;
-  width: $icon-size;
-  height: $icon-size;
+  // reset button properties, like all: unset but without overriding outside style changes
+  margin: 0;
+  padding: 0;
+  background: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  width: $container-size;
+  height: $container-size;
   border: 2px solid transparent;
   border-radius: styles.$rounded--full;
 
@@ -28,8 +37,8 @@ $icon-size: 36px;
 }
 
 .favourite-icon {
-  width: $icon-size;
-  height: $icon-size;
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 
   color: inherit;
 }
