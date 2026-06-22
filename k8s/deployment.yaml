@@ -40,6 +40,8 @@ spec:
             requests:
               cpu: "10m"
               memory: "50Mi"
+            limits:
+              memory: "100Mi"
           env:
             - name: SCRUMLR_SERVER_PORT
               value: "8080"
@@ -140,6 +142,8 @@ spec:
             requests:
               cpu: "10m"
               memory: "50Mi"
+            limits:
+              memory: "100Mi"
           env:
             # - name: SCRUMLR_SERVER_PORT
             #   value: "80"
