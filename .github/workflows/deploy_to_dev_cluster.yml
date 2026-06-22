@@ -23,18 +23,18 @@ jobs:
       pull-requests: write
     steps:
       - name: Install kubectl
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@829323503d1be3d00ca8346e5391ca0b07a9ab0d # v5.1.0
         id: install
 
       - name: Set up Kubernetes Auth
-        uses: azure/k8s-set-context@v4
+        uses: azure/k8s-set-context@89b837d75b40a7bd2ddafde837473c212db8b313 # v5.0.0
         with:
           method: service-account
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
           k8s-url: https://kubernetes.default.svc
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Replace template variables
         run: |
@@ -51,7 +51,7 @@ jobs:
           cat k8s/deployment.yaml
 
       - name: Deploy to dev cluster
-        uses: Azure/k8s-deploy@v5
+        uses: Azure/k8s-deploy@c7ebd0d5f39477a23f1b5dea0f52e6db04adf28e # v6.0.0
         with:
           namespace: scrumlr-dev-deployments
           force: true
@@ -64,7 +64,7 @@ jobs:
 
       - name: send_github_message
         if: github.event_name == 'pull_request'
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b # v3.0.1
         with:
           message: |
             The deployment to the dev cluster was successful. You can find the deployment here: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
