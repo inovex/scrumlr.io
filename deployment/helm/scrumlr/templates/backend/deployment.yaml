@@ -28,6 +28,7 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.backend.automountServiceAccountToken }}
       containers:
         - name: {{ .Release.Name }}-backend
           image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion  }}

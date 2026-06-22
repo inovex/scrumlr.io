@@ -25,6 +25,10 @@ tests:
           value: scrumlr-frontend
         template: /frontend/deployment.yaml
       - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
+        template: /frontend/deployment.yaml
+      - equal:
           path: spec.template.spec.containers[0].name
           value: scrumlr-frontend
         template: /frontend/deployment.yaml
