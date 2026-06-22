@@ -3,6 +3,8 @@ package realtime
 import (
 	"context"
 
+	"github.com/google/uuid"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -29,4 +31,11 @@ type Client interface {
 // The Broker enables a user to broadcast and receive events
 type Broker struct {
 	Con Client
+}
+
+// BrokerInterface describes the subset of Broker functionality used by callers.
+// Defined as an interface so tests can inject mocks.
+type BrokerInterface interface {
+	GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *BoardEvent, error)
+	GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *BoardSessionRequestEventType, error)
 }

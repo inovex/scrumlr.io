@@ -142,7 +142,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Create() {
 	columnId := suite.columns["Write"].ID
 	text := "This is a created note"
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	note, err := suite.noteService.Create(ctx, NoteCreateRequest{Board: boardId, User: authorId, Column: columnId, Text: text})
 
@@ -188,7 +189,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Update() {
 	text := "This note was updated"
 	rank := 1
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	note, err := suite.noteService.Update(ctx, userId, NoteUpdateRequest{
 		ID:     noteId,
@@ -225,9 +227,10 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Delete() {
 	userId := suite.baseData.Users["Santa"].ID
 	deleteStack := true
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.noteService.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err = suite.noteService.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	assert.Nil(t, err)
 

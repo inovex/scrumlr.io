@@ -186,7 +186,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	userId := suite.updateUser.ID
 	boardId := suite.updateBoard.ID
 
-	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	user, err := suite.userService.Update(suite.ctx, UserUpdateRequest{ID: userId, Name: suite.testUserName})
 
@@ -208,9 +209,10 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	suite.Nil(preDeleteErr)
 	suite.Len(preDeleteNotes, 1)
 
-	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.userService.Delete(suite.ctx, userId)
+	err = suite.userService.Delete(suite.ctx, userId)
 
 	suite.Nil(err)
 

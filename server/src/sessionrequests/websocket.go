@@ -3,6 +3,7 @@ package sessionrequests
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"scrumlr.io/server/websocket"
 
@@ -19,11 +20,15 @@ type BoardSessionRequestSubscription struct {
 
 type sessionRequestWebsocket struct {
 	websocketService                 websocket.WebSocketInterface
-	realtime                         *realtime.Broker
+	realtime                         realtime.BrokerInterface
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
-func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
+const MaxRetries = 10
+
+var SleepBetweenRetries = time.Second * 2
+
+func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt realtime.BrokerInterface) SessionRequestWebsocket {
 	websocket := new(sessionRequestWebsocket)
 	websocket.websocketService = webSocketService
 	websocket.realtime = rt
@@ -85,7 +90,24 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 
 	// if not already done, start listening to board session request changes
 	if _, exist := b.subscriptions[userID]; !exist {
-		b.subscriptions[userID] = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
+		var ch chan *realtime.BoardSessionRequestEventType
+		var err error
+
+		for i := 0; i < MaxRetries; i++ {
+			ch, err = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
+			if err == nil {
+				break
+			}
+			logger.Get().Errorw("failed to subscribe to board session request channel, retrying...", "board", boardID, "user", userID, "attempt", i+1, "err", err)
+			time.Sleep(SleepBetweenRetries)
+		}
+
+		// if it completely fails after all retries, abort and don't start the goroutine
+		if err != nil {
+			logger.Get().Errorw("could not establish board session request subscription after retries ", "board", boardID, "user", userID, "err", err)
+			return
+		}
+		b.subscriptions[userID] = ch
 		go b.startListeningOnBoardSessionRequest(userID)
 	}
 }

@@ -26,19 +26,21 @@ func (b *Broker) BroadcastUpdateOnBoardSessionRequest(ctx context.Context, board
 	return b.Con.Publish(ctx, requestSubject(board, user), msg)
 }
 
-func (b *Broker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) chan *BoardSessionRequestEventType {
+func (b *Broker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *BoardSessionRequestEventType, error) {
 	ctx, span := tracer.Start(ctx, "board-session-subscribe")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
 	c, err := b.Con.SubscribeToBoardSessionEvents(ctx, requestSubject(board, user))
 	if err != nil {
-		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		span.SetStatus(codes.Error, "failed to subscribe to board session channel")
 		span.RecordError(err)
 		log.Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
+
+		//bubble up the error instead of returning an nil channel silently
+		return nil, err
 	}
-	return c
+	return c, nil
 }
 
 func requestSubject(board, user uuid.UUID) string {
