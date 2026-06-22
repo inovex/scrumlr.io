@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -753,28 +754,67 @@ func uniqueImportedNoteAuthors(importNotes []notes.Note) []uuid.UUID {
 	return participants
 }
 
-func deletedImportedParticipants(participants, existingParticipants []uuid.UUID) []uuid.UUID {
+func uniqueStackIDs(importNotes []notes.Note) []uuid.NullUUID {
+	stackIDs := make([]uuid.NullUUID, 0, len(importNotes))
+	seen := make(map[uuid.NullUUID]struct{}, len(importNotes))
+
+	for _, note := range importNotes {
+		stackID := note.Position.Stack
+		if _, exists := seen[stackID]; exists {
+			continue
+		}
+		seen[stackID] = struct{}{}
+		stackIDs = append(stackIDs, stackID)
+	}
+
+	return stackIDs
+}
+
+func deletedImportedParticipants(participants, existingParticipants []uuid.UUID) map[uuid.UUID]struct{} {
 	existingParticipantMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
 	for _, participant := range existingParticipants {
 		existingParticipantMap[participant] = struct{}{}
 	}
 
-	deletedParticipants := make([]uuid.UUID, 0, len(participants))
-	for _, participant := range participants {
-		if _, found := existingParticipantMap[participant]; !found {
-			deletedParticipants = append(deletedParticipants, participant)
+	deletedParticipantsMap := make(map[uuid.UUID]struct{})
+	for _, id := range participants {
+		if _, found := existingParticipantMap[id]; !found {
+			deletedParticipantsMap[id] = struct{}{}
 		}
 	}
 
-	return deletedParticipants
+	return deletedParticipantsMap
 }
+
+// other idea:
+
+// take all notes and:
+// sort them by multiple things:
+// by: if author is still there
+// by column (just id)
+// by: is this a top level note (no Stack id) and within that : by the Rank of the note (that rank may have to be created before)
+// by: the rank within a stack -> these should however be put directly after their top level note!
+// so then we can cut of after all authors still there
+// then we go over and check for all:
+// is there a top level node for you? if so, then fine, otherwise we make this node a top level node -> READ next line
+// in the same step we adjust the rank of the stuff
+
+// by that, we would only:
+// have to create the position within the node
+// do one sorting
+// do one number adjustment
+// insert everithing
+// done
 
 func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, error) {
 	if len(body.Notes) == 0 {
 		return body, nil
 	}
 
-	participants := uniqueImportedNoteAuthors(body.Notes)
+	adjustedNotes := make([]notes.Note, len(body.Notes))
+	copy(adjustedNotes, body.Notes)
+
+	participants := uniqueImportedNoteAuthors(adjustedNotes)
 
 	existingParticipants, err := service.userService.GetExistingUserIDs(ctx, participants)
 	if err != nil {
@@ -787,16 +827,85 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 
 	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
 
-	participantMapping := make(map[uuid.UUID]uuid.UUID, len(deletedParticipants))
-
-	for _, deletedID := range deletedParticipants {
-
-		// todo: check if there are notes that do no longer belong to anyone
-		// if so: check if they have child nodes -> make child node parent
-		// delete note
-		// send message if note gets deleted
+	// throw notes away that belong to deleted users by keeping the others
+	keepCount := 0
+	for _, note := range adjustedNotes {
+		if _, isDeleted := deletedParticipants[note.Author]; !isDeleted {
+			adjustedNotes[keepCount] = note
+			keepCount++
+		}
 	}
+	adjustedNotes = adjustedNotes[:keepCount]
 
+	// get all stacks that exist
+	stackIDs := uniqueStackIDs(adjustedNotes)
+
+	// if only one in the stack and that is nil, then we only have top level and we do not have to sort anything
+	if len(stackIDs) == 1 && !stackIDs[0].Valid {
+		body.Notes = adjustedNotes
+		// todo check agian if really return here
+		return body, nil
+	}
+	// get all stacks
+	for _, stackID := range stackIDs {
+		if !stackID.Valid {
+			continue
+		}
+
+		currNotes := make([]*notes.Note, 0, len(adjustedNotes))
+		for i := range adjustedNotes {
+			if adjustedNotes[i].Position.Stack == stackID {
+				currNotes = append(currNotes, &adjustedNotes[i])
+			}
+		}
+
+		// sort them ascending
+		sort.Slice(currNotes, func(i, j int) bool {
+			return currNotes[i].Position.Rank < currNotes[j].Position.Rank
+		})
+
+		// assign new ranks
+		for i := range currNotes {
+			currNotes[i].Position.Rank = i
+		}
+
+		// check if a base note exists
+		baseNoteExists := false
+		for _, n := range adjustedNotes {
+			if n.ID == stackID.UUID {
+				baseNoteExists = true
+				break
+			}
+		}
+
+		// get the deleted note to copy paste its infos to the first note in the stack
+		if !baseNoteExists {
+			var deletedBaseNote notes.Note
+
+			for _, delNote := range body.Notes {
+				if delNote.ID == stackID.UUID {
+					deletedBaseNote = delNote
+					break
+				}
+			}
+
+			newBase := currNotes[len(currNotes)-1]
+			newBase.Position.Stack = uuid.NullUUID{}
+			newBase.Position.Rank = deletedBaseNote.Position.Rank
+
+			for i := range currNotes {
+				if i+1 == len(currNotes) {
+					break
+				}
+				currNotes[i].Position.Stack = uuid.NullUUID{UUID: newBase.ID, Valid: true}
+			}
+		}
+	}
+	//todo: for all columns: get all top notes and adjsut their ranks
+	// take all top level notes and do the same rank cleaning as within the stacks
+	// send message if note gets deleted
+
+	body.Notes = adjustedNotes
 	return body, nil
 }
 
