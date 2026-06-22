@@ -23,7 +23,7 @@ spec:
       {{- range $val := .Values.backend.image.pullSecrets }}
         - name: {{ $val | quote }}
       {{- end }}
-      {{- end}}
+      {{- end }}
       {{- with .Values.backend.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -51,7 +51,7 @@ spec:
             {{ else }}
             - secretRef:
                 name: {{ .Release.Name }}-backend-secrets
-            {{- end}}
+            {{- end }}
           {{- with .Values.backend.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -59,7 +59,7 @@ spec:
           {{- if .Values.backend.resources }}
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.backend.customStartupProbe }}
           startupProbe:
             {{- toYaml .Values.backend.customStartupProbe | nindent 12 }}
@@ -75,7 +75,7 @@ spec:
             successThreshold: {{ .Values.backend.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.backend.startupProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.backend.customReadinessProbe }}
           readinessProbe:
             {{- toYaml .Values.backend.customReadinessProbe | nindent 12 }}
@@ -91,7 +91,7 @@ spec:
             successThreshold: {{ .Values.backend.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.backend.readinessProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.backend.customLivenessProbe }}
           livenessProbe:
             {{- toYaml .Values.backend.customLivenessProbe | nindent 12 }}
@@ -107,4 +107,4 @@ spec:
             successThreshold: {{ .Values.backend.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.backend.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}

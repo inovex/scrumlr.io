@@ -23,7 +23,7 @@ spec:
       {{- range $val := .Values.frontend.image.pullSecrets }}
         - name: {{ $val | quote }}
       {{- end }}
-      {{- end}}
+      {{- end }}
       {{- with .Values.frontend.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -51,7 +51,7 @@ spec:
             {{- else if .Values.frontend.secrets }}
             - secretRef:
                 name: {{ .Release.Name }}-frontend-secrets
-            {{- end}}
+            {{- end }}
           {{- with .Values.frontend.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -59,7 +59,7 @@ spec:
           {{- if .Values.frontend.resources }}
           resources:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.frontend.customStartupProbe }}
           startupProbe:
             {{- toYaml .Values.frontend.customStartupProbe | nindent 12}}
@@ -75,7 +75,7 @@ spec:
             successThreshold: {{ .Values.frontend.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.frontend.startupProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.frontend.customReadinessProbe }}
           readinessProbe:
             {{- toYaml .Values.frontend.customReadinessProbe | nindent 12 }}
@@ -91,7 +91,7 @@ spec:
             successThreshold: {{ .Values.frontend.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.frontend.readinessProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}
           {{- if .Values.frontend.customLivenessProbe }}
           livenessProbe:
             {{- toYaml .Values.frontend.customLivenessProbe | nindent 12 }}
@@ -107,4 +107,4 @@ spec:
             successThreshold: {{ .Values.frontend.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.frontend.livenessProbe.failureThreshold }}
           {{- end }}
-          {{- end}}
+          {{- end }}
