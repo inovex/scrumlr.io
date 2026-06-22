@@ -808,6 +808,9 @@
     "title": "Oups !",
     "description": "Il semble que les portes de cette session restent fermées pour le moment. Nous apprécions votre intérêt, mais malheureusement, votre demande de participation a été refusée.",
     "banned": "Nous sommes désolés, mais il semble que vous ayez été exclu de cette session.",
+    "bannedRetryHint": "Si vous avez été ré-admis, vous pouvez essayer de rejoindre la session. Nous vérifions également automatiquement toutes les 30 secondes.",
+    "retry": "Réessayer de rejoindre",
+    "retrying": "Tentative en cours...",
     "button": "Retour à la page d'accueil"
   },
   "Votes": {
