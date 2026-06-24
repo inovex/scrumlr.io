@@ -266,7 +266,11 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, note)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrNoteNotFound)
+
+	var noteErr NoteError
+	assert.ErrorAs(t, err, &noteErr)
+	assert.Equal(t, noteErr.Category, NotFound)
+	assert.Equal(t, noteErr.ErrType, NoteNotFound)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {

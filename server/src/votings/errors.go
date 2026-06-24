@@ -2,13 +2,24 @@ package votings
 
 import "fmt"
 
+type VotingErrorType string
+
+const (
+	TypeNone            VotingErrorType = ""
+	VotingNotFound      VotingErrorType = "VOTING_NOT_FOUND"
+	VotingLimitNegative VotingErrorType = "VOTING_LIMIT_NEGATIVE"
+	VoteLimitTooHigh    VotingErrorType = "VOTE_LIMIT_TOO_HIGH"
+	OnlyOneOpenVoting   VotingErrorType = "ONLY_ONE_OPEN_VOTING"
+)
+
+type VotingErrorCategory string
+
 type VotingError struct {
 	Category VotingErrorCategory
+	ErrType  VotingErrorType
 	Message  string
 	Err      error
 }
-
-type VotingErrorCategory string
 
 const (
 	NotFound   VotingErrorCategory = "NOT_FOUND"
@@ -28,11 +39,11 @@ func (e VotingError) Unwrap() error {
 	return e.Err
 }
 
-var (
-	// Not Found Errors
-	ErrVotingNotFound = VotingError{Category: NotFound, Message: "no active voting session found"}
-	// Bad Request Errors
-	ErrVotingLimitNegative = VotingError{Category: BadRequest, Message: "vote limit cannot be smaller than 0"}
-	ErrVoteLimitTooHigh    = VotingError{Category: BadRequest, Message: "vote limit cannot be greater than 100"}
-	ErrOnlyOneOpenVoting   = VotingError{Category: BadRequest, Message: "only one open voting per session is allowed"}
-)
+func CreateVotingError(category VotingErrorCategory, errorType VotingErrorType, message string, err error) error {
+	return VotingError{
+		Category: category,
+		ErrType:  errorType,
+		Message:  message,
+		Err:      err,
+	}
+}

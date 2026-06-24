@@ -136,13 +136,13 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "board session request not found")
 			span.RecordError(err)
-			return nil, ErrSessionRequestNotFound
+			return nil, CreateSessionRequestError(NotFound, SessionRequestNotFound, "board session request not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get board session request")
 		span.RecordError(err)
 		log.Errorw("failed to load board session request", "board", boardID, "user", userID, "err", err)
-		return nil, SessionRequestError{Category: Internal, Message: fmt.Sprintf("failed to load board session request: %v", err), Err: err}
+		return nil, CreateSessionRequestError(Internal, TypeNone, fmt.Sprintf("failed to load board session request: %v", err), err)
 	}
 
 	return new(BoardSessionRequest).From(request), err
@@ -164,7 +164,7 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 			f := (RequestStatus)(statusQuery)
 			filters = append(filters, f)
 		} else {
-			err := ErrInvalidBoardStatusFilter
+			err := CreateSessionRequestError(BadRequest, InvalidBoardStatusFilter, "invalid status filter", nil)
 			span.SetStatus(codes.Error, "invalide status filter")
 			span.RecordError(err)
 			return nil, err
@@ -176,7 +176,7 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 		span.SetStatus(codes.Error, "failed to get board session requests")
 		span.RecordError(err)
 		log.Errorw("failed to load board session requests", "board", boardID, "err", err)
-		return nil, SessionRequestError{Category: Internal, Message: fmt.Sprintf("failed to load board session requests: %v", err), Err: err}
+		return nil, CreateSessionRequestError(Internal, TypeNone, fmt.Sprintf("failed to load board session requests: %v", err), err)
 	}
 
 	return BoardSessionRequests(requests), nil

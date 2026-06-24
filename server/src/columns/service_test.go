@@ -118,12 +118,21 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_DatabaseError() {
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 
-	suite.expectGetAllNotes(nil, ErrColumnNotFound)
+	mockErr := ColumnError{
+		Category: NotFound,
+		ErrType:  ColumnNotFound,
+	}
+
+	suite.expectGetAllNotes(nil, mockErr)
 
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.ErrorIs(err, ErrColumnNotFound)
+
+	var columnErr ColumnError
+	suite.ErrorAs(err, &columnErr)
+	suite.Equal(columnErr.Category, NotFound)
+	suite.Equal(columnErr.ErrType, ColumnNotFound)
 }
 
 func (suite *ColumnServiceTestSuite) TestUpdateColumn() {
