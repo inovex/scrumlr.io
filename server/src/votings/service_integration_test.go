@@ -94,7 +94,11 @@ func (suite *VotingServiceIntegrationTestSuite) Test_AddVote_ClosedVoting() {
 
 	assert.Nil(t, vote)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrVotingNotFound)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+	assert.Equal(t, NotFound, votingErr.Category)
+	assert.Equal(t, VotingNotFound, votingErr.ErrType)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote() {
@@ -184,7 +188,12 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrOnlyOneOpenVoting)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, BadRequest, votingErr.Category)
+	assert.Equal(t, OnlyOneOpenVoting, votingErr.ErrType)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {

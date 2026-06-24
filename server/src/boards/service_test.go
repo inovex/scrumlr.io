@@ -264,7 +264,11 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, result)
-	assert.ErrorIs(t, err, ErrPassphraseRequired)
+
+	var boardErr BoardError
+	assert.ErrorAs(t, err, &boardErr)
+	assert.Equal(t, boardErr.Category, BadRequest)
+	assert.Equal(t, boardErr.ErrType, PassphraseRequired)
 }
 
 func TestDelete(t *testing.T) {
@@ -363,7 +367,11 @@ func TestUpdate_EmptyName(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrNameEmpty)
+
+	var boardErr BoardError
+	assert.ErrorAs(t, err, &boardErr)
+	assert.Equal(t, boardErr.Category, BadRequest)
+	assert.Equal(t, boardErr.ErrType, NameEmpty)
 }
 
 func TestUpdate_ToPassphrase(t *testing.T) {
@@ -439,7 +447,11 @@ func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrPassphraseRequired)
+
+	var boardErr BoardError
+	assert.ErrorAs(t, err, &boardErr)
+	assert.Equal(t, boardErr.Category, BadRequest)
+	assert.Equal(t, boardErr.ErrType, PassphraseRequired)
 }
 
 func TestUpdate_ToPublic(t *testing.T) {
@@ -510,7 +522,11 @@ func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrPassphraseForbidden)
+
+	var boardErr BoardError
+	assert.ErrorAs(t, err, &boardErr)
+	assert.Equal(t, boardErr.Category, BadRequest)
+	assert.Equal(t, boardErr.ErrType, PassphraseForbidden)
 }
 
 func TestUpdate_ToInvite(t *testing.T) {
@@ -581,7 +597,11 @@ func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrPassphraseForbidden)
+
+	var boardErr BoardError
+	assert.ErrorAs(t, err, &boardErr)
+	assert.Equal(t, boardErr.Category, BadRequest)
+	assert.Equal(t, boardErr.ErrType, PassphraseForbidden)
 }
 
 func TestSetTimer(t *testing.T) {

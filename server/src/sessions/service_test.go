@@ -60,7 +60,11 @@ func TestGetSession_NotFound(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrSessionNotFound)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, NotFound, sessionErr.Category)
+	assert.Equal(t, SessionNotFound, sessionErr.ErrType)
 }
 
 func TestGetSession_DatabaseError(t *testing.T) {
@@ -629,7 +633,11 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrForbiddenSessionChange)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, ForbiddenSessionChange, sessionErr.ErrType)
 }
 
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
@@ -658,7 +666,11 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrForbiddenRolePromotion)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, ForbiddenRolePromotion, sessionErr.ErrType)
 }
 
 func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
@@ -687,7 +699,11 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrForbiddenOwnerChange)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, ForbiddenOwnerChange, sessionErr.ErrType)
 }
 
 func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
@@ -716,7 +732,11 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrForbiddenOwnerPromotion)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, ForbiddenOwnerPromotion, sessionErr.ErrType)
 }
 
 func TestUpdateAllSessions(t *testing.T) {
