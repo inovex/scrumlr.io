@@ -31,7 +31,6 @@ type UserServiceIntegrationTestsuite struct {
 	userService          UserService
 	notesService         notes.NotesService
 	broker               *realtime.Broker
-	ctx                  context.Context
 	testUserName         string
 
 	// Additional test-specific data
@@ -115,13 +114,13 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	suite.userService = userService
 	suite.notesService = noteService
 	suite.broker = broker
-	suite.ctx = context.Background()
 	suite.testUserName = "Test User"
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateAnonymous(suite.ctx, suite.testUserName)
+	user, err := suite.userService.CreateAnonymous(ctx, suite.testUserName)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -129,8 +128,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateAppleUser(suite.ctx, "appleId", suite.testUserName, "")
+	user, err := suite.userService.CreateAppleUser(ctx, "appleId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -138,8 +138,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateAzureAdUser(suite.ctx, "azureId", suite.testUserName, "")
+	user, err := suite.userService.CreateAzureAdUser(ctx, "azureId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -147,8 +148,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateGitHubUser(suite.ctx, "githubId", suite.testUserName, "")
+	user, err := suite.userService.CreateGitHubUser(ctx, "githubId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -156,8 +158,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateGoogleUser(suite.ctx, "googleId", suite.testUserName, "")
+	user, err := suite.userService.CreateGoogleUser(ctx, "googleId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -165,8 +168,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateMicrosoftUser(suite.ctx, "microsoftId", suite.testUserName, "")
+	user, err := suite.userService.CreateMicrosoftUser(ctx, "microsoftId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -174,8 +178,9 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
+	ctx := context.Background()
 
-	user, err := suite.userService.CreateOIDCUser(suite.ctx, "oidcId", suite.testUserName, "")
+	user, err := suite.userService.CreateOIDCUser(ctx, "oidcId", suite.testUserName, "")
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -183,12 +188,13 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Update() {
+	ctx := context.Background()
 	userId := suite.updateUser.ID
 	boardId := suite.updateBoard.ID
 
-	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	user, err := suite.userService.Update(suite.ctx, UserUpdateRequest{ID: userId, Name: suite.testUserName})
+	user, err := suite.userService.Update(ctx, UserUpdateRequest{ID: userId, Name: suite.testUserName})
 
 	suite.Nil(err)
 	suite.Equal(userId, user.ID)
@@ -202,19 +208,21 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
+	ctx := context.Background()
 	userId := suite.deleteUser.ID
 	boardId := suite.updateBoard.ID
-	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, boardId)
+
+	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(ctx, userId, boardId)
 	suite.Nil(preDeleteErr)
 	suite.Len(preDeleteNotes, 1)
 
-	events := suite.broker.GetBoardChannel(suite.ctx, boardId)
+	events := suite.broker.GetBoardChannel(ctx, boardId)
 
-	err := suite.userService.Delete(suite.ctx, userId)
+	err := suite.userService.Delete(ctx, userId)
 
 	suite.Nil(err)
 
-	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, suite.updateBoard.ID)
+	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(ctx, userId, suite.updateBoard.ID)
 	suite.Nil(notesErr)
 	suite.Len(notesAfterDelete, 0)
 
@@ -230,26 +238,28 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithoutNotes() {
+	ctx := context.Background()
 	userId := suite.updateUser.ID
 	boardId := suite.updateBoard.ID
-	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, boardId)
+
+	preDeleteNotes, preDeleteErr := suite.notesService.GetByUserAndBoard(ctx, userId, boardId)
 	suite.Nil(preDeleteErr)
 	suite.Len(preDeleteNotes, 0)
 
-	err := suite.userService.Delete(suite.ctx, userId)
+	err := suite.userService.Delete(ctx, userId)
 
 	suite.Nil(err)
 
-	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(suite.ctx, userId, suite.updateBoard.ID)
+	notesAfterDelete, notesErr := suite.notesService.GetByUserAndBoard(ctx, userId, suite.updateBoard.ID)
 	suite.Nil(notesErr)
 	suite.Len(notesAfterDelete, 0)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get() {
-
+	ctx := context.Background()
 	userId := suite.baseData.Users["Stan"].ID
 
-	user, err := suite.userService.Get(suite.ctx, userId)
+	user, err := suite.userService.Get(ctx, userId)
 
 	suite.Nil(err)
 	suite.Equal(userId, user.ID)
@@ -257,10 +267,10 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
-
+	ctx := context.Background()
 	userId := uuid.New()
 
-	user, err := suite.userService.Get(suite.ctx, userId)
+	user, err := suite.userService.Get(ctx, userId)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -268,11 +278,11 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
-
+	ctx := context.Background()
 	board := suite.updateBoard
 	userIds := []uuid.UUID{suite.baseData.Users["Stan"].ID, suite.updateUser.ID, suite.deleteUser.ID}
 
-	users, err := suite.userService.GetBoardUsers(suite.ctx, board.ID)
+	users, err := suite.userService.GetBoardUsers(ctx, board.ID)
 
 	ids := slices.Collect(func(yield func(uuid.UUID) bool) {
 		for _, user := range users {
@@ -284,18 +294,20 @@ func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_AvailableForKeyMigration() {
+	ctx := context.Background()
 	userId := suite.baseData.Users["Santa"].ID
 
-	available, err := suite.userService.IsUserAvailableForKeyMigration(suite.ctx, userId)
+	available, err := suite.userService.IsUserAvailableForKeyMigration(ctx, userId)
 
 	suite.Nil(err)
 	suite.True(available)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_SetKeyMigration() {
+	ctx := context.Background()
 	userId := suite.baseData.Users["Stan"].ID
 
-	user, err := suite.userService.SetKeyMigration(suite.ctx, userId)
+	user, err := suite.userService.SetKeyMigration(ctx, userId)
 
 	suite.Nil(err)
 	suite.Equal(userId, user.ID)
