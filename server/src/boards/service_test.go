@@ -913,7 +913,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
 	notesMock.AssertExpectations(suite.T())
 }
 
-func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedParticipantsOnImportFailure() {
+func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 	columnsMock := columns.NewMockColumnService(suite.T())
 	notesMock := notes.NewMockNotesService(suite.T())
 
@@ -927,15 +927,65 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedPart
 
 	importColumnID := uuid.New()
 	createdColumnID := uuid.New()
-	deletedAuthorID := uuid.New()
-	replacementAuthorID := uuid.New()
+	authorID := uuid.New()
+	parentID := uuid.New()
+	importedParentID := uuid.New()
+
+	body := ImportBoardRequest{
+		Columns: []columns.Column{{ID: importColumnID}},
+		Notes: []notes.Note{{
+			ID:     parentID,
+			Author: authorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   3,
+			},
+		}},
+	}
+
+	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil).Once()
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "Imported note",
+		Board: suite.boardID,
+		User:  authorID,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   3,
+		},
+	}).Return(&notes.Note{ID: importedParentID}, nil).Once()
+
+	err := service.processImportedNotes(ctx, suite.boardID, body)
+
+	suite.NoError(err)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
+	columnsMock := columns.NewMockColumnService(suite.T())
+	notesMock := notes.NewMockNotesService(suite.T())
+
+	service := &Service{
+		columnService: columnsMock,
+		notesService:  notesMock,
+		userService:   suite.userService,
+	}
+
+	ctx := context.Background()
+
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	authorID := uuid.New()
 	importError := errors.New("import failed")
 
 	body := ImportBoardRequest{
 		Columns: []columns.Column{{ID: importColumnID}},
 		Notes: []notes.Note{{
 			ID:     uuid.New(),
-			Author: deletedAuthorID,
+			Author: authorID,
 			Text:   "Imported note",
 			Position: notes.NotePosition{
 				Column: importColumnID,
@@ -945,15 +995,22 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_CleansUpCreatedPart
 		}},
 	}
 
-	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
-	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{deletedAuthorID}).Return([]uuid.UUID{}, nil)
-	suite.userService.EXPECT().CreateAnonymous(mock.Anything, "deleted user "+deletedAuthorID.String()[:5]).Return(&users.User{ID: replacementAuthorID}, nil)
-	notesMock.EXPECT().Import(mock.Anything, mock.Anything).Return(nil, importError)
-	suite.userService.EXPECT().Delete(mock.Anything, replacementAuthorID).Return(nil)
+	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil).Once()
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "Imported note",
+		Board: suite.boardID,
+		User:  authorID,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
+	}).Return(nil, importError).Once()
 
 	err := service.processImportedNotes(ctx, suite.boardID, body)
 
 	suite.Error(err)
 	suite.Equal(importError, err)
-
+	notesMock.AssertExpectations(suite.T())
 }

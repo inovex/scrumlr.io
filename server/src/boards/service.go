@@ -770,22 +770,6 @@ func uniqueStackIDs(importNotes []notes.Note) []uuid.NullUUID {
 	return stackIDs
 }
 
-func deletedImportedParticipants(participants, existingParticipants []uuid.UUID) map[uuid.UUID]struct{} {
-	existingParticipantMap := make(map[uuid.UUID]struct{}, len(existingParticipants))
-	for _, participant := range existingParticipants {
-		existingParticipantMap[participant] = struct{}{}
-	}
-
-	deletedParticipantsMap := make(map[uuid.UUID]struct{})
-	for _, id := range participants {
-		if _, found := existingParticipantMap[id]; !found {
-			deletedParticipantsMap[id] = struct{}{}
-		}
-	}
-
-	return deletedParticipantsMap
-}
-
 // other idea:
 
 // take all notes and:
@@ -807,43 +791,50 @@ func deletedImportedParticipants(participants, existingParticipants []uuid.UUID)
 // done
 
 func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, error) {
+	//if no notes then return
 	if len(body.Notes) == 0 {
 		return body, nil
 	}
 
-	adjustedNotes := make([]notes.Note, len(body.Notes))
-	copy(adjustedNotes, body.Notes)
+	// get all notes that will ne processed
+	processedNotes := make([]notes.Note, len(body.Notes))
+	copy(processedNotes, body.Notes)
 
-	participants := uniqueImportedNoteAuthors(adjustedNotes)
+	// get all participants of that board
+	participants := uniqueImportedNoteAuthors(processedNotes)
 
-	existingParticipants, err := service.userService.GetExistingUserIDs(ctx, participants)
+	// all remaining participants
+	nonDeletedParticipants, err := service.userService.GetExistingUserIDs(ctx, participants)
 	if err != nil {
 		return body, err
 	}
 
-	if len(existingParticipants) == len(participants) {
+	if len(nonDeletedParticipants) == len(participants) {
 		return body, nil
 	}
 
-	deletedParticipants := deletedImportedParticipants(participants, existingParticipants)
+	nonDeletedParticipantMap := make(map[uuid.UUID]struct{}, len(nonDeletedParticipants))
+	for _, participant := range nonDeletedParticipants {
+		nonDeletedParticipantMap[participant] = struct{}{}
+	}
 
 	// throw notes away that belong to deleted users by keeping the others
 	keepCount := 0
-	for _, note := range adjustedNotes {
-		if _, isDeleted := deletedParticipants[note.Author]; !isDeleted {
-			adjustedNotes[keepCount] = note
+	for _, note := range processedNotes {
+		if _, exists := nonDeletedParticipantMap[note.Author]; exists {
+			processedNotes[keepCount] = note
 			keepCount++
 		}
 	}
-	adjustedNotes = adjustedNotes[:keepCount]
+	processedNotes = processedNotes[:keepCount]
 
 	// get all stacks that exist
-	stackIDs := uniqueStackIDs(adjustedNotes)
+	stackIDs := uniqueStackIDs(processedNotes)
 
 	// if only one in the stack and that is nil, then we only have top level and we do not have to sort anything
 	if len(stackIDs) == 1 && !stackIDs[0].Valid {
-		body.Notes = adjustedNotes
-		// todo check agian if really return here
+		reorderParNotes(processedNotes)
+		body.Notes = processedNotes
 		return body, nil
 	}
 	// get all stacks
@@ -852,10 +843,10 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 			continue
 		}
 
-		currNotes := make([]*notes.Note, 0, len(adjustedNotes))
-		for i := range adjustedNotes {
-			if adjustedNotes[i].Position.Stack == stackID {
-				currNotes = append(currNotes, &adjustedNotes[i])
+		currNotes := make([]*notes.Note, 0, len(processedNotes))
+		for i := range processedNotes {
+			if processedNotes[i].Position.Stack == stackID {
+				currNotes = append(currNotes, &processedNotes[i])
 			}
 		}
 
@@ -871,7 +862,7 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 
 		// check if a base note exists
 		baseNoteExists := false
-		for _, n := range adjustedNotes {
+		for _, n := range processedNotes {
 			if n.ID == stackID.UUID {
 				baseNoteExists = true
 				break
@@ -901,20 +892,48 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 			}
 		}
 	}
-	//todo: for all columns: get all top notes and adjsut their ranks
-	// take all top level notes and do the same rank cleaning as within the stacks
-	// send message if note gets deleted
 
-	body.Notes = adjustedNotes
+	// reorder parent notes so that in each column the notes are sorted correctly with no gaps
+	reorderParNotes(processedNotes)
+
+	body.Notes = processedNotes
 	return body, nil
 }
 
+// reorder parent notes so that in each column the notes are sorted correctly with no gaps
+func reorderParNotes(processedNotes []notes.Note) {
+	baseNotesByColumn := make(map[uuid.UUID][]*notes.Note)
+	for i := range processedNotes {
+		if processedNotes[i].Position.Stack.Valid {
+			continue
+		}
+
+		columnID := processedNotes[i].Position.Column
+		baseNotesByColumn[columnID] = append(baseNotesByColumn[columnID], &processedNotes[i])
+	}
+
+	for _, columnNotes := range baseNotesByColumn {
+		sort.Slice(columnNotes, func(i, j int) bool {
+			if columnNotes[i].Position.Rank == columnNotes[j].Position.Rank {
+				return columnNotes[i].ID.String() < columnNotes[j].ID.String()
+			}
+			return columnNotes[i].Position.Rank < columnNotes[j].Position.Rank
+		})
+
+		for i := range columnNotes {
+			columnNotes[i].Position.Rank = i
+		}
+	}
+}
+
 func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, body ImportBoardRequest) (err error) {
+	// get all columns
 	cols, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
 		return err
 	}
 
+	// handle note deletion for
 	body, err = service.deleteNotesOfDeletedUsers(ctx, body)
 	if err != nil {
 		return err
@@ -922,7 +941,11 @@ func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.U
 
 	parentNotes, childNotes := organizeNotes(body.Notes)
 
-	colMap := make(map[uuid.UUID]uuid.UUID)
+	if len(cols) != len(body.Columns) {
+		return fmt.Errorf("column count mismatch during import mapping: imported=%d created=%d", len(body.Columns), len(cols))
+	}
+
+	colMap := make(map[uuid.UUID]uuid.UUID, len(body.Columns))
 	for i, col := range body.Columns {
 		colMap[col.ID] = cols[i].ID
 	}
@@ -939,7 +962,7 @@ func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.U
 			Position: notes.NotePosition{
 				Column: newColID,
 				Stack:  uuid.NullUUID{},
-				Rank:   0,
+				Rank:   parentNote.Position.Rank,
 			},
 			Board: boardID,
 			User:  parentNote.Author,
