@@ -136,7 +136,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, BoardError{Category: Internal, Message: fmt.Sprintf("unable to get boards of user: %v", err), Err: err}
+		return nil, CreateBoardError(Internal, TypeNone, fmt.Sprintf("unable to get boards of user: %v", err), err)
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -171,7 +171,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, BoardError{Category: Internal, Message: fmt.Sprintf("unable to create board for owner: %v", err), Err: err}
+		return nil, CreateBoardError(Internal, TypeNone, fmt.Sprintf("unable to create board for owner: %v", err), err)
 	}
 
 	if _, err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
@@ -472,7 +472,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		err := errors.New("name cannot be empty")
 		span.SetStatus(codes.Error, "name cannot be empty")
 		span.RecordError(err)
-		return nil, ErrNameEmpty
+		return nil, CreateBoardError(BadRequest, NameEmpty, "name cannot be empty", err)
 	}
 
 	update := DatabaseBoardUpdate{
@@ -497,14 +497,14 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.RecordError(err)
-				return nil, ErrPassphraseForbidden
+				return nil, CreateBoardError(BadRequest, PassphraseForbidden, "passphrase should not be set for policies except 'BY_PASSPHRASE'", err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
 				span.SetStatus(codes.Error, "no passphrase provided")
 				span.RecordError(err)
-				return nil, ErrPassphraseRequired
+				return nil, CreateBoardError(BadRequest, PassphraseRequired, "passphrase must be set on access policy 'BY_PASSPHRASE'", err)
 			}
 
 			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
@@ -512,7 +512,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
 				log.Error("failed to encode passphrase")
-				return nil, BoardError{Category: Internal, Message: fmt.Sprintf("failed to encode passphrase: %v", err), Err: err}
+				return nil, CreateBoardError(Internal, TypeNone, fmt.Sprintf("failed to encode passphrase: %v", err), err)
 			}
 
 			update.Passphrase = passphrase
@@ -678,7 +678,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to retrieve columns, following a updated board call: %v", err), Err: err}
+		return CreateBoardError(Internal, TypeNone, fmt.Sprintf("unable to retrieve columns, following a updated board call: %v", err), err)
 	}
 
 	var columnsID []uuid.UUID
@@ -690,7 +690,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to retrieve notes, following a updated board call: %v", err), Err: err}
+		return CreateBoardError(Internal, TypeNone, fmt.Sprintf("unable to retrieve notes, following a updated board call: %v", err), err)
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -701,7 +701,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		return BoardError{Category: Internal, Message: fmt.Sprintf("unable to broadcast notes, following a updated board call: %v", err), Err: err}
+		return CreateBoardError(Internal, TypeNone, fmt.Sprintf("unable to broadcast notes, following a updated board call: %v", err), err)
 	}
 
 	return nil

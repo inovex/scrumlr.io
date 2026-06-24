@@ -54,7 +54,12 @@ func TestAddVote_VoteLimit(t *testing.T) {
 
 	assert.Nil(t, vote)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrVotingNotFound)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, NotFound, votingErr.Category)
+	assert.Equal(t, VotingNotFound, votingErr.ErrType)
 }
 
 func TestAddVote_Failed(t *testing.T) {
@@ -217,7 +222,11 @@ func TestCreateVoting_SecondVoting(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrOnlyOneOpenVoting)
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, BadRequest, votingErr.Category)
+	assert.Equal(t, OnlyOneOpenVoting, votingErr.ErrType)
 }
 
 func TestCreateVoting_Failed(t *testing.T) {
@@ -290,7 +299,12 @@ func TestCloseVoting_NotFound(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrVotingNotFound)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, NotFound, votingErr.Category)
+	assert.Equal(t, VotingNotFound, votingErr.ErrType)
 }
 
 func TestCloseVoting_Failed(t *testing.T) {
@@ -384,7 +398,12 @@ func TestGetVoting_Open_NotFound(t *testing.T) {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.ErrorIs(t, err, ErrVotingNotFound)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, NotFound, votingErr.Category)
+	assert.Equal(t, VotingNotFound, votingErr.ErrType)
 }
 
 func TestGetVoting_Open_FailedToGetVoting(t *testing.T) {

@@ -47,12 +47,3 @@ func CreateUserError(category UserErrorCategory, errorType UserErrorType, messag
 		Err:      err,
 	}
 }
-
-var (
-	// Bad Request Errors
-	ErrEmptyUserName   = UserError{Category: BadRequest, Message: "name may not be empty"}
-	ErrNewLineUserName = UserError{Category: BadRequest, Message: "name may not contain newline characters"}
-	ErrInvalidUserName = UserError{Category: BadRequest, Message: "failed to validate username"}
-	// Not Found Errors
-	ErrUserNotFound = UserError{Category: NotFound, Message: "user not found"}
-)

@@ -4,7 +4,20 @@ import (
 	"fmt"
 )
 
-// NoteErrorCategory allows us to classify errors for easier handling at the API layer
+type NoteErrorType string
+
+const (
+	TypeNone             NoteErrorType = ""
+	EmptyTextCreate      NoteErrorType = "EMPTY_TEXT_CREATE"
+	EmptyTextImport      NoteErrorType = "EMPTY_TEXT_IMPORT"
+	NoteLocked           NoteErrorType = "NOTE_LOCKED"
+	ForbiddenTextChange  NoteErrorType = "FORBIDDEN_TEXT_CHANGE"
+	ForbiddenStackNotes  NoteErrorType = "FORBIDDEN_STACK_NOTES"
+	ForbiddenStackOnSelf NoteErrorType = "FORBIDDEN_STACK_ON_SELF"
+	ForbiddenDeleteNote  NoteErrorType = "FORBIDDEN_DELETE_NOTE"
+	NoteNotFound         NoteErrorType = "NOTE_NOT_FOUND"
+)
+
 type NoteErrorCategory string
 
 const (
@@ -15,14 +28,13 @@ const (
 	Internal   NoteErrorCategory = "INTERNAL"
 )
 
-// NoteError is our custom domain error that implements the built-in error interface
 type NoteError struct {
 	Category NoteErrorCategory
+	ErrType  NoteErrorType
 	Message  string
-	Err      error // the original error (for internal errors)
+	Err      error
 }
 
-// Error makes NoteError satisfy the built-in Go 'error' interface
 func (e NoteError) Error() string {
 	return fmt.Sprintf("notes error [%s]: %s", e.Category, e.Message)
 }
@@ -35,21 +47,11 @@ func (e NoteError) Unwrap() error {
 	return e.Err
 }
 
-// Sentinel Error Instances
-var (
-	// Bad Request Errors
-	ErrEmptyTextCreate = NoteError{Category: BadRequest, Message: "cannot create note with empty text"}
-	ErrEmptyTextImport = NoteError{Category: BadRequest, Message: "cannot import note with empty text"}
-
-	// Conflict Errors
-	ErrNoteLocked = NoteError{Category: Conflict, Message: "note is currently locked"}
-
-	// Forbidden Errors
-	ErrNotAllowedTextChange         = NoteError{Category: Forbidden, Message: "not allowed to change note text"}
-	ErrForbiddenStackNotes          = NoteError{Category: Forbidden, Message: "not allowed to stack notes"}
-	ErrForbiddenStackOnSelf         = NoteError{Category: Forbidden, Message: "not allowed to stack a note on self"}
-	ErrForbiddenDeleteOtherUserNote = NoteError{Category: Forbidden, Message: "not allowed to delete other user's note"}
-
-	// Not Found Errors
-	ErrNoteNotFound = NoteError{Category: NotFound, Message: "note not found"}
-)
+func CreateNoteError(category NoteErrorCategory, errorType NoteErrorType, message string, err error) error {
+	return NoteError{
+		Category: category,
+		ErrType:  errorType,
+		Message:  message,
+		Err:      err,
+	}
+}

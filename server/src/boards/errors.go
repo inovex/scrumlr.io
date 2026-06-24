@@ -2,6 +2,15 @@ package boards
 
 import "fmt"
 
+type BoardErrorType string
+
+const (
+	TypeNone            BoardErrorType = ""
+	PassphraseForbidden BoardErrorType = "PASSPHRASE_FORBIDDEN"
+	PassphraseRequired  BoardErrorType = "PASSPHRASE_REQUIRED"
+	NameEmpty           BoardErrorType = "NAME_EMPTY"
+)
+
 type BoardErrorCategory string
 
 const (
@@ -13,6 +22,7 @@ const (
 
 type BoardError struct {
 	Category BoardErrorCategory
+	ErrType  BoardErrorType
 	Message  string
 	Err      error
 }
@@ -29,15 +39,11 @@ func (e BoardError) Unwrap() error {
 	return e.Err
 }
 
-var (
-	// Bad Request Errors
-	ErrPassphraseForbidden  = BoardError{Category: BadRequest, Message: "passphrase should not be set for policies except 'BY_PASSPHRASE'"}
-	ErrPassphraseRequired   = BoardError{Category: BadRequest, Message: "passphrase must be set on access policy 'BY_PASSPHRASE'"}
-	ErrInvalidBoardSettings = BoardError{Category: BadRequest, Message: "invalid board settings"}
-	ErrInvalidPassphrase    = BoardError{Category: BadRequest, Message: "wrong passphrase"}
-	ErrNameEmpty            = BoardError{Category: BadRequest, Message: "name cannot be empty"}
-	// Forbidden Errors
-	ErrNotAuthorized = BoardError{Category: Forbidden, Message: "not authorized to change board"}
-	// Not Found Errors
-	ErrBoardNotFound = BoardError{Category: NotFound, Message: "board not found"}
-)
+func CreateBoardError(category BoardErrorCategory, errorType BoardErrorType, message string, err error) error {
+	return BoardError{
+		Category: category,
+		ErrType:  errorType,
+		Message:  message,
+		Err:      err,
+	}
+}

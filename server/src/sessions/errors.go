@@ -2,13 +2,25 @@ package sessions
 
 import "fmt"
 
+type SessionErrorType string
+
+const (
+	TypeNone                SessionErrorType = ""
+	SessionNotFound         SessionErrorType = "SESSION_NOT_FOUND"
+	ForbiddenSessionChange  SessionErrorType = "FORBIDDEN_SESSION_CHANGE"
+	ForbiddenRolePromotion  SessionErrorType = "FORBIDDEN_ROLE_PROMOTION"
+	ForbiddenOwnerChange    SessionErrorType = "FORBIDDEN_OWNER_CHANGE"
+	ForbiddenOwnerPromotion SessionErrorType = "FORBIDDEN_OWNER_PROMOTION"
+)
+
+type SessionErrorCategory string
+
 type SessionError struct {
 	Category SessionErrorCategory
+	ErrType  SessionErrorType
 	Message  string
 	Err      error
 }
-
-type SessionErrorCategory string
 
 const (
 	NotFound  SessionErrorCategory = "NOT_FOUND"
@@ -28,12 +40,11 @@ func (e SessionError) Unwrap() error {
 	return e.Err
 }
 
-var (
-	// Forbidden Errors
-	ErrForbiddenSessionChange  = SessionError{Category: Forbidden, Message: "not allowed to change other users session"}
-	ErrForbiddenRolePromotion  = SessionError{Category: Forbidden, Message: "cannot promote role"}
-	ErrForbiddenOwnerChange    = SessionError{Category: Forbidden, Message: "not allowed to change owner role"}
-	ErrForbiddenOwnerPromotion = SessionError{Category: Forbidden, Message: "not allowed to promote to owner role"}
-	// Not Found Errors
-	ErrSessionNotFound = SessionError{Category: NotFound, Message: "session not found"}
-)
+func CreateSessionError(category SessionErrorCategory, errorType SessionErrorType, message string, err error) error {
+	return SessionError{
+		Category: category,
+		ErrType:  errorType,
+		Message:  message,
+		Err:      err,
+	}
+}
