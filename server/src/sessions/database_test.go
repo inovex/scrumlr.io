@@ -111,12 +111,12 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Ready() {
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Ready: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.True(dbSession.Connected)
+	suite.True(dbSession.Ready)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_RaisedHand() {
