@@ -38,7 +38,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	user, err := s.users.CreateUser(ctx, "", body.Name, "", common.Anonymous, nil)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create anonyoums user")
 		span.RecordError(err)
@@ -121,20 +121,8 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	}
 
 	var internalUser *users.User
-	switch provider {
-	case common.Google:
-		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.GitHub:
-		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Microsoft:
-		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.AzureAd:
-		internalUser, err = s.users.CreateAzureAdUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Apple:
-		internalUser, err = s.users.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.TypeOIDC:
-		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	}
+	internalUser, err = s.users.CreateUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider, nil)
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)

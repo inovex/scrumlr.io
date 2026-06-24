@@ -50,8 +50,6 @@ type Service struct {
 	notesService   notes.NotesService
 }
 
-type createDBUserFunc func(ctx context.Context) (DatabaseUser, error)
-
 func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService, notesService notes.NotesService) UserService {
 	service := new(Service)
 	service.database = db
@@ -62,8 +60,8 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) CreatePlatformUser(ctx context.Context, platform common.AccountType, name string, specificCounter metric.Int64Counter, dbCall createDBUserFunc) (*User, error) {
-	platformName := strings.ToLower(string(platform))
+func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error) {
+	platformName := strings.ToLower(string(accountType))
 	traceName := fmt.Sprintf("scrumlr.users.service.create.%s", platformName)
 
 	ctx, span := tracer.Start(ctx, traceName)
@@ -77,12 +75,33 @@ func (service *Service) CreatePlatformUser(ctx context.Context, platform common.
 	}
 	//common attributes
 	span.SetAttributes(
-		attribute.String(traceName+".type", string(platform)),
+		attribute.String(traceName+".type", string(accountType)),
 		attribute.String(traceName+".name", name),
 	)
 
 	//execute the specific database call for the platform
-	user, err := dbCall(ctx)
+	var user DatabaseUser
+	var err error
+
+	switch accountType {
+	case common.Anonymous:
+		user, err = service.database.CreateAnonymousUser(ctx, name)
+	case common.Apple:
+		user, err = service.database.CreateAppleUser(ctx, id, name, avatarUrl)
+	case common.AzureAd:
+		user, err = service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
+	case common.GitHub:
+		user, err = service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
+	case common.Google:
+		user, err = service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
+	case common.Microsoft:
+		user, err = service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
+	case common.TypeOIDC:
+		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
+	default:
+		err = errors.New("invalid account type")
+	}
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
@@ -96,48 +115,6 @@ func (service *Service) CreatePlatformUser(ctx context.Context, platform common.
 	}
 
 	return new(User).From(user), nil
-}
-
-func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.Anonymous, name, anonymousUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateAnonymousUser(new_ctx, name)
-	})
-}
-
-func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.Apple, name, appleUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateAppleUser(new_ctx, id, name, avatarUrl)
-	})
-}
-
-func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.AzureAd, name, azureAdUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateAzureAdUser(new_ctx, id, name, avatarUrl)
-	})
-}
-
-func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.GitHub, name, githubUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateGitHubUser(new_ctx, id, name, avatarUrl)
-	})
-}
-
-func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.Google, name, googleUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateGoogleUser(new_ctx, id, name, avatarUrl)
-	})
-}
-
-func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.Microsoft, name, microsoftUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateMicrosoftUser(new_ctx, id, name, avatarUrl)
-	})
-}
-
-func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	return service.CreatePlatformUser(ctx, common.TypeOIDC, name, oidcUserCreatedCounter, func(new_ctx context.Context) (DatabaseUser, error) {
-		return service.database.CreateOIDCUser(new_ctx, id, name, avatarUrl)
-	})
 }
 
 func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {
