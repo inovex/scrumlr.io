@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
@@ -685,7 +686,7 @@ func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 	}
 
 	for _, session := range suite.sessions {
-		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false); err != nil {
+		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(role.ParticipantRole), false, true, true, false); err != nil {
 			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}

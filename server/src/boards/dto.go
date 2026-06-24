@@ -6,9 +6,9 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
@@ -154,13 +154,13 @@ type JoinBoardRequest struct {
 }
 
 type BoardOverview struct {
-	Board        *Board             `json:"board"`
-	Columns      []*columns.Column  `json:"columns"`
-	CreatedAt    time.Time          `json:"createdAt"`
-	Participants int                `json:"participants"`
-	Role         common.SessionRole `json:"role"`
-	Favourite    bool               `json:"favourite"`
-	NoteCount    int                `json:"noteCount"`
+	Board        *Board            `json:"board"`
+	Columns      []*columns.Column `json:"columns"`
+	CreatedAt    time.Time         `json:"createdAt"`
+	Participants int               `json:"participants"`
+	Role         role.Role         `json:"role"`
+	Favourite    bool              `json:"favourite"`
+	NoteCount    int               `json:"noteCount"`
 }
 
 type ImportBoardRequest struct {

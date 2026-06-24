@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 )
 
@@ -397,9 +398,9 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 
 	// test sessions
 	suite.sessions = make(map[string]sessions.BoardSession, 1)
-	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
-	suite.sessions["Friend"] = sessions.BoardSession{UserID: suite.users["Friend"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
-	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: role.OwnerRole, Connected: true}
+	suite.sessions["Friend"] = sessions.BoardSession{UserID: suite.users["Friend"].ID, Board: suite.boards["Update"].id, Role: role.ParticipantRole, Connected: true}
+	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: role.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
 		var avatar *string
