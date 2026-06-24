@@ -561,7 +561,9 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
 		Role:  common.OwnerRole,
 	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
 
-	board, err := service.createImportedBoard(ctx, owner, body)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: importColumnID}}, nil)
+
+	board, _, err := service.createImportedBoard(ctx, owner, body)
 
 	suite.NoError(err)
 	suite.NotNil(board)
@@ -605,7 +607,7 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_CreateFails() {
 		AccessPolicy: Public,
 	}).Return(DatabaseBoard{}, errors.New("create failed"))
 
-	board, err := service.createImportedBoard(ctx, owner, body)
+	board, _, err := service.createImportedBoard(ctx, owner, body)
 
 	suite.Nil(board)
 	suite.Equal(common.InternalServerError, err)
@@ -790,14 +792,14 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 	parentID := uuid.New()
 	columnID := uuid.New()
 
-	organizedNotes := []parentChildNotes{{
-		Parent: notes.Note{
+	organizedNotes := []stackRootChildrenNotes{{
+		StackRoot: notes.Note{
 			ID: parentID,
 			Position: notes.NotePosition{
 				Column: columnID,
 			},
 		},
-		Children: []notes.Note{
+		StackChildren: []notes.Note{
 			{
 				Author: uuid.New(),
 				Text:   "child-1",
@@ -815,7 +817,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 		},
 	}}
 
-	for _, child := range organizedNotes[0].Children {
+	for _, child := range organizedNotes[0].StackChildren {
 		notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
 			Text:  child.Text,
 			Board: suite.boardID,
@@ -831,7 +833,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 		}).Return(&notes.Note{ID: uuid.New()}, nil).Once()
 	}
 
-	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
 
 	suite.NoError(err)
 	notesMock.AssertExpectations(suite.T())
@@ -849,12 +851,12 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 	secondChildAuthor := uuid.New()
 	importErr := errors.New("import child note failed")
 
-	organizedNotes := []parentChildNotes{{
-		Parent: notes.Note{
+	organizedNotes := []stackRootChildrenNotes{{
+		StackRoot: notes.Note{
 			ID:       parentID,
 			Position: notes.NotePosition{Column: columnID},
 		},
-		Children: []notes.Note{
+		StackChildren: []notes.Note{
 			{
 				Author:   firstChildAuthor,
 				Text:     "child-1",
@@ -879,7 +881,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 		},
 	}).Return(nil, importErr).Once()
 
-	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
 
 	suite.Error(err)
 	suite.Equal(importErr, err)
@@ -895,18 +897,18 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
 
 	ctx := context.Background()
 
-	organizedNotes := []parentChildNotes{
+	organizedNotes := []stackRootChildrenNotes{
 		{
-			Parent:   notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
-			Children: []notes.Note{},
+			StackRoot:     notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			StackChildren: []notes.Note{},
 		},
 		{
-			Parent:   notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
-			Children: nil,
+			StackRoot:     notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			StackChildren: nil,
 		},
 	}
 
-	err := service.importChildNotes(ctx, suite.boardID, organizedNotes)
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
 
 	suite.NoError(err)
 	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.Anything)
@@ -945,7 +947,6 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 		}},
 	}
 
-	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil).Once()
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
 	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
 		Text:  "Imported note",
@@ -958,7 +959,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 		},
 	}).Return(&notes.Note{ID: importedParentID}, nil).Once()
 
-	err := service.processImportedNotes(ctx, suite.boardID, body)
+	err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
 
 	suite.NoError(err)
 	notesMock.AssertExpectations(suite.T())
@@ -995,7 +996,6 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 		}},
 	}
 
-	columnsMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil).Once()
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
 	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
 		Text:  "Imported note",
@@ -1008,7 +1008,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 		},
 	}).Return(nil, importError).Once()
 
-	err := service.processImportedNotes(ctx, suite.boardID, body)
+	err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
 
 	suite.Error(err)
 	suite.Equal(importError, err)
