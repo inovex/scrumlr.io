@@ -18,6 +18,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 )
 
 const DefaultTTL = 10 * time.Second
@@ -158,7 +159,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		return nil, common.InternalServerError
 	}
 
-	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole && body.Text != nil {
+	if user != precondition.Author && !role.CanChangeNoteText(precondition.CallerRole) && body.Text != nil {
 		err := errors.New("not allowed to change text of note")
 		span.SetStatus(codes.Error, "not allowed to change text of note")
 		span.RecordError(err)
@@ -256,7 +257,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		return err
 	}
 
-	if preconditions.Author != user && preconditions.CallerRole == common.ParticipantRole {
+	if preconditions.Author != user && !role.CanDeleteNote(preconditions.CallerRole) {
 		err := errors.New("not allowed to delete note from other user")
 		span.SetStatus(codes.Error, "not allowed to delete note from other user")
 		span.RecordError(err)

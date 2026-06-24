@@ -18,6 +18,7 @@ import (
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -105,7 +106,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	// given
 	boardId := suite.boards["Write"].ID
 	userId := suite.users["Luke"].ID
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
@@ -137,13 +138,13 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	events := suite.broker.GetBoardChannel(ctx, boardId)
 
 	// when
-	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(common.ModeratorRole)})
+	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(role.ModeratorRole)})
 
 	// then
 	suite.Nil(err)
 	suite.Equal(boardId, session.Board)
 	suite.Equal(userId, session.UserID)
-	suite.Equal(common.ModeratorRole, session.Role)
+	suite.Equal(role.ModeratorRole, session.Role)
 
 	msgSession := <-events
 	msgColumns := <-events
@@ -154,7 +155,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
 	suite.Nil(err)
 	suite.Equal(userId, session.UserID)
-	suite.Equal(common.ModeratorRole, sessionData.Role)
+	suite.Equal(role.ModeratorRole, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
@@ -323,31 +324,31 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	sessions := []struct {
 		userID                               uuid.UUID
 		boardID                              uuid.UUID
-		role                                 common.SessionRole
+		role                                 role.Role
 		banned, ready, connected, raisedHand bool
 	}{
 		// Write board
-		{suite.users["Han"].ID, suite.boards["Write"].ID, common.ParticipantRole, false, false, false, false},
+		{suite.users["Han"].ID, suite.boards["Write"].ID, role.ParticipantRole, false, false, false, false},
 		// Update board
-		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, common.OwnerRole, false, false, false, false},
-		{suite.users["Luke"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Leia"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Han"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, role.OwnerRole, false, false, false, false},
+		{suite.users["Luke"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Leia"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, false, false},
 		// Read board
-		{suite.baseData.Users["Stan"].ID, suite.boards["Read"].ID, common.OwnerRole, false, false, false, false},
-		{suite.users["Friend"].ID, suite.boards["Read"].ID, common.ModeratorRole, false, false, false, false},
-		{suite.baseData.Users["Santa"].ID, suite.boards["Read"].ID, common.ParticipantRole, false, false, false, false},
-		{suite.users["Bob"].ID, suite.boards["Read"].ID, common.ParticipantRole, true, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Read"].ID, role.OwnerRole, false, false, false, false},
+		{suite.users["Friend"].ID, suite.boards["Read"].ID, role.ModeratorRole, false, false, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["Read"].ID, role.ParticipantRole, false, false, false, false},
+		{suite.users["Bob"].ID, suite.boards["Read"].ID, role.ParticipantRole, true, false, false, false},
 		// ReadFilter board
-		{suite.baseData.Users["Stan"].ID, suite.boards["ReadFilter"].ID, common.OwnerRole, false, true, true, false},
-		{suite.users["Friend"].ID, suite.boards["ReadFilter"].ID, common.ModeratorRole, false, true, false, false},
-		{suite.baseData.Users["Santa"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, true, true},
-		{suite.users["Bob"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, false, true},
+		{suite.baseData.Users["Stan"].ID, suite.boards["ReadFilter"].ID, role.OwnerRole, false, true, true, false},
+		{suite.users["Friend"].ID, suite.boards["ReadFilter"].ID, role.ModeratorRole, false, true, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["ReadFilter"].ID, role.ParticipantRole, false, false, true, true},
+		{suite.users["Bob"].ID, suite.boards["ReadFilter"].ID, role.ParticipantRole, false, false, false, true},
 		// UpdateAll board
-		{suite.baseData.Users["Stan"].ID, suite.boards["UpdateAll"].ID, common.OwnerRole, false, false, true, true},
-		{suite.users["Luke"].ID, suite.boards["UpdateAll"].ID, common.ModeratorRole, false, true, true, false},
-		{suite.users["Leia"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Han"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, true, true, true},
+		{suite.baseData.Users["Stan"].ID, suite.boards["UpdateAll"].ID, role.OwnerRole, false, false, true, true},
+		{suite.users["Luke"].ID, suite.boards["UpdateAll"].ID, role.ModeratorRole, false, true, true, false},
+		{suite.users["Leia"].ID, suite.boards["UpdateAll"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["UpdateAll"].ID, role.ParticipantRole, false, true, true, true},
 	}
 
 	for _, s := range sessions {

@@ -19,6 +19,7 @@ import (
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 )
@@ -321,13 +322,13 @@ func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 		log.Fatalf("Failed to insert delete user note: %s", err)
 	}
 
-	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.updateBoard.ID, string(role.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Stan session: %s", err)
 	}
-	if err := testDbTemplates.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.updateUser.ID, suite.updateBoard.ID, string(role.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Update user session: %s", err)
 	}
-	if err := testDbTemplates.InsertSession(db, suite.deleteUser.ID, suite.updateBoard.ID, string(common.OwnerRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.deleteUser.ID, suite.updateBoard.ID, string(role.OwnerRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert Delete user session: %s", err)
 	}
 }

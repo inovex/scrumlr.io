@@ -9,6 +9,7 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"github.com/stretchr/testify/mock"
@@ -112,8 +113,8 @@ func TestCreate(t *testing.T) {
 		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
-	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: role.OwnerRole}, nil)
 
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
 	noteMock := notes.NewMockNotesService(t)
@@ -186,8 +187,8 @@ func TestCreate_ByPassphrase(t *testing.T) {
 		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
-	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: role.OwnerRole}, nil)
 
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
 	noteMock := notes.NewMockNotesService(t)

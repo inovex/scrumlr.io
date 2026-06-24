@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 
@@ -294,7 +295,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				}
 			} else {
 				if !te.sessionExists {
-					sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+					sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
 						Return(new(sessions.BoardSession), te.err)
 				}
 
@@ -365,7 +366,7 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreateSessionError() {
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
 		Return(nil, errors.New("failed to create session"))
 
 	rr := httptest.NewRecorder()
@@ -383,7 +384,7 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreatesParticipantLocation() {
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
 		Return(new(sessions.BoardSession), nil)
 
 	rr := httptest.NewRecorder()

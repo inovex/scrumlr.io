@@ -16,6 +16,7 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -345,7 +346,7 @@ func (suite *NoteServiceIntegrationTestSuite) seedNotesTestData(db *bun.DB) {
 	}
 
 	// Insert session for Write board
-	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(common.ParticipantRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(role.ParticipantRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert session: %s", err)
 	}
 
