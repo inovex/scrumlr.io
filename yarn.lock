@@ -1595,15 +1595,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/i18next-fs-backend@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@types/i18next-fs-backend@npm:1.2.0"
-  dependencies:
-    i18next-fs-backend: "npm:*"
-  checksum: 10c0/5f1b6f07ecb78d27e92002b00526c681269f12d7b2a2dba1e009eff5aef1c6c42d30887a0df81828f42f86338552d8b2ded6853c0105ed4a836d63996abf344c
-  languageName: node
-  linkType: hard
-
 "@types/js-cookie@npm:^3.0.6":
   version: 3.0.6
   resolution: "@types/js-cookie@npm:3.0.6"
@@ -5360,20 +5351,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-fs-backend@npm:*":
-  version: 2.6.4
-  resolution: "i18next-fs-backend@npm:2.6.4"
-  checksum: 10c0/b1658cbf5d5acf0f663a2b18ca8e70501ef1b6b14213bd3952eb9a271a36b9dcde4ecd2aa899fbaf2907e584cea7c6fa98e44433f1b7e3e30f67063eb1a26cf6
-  languageName: node
-  linkType: hard
-
-"i18next-fs-backend@npm:^2.6.6":
-  version: 2.6.6
-  resolution: "i18next-fs-backend@npm:2.6.6"
-  checksum: 10c0/aa409fb486eb6d3929a413703a0ba2b5c1e0e4e9923cc2e31371a3ae683b5fa9ceaaa608e9610cc911cb0a053139f8b123f4cda85e3e694ae2fcc5aa5fdd8bea
-  languageName: node
-  linkType: hard
-
 "i18next@npm:^26.3.1":
   version: 26.3.1
   resolution: "i18next@npm:26.3.1"
@@ -8239,7 +8216,6 @@ __metadata:
     "@types/classnames": "npm:^2.3.4"
     "@types/file-saver": "npm:^2.0.7"
     "@types/history": "npm:^5.0.0"
-    "@types/i18next-fs-backend": "npm:^1.2.0"
     "@types/js-cookie": "npm:^3.0.6"
     "@types/lodash": "npm:^4.17.24"
     "@types/node": "npm:^25.9.3"
@@ -8278,7 +8254,6 @@ __metadata:
     husky: "npm:^9.1.7"
     i18next: "npm:^26.3.1"
     i18next-browser-languagedetector: "npm:^8.2.1"
-    i18next-fs-backend: "npm:^2.6.6"
     js-cookie: "npm:^3.0.8"
     js-md5: "npm:^0.8.3"
     linkify-react: "npm:^4.3.3"
