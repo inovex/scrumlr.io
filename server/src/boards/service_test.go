@@ -1014,3 +1014,462 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 	suite.Equal(importError, err)
 	notesMock.AssertExpectations(suite.T())
 }
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_ColumnCountMismatch() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   suite.boardID,
+		User:    owner,
+		Name:    suite.columnName,
+		Color:   suite.columnColor,
+		Visible: &columnVisible,
+		Index:   &columnIndex,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{}, nil)
+
+	board, columnMap, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Nil(columnMap)
+	suite.EqualError(err, "column count mismatch during import mapping: imported=1 created=0")
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_AllAuthorsExist() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	authorTwo := uuid.New()
+
+	importNotes := []notes.Note{
+		{ID: uuid.New(), Author: authorOne},
+		{ID: uuid.New(), Author: authorTwo},
+		{ID: uuid.New(), Author: authorOne}, // duplicate author should be de-duplicated
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne, authorTwo}).Return([]uuid.UUID{authorOne, authorTwo}, nil).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.True(allAuthorsExist)
+	suite.Nil(existingAuthors)
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_PartialAuthorsExist() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	authorTwo := uuid.New()
+
+	importNotes := []notes.Note{
+		{ID: uuid.New(), Author: authorOne},
+		{ID: uuid.New(), Author: authorTwo},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne, authorTwo}).Return([]uuid.UUID{authorOne}, nil).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.False(allAuthorsExist)
+	suite.Len(existingAuthors, 1)
+	_, exists := existingAuthors[authorOne]
+	suite.True(exists)
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_Error() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	importNotes := []notes.Note{{ID: uuid.New(), Author: authorOne}}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne}).Return(nil, errors.New("database error")).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.Nil(existingAuthors)
+	suite.False(allAuthorsExist)
+	suite.EqualError(err, "could not get existing authors")
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_EmptyInput() {
+	service := &Service{userService: suite.userService}
+
+	processedNotes, err := service.prepareImportNotes(context.Background(), []notes.Note{})
+
+	suite.NoError(err)
+	suite.Empty(processedNotes)
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_CollectAuthorsError() {
+	service := &Service{userService: suite.userService}
+
+	author := uuid.New()
+	importNotes := []notes.Note{{ID: uuid.New(), Author: author}}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{author}).Return(nil, errors.New("database error")).Once()
+
+	processedNotes, err := service.prepareImportNotes(context.Background(), importNotes)
+
+	suite.Nil(processedNotes)
+	suite.EqualError(err, "could not get existing authors")
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthorsAndRepairsStacks() {
+	service := &Service{userService: suite.userService}
+
+	columnID := uuid.New()
+	missingAuthor := uuid.New()
+	existingAuthorOne := uuid.New()
+	existingAuthorTwo := uuid.New()
+
+	removedRootID := uuid.New()
+	otherRootID := uuid.New()
+	childOneID := uuid.New()
+	childTwoID := uuid.New()
+
+	importNotes := []notes.Note{
+		{
+			ID:     removedRootID,
+			Author: missingAuthor,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   4,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+		{
+			ID:     childOneID,
+			Author: existingAuthorOne,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   10,
+				Stack:  uuid.NullUUID{UUID: removedRootID, Valid: true},
+			},
+		},
+		{
+			ID:     childTwoID,
+			Author: existingAuthorTwo,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   20,
+				Stack:  uuid.NullUUID{UUID: removedRootID, Valid: true},
+			},
+		},
+		{
+			ID:     otherRootID,
+			Author: existingAuthorOne,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   30,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{missingAuthor, existingAuthorOne, existingAuthorTwo}).Return([]uuid.UUID{existingAuthorOne, existingAuthorTwo}, nil).Once()
+
+	processedNotes, err := service.prepareImportNotes(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.Len(processedNotes, 3)
+
+	notesByID := make(map[uuid.UUID]notes.Note, len(processedNotes))
+	for _, note := range processedNotes {
+		notesByID[note.ID] = note
+	}
+
+	replacementRoot := notesByID[childTwoID]
+	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.Equal(0, replacementRoot.Position.Rank)
+
+	stackChild := notesByID[childOneID]
+	suite.True(stackChild.Position.Stack.Valid)
+	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.Equal(0, stackChild.Position.Rank)
+
+	otherRoot := notesByID[otherRootID]
+	suite.False(otherRoot.Position.Stack.Valid)
+	suite.Equal(1, otherRoot.Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestFilterNotesByExistingAuthors() {
+	existingAuthor := uuid.New()
+	missingAuthor := uuid.New()
+
+	noteOne := notes.Note{ID: uuid.New(), Author: existingAuthor}
+	noteTwo := notes.Note{ID: uuid.New(), Author: missingAuthor}
+
+	filteredNotes, originalByID := filterNotesByExistingAuthors(
+		[]notes.Note{noteOne, noteTwo},
+		map[uuid.UUID]struct{}{existingAuthor: {}},
+	)
+
+	suite.Len(filteredNotes, 1)
+	suite.Equal(noteOne.ID, filteredNotes[0].ID)
+	suite.Len(originalByID, 2)
+	suite.Equal(noteOne.ID, originalByID[noteOne.ID].ID)
+	suite.Equal(noteTwo.ID, originalByID[noteTwo.ID].ID)
+}
+
+func (suite *BoardServiceTestSuite) TestIndexAndGroupStacks() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 0}}
+	childOne := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 3}}
+	childTwo := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 7}}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks([]notes.Note{root, childOne, childTwo})
+
+	suite.Len(notesByID, 3)
+	suite.Equal(root.ID, notesByID[root.ID].ID)
+	suite.Len(stackChildrenByRoot, 1)
+	suite.Len(stackChildrenByRoot[rootID], 2)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootExists() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	filteredNotes := []notes.Note{
+		{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 4}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 8}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 2}},
+	}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+	originalByID := map[uuid.UUID]notes.Note{rootID: {ID: rootID, Position: notes.NotePosition{Rank: 4}}}
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
+
+	stackChildren := stackChildrenByRoot[rootID]
+	suite.Len(stackChildren, 2)
+	suite.Equal(0, stackChildren[0].Position.Rank)
+	suite.Equal(1, stackChildren[1].Position.Rank)
+	suite.True(stackChildren[0].Position.Stack.Valid)
+	suite.Equal(rootID, stackChildren[0].Position.Stack.UUID)
+	suite.True(stackChildren[1].Position.Stack.Valid)
+	suite.Equal(rootID, stackChildren[1].Position.Stack.UUID)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromotesLastChild() {
+	removedRootID := uuid.New()
+	childOneID := uuid.New()
+	childTwoID := uuid.New()
+	columnID := uuid.New()
+
+	filteredNotes := []notes.Note{
+		{ID: childOneID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: removedRootID, Valid: true}, Rank: 10}},
+		{ID: childTwoID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: removedRootID, Valid: true}, Rank: 20}},
+	}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+	originalByID := map[uuid.UUID]notes.Note{removedRootID: {ID: removedRootID, Position: notes.NotePosition{Rank: 6}}}
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
+
+	replacementRoot := notesByID[childTwoID]
+	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.Equal(6, replacementRoot.Position.Rank)
+
+	stackChild := notesByID[childOneID]
+	suite.True(stackChild.Position.Stack.Valid)
+	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.Equal(0, stackChild.Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderStackRootNotes() {
+	columnID := uuid.New()
+
+	rootOneID := uuid.New()
+	rootTwoID := uuid.New()
+
+	processedNotes := []notes.Note{
+		{ID: rootOneID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 10}},
+		{ID: rootTwoID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 1}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootOneID, Valid: true}, Rank: 99}},
+	}
+
+	reorderStackRootNotes(processedNotes)
+
+	notesByID := make(map[uuid.UUID]notes.Note, len(processedNotes))
+	for _, note := range processedNotes {
+		notesByID[note.ID] = note
+	}
+
+	suite.Equal(0, notesByID[rootTwoID].Position.Rank)
+	suite.Equal(1, notesByID[rootOneID].Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestOrganizeStackNotes() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 0}}
+	child := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 1}}
+
+	stackRootNotes, stackChildrenByRoot := organizeStackNotes([]notes.Note{root, child})
+
+	suite.Len(stackRootNotes, 1)
+	suite.Equal(root.ID, stackRootNotes[rootID].ID)
+	suite.Len(stackChildrenByRoot, 1)
+	suite.Len(stackChildrenByRoot[rootID], 1)
+	suite.Equal(child.ID, stackChildrenByRoot[rootID][0].ID)
+}
+
+func (suite *BoardServiceTestSuite) TestImportStackRoots_SuccessAndSkipsMissingColumnMapping() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	mappedImportColumnID := uuid.New()
+	unmappedImportColumnID := uuid.New()
+	mappedCreatedColumnID := uuid.New()
+
+	firstRootID := uuid.New()
+	secondRootID := uuid.New()
+	author := uuid.New()
+
+	stackRootNotes := map[uuid.UUID]notes.Note{
+		firstRootID: {
+			ID:     firstRootID,
+			Author: author,
+			Text:   "imported-root",
+			Position: notes.NotePosition{
+				Column: mappedImportColumnID,
+				Rank:   2,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+		secondRootID: {
+			ID:     secondRootID,
+			Author: author,
+			Text:   "ignored-root",
+			Position: notes.NotePosition{
+				Column: unmappedImportColumnID,
+				Rank:   9,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	stackChildrenByRoot := map[uuid.UUID][]notes.Note{
+		firstRootID: {
+			{ID: uuid.New(), Text: "child-a"},
+		},
+	}
+
+	columnMap := map[uuid.UUID]uuid.UUID{mappedImportColumnID: mappedCreatedColumnID}
+
+	createdRootID := uuid.New()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "imported-root",
+		Board: suite.boardID,
+		User:  author,
+		Position: notes.NotePosition{
+			Column: mappedCreatedColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   2,
+		},
+	}).Return(&notes.Note{ID: createdRootID, Position: notes.NotePosition{Column: mappedCreatedColumnID}}, nil).Once()
+
+	stackNotes, err := service.importStackRoots(ctx, suite.boardID, stackRootNotes, stackChildrenByRoot, columnMap)
+
+	suite.NoError(err)
+	suite.Len(stackNotes, 1)
+	suite.Equal(createdRootID, stackNotes[0].StackRoot.ID)
+	suite.Len(stackNotes[0].StackChildren, 1)
+	suite.Equal("child-a", stackNotes[0].StackChildren[0].Text)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	rootID := uuid.New()
+	author := uuid.New()
+	importErr := errors.New("import root failed")
+
+	stackRootNotes := map[uuid.UUID]notes.Note{
+		rootID: {
+			ID:     rootID,
+			Author: author,
+			Text:   "imported-root",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Rank:   2,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	columnMap := map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID}
+
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "imported-root",
+		Board: suite.boardID,
+		User:  author,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   2,
+		},
+	}).Return(nil, importErr).Once()
+
+	stackNotes, err := service.importStackRoots(ctx, suite.boardID, stackRootNotes, nil, columnMap)
+
+	suite.Nil(stackNotes)
+	suite.Equal(importErr, err)
+	notesMock.AssertExpectations(suite.T())
+}

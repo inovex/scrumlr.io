@@ -753,7 +753,6 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 }
 
 func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (err error) {
-	// handle note deletion for
 	request.Notes, err = service.prepareImportNotes(ctx, request.Notes)
 	if err != nil {
 		return err
