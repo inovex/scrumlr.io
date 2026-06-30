@@ -716,10 +716,11 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 
 	for _, column := range body.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:    column.Name,
-			Color:   column.Color,
-			Visible: &column.Visible,
-			Index:   &column.Index,
+			Name:        column.Name,
+			Description: column.Description,
+			Color:       column.Color,
+			Visible:     &column.Visible,
+			Index:       &column.Index,
 		})
 	}
 	b, err := service.Create(ctx, CreateBoardRequest{
