@@ -689,18 +689,18 @@ func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvi
 	return &LastModifiedUpdater{database: database, clock: clock}
 }
 
-func (service *Service) Import(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, error) {
+func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
 	defer span.End()
 
-	board, columnMap, err := service.createImportedBoard(ctx, owner, body)
+	board, columnMap, err := service.createImportedBoard(ctx, owner, request)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import board")
 		span.RecordError(err)
 		return nil, err
 	}
 
-	err = service.processImportedNotes(ctx, board.ID, body, columnMap)
+	err = service.processImportedNotes(ctx, board.ID, request, columnMap)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import notes or columns")
 		span.RecordError(err)
@@ -710,11 +710,11 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, body Import
 	return board, nil
 }
 
-func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*Board, map[uuid.UUID]uuid.UUID, error) {
-	body.Board.Owner = owner
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
+func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, map[uuid.UUID]uuid.UUID, error) {
+	request.Board.Owner = owner
+	importColumns := make([]columns.ColumnRequest, 0, len(request.Columns))
 
-	for _, column := range body.Columns {
+	for _, column := range request.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
 			Name:        column.Name,
 			Description: column.Description,
@@ -724,10 +724,10 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 		})
 	}
 	b, err := service.Create(ctx, CreateBoardRequest{
-		Name:         body.Board.Name,
-		Description:  body.Board.Description,
-		AccessPolicy: body.Board.AccessPolicy,
-		Passphrase:   body.Board.Passphrase,
+		Name:         request.Board.Name,
+		Description:  request.Board.Description,
+		AccessPolicy: request.Board.AccessPolicy,
+		Passphrase:   request.Board.Passphrase,
 		Columns:      importColumns,
 		Owner:        owner,
 	})
@@ -740,41 +740,69 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 		return nil, nil, err
 	}
 
-	if len(newColumns) != len(body.Columns) {
-		return nil, nil, fmt.Errorf("column count mismatch during import mapping: imported=%d created=%d", len(body.Columns), len(newColumns))
+	if len(newColumns) != len(request.Columns) {
+		return nil, nil, fmt.Errorf("column count mismatch during import mapping: imported=%d created=%d", len(request.Columns), len(newColumns))
 	}
 
-	columnMap := make(map[uuid.UUID]uuid.UUID, len(body.Columns))
-	for i, sourceColumn := range body.Columns {
+	columnMap := make(map[uuid.UUID]uuid.UUID, len(request.Columns))
+	for i, sourceColumn := range request.Columns {
 		columnMap[sourceColumn.ID] = newColumns[i].ID
 	}
 
 	return b, columnMap, nil
 }
 
-func (service *Service) prepareImportNotes(ctx context.Context, notes []notes.Note, columnMap map[uuid.UUID]uuid.UUID) ([]notes.Note, error) {
-	if len(notes) == 0 {
-		return notes, nil
+func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (err error) {
+	// handle note deletion for
+	request.Notes, err = service.prepareImportNotes(ctx, request.Notes)
+	if err != nil {
+		return err
 	}
 
-	existingAuthors, noAuthorsDeleted, err := service.collectExistingAuthors(ctx, notes)
+	stackRootNotes, stackChildrenByRoot := organizeStackNotes(request.Notes)
+
+	stackNotes, err := service.importStackRoots(ctx, boardID, stackRootNotes, stackChildrenByRoot, columnMap)
+	if err != nil {
+		return err
+	}
+
+	err = service.importStackChildren(ctx, boardID, stackNotes)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (service *Service) prepareImportNotes(ctx context.Context, importNotes []notes.Note) ([]notes.Note, error) {
+	if len(importNotes) == 0 {
+		return importNotes, nil
+	}
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(ctx, importNotes)
 	if err != nil {
 		return nil, err
 	}
-	if noAuthorsDeleted {
-		return notes, nil
+	if allAuthorsExist {
+		return importNotes, nil
 	}
 
-	filteredNotes, originalNoteByID := filterNotesByExistingAuthors(notes, existingAuthors)
+	filteredNotes, originalNoteByID := filterNotesByExistingAuthors(importNotes, existingAuthors)
 
-	return nil, nil
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalNoteByID)
+
+	reorderStackRootNotes(filteredNotes)
+
+	return filteredNotes, nil
 }
 
-func (service *Service) collectExistingAuthors(ctx context.Context, notes []notes.Note) (map[uuid.UUID]struct{}, bool, error) {
-	authors := make([]uuid.UUID, 0, len(notes))
-	seen := make(map[uuid.UUID]struct{}, len(notes))
+func (service *Service) collectExistingAuthors(ctx context.Context, importNotes []notes.Note) (map[uuid.UUID]struct{}, bool, error) {
+	authors := make([]uuid.UUID, 0, len(importNotes))
+	seen := make(map[uuid.UUID]struct{}, len(importNotes))
 
-	for _, note := range notes {
+	for _, note := range importNotes {
 		if _, exists := seen[note.Author]; exists {
 			continue
 		}
@@ -814,56 +842,9 @@ func filterNotesByExistingAuthors(importNotes []notes.Note, existingAuthors map[
 	return filteredNotes, originalNoteByID
 }
 
-//todo from here on
-
-type stackRootChildrenNotes struct {
-	StackRoot     notes.Note
-	StackChildren []notes.Note
-}
-
-func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body ImportBoardRequest) (ImportBoardRequest, error) {
-
-	// done
-	//if no notes then return
-	if len(body.Notes) == 0 {
-		return body, nil
-	}
-
-	//done
-	// get all authors of that board
-	authors := collectAuthors(body.Notes)
-
-	//done
-	// all remaining participants
-	nonDeletedParticipants, err := service.userService.GetExistingUserIDs(ctx, authors)
-	if err != nil {
-		return body, err
-	}
-
-	if len(nonDeletedParticipants) == len(authors) {
-		return body, nil
-	}
-
-	nonDeletedParticipantMap := make(map[uuid.UUID]struct{}, len(nonDeletedParticipants))
-	for _, participant := range nonDeletedParticipants {
-		nonDeletedParticipantMap[participant] = struct{}{}
-	}
-
-	originalNoteByID := make(map[uuid.UUID]notes.Note, len(body.Notes))
-	filteredNotes := make([]notes.Note, 0, len(body.Notes))
-	notesByID := make(map[uuid.UUID]*notes.Note, len(body.Notes))
+func indexAndGroupStacks(filteredNotes []notes.Note) (map[uuid.UUID]*notes.Note, map[uuid.UUID][]*notes.Note) {
+	notesByID := make(map[uuid.UUID]*notes.Note, len(filteredNotes))
 	stackChildrenByRoot := make(map[uuid.UUID][]*notes.Note)
-
-	for i := range body.Notes {
-		note := body.Notes[i]
-		originalNoteByID[note.ID] = note
-
-		if _, exists := nonDeletedParticipantMap[note.Author]; exists {
-			filteredNotes = append(filteredNotes, note)
-		}
-	}
-
-	// put into smaler funcitons till here
 
 	for i := range filteredNotes {
 		note := &filteredNotes[i]
@@ -873,13 +854,10 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
 		}
 	}
+	return notesByID, stackChildrenByRoot
+}
 
-	stackRootExists := make(map[uuid.UUID]bool, len(stackChildrenByRoot))
-	for stackRootID := range stackChildrenByRoot {
-		_, exists := notesByID[stackRootID]
-		stackRootExists[stackRootID] = exists
-	}
-
+func reorderAndRepairStacks(stackChildrenByRoot map[uuid.UUID][]*notes.Note, notesByID map[uuid.UUID]*notes.Note, originalNoteByID map[uuid.UUID]notes.Note) {
 	for stackRootID, stackChildren := range stackChildrenByRoot {
 		if len(stackChildren) == 0 {
 			continue
@@ -896,29 +874,28 @@ func (service *Service) deleteNotesOfDeletedUsers(ctx context.Context, body Impo
 			stackChildren[i].Position.Rank = i
 		}
 
-		if !stackRootExists[stackRootID] {
-			removedStackRoot, exists := originalNoteByID[stackRootID]
-			if !exists {
-				continue
-			}
+		if _, rootExists := notesByID[stackRootID]; rootExists {
+			continue
+		}
 
-			replacementStackRoot := stackChildren[len(stackChildren)-1]
-			replacementStackRoot.Position.Stack = uuid.NullUUID{}
-			replacementStackRoot.Position.Rank = removedStackRoot.Position.Rank
+		removedStackRoot, exists := originalNoteByID[stackRootID]
+		if !exists {
+			continue
+		}
 
-			for i := range stackChildren {
-				if i+1 == len(stackChildren) {
-					break
-				}
-				stackChildren[i].Position.Stack = uuid.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
-			}
+		replacementStackRoot := stackChildren[len(stackChildren)-1]
+		replacementStackRoot.Position.Stack = uuid.NullUUID{}
+		replacementStackRoot.Position.Rank = removedStackRoot.Position.Rank
+
+		for i := 0; i < len(stackChildren)-1; i++ {
+			stackChildren[i].Position.Stack = uuid.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
 		}
 	}
+}
 
-	reorderStackRootNotes(filteredNotes)
-
-	body.Notes = filteredNotes
-	return body, nil
+type stackRootChildrenNotes struct {
+	StackRoot     notes.Note
+	StackChildren []notes.Note
 }
 
 func reorderStackRootNotes(processedNotes []notes.Note) {
@@ -946,18 +923,25 @@ func reorderStackRootNotes(processedNotes []notes.Note) {
 	}
 }
 
-func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, body ImportBoardRequest, colMap map[uuid.UUID]uuid.UUID) (err error) {
-	// handle note deletion for
-	body, err = service.deleteNotesOfDeletedUsers(ctx, body)
-	if err != nil {
-		return err
+func organizeStackNotes(allNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {
+	stackRootNotes := make(map[uuid.UUID]notes.Note)
+	stackChildrenByRoot := make(map[uuid.UUID][]notes.Note)
+
+	for _, note := range allNotes {
+		if !note.Position.Stack.Valid {
+			stackRootNotes[note.ID] = note
+		} else {
+			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
+		}
 	}
+	return stackRootNotes, stackChildrenByRoot
+}
 
-	stackRootNotes, stackChildrenByRoot := organizeStackNotes(body.Notes)
+func (service *Service) importStackRoots(ctx context.Context, boardID uuid.UUID, stackRootNotes map[uuid.UUID]notes.Note, stackChildrenByRoot map[uuid.UUID][]notes.Note, columnMap map[uuid.UUID]uuid.UUID) ([]stackRootChildrenNotes, error) {
+	stackNotes := make([]stackRootChildrenNotes, 0, len(stackRootNotes))
 
-	var stackNotes []stackRootChildrenNotes
 	for stackRootID, stackRootNote := range stackRootNotes {
-		newColumnID, exists := colMap[stackRootNote.Position.Column]
+		newColumnID, exists := columnMap[stackRootNote.Position.Column]
 		if !exists {
 			continue
 		}
@@ -973,7 +957,7 @@ func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.U
 			User:  stackRootNote.Author,
 		})
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		stackNotes = append(stackNotes, stackRootChildrenNotes{
@@ -982,26 +966,7 @@ func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.U
 		})
 	}
 
-	err = service.importStackChildren(ctx, boardID, stackNotes)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func organizeStackNotes(notes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {
-	stackRootNotes := make(map[uuid.UUID]notes.Note)
-	stackChildrenByRoot := make(map[uuid.UUID][]notes.Note)
-
-	for _, note := range notes {
-		if !note.Position.Stack.Valid {
-			stackRootNotes[note.ID] = note
-		} else {
-			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
-		}
-	}
-	return stackRootNotes, stackChildrenByRoot
+	return stackNotes, nil
 }
 
 func (service *Service) importStackChildren(ctx context.Context, boardID uuid.UUID, stackNotes []stackRootChildrenNotes) error {
