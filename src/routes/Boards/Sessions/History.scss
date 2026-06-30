@@ -1,0 +1,127 @@
+@use "constants/styles";
+
+$stan-height: 50vh;
+$max-card-width: 970px;
+
+.history {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
+  overflow: visible;
+}
+
+.history__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: styles.$spacing--lg;
+
+  overflow: hidden;
+}
+
+.history__container-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+
+  padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
+}
+
+.history__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
+  gap: styles.$spacing--md;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 0 styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
+}
+
+.history__stan-spacing {
+  height: styles.$spacing--3xl;
+}
+
+.history__stan-container {
+  position: absolute;
+  right: 0;
+  height: $stan-height;
+  // align left edge of stan to the right edge of the card
+  transform: translateX(100%);
+}
+
+.history__stan {
+  height: 100%;
+
+  &--dark {
+    display: initial;
+  }
+
+  &--light {
+    display: none;
+  }
+}
+
+// following teaser styles are temporary while the history is not yet fully implemented
+.history__teaser-info {
+  display: flex;
+  gap: styles.$spacing--sm;
+  align-items: flex-start;
+}
+
+.history__teaser-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  flex-shrink: 0;
+  margin-top: styles.$spacing--xxs;
+  color: styles.$navy--600;
+}
+
+.history__teaser-text {
+  font-weight: 400;
+  font-size: styles.$text--md;
+  line-height: 28px;
+  margin-top: styles.$spacing--xxs;
+  color: styles.$navy--400;
+}
+
+[data-theme="dark"] {
+  .history__teaser-title,
+  .history__teaser-icon,
+  .history__teaser-text {
+    color: styles.$blue--50;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--desktop) {
+  .history__stan-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .history__container-header {
+    justify-content: center;
+    gap: styles.$spacing--md;
+  }
+}
+
+[data-theme="dark"] {
+  .history {
+    background-color: styles.$navy--700;
+  }
+
+  .history__stan {
+    &--dark {
+      display: none;
+    }
+
+    &--light {
+      display: initial;
+    }
+  }
+}

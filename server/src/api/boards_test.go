@@ -182,13 +182,11 @@ func (suite *BoardTestSuite) TestGetBoards() {
 			if te.err == nil {
 				boardMock.EXPECT().BoardOverview(mock.Anything, boardIDs, userID).Return([]*boards.BoardOverview{{
 					Board:        firstBoard,
-					Columns:      1,
 					CreatedAt:    time.Time{},
 					Participants: 3,
 				},
 					{
 						Board:        secondBoard,
-						Columns:      2,
 						CreatedAt:    time.Time{},
 						Participants: 4,
 					},
