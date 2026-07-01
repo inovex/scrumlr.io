@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
+import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
@@ -47,8 +47,7 @@ export const BoardAPI = {
       });
 
       if (response.status === 201) {
-        const body = (await response.json()) as Board;
-        return body.id;
+        return (await response.json()) as ImportBoardResponse;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);

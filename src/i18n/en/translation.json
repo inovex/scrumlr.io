@@ -424,7 +424,9 @@
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
     "enable": "Enable",
-    "failedImport": "Error importing the file"
+    "failedImport": "Error importing the file",
+    "importRemovedNotes_one": "{{count}} note was removed during import because no author could be resolved.",
+    "importRemovedNotes_other": "{{count}} notes were removed during import because no author could be resolved."
   },
   "Language": {
     "german": "German",

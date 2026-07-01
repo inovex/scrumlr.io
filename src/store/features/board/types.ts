@@ -43,6 +43,14 @@ export type BoardImportData = {
   voting: Voting;
 };
 
+export interface ImportWarnings {
+  removedNotesMissingAuthorCount?: number;
+}
+
+export interface ImportBoardResponse extends Board {
+  importWarnings?: ImportWarnings;
+}
+
 export type BoardActionType = {
   board: Board;
   participants: ParticipantWithUser[];

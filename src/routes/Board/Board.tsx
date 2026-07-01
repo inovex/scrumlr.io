@@ -10,9 +10,13 @@ import _ from "underscore";
 import {Outlet} from "react-router";
 import {leaveBoard} from "store/features";
 import {SnowfallWrapper} from "components/SnowfallWrapper/SnowfallWrapper";
+import {useTranslation} from "react-i18next";
+import {Toast} from "utils/Toast";
+import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
 
 export const Board = () => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
 
   useEffect(
     () => () => {
@@ -57,6 +61,34 @@ export const Board = () => {
   );
 
   const currentUserIsModerator = state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR";
+
+  useEffect(() => {
+    if (!state.board.id) {
+      return;
+    }
+
+    const importWarningData = sessionStorage.getItem(IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY);
+    if (!importWarningData) {
+      return;
+    }
+
+    sessionStorage.removeItem(IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY);
+
+    try {
+      const parsedImportWarning = JSON.parse(importWarningData) as {boardId?: string; removedNotesMissingAuthorCount?: number};
+
+      if (parsedImportWarning.boardId !== state.board.id) {
+        return;
+      }
+
+      const removedNotesCount = parsedImportWarning.removedNotesMissingAuthorCount ?? 0;
+      if (removedNotesCount > 0) {
+        Toast.info({title: t("Toast.importRemovedNotes", {count: removedNotesCount})});
+      }
+    } catch {
+      // ignore malformed persisted import warning data
+    }
+  }, [state.board.id, t]);
 
   if (state.participants?.self?.banned) {
     window.location.reload();

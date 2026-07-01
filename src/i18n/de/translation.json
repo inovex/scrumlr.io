@@ -425,7 +425,9 @@
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
     "enable": "Aktivieren",
-    "failedImport": "Fehler beim importieren der Datei"
+    "failedImport": "Fehler beim importieren der Datei",
+    "importRemovedNotes_one": "{{count}} Karte wurde beim Import entfernt, weil kein Autor zugeordnet werden konnte.",
+    "importRemovedNotes_other": "{{count}} Karten wurden beim Import entfernt, weil kein Autor zugeordnet werden konnte."
   },
   "Language": {
     "german": "Deutsch",

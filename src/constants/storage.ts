@@ -13,3 +13,4 @@ export const RECENT_EMOJIS_STORAGE_KEY = `${CLIENT_STORAGE_PREFIX}recentEmojis`;
 export const SNOWFALL_STORAGE_KEY = `${CLIENT_STORAGE_PREFIX}snowfall`;
 export const SNOWFALL_NOTIFICATION_STORAGE_KEY = `${CLIENT_STORAGE_PREFIX}snowfall_notification`;
 export const RECOMMENDED_FAVOURITES_KEY = `${CLIENT_STORAGE_PREFIX}recommendedTemplateFavourites`;
+export const IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY = `${CLIENT_STORAGE_PREFIX}import_board_warnings`;

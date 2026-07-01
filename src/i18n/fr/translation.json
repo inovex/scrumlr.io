@@ -424,7 +424,9 @@
     "readyButton": "Prêt !",
     "boardReactionsDisabled": "Les réactions du tableau sont désactivées",
     "enable": "Activer",
-    "failedImport": "Erreur lors de l'importation du fichier"
+    "failedImport": "Erreur lors de l'importation du fichier",
+    "importRemovedNotes_one": "{{count}} note a été supprimée pendant l'import car aucun auteur n'a pu être déterminé.",
+    "importRemovedNotes_other": "{{count}} notes ont été supprimées pendant l'import car aucun auteur n'a pu être déterminé."
   },
   "Language": {
     "german": "Allemand",

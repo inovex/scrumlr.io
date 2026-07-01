@@ -7,6 +7,7 @@ import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
+import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -368,5 +369,16 @@ export const importBoard = createAsyncThunk<
     dispatch,
     () => importBoard(payload),
     "importBoard"
-  ).then((boardID) => window.location.assign(`/board/${boardID}`));
+  ).then((importResponse) => {
+    const {importWarnings} = importResponse;
+    sessionStorage.setItem(
+      IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY,
+      JSON.stringify({
+        boardId: importResponse.id,
+        removedNotesMissingAuthorCount: importWarnings?.removedNotesMissingAuthorCount ?? 0,
+      })
+    );
+
+    globalThis.location.assign(`/board/${importResponse.id}`);
+  });
 });
