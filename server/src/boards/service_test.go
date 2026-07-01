@@ -233,6 +233,145 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphraseMissing() {
 	suite.Equal(common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
 }
 
+func (suite *BoardServiceTestSuite) TestHasValidUniqueColumnIndices() {
+	index0 := 0
+	index1 := 1
+	indexDuplicate := 0
+	indexOutOfBounds := 2
+
+	suite.Run("valid unique indices", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &index1},
+		})
+
+		suite.True(valid)
+	})
+
+	suite.Run("invalid when index is nil", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: nil},
+			{Index: &index1},
+		})
+
+		suite.False(valid)
+	})
+
+	suite.Run("invalid when duplicate index exists", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &indexDuplicate},
+		})
+
+		suite.False(valid)
+	})
+
+	suite.Run("invalid when index is out of bounds", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &indexOutOfBounds},
+		})
+
+		suite.False(valid)
+	})
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_UsesProvidedIndices() {
+	service := &Service{columnService: suite.columnMock}
+
+	boardID := uuid.New()
+	ownerID := uuid.New()
+	index0 := 0
+	index1 := 1
+
+	columnsToCreate := []columns.ColumnRequest{
+		{Name: "Second", Color: common.ColorGoalGreen, Index: &index1},
+		{Name: "First", Color: common.ColorGoalGreen, Index: &index0},
+	}
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Second",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index1,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "First",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index0,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.NoError(err)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_FallsBackToLoopIndicesWhenProvidedIndicesAreInvalid() {
+	service := &Service{columnService: suite.columnMock}
+
+	boardID := uuid.New()
+	ownerID := uuid.New()
+	indexDuplicate := 0
+	indexExpectedSecond := 1
+
+	columnsToCreate := []columns.ColumnRequest{
+		{Name: "First", Color: common.ColorGoalGreen, Index: &indexDuplicate},
+		{Name: "Second", Color: common.ColorGoalGreen, Index: &indexDuplicate},
+	}
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "First",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &indexDuplicate,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Second",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &indexExpectedSecond,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.NoError(err)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_ReturnsErrorWhenColumnCreationFails() {
+	service := &Service{columnService: suite.columnMock}
+
+	boardID := uuid.New()
+	ownerID := uuid.New()
+	index0 := 0
+	createErr := errors.New("create column failed")
+
+	columnsToCreate := []columns.ColumnRequest{{Name: "Only", Color: common.ColorGoalGreen, Index: &index0}}
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Only",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index0,
+	}).Return(nil, createErr).Once()
+
+	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.ErrorIs(err, createErr)
+}
+
 func (suite *BoardServiceTestSuite) TestDelete() {
 
 	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, suite.boardID).Return(nil)

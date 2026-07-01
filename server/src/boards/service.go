@@ -194,15 +194,10 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		return nil, common.InternalServerError
 	}
 
-	// create the columns
-	for index, value := range body.Columns {
-		column := columns.ColumnRequest{Board: b.ID, User: body.Owner, Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index}
-		_, err = service.columnService.Create(ctx, column)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to create column")
-			span.RecordError(err)
-			return nil, err
-		}
+	if err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
+		span.SetStatus(codes.Error, "failed to create column")
+		span.RecordError(err)
+		return nil, err
 	}
 
 	// create the owner session
@@ -216,6 +211,47 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 
 	boardCreatedCounter.Add(ctx, 1)
 	return new(Board).From(b), nil
+}
+
+func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) error {
+	useProvidedIndices := hasValidUniqueColumnIndices(columnsToCreate)
+
+	for index, value := range columnsToCreate {
+		finalIndex := index
+		if useProvidedIndices {
+			finalIndex = *value.Index
+		}
+
+		column := columns.ColumnRequest{
+			Board:       boardID,
+			User:        owner,
+			Name:        value.Name,
+			Description: value.Description,
+			Color:       value.Color,
+			Visible:     value.Visible,
+			Index:       &finalIndex,
+		}
+
+		if _, err := service.columnService.Create(ctx, column); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func hasValidUniqueColumnIndices(columnsToCreate []columns.ColumnRequest) bool {
+	seenIndices := make([]bool, len(columnsToCreate))
+
+	for _, col := range columnsToCreate {
+		if col.Index == nil || *col.Index < 0 || *col.Index >= len(columnsToCreate) || seenIndices[*col.Index] {
+			return false
+		}
+
+		seenIndices[*col.Index] = true
+	}
+
+	return true
 }
 
 func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
