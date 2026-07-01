@@ -959,9 +959,10 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 		},
 	}).Return(&notes.Note{ID: importedParentID}, nil).Once()
 
-	err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
+	warnings, err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
 
 	suite.NoError(err)
+	suite.Nil(warnings)
 	notesMock.AssertExpectations(suite.T())
 }
 
@@ -1008,10 +1009,11 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 		},
 	}).Return(nil, importError).Once()
 
-	err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
+	warnings, err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
 
 	suite.Error(err)
 	suite.Equal(importError, err)
+	suite.Nil(warnings)
 	notesMock.AssertExpectations(suite.T())
 }
 
@@ -1139,10 +1141,11 @@ func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_Error() {
 func (suite *BoardServiceTestSuite) TestPrepareImportNotes_EmptyInput() {
 	service := &Service{userService: suite.userService}
 
-	processedNotes, err := service.prepareImportNotes(context.Background(), []notes.Note{})
+	processedResult, err := service.prepareImportNotes(context.Background(), []notes.Note{})
 
 	suite.NoError(err)
-	suite.Empty(processedNotes)
+	suite.Empty(processedResult.Notes)
+	suite.Zero(processedResult.RemovedNotesMissingAuthorCount)
 }
 
 func (suite *BoardServiceTestSuite) TestPrepareImportNotes_CollectAuthorsError() {
@@ -1153,9 +1156,9 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_CollectAuthorsError()
 
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{author}).Return(nil, errors.New("database error")).Once()
 
-	processedNotes, err := service.prepareImportNotes(context.Background(), importNotes)
+	processedResult, err := service.prepareImportNotes(context.Background(), importNotes)
 
-	suite.Nil(processedNotes)
+	suite.Nil(processedResult)
 	suite.EqualError(err, "could not get existing authors")
 }
 
@@ -1213,13 +1216,14 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{missingAuthor, existingAuthorOne, existingAuthorTwo}).Return([]uuid.UUID{existingAuthorOne, existingAuthorTwo}, nil).Once()
 
-	processedNotes, err := service.prepareImportNotes(context.Background(), importNotes)
+	processedResult, err := service.prepareImportNotes(context.Background(), importNotes)
 
 	suite.NoError(err)
-	suite.Len(processedNotes, 3)
+	suite.Len(processedResult.Notes, 3)
+	suite.Equal(1, processedResult.RemovedNotesMissingAuthorCount)
 
-	notesByID := make(map[uuid.UUID]notes.Note, len(processedNotes))
-	for _, note := range processedNotes {
+	notesByID := make(map[uuid.UUID]notes.Note, len(processedResult.Notes))
+	for _, note := range processedResult.Notes {
 		notesByID[note.ID] = note
 	}
 
@@ -1244,16 +1248,17 @@ func (suite *BoardServiceTestSuite) TestFilterNotesByExistingAuthors() {
 	noteOne := notes.Note{ID: uuid.New(), Author: existingAuthor}
 	noteTwo := notes.Note{ID: uuid.New(), Author: missingAuthor}
 
-	filteredNotes, originalByID := filterNotesByExistingAuthors(
+	result := filterNotesByExistingAuthors(
 		[]notes.Note{noteOne, noteTwo},
 		map[uuid.UUID]struct{}{existingAuthor: {}},
 	)
 
-	suite.Len(filteredNotes, 1)
-	suite.Equal(noteOne.ID, filteredNotes[0].ID)
-	suite.Len(originalByID, 2)
-	suite.Equal(noteOne.ID, originalByID[noteOne.ID].ID)
-	suite.Equal(noteTwo.ID, originalByID[noteTwo.ID].ID)
+	suite.Len(result.FilteredNotes, 1)
+	suite.Equal(noteOne.ID, result.FilteredNotes[0].ID)
+	suite.Len(result.OriginalNoteByID, 2)
+	suite.Equal(noteOne.ID, result.OriginalNoteByID[noteOne.ID].ID)
+	suite.Equal(noteTwo.ID, result.OriginalNoteByID[noteTwo.ID].ID)
+	suite.Equal(1, result.RemovedNotesMissingAuthorCount)
 }
 
 func (suite *BoardServiceTestSuite) TestIndexAndGroupStacks() {

@@ -689,7 +689,7 @@ func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvi
 	return &LastModifiedUpdater{database: database, clock: clock}
 }
 
-func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, error) {
+func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*ImportBoardResponse, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
 	defer span.End()
 
@@ -700,14 +700,14 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, request Imp
 		return nil, err
 	}
 
-	err = service.processImportedNotes(ctx, board.ID, request, columnMap)
+	warnings, err := service.processImportedNotes(ctx, board.ID, request, columnMap)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import notes or columns")
 		span.RecordError(err)
 		return nil, err
 	}
 
-	return board, nil
+	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
 func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, map[uuid.UUID]uuid.UUID, error) {
@@ -752,30 +752,41 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 	return b, columnMap, nil
 }
 
-func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (err error) {
-	request.Notes, err = service.prepareImportNotes(ctx, request.Notes)
+func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (*ImportWarnings, error) {
+	preparedNotes, err := service.prepareImportNotes(ctx, request.Notes)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
+	request.Notes = preparedNotes.Notes
 
 	stackRootNotes, stackChildrenByRoot := organizeStackNotes(request.Notes)
 
 	stackNotes, err := service.importStackRoots(ctx, boardID, stackRootNotes, stackChildrenByRoot, columnMap)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = service.importStackChildren(ctx, boardID, stackNotes)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	if preparedNotes.RemovedNotesMissingAuthorCount > 0 {
+		return &ImportWarnings{RemovedNotesMissingAuthorCount: preparedNotes.RemovedNotesMissingAuthorCount}, nil
+	}
+
+	return nil, nil
 }
 
-func (service *Service) prepareImportNotes(ctx context.Context, importNotes []notes.Note) ([]notes.Note, error) {
+type importNotesPreparationResult struct {
+	Notes                          []notes.Note
+	RemovedNotesMissingAuthorCount int
+}
+
+func (service *Service) prepareImportNotes(ctx context.Context, importNotes []notes.Note) (*importNotesPreparationResult, error) {
 	if len(importNotes) == 0 {
-		return importNotes, nil
+		return &importNotesPreparationResult{Notes: importNotes}, nil
 	}
 
 	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(ctx, importNotes)
@@ -783,18 +794,21 @@ func (service *Service) prepareImportNotes(ctx context.Context, importNotes []no
 		return nil, err
 	}
 	if allAuthorsExist {
-		return importNotes, nil
+		return &importNotesPreparationResult{Notes: importNotes}, nil
 	}
 
-	filteredNotes, originalNoteByID := filterNotesByExistingAuthors(importNotes, existingAuthors)
+	filteredResult := filterNotesByExistingAuthors(importNotes, existingAuthors)
 
-	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredResult.FilteredNotes)
 
-	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalNoteByID)
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, filteredResult.OriginalNoteByID)
 
-	reorderStackRootNotes(filteredNotes)
+	reorderStackRootNotes(filteredResult.FilteredNotes)
 
-	return filteredNotes, nil
+	return &importNotesPreparationResult{
+		Notes:                          filteredResult.FilteredNotes,
+		RemovedNotesMissingAuthorCount: filteredResult.RemovedNotesMissingAuthorCount,
+	}, nil
 }
 
 func (service *Service) collectExistingAuthors(ctx context.Context, importNotes []notes.Note) (map[uuid.UUID]struct{}, bool, error) {
@@ -825,7 +839,13 @@ func (service *Service) collectExistingAuthors(ctx context.Context, importNotes 
 	return existingAuthorsMap, false, nil
 }
 
-func filterNotesByExistingAuthors(importNotes []notes.Note, existingAuthors map[uuid.UUID]struct{}) ([]notes.Note, map[uuid.UUID]notes.Note) {
+type filteredNotesResult struct {
+	FilteredNotes                  []notes.Note
+	OriginalNoteByID               map[uuid.UUID]notes.Note
+	RemovedNotesMissingAuthorCount int
+}
+
+func filterNotesByExistingAuthors(importNotes []notes.Note, existingAuthors map[uuid.UUID]struct{}) *filteredNotesResult {
 	originalNoteByID := make(map[uuid.UUID]notes.Note, len(importNotes))
 	filteredNotes := make([]notes.Note, 0, len(importNotes))
 
@@ -838,7 +858,14 @@ func filterNotesByExistingAuthors(importNotes []notes.Note, existingAuthors map[
 		}
 		filteredNotes = append(filteredNotes, note)
 	}
-	return filteredNotes, originalNoteByID
+
+	numRemovedNotes := len(importNotes) - len(filteredNotes)
+
+	return &filteredNotesResult{
+		FilteredNotes:                  filteredNotes,
+		OriginalNoteByID:               originalNoteByID,
+		RemovedNotesMissingAuthorCount: numRemovedNotes,
+	}
 }
 
 func indexAndGroupStacks(filteredNotes []notes.Note) (map[uuid.UUID]*notes.Note, map[uuid.UUID][]*notes.Note) {
