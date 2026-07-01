@@ -72,7 +72,7 @@ type MockNotesDatabase_CreateNote_Call struct {
 // CreateNote is a helper method to define mock.On call
 //   - ctx context.Context
 //   - insert DatabaseNoteInsert
-func (_e *MockNotesDatabase_Expecter) CreateNote(ctx interface{}, insert interface{}) *MockNotesDatabase_CreateNote_Call {
+func (_e *MockNotesDatabase_Expecter) CreateNote(ctx any, insert any) *MockNotesDatabase_CreateNote_Call {
 	return &MockNotesDatabase_CreateNote_Call{Call: _e.mock.On("CreateNote", ctx, insert)}
 }
 
@@ -132,7 +132,7 @@ type MockNotesDatabase_DeleteNote_Call struct {
 //   - board uuid.UUID
 //   - id uuid.UUID
 //   - deleteStack bool
-func (_e *MockNotesDatabase_Expecter) DeleteNote(ctx interface{}, caller interface{}, board interface{}, id interface{}, deleteStack interface{}) *MockNotesDatabase_DeleteNote_Call {
+func (_e *MockNotesDatabase_Expecter) DeleteNote(ctx any, caller any, board any, id any, deleteStack any) *MockNotesDatabase_DeleteNote_Call {
 	return &MockNotesDatabase_DeleteNote_Call{Call: _e.mock.On("DeleteNote", ctx, caller, board, id, deleteStack)}
 }
 
@@ -213,7 +213,7 @@ type MockNotesDatabase_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockNotesDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockNotesDatabase_Get_Call {
+func (_e *MockNotesDatabase_Expecter) Get(ctx any, id any) *MockNotesDatabase_Get_Call {
 	return &MockNotesDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -288,9 +288,9 @@ type MockNotesDatabase_GetAll_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - columns ...uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetAll(ctx interface{}, board interface{}, columns ...interface{}) *MockNotesDatabase_GetAll_Call {
+func (_e *MockNotesDatabase_Expecter) GetAll(ctx any, board any, columns ...any) *MockNotesDatabase_GetAll_Call {
 	return &MockNotesDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{ctx, board}, columns...)...)}
+		append([]any{ctx, board}, columns...)...)}
 }
 
 func (_c *MockNotesDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID, columns ...uuid.UUID)) *MockNotesDatabase_GetAll_Call {
@@ -365,7 +365,7 @@ type MockNotesDatabase_GetByUserAndBoard_Call struct {
 //   - ctx context.Context
 //   - userID uuid.UUID
 //   - boardID uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetByUserAndBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesDatabase_GetByUserAndBoard_Call {
+func (_e *MockNotesDatabase_Expecter) GetByUserAndBoard(ctx any, userID any, boardID any) *MockNotesDatabase_GetByUserAndBoard_Call {
 	return &MockNotesDatabase_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, userID, boardID)}
 }
 
@@ -438,7 +438,7 @@ type MockNotesDatabase_GetChildNotes_Call struct {
 // GetChildNotes is a helper method to define mock.On call
 //   - ctx context.Context
 //   - parentNote uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetChildNotes(ctx interface{}, parentNote interface{}) *MockNotesDatabase_GetChildNotes_Call {
+func (_e *MockNotesDatabase_Expecter) GetChildNotes(ctx any, parentNote any) *MockNotesDatabase_GetChildNotes_Call {
 	return &MockNotesDatabase_GetChildNotes_Call{Call: _e.mock.On("GetChildNotes", ctx, parentNote)}
 }
 
@@ -506,7 +506,7 @@ type MockNotesDatabase_GetPrecondition_Call struct {
 //   - id uuid.UUID
 //   - board uuid.UUID
 //   - caller uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetPrecondition(ctx interface{}, id interface{}, board interface{}, caller interface{}) *MockNotesDatabase_GetPrecondition_Call {
+func (_e *MockNotesDatabase_Expecter) GetPrecondition(ctx any, id any, board any, caller any) *MockNotesDatabase_GetPrecondition_Call {
 	return &MockNotesDatabase_GetPrecondition_Call{Call: _e.mock.On("GetPrecondition", ctx, id, board, caller)}
 }
 
@@ -584,7 +584,7 @@ type MockNotesDatabase_GetStack_Call struct {
 // GetStack is a helper method to define mock.On call
 //   - ctx context.Context
 //   - noteID uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetStack(ctx interface{}, noteID interface{}) *MockNotesDatabase_GetStack_Call {
+func (_e *MockNotesDatabase_Expecter) GetStack(ctx any, noteID any) *MockNotesDatabase_GetStack_Call {
 	return &MockNotesDatabase_GetStack_Call{Call: _e.mock.On("GetStack", ctx, noteID)}
 }
 
@@ -650,7 +650,7 @@ type MockNotesDatabase_ImportNote_Call struct {
 // ImportNote is a helper method to define mock.On call
 //   - ctx context.Context
 //   - insert DatabaseNoteImport
-func (_e *MockNotesDatabase_Expecter) ImportNote(ctx interface{}, insert interface{}) *MockNotesDatabase_ImportNote_Call {
+func (_e *MockNotesDatabase_Expecter) ImportNote(ctx any, insert any) *MockNotesDatabase_ImportNote_Call {
 	return &MockNotesDatabase_ImportNote_Call{Call: _e.mock.On("ImportNote", ctx, insert)}
 }
 
@@ -717,7 +717,7 @@ type MockNotesDatabase_UpdateNote_Call struct {
 //   - ctx context.Context
 //   - caller uuid.UUID
 //   - update DatabaseNoteUpdate
-func (_e *MockNotesDatabase_Expecter) UpdateNote(ctx interface{}, caller interface{}, update interface{}) *MockNotesDatabase_UpdateNote_Call {
+func (_e *MockNotesDatabase_Expecter) UpdateNote(ctx any, caller any, update any) *MockNotesDatabase_UpdateNote_Call {
 	return &MockNotesDatabase_UpdateNote_Call{Call: _e.mock.On("UpdateNote", ctx, caller, update)}
 }
 

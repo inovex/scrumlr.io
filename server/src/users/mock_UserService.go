@@ -74,7 +74,7 @@ type MockUserService_CreateAnonymous_Call struct {
 // CreateAnonymous is a helper method to define mock.On call
 //   - ctx context.Context
 //   - name string
-func (_e *MockUserService_Expecter) CreateAnonymous(ctx interface{}, name interface{}) *MockUserService_CreateAnonymous_Call {
+func (_e *MockUserService_Expecter) CreateAnonymous(ctx any, name any) *MockUserService_CreateAnonymous_Call {
 	return &MockUserService_CreateAnonymous_Call{Call: _e.mock.On("CreateAnonymous", ctx, name)}
 }
 
@@ -144,7 +144,7 @@ type MockUserService_CreateAppleUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateAppleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateAppleUser_Call {
+func (_e *MockUserService_Expecter) CreateAppleUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateAppleUser_Call {
 	return &MockUserService_CreateAppleUser_Call{Call: _e.mock.On("CreateAppleUser", ctx, id, name, avatarUrl)}
 }
 
@@ -224,7 +224,7 @@ type MockUserService_CreateAzureAdUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateAzureAdUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateAzureAdUser_Call {
+func (_e *MockUserService_Expecter) CreateAzureAdUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateAzureAdUser_Call {
 	return &MockUserService_CreateAzureAdUser_Call{Call: _e.mock.On("CreateAzureAdUser", ctx, id, name, avatarUrl)}
 }
 
@@ -304,7 +304,7 @@ type MockUserService_CreateGitHubUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateGitHubUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateGitHubUser_Call {
+func (_e *MockUserService_Expecter) CreateGitHubUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateGitHubUser_Call {
 	return &MockUserService_CreateGitHubUser_Call{Call: _e.mock.On("CreateGitHubUser", ctx, id, name, avatarUrl)}
 }
 
@@ -384,7 +384,7 @@ type MockUserService_CreateGoogleUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateGoogleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateGoogleUser_Call {
+func (_e *MockUserService_Expecter) CreateGoogleUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateGoogleUser_Call {
 	return &MockUserService_CreateGoogleUser_Call{Call: _e.mock.On("CreateGoogleUser", ctx, id, name, avatarUrl)}
 }
 
@@ -464,7 +464,7 @@ type MockUserService_CreateMicrosoftUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateMicrosoftUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateMicrosoftUser_Call {
+func (_e *MockUserService_Expecter) CreateMicrosoftUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateMicrosoftUser_Call {
 	return &MockUserService_CreateMicrosoftUser_Call{Call: _e.mock.On("CreateMicrosoftUser", ctx, id, name, avatarUrl)}
 }
 
@@ -544,7 +544,7 @@ type MockUserService_CreateOIDCUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateOIDCUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateOIDCUser_Call {
+func (_e *MockUserService_Expecter) CreateOIDCUser(ctx any, id any, name any, avatarUrl any) *MockUserService_CreateOIDCUser_Call {
 	return &MockUserService_CreateOIDCUser_Call{Call: _e.mock.On("CreateOIDCUser", ctx, id, name, avatarUrl)}
 }
 
@@ -611,7 +611,7 @@ type MockUserService_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) Delete(ctx interface{}, id interface{}) *MockUserService_Delete_Call {
+func (_e *MockUserService_Expecter) Delete(ctx any, id any) *MockUserService_Delete_Call {
 	return &MockUserService_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
@@ -679,7 +679,7 @@ type MockUserService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) Get(ctx interface{}, id interface{}) *MockUserService_Get_Call {
+func (_e *MockUserService_Expecter) Get(ctx any, id any) *MockUserService_Get_Call {
 	return &MockUserService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -747,7 +747,7 @@ type MockUserService_GetBoardUsers_Call struct {
 // GetBoardUsers is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockUserService_Expecter) GetBoardUsers(ctx interface{}, boardID interface{}) *MockUserService_GetBoardUsers_Call {
+func (_e *MockUserService_Expecter) GetBoardUsers(ctx any, boardID any) *MockUserService_GetBoardUsers_Call {
 	return &MockUserService_GetBoardUsers_Call{Call: _e.mock.On("GetBoardUsers", ctx, boardID)}
 }
 
@@ -815,7 +815,7 @@ type MockUserService_GetExistingUserIDs_Call struct {
 // GetExistingUserIDs is a helper method to define mock.On call
 //   - ctx context.Context
 //   - userIDs []uuid.UUID
-func (_e *MockUserService_Expecter) GetExistingUserIDs(ctx interface{}, userIDs interface{}) *MockUserService_GetExistingUserIDs_Call {
+func (_e *MockUserService_Expecter) GetExistingUserIDs(ctx any, userIDs any) *MockUserService_GetExistingUserIDs_Call {
 	return &MockUserService_GetExistingUserIDs_Call{Call: _e.mock.On("GetExistingUserIDs", ctx, userIDs)}
 }
 
@@ -881,7 +881,7 @@ type MockUserService_IsUserAvailableForKeyMigration_Call struct {
 // IsUserAvailableForKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) IsUserAvailableForKeyMigration(ctx interface{}, id interface{}) *MockUserService_IsUserAvailableForKeyMigration_Call {
+func (_e *MockUserService_Expecter) IsUserAvailableForKeyMigration(ctx any, id any) *MockUserService_IsUserAvailableForKeyMigration_Call {
 	return &MockUserService_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", ctx, id)}
 }
 
@@ -949,7 +949,7 @@ type MockUserService_SetKeyMigration_Call struct {
 // SetKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) SetKeyMigration(ctx interface{}, id interface{}) *MockUserService_SetKeyMigration_Call {
+func (_e *MockUserService_Expecter) SetKeyMigration(ctx any, id any) *MockUserService_SetKeyMigration_Call {
 	return &MockUserService_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", ctx, id)}
 }
 
@@ -1017,7 +1017,7 @@ type MockUserService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body UserUpdateRequest
-func (_e *MockUserService_Expecter) Update(ctx interface{}, body interface{}) *MockUserService_Update_Call {
+func (_e *MockUserService_Expecter) Update(ctx any, body any) *MockUserService_Update_Call {
 	return &MockUserService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

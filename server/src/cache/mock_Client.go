@@ -65,7 +65,7 @@ type MockClient_Create_Call struct {
 //   - key string
 //   - value any
 //   - ttl time.Duration
-func (_e *MockClient_Expecter) Create(ctx interface{}, key interface{}, value interface{}, ttl interface{}) *MockClient_Create_Call {
+func (_e *MockClient_Expecter) Create(ctx any, key any, value any, ttl any) *MockClient_Create_Call {
 	return &MockClient_Create_Call{Call: _e.mock.On("Create", ctx, key, value, ttl)}
 }
 
@@ -132,7 +132,7 @@ type MockClient_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - key string
-func (_e *MockClient_Expecter) Delete(ctx interface{}, key interface{}) *MockClient_Delete_Call {
+func (_e *MockClient_Expecter) Delete(ctx any, key any) *MockClient_Delete_Call {
 	return &MockClient_Delete_Call{Call: _e.mock.On("Delete", ctx, key)}
 }
 
@@ -200,7 +200,7 @@ type MockClient_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - key string
-func (_e *MockClient_Expecter) Get(ctx interface{}, key interface{}) *MockClient_Get_Call {
+func (_e *MockClient_Expecter) Get(ctx any, key any) *MockClient_Get_Call {
 	return &MockClient_Get_Call{Call: _e.mock.On("Get", ctx, key)}
 }
 
@@ -258,7 +258,7 @@ type MockClient_Put_Call struct {
 //   - ctx context.Context
 //   - key string
 //   - value any
-func (_e *MockClient_Expecter) Put(ctx interface{}, key interface{}, value interface{}) *MockClient_Put_Call {
+func (_e *MockClient_Expecter) Put(ctx any, key any, value any) *MockClient_Put_Call {
 	return &MockClient_Put_Call{Call: _e.mock.On("Put", ctx, key, value)}
 }
 

@@ -672,7 +672,7 @@ func (suite *BoardTestSuite) TestImportBoardSuccess() {
 	suite.Require().NoError(err)
 	req := importBoardRequest(fixture.ownerID, body)
 
-	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(&boards.Board{ID: fixture.createdBoardID}, nil)
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(&boards.ImportBoardResponse{Board: &boards.Board{ID: fixture.createdBoardID}}, nil)
 
 	rr := httptest.NewRecorder()
 

@@ -66,7 +66,7 @@ type MockNotesService_AcquireLock_Call struct {
 //   - noteID uuid.UUID
 //   - userID uuid.UUID
 //   - boardID uuid.UUID
-func (_e *MockNotesService_Expecter) AcquireLock(ctx interface{}, noteID interface{}, userID interface{}, boardID interface{}) *MockNotesService_AcquireLock_Call {
+func (_e *MockNotesService_Expecter) AcquireLock(ctx any, noteID any, userID any, boardID any) *MockNotesService_AcquireLock_Call {
 	return &MockNotesService_AcquireLock_Call{Call: _e.mock.On("AcquireLock", ctx, noteID, userID, boardID)}
 }
 
@@ -144,7 +144,7 @@ type MockNotesService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body NoteCreateRequest
-func (_e *MockNotesService_Expecter) Create(ctx interface{}, body interface{}) *MockNotesService_Create_Call {
+func (_e *MockNotesService_Expecter) Create(ctx any, body any) *MockNotesService_Create_Call {
 	return &MockNotesService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -202,7 +202,7 @@ type MockNotesService_Delete_Call struct {
 //   - ctx context.Context
 //   - userID uuid.UUID
 //   - body NoteDeleteRequest
-func (_e *MockNotesService_Expecter) Delete(ctx interface{}, userID interface{}, body interface{}) *MockNotesService_Delete_Call {
+func (_e *MockNotesService_Expecter) Delete(ctx any, userID any, body any) *MockNotesService_Delete_Call {
 	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, userID, body)}
 }
 
@@ -265,7 +265,7 @@ type MockNotesService_DeleteUserNotesFromBoard_Call struct {
 //   - ctx context.Context
 //   - userID uuid.UUID
 //   - boardID uuid.UUID
-func (_e *MockNotesService_Expecter) DeleteUserNotesFromBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesService_DeleteUserNotesFromBoard_Call {
+func (_e *MockNotesService_Expecter) DeleteUserNotesFromBoard(ctx any, userID any, boardID any) *MockNotesService_DeleteUserNotesFromBoard_Call {
 	return &MockNotesService_DeleteUserNotesFromBoard_Call{Call: _e.mock.On("DeleteUserNotesFromBoard", ctx, userID, boardID)}
 }
 
@@ -338,7 +338,7 @@ type MockNotesService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockNotesService_Expecter) Get(ctx interface{}, id interface{}) *MockNotesService_Get_Call {
+func (_e *MockNotesService_Expecter) Get(ctx any, id any) *MockNotesService_Get_Call {
 	return &MockNotesService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -413,9 +413,9 @@ type MockNotesService_GetAll_Call struct {
 //   - ctx context.Context
 //   - id uuid.UUID
 //   - columns ...uuid.UUID
-func (_e *MockNotesService_Expecter) GetAll(ctx interface{}, id interface{}, columns ...interface{}) *MockNotesService_GetAll_Call {
+func (_e *MockNotesService_Expecter) GetAll(ctx any, id any, columns ...any) *MockNotesService_GetAll_Call {
 	return &MockNotesService_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{ctx, id}, columns...)...)}
+		append([]any{ctx, id}, columns...)...)}
 }
 
 func (_c *MockNotesService_GetAll_Call) Run(run func(ctx context.Context, id uuid.UUID, columns ...uuid.UUID)) *MockNotesService_GetAll_Call {
@@ -490,7 +490,7 @@ type MockNotesService_GetByUserAndBoard_Call struct {
 //   - ctx context.Context
 //   - userID uuid.UUID
 //   - boardID uuid.UUID
-func (_e *MockNotesService_Expecter) GetByUserAndBoard(ctx interface{}, userID interface{}, boardID interface{}) *MockNotesService_GetByUserAndBoard_Call {
+func (_e *MockNotesService_Expecter) GetByUserAndBoard(ctx any, userID any, boardID any) *MockNotesService_GetByUserAndBoard_Call {
 	return &MockNotesService_GetByUserAndBoard_Call{Call: _e.mock.On("GetByUserAndBoard", ctx, userID, boardID)}
 }
 
@@ -563,7 +563,7 @@ type MockNotesService_GetLock_Call struct {
 // GetLock is a helper method to define mock.On call
 //   - ctx context.Context
 //   - noteID uuid.UUID
-func (_e *MockNotesService_Expecter) GetLock(ctx interface{}, noteID interface{}) *MockNotesService_GetLock_Call {
+func (_e *MockNotesService_Expecter) GetLock(ctx any, noteID any) *MockNotesService_GetLock_Call {
 	return &MockNotesService_GetLock_Call{Call: _e.mock.On("GetLock", ctx, noteID)}
 }
 
@@ -631,7 +631,7 @@ type MockNotesService_GetStack_Call struct {
 // GetStack is a helper method to define mock.On call
 //   - ctx context.Context
 //   - note uuid.UUID
-func (_e *MockNotesService_Expecter) GetStack(ctx interface{}, note interface{}) *MockNotesService_GetStack_Call {
+func (_e *MockNotesService_Expecter) GetStack(ctx any, note any) *MockNotesService_GetStack_Call {
 	return &MockNotesService_GetStack_Call{Call: _e.mock.On("GetStack", ctx, note)}
 }
 
@@ -680,7 +680,7 @@ type MockNotesService_HandleWebSocketMessage_Call struct {
 //   - userID uuid.UUID
 //   - conn WebSocketConnector
 //   - data json.RawMessage
-func (_e *MockNotesService_Expecter) HandleWebSocketMessage(ctx interface{}, boardID interface{}, userID interface{}, conn interface{}, data interface{}) *MockNotesService_HandleWebSocketMessage_Call {
+func (_e *MockNotesService_Expecter) HandleWebSocketMessage(ctx any, boardID any, userID any, conn any, data any) *MockNotesService_HandleWebSocketMessage_Call {
 	return &MockNotesService_HandleWebSocketMessage_Call{Call: _e.mock.On("HandleWebSocketMessage", ctx, boardID, userID, conn, data)}
 }
 
@@ -763,7 +763,7 @@ type MockNotesService_Import_Call struct {
 // Import is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body NoteImportRequest
-func (_e *MockNotesService_Expecter) Import(ctx interface{}, body interface{}) *MockNotesService_Import_Call {
+func (_e *MockNotesService_Expecter) Import(ctx any, body any) *MockNotesService_Import_Call {
 	return &MockNotesService_Import_Call{Call: _e.mock.On("Import", ctx, body)}
 }
 
@@ -820,7 +820,7 @@ type MockNotesService_IsLocked_Call struct {
 // IsLocked is a helper method to define mock.On call
 //   - ctx context.Context
 //   - noteID uuid.UUID
-func (_e *MockNotesService_Expecter) IsLocked(ctx interface{}, noteID interface{}) *MockNotesService_IsLocked_Call {
+func (_e *MockNotesService_Expecter) IsLocked(ctx any, noteID any) *MockNotesService_IsLocked_Call {
 	return &MockNotesService_IsLocked_Call{Call: _e.mock.On("IsLocked", ctx, noteID)}
 }
 
@@ -879,7 +879,7 @@ type MockNotesService_ReleaseLock_Call struct {
 //   - noteID uuid.UUID
 //   - userID uuid.UUID
 //   - boardID uuid.UUID
-func (_e *MockNotesService_Expecter) ReleaseLock(ctx interface{}, noteID interface{}, userID interface{}, boardID interface{}) *MockNotesService_ReleaseLock_Call {
+func (_e *MockNotesService_Expecter) ReleaseLock(ctx any, noteID any, userID any, boardID any) *MockNotesService_ReleaseLock_Call {
 	return &MockNotesService_ReleaseLock_Call{Call: _e.mock.On("ReleaseLock", ctx, noteID, userID, boardID)}
 }
 
@@ -958,7 +958,7 @@ type MockNotesService_Update_Call struct {
 //   - ctx context.Context
 //   - userID uuid.UUID
 //   - body NoteUpdateRequest
-func (_e *MockNotesService_Expecter) Update(ctx interface{}, userID interface{}, body interface{}) *MockNotesService_Update_Call {
+func (_e *MockNotesService_Expecter) Update(ctx any, userID any, body any) *MockNotesService_Update_Call {
 	return &MockNotesService_Update_Call{Call: _e.mock.On("Update", ctx, userID, body)}
 }
 

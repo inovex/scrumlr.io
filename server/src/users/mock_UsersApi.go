@@ -63,7 +63,7 @@ type MockUsersApi_AnonymousBoardCreationContext_Call struct {
 
 // AnonymousBoardCreationContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockUsersApi_Expecter) AnonymousBoardCreationContext(next interface{}) *MockUsersApi_AnonymousBoardCreationContext_Call {
+func (_e *MockUsersApi_Expecter) AnonymousBoardCreationContext(next any) *MockUsersApi_AnonymousBoardCreationContext_Call {
 	return &MockUsersApi_AnonymousBoardCreationContext_Call{Call: _e.mock.On("AnonymousBoardCreationContext", next)}
 }
 
@@ -116,7 +116,7 @@ type MockUsersApi_AnonymousCustomTemplateCreationContext_Call struct {
 
 // AnonymousCustomTemplateCreationContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockUsersApi_Expecter) AnonymousCustomTemplateCreationContext(next interface{}) *MockUsersApi_AnonymousCustomTemplateCreationContext_Call {
+func (_e *MockUsersApi_Expecter) AnonymousCustomTemplateCreationContext(next any) *MockUsersApi_AnonymousCustomTemplateCreationContext_Call {
 	return &MockUsersApi_AnonymousCustomTemplateCreationContext_Call{Call: _e.mock.On("AnonymousCustomTemplateCreationContext", next)}
 }
 
@@ -169,7 +169,7 @@ type MockUsersApi_BoardAuthenticatedContext_Call struct {
 
 // BoardAuthenticatedContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockUsersApi_Expecter) BoardAuthenticatedContext(next interface{}) *MockUsersApi_BoardAuthenticatedContext_Call {
+func (_e *MockUsersApi_Expecter) BoardAuthenticatedContext(next any) *MockUsersApi_BoardAuthenticatedContext_Call {
 	return &MockUsersApi_BoardAuthenticatedContext_Call{Call: _e.mock.On("BoardAuthenticatedContext", next)}
 }
 
@@ -210,7 +210,7 @@ type MockUsersApi_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockUsersApi_Expecter) Delete(w interface{}, r interface{}) *MockUsersApi_Delete_Call {
+func (_e *MockUsersApi_Expecter) Delete(w any, r any) *MockUsersApi_Delete_Call {
 	return &MockUsersApi_Delete_Call{Call: _e.mock.On("Delete", w, r)}
 }
 
@@ -256,7 +256,7 @@ type MockUsersApi_GetUser_Call struct {
 // GetUser is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockUsersApi_Expecter) GetUser(w interface{}, r interface{}) *MockUsersApi_GetUser_Call {
+func (_e *MockUsersApi_Expecter) GetUser(w any, r any) *MockUsersApi_GetUser_Call {
 	return &MockUsersApi_GetUser_Call{Call: _e.mock.On("GetUser", w, r)}
 }
 
@@ -302,7 +302,7 @@ type MockUsersApi_GetUserByID_Call struct {
 // GetUserByID is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockUsersApi_Expecter) GetUserByID(w interface{}, r interface{}) *MockUsersApi_GetUserByID_Call {
+func (_e *MockUsersApi_Expecter) GetUserByID(w any, r any) *MockUsersApi_GetUserByID_Call {
 	return &MockUsersApi_GetUserByID_Call{Call: _e.mock.On("GetUserByID", w, r)}
 }
 
@@ -348,7 +348,7 @@ type MockUsersApi_GetUsersFromBoard_Call struct {
 // GetUsersFromBoard is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockUsersApi_Expecter) GetUsersFromBoard(w interface{}, r interface{}) *MockUsersApi_GetUsersFromBoard_Call {
+func (_e *MockUsersApi_Expecter) GetUsersFromBoard(w any, r any) *MockUsersApi_GetUsersFromBoard_Call {
 	return &MockUsersApi_GetUsersFromBoard_Call{Call: _e.mock.On("GetUsersFromBoard", w, r)}
 }
 
@@ -394,7 +394,7 @@ type MockUsersApi_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockUsersApi_Expecter) Update(w interface{}, r interface{}) *MockUsersApi_Update_Call {
+func (_e *MockUsersApi_Expecter) Update(w any, r any) *MockUsersApi_Update_Call {
 	return &MockUsersApi_Update_Call{Call: _e.mock.On("Update", w, r)}
 }
 
@@ -452,7 +452,7 @@ type MockUsersApi_isAccountOwner_Call struct {
 
 // isAccountOwner is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockUsersApi_Expecter) isAccountOwner(next interface{}) *MockUsersApi_isAccountOwner_Call {
+func (_e *MockUsersApi_Expecter) isAccountOwner(next any) *MockUsersApi_isAccountOwner_Call {
 	return &MockUsersApi_isAccountOwner_Call{Call: _e.mock.On("isAccountOwner", next)}
 }
 

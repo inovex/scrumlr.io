@@ -61,7 +61,7 @@ type MockHealthDatabaseChecker_IsHealthy_Call struct {
 
 // IsHealthy is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockHealthDatabaseChecker_Expecter) IsHealthy(ctx interface{}) *MockHealthDatabaseChecker_IsHealthy_Call {
+func (_e *MockHealthDatabaseChecker_Expecter) IsHealthy(ctx any) *MockHealthDatabaseChecker_IsHealthy_Call {
 	return &MockHealthDatabaseChecker_IsHealthy_Call{Call: _e.mock.On("IsHealthy", ctx)}
 }
 

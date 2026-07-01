@@ -74,7 +74,7 @@ type MockReactionService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body ReactionCreateRequest
-func (_e *MockReactionService_Expecter) Create(ctx interface{}, body interface{}) *MockReactionService_Create_Call {
+func (_e *MockReactionService_Expecter) Create(ctx any, body any) *MockReactionService_Create_Call {
 	return &MockReactionService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -133,7 +133,7 @@ type MockReactionService_Delete_Call struct {
 //   - board uuid.UUID
 //   - user uuid.UUID
 //   - id uuid.UUID
-func (_e *MockReactionService_Expecter) Delete(ctx interface{}, board interface{}, user interface{}, id interface{}) *MockReactionService_Delete_Call {
+func (_e *MockReactionService_Expecter) Delete(ctx any, board any, user any, id any) *MockReactionService_Delete_Call {
 	return &MockReactionService_Delete_Call{Call: _e.mock.On("Delete", ctx, board, user, id)}
 }
 
@@ -211,7 +211,7 @@ type MockReactionService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockReactionService_Expecter) Get(ctx interface{}, id interface{}) *MockReactionService_Get_Call {
+func (_e *MockReactionService_Expecter) Get(ctx any, id any) *MockReactionService_Get_Call {
 	return &MockReactionService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -279,7 +279,7 @@ type MockReactionService_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardId uuid.UUID
-func (_e *MockReactionService_Expecter) GetAll(ctx interface{}, boardId interface{}) *MockReactionService_GetAll_Call {
+func (_e *MockReactionService_Expecter) GetAll(ctx any, boardId any) *MockReactionService_GetAll_Call {
 	return &MockReactionService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardId)}
 }
 
@@ -350,7 +350,7 @@ type MockReactionService_Update_Call struct {
 //   - user uuid.UUID
 //   - id uuid.UUID
 //   - body ReactionUpdateTypeRequest
-func (_e *MockReactionService_Expecter) Update(ctx interface{}, board interface{}, user interface{}, id interface{}, body interface{}) *MockReactionService_Update_Call {
+func (_e *MockReactionService_Expecter) Update(ctx any, board any, user any, id any, body any) *MockReactionService_Update_Call {
 	return &MockReactionService_Update_Call{Call: _e.mock.On("Update", ctx, board, user, id, body)}
 }
 
