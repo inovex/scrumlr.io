@@ -154,35 +154,11 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
 	)
 
-	// map request on board object to insert into database
-	var board DatabaseBoardInsert
-	switch body.AccessPolicy {
-	case Public, ByInvite:
-		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
-
-		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
-
-	case ByPassphrase:
-		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
-			span.SetStatus(codes.Error, "passphrase not set")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
-
-		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
-		board = DatabaseBoardInsert{
-			Name:         body.Name,
-			Description:  body.Description,
-			AccessPolicy: body.AccessPolicy,
-			Passphrase:   encodedPassphrase,
-			Salt:         salt,
-		}
+	board, err := service.mapCreateBoardInsert(body)
+	if err != nil {
+		span.SetStatus(codes.Error, "invalid board create request")
+		span.RecordError(err)
+		return nil, err
 	}
 
 	// create the board
@@ -194,7 +170,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		return nil, common.InternalServerError
 	}
 
-	if err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
+	if _, err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
 		span.SetStatus(codes.Error, "failed to create column")
 		span.RecordError(err)
 		return nil, err
@@ -213,8 +189,40 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	return new(Board).From(b), nil
 }
 
-func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) error {
+func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
+	var board DatabaseBoardInsert
+
+	switch body.AccessPolicy {
+	case Public, ByInvite:
+		if body.Passphrase != nil {
+			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			return board, common.BadRequestError(err)
+		}
+
+		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+
+	case ByPassphrase:
+		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
+			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			return board, common.BadRequestError(err)
+		}
+
+		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
+		board = DatabaseBoardInsert{
+			Name:         body.Name,
+			Description:  body.Description,
+			AccessPolicy: body.AccessPolicy,
+			Passphrase:   encodedPassphrase,
+			Salt:         salt,
+		}
+	}
+
+	return board, nil
+}
+
+func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) (map[uuid.UUID]uuid.UUID, error) {
 	useProvidedIndices := hasValidUniqueColumnIndices(columnsToCreate)
+	sourceToCreatedColumnMap := make(map[uuid.UUID]uuid.UUID)
 
 	for index, value := range columnsToCreate {
 		finalIndex := index
@@ -223,21 +231,41 @@ func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.U
 		}
 
 		column := columns.ColumnRequest{
-			Board:       boardID,
-			User:        owner,
-			Name:        value.Name,
-			Description: value.Description,
-			Color:       value.Color,
-			Visible:     value.Visible,
-			Index:       &finalIndex,
+			Board:          boardID,
+			User:           owner,
+			Name:           value.Name,
+			Description:    value.Description,
+			Color:          value.Color,
+			Visible:        value.Visible,
+			Index:          &finalIndex,
+			SourceColumnID: value.SourceColumnID,
 		}
 
-		if _, err := service.columnService.Create(ctx, column); err != nil {
-			return err
+		createdColumn, err := service.columnService.Create(ctx, column)
+		if err != nil {
+			return nil, err
 		}
+
+		if value.SourceColumnID == nil {
+			continue
+		}
+
+		if _, exists := sourceToCreatedColumnMap[*value.SourceColumnID]; exists {
+			return nil, fmt.Errorf("duplicate source column id during import mapping: sourceColumnID=%s", value.SourceColumnID)
+		}
+
+		sourceToCreatedColumnMap[*value.SourceColumnID] = createdColumn.ID
 	}
 
-	return nil
+	if len(sourceToCreatedColumnMap) == 0 {
+		return nil, nil
+	}
+
+	if len(sourceToCreatedColumnMap) != len(columnsToCreate) {
+		return nil, fmt.Errorf("source column id missing during import mapping: expected=%d mapped=%d", len(columnsToCreate), len(sourceToCreatedColumnMap))
+	}
+
+	return sourceToCreatedColumnMap, nil
 }
 
 func hasValidUniqueColumnIndices(columnsToCreate []columns.ColumnRequest) bool {
@@ -750,42 +778,55 @@ func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID
 	request.Board.Owner = owner
 	importColumns := make([]columns.ColumnRequest, 0, len(request.Columns))
 
-	for _, column := range request.Columns {
+	for i := range request.Columns {
+		column := request.Columns[i]
 		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:        column.Name,
-			Description: column.Description,
-			Color:       column.Color,
-			Visible:     &column.Visible,
-			Index:       &column.Index,
+			Name:           column.Name,
+			Description:    column.Description,
+			Color:          column.Color,
+			Visible:        &request.Columns[i].Visible,
+			Index:          &request.Columns[i].Index,
+			SourceColumnID: &request.Columns[i].ID,
 		})
 	}
-	b, err := service.Create(ctx, CreateBoardRequest{
+
+	createRequest := CreateBoardRequest{
 		Name:         request.Board.Name,
 		Description:  request.Board.Description,
 		AccessPolicy: request.Board.AccessPolicy,
 		Passphrase:   request.Board.Passphrase,
 		Columns:      importColumns,
 		Owner:        owner,
-	})
+	}
+
+	boardInsert, err := service.mapCreateBoardInsert(createRequest)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	newColumns, err := service.columnService.GetAll(ctx, b.ID)
+	b, err := service.database.CreateBoard(ctx, boardInsert)
+	if err != nil {
+		return nil, nil, common.InternalServerError
+	}
+
+	columnMap, err := service.createColumnsOnBoard(ctx, b.ID, owner, importColumns)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	if len(newColumns) != len(request.Columns) {
-		return nil, nil, fmt.Errorf("column count mismatch during import mapping: imported=%d created=%d", len(request.Columns), len(newColumns))
+	if len(importColumns) > 0 && len(columnMap) != len(importColumns) {
+		return nil, nil, fmt.Errorf("column mapping mismatch during import creation: imported=%d mapped=%d", len(importColumns), len(columnMap))
 	}
 
-	columnMap := make(map[uuid.UUID]uuid.UUID, len(request.Columns))
-	for i, sourceColumn := range request.Columns {
-		columnMap[sourceColumn.ID] = newColumns[i].ID
+	sessionRequest := sessions.BoardSessionCreateRequest{Board: b.ID, User: owner, Role: common.OwnerRole}
+	_, err = service.sessionService.Create(ctx, sessionRequest)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	return b, columnMap, nil
+	boardCreatedCounter.Add(ctx, 1)
+
+	return new(Board).From(b), columnMap, nil
 }
 
 func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (*ImportWarnings, error) {

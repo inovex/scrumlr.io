@@ -307,7 +307,7 @@ func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_UsesProvidedIndices
 		Index:   &index0,
 	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
 
-	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
 
 	suite.NoError(err)
 }
@@ -343,7 +343,7 @@ func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_FallsBackToLoopIndi
 		Index:   &indexExpectedSecond,
 	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
 
-	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
 
 	suite.NoError(err)
 }
@@ -367,7 +367,7 @@ func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_ReturnsErrorWhenCol
 		Index:   &index0,
 	}).Return(nil, createErr).Once()
 
-	err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
 
 	suite.ErrorIs(err, createErr)
 }
@@ -686,12 +686,13 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   suite.boardID,
-		User:    owner,
-		Name:    suite.columnName,
-		Color:   suite.columnColor,
-		Visible: &columnVisible,
-		Index:   &columnIndex,
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importColumnID,
 	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
@@ -699,8 +700,6 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
 		User:  owner,
 		Role:  common.OwnerRole,
 	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
-
-	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: importColumnID}}, nil)
 
 	board, _, err := service.createImportedBoard(ctx, owner, body)
 
@@ -752,6 +751,85 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_CreateFails() {
 	suite.Equal(common.InternalServerError, err)
 }
 
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_MapsColumnsByIndexNotByReturnedOrder() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	firstSourceColumnID := uuid.New()
+	secondSourceColumnID := uuid.New()
+	firstCreatedColumnID := uuid.New()
+	secondCreatedColumnID := uuid.New()
+
+	firstSourceColumnIndex := 1
+	secondSourceColumnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:    firstSourceColumnID,
+				Name:  "First source",
+				Color: common.ColorGoalGreen,
+				Index: firstSourceColumnIndex,
+			},
+			{
+				ID:    secondSourceColumnID,
+				Name:  "Second source",
+				Color: common.ColorGoalGreen,
+				Index: secondSourceColumnIndex,
+			},
+		},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: Public}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "First source",
+		Color:          common.ColorGoalGreen,
+		Visible:        &body.Columns[0].Visible,
+		Index:          &firstSourceColumnIndex,
+		SourceColumnID: &firstSourceColumnID,
+	}).Return(&columns.Column{ID: firstCreatedColumnID}, nil).Once()
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "Second source",
+		Color:          common.ColorGoalGreen,
+		Visible:        &body.Columns[1].Visible,
+		Index:          &secondSourceColumnIndex,
+		SourceColumnID: &secondSourceColumnID,
+	}).Return(&columns.Column{ID: secondCreatedColumnID}, nil).Once()
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	_, columnMap, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.Equal(firstCreatedColumnID, columnMap[firstSourceColumnID])
+	suite.Equal(secondCreatedColumnID, columnMap[secondSourceColumnID])
+}
+
 func (suite *BoardServiceTestSuite) TestImportSuccess() {
 	service := &Service{
 		database:       suite.mockBoardDatabase,
@@ -796,12 +874,13 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   suite.boardID,
-		User:    owner,
-		Name:    suite.columnName,
-		Color:   suite.columnColor,
-		Visible: &columnVisible,
-		Index:   &columnIndex,
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importColumnID,
 	}).Return(&columns.Column{ID: createdColumnID}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
@@ -809,8 +888,6 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 		User:  owner,
 		Role:  common.OwnerRole,
 	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
-
-	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{{ID: createdColumnID}}, nil)
 
 	board, err := service.Import(ctx, owner, body)
 
@@ -862,11 +939,14 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 		database:       suite.mockBoardDatabase,
 		columnService:  suite.columnMock,
 		sessionService: suite.sessionsMock,
+		notesService:   suite.noteMock,
 		userService:    suite.userService,
 	}
 
 	ctx := context.Background()
 	owner := uuid.New()
+	authorID := uuid.New()
+	importedColumnID := uuid.New()
 
 	columnVisible := true
 	columnIndex := 0
@@ -878,11 +958,21 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 			AccessPolicy: Public,
 		},
 		Columns: []columns.Column{{
-			ID:      uuid.New(),
+			ID:      importedColumnID,
 			Name:    suite.columnName,
 			Color:   suite.columnColor,
 			Visible: columnVisible,
 			Index:   columnIndex,
+		}},
+		Notes: []notes.Note{{
+			ID:     uuid.New(),
+			Author: authorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importedColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
 		}},
 	}
 
@@ -898,12 +988,13 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   suite.boardID,
-		User:    owner,
-		Name:    suite.columnName,
-		Color:   suite.columnColor,
-		Visible: &columnVisible,
-		Index:   &columnIndex,
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importedColumnID,
 	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
@@ -912,13 +1003,20 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 		Role:  common.OwnerRole,
 	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
 
-	getColumnsErr := errors.New("failed to get imported columns")
-	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return(nil, getColumnsErr)
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil)
+	suite.noteMock.EXPECT().Import(mock.Anything, mock.MatchedBy(func(request notes.NoteImportRequest) bool {
+		return request.Text == "Imported note" &&
+			request.Board == suite.boardID &&
+			request.User == authorID &&
+			request.Position.Stack == (uuid.NullUUID{}) &&
+			request.Position.Rank == 0 &&
+			request.Position.Column != uuid.Nil
+	})).Return(nil, errors.New("import failed"))
 
 	board, err := service.Import(ctx, owner, body)
 
 	suite.Nil(board)
-	suite.Equal(getColumnsErr, err)
+	suite.EqualError(err, "import failed")
 
 }
 
@@ -1156,7 +1254,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 	notesMock.AssertExpectations(suite.T())
 }
 
-func (suite *BoardServiceTestSuite) TestCreateImportedBoard_ColumnCountMismatch() {
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_DuplicateSourceColumnID() {
 	service := &Service{
 		database:       suite.mockBoardDatabase,
 		columnService:  suite.columnMock,
@@ -1168,6 +1266,8 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_ColumnCountMismatch(
 
 	columnVisible := true
 	columnIndex := 0
+	duplicateImportColumnID := uuid.New()
+	secondColumnIndex := 1
 
 	body := ImportBoardRequest{
 		Board: &CreateBoardRequest{
@@ -1175,13 +1275,22 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_ColumnCountMismatch(
 			Description:  &suite.boardDescription,
 			AccessPolicy: Public,
 		},
-		Columns: []columns.Column{{
-			ID:      uuid.New(),
-			Name:    suite.columnName,
-			Color:   suite.columnColor,
-			Visible: columnVisible,
-			Index:   columnIndex,
-		}},
+		Columns: []columns.Column{
+			{
+				ID:      duplicateImportColumnID,
+				Name:    suite.columnName,
+				Color:   suite.columnColor,
+				Visible: columnVisible,
+				Index:   columnIndex,
+			},
+			{
+				ID:      duplicateImportColumnID,
+				Name:    "Second",
+				Color:   suite.columnColor,
+				Visible: columnVisible,
+				Index:   secondColumnIndex,
+			},
+		},
 	}
 
 	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
@@ -1196,27 +1305,30 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_ColumnCountMismatch(
 	}, nil)
 
 	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
-		Board:   suite.boardID,
-		User:    owner,
-		Name:    suite.columnName,
-		Color:   suite.columnColor,
-		Visible: &columnVisible,
-		Index:   &columnIndex,
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &duplicateImportColumnID,
 	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: suite.boardID,
-		User:  owner,
-		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
-
-	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{}, nil)
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "Second",
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &secondColumnIndex,
+		SourceColumnID: &duplicateImportColumnID,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
 
 	board, columnMap, err := service.createImportedBoard(ctx, owner, body)
 
 	suite.Nil(board)
 	suite.Nil(columnMap)
-	suite.EqualError(err, "column count mismatch during import mapping: imported=1 created=0")
+	suite.EqualError(err, "duplicate source column id during import mapping: sourceColumnID="+duplicateImportColumnID.String())
 }
 
 func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_AllAuthorsExist() {
