@@ -72,7 +72,7 @@ type MockUserDatabase_CreateAnonymousUser_Call struct {
 // CreateAnonymousUser is a helper method to define mock.On call
 //   - ctx context.Context
 //   - name string
-func (_e *MockUserDatabase_Expecter) CreateAnonymousUser(ctx interface{}, name interface{}) *MockUserDatabase_CreateAnonymousUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateAnonymousUser(ctx any, name any) *MockUserDatabase_CreateAnonymousUser_Call {
 	return &MockUserDatabase_CreateAnonymousUser_Call{Call: _e.mock.On("CreateAnonymousUser", ctx, name)}
 }
 
@@ -140,7 +140,7 @@ type MockUserDatabase_CreateAppleUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateAppleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAppleUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateAppleUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateAppleUser_Call {
 	return &MockUserDatabase_CreateAppleUser_Call{Call: _e.mock.On("CreateAppleUser", ctx, id, name, avatarUrl)}
 }
 
@@ -218,7 +218,7 @@ type MockUserDatabase_CreateAzureAdUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateAzureAdUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAzureAdUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateAzureAdUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateAzureAdUser_Call {
 	return &MockUserDatabase_CreateAzureAdUser_Call{Call: _e.mock.On("CreateAzureAdUser", ctx, id, name, avatarUrl)}
 }
 
@@ -296,7 +296,7 @@ type MockUserDatabase_CreateGitHubUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateGitHubUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGitHubUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateGitHubUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateGitHubUser_Call {
 	return &MockUserDatabase_CreateGitHubUser_Call{Call: _e.mock.On("CreateGitHubUser", ctx, id, name, avatarUrl)}
 }
 
@@ -374,7 +374,7 @@ type MockUserDatabase_CreateGoogleUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateGoogleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGoogleUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateGoogleUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateGoogleUser_Call {
 	return &MockUserDatabase_CreateGoogleUser_Call{Call: _e.mock.On("CreateGoogleUser", ctx, id, name, avatarUrl)}
 }
 
@@ -452,7 +452,7 @@ type MockUserDatabase_CreateMicrosoftUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateMicrosoftUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateMicrosoftUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateMicrosoftUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateMicrosoftUser_Call {
 	return &MockUserDatabase_CreateMicrosoftUser_Call{Call: _e.mock.On("CreateMicrosoftUser", ctx, id, name, avatarUrl)}
 }
 
@@ -530,7 +530,7 @@ type MockUserDatabase_CreateOIDCUser_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateOIDCUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateOIDCUser_Call {
+func (_e *MockUserDatabase_Expecter) CreateOIDCUser(ctx any, id any, name any, avatarUrl any) *MockUserDatabase_CreateOIDCUser_Call {
 	return &MockUserDatabase_CreateOIDCUser_Call{Call: _e.mock.On("CreateOIDCUser", ctx, id, name, avatarUrl)}
 }
 
@@ -597,7 +597,7 @@ type MockUserDatabase_DeleteUser_Call struct {
 // DeleteUser is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) DeleteUser(ctx interface{}, id interface{}) *MockUserDatabase_DeleteUser_Call {
+func (_e *MockUserDatabase_Expecter) DeleteUser(ctx any, id any) *MockUserDatabase_DeleteUser_Call {
 	return &MockUserDatabase_DeleteUser_Call{Call: _e.mock.On("DeleteUser", ctx, id)}
 }
 
@@ -625,6 +625,74 @@ func (_c *MockUserDatabase_DeleteUser_Call) Return(err error) *MockUserDatabase_
 }
 
 func (_c *MockUserDatabase_DeleteUser_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) error) *MockUserDatabase_DeleteUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetExistingUserIDs provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error) {
+	ret := _mock.Called(ctx, ids)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetExistingUserIDs")
+	}
+
+	var r0 []uuid.UUID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []uuid.UUID) ([]uuid.UUID, error)); ok {
+		return returnFunc(ctx, ids)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []uuid.UUID) []uuid.UUID); ok {
+		r0 = returnFunc(ctx, ids)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]uuid.UUID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, ids)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_GetExistingUserIDs_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExistingUserIDs'
+type MockUserDatabase_GetExistingUserIDs_Call struct {
+	*mock.Call
+}
+
+// GetExistingUserIDs is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ids []uuid.UUID
+func (_e *MockUserDatabase_Expecter) GetExistingUserIDs(ctx any, ids any) *MockUserDatabase_GetExistingUserIDs_Call {
+	return &MockUserDatabase_GetExistingUserIDs_Call{Call: _e.mock.On("GetExistingUserIDs", ctx, ids)}
+}
+
+func (_c *MockUserDatabase_GetExistingUserIDs_Call) Run(run func(ctx context.Context, ids []uuid.UUID)) *MockUserDatabase_GetExistingUserIDs_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].([]uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_GetExistingUserIDs_Call) Return(uUIDs []uuid.UUID, err error) *MockUserDatabase_GetExistingUserIDs_Call {
+	_c.Call.Return(uUIDs, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_GetExistingUserIDs_Call) RunAndReturn(run func(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error)) *MockUserDatabase_GetExistingUserIDs_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -663,7 +731,7 @@ type MockUserDatabase_GetUser_Call struct {
 // GetUser is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) GetUser(ctx interface{}, id interface{}) *MockUserDatabase_GetUser_Call {
+func (_e *MockUserDatabase_Expecter) GetUser(ctx any, id any) *MockUserDatabase_GetUser_Call {
 	return &MockUserDatabase_GetUser_Call{Call: _e.mock.On("GetUser", ctx, id)}
 }
 
@@ -695,12 +763,12 @@ func (_c *MockUserDatabase_GetUser_Call) RunAndReturn(run func(ctx context.Conte
 	return _c
 }
 
-// GetUsers provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
+// GetUsersByBoardID provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
 	ret := _mock.Called(ctx, boardID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetUsers")
+		panic("no return value specified for GetUsersByBoardID")
 	}
 
 	var r0 []DatabaseUser
@@ -723,19 +791,19 @@ func (_mock *MockUserDatabase) GetUsers(ctx context.Context, boardID uuid.UUID) 
 	return r0, r1
 }
 
-// MockUserDatabase_GetUsers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUsers'
-type MockUserDatabase_GetUsers_Call struct {
+// MockUserDatabase_GetUsersByBoardID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUsersByBoardID'
+type MockUserDatabase_GetUsersByBoardID_Call struct {
 	*mock.Call
 }
 
-// GetUsers is a helper method to define mock.On call
+// GetUsersByBoardID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockUserDatabase_Expecter) GetUsers(ctx interface{}, boardID interface{}) *MockUserDatabase_GetUsers_Call {
-	return &MockUserDatabase_GetUsers_Call{Call: _e.mock.On("GetUsers", ctx, boardID)}
+func (_e *MockUserDatabase_Expecter) GetUsersByBoardID(ctx any, boardID any) *MockUserDatabase_GetUsersByBoardID_Call {
+	return &MockUserDatabase_GetUsersByBoardID_Call{Call: _e.mock.On("GetUsersByBoardID", ctx, boardID)}
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -753,12 +821,12 @@ func (_c *MockUserDatabase_GetUsers_Call) Run(run func(ctx context.Context, boar
 	return _c
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) Return(databaseUsers []DatabaseUser, err error) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) Return(databaseUsers []DatabaseUser, err error) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Return(databaseUsers, err)
 	return _c
 }
 
-func (_c *MockUserDatabase_GetUsers_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)) *MockUserDatabase_GetUsers_Call {
+func (_c *MockUserDatabase_GetUsersByBoardID_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)) *MockUserDatabase_GetUsersByBoardID_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -797,7 +865,7 @@ type MockUserDatabase_IsUserAnonymous_Call struct {
 // IsUserAnonymous is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) IsUserAnonymous(ctx interface{}, id interface{}) *MockUserDatabase_IsUserAnonymous_Call {
+func (_e *MockUserDatabase_Expecter) IsUserAnonymous(ctx any, id any) *MockUserDatabase_IsUserAnonymous_Call {
 	return &MockUserDatabase_IsUserAnonymous_Call{Call: _e.mock.On("IsUserAnonymous", ctx, id)}
 }
 
@@ -863,7 +931,7 @@ type MockUserDatabase_IsUserAvailableForKeyMigration_Call struct {
 // IsUserAvailableForKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) IsUserAvailableForKeyMigration(ctx interface{}, id interface{}) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
+func (_e *MockUserDatabase_Expecter) IsUserAvailableForKeyMigration(ctx any, id any) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
 	return &MockUserDatabase_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", ctx, id)}
 }
 
@@ -929,7 +997,7 @@ type MockUserDatabase_SetKeyMigration_Call struct {
 // SetKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) SetKeyMigration(ctx interface{}, id interface{}) *MockUserDatabase_SetKeyMigration_Call {
+func (_e *MockUserDatabase_Expecter) SetKeyMigration(ctx any, id any) *MockUserDatabase_SetKeyMigration_Call {
 	return &MockUserDatabase_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", ctx, id)}
 }
 
@@ -995,7 +1063,7 @@ type MockUserDatabase_UpdateUser_Call struct {
 // UpdateUser is a helper method to define mock.On call
 //   - ctx context.Context
 //   - update DatabaseUserUpdate
-func (_e *MockUserDatabase_Expecter) UpdateUser(ctx interface{}, update interface{}) *MockUserDatabase_UpdateUser_Call {
+func (_e *MockUserDatabase_Expecter) UpdateUser(ctx any, update any) *MockUserDatabase_UpdateUser_Call {
 	return &MockUserDatabase_UpdateUser_Call{Call: _e.mock.On("UpdateUser", ctx, update)}
 }
 

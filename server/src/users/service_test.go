@@ -77,10 +77,38 @@ func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
 	suite.Equal(common.InternalServerError, err)
 }
 
+func (suite *UserServiceTestSuite) TestGetExistingUserIDs() {
+	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
+	suite.mockUserDatabase.EXPECT().GetExistingUserIDs(mock.Anything, userIDs).Return([]uuid.UUID{userIDs[0], userIDs[1], userIDs[2]}, nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.GetExistingUserIDs(context.Background(), userIDs)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+}
+
+func (suite *UserServiceTestSuite) TestGetExistingUserIDsError() {
+	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
+	dbError := "unable to execute"
+	suite.mockUserDatabase.EXPECT().GetExistingUserIDs(mock.Anything, userIDs).Return(nil, errors.New(dbError))
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.GetExistingUserIDs(context.Background(), userIDs)
+
+	suite.Nil(user)
+	suite.NotNil(err)
+	suite.Equal(common.InternalServerError, err)
+}
+
 func (suite *UserServiceTestSuite) TestGetBoardUsers() {
 	boardID := uuid.New()
 	userIDs := []uuid.UUID{uuid.New(), uuid.New(), uuid.New()}
-	suite.mockUserDatabase.EXPECT().GetUsers(mock.Anything, boardID).Return([]DatabaseUser{
+	suite.mockUserDatabase.EXPECT().GetUsersByBoardID(mock.Anything, boardID).Return([]DatabaseUser{
 		{ID: userIDs[0]},
 		{ID: userIDs[1]},
 		{ID: userIDs[2]},

@@ -74,7 +74,7 @@ type MockColumnService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body ColumnRequest
-func (_e *MockColumnService_Expecter) Create(ctx interface{}, body interface{}) *MockColumnService_Create_Call {
+func (_e *MockColumnService_Expecter) Create(ctx any, body any) *MockColumnService_Create_Call {
 	return &MockColumnService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -133,7 +133,7 @@ type MockColumnService_Delete_Call struct {
 //   - board uuid.UUID
 //   - column uuid.UUID
 //   - user uuid.UUID
-func (_e *MockColumnService_Expecter) Delete(ctx interface{}, board interface{}, column interface{}, user interface{}) *MockColumnService_Delete_Call {
+func (_e *MockColumnService_Expecter) Delete(ctx any, board any, column any, user any) *MockColumnService_Delete_Call {
 	return &MockColumnService_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column, user)}
 }
 
@@ -212,7 +212,7 @@ type MockColumnService_Get_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - columnID uuid.UUID
-func (_e *MockColumnService_Expecter) Get(ctx interface{}, boardID interface{}, columnID interface{}) *MockColumnService_Get_Call {
+func (_e *MockColumnService_Expecter) Get(ctx any, boardID any, columnID any) *MockColumnService_Get_Call {
 	return &MockColumnService_Get_Call{Call: _e.mock.On("Get", ctx, boardID, columnID)}
 }
 
@@ -285,7 +285,7 @@ type MockColumnService_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockColumnService_Expecter) GetAll(ctx interface{}, boardID interface{}) *MockColumnService_GetAll_Call {
+func (_e *MockColumnService_Expecter) GetAll(ctx any, boardID any) *MockColumnService_GetAll_Call {
 	return &MockColumnService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardID)}
 }
 
@@ -351,7 +351,7 @@ type MockColumnService_GetCount_Call struct {
 // GetCount is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockColumnService_Expecter) GetCount(ctx interface{}, boardID interface{}) *MockColumnService_GetCount_Call {
+func (_e *MockColumnService_Expecter) GetCount(ctx any, boardID any) *MockColumnService_GetCount_Call {
 	return &MockColumnService_GetCount_Call{Call: _e.mock.On("GetCount", ctx, boardID)}
 }
 
@@ -419,7 +419,7 @@ type MockColumnService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body ColumnUpdateRequest
-func (_e *MockColumnService_Expecter) Update(ctx interface{}, body interface{}) *MockColumnService_Update_Call {
+func (_e *MockColumnService_Expecter) Update(ctx any, body any) *MockColumnService_Update_Call {
 	return &MockColumnService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

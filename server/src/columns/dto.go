@@ -52,6 +52,9 @@ type ColumnRequest struct {
 	// Sets the index of this column in the sort order.
 	Index *int `json:"index"`
 
+	// SourceColumnID is only used during imports to map source to created columns.
+	SourceColumnID *uuid.UUID `json:"-"`
+
 	Board uuid.UUID `json:"-"`
 	User  uuid.UUID `json:"-"`
 }

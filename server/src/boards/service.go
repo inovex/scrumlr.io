@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -14,6 +15,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
@@ -44,6 +46,7 @@ type Service struct {
 	sessionRequestService sessionrequests.SessionRequestService
 	reactionService       reactions.ReactionService
 	votingService         votings.VotingService
+	userService           users.UserService
 }
 
 type LastModifiedUpdater struct {
@@ -73,6 +76,7 @@ func NewBoardService(
 	noteService notes.NotesService,
 	reactionService reactions.ReactionService,
 	votingService votings.VotingService,
+	userService users.UserService,
 	clock timeprovider.TimeProvider,
 	hash hash.Hash,
 ) BoardService {
@@ -87,6 +91,7 @@ func NewBoardService(
 	b.notesService = noteService
 	b.reactionService = reactionService
 	b.votingService = votingService
+	b.userService = userService
 	b.boardLastModifiedUpdater = NewLastModifiedUpdater(db, clock)
 
 	return b
@@ -149,35 +154,11 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
 	)
 
-	// map request on board object to insert into database
-	var board DatabaseBoardInsert
-	switch body.AccessPolicy {
-	case Public, ByInvite:
-		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
-
-		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
-
-	case ByPassphrase:
-		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
-			span.SetStatus(codes.Error, "passphrase not set")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
-
-		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
-		board = DatabaseBoardInsert{
-			Name:         body.Name,
-			Description:  body.Description,
-			AccessPolicy: body.AccessPolicy,
-			Passphrase:   encodedPassphrase,
-			Salt:         salt,
-		}
+	board, err := service.mapCreateBoardInsert(body)
+	if err != nil {
+		span.SetStatus(codes.Error, "invalid board create request")
+		span.RecordError(err)
+		return nil, err
 	}
 
 	// create the board
@@ -189,15 +170,10 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		return nil, common.InternalServerError
 	}
 
-	// create the columns
-	for index, value := range body.Columns {
-		column := columns.ColumnRequest{Board: b.ID, User: body.Owner, Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index}
-		_, err = service.columnService.Create(ctx, column)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to create column")
-			span.RecordError(err)
-			return nil, err
-		}
+	if _, err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
+		span.SetStatus(codes.Error, "failed to create column")
+		span.RecordError(err)
+		return nil, err
 	}
 
 	// create the owner session
@@ -211,6 +187,99 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 
 	boardCreatedCounter.Add(ctx, 1)
 	return new(Board).From(b), nil
+}
+
+func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
+	var board DatabaseBoardInsert
+
+	switch body.AccessPolicy {
+	case Public, ByInvite:
+		if body.Passphrase != nil {
+			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			return board, common.BadRequestError(err)
+		}
+
+		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+
+	case ByPassphrase:
+		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
+			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			return board, common.BadRequestError(err)
+		}
+
+		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
+		board = DatabaseBoardInsert{
+			Name:         body.Name,
+			Description:  body.Description,
+			AccessPolicy: body.AccessPolicy,
+			Passphrase:   encodedPassphrase,
+			Salt:         salt,
+		}
+	}
+
+	return board, nil
+}
+
+func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) (map[uuid.UUID]uuid.UUID, error) {
+	useProvidedIndices := hasValidUniqueColumnIndices(columnsToCreate)
+	sourceToCreatedColumnMap := make(map[uuid.UUID]uuid.UUID)
+
+	for index, value := range columnsToCreate {
+		finalIndex := index
+		if useProvidedIndices {
+			finalIndex = *value.Index
+		}
+
+		column := columns.ColumnRequest{
+			Board:          boardID,
+			User:           owner,
+			Name:           value.Name,
+			Description:    value.Description,
+			Color:          value.Color,
+			Visible:        value.Visible,
+			Index:          &finalIndex,
+			SourceColumnID: value.SourceColumnID,
+		}
+
+		createdColumn, err := service.columnService.Create(ctx, column)
+		if err != nil {
+			return nil, err
+		}
+
+		if value.SourceColumnID == nil {
+			continue
+		}
+
+		if _, exists := sourceToCreatedColumnMap[*value.SourceColumnID]; exists {
+			return nil, fmt.Errorf("duplicate source column id during import mapping: sourceColumnID=%s", value.SourceColumnID)
+		}
+
+		sourceToCreatedColumnMap[*value.SourceColumnID] = createdColumn.ID
+	}
+
+	if len(sourceToCreatedColumnMap) == 0 {
+		return nil, nil
+	}
+
+	if len(sourceToCreatedColumnMap) != len(columnsToCreate) {
+		return nil, fmt.Errorf("source column id missing during import mapping: expected=%d mapped=%d", len(columnsToCreate), len(sourceToCreatedColumnMap))
+	}
+
+	return sourceToCreatedColumnMap, nil
+}
+
+func hasValidUniqueColumnIndices(columnsToCreate []columns.ColumnRequest) bool {
+	seenIndices := make([]bool, len(columnsToCreate))
+
+	for _, col := range columnsToCreate {
+		if col.Index == nil || *col.Index < 0 || *col.Index >= len(columnsToCreate) || seenIndices[*col.Index] {
+			return false
+		}
+
+		seenIndices[*col.Index] = true
+	}
+
+	return true
 }
 
 func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
@@ -682,4 +751,347 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 
 func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
 	return &LastModifiedUpdater{database: database, clock: clock}
+}
+
+func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*ImportBoardResponse, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
+	defer span.End()
+
+	board, columnMap, err := service.createImportedBoard(ctx, owner, request)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import board")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	warnings, err := service.processImportedNotes(ctx, board.ID, request, columnMap)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import notes or columns")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
+}
+
+func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, map[uuid.UUID]uuid.UUID, error) {
+	request.Board.Owner = owner
+	importColumns := make([]columns.ColumnRequest, 0, len(request.Columns))
+
+	for i := range request.Columns {
+		column := request.Columns[i]
+		importColumns = append(importColumns, columns.ColumnRequest{
+			Name:           column.Name,
+			Description:    column.Description,
+			Color:          column.Color,
+			Visible:        &request.Columns[i].Visible,
+			Index:          &request.Columns[i].Index,
+			SourceColumnID: &request.Columns[i].ID,
+		})
+	}
+
+	createRequest := CreateBoardRequest{
+		Name:         request.Board.Name,
+		Description:  request.Board.Description,
+		AccessPolicy: request.Board.AccessPolicy,
+		Passphrase:   request.Board.Passphrase,
+		Columns:      importColumns,
+		Owner:        owner,
+	}
+
+	boardInsert, err := service.mapCreateBoardInsert(createRequest)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	b, err := service.database.CreateBoard(ctx, boardInsert)
+	if err != nil {
+		return nil, nil, common.InternalServerError
+	}
+
+	columnMap, err := service.createColumnsOnBoard(ctx, b.ID, owner, importColumns)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if len(importColumns) > 0 && len(columnMap) != len(importColumns) {
+		return nil, nil, fmt.Errorf("column mapping mismatch during import creation: imported=%d mapped=%d", len(importColumns), len(columnMap))
+	}
+
+	sessionRequest := sessions.BoardSessionCreateRequest{Board: b.ID, User: owner, Role: common.OwnerRole}
+	_, err = service.sessionService.Create(ctx, sessionRequest)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	boardCreatedCounter.Add(ctx, 1)
+
+	return new(Board).From(b), columnMap, nil
+}
+
+func (service *Service) processImportedNotes(ctx context.Context, boardID uuid.UUID, request ImportBoardRequest, columnMap map[uuid.UUID]uuid.UUID) (*ImportWarnings, error) {
+	preparedNotes, err := service.prepareImportNotes(ctx, request.Notes)
+	if err != nil {
+		return nil, err
+	}
+
+	request.Notes = preparedNotes.Notes
+
+	stackRootNotes, stackChildrenByRoot := organizeStackNotes(request.Notes)
+
+	stackNotes, err := service.importStackRoots(ctx, boardID, stackRootNotes, stackChildrenByRoot, columnMap)
+	if err != nil {
+		return nil, err
+	}
+
+	err = service.importStackChildren(ctx, boardID, stackNotes)
+	if err != nil {
+		return nil, err
+	}
+
+	if preparedNotes.RemovedNotesMissingAuthorCount > 0 {
+		return &ImportWarnings{RemovedNotesMissingAuthorCount: preparedNotes.RemovedNotesMissingAuthorCount}, nil
+	}
+
+	return nil, nil
+}
+
+type importNotesPreparationResult struct {
+	Notes                          []notes.Note
+	RemovedNotesMissingAuthorCount int
+}
+
+func (service *Service) prepareImportNotes(ctx context.Context, importNotes []notes.Note) (*importNotesPreparationResult, error) {
+	if len(importNotes) == 0 {
+		return &importNotesPreparationResult{Notes: importNotes}, nil
+	}
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(ctx, importNotes)
+	if err != nil {
+		return nil, err
+	}
+	if allAuthorsExist {
+		return &importNotesPreparationResult{Notes: importNotes}, nil
+	}
+
+	filteredResult := filterNotesByExistingAuthors(importNotes, existingAuthors)
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredResult.FilteredNotes)
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, filteredResult.OriginalNoteByID)
+
+	reorderStackRootNotes(filteredResult.FilteredNotes)
+
+	return &importNotesPreparationResult{
+		Notes:                          filteredResult.FilteredNotes,
+		RemovedNotesMissingAuthorCount: filteredResult.RemovedNotesMissingAuthorCount,
+	}, nil
+}
+
+func (service *Service) collectExistingAuthors(ctx context.Context, importNotes []notes.Note) (map[uuid.UUID]struct{}, bool, error) {
+	authors := make([]uuid.UUID, 0, len(importNotes))
+	seen := make(map[uuid.UUID]struct{}, len(importNotes))
+
+	for _, note := range importNotes {
+		if _, exists := seen[note.Author]; exists {
+			continue
+		}
+		seen[note.Author] = struct{}{}
+		authors = append(authors, note.Author)
+	}
+
+	existingAuthors, err := service.userService.GetExistingUserIDs(ctx, authors)
+	if err != nil {
+		return nil, false, fmt.Errorf("could not get existing authors")
+	}
+
+	if len(existingAuthors) == len(authors) {
+		return nil, true, nil
+	}
+
+	existingAuthorsMap := make(map[uuid.UUID]struct{}, len(existingAuthors))
+	for _, participant := range existingAuthors {
+		existingAuthorsMap[participant] = struct{}{}
+	}
+	return existingAuthorsMap, false, nil
+}
+
+type filteredNotesResult struct {
+	FilteredNotes                  []notes.Note
+	OriginalNoteByID               map[uuid.UUID]notes.Note
+	RemovedNotesMissingAuthorCount int
+}
+
+func filterNotesByExistingAuthors(importNotes []notes.Note, existingAuthors map[uuid.UUID]struct{}) *filteredNotesResult {
+	originalNoteByID := make(map[uuid.UUID]notes.Note, len(importNotes))
+	filteredNotes := make([]notes.Note, 0, len(importNotes))
+
+	for i := range importNotes {
+		note := importNotes[i]
+		originalNoteByID[note.ID] = note
+
+		if _, exists := existingAuthors[note.Author]; !exists {
+			continue
+		}
+		filteredNotes = append(filteredNotes, note)
+	}
+
+	numRemovedNotes := len(importNotes) - len(filteredNotes)
+
+	return &filteredNotesResult{
+		FilteredNotes:                  filteredNotes,
+		OriginalNoteByID:               originalNoteByID,
+		RemovedNotesMissingAuthorCount: numRemovedNotes,
+	}
+}
+
+func indexAndGroupStacks(filteredNotes []notes.Note) (map[uuid.UUID]*notes.Note, map[uuid.UUID][]*notes.Note) {
+	notesByID := make(map[uuid.UUID]*notes.Note, len(filteredNotes))
+	stackChildrenByRoot := make(map[uuid.UUID][]*notes.Note)
+
+	for i := range filteredNotes {
+		note := &filteredNotes[i]
+		notesByID[note.ID] = note
+
+		if note.Position.Stack.Valid {
+			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
+		}
+	}
+	return notesByID, stackChildrenByRoot
+}
+
+func reorderAndRepairStacks(stackChildrenByRoot map[uuid.UUID][]*notes.Note, notesByID map[uuid.UUID]*notes.Note, originalNoteByID map[uuid.UUID]notes.Note) {
+	for stackRootID, stackChildren := range stackChildrenByRoot {
+		if len(stackChildren) == 0 {
+			continue
+		}
+
+		sort.Slice(stackChildren, func(i, j int) bool {
+			if stackChildren[i].Position.Rank == stackChildren[j].Position.Rank {
+				return stackChildren[i].ID.String() < stackChildren[j].ID.String()
+			}
+			return stackChildren[i].Position.Rank < stackChildren[j].Position.Rank
+		})
+
+		for i := range stackChildren {
+			stackChildren[i].Position.Rank = i
+		}
+
+		if _, rootExists := notesByID[stackRootID]; rootExists {
+			continue
+		}
+
+		removedStackRoot, exists := originalNoteByID[stackRootID]
+		if !exists {
+			continue
+		}
+
+		replacementStackRoot := stackChildren[len(stackChildren)-1]
+		replacementStackRoot.Position.Stack = uuid.NullUUID{}
+		replacementStackRoot.Position.Rank = removedStackRoot.Position.Rank
+
+		for i := 0; i < len(stackChildren)-1; i++ {
+			stackChildren[i].Position.Stack = uuid.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
+		}
+	}
+}
+
+type stackRootChildrenNotes struct {
+	StackRoot     notes.Note
+	StackChildren []notes.Note
+}
+
+func reorderStackRootNotes(processedNotes []notes.Note) {
+	stackRootsByColumn := make(map[uuid.UUID][]*notes.Note)
+	for i := range processedNotes {
+		if processedNotes[i].Position.Stack.Valid {
+			continue
+		}
+
+		columnID := processedNotes[i].Position.Column
+		stackRootsByColumn[columnID] = append(stackRootsByColumn[columnID], &processedNotes[i])
+	}
+
+	for _, columnNotes := range stackRootsByColumn {
+		sort.Slice(columnNotes, func(i, j int) bool {
+			if columnNotes[i].Position.Rank == columnNotes[j].Position.Rank {
+				return columnNotes[i].ID.String() < columnNotes[j].ID.String()
+			}
+			return columnNotes[i].Position.Rank < columnNotes[j].Position.Rank
+		})
+
+		for i := range columnNotes {
+			columnNotes[i].Position.Rank = i
+		}
+	}
+}
+
+func organizeStackNotes(allNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uuid.UUID][]notes.Note) {
+	stackRootNotes := make(map[uuid.UUID]notes.Note)
+	stackChildrenByRoot := make(map[uuid.UUID][]notes.Note)
+
+	for _, note := range allNotes {
+		if !note.Position.Stack.Valid {
+			stackRootNotes[note.ID] = note
+		} else {
+			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
+		}
+	}
+	return stackRootNotes, stackChildrenByRoot
+}
+
+func (service *Service) importStackRoots(ctx context.Context, boardID uuid.UUID, stackRootNotes map[uuid.UUID]notes.Note, stackChildrenByRoot map[uuid.UUID][]notes.Note, columnMap map[uuid.UUID]uuid.UUID) ([]stackRootChildrenNotes, error) {
+	stackNotes := make([]stackRootChildrenNotes, 0, len(stackRootNotes))
+
+	for stackRootID, stackRootNote := range stackRootNotes {
+		newColumnID, exists := columnMap[stackRootNote.Position.Column]
+		if !exists {
+			continue
+		}
+
+		note, err := service.notesService.Import(ctx, notes.NoteImportRequest{
+			Text: stackRootNote.Text,
+			Position: notes.NotePosition{
+				Column: newColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   stackRootNote.Position.Rank,
+			},
+			Board: boardID,
+			User:  stackRootNote.Author,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		stackNotes = append(stackNotes, stackRootChildrenNotes{
+			StackRoot:     *note,
+			StackChildren: stackChildrenByRoot[stackRootID],
+		})
+	}
+
+	return stackNotes, nil
+}
+
+func (service *Service) importStackChildren(ctx context.Context, boardID uuid.UUID, stackNotes []stackRootChildrenNotes) error {
+	for _, stackGroup := range stackNotes {
+		for _, note := range stackGroup.StackChildren {
+			_, err := service.notesService.Import(ctx, notes.NoteImportRequest{
+				Text:  note.Text,
+				Board: boardID,
+				User:  note.Author,
+				Position: notes.NotePosition{
+					Column: stackGroup.StackRoot.Position.Column,
+					Rank:   note.Position.Rank,
+					Stack: uuid.NullUUID{
+						UUID:  stackGroup.StackRoot.ID,
+						Valid: true,
+					},
+				},
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }

@@ -73,7 +73,7 @@ type MockReactionDatabase_Create_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - insert DatabaseReactionInsert
-func (_e *MockReactionDatabase_Expecter) Create(ctx interface{}, board interface{}, insert interface{}) *MockReactionDatabase_Create_Call {
+func (_e *MockReactionDatabase_Expecter) Create(ctx any, board any, insert any) *MockReactionDatabase_Create_Call {
 	return &MockReactionDatabase_Create_Call{Call: _e.mock.On("Create", ctx, board, insert)}
 }
 
@@ -135,7 +135,7 @@ type MockReactionDatabase_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockReactionDatabase_Expecter) Delete(ctx interface{}, id interface{}) *MockReactionDatabase_Delete_Call {
+func (_e *MockReactionDatabase_Expecter) Delete(ctx any, id any) *MockReactionDatabase_Delete_Call {
 	return &MockReactionDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
@@ -201,7 +201,7 @@ type MockReactionDatabase_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockReactionDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockReactionDatabase_Get_Call {
+func (_e *MockReactionDatabase_Expecter) Get(ctx any, id any) *MockReactionDatabase_Get_Call {
 	return &MockReactionDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -269,7 +269,7 @@ type MockReactionDatabase_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockReactionDatabase_Expecter) GetAll(ctx interface{}, board interface{}) *MockReactionDatabase_GetAll_Call {
+func (_e *MockReactionDatabase_Expecter) GetAll(ctx any, board any) *MockReactionDatabase_GetAll_Call {
 	return &MockReactionDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
@@ -337,7 +337,7 @@ type MockReactionDatabase_GetAllForNote_Call struct {
 // GetAllForNote is a helper method to define mock.On call
 //   - ctx context.Context
 //   - note uuid.UUID
-func (_e *MockReactionDatabase_Expecter) GetAllForNote(ctx interface{}, note interface{}) *MockReactionDatabase_GetAllForNote_Call {
+func (_e *MockReactionDatabase_Expecter) GetAllForNote(ctx any, note any) *MockReactionDatabase_GetAllForNote_Call {
 	return &MockReactionDatabase_GetAllForNote_Call{Call: _e.mock.On("GetAllForNote", ctx, note)}
 }
 
@@ -404,7 +404,7 @@ type MockReactionDatabase_Update_Call struct {
 //   - ctx context.Context
 //   - id uuid.UUID
 //   - update DatabaseReactionUpdate
-func (_e *MockReactionDatabase_Expecter) Update(ctx interface{}, id interface{}, update interface{}) *MockReactionDatabase_Update_Call {
+func (_e *MockReactionDatabase_Expecter) Update(ctx any, id any, update any) *MockReactionDatabase_Update_Call {
 	return &MockReactionDatabase_Update_Call{Call: _e.mock.On("Update", ctx, id, update)}
 }
 
