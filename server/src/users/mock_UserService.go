@@ -9,6 +9,8 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"go.opentelemetry.io/otel/metric"
+	"scrumlr.io/server/common"
 )
 
 // NewMockUserService creates a new instance of MockUserService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -38,117 +40,51 @@ func (_m *MockUserService) EXPECT() *MockUserService_Expecter {
 	return &MockUserService_Expecter{mock: &_m.Mock}
 }
 
-// CreateAnonymous provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateAnonymous(ctx context.Context, name string) (*User, error) {
-	ret := _mock.Called(ctx, name)
+// CreateUser provides a mock function for the type MockUserService
+func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl, accountType, specificCounter)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateAnonymous")
+		panic("no return value specified for CreateUser")
 	}
 
 	var r0 *User
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (*User, error)); ok {
-		return returnFunc(ctx, name)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) (*User, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string) *User); ok {
-		r0 = returnFunc(ctx, name)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) *User); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
-		r1 = returnFunc(ctx, name)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
 	} else {
 		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
 
-// MockUserService_CreateAnonymous_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateAnonymous'
-type MockUserService_CreateAnonymous_Call struct {
+// MockUserService_CreateUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateUser'
+type MockUserService_CreateUser_Call struct {
 	*mock.Call
 }
 
-// CreateAnonymous is a helper method to define mock.On call
-//   - ctx context.Context
-//   - name string
-func (_e *MockUserService_Expecter) CreateAnonymous(ctx interface{}, name interface{}) *MockUserService_CreateAnonymous_Call {
-	return &MockUserService_CreateAnonymous_Call{Call: _e.mock.On("CreateAnonymous", ctx, name)}
-}
-
-func (_c *MockUserService_CreateAnonymous_Call) Run(run func(ctx context.Context, name string)) *MockUserService_CreateAnonymous_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		run(
-			arg0,
-			arg1,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateAnonymous_Call) Return(user *User, err error) *MockUserService_CreateAnonymous_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateAnonymous_Call) RunAndReturn(run func(ctx context.Context, name string) (*User, error)) *MockUserService_CreateAnonymous_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateAppleUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateAppleUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateAppleUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateAppleUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateAppleUser'
-type MockUserService_CreateAppleUser_Call struct {
-	*mock.Call
-}
-
-// CreateAppleUser is a helper method to define mock.On call
+// CreateUser is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateAppleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateAppleUser_Call {
-	return &MockUserService_CreateAppleUser_Call{Call: _e.mock.On("CreateAppleUser", ctx, id, name, avatarUrl)}
+//   - accountType common.AccountType
+//   - specificCounter metric.Int64Counter
+func (_e *MockUserService_Expecter) CreateUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}, accountType interface{}, specificCounter interface{}) *MockUserService_CreateUser_Call {
+	return &MockUserService_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, id, name, avatarUrl, accountType, specificCounter)}
 }
 
-func (_c *MockUserService_CreateAppleUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateAppleUser_Call {
+func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter)) *MockUserService_CreateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -166,422 +102,32 @@ func (_c *MockUserService_CreateAppleUser_Call) Run(run func(ctx context.Context
 		if args[3] != nil {
 			arg3 = args[3].(string)
 		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateAppleUser_Call) Return(user *User, err error) *MockUserService_CreateAppleUser_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateAppleUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateAppleUser_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateAzureAdUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateAzureAdUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateAzureAdUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
+		var arg4 common.AccountType
+		if args[4] != nil {
+			arg4 = args[4].(common.AccountType)
 		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateAzureAdUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateAzureAdUser'
-type MockUserService_CreateAzureAdUser_Call struct {
-	*mock.Call
-}
-
-// CreateAzureAdUser is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id string
-//   - name string
-//   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateAzureAdUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateAzureAdUser_Call {
-	return &MockUserService_CreateAzureAdUser_Call{Call: _e.mock.On("CreateAzureAdUser", ctx, id, name, avatarUrl)}
-}
-
-func (_c *MockUserService_CreateAzureAdUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateAzureAdUser_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		var arg2 string
-		if args[2] != nil {
-			arg2 = args[2].(string)
-		}
-		var arg3 string
-		if args[3] != nil {
-			arg3 = args[3].(string)
+		var arg5 metric.Int64Counter
+		if args[5] != nil {
+			arg5 = args[5].(metric.Int64Counter)
 		}
 		run(
 			arg0,
 			arg1,
 			arg2,
 			arg3,
+			arg4,
+			arg5,
 		)
 	})
 	return _c
 }
 
-func (_c *MockUserService_CreateAzureAdUser_Call) Return(user *User, err error) *MockUserService_CreateAzureAdUser_Call {
+func (_c *MockUserService_CreateUser_Call) Return(user *User, err error) *MockUserService_CreateUser_Call {
 	_c.Call.Return(user, err)
 	return _c
 }
 
-func (_c *MockUserService_CreateAzureAdUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateAzureAdUser_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateGitHubUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateGitHubUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateGitHubUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateGitHubUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateGitHubUser'
-type MockUserService_CreateGitHubUser_Call struct {
-	*mock.Call
-}
-
-// CreateGitHubUser is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id string
-//   - name string
-//   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateGitHubUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateGitHubUser_Call {
-	return &MockUserService_CreateGitHubUser_Call{Call: _e.mock.On("CreateGitHubUser", ctx, id, name, avatarUrl)}
-}
-
-func (_c *MockUserService_CreateGitHubUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateGitHubUser_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		var arg2 string
-		if args[2] != nil {
-			arg2 = args[2].(string)
-		}
-		var arg3 string
-		if args[3] != nil {
-			arg3 = args[3].(string)
-		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateGitHubUser_Call) Return(user *User, err error) *MockUserService_CreateGitHubUser_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateGitHubUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateGitHubUser_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateGoogleUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateGoogleUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateGoogleUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateGoogleUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateGoogleUser'
-type MockUserService_CreateGoogleUser_Call struct {
-	*mock.Call
-}
-
-// CreateGoogleUser is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id string
-//   - name string
-//   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateGoogleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateGoogleUser_Call {
-	return &MockUserService_CreateGoogleUser_Call{Call: _e.mock.On("CreateGoogleUser", ctx, id, name, avatarUrl)}
-}
-
-func (_c *MockUserService_CreateGoogleUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateGoogleUser_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		var arg2 string
-		if args[2] != nil {
-			arg2 = args[2].(string)
-		}
-		var arg3 string
-		if args[3] != nil {
-			arg3 = args[3].(string)
-		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateGoogleUser_Call) Return(user *User, err error) *MockUserService_CreateGoogleUser_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateGoogleUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateGoogleUser_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateMicrosoftUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateMicrosoftUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateMicrosoftUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateMicrosoftUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateMicrosoftUser'
-type MockUserService_CreateMicrosoftUser_Call struct {
-	*mock.Call
-}
-
-// CreateMicrosoftUser is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id string
-//   - name string
-//   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateMicrosoftUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateMicrosoftUser_Call {
-	return &MockUserService_CreateMicrosoftUser_Call{Call: _e.mock.On("CreateMicrosoftUser", ctx, id, name, avatarUrl)}
-}
-
-func (_c *MockUserService_CreateMicrosoftUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateMicrosoftUser_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		var arg2 string
-		if args[2] != nil {
-			arg2 = args[2].(string)
-		}
-		var arg3 string
-		if args[3] != nil {
-			arg3 = args[3].(string)
-		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateMicrosoftUser_Call) Return(user *User, err error) *MockUserService_CreateMicrosoftUser_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateMicrosoftUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateMicrosoftUser_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateOIDCUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateOIDCUser(ctx context.Context, id string, name string, avatarUrl string) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateOIDCUser")
-	}
-
-	var r0 *User
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*User)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockUserService_CreateOIDCUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateOIDCUser'
-type MockUserService_CreateOIDCUser_Call struct {
-	*mock.Call
-}
-
-// CreateOIDCUser is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id string
-//   - name string
-//   - avatarUrl string
-func (_e *MockUserService_Expecter) CreateOIDCUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserService_CreateOIDCUser_Call {
-	return &MockUserService_CreateOIDCUser_Call{Call: _e.mock.On("CreateOIDCUser", ctx, id, name, avatarUrl)}
-}
-
-func (_c *MockUserService_CreateOIDCUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserService_CreateOIDCUser_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 string
-		if args[1] != nil {
-			arg1 = args[1].(string)
-		}
-		var arg2 string
-		if args[2] != nil {
-			arg2 = args[2].(string)
-		}
-		var arg3 string
-		if args[3] != nil {
-			arg3 = args[3].(string)
-		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockUserService_CreateOIDCUser_Call) Return(user *User, err error) *MockUserService_CreateOIDCUser_Call {
-	_c.Call.Return(user, err)
-	return _c
-}
-
-func (_c *MockUserService_CreateOIDCUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (*User, error)) *MockUserService_CreateOIDCUser_Call {
+func (_c *MockUserService_CreateUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error)) *MockUserService_CreateUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
