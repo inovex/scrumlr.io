@@ -1,6 +1,8 @@
 ---
 title: Contributing Translations
 description: Complete guide for adding new language support to Scrumlr
+sidebar:
+    order: 11
 ---
 
 This guide provides step-by-step instructions for contributing a new language translation to Scrumlr. The application uses i18next for internationalization and currently supports English, German and French.
