@@ -43,7 +43,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Create() {
 	database := NewSessionRequestDatabase(suite.db)
 
 	boardId := suite.boards["Write"].id
-	userId := suite.users["Stan"].id
+	userId := suite.users["New"].id
 
 	dbRequest, err := database.Create(context.Background(), DatabaseBoardSessionRequestInsert{Board: boardId, User: userId})
 
@@ -296,8 +296,9 @@ type TestBoard struct {
 
 func (suite *DatabaseSessionRequestTestSuite) seedData(db *bun.DB) {
 	// tests users
-	suite.users = make(map[string]TestUser, 6)
+	suite.users = make(map[string]TestUser, 7)
 	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
+	suite.users["New"] = TestUser{id: uuid.New(), name: "Newbie", accountType: common.Anonymous}
 	suite.users["Friend"] = TestUser{id: uuid.New(), name: "Friend", accountType: common.Anonymous}
 	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
 	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: common.Anonymous}
