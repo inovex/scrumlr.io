@@ -542,10 +542,11 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, column := range body.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:    column.Name,
-			Color:   column.Color,
-			Visible: &column.Visible,
-			Index:   &column.Index,
+			Name:        column.Name,
+			Description: column.Description,
+			Color:       column.Color,
+			Visible:     &column.Visible,
+			Index:       &column.Index,
 		})
 	}
 	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{

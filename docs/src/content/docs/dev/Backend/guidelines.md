@@ -1,16 +1,24 @@
-# Guidelines
+---
+title: Guidelines
+description: Guidelines for the Scrumlr backend
+sidebar:
+    order: 21
+---
 
 Please make sure to use the [.editorconfig](./../../.editorconfig) in your editor.
 
 ## Code Formatting
 
-To ensure consistent code formatting across all team members and development environments:
+To ensure consistent code formatting across all team members and development environments make sure to use one of the
+following methods:
 
 ### Automatic Setup (Recommended)
+
 1. **One-time setup**: Run `./scripts/setup-git-hooks.sh` from the `server/` directory
 2. **That's it!** All commits will automatically format Go code
 
 ### Manual Commands (Optional)
+
 With Git hooks enabled, these commands are rarely needed but available when necessary:
 
 - **Auto-format code**: `make format` - manually format all Go code
@@ -19,9 +27,13 @@ With Git hooks enabled, these commands are rarely needed but available when nece
 - **Update golangci-lint**: `go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest` - fix local version conflicts
 
 ### IDE Setup (Optional but Recommended)
+
 Configure your editor to format on save:
 
-**VS Code** (`.vscode/settings.json`):
+#### VS Code
+
+Add the following lines to `.vscode/settings.json` to configure VS Code to trigger the formatter on save.
+
 ```json
 {
   "go.formatTool": "goimports",
@@ -32,12 +44,16 @@ Configure your editor to format on save:
 }
 ```
 
-**GoLand/IntelliJ**:
+#### GoLand/IntelliJ
+
+For GoLand follow these steps to configure the formatter
+
 - Go to Settings → Tools → File Watchers
 - Add "goimports" file watcher
 - Or enable "Reformat code" in commit dialog
 
 ### How It Works
+
 - **Git hooks**: Automatically format staged Go files before commit
 - **CI checks**: Verify formatting in pull requests
 - **Tools**: Uses `goimports` for import organization and `gofmt` for code formatting
@@ -58,11 +74,11 @@ This interface should be defined in the service, where it is used.
 The interface for the database access should end with `Database` and start with the name of the service.
 The interface for the service should end with `Service` and start with the name of the service.
 
-The names of the mothods should contain the following if needed
+The names of the methods should contain the following if needed
 
 - *Create*: Creates a new object
-- *Update*: Updates a object by its id
-- *Delete*: Deletes a object by its id
-- *Get*: Get a object by its id
+- *Update*: Updates an object by its id
+- *Delete*: Deletes an object by its id
+- *Get*: Get an object by its id
 - *GetAll*: Get a list of objects
 - *Exists*: Check if an object exists
