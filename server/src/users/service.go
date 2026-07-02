@@ -67,19 +67,17 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	ctx, span := tracer.Start(ctx, traceName)
 	defer span.End()
 
-	// Validation
 	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
 		return nil, common.BadRequestError(err)
 	}
-	//common attributes
+
 	span.SetAttributes(
 		attribute.String(traceName+".type", string(accountType)),
 		attribute.String(traceName+".name", name),
 	)
 
-	//execute the specific database call for the platform
 	var user DatabaseUser
 	var err error
 
@@ -108,7 +106,6 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 		return nil, common.InternalServerError
 	}
 
-	// common telemetry
 	userCreatedCounter.Add(ctx, 1)
 	if specificCounter != nil {
 		specificCounter.Add(ctx, 1)
