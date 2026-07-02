@@ -2,7 +2,6 @@ package votings
 
 import (
 	"context"
-	"errors"
 	"log"
 	"testing"
 
@@ -16,7 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"
 )
@@ -96,7 +94,11 @@ func (suite *VotingServiceIntegrationTestSuite) Test_AddVote_ClosedVoting() {
 
 	assert.Nil(t, vote)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+	assert.Equal(t, NotFound, votingErr.Category)
+	assert.Equal(t, VotingNotFound, votingErr.ErrType)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote() {
@@ -186,7 +188,12 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, BadRequest, votingErr.Category)
+	assert.Equal(t, OnlyOneOpenVoting, votingErr.ErrType)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {

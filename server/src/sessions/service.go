@@ -101,13 +101,13 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get board session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, TypeNone, fmt.Sprintf("unable to get session for board: %v", err), err)
 	}
 
 	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
-		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
+		return nil, CreateSessionError(Forbidden, ForbiddenSessionChange, "not allowed to change other users session", err)
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
@@ -115,22 +115,22 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, TypeNone, fmt.Sprintf("unable to get session for board: %v", err), err)
 	}
 
 	if body.Role != nil {
 		if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
-			err := common.ForbiddenError(errors.New("cannot promote role"))
+			err := CreateSessionError(Forbidden, ForbiddenRolePromotion, "cannot promote role", err)
 			span.SetStatus(codes.Error, "cannot promote role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to change owner role"))
+			err := CreateSessionError(Forbidden, ForbiddenOwnerChange, "not allowed to change owner role", err)
 			span.SetStatus(codes.Error, "not allowed to change owner role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to promote to owner role"))
+			err := CreateSessionError(Forbidden, ForbiddenOwnerPromotion, "not allowed to promote to owner role", err)
 			span.SetStatus(codes.Error, "not allowed to promote to owner role")
 			span.RecordError(err)
 			return nil, err
@@ -202,16 +202,16 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "session not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateSessionError(NotFound, SessionNotFound, "session not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, TypeNone, fmt.Sprintf("unable to get session for board: %v", err), err)
 	}
 
 	return new(BoardSession).From(session), err

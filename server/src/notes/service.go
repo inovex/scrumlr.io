@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -81,7 +82,7 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		err := errors.New("cannot create note with empty text")
 		span.SetStatus(codes.Error, "cannot create note with empty text")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, CreateNoteError(BadRequest, EmptyTextCreate, "cannot create note with empty text", err)
 	}
 
 	note, err := service.database.CreateNote(ctx, DatabaseNoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
@@ -89,7 +90,7 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		span.SetStatus(codes.Error, "failed to create note")
 		span.RecordError(err)
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to create note: %v", err), err)
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -113,7 +114,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		err := errors.New("cannot import note with empty text")
 		span.SetStatus(codes.Error, "cannot import note with empty text")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, CreateNoteError(BadRequest, EmptyTextImport, "cannot import note with empty text", err)
 	}
 
 	note, err := service.database.ImportNote(ctx, DatabaseNoteImport{
@@ -130,7 +131,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		span.SetStatus(codes.Error, "failed to import note")
 		span.RecordError(err)
 		log.Errorw("Could not import notes", "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to import note: %v", err), err)
 	}
 
 	notesImportCounter.Add(ctx, 1)
@@ -155,14 +156,14 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get preconditions")
 		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get preconditions: %v", err), err)
 	}
 
 	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole && body.Text != nil {
 		err := errors.New("not allowed to change text of note")
 		span.SetStatus(codes.Error, "not allowed to change text of note")
 		span.RecordError(err)
-		return nil, common.ForbiddenError(err)
+		return nil, CreateNoteError(Forbidden, ForbiddenTextChange, "not allowed to change note text", err)
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
@@ -170,7 +171,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return nil, common.InternalServerError
+			return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get lock: %v", err), err)
 		}
 	}
 
@@ -180,7 +181,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 			err := errors.New("note is currently locked")
 			span.SetStatus(codes.Error, "note is currently locked")
 			span.RecordError(err)
-			return nil, common.ConflictError(err)
+			return nil, CreateNoteError(Conflict, NoteLocked, "note is currently locked", err)
 		}
 	}
 
@@ -191,14 +192,14 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 			err := errors.New("not allowed to stack notes")
 			span.SetStatus(codes.Error, "not allowed to stack notes")
 			span.RecordError(err)
-			return nil, common.ForbiddenError(err)
+			return nil, CreateNoteError(Forbidden, ForbiddenStackNotes, "not allowed to stack notes", err)
 		}
 
 		if body.Position.Stack.Valid && body.Position.Stack.UUID == body.ID {
 			err := errors.New("not allowed to stack a note on self")
 			span.SetStatus(codes.Error, "not allowed to stack a note on self")
 			span.RecordError(err)
-			return nil, common.ForbiddenError(err)
+			return nil, CreateNoteError(Forbidden, ForbiddenStackOnSelf, "not allowed to stack a note on self", err)
 		}
 
 		if body.Position.Rank < 0 {
@@ -230,7 +231,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		span.SetStatus(codes.Error, "failed to update note")
 		span.RecordError(err)
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to update note: %v", err), err)
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -260,7 +261,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		err := errors.New("not allowed to delete note from other user")
 		span.SetStatus(codes.Error, "not allowed to delete note from other user")
 		span.RecordError(err)
-		return common.ForbiddenError(err)
+		return CreateNoteError(Forbidden, ForbiddenDeleteNote, "not allowed to delete other user's note", err)
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
@@ -268,7 +269,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return common.InternalServerError
+			return CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get lock: %v", err), err)
 		}
 	}
 
@@ -278,7 +279,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 			err := errors.New("note is currently locked")
 			span.SetStatus(codes.Error, "note is currently locked")
 			span.RecordError(err)
-			return common.ConflictError(err)
+			return CreateNoteError(Conflict, NoteLocked, "note is currently locked", err)
 		}
 	}
 
@@ -288,7 +289,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get note stack")
 			span.RecordError(err)
-			return common.InternalServerError
+			return CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get note stack: %v", err), err)
 		}
 
 		for _, s := range stack {
@@ -324,16 +325,16 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
 
 	note, err := service.database.Get(ctx, id)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "note not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateNoteError(NotFound, NoteNotFound, "note not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get note")
 		span.RecordError(err)
 		log.Errorw("unable to get note", "note", id, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get note: %v", err), err)
 	}
 	return new(Note).From(note), err
 }
@@ -349,18 +350,12 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "notes not found")
-			span.RecordError(err)
-			return nil, common.NotFoundError
-		}
-
-		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to get notes")
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get notes: %v", err), err)
 	}
-	return Notes(notes), err
+	return Notes(notes), nil
 }
 
 func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
@@ -554,16 +549,16 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 
 	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "notes not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateNoteError(NotFound, NoteNotFound, "note not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
 		log.Errorw("unable to get notes", "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateNoteError(Internal, TypeNone, fmt.Sprintf("failed to get notes: %v", err), err)
 	}
 	return Notes(notes), nil
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 )
 
@@ -51,13 +50,18 @@ func TestGetReaction_NotFound(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestGetReaction_DatabaseError(t *testing.T) {
 	id := uuid.New()
+	dbErr := errors.New("database error")
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Get(mock.Anything, id).Return(DatabaseReaction{}, errors.New("database error"))
+	mockReactionDb.EXPECT().Get(mock.Anything, id).Return(DatabaseReaction{}, dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -68,7 +72,7 @@ func TestGetReaction_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }
 
 func TestGetAllReactions(t *testing.T) {
@@ -111,7 +115,8 @@ func TestGetAllReactions_NotFound(t *testing.T) {
 func TestGetAllReactions_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().GetAll(mock.Anything, boardId).Return(nil, errors.New("database error"))
+	dbErr := errors.New("database error")
+	mockReactionDb.EXPECT().GetAll(mock.Anything, boardId).Return(nil, dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -121,7 +126,7 @@ func TestGetAllReactions_DatabaseError(t *testing.T) {
 	_, err := service.GetAll(context.Background(), boardId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }
 
 func TestCreateReaction(t *testing.T) {
@@ -182,7 +187,11 @@ func TestCreateReaction_Multiple(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ConflictError(errors.New("cannot make multiple reactions on the same note by the same user")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Conflict)
+	assert.Equal(t, reactionErr.ErrType, ReactionAlreadyExists)
 }
 
 func TestCreateReaction_Failed(t *testing.T) {
@@ -190,12 +199,13 @@ func TestCreateReaction_Failed(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 	reactionType := Like
+	dbErr := errors.New("database error")
 
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().GetAllForNote(mock.Anything, noteId).
 		Return([]DatabaseReaction{{ID: uuid.New(), Note: noteId, User: uuid.New(), ReactionType: Heart}}, nil)
 	mockReactionDb.EXPECT().Create(mock.Anything, boardId, DatabaseReactionInsert{Note: noteId, User: userId, ReactionType: reactionType}).
-		Return(DatabaseReaction{}, errors.New("database error"))
+		Return(DatabaseReaction{}, dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -206,7 +216,7 @@ func TestCreateReaction_Failed(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }
 
 func TestCreateReaction_DatabaseError(t *testing.T) {
@@ -216,8 +226,9 @@ func TestCreateReaction_DatabaseError(t *testing.T) {
 	reactionType := Like
 
 	mockReactionDb := NewMockReactionDatabase(t)
+	dbErr := errors.New("database error")
 	mockReactionDb.EXPECT().GetAllForNote(mock.Anything, noteId).
-		Return([]DatabaseReaction{}, errors.New("databse error"))
+		Return([]DatabaseReaction{}, dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -228,7 +239,7 @@ func TestCreateReaction_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }
 
 func TestDeleteReaction(t *testing.T) {
@@ -271,7 +282,11 @@ func TestDeleteReaction_NotFound(t *testing.T) {
 	err := service.Delete(context.Background(), boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestDeleteReaction_Forbidden(t *testing.T) {
@@ -292,7 +307,11 @@ func TestDeleteReaction_Forbidden(t *testing.T) {
 	err := service.Delete(context.Background(), boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Forbidden)
+	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionDelete)
 }
 
 func TestDeleteReaction_DatabaseError(t *testing.T) {
@@ -304,8 +323,9 @@ func TestDeleteReaction_DatabaseError(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Get(mock.Anything, reactionId).
 		Return(DatabaseReaction{ID: reactionId, User: userId, Note: noteId, ReactionType: Celebration}, nil)
+	dbErr := errors.New("database error")
 	mockReactionDb.EXPECT().Delete(mock.Anything, reactionId).
-		Return(errors.New("database error"))
+		Return(dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -315,7 +335,7 @@ func TestDeleteReaction_DatabaseError(t *testing.T) {
 	err := service.Delete(context.Background(), boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }
 
 func TestUpdateReaction(t *testing.T) {
@@ -365,7 +385,11 @@ func TestUpdateReaction_NotFound(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestUpdateReaction_Forbidden(t *testing.T) {
@@ -387,7 +411,11 @@ func TestUpdateReaction_Forbidden(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Forbidden)
+	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionUpdate)
 }
 
 func TestUpdateReaction_DatabaseError(t *testing.T) {
@@ -395,12 +423,13 @@ func TestUpdateReaction_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	noteId := uuid.New()
+	dbErr := errors.New("database error")
 
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Get(mock.Anything, Id).
 		Return(DatabaseReaction{ID: Id, Note: noteId, User: userId, ReactionType: Dislike}, nil)
 	mockReactionDb.EXPECT().Update(mock.Anything, Id, DatabaseReactionUpdate{ReactionType: Poop}).
-		Return(DatabaseReaction{}, errors.New("database error"))
+		Return(DatabaseReaction{}, dbErr)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -411,5 +440,5 @@ func TestUpdateReaction_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+	assert.ErrorIs(t, err, dbErr)
 }

@@ -2,7 +2,6 @@ package reactions
 
 import (
 	"context"
-	"errors"
 	"log"
 	"testing"
 
@@ -149,7 +148,8 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create_NotFound() {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.InternalServerError, err)
+
+	assert.ErrorContains(t, err, "failed to create reaction")
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Create_Multiple() {
@@ -164,7 +164,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create_Multiple() {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ConflictError(errors.New("cannot make multiple reactions on the same note by the same user")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Conflict)
+	assert.Equal(t, reactionErr.ErrType, ReactionAlreadyExists)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
@@ -203,7 +207,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update_NotFound() {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Update_Forbidden() {
@@ -218,7 +226,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update_Forbidden() {
 
 	assert.Nil(t, reaction)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Forbidden)
+	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionUpdate)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
@@ -253,7 +265,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_NotFound() {
 	err := suite.reactionService.Delete(ctx, boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_Forbidden() {
@@ -267,7 +283,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_Forbidden() {
 	err := suite.reactionService.Delete(ctx, boardId, userId, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("forbidden")), err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, Forbidden)
+	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionDelete)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Get() {
@@ -292,7 +312,11 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Get_NotFound() {
 	reaction, err := suite.reactionService.Get(ctx, reactionId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var reactionErr ReactionError
+	assert.ErrorAs(t, err, &reactionErr)
+	assert.Equal(t, reactionErr.Category, NotFound)
+	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 	assert.Nil(t, reaction)
 }
 
