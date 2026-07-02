@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"strings"
 
@@ -61,8 +60,7 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 }
 
 func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error) {
-	platformName := strings.ToLower(string(accountType))
-	traceName := fmt.Sprintf("scrumlr.users.service.create.%s", platformName)
+	traceName := "scrumlr.users.service.create"
 
 	ctx, span := tracer.Start(ctx, traceName)
 	defer span.End()
