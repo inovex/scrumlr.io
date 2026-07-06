@@ -312,15 +312,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-syntax-patches-for-csstree@npm:^1.1.4":
-  version: 1.1.5
-  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.5"
+"@csstools/css-syntax-patches-for-csstree@npm:^1.1.5":
+  version: 1.1.6
+  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.6"
   peerDependencies:
     css-tree: ^3.2.1
   peerDependenciesMeta:
     css-tree:
       optional: true
-  checksum: 10c0/a31f0cfb74e2b5ce8a283c47969a202fc3b23c3ee05c6b6beab7f5c14d89c50b82533e446df74f7df0bf88bf23810ed59431353db26e00d5b013995c1ebf07a2
+  checksum: 10c0/4f1322833df87dfb19ec5b23cba5475ceeff8391940dd0eeaf9b28df362f23c354c31f704c4bdef9bd749ae5f0825ded022df3fea1fab39af9b6aab42370ba53
   languageName: node
   linkType: hard
 
@@ -3047,9 +3047,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "cosmiconfig@npm:9.0.1"
+"cosmiconfig@npm:^9.0.2":
+  version: 9.0.2
+  resolution: "cosmiconfig@npm:9.0.2"
   dependencies:
     env-paths: "npm:^2.2.1"
     import-fresh: "npm:^3.3.0"
@@ -3060,7 +3060,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/a5d4d95599687532ee072bca60170133c24d4e08cd795529e0f22c6ce5fde9409eaf4f26e36e3d671f43270ef858fc68f3c7b0ec28e58fac7ddebda5b7725306
+  checksum: 10c0/132d32863c0b3d9ace7010a10011e09089532b36e3b11e02004d671dcbd8b8f2f16293b82d510d9c15890f30358baf8722127c7b1c011449c90b6a178f9c6594
   languageName: node
   linkType: hard
 
@@ -7284,13 +7284,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "postcss-selector-parser@npm:7.1.1"
+"postcss-selector-parser@npm:^7.1.4":
+  version: 7.1.4
+  resolution: "postcss-selector-parser@npm:7.1.4"
   dependencies:
     cssesc: "npm:^3.0.0"
     util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/02d3b1589ddcddceed4b583b098b95a7266dacd5135f041e5d913ebb48e874fd333a36e564cc9a2ec426a464cb18db11cb192ac76247aced5eba8c951bf59507
+  checksum: 10c0/3d533d25bab83592e7134be0435e6cb1e2865f5e7d9fde65f1e7e1c75ccc5905168c9f55b05d2a3e10d01914a178433d3a54eab003f5ef6aa9a9d6816926caa2
   languageName: node
   linkType: hard
 
@@ -8308,7 +8308,7 @@ __metadata:
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.101.0"
     sockette: "npm:^2.0.6"
-    stylelint: "npm:^17.13.0"
+    stylelint: "npm:^17.14.0"
     stylelint-config-standard: "npm:^40.0.0"
     typescript: "npm:^6.0.3"
     underscore: "npm:^1.13.8"
@@ -8926,19 +8926,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^17.13.0":
-  version: 17.13.0
-  resolution: "stylelint@npm:17.13.0"
+"stylelint@npm:^17.14.0":
+  version: 17.14.0
+  resolution: "stylelint@npm:17.14.0"
   dependencies:
     "@csstools/css-calc": "npm:^3.2.1"
     "@csstools/css-parser-algorithms": "npm:^4.0.0"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.4"
+    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.5"
     "@csstools/css-tokenizer": "npm:^4.0.0"
     "@csstools/media-query-list-parser": "npm:^5.0.0"
     "@csstools/selector-resolve-nested": "npm:^4.0.0"
     "@csstools/selector-specificity": "npm:^6.0.0"
     colord: "npm:^2.9.3"
-    cosmiconfig: "npm:^9.0.1"
+    cosmiconfig: "npm:^9.0.2"
     css-functions-list: "npm:^3.3.3"
     css-tree: "npm:^3.2.1"
     debug: "npm:^4.4.3"
@@ -8958,7 +8958,7 @@ __metadata:
     picocolors: "npm:^1.1.1"
     postcss: "npm:^8.5.15"
     postcss-safe-parser: "npm:^7.0.1"
-    postcss-selector-parser: "npm:^7.1.1"
+    postcss-selector-parser: "npm:^7.1.4"
     postcss-value-parser: "npm:^4.2.0"
     string-width: "npm:^8.2.1"
     supports-hyperlinks: "npm:^4.4.0"
@@ -8967,7 +8967,7 @@ __metadata:
     write-file-atomic: "npm:^7.0.1"
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 10c0/07b8e640099c042a5ee807303f79d065998304410ec94e18c419a22e5695bebfe9b2ca10a760630eff9d71f108b2404da8ab7eaba2559686ba99f688b747820b
+  checksum: 10c0/7be23db5c66eba4d4b540bcf9b94e42daf40b1f52b089792dcb8e7d951f81fbec342a458f692fb5156848d6073ce6c36065ba9ec71e86d1c68360dbc3c251a00
   languageName: node
   linkType: hard
 
