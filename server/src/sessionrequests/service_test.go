@@ -212,7 +212,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	var sessionRequestErr SessionRequestError
 	assert.ErrorAs(t, err, &sessionRequestErr)
 	assert.Equal(t, sessionRequestErr.Category, BadRequest)
-	assert.Equal(t, sessionRequestErr.ErrType, InvalidBoardStatusFilter)
+	assert.Equal(t, sessionRequestErr.Message, "invalid status filter")
 }
 
 func TestCreateSessionRequest(t *testing.T) {

@@ -2,19 +2,10 @@ package sessionrequests
 
 import "fmt"
 
-type SessionRequestErrorType string
-
-const (
-	TypeNone                 SessionRequestErrorType = ""
-	SessionRequestNotFound   SessionRequestErrorType = "SESSION_REQUEST_NOT_FOUND"
-	InvalidBoardStatusFilter SessionRequestErrorType = "INVALID_BOARD_STATUS_FILTER"
-)
-
 type SessionRequestErrorCategory string
 
 type SessionRequestError struct {
 	Category SessionRequestErrorCategory
-	ErrType  SessionRequestErrorType
 	Message  string
 	Err      error
 }
@@ -37,10 +28,9 @@ func (e SessionRequestError) Unwrap() error {
 	return e.Err
 }
 
-func CreateSessionRequestError(category SessionRequestErrorCategory, errorType SessionRequestErrorType, message string, err error) error {
+func CreateSessionRequestError(category SessionRequestErrorCategory, message string, err error) error {
 	return SessionRequestError{
 		Category: category,
-		ErrType:  errorType,
 		Message:  message,
 		Err:      err,
 	}

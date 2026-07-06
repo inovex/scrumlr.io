@@ -64,7 +64,6 @@ func TestGetSession_NotFound(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, NotFound, sessionErr.Category)
-	assert.Equal(t, SessionNotFound, sessionErr.ErrType)
 }
 
 func TestGetSession_DatabaseError(t *testing.T) {
@@ -637,7 +636,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, Forbidden, sessionErr.Category)
-	assert.Equal(t, ForbiddenSessionChange, sessionErr.ErrType)
+	assert.Equal(t, "not allowed to change other users session", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
@@ -670,7 +669,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, Forbidden, sessionErr.Category)
-	assert.Equal(t, ForbiddenRolePromotion, sessionErr.ErrType)
+	assert.Equal(t, "cannot promote role", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
@@ -703,7 +702,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, Forbidden, sessionErr.Category)
-	assert.Equal(t, ForbiddenOwnerChange, sessionErr.ErrType)
+	assert.Equal(t, "not allowed to change owner role", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
@@ -736,7 +735,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, Forbidden, sessionErr.Category)
-	assert.Equal(t, ForbiddenOwnerPromotion, sessionErr.ErrType)
+	assert.Equal(t, "not allowed to promote to owner role", sessionErr.Message)
 }
 
 func TestUpdateAllSessions(t *testing.T) {

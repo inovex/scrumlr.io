@@ -120,7 +120,6 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 
 	mockErr := ColumnError{
 		Category: NotFound,
-		ErrType:  ColumnNotFound,
 	}
 
 	suite.expectGetAllNotes(nil, mockErr)
@@ -132,7 +131,6 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 	var columnErr ColumnError
 	suite.ErrorAs(err, &columnErr)
 	suite.Equal(columnErr.Category, NotFound)
-	suite.Equal(columnErr.ErrType, ColumnNotFound)
 }
 
 func (suite *ColumnServiceTestSuite) TestUpdateColumn() {

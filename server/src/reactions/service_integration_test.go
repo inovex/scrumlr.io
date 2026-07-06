@@ -168,7 +168,6 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Create_Multiple() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Conflict)
-	assert.Equal(t, reactionErr.ErrType, ReactionAlreadyExists)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Update() {
@@ -211,7 +210,6 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update_NotFound() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Update_Forbidden() {
@@ -230,7 +228,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Update_Forbidden() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Forbidden)
-	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionUpdate)
+	assert.Equal(t, reactionErr.Message, "forbidden to update other user's reaction")
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Delete() {
@@ -269,7 +267,6 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_NotFound() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_Forbidden() {
@@ -287,7 +284,7 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Delete_Forbidden() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Forbidden)
-	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionDelete)
+	assert.Equal(t, reactionErr.Message, "forbidden to delete other user's reaction")
 }
 
 func (suite *ReactionServiceIntegrationTestSuite) Test_Get() {
@@ -316,7 +313,6 @@ func (suite *ReactionServiceIntegrationTestSuite) Test_Get_NotFound() {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 	assert.Nil(t, reaction)
 }
 
