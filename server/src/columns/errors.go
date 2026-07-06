@@ -2,13 +2,6 @@ package columns
 
 import "fmt"
 
-type ColumnErrorType string
-
-const (
-	TypeNone       ColumnErrorType = ""
-	ColumnNotFound ColumnErrorType = "COLUMN_NOT_FOUND"
-)
-
 type ColumnErrorCategory string
 
 const (
@@ -18,7 +11,6 @@ const (
 
 type ColumnError struct {
 	Category ColumnErrorCategory
-	ErrType  ColumnErrorType
 	Message  string
 	Err      error
 }
@@ -35,10 +27,9 @@ func (e ColumnError) Unwrap() error {
 	return e.Err
 }
 
-func CreateColumnError(category ColumnErrorCategory, errorType ColumnErrorType, message string, err error) error {
+func CreateColumnError(category ColumnErrorCategory, message string, err error) error {
 	return ColumnError{
 		Category: category,
-		ErrType:  errorType,
 		Message:  message,
 		Err:      err,
 	}

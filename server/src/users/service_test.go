@@ -65,7 +65,6 @@ func (suite *UserServiceTestSuite) TestGetUser_NotFound() {
 	suite.ErrorAs(err, &userErr)
 
 	suite.Equal(NotFound, userErr.Category)
-	suite.Equal(UserNotFound, userErr.ErrType)
 }
 
 func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
@@ -142,7 +141,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(EmptyUserName, userErr.ErrType)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
@@ -159,7 +158,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(NewLineUserName, userErr.ErrType)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser() {
@@ -209,7 +208,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 	suite.ErrorAs(err, &userErr)
 
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
@@ -228,7 +227,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 	suite.ErrorAs(err, &userErr)
 
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser() {
@@ -277,7 +276,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
@@ -295,7 +294,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
@@ -344,7 +343,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
@@ -362,7 +361,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
@@ -411,7 +410,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
@@ -429,7 +428,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
@@ -478,7 +477,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
@@ -496,7 +495,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
@@ -545,7 +544,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
@@ -563,7 +562,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser() {
@@ -622,7 +621,7 @@ func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
@@ -639,7 +638,7 @@ func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 	var userErr UserError
 	suite.ErrorAs(err, &userErr)
 	suite.Equal(BadRequest, userErr.Category)
-	suite.Equal(InvalidUserName, userErr.ErrType)
+	suite.Equal("failed to validate username", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {

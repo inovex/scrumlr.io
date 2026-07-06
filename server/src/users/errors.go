@@ -2,16 +2,6 @@ package users
 
 import "fmt"
 
-type UserErrorType string
-
-const (
-	TypeNone        UserErrorType = ""
-	EmptyUserName   UserErrorType = "EMPTY_USER_NAME"
-	NewLineUserName UserErrorType = "NEW_LINE_USER_NAME"
-	InvalidUserName UserErrorType = "INVALID_USER_NAME"
-	UserNotFound    UserErrorType = "USER_NOT_FOUND"
-)
-
 type UserErrorCategory string
 
 const (
@@ -22,7 +12,6 @@ const (
 
 type UserError struct {
 	Category UserErrorCategory
-	ErrType  UserErrorType
 	Message  string
 	Err      error
 }
@@ -39,10 +28,9 @@ func (e UserError) Unwrap() error {
 	return e.Err
 }
 
-func CreateUserError(category UserErrorCategory, errorType UserErrorType, message string, err error) error {
+func CreateUserError(category UserErrorCategory, message string, err error) error {
 	return UserError{
 		Category: category,
-		ErrType:  errorType,
 		Message:  message,
 		Err:      err,
 	}

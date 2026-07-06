@@ -155,7 +155,7 @@ func (suite *NotesServiceTestSuite) Test_Create_EmptyText() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, BadRequest)
-	suite.Equal(noteErr.ErrType, EmptyTextCreate)
+	suite.Equal(noteErr.Message, "cannot create note with empty text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
@@ -198,7 +198,7 @@ func (suite *NotesServiceTestSuite) Test_Import_EmptyText() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, BadRequest)
-	suite.Equal(noteErr.ErrType, EmptyTextImport)
+	suite.Equal(noteErr.Message, "cannot import note with empty text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
@@ -395,7 +395,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Forbidden)
-	suite.Equal(noteErr.ErrType, ForbiddenTextChange)
+	suite.Equal(noteErr.Message, "not allowed to change note text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
@@ -452,7 +452,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Forbidden)
-	suite.Equal(noteErr.ErrType, ForbiddenStackNotes)
+	suite.Equal(noteErr.Message, "not allowed to stack notes")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
@@ -480,7 +480,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Forbidden)
-	suite.Equal(noteErr.ErrType, ForbiddenStackOnSelf)
+	suite.Equal(noteErr.Message, "not allowed to stack a note on self")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
@@ -577,7 +577,6 @@ func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Conflict)
-	suite.Equal(noteErr.ErrType, NoteLocked)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_NegativeRankIsResetToZero() {
@@ -681,7 +680,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Forbidden)
-	suite.Equal(noteErr.ErrType, ForbiddenDeleteNote)
+	suite.Equal(noteErr.Message, "not allowed to delete other user's note")
 }
 
 func (suite *NotesServiceTestSuite) Test_Get() {
@@ -711,7 +710,6 @@ func (suite *NotesServiceTestSuite) Test_Get_NotFound() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, NotFound)
-	suite.Equal(noteErr.ErrType, NoteNotFound)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
@@ -1174,7 +1172,6 @@ func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
 	var noteErr NoteError
 	suite.ErrorAs(err, &noteErr)
 	suite.Equal(noteErr.Category, Conflict)
-	suite.Equal(noteErr.ErrType, NoteLocked)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteStackGetStackError() {

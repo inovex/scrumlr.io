@@ -271,7 +271,6 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Get_NotFound() {
 	var columnErr ColumnError
 	suite.ErrorAs(err, &columnErr)
 	suite.Equal(columnErr.Category, NotFound)
-	suite.Equal(columnErr.ErrType, ColumnNotFound)
 }
 
 func (suite *ColumnServiceIntegrationTestSuite) Test_GetAll() {

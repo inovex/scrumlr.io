@@ -270,7 +270,6 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 	var noteErr NoteError
 	assert.ErrorAs(t, err, &noteErr)
 	assert.Equal(t, noteErr.Category, NotFound)
-	assert.Equal(t, noteErr.ErrType, NoteNotFound)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {

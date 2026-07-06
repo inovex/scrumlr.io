@@ -4,20 +4,6 @@ import (
 	"fmt"
 )
 
-type NoteErrorType string
-
-const (
-	TypeNone             NoteErrorType = ""
-	EmptyTextCreate      NoteErrorType = "EMPTY_TEXT_CREATE"
-	EmptyTextImport      NoteErrorType = "EMPTY_TEXT_IMPORT"
-	NoteLocked           NoteErrorType = "NOTE_LOCKED"
-	ForbiddenTextChange  NoteErrorType = "FORBIDDEN_TEXT_CHANGE"
-	ForbiddenStackNotes  NoteErrorType = "FORBIDDEN_STACK_NOTES"
-	ForbiddenStackOnSelf NoteErrorType = "FORBIDDEN_STACK_ON_SELF"
-	ForbiddenDeleteNote  NoteErrorType = "FORBIDDEN_DELETE_NOTE"
-	NoteNotFound         NoteErrorType = "NOTE_NOT_FOUND"
-)
-
 type NoteErrorCategory string
 
 const (
@@ -30,7 +16,6 @@ const (
 
 type NoteError struct {
 	Category NoteErrorCategory
-	ErrType  NoteErrorType
 	Message  string
 	Err      error
 }
@@ -47,10 +32,9 @@ func (e NoteError) Unwrap() error {
 	return e.Err
 }
 
-func CreateNoteError(category NoteErrorCategory, errorType NoteErrorType, message string, err error) error {
+func CreateNoteError(category NoteErrorCategory, message string, err error) error {
 	return NoteError{
 		Category: category,
-		ErrType:  errorType,
 		Message:  message,
 		Err:      err,
 	}

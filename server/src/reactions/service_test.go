@@ -54,7 +54,6 @@ func TestGetReaction_NotFound(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestGetReaction_DatabaseError(t *testing.T) {
@@ -191,7 +190,6 @@ func TestCreateReaction_Multiple(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Conflict)
-	assert.Equal(t, reactionErr.ErrType, ReactionAlreadyExists)
 }
 
 func TestCreateReaction_Failed(t *testing.T) {
@@ -286,7 +284,6 @@ func TestDeleteReaction_NotFound(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestDeleteReaction_Forbidden(t *testing.T) {
@@ -311,7 +308,7 @@ func TestDeleteReaction_Forbidden(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Forbidden)
-	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionDelete)
+	assert.Equal(t, reactionErr.Message, "forbidden to delete other user's reaction")
 }
 
 func TestDeleteReaction_DatabaseError(t *testing.T) {
@@ -389,7 +386,6 @@ func TestUpdateReaction_NotFound(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, NotFound)
-	assert.Equal(t, reactionErr.ErrType, ReactionNotFound)
 }
 
 func TestUpdateReaction_Forbidden(t *testing.T) {
@@ -415,7 +411,7 @@ func TestUpdateReaction_Forbidden(t *testing.T) {
 	var reactionErr ReactionError
 	assert.ErrorAs(t, err, &reactionErr)
 	assert.Equal(t, reactionErr.Category, Forbidden)
-	assert.Equal(t, reactionErr.ErrType, ForbiddenReactionUpdate)
+	assert.Equal(t, reactionErr.Message, "forbidden to update other user's reaction")
 }
 
 func TestUpdateReaction_DatabaseError(t *testing.T) {

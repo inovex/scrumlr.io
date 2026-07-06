@@ -268,7 +268,7 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 	var boardErr BoardError
 	assert.ErrorAs(t, err, &boardErr)
 	assert.Equal(t, boardErr.Category, BadRequest)
-	assert.Equal(t, boardErr.ErrType, PassphraseRequired)
+	assert.Equal(t, boardErr.Message, "passphrase must be set on access policy 'BY_PASSPHRASE'")
 }
 
 func TestDelete(t *testing.T) {
@@ -371,7 +371,7 @@ func TestUpdate_EmptyName(t *testing.T) {
 	var boardErr BoardError
 	assert.ErrorAs(t, err, &boardErr)
 	assert.Equal(t, boardErr.Category, BadRequest)
-	assert.Equal(t, boardErr.ErrType, NameEmpty)
+	assert.Equal(t, boardErr.Message, "name cannot be empty")
 }
 
 func TestUpdate_ToPassphrase(t *testing.T) {
@@ -451,7 +451,7 @@ func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
 	var boardErr BoardError
 	assert.ErrorAs(t, err, &boardErr)
 	assert.Equal(t, boardErr.Category, BadRequest)
-	assert.Equal(t, boardErr.ErrType, PassphraseRequired)
+	assert.Equal(t, boardErr.Message, "passphrase must be set on access policy 'BY_PASSPHRASE'")
 }
 
 func TestUpdate_ToPublic(t *testing.T) {
@@ -526,7 +526,7 @@ func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
 	var boardErr BoardError
 	assert.ErrorAs(t, err, &boardErr)
 	assert.Equal(t, boardErr.Category, BadRequest)
-	assert.Equal(t, boardErr.ErrType, PassphraseForbidden)
+	assert.Equal(t, boardErr.Message, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 }
 
 func TestUpdate_ToInvite(t *testing.T) {
@@ -601,7 +601,7 @@ func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
 	var boardErr BoardError
 	assert.ErrorAs(t, err, &boardErr)
 	assert.Equal(t, boardErr.Category, BadRequest)
-	assert.Equal(t, boardErr.ErrType, PassphraseForbidden)
+	assert.Equal(t, boardErr.Message, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 }
 
 func TestSetTimer(t *testing.T) {
