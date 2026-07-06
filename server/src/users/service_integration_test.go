@@ -121,7 +121,7 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "", suite.testUserName, "", common.Anonymous, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "", suite.testUserName, "", common.Anonymous)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -130,7 +130,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "appleId", suite.testUserName, "", common.Apple, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "appleId", suite.testUserName, "", common.Apple)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -139,7 +139,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "azureId", suite.testUserName, "", common.AzureAd, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "azureId", suite.testUserName, "", common.AzureAd)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -148,7 +148,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "githubId", suite.testUserName, "", common.GitHub, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "githubId", suite.testUserName, "", common.GitHub)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -157,7 +157,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "googleId", suite.testUserName, "", common.Google, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "googleId", suite.testUserName, "", common.Google)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -166,7 +166,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "microsoftId", suite.testUserName, "", common.Microsoft, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "microsoftId", suite.testUserName, "", common.Microsoft)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -175,7 +175,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 
-	user, err := suite.userService.CreateUser(suite.ctx, "oidcId", suite.testUserName, "", common.TypeOIDC, nil)
+	user, err := suite.userService.CreateUser(suite.ctx, "oidcId", suite.testUserName, "", common.TypeOIDC)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)

@@ -9,7 +9,6 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
-	"go.opentelemetry.io/otel/metric"
 	"scrumlr.io/server/common"
 )
 
@@ -41,8 +40,8 @@ func (_m *MockUserService) EXPECT() *MockUserService_Expecter {
 }
 
 // CreateUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error) {
-	ret := _mock.Called(ctx, id, name, avatarUrl, accountType, specificCounter)
+func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl, accountType)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateUser")
@@ -50,18 +49,18 @@ func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name st
 
 	var r0 *User
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) (*User, error)); ok {
-		return returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType) (*User, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl, accountType)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) *User); ok {
-		r0 = returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType) *User); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl, accountType)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string, common.AccountType, metric.Int64Counter) error); ok {
-		r1 = returnFunc(ctx, id, name, avatarUrl, accountType, specificCounter)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string, common.AccountType) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl, accountType)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -79,12 +78,11 @@ type MockUserService_CreateUser_Call struct {
 //   - name string
 //   - avatarUrl string
 //   - accountType common.AccountType
-//   - specificCounter metric.Int64Counter
-func (_e *MockUserService_Expecter) CreateUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}, accountType interface{}, specificCounter interface{}) *MockUserService_CreateUser_Call {
-	return &MockUserService_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, id, name, avatarUrl, accountType, specificCounter)}
+func (_e *MockUserService_Expecter) CreateUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}, accountType interface{}) *MockUserService_CreateUser_Call {
+	return &MockUserService_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, id, name, avatarUrl, accountType)}
 }
 
-func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter)) *MockUserService_CreateUser_Call {
+func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserService_CreateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -106,17 +104,12 @@ func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id 
 		if args[4] != nil {
 			arg4 = args[4].(common.AccountType)
 		}
-		var arg5 metric.Int64Counter
-		if args[5] != nil {
-			arg5 = args[5].(metric.Int64Counter)
-		}
 		run(
 			arg0,
 			arg1,
 			arg2,
 			arg3,
 			arg4,
-			arg5,
 		)
 	})
 	return _c
@@ -127,7 +120,7 @@ func (_c *MockUserService_CreateUser_Call) Return(user *User, err error) *MockUs
 	return _c
 }
 
-func (_c *MockUserService_CreateUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error)) *MockUserService_CreateUser_Call {
+func (_c *MockUserService_CreateUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error)) *MockUserService_CreateUser_Call {
 	_c.Call.Return(run)
 	return _c
 }

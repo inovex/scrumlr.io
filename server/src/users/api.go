@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -18,7 +17,7 @@ import (
 )
 
 type UserService interface {
-	CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error)
+	CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
 	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	Get(ctx context.Context, id uuid.UUID) (*User, error)

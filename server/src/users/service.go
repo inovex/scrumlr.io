@@ -59,10 +59,8 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, specificCounter metric.Int64Counter) (*User, error) {
-	traceName := "scrumlr.users.service.create"
-
-	ctx, span := tracer.Start(ctx, traceName)
+func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create")
 	defer span.End()
 
 	if err := validateUsername(name); err != nil {
@@ -72,30 +70,38 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	}
 
 	span.SetAttributes(
-		attribute.String(traceName+".type", string(accountType)),
-		attribute.String(traceName+".name", name),
+		attribute.String("scrumlr.users.service.create.type", string(accountType)),
+		attribute.String("scrumlr.users.service.create.name", name),
 	)
 
 	var user DatabaseUser
 	var err error
+	var specificCounter metric.Int64Counter
 
 	switch accountType {
 	case common.Anonymous:
+		specificCounter = anonymousUserCreatedCounter
 		user, err = service.database.CreateAnonymousUser(ctx, name)
 	case common.Apple:
+		specificCounter = appleUserCreatedCounter
 		user, err = service.database.CreateAppleUser(ctx, id, name, avatarUrl)
 	case common.AzureAd:
+		specificCounter = azureAdUserCreatedCounter
 		user, err = service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
 	case common.GitHub:
+		specificCounter = githubUserCreatedCounter
 		user, err = service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
 	case common.Google:
+		specificCounter = googleUserCreatedCounter
 		user, err = service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
 	case common.Microsoft:
+		specificCounter = microsoftUserCreatedCounter
 		user, err = service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
 	case common.TypeOIDC:
+		specificCounter = oicdUserCreatedCounter
 		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
 	default:
-		err = errors.New("invalid account type")
+		return nil, common.BadRequestError(errors.New("invalid account type"))
 	}
 
 	if err != nil {
@@ -105,9 +111,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	}
 
 	userCreatedCounter.Add(ctx, 1)
-	if specificCounter != nil {
-		specificCounter.Add(ctx, 1)
-	}
+	specificCounter.Add(ctx, 1)
 
 	return new(User).From(user), nil
 }
