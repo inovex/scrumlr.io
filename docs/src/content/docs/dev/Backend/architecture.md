@@ -1,6 +1,13 @@
-# Backend Architecture
+---
+title: Architecture
+description: Guide for the backend architecture
+sidebar:
+    order: 24
+---
 
-In the following diagram the packages of the backend and how they interact with each other are shown.
+## Backend Packages
+
+The following diagram shows the packages of the backend and how they interact with each other.
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%

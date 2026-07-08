@@ -37,7 +37,7 @@ const renderBoardSettings = (storeOverrides?: Parameters<typeof getTestStore>[0]
 describe("BoardSettings", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(boardThunks, "editBoard").mockReturnValue({type: "board/editBoard"} as any);
+    vi.spyOn(boardThunks, "editBoard").mockReturnValue({type: "board/editBoard"} as never as ReturnType<typeof boardThunks.editBoard>);
     Object.defineProperty(navigator, "clipboard", {
       value: {writeText: vi.fn().mockResolvedValue(undefined)},
       configurable: true,

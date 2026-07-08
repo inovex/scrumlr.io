@@ -32,7 +32,7 @@ export const fileName = (name?: string) => {
   return `${date}_${name}`;
 };
 
-const removeParticipantId = ({id, ...rest}: ParticipantWithUser & {id?: string}) => rest;
+const removeParticipantId = ({id: _, ...rest}: ParticipantWithUser & {id?: string}) => rest;
 
 const getBoardExportData = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");

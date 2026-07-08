@@ -36,6 +36,7 @@ $max-card-width: 500px;
 }
 
 .templates__container-title {
+  all: unset;
   word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
   font-size: styles.$text--lg;
   font-weight: 700;

@@ -319,6 +319,120 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	}
 }
 
+func (suite *BoardTestSuite) setupRootJoinBoardRequest() (*Server, *boards.MockBoardService, *sessions.MockSessionService, *sessionrequests.MockSessionRequestService, uuid.UUID, uuid.UUID, *http.Request) {
+	s := new(Server)
+	s.basePath = "/"
+
+	boardMock := boards.NewMockBoardService(suite.T())
+	sessionMock := sessions.NewMockSessionService(suite.T())
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
+
+	s.boards = boardMock
+	s.sessions = sessionMock
+	s.sessionRequests = sessionRequestMock
+
+	boardID := uuid.New()
+	userID := uuid.New()
+
+	req := technical_helper.NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), nil).
+		AddToContext(identifiers.UserIdentifier, userID)
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("id", boardID.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	return s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req.Request()
+}
+
+func (suite *BoardTestSuite) TestJoinBoard_ExistingSessionRedirectsToParticipant() {
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
+
+	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
+	sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, nil)
+
+	rr := httptest.NewRecorder()
+	s.joinBoard(rr, req)
+
+	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), rr.Result().Header.Get("Location"))
+	boardMock.AssertExpectations(suite.T())
+	sessionMock.AssertExpectations(suite.T())
+	sessionRequestMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestJoinBoard_PublicCreateSessionError() {
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
+
+	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
+	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
+	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
+	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+		Return(nil, errors.New("failed to create session"))
+
+	rr := httptest.NewRecorder()
+	s.joinBoard(rr, req)
+
+	suite.Equal(http.StatusInternalServerError, rr.Result().StatusCode)
+	boardMock.AssertExpectations(suite.T())
+	sessionMock.AssertExpectations(suite.T())
+	sessionRequestMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestJoinBoard_PublicCreatesParticipantLocation() {
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
+
+	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
+	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
+	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
+	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.ParticipantRole}).
+		Return(new(sessions.BoardSession), nil)
+
+	rr := httptest.NewRecorder()
+	s.joinBoard(rr, req)
+
+	suite.Equal(http.StatusCreated, rr.Result().StatusCode)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), rr.Result().Header.Get("Location"))
+	boardMock.AssertExpectations(suite.T())
+	sessionMock.AssertExpectations(suite.T())
+	sessionRequestMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestJoinBoard_ByInviteExistingRequestLocation() {
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
+
+	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
+	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
+	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
+	sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
+
+	rr := httptest.NewRecorder()
+	s.joinBoard(rr, req)
+
+	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
+	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), rr.Result().Header.Get("Location"))
+	boardMock.AssertExpectations(suite.T())
+	sessionMock.AssertExpectations(suite.T())
+	sessionRequestMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestJoinBoard_ByInviteCreatesRequestLocation() {
+	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
+
+	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
+	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
+	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
+	sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
+	sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), nil)
+
+	rr := httptest.NewRecorder()
+	s.joinBoard(rr, req)
+
+	suite.Equal(http.StatusSeeOther, rr.Result().StatusCode)
+	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), rr.Result().Header.Get("Location"))
+	boardMock.AssertExpectations(suite.T())
+	sessionMock.AssertExpectations(suite.T())
+	sessionRequestMock.AssertExpectations(suite.T())
+}
+
 func (suite *BoardTestSuite) TestUpdateBoards() {
 
 	testParameterBundles := *TestParameterBundles{}.

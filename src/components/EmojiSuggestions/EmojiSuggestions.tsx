@@ -65,17 +65,21 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
           return (
             <li
               className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
-              onMouseDown={(e) => {
-                // using onMouseDown to prevent the input from losing focus
-                e.preventDefault();
-                acceptSuggestion(actualEmoji);
-              }}
               key={slug}
               ref={(el) => {
                 suggestionsRef.current[i] = el!;
               }}
             >
-              <span className="emoji-suggestions__emoji">{actualEmoji}</span>:{slug}:
+              <button
+                className={"emoji-suggestions__element-button"}
+                onMouseDown={(e) => {
+                  // using onMouseDown to prevent the input from losing focus
+                  e.preventDefault();
+                  acceptSuggestion(actualEmoji);
+                }}
+              >
+                <span className="emoji-suggestions__emoji">{actualEmoji}</span>:{slug}:
+              </button>
             </li>
           );
         })}

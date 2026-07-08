@@ -82,7 +82,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
 
   it("should close after losing focus", () => {
     const setOpenStateSpy = vi.fn();
-    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
+    render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     // note: useOnBlur does not actually use the native blur event, but scans for clicks outside the element instead.
     // this is why to simulate the blur, we just click somewhere on the document.

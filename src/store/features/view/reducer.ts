@@ -9,7 +9,7 @@ import {
 import {createReducer} from "@reduxjs/toolkit";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
-import {setHotkeyState, setLanguage, setModerating, setRoute} from "./actions";
+import {setHotkeyState, setModerating, setRoute} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
 import {
@@ -17,6 +17,7 @@ import {
   disableSnowfall,
   enableHotkeyNotifications,
   enableSnowfall,
+  setLanguage,
   setServerInfo,
   setShowBoardReactions,
   setSnowfallNotification,
@@ -49,7 +50,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
     .addCase(setModerating, (state, action) => {
       state.moderating = action.payload;
     })
-    .addCase(setLanguage, (state, action) => {
+    .addCase(setLanguage.fulfilled, (state, action) => {
       state.language = action.payload;
     })
     .addCase(setTheme.fulfilled, (state, action) => {

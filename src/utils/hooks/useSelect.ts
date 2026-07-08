@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
 
-export const SelectContext = createContext<{activeIndex: number | null; setActiveIndex: (index: number) => void} | undefined>(undefined);
+export const SelectContext = createContext<{activeIndex: number | null; setActiveIndex: (_index: number) => void} | undefined>(undefined);
 
 export const useSelect = () => {
   const context = useContext(SelectContext);

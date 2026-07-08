@@ -6,7 +6,8 @@ exports[`<HeaderMenu/> > should render correctly > for moderator 1`] = `
 >
   <div
     class="portal"
-    role="dialog"
+    role="presentation"
+    tabindex="-1"
   >
     <div
       data-focus-guard="true"
@@ -168,7 +169,8 @@ exports[`<HeaderMenu/> > should render correctly > for participants 1`] = `
 >
   <div
     class="portal"
-    role="dialog"
+    role="presentation"
+    tabindex="-1"
   >
     <div
       data-focus-guard="true"

@@ -11,50 +11,66 @@ exports[`EmojiSuggestions > should match the snapshot 1`] = `
     <li
       class="emoji-suggestions__element emoji-suggestions__element--focus"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        😂
-      </span>
-      :
-      face_with_tears_of_joy
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          😂
+        </span>
+        :
+        face_with_tears_of_joy
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        💖
-      </span>
-      :
-      sparkling_heart
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          💖
+        </span>
+        :
+        sparkling_heart
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        👍
-      </span>
-      :
-      thumbs_up
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          👍
+        </span>
+        :
+        thumbs_up
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        👩‍✈️
-      </span>
-      :
-      woman_pilot
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          👩‍✈️
+        </span>
+        :
+        woman_pilot
+        :
+      </button>
     </li>
   </ul>
 </div>
@@ -71,50 +87,66 @@ exports[`EmojiSuggestions > should use skin tones where supported > should use s
     <li
       class="emoji-suggestions__element emoji-suggestions__element--focus"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        😂
-      </span>
-      :
-      face_with_tears_of_joy
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          😂
+        </span>
+        :
+        face_with_tears_of_joy
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        💖
-      </span>
-      :
-      sparkling_heart
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          💖
+        </span>
+        :
+        sparkling_heart
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        👍🏽
-      </span>
-      :
-      thumbs_up
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          👍🏽
+        </span>
+        :
+        thumbs_up
+        :
+      </button>
     </li>
     <li
       class="emoji-suggestions__element"
     >
-      <span
-        class="emoji-suggestions__emoji"
+      <button
+        class="emoji-suggestions__element-button"
       >
-        👩🏽‍✈️
-      </span>
-      :
-      woman_pilot
-      :
+        <span
+          class="emoji-suggestions__emoji"
+        >
+          👩🏽‍✈️
+        </span>
+        :
+        woman_pilot
+        :
+      </button>
     </li>
   </ul>
 </div>
