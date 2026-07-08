@@ -1,6 +1,7 @@
 # scrumlr.io Server
 
 This is the server application of [scrumlr.io](https://scrumlr.io) targeted by the web client.
+Before contributing to the project, please make sure you have read the [contributing guideline](./../CONTRIBUTING.md)
 
 ## Local development
 
@@ -25,8 +26,7 @@ cd src/
 go run . --database "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" --disable-check-origin --insecure
 ```
 
-For more information read the [development documentation](./docs/development.md).
-Also please make sure to read the [guidlines](./docs/guidelines.md).
+Also please make sure to read the [guidlines](https://docs.scrumlr.io/dev/backend/guidelines/).
 
 ## Testing
 
@@ -36,13 +36,8 @@ To run the tests locally run
 make test
 ```
 
-For more information about the tests refer to the [testing documentation](./docs/testing.md).
+For more information about the tests refer to the [testing documentation](https://docs.scrumlr.io/dev/backend/testing/).
 
-## API
-
-The API is currently documented in the [Postman](https://www.postman.com/) collection `api.postman_collection.json`.
-Simply start Postman, import the collection, and you can immediately start to explore all resources and take a look
-at our documentation.
 
 ## Architecture
 
@@ -50,10 +45,10 @@ In the picture below is a high level overview of how scrumlr works
 
 ![Architecture](./docs/architecture.png)
 
-For a detailed overview of the backend read the [architecture documentation](./docs/architecture.md).
+For a detailed overview of the backend read the [architecture documentation](https://docs.scrumlr.io/dev/backendarchitecture).
 
 ## Refactoring
 
-Currently the backend is refactored.
+The backend is currently refactored.
 Not all parts of the backend are done.
 For a list of things that need refactorings see the [todos](./docs/todo.md)
