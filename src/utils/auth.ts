@@ -19,7 +19,7 @@ const signInAnonymously = async (displayName: string) => {
       store.dispatch(signIn({id: user.id, name: user.name, isAnonymous: true}));
     }
     return true;
-  } catch (_err) {
+  } catch (_error) {
     Toast.error({title: i18n.t("Toast.authenticationError")});
     return null;
   }
