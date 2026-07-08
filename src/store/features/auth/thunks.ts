@@ -22,9 +22,7 @@ export const initAuth = createAsyncThunk("auth/initAuth", async (_payload, {disp
 
 // use createAsyncThunk, because the action also changes state in the reducer.
 export const signOut = createAsyncThunk("auth/signOut", async (_payload, {dispatch}) => {
-  retryable(() => API.signOut(), dispatch, signOut, "logout")
-    // eslint-disable-next-line no-restricted-globals
-    .then(() => location.reload());
+  retryable(() => API.signOut(), dispatch, signOut, "logout").then(() => location.reload());
 });
 
 export const deleteAccount = createAsyncThunk<void, string>("auth/deleteAccount", async (userId, {dispatch}) => {

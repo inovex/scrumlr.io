@@ -48,8 +48,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
   useEffect(() => {
     leftSpacerOffset.updateOffset();
     rightSpacerOffset.updateOffset();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
 
   useEffect(() => {

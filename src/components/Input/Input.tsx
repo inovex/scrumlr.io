@@ -71,21 +71,21 @@ export const Input = (props: SearchBarProps) => {
     if (props.type === "password") {
       if (passwordHidden) {
         return (
-          <div className="input__icon-container input__icon-container--password-hidden" role="button" tabIndex={0} onClick={togglePasswordHidden}>
+          <button className="input__icon-container input__icon-container--password-hidden" tabIndex={0} onClick={togglePasswordHidden}>
             <HiddenIcon className="input__icon" aria-label="password is hidden" />
-          </div>
+          </button>
         );
       }
       return (
-        <div className="input__icon-container input__icon-container--password-visible" role="button" tabIndex={0} onClick={togglePasswordHidden}>
+        <button className="input__icon-container input__icon-container--password-visible" tabIndex={0} onClick={togglePasswordHidden}>
           <VisibleIcon className="input__icon" aria-label="password is visible" />
-        </div>
+        </button>
       );
     }
     return (
-      <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
+      <button className="input__icon-container input__icon-container--clear-icon" tabIndex={0} onClick={clearInput}>
         <ClearIcon className="input__icon" aria-label="clear input" />
-      </div>
+      </button>
     );
   };
 

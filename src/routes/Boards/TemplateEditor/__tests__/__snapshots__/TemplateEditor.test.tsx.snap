@@ -116,13 +116,12 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                   placeholder="Title"
                   value="Column 1"
                 />
-                <div
+                <button
                   class="column-configurator-column-name-details__inline-description"
-                  role="button"
                   tabindex="0"
                 >
                   Description (optional)
-                </div>
+                </button>
               </div>
               <div
                 class="columns-configurator-column__menu"
@@ -183,11 +182,10 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                     </g>
                   </g>
                 </svg>
-                <span
+                <button
                   aria-label="current colorBacklog Blue"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
-                  role="button"
                   tabindex="0"
                 />
                 <button
@@ -290,13 +288,12 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                   placeholder="Title"
                   value="Actions"
                 />
-                <div
+                <button
                   class="column-configurator-column-name-details__inline-description"
-                  role="button"
                   tabindex="0"
                 >
                   Description (optional)
-                </div>
+                </button>
               </div>
               <div
                 class="columns-configurator-column__menu"
@@ -357,11 +354,10 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                     </g>
                   </g>
                 </svg>
-                <span
+                <button
                   aria-label="current colorPlanning Pink"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
-                  role="button"
                   tabindex="0"
                 />
                 <button
@@ -963,9 +959,8 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
               type="text"
               value="sample name 1"
             />
-            <div
+            <button
               class="input__icon-container input__icon-container--clear-icon"
-              role="button"
               tabindex="0"
             >
               <svg
@@ -988,7 +983,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                   stroke-width="1.75"
                 />
               </svg>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -1081,13 +1076,12 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                   placeholder="Title"
                   value="sample templates col name 1"
                 />
-                <div
+                <button
                   class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-                  role="button"
                   tabindex="0"
                 >
                   sample templates col name 1
-                </div>
+                </button>
               </div>
               <div
                 class="columns-configurator-column__menu"
@@ -1148,11 +1142,10 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                     </g>
                   </g>
                 </svg>
-                <span
+                <button
                   aria-label="current colorBacklog Blue"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
-                  role="button"
                   tabindex="0"
                 />
                 <button
@@ -1255,13 +1248,12 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                   placeholder="Title"
                   value="sample templates col name 2"
                 />
-                <div
+                <button
                   class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-                  role="button"
                   tabindex="0"
                 >
                   sample templates col name 2
-                </div>
+                </button>
               </div>
               <div
                 class="columns-configurator-column__menu"
@@ -1322,11 +1314,10 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                     </g>
                   </g>
                 </svg>
-                <span
+                <button
                   aria-label="current colorPlanning Pink"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
-                  role="button"
                   tabindex="0"
                 />
                 <button

@@ -53,7 +53,7 @@ describe("ImportBoard", () => {
       return fileReaderInstance;
     }) as unknown as typeof FileReader;
 
-    vi.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as any);
+    vi.spyOn(boardThunks, "importBoard").mockReturnValue({type: "board/importBoard"} as never as ReturnType<typeof boardThunks.importBoard>);
 
     const portal = document.createElement("div");
     portal.setAttribute("id", "portal");
@@ -114,7 +114,7 @@ describe("ImportBoard", () => {
     fireEvent.change(fileInput, {target: {files: [file]}});
 
     await act(async () => {
-      fileReaderInstance.onload?.({target: {result: "{not json"}} as any);
+      fileReaderInstance.onload?.({target: {result: "{not json"}});
     });
 
     expect(Toast.error).toHaveBeenCalled();

@@ -4,18 +4,18 @@ import {Dialog} from "..";
 
 describe("Dialog", () => {
   beforeEach(() => {
-    const portal = global.document.createElement("div");
+    const portal = document.createElement("div");
     portal.setAttribute("id", "portal");
-    global.document.querySelector("body")!.appendChild(portal);
+    document.querySelector("body")!.appendChild(portal);
   });
 
   it("should match snapshot", () => {
-    const {container} = render(<Dialog title="Test-Dialog" />, {container: global.document.querySelector("#portal")!});
+    const {container} = render(<Dialog title="Test-Dialog" />, {container: document.querySelector("#portal")!});
     expect(container.firstChild).toMatchSnapshot();
   });
 
   it("should contain the title prop as heading", () => {
-    const {container} = render(<Dialog title="Test-Dialog" />, {container: global.document.querySelector("#portal")!});
+    const {container} = render(<Dialog title="Test-Dialog" />, {container: document.querySelector("#portal")!});
     expect(container.getElementsByClassName("dialog__header-text")[0].innerHTML).toBe("Test-Dialog");
   });
 
@@ -24,14 +24,14 @@ describe("Dialog", () => {
       <Dialog title="Test-Dialog">
         <div className="test-child" />
       </Dialog>,
-      {container: global.document.querySelector("#portal")!}
+      {container: document.querySelector("#portal")!}
     );
     expect(container.getElementsByClassName("test-child")).toHaveLength(1);
   });
 
   it("should run the onClose function on ESC key press", () => {
     const mockOnClose = vi.fn();
-    const {container} = render(<Dialog title="Test-Dialog" onClose={mockOnClose} />, {container: global.document.querySelector("#portal")!});
+    const {container} = render(<Dialog title="Test-Dialog" onClose={mockOnClose} />, {container: document.querySelector("#portal")!});
     fireEvent.keyDown(container, {key: "Escape", code: "Escape", charCode: 27});
     expect(mockOnClose).toHaveBeenCalled();
   });

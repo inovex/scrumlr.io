@@ -32,9 +32,6 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           e.preventDefault();
           onSubmit();
         }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onSubmit();
-        }}
       >
         <input
           className="board-settings__board-name"
