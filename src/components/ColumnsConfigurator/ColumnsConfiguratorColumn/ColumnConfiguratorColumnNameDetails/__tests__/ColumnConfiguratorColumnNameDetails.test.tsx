@@ -128,7 +128,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
 
   it("should call save changes with new input title", () => {
     const updateColumnTitleSpy = vi.fn();
-    const {container, debug} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", updateColumnTitle: updateColumnTitleSpy}));
+    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", updateColumnTitle: updateColumnTitleSpy}));
 
     const inputElement = container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")!;
     fireEvent.input(inputElement, {target: {value: "Custom Title"}});
