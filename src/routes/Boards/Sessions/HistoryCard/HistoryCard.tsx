@@ -155,11 +155,11 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
 
         <div className={classNames("history-card__info-footer")}>
-          <div className="history-card__info-item">
+          <div className="history-card__info-item" id={`history-card__info-item-data-subtitle--columns::${props.board.id}`}>
             <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
               <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountColumns", {count: props.board.columns.length})}</div>
-              <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
+              <div ref={columnsSubtitleRef} className="history-card__info-item-data-subtitle">
                 {joinedColumnsNames}
               </div>
             </div>

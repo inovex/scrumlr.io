@@ -157,6 +157,7 @@ $description-height: 3 * styles.$line-height--medium;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  cursor: default;
 
   overflow: hidden;
 }
