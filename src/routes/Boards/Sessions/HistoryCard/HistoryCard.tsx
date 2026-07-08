@@ -28,7 +28,7 @@ import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";
-import {getTimeDifference, isDateYesterday} from "utils/datetime";
+import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
@@ -62,7 +62,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
     const dateThreshold = 3; // "x days ago" before the full date is shown
     const isYesterday = isDateYesterday(date);
 
-    const diff = getTimeDifference(date, now);
+    const diff = decomposeTimeUnitComponents(getTimeDifference(date, now));
     if (diff.seconds < 60) return t("TimeDifference.now");
     if (diff.minutes < 60) return t("TimeDifference.minutes", {count: diff.minutes});
     if (isYesterday) return t("TimeDifference.yesterday");
