@@ -1,7 +1,7 @@
 import React from "react";
 import {render, fireEvent} from "@testing-library/react";
 import {Provider} from "react-redux";
-import {TextArea} from "../TextArea";
+import {TextArea, TextAreaProps} from "../TextArea";
 import getTestStore from "utils/test/getTestStore";
 
 describe("TextArea", () => {
@@ -10,7 +10,7 @@ describe("TextArea", () => {
     setInput: vi.fn(),
   };
 
-  const renderTextArea = (props: any) => {
+  const renderTextArea = (props: TextAreaProps) => {
     return render(
       <Provider store={getTestStore()}>
         <TextArea {...props} />

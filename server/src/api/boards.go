@@ -27,6 +27,9 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const boardParticipantsPath = "/boards/%s/participants/%s"
+const boardsRequestsPath = "/boards/%s/requests/%s"
+
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // createBoard creates a new board
@@ -58,11 +61,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// build the response
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s", common.GetProtocol(r), r.Host, b.ID))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s", common.GetProtocol(r), r.Host, s.basePath, b.ID))
-	}
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s", b.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
 }
@@ -171,9 +170,10 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
+
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	exists, err := s.sessions.Exists(ctx, board, user)
+	sessionExists, err := s.sessions.Exists(ctx, board, user)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session")
 		span.RecordError(err)
@@ -181,7 +181,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if exists {
+	if sessionExists {
 		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check if participant is banned")
@@ -198,16 +198,11 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if s.basePath == "/" {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user), http.StatusSeeOther)
-		} else {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user), http.StatusSeeOther)
-		}
+		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
 	b, err := s.boards.Get(ctx, board)
-
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
@@ -224,11 +219,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-		}
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
@@ -243,6 +234,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
+
 		if body.Passphrase == "" {
 			err := errors.New("missing passphrase")
 			span.SetStatus(codes.Error, "no passphrase provided")
@@ -250,6 +242,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
+
 		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
@@ -260,13 +253,10 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-			}
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
+
 		} else {
 			err := errors.New("wrong passphrase")
 			span.SetStatus(codes.Error, "wrong passphrase provided")
@@ -277,7 +267,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == boards.ByInvite {
-		sessionExists, err := s.sessionRequests.Exists(ctx, board, user)
+		sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check session requests")
 			span.RecordError(err)
@@ -285,12 +275,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if sessionExists {
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-			}
+		if sessionRequestExists {
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 			w.WriteHeader(http.StatusSeeOther)
 			return
 		}
@@ -302,11 +288,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-		}
+
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}
@@ -479,7 +462,13 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
 				if session.UserID == note.Author {
-					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
+					user, err := s.users.Get(ctx, session.UserID)
+					if err != nil {
+						span.SetStatus(codes.Error, "failed to get note author user")
+						span.RecordError(err)
+						common.Throw(w, r, err)
+						return
+					}
 					author = user.Name
 				}
 			}
@@ -553,10 +542,11 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, column := range body.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:    column.Name,
-			Color:   column.Color,
-			Visible: &column.Visible,
-			Index:   &column.Index,
+			Name:        column.Name,
+			Description: column.Description,
+			Color:       column.Color,
+			Visible:     &column.Visible,
+			Index:       &column.Index,
 		})
 	}
 	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{

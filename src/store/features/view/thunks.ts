@@ -9,11 +9,18 @@ import {
   SNOWFALL_NOTIFICATION_STORAGE_KEY,
 } from "constants/storage";
 import {retryable} from "store";
+import i18n from "i18next";
 import {ServerInfo, Theme} from "./types";
 
 export const setServerInfo = createAsyncThunk<ServerInfo, void>("view/setServerInfo", async (_payload, {dispatch}) => {
   const serverInfo: ServerInfo = await retryable(API.getServerInfo, dispatch, setServerInfo, "initApplication");
   return serverInfo;
+});
+
+export const setLanguage = createAsyncThunk<string, string>("view/setLanguage", async (payload) => {
+  await i18n.changeLanguage(payload);
+  document.documentElement.lang = payload;
+  return payload;
 });
 
 export const setTheme = createAsyncThunk<Theme, Theme>("view/setTheme", async (payload) => {

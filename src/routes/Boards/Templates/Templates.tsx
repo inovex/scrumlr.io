@@ -125,9 +125,9 @@ export const Templates = () => {
             className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})}
           />
         </button>
-        <div className="templates__container-title" role="button" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left", true)}>
+        <button className="templates__container-title" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left", true)}>
           {title}
-        </div>
+        </button>
         <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right", true)} aria-label="scroll right">
           <ArrowRightIcon
             className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})}

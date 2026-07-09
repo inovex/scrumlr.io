@@ -81,9 +81,9 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
         // if a reaction is given as parameter, filter only that reaction type, otherwise show all.
         .filter((r) => (reaction ? r.reactionType === reaction.reactionType : true))
         .map((r) => (
-          <div className="note-reaction-popup__row-container">
+          <div key={`${r.users[0].user.id}-${reaction?.reactionType ?? "all"}`} className="note-reaction-popup__row-container">
             <div className="note-reaction-popup__row">
-              <NoteAuthorList authors={r.users} authorID={r.users[0].user.id} showAuthors viewer={viewer} key={`${r.users[0].user.id}-${reaction?.reactionType ?? "all"}`} />
+              <NoteAuthorList authors={r.users} authorID={r.users[0].user.id} showAuthors viewer={viewer} />
               <button
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}

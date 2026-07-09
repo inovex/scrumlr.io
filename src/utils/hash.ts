@@ -9,7 +9,6 @@ export const hashCode = (s: string) => {
   let i = 0;
   if (stringLength > 0) {
     while (i < stringLength) {
-      // eslint-disable-next-line no-bitwise
       hash = ((hash << 5) - hash + s.charCodeAt(i++)) | 0;
     }
   }

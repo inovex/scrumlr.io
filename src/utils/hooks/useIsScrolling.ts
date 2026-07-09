@@ -11,7 +11,7 @@ export const useIsScrolling = (ref: React.RefObject<HTMLDivElement | null>, dela
   const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
 
     const handleScroll = () => {
       // Clear previous timeout

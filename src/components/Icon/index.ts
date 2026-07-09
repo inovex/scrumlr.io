@@ -11,6 +11,7 @@ export {default as AppleIcon} from "assets/icons/apple.svg?react";
 export {default as ArrowDownIcon} from "assets/icons/arrow-down.svg?react";
 export {default as ArrowLeftIcon} from "assets/icons/arrow-left.svg?react";
 export {default as ArrowRightIcon} from "assets/icons/arrow-right.svg?react";
+export {default as ArrowReturnIcon} from "assets/icons/arrow-return.svg?react";
 export {default as ArrowUpIcon} from "assets/icons/arrow-up.svg?react";
 export {default as AzureIcon} from "assets/icons/azure.svg?react";
 export {default as CalendarIcon} from "assets/icons/calendar.svg?react";

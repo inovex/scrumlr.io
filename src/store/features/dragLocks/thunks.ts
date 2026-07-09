@@ -15,7 +15,7 @@ export const updateNoteDragState = createAsyncThunk<void, {noteId: string; dragg
         },
       };
       sendWebSocketMessage(message);
-    } catch (error) {
+    } catch (_error) {
       // Silently handle errors to avoid disrupting user experience
     }
   }

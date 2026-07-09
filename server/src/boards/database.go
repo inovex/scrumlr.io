@@ -2,7 +2,6 @@ package boards
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"scrumlr.io/server/timeprovider"
@@ -103,7 +102,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 
 		_, err = query.
 			With("voting", votingQuery).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
+			With("rankUpdate", common.GetRankUpdateQueryForClosedVoting(d.db, "voting")).
 			Set("show_voting = (SELECT \"id\" FROM \"voting\")").
 			Where("id = ?", update.ID).
 			Returning("*").
@@ -148,28 +147,6 @@ func (d *DB) GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, 
 		Scan(ctx, &boards)
 
 	return boards, err
-}
-
-// todo: duplicate here. either remove from here or from voting
-func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
-	newRankSelect := d.db.NewSelect().
-		TableExpr("notes as note").
-		ColumnExpr(fmt.Sprintf(
-			"ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY "+
-				"(SELECT COUNT(*) FROM notes AS n INNER JOIN (SELECT * FROM VOTES WHERE voting = (SELECT id FROM \"%s\")) as v ON n.id = v.note WHERE n.id = note.id OR n.stack = note.id), rank)-1 AS new_rank",
-			votingQuery)).
-		Column("id").
-		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
-		GroupExpr("id")
-
-	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*common.DatabaseNote)(nil)).
-		TableExpr("_data").
-		Set("rank = _data.new_rank").
-		WhereOr("note.id = _data.id").
-		WhereOr("note.stack = _data.id")
-
-	return rankUpdate
 }
 
 func (u *LastModifiedUpdater) UpdateLastModified(ctx context.Context, boardID uuid.UUID, time time.Time) error {
