@@ -114,6 +114,7 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 	})
 }
 
+// BoardOwnerContext allows only the board owner to access the route
 func (s *Server) BoardOwnerContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
