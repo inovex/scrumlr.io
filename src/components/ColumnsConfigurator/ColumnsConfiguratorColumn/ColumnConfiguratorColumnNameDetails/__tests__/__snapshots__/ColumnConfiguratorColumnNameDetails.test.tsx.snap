@@ -51,6 +51,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item"
+          data-autofocus="false"
           data-cy="undefined-item-Cancel"
           data-testid="undefined-item-Cancel"
           id="mini-menu-Cancel-_r_1_-0"
@@ -74,13 +75,11 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item"
+          data-autofocus="true"
           data-cy="undefined-item-Save"
           data-testid="undefined-item-Save"
           id="mini-menu-Save-_r_1_-1"
@@ -100,9 +99,6 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
       </div>
     </div>
@@ -140,6 +136,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item"
+          data-autofocus="false"
           data-cy="undefined-item-Cancel"
           data-testid="undefined-item-Cancel"
           id="mini-menu-Cancel-_r_0_-0"
@@ -163,13 +160,11 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item"
+          data-autofocus="true"
           data-cy="undefined-item-Save"
           data-testid="undefined-item-Save"
           id="mini-menu-Save-_r_0_-1"
@@ -189,9 +184,6 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
       </div>
     </div>

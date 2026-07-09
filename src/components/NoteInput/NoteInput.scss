@@ -72,7 +72,7 @@ $note-input__input-right: 40px;
   display: flex;
   align-self: flex-start;
   padding: styles.$spacing--xxs 0;
-  color: var(--accent-color);
+  color: var(--chip-accent-color);
 
   &:disabled {
     color: styles.$gray--800;
