@@ -103,9 +103,8 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 			return
 		}
 
-		// TODO: Permission Context: while it's technically a 404 looking at the database logic, what we really want to return is a 403 forbidden
 		if !exists {
-			common.Throw(w, r, common.NotFoundError)
+			common.Throw(w, r, common.ForbiddenError(errors.New("user does not have sufficient role privileges (moderator)")))
 			return
 		}
 
@@ -134,9 +133,8 @@ func (s *Server) BoardOwnerContext(next http.Handler) http.Handler {
 			return
 		}
 
-		// TODO: Permission Context: while it's technically a 404 looking at the database logic, what we really want to return is a 403 forbidden
 		if !exists {
-			common.Throw(w, r, common.NotFoundError)
+			common.Throw(w, r, common.ForbiddenError(errors.New("user does not have sufficient role privileges (owner)")))
 			return
 		}
 
