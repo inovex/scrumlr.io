@@ -8,7 +8,7 @@ import i18n from "i18nTest";
 const createBoardHeader = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <BoardHeader currentUserIsModerator={false} />
+      <BoardHeader userRole={"PARTICIPANT"} />
     </Provider>
   );
 };
