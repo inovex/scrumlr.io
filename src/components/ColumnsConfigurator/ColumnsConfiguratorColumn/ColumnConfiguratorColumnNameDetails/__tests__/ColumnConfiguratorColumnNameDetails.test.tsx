@@ -98,7 +98,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
   });
@@ -114,7 +114,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     fireEvent.input(inputElement, {target: {value: "Custom Title"}});
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(setOpenStateSpy).toHaveBeenCalledWith("visualFeedback");
     expect(updateColumnTitleSpy).toHaveBeenCalledWith("Custom Title", expect.anything());
@@ -134,7 +134,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     fireEvent.input(inputElement, {target: {value: "Custom Title"}});
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(updateColumnTitleSpy).toHaveBeenCalledWith("Custom Title", expect.anything());
   });

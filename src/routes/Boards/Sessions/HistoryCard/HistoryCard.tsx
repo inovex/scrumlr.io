@@ -28,20 +28,32 @@ import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";
-import {getTimeDifference, isDateYesterday} from "utils/datetime";
+import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
 type HistoryCardProps = {
   board: HistoryBoard;
 };
 
-const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
-  PUBLIC: <OpenIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />,
-  BY_PASSPHRASE: <LockClosedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")} />,
-  BY_INVITE: <KeyProtectedIcon className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")} />,
-};
-
 export const HistoryCard = (props: HistoryCardProps) => {
+  const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
+    PUBLIC: (
+      <OpenIcon id={`history-card__access-policy::${props.board.id}`} className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />
+    ),
+    BY_PASSPHRASE: (
+      <LockClosedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")}
+      />
+    ),
+    BY_INVITE: (
+      <KeyProtectedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")}
+      />
+    ),
+  };
+
   const {t} = useTranslation();
 
   const locale = useAppSelector((state) => state.view.language) ?? "en";
@@ -50,7 +62,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
     const dateThreshold = 3; // "x days ago" before the full date is shown
     const isYesterday = isDateYesterday(date);
 
-    const diff = getTimeDifference(date, now);
+    const diff = decomposeTimeUnitComponents(getTimeDifference(date, now));
     if (diff.seconds < 60) return t("TimeDifference.now");
     if (diff.minutes < 60) return t("TimeDifference.minutes", {count: diff.minutes});
     if (isYesterday) return t("TimeDifference.yesterday");
@@ -107,7 +119,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           },
           {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
-        focusBehaviour="moveFocus"
+        focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
       />
@@ -121,7 +133,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
     <div className="history-card__wrapper">
       <div className="history-card">
         <FavouriteButton
-          className="history-card__favourite"
+          className="history-card__icon history-card__favourite"
           active={props.board.favourite}
           onClick={() => {
             throw new Error("Not implemented yet");
@@ -143,11 +155,11 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
 
         <div className={classNames("history-card__info-footer")}>
-          <div className="history-card__info-item">
+          <div className="history-card__info-item" id={`history-card__info-item-data-subtitle--columns::${props.board.id}`}>
             <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
             <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
               <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountColumns", {count: props.board.columns.length})}</div>
-              <div ref={columnsSubtitleRef} id={`history-card__info-item-data-subtitle--columns::${props.board.id}`} className="history-card__info-item-data-subtitle">
+              <div ref={columnsSubtitleRef} className="history-card__info-item-data-subtitle">
                 {joinedColumnsNames}
               </div>
             </div>
@@ -194,6 +206,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
         >
           {t("History.HistoryCard.openBoardButton")}
         </Button>
+        <Tooltip anchorId={`history-card__access-policy::${props.board.id}`} color="backlog-blue">
+          {t(`AccessPolicy.${props.board.accessPolicy}`)}
+        </Tooltip>
         {isBoardNameTruncated.horizontal && (
           <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
             {props.board.name}
