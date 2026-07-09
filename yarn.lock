@@ -7690,14 +7690,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:^9.4.0":
-  version: 9.4.0
-  resolution: "query-string@npm:9.4.0"
+"query-string@npm:^9.4.1":
+  version: 9.4.1
+  resolution: "query-string@npm:9.4.1"
   dependencies:
     decode-uri-component: "npm:^0.4.1"
     filter-obj: "npm:^5.1.0"
     split-on-first: "npm:^3.0.0"
-  checksum: 10c0/44bf989e7f766f99165be27fcd223bbb7a8feca05cacceb8df97bef700bdc9d0a629009554c739adb19527e10813d08a615f794c2aa0de22abafa07019abfbc7
+  checksum: 10c0/ee6e7f549e14c51ae958b4ff01f23d41e21315743422248d460ba4184c1c920343807e44e071ef685842244913218c1aadc50668ab8f2811b7cfc353fb225685
   languageName: node
   linkType: hard
 
@@ -8529,7 +8529,7 @@ __metadata:
     plausible-tracker: "npm:^0.3.9"
     prettier: "npm:^3.9.1"
     qrcode.react: "npm:^4.2.0"
-    query-string: "npm:^9.4.0"
+    query-string: "npm:^9.4.1"
     react: "npm:^19.2.7"
     react-dnd-test-backend: "npm:^16.0.1"
     react-dnd-test-utils: "npm:^16.0.1"
