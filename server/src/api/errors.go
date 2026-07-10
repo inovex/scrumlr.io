@@ -29,8 +29,6 @@ func mapError(err error) error {
 			return common.NotFoundError
 		case "CONFLICT":
 			return common.ConflictError(err)
-		default:
-			return common.InternalServerError
 		}
 	}
 

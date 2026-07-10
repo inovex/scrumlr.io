@@ -115,7 +115,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to get board: %v", err), err)
 	}
 
 	return new(Board).From(board), err
@@ -450,7 +450,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete board")
 		span.RecordError(err)
 		log.Errorw("unable to delete board", "err", err)
-		return err
+		return CreateBoardError(Internal, fmt.Sprintf("failed to delete board: %v", err), err)
 	}
 
 	service.DeletedBoard(ctx, id)
@@ -525,7 +525,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board: %v", err), err)
 	}
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
@@ -560,7 +560,7 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board timer: %v", err), err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -589,7 +589,7 @@ func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, 
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to delete board timer: %v", err), err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -639,7 +639,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board timer: %v", err), err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)

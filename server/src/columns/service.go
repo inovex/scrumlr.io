@@ -139,7 +139,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		span.SetStatus(codes.Error, "failed to delete column")
 		span.RecordError(err)
 		log.Errorw("unable to delete column", "err", err)
-		return err
+		return CreateColumnError(Internal, fmt.Sprintf("failed to delete column: %v", err), err)
 	}
 
 	service.deletedColumn(ctx, board, column, noteIds)
@@ -179,7 +179,7 @@ func (service *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*
 		span.SetStatus(codes.Error, "failed to update column")
 		span.RecordError(err)
 		log.Errorw("unable to update column", "err", err)
-		return nil, err
+		return nil, CreateColumnError(Internal, fmt.Sprintf("failed to update column: %v", err), err)
 	}
 
 	service.updatedColumns(ctx, body.Board)
