@@ -254,7 +254,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get preconditions")
 		span.RecordError(err)
-		return err
+		return CreateNoteError(Internal, "failed to get preconditions", err)
 	}
 
 	if preconditions.Author != user && preconditions.CallerRole == common.ParticipantRole {
@@ -305,7 +305,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		span.SetStatus(codes.Error, "failed to delete note")
 		span.RecordError(err)
 		log.Errorw("unable to delete note", "note", body, "err", err)
-		return err
+		return CreateNoteError(Internal, "failed to delete note", err)
 	}
 
 	service.deletedNote(ctx, body.Board, stackIds...)
@@ -372,7 +372,7 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 		span.SetStatus(codes.Error, "failed to get note stack")
 		span.RecordError(err)
 		log.Errorw("unable to get stack", "note", note, "err", err)
-		return nil, err
+		return nil, CreateNoteError(Internal, "failed to get note stack", err)
 	}
 
 	return Notes(notes), err

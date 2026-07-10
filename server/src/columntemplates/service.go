@@ -2,7 +2,6 @@ package columntemplates
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -51,7 +50,7 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get index")
 		span.RecordError(err)
-		return nil, fmt.Errorf("failed to get index: %w", err)
+		return nil, CreateColumnTemplateError(Internal, "failed to get index", err)
 	}
 
 	if body.Index == nil {
@@ -75,7 +74,7 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 		span.SetStatus(codes.Error, "failed to create column template")
 		span.RecordError(err)
 		log.Errorw("unable to create column template", "user", body.User, "err", err)
-		return nil, err
+		return nil, CreateColumnTemplateError(Internal, "failed to create column template", err)
 	}
 
 	columnTemplatesCreatedCounter.Add(ctx, 1)
@@ -97,7 +96,7 @@ func (service *Service) Get(ctx context.Context, boardTemplate, columnTemplate u
 		span.SetStatus(codes.Error, "failed to get column template")
 		span.RecordError(err)
 		log.Errorw("unable to get template column", "board", boardTemplate, "err", err)
-		return nil, fmt.Errorf("unable to get template column: %w", err)
+		return nil, CreateColumnTemplateError(Internal, "unable to get template column", err)
 	}
 
 	return new(ColumnTemplate).From(column), err
@@ -117,7 +116,7 @@ func (service *Service) GetAll(ctx context.Context, boardTemplate uuid.UUID) ([]
 		span.SetStatus(codes.Error, "failed to get column templates")
 		span.RecordError(err)
 		log.Errorw("unable to get template columns", "board", boardTemplate, "err", err)
-		return nil, fmt.Errorf("unable to get template columns: %w", err)
+		return nil, CreateColumnTemplateError(Internal, "unable to get template columns", err)
 	}
 
 	return ColumnTemplates(columns), err
@@ -153,7 +152,7 @@ func (service *Service) Update(ctx context.Context, body ColumnTemplateUpdateReq
 		span.SetStatus(codes.Error, "failed to update column templates")
 		span.RecordError(err)
 		log.Errorw("unable to update column template", "board", body.BoardTemplate, "column", body.ID, "err", err)
-		return nil, err
+		return nil, CreateColumnTemplateError(Internal, "failed to update column templates", err)
 	}
 
 	return new(ColumnTemplate).From(column), err
@@ -174,7 +173,7 @@ func (service *Service) Delete(ctx context.Context, board, column uuid.UUID) err
 		span.SetStatus(codes.Error, "failed to delete column templates")
 		span.RecordError(err)
 		log.Errorw("unable to delete column template", "board", board, "column", column, "err", err)
-		return err
+		return CreateColumnTemplateError(Internal, "failed to delete column templates", err)
 	}
 
 	columnTemplatesDeletedCounter.Add(ctx, 1)
