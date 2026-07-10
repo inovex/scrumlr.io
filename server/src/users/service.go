@@ -35,7 +35,8 @@ type UserDatabase interface {
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
-	GetUsers(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
+	GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
+	GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error)
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
@@ -359,12 +360,27 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	return new(User).From(user), err
 }
 
-func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error) {
+func (service *Service) GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error) {
 	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.multiple")
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_ids")
 	defer span.End()
 
-	users, err := service.database.GetUsers(ctx, boardID)
+	retrievedIDs, err := service.database.GetExistingUserIDs(ctx, userIDs)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get userIDs")
+		span.RecordError(err)
+		log.Errorw("unable to get retrievedIDs", "userIDs", userIDs, "error", err)
+		return nil, common.InternalServerError
+	}
+	return retrievedIDs, nil
+}
+
+func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_by_board")
+	defer span.End()
+
+	users, err := service.database.GetUsersByBoardID(ctx, boardID)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)

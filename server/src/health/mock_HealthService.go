@@ -61,7 +61,7 @@ type MockHealthService_IsDatabaseHealthy_Call struct {
 
 // IsDatabaseHealthy is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockHealthService_Expecter) IsDatabaseHealthy(ctx interface{}) *MockHealthService_IsDatabaseHealthy_Call {
+func (_e *MockHealthService_Expecter) IsDatabaseHealthy(ctx any) *MockHealthService_IsDatabaseHealthy_Call {
 	return &MockHealthService_IsDatabaseHealthy_Call{Call: _e.mock.On("IsDatabaseHealthy", ctx)}
 }
 
@@ -112,7 +112,7 @@ type MockHealthService_IsRealtimeHealthy_Call struct {
 
 // IsRealtimeHealthy is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockHealthService_Expecter) IsRealtimeHealthy(ctx interface{}) *MockHealthService_IsRealtimeHealthy_Call {
+func (_e *MockHealthService_Expecter) IsRealtimeHealthy(ctx any) *MockHealthService_IsRealtimeHealthy_Call {
 	return &MockHealthService_IsRealtimeHealthy_Call{Call: _e.mock.On("IsRealtimeHealthy", ctx)}
 }
 

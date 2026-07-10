@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
 
 	"github.com/stretchr/testify/assert"
@@ -39,11 +40,12 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	reactionService := reactions.NewMockReactionService(t)
 	votingService := votings.NewMockVotingService(t)
 	sessionService := sessions.NewMockSessionService(t)
+	userSession := users.NewMockUserService(t)
 	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
 	sessionRequestWebsocket := sessionrequests.NewMockSessionRequestWebsocket(t)
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
 
-	assert.NotNil(t, initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService))
+	assert.NotNil(t, initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession))
 	assert.NotNil(t, initializer.InitializeColumnService(noteService))
 	assert.NotNil(t, initializer.InitializeBoardReactionService())
 	assert.NotNil(t, initializer.InitializeBoardTemplateService(columnTemplateService))

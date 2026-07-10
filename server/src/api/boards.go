@@ -538,110 +538,13 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
-
-	for _, column := range body.Columns {
-		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:        column.Name,
-			Description: column.Description,
-			Color:       column.Color,
-			Visible:     &column.Visible,
-			Index:       &column.Index,
-		})
-	}
-	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{
-		Name:         body.Board.Name,
-		Description:  body.Board.Description,
-		AccessPolicy: body.Board.AccessPolicy,
-		Passphrase:   body.Board.Passphrase,
-		Columns:      importColumns,
-		Owner:        owner,
-	})
-
+	b, err := s.boards.Import(ctx, owner, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import board")
 		span.RecordError(err)
 		log.Errorw("Could not import board", "err", err)
 		common.Throw(w, r, err)
 		return
-	}
-
-	cols, err := s.columns.GetAll(ctx, b.ID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns from imported board")
-		span.RecordError(err)
-		_ = s.boards.Delete(ctx, b.ID)
-	}
-
-	type ParentChildNotes struct {
-		Parent   notes.Note
-		Children []notes.Note
-	}
-	parentNotes := make(map[uuid.UUID]notes.Note)
-	childNotes := make(map[uuid.UUID][]notes.Note)
-
-	for _, note := range body.Notes {
-		if !note.Position.Stack.Valid {
-			parentNotes[note.ID] = note
-		} else {
-			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
-		}
-	}
-
-	var organizedNotes []ParentChildNotes
-	for parentID, parentNote := range parentNotes {
-		for i, column := range body.Columns {
-			if parentNote.Position.Column == column.ID {
-
-				note, err := s.notes.Import(ctx, notes.NoteImportRequest{
-					Text: parentNote.Text,
-					Position: notes.NotePosition{
-						Column: cols[i].ID,
-						Stack:  uuid.NullUUID{},
-						Rank:   0,
-					},
-					Board: b.ID,
-					User:  parentNote.Author,
-				})
-				if err != nil {
-					span.SetStatus(codes.Error, "failed to import notes")
-					span.RecordError(err)
-					_ = s.boards.Delete(ctx, b.ID)
-					common.Throw(w, r, err)
-					return
-				}
-				parentNote = *note
-			}
-		}
-		organizedNotes = append(organizedNotes, ParentChildNotes{
-			Parent:   parentNote,
-			Children: childNotes[parentID],
-		})
-	}
-
-	for _, node := range organizedNotes {
-		for _, note := range node.Children {
-			_, err := s.notes.Import(ctx, notes.NoteImportRequest{
-				Text:  note.Text,
-				Board: b.ID,
-				User:  note.Author,
-				Position: notes.NotePosition{
-					Column: node.Parent.Position.Column,
-					Rank:   note.Position.Rank,
-					Stack: uuid.NullUUID{
-						UUID:  node.Parent.ID,
-						Valid: true,
-					},
-				},
-			})
-			if err != nil {
-				span.SetStatus(codes.Error, "failed to import note")
-				span.RecordError(err)
-				_ = s.boards.Delete(ctx, b.ID)
-				common.Throw(w, r, err)
-				return
-			}
-		}
 	}
 
 	render.Status(r, http.StatusCreated)

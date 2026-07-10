@@ -65,7 +65,7 @@ type MockBoardLastModifiedUpdater_UpdateLastModified_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - time1 time.Time
-func (_e *MockBoardLastModifiedUpdater_Expecter) UpdateLastModified(ctx interface{}, boardID interface{}, time1 interface{}) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
+func (_e *MockBoardLastModifiedUpdater_Expecter) UpdateLastModified(ctx any, boardID any, time1 any) *MockBoardLastModifiedUpdater_UpdateLastModified_Call {
 	return &MockBoardLastModifiedUpdater_UpdateLastModified_Call{Call: _e.mock.On("UpdateLastModified", ctx, boardID, time1)}
 }
 

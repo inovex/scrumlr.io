@@ -28,6 +28,7 @@ type UserService interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
 	GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
+	GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error)
 
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -27,6 +28,22 @@ import (
 
 type BoardTestSuite struct {
 	suite.Suite
+}
+
+type importBoardFixture struct {
+	boardName        string
+	boardDescription string
+	columnName       string
+	columnVisible    bool
+	columnIndex      int
+	columnColor      common.Color
+
+	ownerID         uuid.UUID
+	importColumnID  uuid.UUID
+	createdBoardID  uuid.UUID
+	createdColumnID uuid.UUID
+	authorID        uuid.UUID
+	importedNoteID  uuid.UUID
 }
 
 func TestBoardTestSuite(t *testing.T) {
@@ -579,4 +596,147 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 			boardMock.AssertExpectations(suite.T())
 		})
 	}
+}
+
+func newImportBoardFixture() importBoardFixture {
+	return importBoardFixture{
+		boardName:        "Imported board",
+		boardDescription: "Imported board description",
+		columnName:       "Start",
+		columnVisible:    true,
+		columnIndex:      0,
+		columnColor:      common.Color("backlog-blue"),
+		ownerID:          uuid.New(),
+		importColumnID:   uuid.New(),
+		createdBoardID:   uuid.New(),
+		createdColumnID:  uuid.New(),
+		authorID:         uuid.New(),
+		importedNoteID:   uuid.New(),
+	}
+}
+
+func (f importBoardFixture) body(includeNotes bool) (string, error) {
+	notesPayload := []map[string]any{}
+	if includeNotes {
+		notesPayload = append(notesPayload, map[string]any{
+			"id":     f.importedNoteID,
+			"author": f.authorID,
+			"text":   "Imported note",
+			"position": map[string]any{
+				"column": f.importColumnID,
+				"rank":   0,
+			},
+		})
+	}
+
+	payload := map[string]any{
+		"board": map[string]any{
+			"name":         f.boardName,
+			"description":  f.boardDescription,
+			"accessPolicy": "PUBLIC",
+		},
+		"columns": []map[string]any{{
+			"id":      f.importColumnID,
+			"name":    f.columnName,
+			"color":   f.columnColor,
+			"visible": f.columnVisible,
+			"index":   f.columnIndex,
+		}},
+		"notes":   notesPayload,
+		"votings": []any{},
+	}
+
+	raw, err := json.Marshal(payload)
+	if err != nil {
+		return "", err
+	}
+
+	return string(raw), nil
+}
+
+func importBoardRequest(ownerID uuid.UUID, body string) *http.Request {
+	return technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(body)).
+		AddToContext(identifiers.UserIdentifier, ownerID).
+		Request()
+}
+
+func (suite *BoardTestSuite) TestImportBoardSuccess() {
+	s := new(Server)
+
+	boardMock := boards.NewMockBoardService(suite.T())
+
+	s.boards = boardMock
+
+	fixture := newImportBoardFixture()
+	body, err := fixture.body(true)
+	suite.Require().NoError(err)
+	req := importBoardRequest(fixture.ownerID, body)
+
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(&boards.ImportBoardResponse{Board: &boards.Board{ID: fixture.createdBoardID}}, nil)
+
+	rr := httptest.NewRecorder()
+
+	s.importBoard(rr, req)
+
+	suite.Equal(http.StatusCreated, rr.Result().StatusCode)
+	boardMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestImportBoardFailedDecodingBody() {
+	s := new(Server)
+
+	ownerID := uuid.New()
+	req := importBoardRequest(ownerID, `{"board":`)
+
+	rr := httptest.NewRecorder()
+
+	s.importBoard(rr, req)
+
+	suite.Equal(http.StatusBadRequest, rr.Result().StatusCode)
+}
+
+func (suite *BoardTestSuite) TestImportBoardCreateFailure() {
+	s := new(Server)
+	boardMock := boards.NewMockBoardService(suite.T())
+	s.boards = boardMock
+
+	fixture := newImportBoardFixture()
+	body, err := fixture.body(false)
+	suite.Require().NoError(err)
+	req := importBoardRequest(fixture.ownerID, body)
+
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(nil, &common.APIError{
+		Err:        errors.New("failed to create board"),
+		StatusCode: http.StatusInternalServerError,
+		StatusText: "failed",
+		ErrorText:  "failed to create board",
+	})
+
+	rr := httptest.NewRecorder()
+
+	s.importBoard(rr, req)
+
+	suite.Equal(http.StatusInternalServerError, rr.Result().StatusCode)
+	boardMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardTestSuite) TestImportBoardProcessImportedNotesFailure() {
+	s := new(Server)
+	boardMock := boards.NewMockBoardService(suite.T())
+
+	s.boards = boardMock
+
+	fixture := newImportBoardFixture()
+	body, err := fixture.body(false)
+	suite.Require().NoError(err)
+	req := importBoardRequest(fixture.ownerID, body)
+
+	boardMock.EXPECT().Import(mock.Anything, fixture.ownerID, mock.Anything).Return(nil, errors.New("failed to get imported columns"))
+
+	rr := httptest.NewRecorder()
+
+	s.importBoard(rr, req)
+
+	suite.Equal(http.StatusInternalServerError, rr.Result().StatusCode)
+	boardMock.AssertExpectations(suite.T())
 }

@@ -157,6 +157,15 @@ type ImportBoardRequest struct {
 	Votings []votings.Voting    `json:"votings"`
 }
 
+type ImportWarnings struct {
+	RemovedNotesMissingAuthorCount int `json:"removedNotesMissingAuthorCount,omitempty"`
+}
+
+type ImportBoardResponse struct {
+	*Board
+	ImportWarnings *ImportWarnings `json:"importWarnings,omitempty"`
+}
+
 type FullBoard struct {
 	Board                *Board                                 `json:"board"`
 	BoardSessionRequests []*sessionrequests.BoardSessionRequest `json:"requests"`
