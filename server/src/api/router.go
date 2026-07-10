@@ -116,6 +116,7 @@ func New(
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
+	r.Use(middleware.ClientIPFromHeader("X-Real-IP"))
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(otelhttp.NewMiddleware("scrumlr"))
@@ -299,10 +300,12 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(httprate.Limit(
+			r.Use(httprate.LimitBy(
 				3,
 				5*time.Second,
-				httprate.WithKeyFuncs(httprate.KeyByIP),
+				func(r *http.Request) (string, error) {
+					return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
+				},
 				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(http.StatusTooManyRequests)
