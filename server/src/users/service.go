@@ -59,51 +59,51 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) CreateAnonymous(ctx context.Context, name string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "users.service.CreateAnonymous")
+func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create")
 	defer span.End()
 
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, err
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.anonymous.type", string(common.Anonymous)),
-		attribute.String("scrumlr.users.service.create.anonymous.name", name),
-	)
-
-	user, err := service.database.CreateAnonymousUser(ctx, name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, err
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	anonymousUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
-
-func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.apple")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
+	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
 		return nil, common.BadRequestError(err)
 	}
 
 	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.apple.type", string(common.Apple)),
-		attribute.String("scrumlr.users.service.create.apple.name", name),
+		attribute.String("scrumlr.users.service.create.type", string(accountType)),
+		attribute.String("scrumlr.users.service.create.name", name),
 	)
 
-	user, err := service.database.CreateAppleUser(ctx, id, name, avatarUrl)
+	var user DatabaseUser
+	var err error
+	var specificCounter metric.Int64Counter
+
+	switch accountType {
+	case common.Anonymous:
+		specificCounter = anonymousUserCreatedCounter
+		user, err = service.database.CreateAnonymousUser(ctx, name)
+	case common.Apple:
+		specificCounter = appleUserCreatedCounter
+		user, err = service.database.CreateAppleUser(ctx, id, name, avatarUrl)
+	case common.AzureAd:
+		specificCounter = azureAdUserCreatedCounter
+		user, err = service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
+	case common.GitHub:
+		specificCounter = githubUserCreatedCounter
+		user, err = service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
+	case common.Google:
+		specificCounter = googleUserCreatedCounter
+		user, err = service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
+	case common.Microsoft:
+		specificCounter = microsoftUserCreatedCounter
+		user, err = service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
+	case common.TypeOIDC:
+		specificCounter = oicdUserCreatedCounter
+		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
+	default:
+		return nil, common.BadRequestError(errors.New("invalid account type"))
+	}
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
@@ -111,148 +111,9 @@ func (service *Service) CreateAppleUser(ctx context.Context, id, name, avatarUrl
 	}
 
 	userCreatedCounter.Add(ctx, 1)
-	appleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
+	specificCounter.Add(ctx, 1)
 
-func (service *Service) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.azuread")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.azuread.type", string(common.AzureAd)),
-		attribute.String("scrumlr.users.service.create.azuread.name", name),
-	)
-
-	user, err := service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	azureAdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
-
-func (service *Service) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.github")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.github.type", string(common.GitHub)),
-		attribute.String("scrumlr.users.service.create.github.name", name),
-	)
-
-	user, err := service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	githubUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
-
-func (service *Service) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.google")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.google.type", string(common.Google)),
-		attribute.String("scrumlr.users.service.create.google.name", name),
-	)
-
-	user, err := service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	googleUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
-
-func (service *Service) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.microsoft")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.microsoft.type", string(common.Microsoft)),
-		attribute.String("scrumlr.users.service.create.microsoft.name", name),
-	)
-
-	user, err := service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	microsoftUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
-}
-
-func (service *Service) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*User, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create.oidc")
-	defer span.End()
-
-	err := validateUsername(name)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
-		return nil, common.BadRequestError(err)
-	}
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.create.oidc.type", string(common.TypeOIDC)),
-		attribute.String("scrumlr.users.service.create.oidc.name", name),
-	)
-
-	user, err := service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		return nil, common.InternalServerError
-	}
-
-	userCreatedCounter.Add(ctx, 1)
-	oicdUserCreatedCounter.Add(ctx, 1)
-	return new(User).From(user), err
+	return new(User).From(user), nil
 }
 
 func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {
