@@ -7864,9 +7864,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "react-router@npm:8.0.1"
+"react-router@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "react-router@npm:8.1.0"
   dependencies:
     cookie-es: "npm:^3.1.1"
   peerDependencies:
@@ -7875,7 +7875,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/7ffcac5caf209b6988a0e045fd044f5f8e91e7f677475f707becd514f316f6c2d556f90e371c5a41f6033da891a2d97370b1c5d443ba96991ab0f4f71252c8ba
+  checksum: 10c0/28c336a5c32ad011a305b82fb27ae1abb892a971591618d3dcb4c8ff3fef3440c215e2b9b365217dd43774db4b3d526c4a95e5d3faecacf42ed9356402bab03f
   languageName: node
   linkType: hard
 
@@ -8531,7 +8531,7 @@ __metadata:
     react-hotkeys-hook: "npm:^5.3.3"
     react-i18next: "npm:^17.0.8"
     react-redux: "npm:^9.3.0"
-    react-router: "npm:^8.0.1"
+    react-router: "npm:^8.1.0"
     react-snowfall: "npm:^2.4.0"
     react-textarea-autosize: "npm:^8.5.9"
     react-to-print: "npm:^3.3.0"
