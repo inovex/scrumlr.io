@@ -67,7 +67,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, ErrInvalidUserName
+		return nil, err
 	}
 
 	span.SetAttributes(
@@ -108,7 +108,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, CreateUserError(Internal, fmt.Sprintf("failed to create user: %v", err), err)
+		return nil, CreateUserError(Internal, "failed to create user", err)
 	}
 
 	userCreatedCounter.Add(ctx, 1)
