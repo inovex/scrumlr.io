@@ -262,7 +262,11 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 
 	assert.Nil(t, request)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "unable to create board session request")
 }
 
 func TestUpdatesessionRequest(t *testing.T) {
@@ -318,7 +322,11 @@ func TestUpdatesessionRequest_DBError(t *testing.T) {
 
 	assert.Nil(t, request)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "unable to update board session request")
 }
 
 func TestSessionRequestExists(t *testing.T) {
@@ -361,7 +369,11 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, "database error", err.Error())
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "failed to check board session request existence")
 	assert.False(t, exists)
 }
 
