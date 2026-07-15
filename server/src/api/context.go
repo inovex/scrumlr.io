@@ -83,6 +83,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	})
 }
 
+// BoardModeratorContext allows both board moderators and owner
 func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
@@ -103,7 +104,37 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 		}
 
 		if !exists {
-			common.Throw(w, r, common.NotFoundError)
+			common.Throw(w, r, common.ForbiddenError(errors.New("user does not have sufficient role privileges (moderator)")))
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+// BoardOwnerContext allows only the board owner to access the route
+func (s *Server) BoardOwnerContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		exists, err := s.sessions.OwnerSessionExists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to verify board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			common.Throw(w, r, common.ForbiddenError(errors.New("user does not have sufficient role privileges (owner)")))
 			return
 		}
 

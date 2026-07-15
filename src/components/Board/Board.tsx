@@ -11,16 +11,18 @@ import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
 import {useIsTouchingSides} from "utils/hooks/useIsTouchingSides";
+import {ParticipantRole} from "store/features";
+import {isParticipantModerator} from "utils/participant";
 import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
-  currentUserIsModerator: boolean;
+  userRole: ParticipantRole;
   moderating: boolean;
   locked: boolean;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator, moderating, locked}: BoardProps) => {
+export const BoardComponent = ({children, userRole, moderating, locked}: BoardProps) => {
   const {t} = useTranslation();
   const [dragActive, setDragActive] = useState(false);
   useDndMonitor({
@@ -61,7 +63,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
     return (
       <div className="board--empty">
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
-        <BoardHeader currentUserIsModerator={currentUserIsModerator} />
+        <BoardHeader userRole={userRole} />
         <InfoBar />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <HotkeyAnchor />
@@ -86,7 +88,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
   return (
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
-      <BoardHeader currentUserIsModerator={currentUserIsModerator} />
+      <BoardHeader userRole={userRole} />
       <InfoBar />
       <MenuBars
         showPreviousColumn={!isTouchingLeftSide}
@@ -97,12 +99,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
-          className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
+          className={`board__spacer-left ${getColorClassName(columnColors[0])} ${isParticipantModerator(userRole) && moderating ? "board__spacer--moderation-isActive" : ""}`}
           {...leftSpacerOffset.bindings}
         />
         {children}
         <div
-          className={`board__spacer-right  ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""} ${getColorClassName(
+          className={`board__spacer-right  ${isParticipantModerator(userRole) && moderating ? "board__spacer--moderation-isActive" : ""} ${getColorClassName(
             columnColors[columnColors.length - 1]
           )}`}
           {...rightSpacerOffset.bindings}

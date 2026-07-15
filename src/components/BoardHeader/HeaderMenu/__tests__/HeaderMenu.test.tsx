@@ -23,7 +23,7 @@ vi.mock("file-saver", async () => ({saveAs: vi.fn()}));
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
   return (
     <Provider store={getTestStore()}>
-      <HeaderMenu open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
+      <HeaderMenu open onClose={() => undefined} userRole={currentUserIsModerator ? "MODERATOR" : "PARTICIPANT"} />
     </Provider>
   );
 };

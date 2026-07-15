@@ -308,6 +308,45 @@ func (suite *DatabaseSessionTestSuite) Test_Database_ModeratorExists_Participant
 	suite.False(exists)
 }
 
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Stan"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.True(exists)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists_Moderator() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Friend"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.False(exists)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists_Participant() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Santa"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.False(exists)
+}
+
 func (suite *DatabaseSessionTestSuite) Test_Database_IsBanned() {
 
 	database := NewSessionDatabase(suite.db)
