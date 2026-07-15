@@ -77,7 +77,7 @@ func (service *BoardSessionService) Create(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to create board session")
 		span.RecordError(err)
 		log.Errorw("unable to create board session", "board", body.Board, "user", body.User, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to create board session", err)
 	}
 
 	service.createdSession(ctx, body.Board, session)
@@ -153,7 +153,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to update board session")
 		span.RecordError(err)
 		log.Errorw("unable to update board session", "board", body.Board, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to update board session", err)
 	}
 
 	service.updatedSession(ctx, body.Board, body.User)
@@ -184,7 +184,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 		span.SetStatus(codes.Error, "failed to update all sessions")
 		span.RecordError(err)
 		log.Errorw("unable to update all sessions for a board", "board", body.Board, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to update all sessions for a board", err)
 	}
 
 	service.updatedSessions(ctx, body.Board, sessions)
@@ -231,7 +231,7 @@ func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUI
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get all session")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to get all sessions for board", err)
 	}
 
 	return BoardSessions(sessions), err
@@ -249,7 +249,7 @@ func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "failed to get user boards", err)
 	}
 
 	return BoardSessions(sessions), err
@@ -275,7 +275,7 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 		span.SetStatus(codes.Error, "failed to connect to board session")
 		span.RecordError(err)
 		log.Errorw("unable to connect to board session", "board", boardID, "user", userID, "error", err)
-		return err
+		return CreateSessionError(Internal, "unable to connect to board session", err)
 	}
 
 	service.updatedSession(ctx, boardID, userID)
@@ -304,7 +304,7 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 		span.SetStatus(codes.Error, "failed to disconnect from board session")
 		span.RecordError(err)
 		log.Errorw("unable to disconnect from board session", "board", boardID, "user", userID, "error", err)
-		return err
+		return CreateSessionError(Internal, "unable to disconnect from board session", err)
 	}
 
 	service.updatedSession(ctx, boardID, userID)
@@ -322,7 +322,14 @@ func (service *BoardSessionService) Exists(ctx context.Context, boardID, userID 
 		attribute.String("scrumlr.sessions.service.exists.user", userID.String()),
 	)
 
-	return service.database.Exists(ctx, boardID, userID)
+	exists, err := service.database.Exists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check board session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check board session existence", err)
+	}
+
+	return exists, nil
 }
 
 func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
@@ -334,7 +341,14 @@ func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, 
 		attribute.String("scrumlr.sessions.service.exists.moderator.user", userID.String()),
 	)
 
-	return service.database.ModeratorExists(ctx, boardID, userID)
+	moderatorExists, err := service.database.ModeratorExists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check moderator session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check moderator session existence", err)
+	}
+
+	return moderatorExists, nil
 }
 
 func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
@@ -358,7 +372,14 @@ func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boa
 		attribute.String("scrumlr.sessions.service.is_banned.user", userID.String()),
 	)
 
-	return service.database.IsParticipantBanned(ctx, boardID, userID)
+	isBanned, err := service.database.IsParticipantBanned(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check participant ban status")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check participant ban status", err)
+	}
+
+	return isBanned, nil
 }
 
 func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {

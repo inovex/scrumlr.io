@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"scrumlr.io/server/websocket"
@@ -74,7 +73,7 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 		span.SetStatus(codes.Error, "failed to create board session request")
 		span.RecordError(err)
 		log.Errorw("unable to create BoardSessionRequest", "board", boardID, "user", userID, "error", err)
-		return nil, err
+		return nil, CreateSessionRequestError(Internal, "unable to create board session request", err)
 	}
 
 	service.createdSessionRequest(ctx, boardID, request)
@@ -104,7 +103,7 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 		span.SetStatus(codes.Error, "failed to update board session request")
 		span.RecordError(err)
 		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
-		return nil, err
+		return nil, CreateSessionRequestError(Internal, "unable to update board session request", err)
 	}
 
 	if request.Status == RequestAccepted {
@@ -142,7 +141,7 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 		span.SetStatus(codes.Error, "failed to get board session request")
 		span.RecordError(err)
 		log.Errorw("failed to load board session request", "board", boardID, "user", userID, "err", err)
-		return nil, CreateSessionRequestError(Internal, fmt.Sprintf("failed to load board session request: %v", err), err)
+		return nil, CreateSessionRequestError(Internal, "failed to load board session request", err)
 	}
 
 	return new(BoardSessionRequest).From(request), err
@@ -176,7 +175,7 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 		span.SetStatus(codes.Error, "failed to get board session requests")
 		span.RecordError(err)
 		log.Errorw("failed to load board session requests", "board", boardID, "err", err)
-		return nil, CreateSessionRequestError(Internal, fmt.Sprintf("failed to load board session requests: %v", err), err)
+		return nil, CreateSessionRequestError(Internal, "failed to load board session requests", err)
 	}
 
 	return BoardSessionRequests(requests), nil
@@ -191,7 +190,14 @@ func (service *BoardSessionRequestService) Exists(ctx context.Context, boardID, 
 		attribute.String("scrumlr.session_requests.service.exists.user", userID.String()),
 	)
 
-	return service.database.Exists(ctx, boardID, userID)
+	exists, err := service.database.Exists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check board session request existence")
+		span.RecordError(err)
+		return false, CreateSessionRequestError(Internal, "failed to check board session request existence", err)
+	}
+
+	return exists, nil
 }
 
 func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request) {

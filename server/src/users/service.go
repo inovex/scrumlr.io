@@ -126,7 +126,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, CreateUserError(BadRequest, "failed to validate username", err)
+		return nil, err
 	}
 
 	span.SetAttributes(
@@ -245,7 +245,14 @@ func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id u
 		attribute.String("scrumlr.users.service.available_key_migration.id", id.String()),
 	)
 
-	return service.database.IsUserAvailableForKeyMigration(ctx, id)
+	isUserAvailable, err := service.database.IsUserAvailableForKeyMigration(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check user availability for key migration")
+		span.RecordError(err)
+		return false, CreateUserError(Internal, "failed to check user availability for key migration", err)
+	}
+
+	return isUserAvailable, nil
 }
 
 func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error) {
@@ -260,7 +267,7 @@ func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*Use
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to set key migration")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateUserError(Internal, "failed to set key migration", err)
 	}
 
 	return new(User).From(user), nil
