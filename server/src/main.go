@@ -319,42 +319,10 @@ func run(ctx *cli.Context) error {
 		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
 	}
 
-	var rt *realtime.Broker
-	if ctx.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v as message broker", ctx.String("redis-address"))
-		rt, err = realtime.NewRedis(realtime.RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
-		})
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
-		}
-	} else {
-		logger.Get().Infof("Connecting to nats at %v as message broker", ctx.String("nats"))
-		rt, err = realtime.NewNats(ctx.String("nats"))
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
-		}
-	}
-
-	var c *cache.Cache
-	if ctx.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v as cache", ctx.String("redis-address"))
-		c, err = cache.NewRedis(cache.RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
-		})
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis cache: %v", err)
-		}
-	} else {
-		logger.Get().Infof("Connecting to nats at %v as cache", ctx.String("nats"))
-		c, err = cache.NewNats(ctx.String("nats"), "scrumlr")
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats cache: %v", err)
-		}
+	c, err := cache.InitializeCache(ctx)
+	if err != nil {
+		log.Fatalf("failed to connect to cache: %v", err)
+		return err
 	}
 
 	basePath := "/"
