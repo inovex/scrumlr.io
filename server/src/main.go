@@ -319,6 +319,12 @@ func run(ctx *cli.Context) error {
 		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
 	}
 
+	rt, err := realtime.InitializeRealtime(ctx)
+	if err != nil {
+		log.Fatalf("failed to connect to message broker: %v", err)
+		return err
+	}
+
 	c, err := cache.InitializeCache(ctx)
 	if err != nil {
 		log.Fatalf("failed to connect to cache: %v", err)
