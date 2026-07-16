@@ -98,8 +98,26 @@ func main() {
 				Name:    "database",
 				Aliases: []string{"d"},
 				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
-				Usage:   "the connection `url` for the database",
-				Value:   "postgresql://localhost:5432", // postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName?sslmode=disable
+				Usage:   "the complete connection `url` for the database, e.g. `postgresql://YourUserName:YourPassword:@YourHostname:5432/YourDatabaseName?sslmode=disable`",
+				Value:   "",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "database-host",
+				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_HOST"},
+				Usage:   "the host name of the database with port e.g. `YourHostName:5432/YourDatabaseName?sslmode=disable`. The host name will be combined with the username and password to form the connection url",
+				Value:   "",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "database-username",
+				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_USER"},
+				Usage:   "the user name for the database connection. The username name will be combined with the host and password to form the connection url",
+				Value:   "",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "database-password",
+				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_PASSWORD"},
+				Usage:   "the password for the database connection. The password will be combined with the host and username to form the connection url",
+				Value:   "",
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "base-path",
@@ -301,18 +319,21 @@ func main() {
 
 func run(ctx *cli.Context) error {
 	logger.SetLogLevel(ctx.String("log-level"))
+	log := logger.FromContext(ctx.Context)
 
 	otelShutdown, err := initialize.SetupOTelSDK(ctx.Context, ctx.String("otel-grpc"), ctx.String("otel-http"))
 	if err != nil {
-		return fmt.Errorf("failed to setup OpenTelemetry: %w", err)
+		log.Errorf("failed to setup OpenTelemetry: %w", err)
+		return err
 	}
 	defer func() {
 		err = errors.Join(err, otelShutdown(ctx.Context))
 	}()
 
-	db, err := initialize.InitializeDatabase(ctx.String("database"))
+	db, err := initialize.InitializeDatabase(ctx)
 	if err != nil {
-		return fmt.Errorf("unable to migrate database: %w", err)
+		log.Errorf("failed to initialize database: %w", err)
+		return err
 	}
 
 	if !ctx.Bool("insecure") && ctx.String("key") == "" {
@@ -401,8 +422,7 @@ func run(ctx *cli.Context) error {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	bun := initialize.InitializeBun(db, logger.GetLogLevel())
-	initializer := serviceinitialize.NewServiceInitializer(bun, rt, c)
+	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
 
 	wsService := initializer.InitializeWebSocketService()
 	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
@@ -426,7 +446,7 @@ func run(ctx *cli.Context) error {
 
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, db, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
