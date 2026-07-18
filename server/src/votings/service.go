@@ -144,14 +144,13 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 	openVoting, err := service.GetOpen(ctx, body.Board)
 	if openVoting != nil || (err != nil && !errors.Is(err, sql.ErrNoRows)) {
 		if openVoting != nil {
+			err := CreateVotingError(BadRequest, "only one open voting per session is allowed", err)
 			span.SetStatus(codes.Error, "only one open voting per session is allowed")
 			span.RecordError(err)
-			return nil, CreateVotingError(BadRequest, "only one open voting per session is allowed", err)
+			return nil, err
 		}
 
-		span.SetStatus(codes.Error, "failed to get open votings")
-		span.RecordError(err)
-		return nil, CreateVotingError(Internal, fmt.Sprintf("failed to get open votings: %v", err), err)
+		return nil, err
 	}
 
 	voting, err := service.database.Create(ctx, DatabaseVotingInsert{

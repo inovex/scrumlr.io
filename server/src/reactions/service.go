@@ -108,10 +108,11 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 
 	for _, currentReaction := range currentReactions {
 		if currentReaction.User == body.User {
+			err := CreateReactionError(Conflict, "cannot make multiple reactions on the same note by the same user", errors.New("cannot make multiple reactions on the same note by the same user"))
 			span.SetStatus(codes.Error, "multiple reactions not allowed")
 			span.RecordError(err)
 			log.Errorw("Cannot make multiple reactions on the same note by the same user", "user", body.User, "note", body.Note)
-			return nil, CreateReactionError(Conflict, "cannot make multiple reactions on the same note by the same user", err)
+			return nil, err
 		}
 	}
 
@@ -152,10 +153,11 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 	}
 
 	if reaction.User != user {
+		err := CreateReactionError(Forbidden, "forbidden to delete other user's reaction", errors.New("forbidden to delete other user's reaction"))
 		span.SetStatus(codes.Error, "cannot remove reaction from other user")
 		span.RecordError(err)
 		log.Errorw("Unable to remove reaction from other users", "reactionUserId", reaction.User, "user", user)
-		return CreateReactionError(Forbidden, "forbidden to delete other user's reaction", err)
+		return err
 	}
 
 	err = service.database.Delete(ctx, id)
@@ -191,10 +193,11 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 	}
 
 	if currentReaction.User != user {
+		err := CreateReactionError(Forbidden, "forbidden to update other user's reaction", errors.New("forbidden to update other user's reaction"))
 		span.SetStatus(codes.Error, "cannot update reaction from other user")
 		span.RecordError(err)
 		log.Errorw("Unable to update reaction from other users", "reactionUserId", currentReaction.User, "user", user)
-		return nil, CreateReactionError(Forbidden, "forbidden to update other user's reaction", err)
+		return nil, err
 	}
 
 	reaction, err := service.database.Update(ctx, id, DatabaseReactionUpdate{ReactionType: body.ReactionType})

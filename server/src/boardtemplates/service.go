@@ -70,7 +70,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create column template")
 			span.RecordError(err)
-			return nil, CreateBoardTemplateError(Internal, "failed to create column template", err)
+			return nil, err
 		}
 	}
 

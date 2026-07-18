@@ -636,7 +636,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 	var sessionErr SessionError
 	assert.ErrorAs(t, err, &sessionErr)
 	assert.Equal(t, Forbidden, sessionErr.Category)
-	assert.Equal(t, "not allowed to change other users session", sessionErr.Message)
+	assert.Equal(t, "not allowed to change other user's session", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
@@ -1052,10 +1052,10 @@ func TestOwnerSessionExists(t *testing.T) {
 func TestOwnerSessionExists_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(false, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -1069,7 +1069,7 @@ func TestOwnerSessionExists_DatabaseError(t *testing.T) {
 	exists, err := sessionService.OwnerSessionExists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 	assert.False(t, exists)
 }
 
