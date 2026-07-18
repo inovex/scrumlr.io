@@ -294,7 +294,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		Reactions:            boardReactions,
 		Votings:              boardVotings,
 		Votes:                boardVotes,
-	}, err
+	}, nil
 }
 
 func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {

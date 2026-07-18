@@ -79,10 +79,10 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 	)
 
 	if body.Text == "" {
-		err := errors.New("cannot create note with empty text")
+		err := CreateNoteError(BadRequest, "cannot create note with empty text", errors.New("cannot create note with empty text"))
 		span.SetStatus(codes.Error, "cannot create note with empty text")
 		span.RecordError(err)
-		return nil, CreateNoteError(BadRequest, "cannot create note with empty text", err)
+		return nil, err
 	}
 
 	note, err := service.database.CreateNote(ctx, DatabaseNoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
@@ -111,10 +111,10 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	)
 
 	if body.Text == "" {
-		err := errors.New("cannot import note with empty text")
+		err := CreateNoteError(BadRequest, "cannot import note with empty text", errors.New("cannot import note with empty text"))
 		span.SetStatus(codes.Error, "cannot import note with empty text")
 		span.RecordError(err)
-		return nil, CreateNoteError(BadRequest, "cannot import note with empty text", err)
+		return nil, err
 	}
 
 	note, err := service.database.ImportNote(ctx, DatabaseNoteImport{
@@ -160,10 +160,10 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	}
 
 	if user != precondition.Author && precondition.CallerRole == common.ParticipantRole && body.Text != nil {
-		err := errors.New("not allowed to change text of note")
+		err := CreateNoteError(Forbidden, "not allowed to change note text", errors.New("not allowed to change text of note"))
 		span.SetStatus(codes.Error, "not allowed to change text of note")
 		span.RecordError(err)
-		return nil, CreateNoteError(Forbidden, "not allowed to change note text", err)
+		return nil, err
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
@@ -178,10 +178,10 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := errors.New("note is currently locked")
+			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
 			span.SetStatus(codes.Error, "note is currently locked")
 			span.RecordError(err)
-			return nil, CreateNoteError(Conflict, "note is currently locked", err)
+			return nil, err
 		}
 	}
 
@@ -189,17 +189,17 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	edited := body.Text != nil || body.Edited
 	if body.Position != nil {
 		if !precondition.StackingAllowed && body.Position.Stack.Valid {
-			err := errors.New("not allowed to stack notes")
+			err := CreateNoteError(Forbidden, "not allowed to stack notes", errors.New("not allowed to stack notes"))
 			span.SetStatus(codes.Error, "not allowed to stack notes")
 			span.RecordError(err)
-			return nil, CreateNoteError(Forbidden, "not allowed to stack notes", err)
+			return nil, err
 		}
 
 		if body.Position.Stack.Valid && body.Position.Stack.UUID == body.ID {
-			err := errors.New("not allowed to stack a note on self")
+			err := CreateNoteError(Forbidden, "not allowed to stack a note on self", errors.New("not allowed to stack a note on self"))
 			span.SetStatus(codes.Error, "not allowed to stack a note on self")
 			span.RecordError(err)
-			return nil, CreateNoteError(Forbidden, "not allowed to stack a note on self", err)
+			return nil, err
 		}
 
 		if body.Position.Rank < 0 {
@@ -258,10 +258,10 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	}
 
 	if preconditions.Author != user && preconditions.CallerRole == common.ParticipantRole {
-		err := errors.New("not allowed to delete note from other user")
+		err := CreateNoteError(Forbidden, "not allowed to delete other user's note", errors.New("not allowed to delete note from other user"))
 		span.SetStatus(codes.Error, "not allowed to delete note from other user")
 		span.RecordError(err)
-		return CreateNoteError(Forbidden, "not allowed to delete other user's note", err)
+		return err
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
@@ -276,10 +276,10 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := errors.New("note is currently locked")
+			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
 			span.SetStatus(codes.Error, "note is currently locked")
 			span.RecordError(err)
-			return CreateNoteError(Conflict, "note is currently locked", err)
+			return err
 		}
 	}
 
@@ -289,7 +289,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get note stack")
 			span.RecordError(err)
-			return CreateNoteError(Internal, fmt.Sprintf("failed to get note stack: %v", err), err)
+			return err
 		}
 
 		for _, s := range stack {

@@ -102,7 +102,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 		specificCounter = oicdUserCreatedCounter
 		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
 	default:
-		return nil, common.BadRequestError(errors.New("invalid account type"))
+		return nil, CreateUserError(BadRequest, "invalid account type", errors.New("invalid account type"))
 	}
 
 	if err != nil {

@@ -234,7 +234,7 @@ func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Con
 
 }
 
-// this needs to be moved to the API layer
+// this needs to be moved to the middleware later
 
 func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -106,9 +106,10 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	}
 
 	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
+		err := CreateSessionError(Forbidden, "not allowed to change other user's session", errors.New("not allowed to change other user's session"))
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
-		return nil, CreateSessionError(Forbidden, "not allowed to change other users session", err)
+		return nil, err
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
@@ -121,17 +122,17 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 
 	if body.Role != nil {
 		if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
-			err := CreateSessionError(Forbidden, "cannot promote role", err)
+			err := CreateSessionError(Forbidden, "cannot promote role", errors.New("cannot promote role"))
 			span.SetStatus(codes.Error, "cannot promote role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
-			err := CreateSessionError(Forbidden, "not allowed to change owner role", err)
+			err := CreateSessionError(Forbidden, "not allowed to change owner role", errors.New("not allowed to change owner role"))
 			span.SetStatus(codes.Error, "not allowed to change owner role")
 			span.RecordError(err)
 			return nil, err
 		} else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
-			err := CreateSessionError(Forbidden, "not allowed to promote to owner role", err)
+			err := CreateSessionError(Forbidden, "not allowed to promote to owner role", errors.New("not allowed to promote to owner role"))
 			span.SetStatus(codes.Error, "not allowed to promote to owner role")
 			span.RecordError(err)
 			return nil, err
@@ -360,7 +361,14 @@ func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boar
 		attribute.String("scrumlr.sessions.service.exists.owner.user", userID.String()),
 	)
 
-	return service.database.OwnerExists(ctx, boardID, userID)
+	ownerExists, err := service.database.OwnerExists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check owner session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check owner session existence", err)
+	}
+
+	return ownerExists, nil
 }
 
 func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
