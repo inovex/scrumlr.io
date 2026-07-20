@@ -265,6 +265,7 @@ func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handl
 		}
 
 		if !exists {
+			err := errors.New("board session request not found")
 			span.SetStatus(codes.Error, "board session request not found")
 			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)

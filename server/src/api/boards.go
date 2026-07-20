@@ -181,7 +181,11 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	board, err := s.boards.Get(ctx, boardId)
 	if err != nil {
 		mappedErr := mapError(err)
-		span.SetStatus(codes.Error, mappedErr.Error())
+		if errors.Is(mappedErr, common.NotFoundError) {
+			span.SetStatus(codes.Error, "board not found")
+		} else {
+			span.SetStatus(codes.Error, "failed to get board")
+		}
 		span.RecordError(err)
 		log.Errorw("unable to access board", "err", err)
 		common.Throw(w, r, mappedErr)

@@ -677,7 +677,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			span.SetStatus(codes.Error, "failed to get board settings")
 			span.RecordError(err)
 			log.Errorw("unable to verify board settings", "err", err)
-			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings"))) //replace this with domain error
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
 			return
 		}
 
@@ -685,7 +685,7 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 			span.SetStatus(codes.Error, "not allowed to edit board")
 			span.RecordError(err)
 			log.Errorw("not allowed to edit board", "err", err)
-			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board"))) //replace this with domain error
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
 			return
 		}
 
