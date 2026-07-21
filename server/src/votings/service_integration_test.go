@@ -148,7 +148,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
 	anonymous := false
 	status := Open
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	voting, err := suite.votingService.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
 
@@ -196,7 +197,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	affectedNotes := []Note{
 		{ID: suite.baseData.Notes["Update1"].ID, Author: suite.baseData.Notes["Update1"].AuthorID, Text: suite.baseData.Notes["Update1"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update1"].ColumnID}},
@@ -228,7 +230,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() 
 	votingId := expectedVoting.ID
 	boardId := suite.baseData.Boards["SortedUpdate"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	affectedNotes := []Note{
 		{ID: suite.baseData.Notes["SortedUpdate1"].ID, Author: suite.baseData.Notes["SortedUpdate1"].AuthorID, Text: suite.baseData.Notes["SortedUpdate1"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate1"].ColumnID}},

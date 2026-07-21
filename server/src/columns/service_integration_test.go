@@ -113,7 +113,8 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithoutIndex() {
 	color := common.ColorOnlineOrange
 	index := 0
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	column, err := suite.columnService.Create(ctx, ColumnRequest{Board: boardId, Name: name, Description: description, Color: color, Visible: new(true)})
 
@@ -146,7 +147,8 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Create_WithIndex() {
 	color := common.ColorOnlineOrange
 	index := 1
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	column, err := suite.columnService.Create(ctx,
 		ColumnRequest{
@@ -190,7 +192,8 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Update() {
 	visible := false
 	index := 1
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	column, err := suite.columnService.Update(ctx, ColumnUpdateRequest{ID: columnId, Board: boardId, Name: name, Description: description, Color: color, Visible: visible, Index: index})
 
@@ -222,9 +225,10 @@ func (suite *ColumnServiceIntegrationTestSuite) Test_Delete() {
 	boardId := suite.columns["Delete"].Board
 	userId := uuid.New()
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.columnService.Delete(ctx, boardId, columnId, userId)
+	err = suite.columnService.Delete(ctx, boardId, columnId, userId)
 
 	suite.Nil(err)
 
