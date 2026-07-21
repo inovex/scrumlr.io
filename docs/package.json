@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/check": "0.9.8",
     "@astrojs/starlight": "0.38.3",
-    "astro": "6.4.6",
+    "astro": "7.1.0",
     "astro-mermaid": "^2.0.2",
     "mermaid": "^11.15.0",
     "sharp": "^0.35.2",
