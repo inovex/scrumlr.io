@@ -1,4 +1,7 @@
 {
+  "BoardEditor": {
+    "save": "Enregistrer"
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Retour à la note présentée",
     "VotingIsAnonymous": "Le vote est anonyme",

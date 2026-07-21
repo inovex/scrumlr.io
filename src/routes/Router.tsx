@@ -24,6 +24,7 @@ import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
 import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
+import {BoardEditor} from "./Boards/BoardEditor/BoardEditor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
 const renderLegacyRoute = (legacy: boolean) =>
@@ -100,6 +101,8 @@ const Router = () => {
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
+
+          <Route path="edit-board/:boardId" element={<BoardEditor />} />
 
           <Route path="history" element={<History />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>

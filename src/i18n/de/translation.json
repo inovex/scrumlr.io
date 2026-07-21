@@ -1,4 +1,7 @@
 {
+  "BoardEditor": {
+    "save": "Speichern"
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
     "VotingIsAnonymous": "Abstimmung ist anonym",
