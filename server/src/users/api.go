@@ -26,6 +26,7 @@ type UserService interface {
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)
 }
+
 type API struct {
 	service                       UserService
 	sessions                      sessions.SessionService
@@ -33,6 +34,20 @@ type API struct {
 	allowAnonymousCustomTemplates bool
 }
 
+// Get the logged in user
+//
+//	@Summary		Get the loged in user
+//	@Description	Get the loged in user
+//	@Tags			users
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Produce		json
+//	@Success		200	{object}	User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/users [get]
 func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.get")
 	defer span.End()
@@ -51,6 +66,21 @@ func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
+// Get a user by id
+//
+//	@Summary		Get a user by id
+//	@Description	Get a user by id
+//	@Tags			users
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the user"
+//	@Produce		json
+//	@Success		200	{object}	User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/users/{id} [get]
 func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.get")
 	defer span.End()
@@ -77,6 +107,21 @@ func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
+// Get all users from a board
+//
+//	@Summary		Get all users from a board
+//	@Description	Get all users from a board
+//	@Tags			users
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Produce		json
+//	@Success		200	{object}	[]User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/users/board/{boardId} [get]
 func (api *API) GetUsersFromBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.getAll")
 	defer span.End()
@@ -95,6 +140,21 @@ func (api *API) GetUsersFromBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, users)
 }
 
+// Update the logged in user
+//
+//	@Summary		Update the logged in user
+//	@Description	Update the logged in user
+//	@Tags			users
+//	@Accept			json
+//	@Param			Cookie	header	string				true	"jwt token to authenticate"
+//	@Param			user	body	UserUpdateRequest	true	"values to update the user"
+//	@Produce		json
+//	@Success		200	{object}	User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/users [put]
 func (api *API) Update(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.update")
 	defer span.End()
@@ -125,6 +185,21 @@ func (api *API) Update(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, updatedUser)
 }
 
+// Delete the logged in user
+//
+//	@Summary		Delete the logged in user
+//	@Description	Delete the logged in user
+//	@Tags			users
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the user to delete"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/users/{id} [delete]
 func (api *API) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.users.api.delete")
 	defer span.End()

@@ -16,7 +16,23 @@ import (
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
-// createVoting creates a new voting session
+// Create a new voting on a board
+//
+//	@Summary		Create a new voting on a board
+//	@Description	Create a new voting on a board
+//	@Tags			votings
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			voting	body	votings.VotingCreateRequest	true	"voting to create"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created voting"
+//	@Success		201	{object}	votings.Voting
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/votings [post]
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.create")
 	defer span.End()
@@ -48,7 +64,22 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, voting)
 }
 
-// updateVoting updates a voting session
+// Update a voting on a board to closed
+//
+//	@Summary		Update a voting on a board to closed
+//	@Description	Update a voting on a board to closed
+//	@Tags			votings
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the voting"
+//	@Produce		json
+//	@Success		200	{object}	votings.Voting
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/votings/{id} [put]
 func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.update")
 	defer span.End()
@@ -91,7 +122,22 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, voting)
 }
 
-// getVoting get a voting session
+// Get a voting on a board
+//
+//	@Summary		Get a voting on a board
+//	@Description	Get a voting on a board
+//	@Tags			votings
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the voting"
+//	@Produce		json
+//	@Success		200	{object}	votings.Voting
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/votings/{id} [get]
 func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.get")
 	defer span.End()
@@ -111,7 +157,21 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, voting)
 }
 
-// getVotings get all voting sessions
+// Get all votings on a board
+//
+//	@Summary		Get all votings on a board
+//	@Description	Get all votings on a board
+//	@Tags			votings
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Produce		json
+//	@Success		200	{object}	[]votings.Voting
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/votings [get]
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.votings.api.update")
 	defer span.End()

@@ -36,6 +36,24 @@ type API struct {
 	service SessionService
 }
 
+// Get all sessions for a board
+//
+//	@Summary		Get all sessions for a board
+//	@Description	Get all sessions for a board
+//	@Tags			sessions
+//	@Accept			json
+//	@Param			Cookie		header	string	true	"jwt token to authenticate"
+//	@Param			boardId		path	string	true	"id of the board"
+//	@Param			connected	query	string	false	"only select connected sessions"				Enums(true, false)
+//	@Param			ready		query	string	false	"only select sessions that are ready"			Enums(true, false)
+//	@Param			raisedHand	query	string	false	"only select sessions that raised their hand"	Enums(true, false)
+//	@Param			role		query	string	false	"only select sessions with the requested role"	Enums(OWNER, MODERATOR, PARTICIPANT)
+//	@Produce		json
+//	@Success		200	{object}	[]BoardSession	"sessions for the board"
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/participants [get]
 func (api *API) GetBoardSessions(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.get.all")
 	defer span.End()
@@ -55,6 +73,21 @@ func (api *API) GetBoardSessions(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, sessions)
 }
 
+// Get a sessions for a board
+//
+//	@Summary		Get a sessions for a board
+//	@Description	Get a sessions for a board
+//	@Tags			sessions
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the session"
+//	@Produce		json
+//	@Success		200	{object}	sessions.BoardSession	"session for the board"
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/participants/{id} [get]
 func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.get")
 	defer span.End()
@@ -83,6 +116,22 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, session)
 }
 
+// Update a sessions for a board
+//
+//	@Summary		Update a sessions for a board
+//	@Description	Update a sessions for a board
+//	@Tags			sessions
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			id		path	string						true	"id of the session"
+//	@Param			session	body	BoardSessionUpdateRequest	true	"values to update the session"
+//	@Produce		json
+//	@Success		200	{object}	sessions.BoardSession	"session for the board"
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/participants/{id} [put]
 func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.update")
 	defer span.End()
@@ -125,6 +174,22 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, session)
 }
 
+// Update a sessions for a board
+//
+//	@Summary		Update a sessions for a board
+//	@Description	Update a sessions for a board
+//	@Tags			sessions
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			id		path	string						true	"id of the session"
+//	@Param			session	body	BoardSessionUpdateRequest	true	"values to update the session"
+//	@Produce		json
+//	@Success		200	{object}	sessions.BoardSession	"updated session for the board"
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/participants [put]
 func (api *API) UpdateBoardSessions(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.update.all")
 	defer span.End()

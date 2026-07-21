@@ -11,6 +11,15 @@ import (
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
+// Get server health status
+//
+//	@Summary		Get the health status
+//	@Description	Get the health status of the scrumlr backend
+//	@Tags			health
+//	@Produce		json
+//	@Success		204
+//	@Failure		503
+//	@Router			/health [get]
 func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.health.api")
 	defer span.End()

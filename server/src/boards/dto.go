@@ -143,6 +143,13 @@ type BoardUpdateRequest struct {
 	ID uuid.UUID `json:"-"`
 }
 
+// JoinBoardRequest represents the request to create a new participant of a board.
+type JoinBoardRequest struct {
+
+	// The passphrase challenge if the access policy is 'BY_PASSPHRASE'.
+	Passphrase string `json:"passphrase"`
+}
+
 type BoardOverview struct {
 	Board        *Board    `json:"board"`
 	Columns      int       `json:"columnsNumber"`
