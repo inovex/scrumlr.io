@@ -17,6 +17,7 @@ import {
   viewReducer,
   votesReducer,
   votingsReducer,
+  historyReducer,
 } from "./features";
 
 export const rootReducer = {
@@ -36,6 +37,7 @@ export const rootReducer = {
   view: viewReducer,
   votes: votesReducer,
   votings: votingsReducer,
+  history: historyReducer,
 };
 
 export const store = configureStore({

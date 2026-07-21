@@ -21,13 +21,15 @@ import {
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
 import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
-import {AccessPolicy} from "store/features";
+import {AccessPolicy, removeHistoryBoard, toggleHistoryBoardFavourite} from "store/features";
 import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
-import {useAppSelector} from "store";
+import {useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "store";
+import {isParticipantModerator} from "utils/participant";
 import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
@@ -71,9 +73,16 @@ export const HistoryCard = (props: HistoryCardProps) => {
     return date.toLocaleDateString(locale, {year: "numeric", month: "2-digit", day: "2-digit"});
   };
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
-  const joinedColumnsNames = props.board.columns.join(", ");
+  // owner: edit + delete; moderator: edit only; participant: neither.
+  const canEdit = isParticipantModerator(props.board.userRole);
+  const canDelete = props.board.userRole === "OWNER";
+
+  const joinedColumnsNames = props.board.columns.map((column) => column.name).join(", ");
   const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
   const formattedModifiedAtDate = localizeTimeDifference(props.board.modifiedAt);
 
@@ -89,13 +98,15 @@ export const HistoryCard = (props: HistoryCardProps) => {
       <MiniMenu
         className={classNames("history-card__menu", "history-card__menu--open")}
         items={[
-          {
-            label: t("History.HistoryCard.Menu.delete"),
-            element: <TrashIcon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
-          },
+          ...(canDelete
+            ? [
+                {
+                  label: t("History.HistoryCard.Menu.delete"),
+                  element: <TrashIcon />,
+                  onClick: () => dispatch(removeHistoryBoard(props.board.id)),
+                },
+              ]
+            : []),
           {
             label: t("History.HistoryCard.Menu.copyLink"),
             element: <LinkIcon />,
@@ -110,13 +121,15 @@ export const HistoryCard = (props: HistoryCardProps) => {
               throw new Error("Not implemented yet");
             },
           },
-          {
-            label: t("History.HistoryCard.Menu.edit"),
-            element: <EditIcon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
-          },
+          ...(canEdit
+            ? [
+                {
+                  label: t("History.HistoryCard.Menu.edit"),
+                  element: <EditIcon />,
+                  onClick: () => navigate(`/boards/edit-board/${props.board.id}`),
+                },
+              ]
+            : []),
           {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
         focusBehaviour="trap"
@@ -135,9 +148,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <FavouriteButton
           className="history-card__icon history-card__favourite"
           active={props.board.favourite}
-          onClick={() => {
-            throw new Error("Not implemented yet");
-          }}
+          onClick={() => dispatch(toggleHistoryBoardFavourite(props.board.id))}
         />
 
         <div className={classNames("history-card__head")}>
