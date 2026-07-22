@@ -325,7 +325,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
-		numColumns, err := service.columnService.GetCount(ctx, id)
+		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get columns")
 			span.RecordError(err)
@@ -333,15 +333,29 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
+		notes, err := service.notesService.GetAll(ctx, id)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get notes")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
+		}
+
 		participantNum := len(boardSessions)
 		for _, session := range boardSessions {
+			// Participants should not be able to see hidden collumns
 			if session.UserID == user {
-				sessionCreated := session.CreatedAt
+				if session.Role == common.ParticipantRole {
+					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
+				}
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        board,
+					Columns:      boardColumns,
+					CreatedAt:    board.CreatedAt,
 					Participants: participantNum,
-					CreatedAt:    sessionCreated,
-					Columns:      numColumns,
+					Role:         session.Role,
+					Favourite:    session.Favourite,
+					NoteCount:    len(notes),
 				})
 			}
 		}
