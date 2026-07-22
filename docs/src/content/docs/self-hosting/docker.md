@@ -104,7 +104,7 @@ All you need to do is updating the `Caddyfile` to include your host domain inste
 If you don't want TLS you can simply keep the specified port.
 Keep in mind that running Scrumlr without TLS is **not recommended**.
 
-```conf
+```ini
 your_domain {
 }
 ```
