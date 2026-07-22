@@ -36,6 +36,14 @@ type testSession struct {
 	user  uuid.UUID
 }
 
+type testColumn struct {
+	id      uuid.UUID
+	board   uuid.UUID
+	name    string
+	visible bool
+	index   int
+}
+
 type BoardServiceIntegrationTestSuite struct {
 	suite.Suite
 	natsContainer        *nats.NATSContainer
@@ -46,6 +54,7 @@ type BoardServiceIntegrationTestSuite struct {
 	// Additional test-specific data
 	users    map[string]testDbTemplates.TestUser
 	boards   map[string]Board
+	columns  map[string]testColumn
 	sessions map[string]testSession
 }
 
@@ -112,6 +121,8 @@ func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 	suite.boards = map[string]Board{
 		"Read1":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567101"), Name: new("Read1"), Description: new("This is a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Read2":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567102"), Name: new("Read2"), Description: new("This is also a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"OverviewParticipant":      {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710c"), Name: new("OverviewParticipant"), Description: new("Board with hidden participant column"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"OverviewVisibleOnly":      {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710d"), Name: new("OverviewVisibleOnly"), Description: new("Board with only visible columns"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Timer":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567103"), Name: new("TimerUpdate"), Description: new("This is a board to update the timer"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Update":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567104"), Name: new("Update"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"UpdatePublicToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567105"), Name: new("UpdateToPassphrase"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
@@ -124,8 +135,16 @@ func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 	}
 
 	suite.sessions = map[string]testSession{
-		"Read1": {board: suite.boards["Read1"].ID, user: suite.users["Stan"].ID},
-		"Read2": {board: suite.boards["Read2"].ID, user: suite.users["Stan"].ID},
+		"Read1":               {board: suite.boards["Read1"].ID, user: suite.users["Stan"].ID},
+		"Read2":               {board: suite.boards["Read2"].ID, user: suite.users["Stan"].ID},
+		"OverviewParticipant": {board: suite.boards["OverviewParticipant"].ID, user: suite.users["Santa"].ID},
+		"OverviewVisibleOnly": {board: suite.boards["OverviewVisibleOnly"].ID, user: suite.users["Santa"].ID},
+	}
+
+	suite.columns = map[string]testColumn{
+		"OverviewParticipantVisible": {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567101"), board: suite.boards["OverviewParticipant"].ID, name: "Visible Column", visible: true, index: 0},
+		"OverviewParticipantHidden":  {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567102"), board: suite.boards["OverviewParticipant"].ID, name: "Hidden Column", visible: false, index: 1},
+		"OverviewVisibleOnly":        {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567103"), board: suite.boards["OverviewVisibleOnly"].ID, name: "Only Visible Column", visible: true, index: 0},
 	}
 }
 
@@ -531,8 +550,10 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Len(t, boards, 2)
 
 	firstBoard := checkBoardInList(boards, suite.boards["Read1"].ID)
+	require.NotNil(t, firstBoard)
 	assert.Equal(t, suite.boards["Read1"].ID, *firstBoard)
 	secondBoard := checkBoardInList(boards, suite.boards["Read2"].ID)
+	require.NotNil(t, secondBoard)
 	assert.Equal(t, suite.boards["Read2"].ID, *secondBoard)
 }
 
@@ -576,25 +597,26 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardIds := []uuid.UUID{suite.boards["Read1"].ID, suite.boards["Read2"].ID}
-	userId := suite.users["Stan"].ID
+	boardIds := []uuid.UUID{suite.boards["OverviewParticipant"].ID, suite.boards["OverviewVisibleOnly"].ID}
+	userId := suite.users["Santa"].ID
 
 	boards, err := suite.service.BoardOverview(ctx, boardIds, userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, boards, 2)
 
-	assert.Equal(t, suite.boards["Read1"].ID, boards[0].Board.ID)
-	assert.Equal(t, suite.boards["Read1"].Name, boards[0].Board.Name)
-	assert.Equal(t, suite.boards["Read1"].Description, boards[0].Board.Description)
-	assert.Equal(t, suite.boards["Read1"].AccessPolicy, boards[0].Board.AccessPolicy)
-	assert.Equal(t, suite.boards["Read1"].ShowAuthors, boards[0].Board.ShowAuthors)
+	// OverviewParticipant has one hidden and one visible column so user Santa (Participant) should only see one.
+	assert.Equal(t, suite.boards["OverviewParticipant"].ID, boards[0].Board.ID)
+	assert.Len(t, boards[0].Columns, 1)
+	assert.True(t, boards[0].Columns[0].Visible)
+	// ensure ONLY visible columns can be seen by user Santa
+	for _, column := range boards[0].Columns {
+		assert.True(t, column.Visible)
+	}
 
-	assert.Equal(t, suite.boards["Read2"].ID, boards[1].Board.ID)
-	assert.Equal(t, suite.boards["Read2"].Name, boards[1].Board.Name)
-	assert.Equal(t, suite.boards["Read2"].Description, boards[1].Board.Description)
-	assert.Equal(t, suite.boards["Read2"].AccessPolicy, boards[1].Board.AccessPolicy)
-	assert.Equal(t, suite.boards["Read2"].ShowAuthors, boards[1].Board.ShowAuthors)
+	assert.Equal(t, suite.boards["OverviewVisibleOnly"].ID, boards[1].Board.ID)
+	assert.Len(t, boards[1].Columns, 1)
+	assert.True(t, boards[1].Columns[0].Visible)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
@@ -653,6 +675,12 @@ func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 	for _, board := range suite.boards {
 		if err := testDbTemplates.InsertBoard(db, board.ID, *board.Name, *board.Description, board.Passphrase, board.Salt, string(board.AccessPolicy), board.ShowAuthors, board.ShowNotesOfOtherUsers, board.ShowNoteReactions, board.AllowStacking, board.IsLocked); err != nil {
 			log.Fatalf("Failed to insert board %s: %s", *board.Name, err)
+		}
+	}
+
+	for _, column := range suite.columns {
+		if err := testDbTemplates.InsertColumn(db, column.id, column.board, column.name, "", string(common.ColorBacklogBlue), column.visible, column.index); err != nil {
+			log.Fatalf("Failed to insert column %s: %s", column.name, err)
 		}
 	}
 
