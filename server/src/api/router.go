@@ -50,6 +50,7 @@ type Server struct {
 
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
+	swaggerRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -76,6 +77,7 @@ type Server struct {
 	allowAnonymousCustomTemplates bool
 	allowAnonymousBoardCreation   bool
 	experimentalFileSystemStore   bool
+	enableSwagger                 bool
 }
 
 func New(
@@ -87,6 +89,7 @@ func New(
 
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
+	swaggerRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -108,6 +111,7 @@ func New(
 	allowAnonymousCustomTemplates bool,
 	allowAnonymousBoardCreation bool,
 	experimentalFileSystemStore bool,
+	enableSwagger bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -139,6 +143,7 @@ func New(
 		wsService:                        wsService,
 		userRoutes:                       userRoutes,
 		sessionRoutes:                    sessionRoutes,
+		swaggerRoutes:                    swaggerRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
@@ -161,6 +166,7 @@ func New(
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
+		enableSwagger:                 enableSwagger,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -173,15 +179,11 @@ func New(
 		gothic.Store = store
 	}
 
-	if s.basePath == "/" {
-		s.publicRoutes(r)
-		s.protectedRoutes(r)
-	} else {
-		r.Route(s.basePath, func(router chi.Router) {
-			s.publicRoutes(router)
-			s.protectedRoutes(router)
-		})
-	}
+	r.Route(s.basePath, func(router chi.Router) {
+		s.publicRoutes(router)
+		s.protectedRoutes(router)
+	})
+
 	return r
 }
 
@@ -199,6 +201,11 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+
+		if s.enableSwagger {
+			r.Mount("/swagger", s.swaggerRoutes)
+		}
+
 	})
 }
 
@@ -280,7 +287,6 @@ func (s *Server) initVotingResources(r chi.Router) {
 	r.Route("/votings", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getVotings)
 		r.With(s.BoardModeratorContext).Post("/", s.createVoting)
-		r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 
 		r.Route("/{voting}", func(r chi.Router) {
 			r.Use(s.VotingContext)

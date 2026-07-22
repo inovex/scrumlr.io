@@ -32,7 +32,19 @@ const boardsRequestsPath = "/boards/%s/requests/%s"
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
-// createBoard creates a new board
+// Create a new board
+//
+//	@Summary		Create a new board
+//	@Description	Create a new board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			board	body	boards.CreateBoardRequest	true	"board to create"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created board"
+//	@Success		201	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Router			/boards [post]
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.create")
 	defer span.End()
@@ -66,7 +78,20 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, b)
 }
 
-// deleteBoard deletes a board
+// Delete a board
+//
+//	@Summary		Delete a board
+//	@Description	Delete a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to delete"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id} [delete]
 func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.delete")
 	defer span.End()
@@ -87,6 +112,18 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+// Get all boards
+//
+//	@Summary		Delete a board
+//	@Description	Delete a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Produce		json
+//	@Success		200	{object}	boards.BoardOverview
+//	@Failure		400	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards [get]
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
 	defer span.End()
@@ -115,7 +152,21 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, OverviewBoards)
 }
 
-// getBoard get a board
+// Get a board by its id
+//
+//	@Summary		Get a board
+//	@Description	Get a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to get"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id} [get]
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get")
 	defer span.End()
@@ -148,14 +199,24 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
-// JoinBoardRequest represents the request to create a new participant of a board.
-type JoinBoardRequest struct {
-
-	// The passphrase challenge if the access policy is 'BY_PASSPHRASE'.
-	Passphrase string `json:"passphrase"`
-}
-
-// joinBoard create a new participant
+// Join a board
+//
+//	@Summary		Join an existing board
+//	@Description	Join an existing board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string					true	"jwt token to authenticate"
+//	@Param			id		path	string					true	"id of the board to join"
+//	@Param			join	body	boards.JoinBoardRequest	false	"join request for the board"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created session"
+//	@Success		303
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id}/participants [post]
 func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.join")
 	defer span.End()
@@ -225,7 +286,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == boards.ByPassphrase {
-		var body JoinBoardRequest
+		var body boards.JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to decode body")
@@ -297,7 +358,22 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusBadRequest)
 }
 
-// updateBoard updates a board
+// Update a board
+//
+//	@Summary		Update a board
+//	@Description	Update a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			id		path	string						true	"id of the board to update"
+//	@Param			board	body	boards.BoardUpdateRequest	true	"values to update the board"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id} [put]
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
 	defer span.End()
@@ -328,6 +404,22 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Set a new timer for a board
+//
+//	@Summary		Set a new timer for a board
+//	@Description	Set a new timer for a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string					true	"jwt token to authenticate"
+//	@Param			id		path	string					true	"id of the board to set the timer"
+//	@Param			timer	body	boards.SetTimerRequest	true	"timer request"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer [post]
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.set")
 	defer span.End()
@@ -357,6 +449,21 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Delete a timer for a board
+//
+//	@Summary		Delete a timer for a board
+//	@Description	Delete a timer for a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to delete the timer from"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer [delete]
 func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.delete")
 	defer span.End()
@@ -377,6 +484,21 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Increment a timer for a board
+//
+//	@Summary		Increment a timer for a board
+//	@Description	Increment a timer for a board by one minute
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to increment the timer"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer/increment [post]
 func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.increment")
 	defer span.End()
@@ -397,6 +519,22 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Export a board
+//
+//	@Summary		Export a board
+//	@Description	Export a board
+//	@Tags			boards
+//	@Accept			json text/csv
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to export"
+//	@Produce		json text/csv
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		406
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/export [get]
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
 	defer span.End()
@@ -521,6 +659,20 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+// Import a board
+//
+//	@Summary		Import a board
+//	@Description	Import a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			board	body	boards.ImportBoardRequest	true	"board to import"
+//	@Produce		json
+//	@Success		201	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/import [post]
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.import")
 	defer span.End()
