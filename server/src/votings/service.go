@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -166,7 +165,7 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 		span.SetStatus(codes.Error, "failed to create voting")
 		span.RecordError(err)
 		log.Errorw("unable to create voting", "board", body.Board, "error", err)
-		return nil, CreateVotingError(Internal, fmt.Sprintf("failed to create voting: %v", err), err)
+		return nil, CreateVotingError(Internal, "failed to create voting", err)
 	}
 
 	service.createdVoting(ctx, body.Board, voting)
@@ -201,7 +200,7 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 		span.SetStatus(codes.Error, "failed to close voting")
 		span.RecordError(err)
 		log.Errorw("unable to close voting", "err", err)
-		return nil, CreateVotingError(Internal, fmt.Sprintf("failed to close voting: %v", err), err)
+		return nil, CreateVotingError(Internal, "failed to close voting", err)
 	}
 
 	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
@@ -209,7 +208,7 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, fmt.Sprintf("failed to get votes: %v", err), err)
+		return nil, CreateVotingError(Internal, "failed to get votes", err)
 	}
 
 	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
@@ -236,7 +235,7 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 		span.SetStatus(codes.Error, "failed to get voting")
 		span.RecordError(err)
 		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, CreateVotingError(Internal, fmt.Sprintf("failed to get voting: %v", err), err)
+		return nil, CreateVotingError(Internal, "failed to get voting", err)
 	}
 
 	if voting.Status == Open {

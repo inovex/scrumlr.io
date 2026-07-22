@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -89,7 +88,7 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 		span.SetStatus(codes.Error, "failed to create note")
 		span.RecordError(err)
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to create note: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to create note", err)
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -130,7 +129,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		span.SetStatus(codes.Error, "failed to import note")
 		span.RecordError(err)
 		log.Errorw("Could not import notes", "err", err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to import note: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to import note", err)
 	}
 
 	notesImportCounter.Add(ctx, 1)
@@ -155,7 +154,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get preconditions")
 		span.RecordError(err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to get preconditions: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to get preconditions", err)
 	}
 
 	if user != precondition.Author && !precondition.CallerRole.CanChangeNoteText() && body.Text != nil {
@@ -170,7 +169,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return nil, CreateNoteError(Internal, fmt.Sprintf("failed to get lock: %v", err), err)
+			return nil, CreateNoteError(Internal, "failed to get lock", err)
 		}
 	}
 
@@ -230,7 +229,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 		span.SetStatus(codes.Error, "failed to update note")
 		span.RecordError(err)
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to update note: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to update note", err)
 	}
 
 	service.updatedNotes(ctx, body.Board)
@@ -268,7 +267,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
 			span.SetStatus(codes.Error, "failed to get lock")
 			span.RecordError(err)
-			return CreateNoteError(Internal, fmt.Sprintf("failed to get lock: %v", err), err)
+			return CreateNoteError(Internal, "failed to get lock", err)
 		}
 	}
 
@@ -333,7 +332,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
 		span.SetStatus(codes.Error, "failed to get note")
 		span.RecordError(err)
 		log.Errorw("unable to get note", "note", id, "error", err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to get note: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to get note", err)
 	}
 	return new(Note).From(note), err
 }
@@ -352,7 +351,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 		span.RecordError(err)
 		span.SetStatus(codes.Error, "failed to get notes")
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to get notes: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to get notes", err)
 	}
 	return Notes(notes), nil
 }
@@ -557,7 +556,7 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
 		log.Errorw("unable to get notes", "error", err)
-		return nil, CreateNoteError(Internal, fmt.Sprintf("failed to get notes: %v", err), err)
+		return nil, CreateNoteError(Internal, "failed to get notes", err)
 	}
 	return Notes(notes), nil
 }

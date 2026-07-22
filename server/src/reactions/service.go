@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -61,7 +60,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 		}
 
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
-		return nil, CreateReactionError(Internal, fmt.Sprintf("unable to get reaction: %v", err), err)
+		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
 
 	return new(Reaction).From(reaction), err
@@ -81,7 +80,7 @@ func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*React
 		span.SetStatus(codes.Error, "failed to get reactions for board")
 		span.RecordError(err)
 		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
-		return nil, CreateReactionError(Internal, fmt.Sprintf("unable to get reaction: %v", err), err)
+		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
 
 	return Reactions(reactions), err
@@ -103,7 +102,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 		span.SetStatus(codes.Error, "failed to get current reactions")
 		span.RecordError(err)
 		log.Errorw("Unable to get current reactions for note", body.Note, "boardId", body.Board)
-		return nil, CreateReactionError(Internal, fmt.Sprintf("failed to get current reactions: %v", err), err)
+		return nil, CreateReactionError(Internal, "failed to get current reactions", err)
 	}
 
 	for _, currentReaction := range currentReactions {
@@ -126,7 +125,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 		span.SetStatus(codes.Error, "failed to create reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
-		return nil, CreateReactionError(Internal, fmt.Sprintf("failed to create reaction: %v", err), err)
+		return nil, CreateReactionError(Internal, "failed to create reaction", err)
 	}
 
 	service.addReaction(ctx, body.Board, reaction)
@@ -165,7 +164,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 		span.SetStatus(codes.Error, "failed to delete reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
-		return CreateReactionError(Internal, fmt.Sprintf("failed to delete reaction: %v", err), err)
+		return CreateReactionError(Internal, "failed to delete reaction", err)
 	}
 
 	service.deleteReaction(ctx, board, id)
@@ -205,7 +204,7 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 		span.SetStatus(codes.Error, "failed to update reaction")
 		span.RecordError(err)
 		log.Errorw("Unable to update reaction", "id", id, "type", body.ReactionType, "error", err)
-		return nil, CreateReactionError(Internal, fmt.Sprintf("failed to update reaction: %v", err), err)
+		return nil, CreateReactionError(Internal, "failed to update reaction", err)
 	}
 
 	service.updateReaction(ctx, board, reaction)
