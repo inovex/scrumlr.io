@@ -1009,6 +1009,52 @@ func TestModeratorSessionExists_DatabaseError(t *testing.T) {
 	assert.False(t, exists)
 }
 
+func TestOwnerSessionExists(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(true, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	exists, err := sessionService.OwnerSessionExists(context.Background(), boardId, userId)
+
+	assert.Nil(t, err)
+	assert.True(t, exists)
+}
+
+func TestOwnerSessionExists_DatabaseError(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	dbError := "unable to execute"
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	exists, err := sessionService.OwnerSessionExists(context.Background(), boardId, userId)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+	assert.False(t, exists)
+}
+
 func TestIsParticipantBanned(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()

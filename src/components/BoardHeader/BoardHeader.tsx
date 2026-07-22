@@ -7,7 +7,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {shallowEqual} from "react-redux";
-import {leaveBoard} from "store/features";
+import {leaveBoard, ParticipantRole} from "store/features";
 import {DEFAULT_BOARD_NAME} from "constants/misc";
 import {Tooltip} from "components/Tooltip";
 import {ShareButton} from "components/ShareButton";
@@ -15,7 +15,7 @@ import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import "./BoardHeader.scss";
 
 type BoardHeaderProps = {
-  currentUserIsModerator: boolean;
+  userRole: ParticipantRole;
 };
 
 export const BoardHeader = (props: BoardHeaderProps) => {
@@ -86,7 +86,7 @@ export const BoardHeader = (props: BoardHeaderProps) => {
           <ShareButton />
         </div>
 
-        <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
+        <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} userRole={props.userRole} />
       </header>
     </>
   );

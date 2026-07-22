@@ -1,13 +1,15 @@
 import {Portal} from "components/Portal";
 import {useState} from "react";
-import "./HeaderMenu.scss";
+import {ParticipantRole} from "store/features";
+import {isParticipantModerator} from "utils/participant";
 import {BoardOption} from "./BoardOptions";
 import {BoardSettings} from "./BoardSettings";
+import "./HeaderMenu.scss";
 
 type HeaderMenuProps = {
   open: boolean;
   onClose: () => void;
-  currentUserIsModerator: boolean;
+  userRole: ParticipantRole;
 };
 
 const HeaderMenu = (props: HeaderMenuProps) => {
@@ -26,8 +28,8 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       align="here"
     >
       <ul className="header-menu">
-        <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={props.currentUserIsModerator} setActiveEditMode={setActiveEditMode} />
-        {props.currentUserIsModerator && (
+        <BoardSettings activeEditMode={activeEditMode} userRole={props.userRole} setActiveEditMode={setActiveEditMode} />
+        {isParticipantModerator(props.userRole) && (
           <>
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />

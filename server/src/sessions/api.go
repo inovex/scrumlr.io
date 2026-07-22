@@ -27,6 +27,7 @@ type SessionService interface {
 	Disconnect(ctx context.Context, boardID, userID uuid.UUID) error
 	Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
+	OwnerSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter
 }
@@ -243,6 +244,48 @@ func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 
 		if !exists {
 			span.SetStatus(codes.Error, "moderator session does not exist")
+			span.RecordError(err)
+			common.Throw(w, r, common.NotFoundError)
+			return
+		}
+
+		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (api *API) BoardOwnerContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx, span := tracer.Start(r.Context(), "scrumlr.sessions.api.context.owner")
+		defer span.End()
+		log := logger.FromContext(ctx)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			span.SetStatus(codes.Error, "unable to parse board id")
+			span.RecordError(err)
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		span.SetAttributes(
+			attribute.String("scrumlr.sessions.api.context.owner.board", board.String()),
+			attribute.String("scrumlr.sessions.api.context.owner.user", user.String()),
+		)
+
+		exists, err := api.service.OwnerSessionExists(ctx, board, user)
+		if err != nil {
+			span.SetStatus(codes.Error, "unable to check board session")
+			span.RecordError(err)
+			log.Errorw("unable to verify board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			span.SetStatus(codes.Error, "owner session does not exist")
 			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)
 			return

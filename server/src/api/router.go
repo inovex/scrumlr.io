@@ -247,7 +247,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardModeratorContext).Delete("/timer", s.deleteTimer)
 			r.With(s.BoardModeratorContext).Post("/timer/increment", s.incrementTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
-			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
+			r.With(s.BoardOwnerContext).Delete("/", s.deleteBoard)
 
 			s.initBoardSessionRequestResources(r)
 			s.initBoardSessionResources(r)

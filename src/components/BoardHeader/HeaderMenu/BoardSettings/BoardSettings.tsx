@@ -1,13 +1,14 @@
-import "./BoardSettings.scss";
 import {Dispatch, SetStateAction, useState} from "react";
 import {ApplicationState, useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {DEFAULT_BOARD_NAME} from "constants/misc";
-import {editBoard} from "store/features";
+import {editBoard, ParticipantRole} from "store/features";
+import {isParticipantModerator} from "utils/participant";
+import "./BoardSettings.scss";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
-  currentUserIsModerator: boolean;
+  userRole: ParticipantRole;
   setActiveEditMode: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -53,7 +54,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           }}
         />
 
-        {props.currentUserIsModerator && (
+        {isParticipantModerator(props.userRole) && (
           <button type="submit" className="board-settings__edit-button">
             {props.activeEditMode ? t("BoardSettings.save") : t("BoardSettings.edit")}
           </button>
