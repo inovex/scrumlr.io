@@ -1090,7 +1090,8 @@ definitions:
     - Open
     - Closed
 info:
-  contact: {}
+  contact:
+    email: info@scrumlr.io
   description: This is the scrumlr backend server.
   license:
     name: MIT

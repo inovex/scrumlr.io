@@ -4,7 +4,9 @@
         "description": "This is the scrumlr backend server.",
         "title": "Scrumlr backend",
         "termsOfService": "https://scrumlr.io/terms",
-        "contact": {},
+        "contact": {
+            "email": "info@scrumlr.io"
+        },
         "license": {
             "name": "MIT",
             "url": "https://github.com/inovex/scrumlr.io/blob/main/LICENSE"

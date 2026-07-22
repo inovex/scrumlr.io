@@ -27,7 +27,7 @@ import (
 // @version		5.2.2
 // @description	This is the scrumlr backend server.
 // @termsOfService	https://scrumlr.io/terms
-// @contact.email info@scrumlr.io
+// @contact.email	info@scrumlr.io
 // @license.name	MIT
 // @license.url	https://github.com/inovex/scrumlr.io/blob/main/LICENSE
 func main() {
