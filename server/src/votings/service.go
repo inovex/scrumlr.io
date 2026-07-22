@@ -11,8 +11,6 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/common"
-
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -56,16 +54,16 @@ func (service *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, e
 
 	vote, err := service.database.AddVote(ctx, body.Board, body.User, body.Note)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "No rows returned")
 			span.RecordError(err)
-			return nil, common.ForbiddenError(errors.New("voting limit reached or no active voting session found"))
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to add vote")
 		span.RecordError(err)
 		log.Warnw("unable to add vote", "board", body.Board, "user", body.User, "note", body.Note, "err", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "failed to add vote", err)
 	}
 
 	voteCreatedCounter.Add(ctx, 1)
@@ -88,10 +86,11 @@ func (service *Service) RemoveVote(ctx context.Context, body VoteRequest) error 
 		span.SetStatus(codes.Error, "failed to remove vote")
 		span.RecordError(err)
 		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+		return CreateVotingError(Internal, "failed to remove vote", err)
 	}
 
 	voteDeletedCounter.Add(ctx, 1)
-	return err
+	return nil
 }
 
 func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error) {
@@ -108,7 +107,7 @@ func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFil
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "err", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "failed to get votes", err)
 	}
 
 	return Votes(votes), err
@@ -128,30 +127,29 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 	)
 
 	if body.VoteLimit < 0 {
-		err := errors.New("vote limit cannot be smaller than 0")
+		err := CreateVotingError(BadRequest, "vote limit cannot be smaller than 0", nil)
 		span.SetStatus(codes.Error, "Vote limit cannot be smaller than 0")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, err
 	}
 
 	if body.VoteLimit >= 100 {
-		err := errors.New("vote limit cannot be greater than 100")
+		err := CreateVotingError(BadRequest, "vote limit cannot be greater than 100", nil)
 		span.SetStatus(codes.Error, "Vote limit cannot be greater than 100")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, err
 	}
 
 	openVoting, err := service.GetOpen(ctx, body.Board)
-	if openVoting != nil || (err != nil && err != sql.ErrNoRows) {
+	if openVoting != nil || (err != nil && !errors.Is(err, sql.ErrNoRows)) {
 		if openVoting != nil {
+			err := CreateVotingError(BadRequest, "only one open voting per session is allowed", err)
 			span.SetStatus(codes.Error, "only one open voting per session is allowed")
 			span.RecordError(err)
-			return nil, common.BadRequestError(errors.New("only one open voting per session is allowed"))
+			return nil, err
 		}
 
-		span.SetStatus(codes.Error, "failed to get open votings")
-		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, err
 	}
 
 	voting, err := service.database.Create(ctx, DatabaseVotingInsert{
@@ -167,7 +165,7 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 		span.SetStatus(codes.Error, "failed to create voting")
 		span.RecordError(err)
 		log.Errorw("unable to create voting", "board", body.Board, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateVotingError(Internal, "failed to create voting", err)
 	}
 
 	service.createdVoting(ctx, body.Board, voting)
@@ -193,16 +191,16 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 	})
 
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "No voting found to update")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to close voting")
 		span.RecordError(err)
 		log.Errorw("unable to close voting", "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateVotingError(Internal, "failed to close voting", err)
 	}
 
 	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
@@ -210,7 +208,7 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "err", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "failed to get votes", err)
 	}
 
 	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
@@ -228,16 +226,16 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 
 	voting, err := service.database.Get(ctx, boardID, id)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "voting not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get voting")
 		span.RecordError(err)
 		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateVotingError(Internal, "failed to get voting", err)
 	}
 
 	if voting.Status == Open {
@@ -249,7 +247,7 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 		span.SetStatus(codes.Error, "")
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "voting", id, "error", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "unable to get votes", err)
 	}
 
 	return new(Voting).From(voting, receivedVotes), err
@@ -270,13 +268,13 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Votin
 		span.SetStatus(codes.Error, "failed to get votings")
 		span.RecordError(err)
 		log.Errorw("unable to get votings", "board", boardID, "error", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "failed to get votings", err)
 	}
 
 	votes, err := service.database.GetVotes(ctx, boardID, VoteFilter{})
 	if err != nil {
 		log.Errorw("unable to get votes", "board", boardID, "error", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "unable to get votes", err)
 	}
 
 	return Votings(votings, votes), err
@@ -293,14 +291,14 @@ func (service *Service) GetOpen(ctx context.Context, boardID uuid.UUID) (*Voting
 
 	voting, err := service.database.GetOpenVoting(ctx, boardID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 
 		span.SetStatus(codes.Error, "failed to get voting")
 		span.RecordError(err)
 		log.Errorw("unable to get open votings", "board", boardID, "error", err)
-		return nil, err
+		return nil, CreateVotingError(Internal, "unable to get open votings", err)
 	}
 
 	return new(Voting).From(voting, nil), err

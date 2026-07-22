@@ -3,27 +3,25 @@ package boards
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
-
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
@@ -106,7 +104,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to get board", err)
 	}
 
 	return new(Board).From(board), err
@@ -127,7 +125,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateBoardError(Internal, "unable to get boards of user", err)
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -146,7 +144,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	span.SetAttributes(
 		attribute.String("scrumlr.boards.service.create.user", body.Owner.String()),
 		attribute.String("scrumlr.boards.service.create.access_policy", string(body.AccessPolicy)),
-		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
+		attribute.Int("scrumlr.boards.service.create.columns.count", len(body.Columns)),
 	)
 
 	// map request on board object to insert into database
@@ -154,20 +152,20 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+			err := CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", nil)
 			span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 			span.RecordError(err)
-			return nil, common.BadRequestError(err)
+			return nil, err
 		}
 
 		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			err := CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", nil)
 			span.SetStatus(codes.Error, "passphrase not set")
 			span.RecordError(err)
-			return nil, common.BadRequestError(err)
+			return nil, err
 		}
 
 		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
@@ -186,7 +184,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateBoardError(Internal, "unable to create board for owner", err)
 	}
 
 	// create the columns
@@ -295,7 +293,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		Reactions:            boardReactions,
 		Votings:              boardVotings,
 		Votes:                boardVotes,
-	}, err
+	}, nil
 }
 
 func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
@@ -377,7 +375,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete board")
 		span.RecordError(err)
 		log.Errorw("unable to delete board", "err", err)
-		return err
+		return CreateBoardError(Internal, "failed to delete board", err)
 	}
 
 	service.DeletedBoard(ctx, id)
@@ -395,13 +393,11 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		attribute.String("scrumlr.boards.service.board.update.board", body.ID.String()),
 	)
 
-	if body.Name != nil {
-		if len(*body.Name) == 0 {
-			err := errors.New("name cannot be empty")
-			span.SetStatus(codes.Error, "name cannot be empty")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
+	if body.Name != nil && len(*body.Name) == 0 {
+		err := errors.New("name cannot be empty")
+		span.SetStatus(codes.Error, "name cannot be empty")
+		span.RecordError(err)
+		return nil, CreateBoardError(BadRequest, "name cannot be empty", err)
 	}
 
 	update := DatabaseBoardUpdate{
@@ -426,14 +422,14 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
 				span.SetStatus(codes.Error, "no passphrase provided")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", err)
 			}
 
 			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
@@ -441,7 +437,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
 				log.Error("failed to encode passphrase")
-				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
+				return nil, CreateBoardError(Internal, "failed to encode passphrase", err)
 			}
 
 			update.Passphrase = passphrase
@@ -454,7 +450,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board", err)
 	}
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
@@ -489,7 +485,7 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -518,7 +514,7 @@ func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, 
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to delete board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -541,7 +537,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to get board", err)
 	}
 
 	var timerStart time.Time
@@ -568,7 +564,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -607,7 +603,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve columns, following a updated board call: %w", err)
+		return CreateBoardError(Internal, "unable to retrieve columns, following a updated board call", err)
 	}
 
 	var columnsID []uuid.UUID
@@ -619,7 +615,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve notes, following a updated board call: %w", err)
+		return CreateBoardError(Internal, "unable to retrieve notes, following a updated board call", err)
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -630,7 +626,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		return fmt.Errorf("unable to broadcast notes, following a updated board call: %w", err)
+		return CreateBoardError(Internal, "unable to broadcast notes, following a updated board call", err)
 	}
 
 	return nil
@@ -648,6 +644,9 @@ func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
 		Type: realtime.BoardEventBoardDeleted,
 	})
 }
+
+// This middleware checks if the user has a moderator session for the board and if the board is locked. If the user is not a moderator and the board is locked, it returns a forbidden error. Otherwise, it adds the board's editability status to the context and calls the next handler.
+// NOTE: The BoardEditableContext needs to be outsourced to the API layer -> more refactoring work required
 
 func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

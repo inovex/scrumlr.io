@@ -66,7 +66,7 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	if err := validateUsername(name); err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, err
 	}
 
 	span.SetAttributes(
@@ -101,13 +101,13 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 		specificCounter = oicdUserCreatedCounter
 		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
 	default:
-		return nil, common.BadRequestError(errors.New("invalid account type"))
+		return nil, CreateUserError(BadRequest, "invalid account type", errors.New("invalid account type"))
 	}
 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
-		return nil, common.InternalServerError
+		return nil, CreateUserError(Internal, "failed to create user", err)
 	}
 
 	userCreatedCounter.Add(ctx, 1)
@@ -125,7 +125,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to validate user name")
 		span.RecordError(err)
-		return nil, common.BadRequestError(err)
+		return nil, err
 	}
 
 	span.SetAttributes(
@@ -140,17 +140,17 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	})
 
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "user to update not found")
 			span.RecordError(err)
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
-			return nil, common.NotFoundError
+			return nil, CreateUserError(NotFound, "user not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to update user")
 		span.RecordError(err)
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateUserError(Internal, "failed to update user", err)
 	}
 
 	service.updatedUser(ctx, user)
@@ -187,7 +187,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete user")
 		span.RecordError(err)
 		log.Errorw("failed to delete user", "user", id, "err", err)
-		return common.InternalServerError
+		return CreateUserError(Internal, "failed to delete user", err)
 	}
 
 	deletedUserCounter.Add(ctx, 1)
@@ -205,16 +205,16 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "user not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateUserError(NotFound, "user not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get user")
 		span.RecordError(err)
 		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateUserError(Internal, "failed to get user", err)
 	}
 
 	return new(User).From(user), err
@@ -230,7 +230,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 		span.SetStatus(codes.Error, "failed to get users")
 		span.RecordError(err)
 		log.Errorw("unable to get users", "board", boardID, "err", err)
-		return nil, common.InternalServerError
+		return nil, CreateUserError(Internal, "failed to get users", err)
 	}
 
 	return UserSlice(users), nil
@@ -244,7 +244,14 @@ func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id u
 		attribute.String("scrumlr.users.service.available_key_migration.id", id.String()),
 	)
 
-	return service.database.IsUserAvailableForKeyMigration(ctx, id)
+	isUserAvailable, err := service.database.IsUserAvailableForKeyMigration(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check user availability for key migration")
+		span.RecordError(err)
+		return false, CreateUserError(Internal, "failed to check user availability for key migration", err)
+	}
+
+	return isUserAvailable, nil
 }
 
 func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error) {
@@ -259,7 +266,7 @@ func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*Use
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to set key migration")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateUserError(Internal, "failed to set key migration", err)
 	}
 
 	return new(User).From(user), nil
@@ -292,11 +299,11 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 
 func validateUsername(name string) error {
 	if strings.TrimSpace(name) == "" {
-		return errors.New("name may not be empty")
+		return CreateUserError(BadRequest, "name may not be empty", nil)
 	}
 
 	if strings.Contains(name, "\n") {
-		return errors.New("name may not contain newline characters")
+		return CreateUserError(BadRequest, "name may not contain newline characters", nil)
 	}
 
 	return nil

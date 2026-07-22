@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -68,7 +67,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("failed to create board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -181,17 +180,15 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.Get(ctx, boardId)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "no board found")
-			span.RecordError(err)
-			common.Throw(w, r, common.NotFoundError)
-			return
+		mappedErr := mapError(err)
+		if errors.Is(mappedErr, common.NotFoundError) {
+			span.SetStatus(codes.Error, "board not found")
+		} else {
+			span.SetStatus(codes.Error, "failed to get board")
 		}
-
-		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to access board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mappedErr)
 		return
 	}
 
@@ -511,7 +508,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to increment board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to increment board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -546,7 +543,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get full board")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -714,7 +711,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to import board")
 		span.RecordError(err)
 		log.Errorw("Could not import board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -759,7 +756,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 					span.SetStatus(codes.Error, "failed to import notes")
 					span.RecordError(err)
 					_ = s.boards.Delete(ctx, b.ID)
-					common.Throw(w, r, err)
+					common.Throw(w, r, mapError(err))
 					return
 				}
 				parentNote = *note
@@ -790,7 +787,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				span.SetStatus(codes.Error, "failed to import note")
 				span.RecordError(err)
 				_ = s.boards.Delete(ctx, b.ID)
-				common.Throw(w, r, err)
+				common.Throw(w, r, mapError(err))
 				return
 			}
 		}
