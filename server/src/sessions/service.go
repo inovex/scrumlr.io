@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/url"
 	"slices"
 	"strconv"
@@ -102,7 +101,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get board session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
-		return nil, CreateSessionError(Internal, fmt.Sprintf("unable to get session for board: %v", err), err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
@@ -117,7 +116,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
-		return nil, CreateSessionError(Internal, fmt.Sprintf("unable to get session for board: %v", err), err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	if body.Role != nil {
@@ -214,7 +213,7 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
-		return nil, CreateSessionError(Internal, fmt.Sprintf("unable to get session for board: %v", err), err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	return new(BoardSession).From(session), err

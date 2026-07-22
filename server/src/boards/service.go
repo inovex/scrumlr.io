@@ -3,7 +3,6 @@ package boards
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -105,7 +104,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to get board: %v", err), err)
+		return nil, CreateBoardError(Internal, "failed to get board", err)
 	}
 
 	return new(Board).From(board), err
@@ -126,7 +125,7 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("unable to get boards of user: %v", err), err)
+		return nil, CreateBoardError(Internal, "unable to get boards of user", err)
 	}
 
 	result := make([]uuid.UUID, 0, len(boards))
@@ -185,7 +184,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("unable to create board for owner: %v", err), err)
+		return nil, CreateBoardError(Internal, "unable to create board for owner", err)
 	}
 
 	// create the columns
@@ -376,7 +375,7 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 		span.SetStatus(codes.Error, "failed to delete board")
 		span.RecordError(err)
 		log.Errorw("unable to delete board", "err", err)
-		return CreateBoardError(Internal, fmt.Sprintf("failed to delete board: %v", err), err)
+		return CreateBoardError(Internal, "failed to delete board", err)
 	}
 
 	service.DeletedBoard(ctx, id)
@@ -438,7 +437,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
 				log.Error("failed to encode passphrase")
-				return nil, CreateBoardError(Internal, fmt.Sprintf("failed to encode passphrase: %v", err), err)
+				return nil, CreateBoardError(Internal, "failed to encode passphrase", err)
 			}
 
 			update.Passphrase = passphrase
@@ -451,7 +450,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board: %v", err), err)
+		return nil, CreateBoardError(Internal, "failed to update board", err)
 	}
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
@@ -486,7 +485,7 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board timer: %v", err), err)
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -515,7 +514,7 @@ func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, 
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to delete board timer: %v", err), err)
+		return nil, CreateBoardError(Internal, "failed to delete board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -565,7 +564,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, fmt.Sprintf("failed to update board timer: %v", err), err)
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
 	service.UpdatedBoardTimer(ctx, board)
@@ -604,7 +603,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		return CreateBoardError(Internal, fmt.Sprintf("unable to retrieve columns, following a updated board call: %v", err), err)
+		return CreateBoardError(Internal, "unable to retrieve columns, following a updated board call", err)
 	}
 
 	var columnsID []uuid.UUID
@@ -616,7 +615,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get notes")
 		span.RecordError(err)
-		return CreateBoardError(Internal, fmt.Sprintf("unable to retrieve notes, following a updated board call: %v", err), err)
+		return CreateBoardError(Internal, "unable to retrieve notes, following a updated board call", err)
 	}
 
 	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
@@ -627,7 +626,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to broadcast notes")
 		span.RecordError(err)
-		return CreateBoardError(Internal, fmt.Sprintf("unable to broadcast notes, following a updated board call: %v", err), err)
+		return CreateBoardError(Internal, "unable to broadcast notes, following a updated board call", err)
 	}
 
 	return nil
