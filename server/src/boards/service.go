@@ -538,7 +538,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to get board", err)
 	}
 
 	var timerStart time.Time
