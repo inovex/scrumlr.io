@@ -21,15 +21,17 @@ import {
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
 import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
-import {AccessPolicy, removeHistoryBoard, toggleHistoryBoardFavourite} from "store/features";
+import {AccessPolicy, deleteHistoryBoard, setBoardFavourite} from "store/features";
 import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {ConfirmationDialog} from "components/ConfirmationDialog/ConfirmationDialog";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import {isParticipantModerator} from "utils/participant";
+import {Toast} from "utils/Toast";
 import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
@@ -77,6 +79,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
   const dispatch = useAppDispatch();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   // owner: edit + delete; moderator: edit only; participant: neither.
   const canEdit = isParticipantModerator(props.board.userRole);
@@ -103,7 +106,10 @@ export const HistoryCard = (props: HistoryCardProps) => {
                 {
                   label: t("History.HistoryCard.Menu.delete"),
                   element: <TrashIcon />,
-                  onClick: () => dispatch(removeHistoryBoard(props.board.id)),
+                  onClick: () => {
+                    setShowMiniMenu(false);
+                    setShowDeleteConfirmation(true);
+                  },
                 },
               ]
             : []),
@@ -111,15 +117,15 @@ export const HistoryCard = (props: HistoryCardProps) => {
             label: t("History.HistoryCard.Menu.copyLink"),
             element: <LinkIcon />,
             onClick: () => {
-              throw new Error("Not implemented yet");
+              navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`);
+              Toast.success({title: t("History.HistoryCard.linkCopied")});
             },
           },
           {
+            // TODO: Disabled until implemented. Maybe add a coming soon tooltip?
             label: t("History.HistoryCard.Menu.createTemplate"),
             element: <Duplicate2Icon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
+            disabled: true,
           },
           ...(canEdit
             ? [
@@ -148,7 +154,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <FavouriteButton
           className="history-card__icon history-card__favourite"
           active={props.board.favourite}
-          onClick={() => dispatch(toggleHistoryBoardFavourite(props.board.id))}
+          onClick={() => dispatch(setBoardFavourite({boardId: props.board.id, favourite: !props.board.favourite}))}
         />
 
         <div className={classNames("history-card__head")}>
@@ -207,14 +213,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
         </div>
 
-        <Button
-          className={classNames("history-card__button", "history-card__button--start")}
-          small
-          icon={<NextIcon />}
-          onClick={() => {
-            throw new Error("Not implemented yet");
-          }}
-        >
+        <Button className={classNames("history-card__button", "history-card__button--start")} small icon={<NextIcon />} onClick={() => navigate(`/board/${props.board.id}`)}>
           {t("History.HistoryCard.openBoardButton")}
         </Button>
         <Tooltip anchorId={`history-card__access-policy::${props.board.id}`} color="backlog-blue">
@@ -244,6 +243,19 @@ export const HistoryCard = (props: HistoryCardProps) => {
           </Tooltip>
         )}
       </div>
+      {showDeleteConfirmation && (
+        <ConfirmationDialog
+          title={t("History.HistoryCard.deleteConfirmationTitle")}
+          text="History.HistoryCard.deleteConfirmationText"
+          icon={TrashIcon}
+          warning
+          onAccept={() => {
+            dispatch(deleteHistoryBoard(props.board.id));
+            setShowDeleteConfirmation(false);
+          }}
+          onDecline={() => setShowDeleteConfirmation(false)}
+        />
+      )}
     </div>
   );
 };

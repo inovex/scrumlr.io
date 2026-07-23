@@ -74,7 +74,7 @@ export const Boards = () => {
               activeDirection={boardView === "templates" ? "left" : "right"}
               toggle={() => navigate(boardView === "templates" ? "/boards/history" : "/boards/templates")}
             />
-            <span className="boards__coming-soon-badge">Coming Soon</span>
+            <span className="boards__coming-soon-badge">New!</span>
           </div>
 
           {/* desktop search bar */}
