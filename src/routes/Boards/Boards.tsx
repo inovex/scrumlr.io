@@ -12,7 +12,7 @@ import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
-type BoardView = "templates" | "history" | "create" | "edit";
+type BoardView = "templates" | "history" | "create" | "edit" | "edit-board";
 
 export const Boards = () => {
   const {t} = useTranslation();
@@ -54,6 +54,8 @@ export const Boards = () => {
         return t("History.title");
       case "create":
         return t("Templates.TemplateEditor.createTitle");
+      case "edit-board":
+        return t("BoardEditor.editTitle");
       case "edit":
       default: // TS is smart enough to recognize boardView is exhaustive, but ESLint isn't
         return t("Templates.TemplateEditor.editTitle");

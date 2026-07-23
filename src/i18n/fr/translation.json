@@ -1,5 +1,6 @@
 {
   "BoardEditor": {
+    "editTitle": "Modifier le tableau",
     "save": "Enregistrer",
     "loadError": "Désolé, nous n'avons pas pu charger ce tableau."
   },

@@ -1,5 +1,6 @@
 {
   "BoardEditor": {
+    "editTitle": "Edit a Board",
     "save": "Save",
     "loadError": "Sorry, we couldn't load this board."
   },
