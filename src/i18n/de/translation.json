@@ -1,5 +1,6 @@
 {
   "BoardEditor": {
+    "editTitle": "Board bearbeiten",
     "save": "Speichern",
     "loadError": "Dieses Board konnte leider nicht geladen werden."
   },
