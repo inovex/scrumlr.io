@@ -1,6 +1,7 @@
 {
   "BoardEditor": {
-    "save": "Save"
+    "save": "Save",
+    "loadError": "Sorry, we couldn't load this board."
   },
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note",
@@ -120,7 +121,10 @@
         "close": "Close"
       },
       "readOnly": "Read only",
-      "openBoardButton": "Go to Session"
+      "openBoardButton": "Go to Session",
+      "linkCopied": "Board link copied!",
+      "deleteConfirmationTitle": "Delete board?",
+      "deleteConfirmationText": "This permanently deletes the board for everyone. This action cannot be undone."
     }
   },
   "CreateBoard": {

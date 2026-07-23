@@ -1,6 +1,7 @@
 {
   "BoardEditor": {
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "loadError": "Désolé, nous n'avons pas pu charger ce tableau."
   },
   "InfoBar": {
     "ReturnToPresentedNote": "Retour à la note présentée",
@@ -120,7 +121,10 @@
         "close": "Fermer"
       },
       "readOnly": "Verrouillé",
-      "openBoardButton": "Ouvrir la session"
+      "openBoardButton": "Ouvrir la session",
+      "linkCopied": "Lien du tableau copié !",
+      "deleteConfirmationTitle": "Supprimer le tableau ?",
+      "deleteConfirmationText": "Cela supprime définitivement le tableau pour tout le monde. Cette action est irréversible."
     }
   },
   "CreateBoard": {

@@ -1,12 +1,17 @@
 import {render} from "testUtils";
-import {render as rtlRender, fireEvent, screen} from "@testing-library/react";
+import {render as rtlRender, fireEvent, screen, waitFor} from "@testing-library/react";
 import {I18nextProvider} from "react-i18next";
 import {MemoryRouter} from "react-router";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
-import {HistoryBoard, ParticipantRole} from "store/features";
+import {API} from "api";
+import {HistoryBoard, ParticipantRole, ParticipantWithUser} from "store/features";
 import {HistoryCard} from "../HistoryCard";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 const makeBoard = (userRole: ParticipantRole): HistoryBoard => ({
   id: "1",
@@ -57,7 +62,10 @@ describe("HistoryCard menu role gating", () => {
 });
 
 describe("HistoryCard favourite", () => {
-  it("toggles the board's favourite in the store when the star is clicked", () => {
+  it("persists the favourite via the participant API and updates the store", async () => {
+    const participant = {user: {id: "u", name: "n", isAnonymous: true}, connected: true, ready: false, raisedHand: false, showHiddenColumns: false, role: "OWNER"} as ParticipantWithUser;
+    const editParticipant = vi.spyOn(API, "editParticipant").mockResolvedValue(participant);
+
     const board = makeBoard("OWNER"); // favourite: false
     const store = getTestStore({history: [board]});
     const {container} = rtlRender(
@@ -72,12 +80,20 @@ describe("HistoryCard favourite", () => {
 
     fireEvent.click(container.querySelector(".history-card__favourite")!);
 
-    expect(store.getState().history[0].favourite).toBe(true);
+    expect(editParticipant).toHaveBeenCalledWith("1", "test-auth-user-id", {favourite: true});
+    await waitFor(() => expect(store.getState().history[0].favourite).toBe(true));
   });
 });
 
 describe("HistoryCard delete", () => {
-  it("removes the board from the store when an owner clicks delete", () => {
+  it("confirms first, then deletes via the API and removes it from the store", async () => {
+    const deleteBoard = vi.spyOn(API, "deleteBoard").mockResolvedValue(undefined);
+
+    // the ConfirmationDialog renders through a Portal, which needs a #portal element.
+    const portal = document.createElement("div");
+    portal.setAttribute("id", "portal");
+    document.body.appendChild(portal);
+
     const board = makeBoard("OWNER");
     const store = getTestStore({history: [board]});
     const {container} = rtlRender(
@@ -93,6 +109,13 @@ describe("HistoryCard delete", () => {
     openMenu(container);
     fireEvent.click(screen.getByRole("button", {name: "Delete"}));
 
-    expect(store.getState().history).toHaveLength(0);
+    // nothing happens until the user confirms deletion
+    expect(screen.getByText("Delete board?")).toBeInTheDocument();
+    expect(deleteBoard).not.toHaveBeenCalled();
+
+    fireEvent.click(document.querySelector(".confirmation-dialog__button--accept")!);
+
+    expect(deleteBoard).toHaveBeenCalledWith("1");
+    await waitFor(() => expect(store.getState().history).toHaveLength(0));
   });
 });

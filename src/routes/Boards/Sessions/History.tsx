@@ -21,7 +21,6 @@ export const History = () => {
   const historyBoards = useAppSelector((state) => state.history);
 
   useEffect(() => {
-    // TODO: with a real backend later this can fetch unconditionally anyways so remove the length check, this is just so we see the mocked data change now.
     if (historyBoards.length === 0) dispatch(getBoards());
   }, [dispatch, historyBoards.length]);
 
