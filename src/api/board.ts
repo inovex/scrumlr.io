@@ -1,8 +1,30 @@
 import {Color} from "constants/colors";
 import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
+import {BoardOverview} from "store/features/history/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
+  /**
+   * Returns an overview of all boards the current user has a session on (the History list).
+   *
+   * @returns the list of board overviews
+   */
+  getBoards: async (): Promise<BoardOverview[]> => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as BoardOverview[];
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get boards`, {cause: error});
+    }
+  },
   /**
    * Creates a board with the specified parameters and returns the board id.
    *

@@ -21,13 +21,17 @@ import {
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
 import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
-import {AccessPolicy} from "store/features";
+import {AccessPolicy, deleteHistoryBoard, setBoardFavourite} from "store/features";
 import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {ConfirmationDialog} from "components/ConfirmationDialog/ConfirmationDialog";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {useTranslation} from "react-i18next";
-import {useAppSelector} from "store";
+import {useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "store";
+import {isParticipantModerator} from "utils/participant";
+import {Toast} from "utils/Toast";
 import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
 import "./HistoryCard.scss";
 
@@ -71,9 +75,17 @@ export const HistoryCard = (props: HistoryCardProps) => {
     return date.toLocaleDateString(locale, {year: "numeric", month: "2-digit", day: "2-digit"});
   };
 
-  const [showMiniMenu, setShowMiniMenu] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const joinedColumnsNames = props.board.columns.join(", ");
+  const [showMiniMenu, setShowMiniMenu] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
+  // owner: edit + delete; moderator: edit only; participant: neither.
+  const canEdit = isParticipantModerator(props.board.userRole);
+  const canDelete = props.board.userRole === "OWNER";
+
+  const joinedColumnsNames = props.board.columns.map((column) => column.name).join(", ");
   const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
   const formattedModifiedAtDate = localizeTimeDifference(props.board.modifiedAt);
 
@@ -89,34 +101,41 @@ export const HistoryCard = (props: HistoryCardProps) => {
       <MiniMenu
         className={classNames("history-card__menu", "history-card__menu--open")}
         items={[
-          {
-            label: t("History.HistoryCard.Menu.delete"),
-            element: <TrashIcon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
-          },
+          ...(canDelete
+            ? [
+                {
+                  label: t("History.HistoryCard.Menu.delete"),
+                  element: <TrashIcon />,
+                  onClick: () => {
+                    setShowMiniMenu(false);
+                    setShowDeleteConfirmation(true);
+                  },
+                },
+              ]
+            : []),
           {
             label: t("History.HistoryCard.Menu.copyLink"),
             element: <LinkIcon />,
             onClick: () => {
-              throw new Error("Not implemented yet");
+              navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`);
+              Toast.success({title: t("History.HistoryCard.linkCopied")});
             },
           },
           {
+            // TODO: Disabled until implemented. Maybe add a coming soon tooltip?
             label: t("History.HistoryCard.Menu.createTemplate"),
             element: <Duplicate2Icon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
+            disabled: true,
           },
-          {
-            label: t("History.HistoryCard.Menu.edit"),
-            element: <EditIcon />,
-            onClick: () => {
-              throw new Error("Not implemented yet");
-            },
-          },
+          ...(canEdit
+            ? [
+                {
+                  label: t("History.HistoryCard.Menu.edit"),
+                  element: <EditIcon />,
+                  onClick: () => navigate(`/boards/edit-board/${props.board.id}`),
+                },
+              ]
+            : []),
           {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
         focusBehaviour="trap"
@@ -135,9 +154,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
         <FavouriteButton
           className="history-card__icon history-card__favourite"
           active={props.board.favourite}
-          onClick={() => {
-            throw new Error("Not implemented yet");
-          }}
+          onClick={() => dispatch(setBoardFavourite({boardId: props.board.id, favourite: !props.board.favourite}))}
         />
 
         <div className={classNames("history-card__head")}>
@@ -196,14 +213,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
           <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
         </div>
 
-        <Button
-          className={classNames("history-card__button", "history-card__button--start")}
-          small
-          icon={<NextIcon />}
-          onClick={() => {
-            throw new Error("Not implemented yet");
-          }}
-        >
+        <Button className={classNames("history-card__button", "history-card__button--start")} small icon={<NextIcon />} onClick={() => navigate(`/board/${props.board.id}`)}>
           {t("History.HistoryCard.openBoardButton")}
         </Button>
         <Tooltip anchorId={`history-card__access-policy::${props.board.id}`} color="backlog-blue">
@@ -233,6 +243,19 @@ export const HistoryCard = (props: HistoryCardProps) => {
           </Tooltip>
         )}
       </div>
+      {showDeleteConfirmation && (
+        <ConfirmationDialog
+          title={t("History.HistoryCard.deleteConfirmationTitle")}
+          text="History.HistoryCard.deleteConfirmationText"
+          icon={TrashIcon}
+          warning
+          onAccept={() => {
+            dispatch(deleteHistoryBoard(props.board.id));
+            setShowDeleteConfirmation(false);
+          }}
+          onDecline={() => setShowDeleteConfirmation(false)}
+        />
+      )}
     </div>
   );
 };

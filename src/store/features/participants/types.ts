@@ -20,6 +20,7 @@ export interface ParticipantWithUserId {
   showHiddenColumns: boolean;
   role: ParticipantRole;
   banned?: boolean;
+  favourite?: boolean;
 }
 
 export type ParticipantsState = {

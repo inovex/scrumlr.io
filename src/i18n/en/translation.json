@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Edit a Board",
+    "save": "Save",
+    "loadError": "Sorry, we couldn't load this board."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note",
     "VotingIsAnonymous": "Voting is anonymous",
@@ -117,7 +122,10 @@
         "close": "Close"
       },
       "readOnly": "Read only",
-      "openBoardButton": "Go to Session"
+      "openBoardButton": "Go to Session",
+      "linkCopied": "Board link copied!",
+      "deleteConfirmationTitle": "Delete board?",
+      "deleteConfirmationText": "This permanently deletes the board for everyone. This action cannot be undone."
     }
   },
   "CreateBoard": {

@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Board bearbeiten",
+    "save": "Speichern",
+    "loadError": "Dieses Board konnte leider nicht geladen werden."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
     "VotingIsAnonymous": "Abstimmung ist anonym",
@@ -118,7 +123,10 @@
         "close": "Schließen"
       },
       "readOnly": "Schreibgeschützt",
-      "openBoardButton": "Session öffnen"
+      "openBoardButton": "Session öffnen",
+      "linkCopied": "Board-Link kopiert!",
+      "deleteConfirmationTitle": "Board löschen?",
+      "deleteConfirmationText": "Dies löscht das Board dauerhaft für alle. Diese Aktion kann nicht rückgängig gemacht werden."
     }
   },
   "CreateBoard": {

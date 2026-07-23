@@ -18,6 +18,7 @@ export type CreateSessionAccessPolicy =
 export interface Board {
   id: string;
   name?: string;
+  description?: string;
   accessPolicy: AccessPolicy;
   showAuthors: boolean;
   showNotesOfOtherUsers: boolean;

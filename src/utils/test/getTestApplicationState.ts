@@ -255,5 +255,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   dragLocks: {
     lockedNotes: {},
   },
+  history: [],
   ...overwrite,
 });
