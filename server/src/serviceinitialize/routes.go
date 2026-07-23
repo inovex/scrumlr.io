@@ -3,6 +3,7 @@ package serviceinitialize
 import (
 	"github.com/go-chi/chi/v5"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/swagger"
 	"scrumlr.io/server/users"
 )
 
@@ -78,4 +79,9 @@ func (init *RoutesInitializer) InitializeNotesRoutes() {
 func (init *RoutesInitializer) InitializeVotingRoutes() {
 	// voting routes are currently not initialized through the route initializer
 	panic("Not implemented")
+}
+
+func (init *RoutesInitializer) InitializeSwaggerRoutes(basePath string) chi.Router {
+	router := swagger.InitializeSwagger(basePath).RegisterRoutes()
+	return router
 }

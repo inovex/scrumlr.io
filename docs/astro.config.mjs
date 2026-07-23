@@ -7,6 +7,13 @@ export default defineConfig({
   site: "https://docs.scrumlr.io",
   base: "/",
   integrations: [
+    mermaid({
+      theme: "default",
+      autoTheme: true,
+      mermaidConfig: {
+        startOnLoad: false,
+      }
+    }),
     starlight({
       title: "Scrumlr Docs",
       customCss: [
@@ -17,30 +24,38 @@ export default defineConfig({
       sidebar: [
         {
           label: "Getting Started",
-          autogenerate: {
-            directory: "getting-started",
-          },
+          items: [
+            {
+              autogenerate: {
+                directory: "getting-started",
+              },
+            },
+          ]
+
         },
         {
           label: "Development",
-          autogenerate: {
-            directory: "dev",
-          }
+          items: [
+            {
+              autogenerate: {
+               directory: "dev",
+              }
+            },
+          ]
+
         },
         {
           label: "Self-Hosted",
-          autogenerate: {
-            directory: "self-hosting",
-          },
+          items: [
+            {
+              autogenerate: {
+                directory: "self-hosting",
+              },
+            },
+          ]
+
         },
       ],
-    }),
-    mermaid({
-      theme: "default",
-      autoTheme: true,
-      mermaidConfig: {
-        startOnLoad: false,
-      }
     }),
   ],
 });

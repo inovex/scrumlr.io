@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"go.uber.org/zap"
+	"scrumlr.io/server/api"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
@@ -18,11 +19,17 @@ import (
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
-	"scrumlr.io/server/api"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
+// @title			Scrumlr backend
+// @version		5.2.2
+// @description	This is the scrumlr backend server.
+// @termsOfService	https://scrumlr.io/terms
+// @contact.email	info@scrumlr.io
+// @license.name	MIT
+// @license.url	https://github.com/inovex/scrumlr.io/blob/main/LICENSE
 func main() {
 	app := &cli.App{
 		Name:      "scrumlr.io",
@@ -270,6 +277,13 @@ func main() {
 				Usage:    "the url where feedback will be sent to",
 				Required: false,
 			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "enable-swagger",
+				EnvVars:  []string{"SCRUMLR_ENABLE_SWAGGER"},
+				Usage:    "enable the swagger page",
+				Value:    false,
+				Required: false,
+			}),
 			&cli.StringFlag{
 				Name:     "config",
 				EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
@@ -452,6 +466,8 @@ func run(ctx *cli.Context) error {
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
+	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
+
 	s := api.New(
 		basePath,
 		rt,
@@ -460,6 +476,8 @@ func run(ctx *cli.Context) error {
 
 		userRoutes,
 		sessionRoutes,
+		swaggerRoutes,
+
 		boardService,
 		columnService,
 		votingService,
@@ -480,6 +498,7 @@ func run(ctx *cli.Context) error {
 		ctx.Bool("allow-anonymous-custom-templates"),
 		ctx.Bool("allow-anonymous-board-creation"),
 		ctx.Bool("auth-enable-experimental-file-system-store"),
+		ctx.Bool("enable-swagger"),
 	)
 
 	listen := fmt.Sprintf("%s:%d", ctx.String("address"), ctx.Int("port"))
