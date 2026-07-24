@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -139,7 +140,7 @@ func Test_UpdateBoardSession_api(t *testing.T) {
 		User:   targetUserID,
 		Ready:  &ready,
 	}
-	mockResponse := &BoardSession{Board: boardID, UserID: targetUserID, Role: common.ParticipantRole, Ready: ready}
+	mockResponse := &BoardSession{Board: boardID, UserID: targetUserID, Role: role.ParticipantRole, Ready: ready}
 
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
@@ -229,7 +230,7 @@ func Test_UpdateBoardSessions_api(t *testing.T) {
 	}
 	serviceArg := BoardSessionsUpdateRequest{Board: boardID}
 	mockResponse := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
 	}
 
 	mockService := NewMockSessionService(t)

@@ -13,6 +13,7 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -201,7 +202,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	}
 
 	// create the owner session
-	sessionRequest := sessions.BoardSessionCreateRequest{Board: b.ID, User: body.Owner, Role: common.OwnerRole}
+	sessionRequest := sessions.BoardSessionCreateRequest{Board: b.ID, User: body.Owner, Role: role.OwnerRole}
 	_, err = service.sessionService.Create(ctx, sessionRequest)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create session")
@@ -345,7 +346,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		for _, session := range boardSessions {
 			// Participants should not be able to see hidden collumns
 			if session.UserID == user {
-				if session.Role == common.ParticipantRole {
+				if !session.Role.CanSeeHiddenColumns() {
 					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
 				}
 				overviewBoards = append(overviewBoards, &BoardOverview{

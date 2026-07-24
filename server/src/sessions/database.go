@@ -7,6 +7,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/role"
 )
 
 type SessionDB struct {
@@ -66,8 +67,8 @@ func (database *SessionDB) Update(ctx context.Context, update DatabaseBoardSessi
 
 	if update.Role != nil {
 		updateQuery = updateQuery.Column("role")
-		if *update.Role == common.OwnerRole {
-			updateQuery.Where("role = ?", common.OwnerRole)
+		if *update.Role == role.OwnerRole {
+			updateQuery.Where("role = ?", role.OwnerRole)
 		}
 	}
 
@@ -143,7 +144,7 @@ func (database *SessionDB) ModeratorExists(ctx context.Context, board, user uuid
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
-		Where("role <> ?", common.ParticipantRole).
+		Where("role <> ?", role.ParticipantRole).
 		Exists(ctx)
 }
 
@@ -152,7 +153,7 @@ func (database *SessionDB) OwnerExists(ctx context.Context, board, user uuid.UUI
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
-		Where("role = ?", common.OwnerRole).
+		Where("role = ?", role.OwnerRole).
 		Exists(ctx)
 }
 
