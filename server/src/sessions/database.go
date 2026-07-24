@@ -221,3 +221,13 @@ func (database *SessionDB) GetUserBoardSessions(ctx context.Context, user uuid.U
 
 	return sessions, err
 }
+
+func (database *SessionDB) Delete(ctx context.Context, board, user uuid.UUID) error {
+	_, err := database.db.NewDelete().
+		Model((*DatabaseBoardSession)(nil)).
+		Where("board = ?", board).
+		Where("user = ?", user).
+		Exec(ctx)
+
+	return err
+}
