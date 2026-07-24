@@ -30,6 +30,7 @@ const (
 	BoardEventSessionRequestUpdated BoardEventType = "REQUEST_UPDATED"
 	BoardEventParticipantCreated    BoardEventType = "PARTICIPANT_CREATED"
 	BoardEventParticipantUpdated    BoardEventType = "PARTICIPANT_UPDATED"
+	BoardEventParticipantDeleted    BoardEventType = "PARTICIPANT_DELETED"
 	BoardEventParticipantsUpdated   BoardEventType = "PARTICIPANTS_UPDATED"
 	BoardEventUserDeleted           BoardEventType = "USER_DELETED"
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
