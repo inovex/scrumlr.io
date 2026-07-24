@@ -2,9 +2,12 @@ package realtime
 
 import (
 	"context"
+	"errors"
 
+	"github.com/urfave/cli/v2"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/logger"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/realtime")
@@ -29,4 +32,34 @@ type Client interface {
 // The Broker enables a user to broadcast and receive events
 type Broker struct {
 	Con Client
+}
+
+func InitializeRealtime(ctx *cli.Context) (*Broker, error) {
+	log := logger.FromContext(ctx.Context)
+
+	var broker *Broker
+
+	if ctx.String("redis-address") != "" {
+		redis := RedisServer{
+			Addr:     ctx.String("redis-address"),
+			Username: ctx.String("redis-username"),
+			Password: ctx.String("redis-password"),
+		}
+
+		log.Infof("Connecting to redis at %v as message broker", redis.Addr)
+
+		broker, err := NewRedis(redis)
+		return broker, err
+	}
+
+	if ctx.String("nats") != "" {
+		address := ctx.String("nats")
+
+		log.Infof("Connecting to nats at %v as message broker", address)
+
+		broker, err := NewNats(address)
+		return broker, err
+	}
+
+	return broker, errors.New("no valid message broker configuration found")
 }
