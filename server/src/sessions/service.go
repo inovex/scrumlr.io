@@ -37,6 +37,7 @@ type SessionDatabase interface {
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
 	GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]DatabaseBoardSession, error)
+	Delete(ctx context.Context, board, user uuid.UUID) error
 }
 
 type BoardSessionService struct {
@@ -359,6 +360,27 @@ func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boa
 	)
 
 	return service.database.IsParticipantBanned(ctx, boardID, userID)
+}
+
+func (service *BoardSessionService) Delete(ctx context.Context, callerID, boardID, userID uuid.UUID) error {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.sessions.service.delete.board", boardID.String()),
+		attribute.String("scrumlr.sessions.service.delete.user", userID.String()),
+		attribute.String("scrumlr.sessions.service.delete.caller", callerID.String()),
+	)
+
+	if callerID != userID {
+		err := errors.New("cannot delete a session of another user")
+		span.SetStatus(codes.Error, "cannot delete a session of another user")
+		span.RecordError(err)
+		return err
+	}
+
+	err := service.database.Delete(ctx, boardID, userID)
+	return err
 }
 
 func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {

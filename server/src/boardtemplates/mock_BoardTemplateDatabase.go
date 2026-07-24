@@ -72,7 +72,7 @@ type MockBoardTemplateDatabase_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board DatabaseBoardTemplateInsert
-func (_e *MockBoardTemplateDatabase_Expecter) Create(ctx interface{}, board interface{}) *MockBoardTemplateDatabase_Create_Call {
+func (_e *MockBoardTemplateDatabase_Expecter) Create(ctx any, board any) *MockBoardTemplateDatabase_Create_Call {
 	return &MockBoardTemplateDatabase_Create_Call{Call: _e.mock.On("Create", ctx, board)}
 }
 
@@ -129,7 +129,7 @@ type MockBoardTemplateDatabase_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - templateId uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) Delete(ctx interface{}, templateId interface{}) *MockBoardTemplateDatabase_Delete_Call {
+func (_e *MockBoardTemplateDatabase_Expecter) Delete(ctx any, templateId any) *MockBoardTemplateDatabase_Delete_Call {
 	return &MockBoardTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, templateId)}
 }
 
@@ -195,7 +195,7 @@ type MockBoardTemplateDatabase_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockBoardTemplateDatabase_Get_Call {
+func (_e *MockBoardTemplateDatabase_Expecter) Get(ctx any, id any) *MockBoardTemplateDatabase_Get_Call {
 	return &MockBoardTemplateDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -263,7 +263,7 @@ type MockBoardTemplateDatabase_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - user uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) GetAll(ctx interface{}, user interface{}) *MockBoardTemplateDatabase_GetAll_Call {
+func (_e *MockBoardTemplateDatabase_Expecter) GetAll(ctx any, user any) *MockBoardTemplateDatabase_GetAll_Call {
 	return &MockBoardTemplateDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, user)}
 }
 
@@ -329,7 +329,7 @@ type MockBoardTemplateDatabase_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board DatabaseBoardTemplateUpdate
-func (_e *MockBoardTemplateDatabase_Expecter) Update(ctx interface{}, board interface{}) *MockBoardTemplateDatabase_Update_Call {
+func (_e *MockBoardTemplateDatabase_Expecter) Update(ctx any, board any) *MockBoardTemplateDatabase_Update_Call {
 	return &MockBoardTemplateDatabase_Update_Call{Call: _e.mock.On("Update", ctx, board)}
 }
 
