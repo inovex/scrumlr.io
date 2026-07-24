@@ -74,7 +74,7 @@ type MockVotingService_AddVote_Call struct {
 // AddVote is a helper method to define mock.On call
 //   - ctx context.Context
 //   - req VoteRequest
-func (_e *MockVotingService_Expecter) AddVote(ctx interface{}, req interface{}) *MockVotingService_AddVote_Call {
+func (_e *MockVotingService_Expecter) AddVote(ctx any, req any) *MockVotingService_AddVote_Call {
 	return &MockVotingService_AddVote_Call{Call: _e.mock.On("AddVote", ctx, req)}
 }
 
@@ -144,7 +144,7 @@ type MockVotingService_Close_Call struct {
 //   - id uuid.UUID
 //   - board uuid.UUID
 //   - affectedNotes []Note
-func (_e *MockVotingService_Expecter) Close(ctx interface{}, id interface{}, board interface{}, affectedNotes interface{}) *MockVotingService_Close_Call {
+func (_e *MockVotingService_Expecter) Close(ctx any, id any, board any, affectedNotes any) *MockVotingService_Close_Call {
 	return &MockVotingService_Close_Call{Call: _e.mock.On("Close", ctx, id, board, affectedNotes)}
 }
 
@@ -222,7 +222,7 @@ type MockVotingService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body VotingCreateRequest
-func (_e *MockVotingService_Expecter) Create(ctx interface{}, body interface{}) *MockVotingService_Create_Call {
+func (_e *MockVotingService_Expecter) Create(ctx any, body any) *MockVotingService_Create_Call {
 	return &MockVotingService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -291,7 +291,7 @@ type MockVotingService_Get_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - id uuid.UUID
-func (_e *MockVotingService_Expecter) Get(ctx interface{}, board interface{}, id interface{}) *MockVotingService_Get_Call {
+func (_e *MockVotingService_Expecter) Get(ctx any, board any, id any) *MockVotingService_Get_Call {
 	return &MockVotingService_Get_Call{Call: _e.mock.On("Get", ctx, board, id)}
 }
 
@@ -364,7 +364,7 @@ type MockVotingService_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockVotingService_Expecter) GetAll(ctx interface{}, board interface{}) *MockVotingService_GetAll_Call {
+func (_e *MockVotingService_Expecter) GetAll(ctx any, board any) *MockVotingService_GetAll_Call {
 	return &MockVotingService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
@@ -432,7 +432,7 @@ type MockVotingService_GetOpen_Call struct {
 // GetOpen is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockVotingService_Expecter) GetOpen(ctx interface{}, board interface{}) *MockVotingService_GetOpen_Call {
+func (_e *MockVotingService_Expecter) GetOpen(ctx any, board any) *MockVotingService_GetOpen_Call {
 	return &MockVotingService_GetOpen_Call{Call: _e.mock.On("GetOpen", ctx, board)}
 }
 
@@ -501,7 +501,7 @@ type MockVotingService_GetVotes_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - f VoteFilter
-func (_e *MockVotingService_Expecter) GetVotes(ctx interface{}, board interface{}, f interface{}) *MockVotingService_GetVotes_Call {
+func (_e *MockVotingService_Expecter) GetVotes(ctx any, board any, f any) *MockVotingService_GetVotes_Call {
 	return &MockVotingService_GetVotes_Call{Call: _e.mock.On("GetVotes", ctx, board, f)}
 }
 
@@ -563,7 +563,7 @@ type MockVotingService_RemoveVote_Call struct {
 // RemoveVote is a helper method to define mock.On call
 //   - ctx context.Context
 //   - req VoteRequest
-func (_e *MockVotingService_Expecter) RemoveVote(ctx interface{}, req interface{}) *MockVotingService_RemoveVote_Call {
+func (_e *MockVotingService_Expecter) RemoveVote(ctx any, req any) *MockVotingService_RemoveVote_Call {
 	return &MockVotingService_RemoveVote_Call{Call: _e.mock.On("RemoveVote", ctx, req)}
 }
 

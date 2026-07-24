@@ -74,7 +74,7 @@ type MockColumnTemplateService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body ColumnTemplateRequest
-func (_e *MockColumnTemplateService_Expecter) Create(ctx interface{}, body interface{}) *MockColumnTemplateService_Create_Call {
+func (_e *MockColumnTemplateService_Expecter) Create(ctx any, body any) *MockColumnTemplateService_Create_Call {
 	return &MockColumnTemplateService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -132,7 +132,7 @@ type MockColumnTemplateService_Delete_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - column uuid.UUID
-func (_e *MockColumnTemplateService_Expecter) Delete(ctx interface{}, board interface{}, column interface{}) *MockColumnTemplateService_Delete_Call {
+func (_e *MockColumnTemplateService_Expecter) Delete(ctx any, board any, column any) *MockColumnTemplateService_Delete_Call {
 	return &MockColumnTemplateService_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column)}
 }
 
@@ -206,7 +206,7 @@ type MockColumnTemplateService_Get_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - columnID uuid.UUID
-func (_e *MockColumnTemplateService_Expecter) Get(ctx interface{}, boardID interface{}, columnID interface{}) *MockColumnTemplateService_Get_Call {
+func (_e *MockColumnTemplateService_Expecter) Get(ctx any, boardID any, columnID any) *MockColumnTemplateService_Get_Call {
 	return &MockColumnTemplateService_Get_Call{Call: _e.mock.On("Get", ctx, boardID, columnID)}
 }
 
@@ -279,7 +279,7 @@ type MockColumnTemplateService_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockColumnTemplateService_Expecter) GetAll(ctx interface{}, board interface{}) *MockColumnTemplateService_GetAll_Call {
+func (_e *MockColumnTemplateService_Expecter) GetAll(ctx any, board any) *MockColumnTemplateService_GetAll_Call {
 	return &MockColumnTemplateService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
@@ -347,7 +347,7 @@ type MockColumnTemplateService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body ColumnTemplateUpdateRequest
-func (_e *MockColumnTemplateService_Expecter) Update(ctx interface{}, body interface{}) *MockColumnTemplateService_Update_Call {
+func (_e *MockColumnTemplateService_Expecter) Update(ctx any, body any) *MockColumnTemplateService_Update_Call {
 	return &MockColumnTemplateService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

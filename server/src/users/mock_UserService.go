@@ -78,7 +78,7 @@ type MockUserService_CreateUser_Call struct {
 //   - name string
 //   - avatarUrl string
 //   - accountType common.AccountType
-func (_e *MockUserService_Expecter) CreateUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}, accountType interface{}) *MockUserService_CreateUser_Call {
+func (_e *MockUserService_Expecter) CreateUser(ctx any, id any, name any, avatarUrl any, accountType any) *MockUserService_CreateUser_Call {
 	return &MockUserService_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, id, name, avatarUrl, accountType)}
 }
 
@@ -150,7 +150,7 @@ type MockUserService_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) Delete(ctx interface{}, id interface{}) *MockUserService_Delete_Call {
+func (_e *MockUserService_Expecter) Delete(ctx any, id any) *MockUserService_Delete_Call {
 	return &MockUserService_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
@@ -218,7 +218,7 @@ type MockUserService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) Get(ctx interface{}, id interface{}) *MockUserService_Get_Call {
+func (_e *MockUserService_Expecter) Get(ctx any, id any) *MockUserService_Get_Call {
 	return &MockUserService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -286,7 +286,7 @@ type MockUserService_GetBoardUsers_Call struct {
 // GetBoardUsers is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockUserService_Expecter) GetBoardUsers(ctx interface{}, boardID interface{}) *MockUserService_GetBoardUsers_Call {
+func (_e *MockUserService_Expecter) GetBoardUsers(ctx any, boardID any) *MockUserService_GetBoardUsers_Call {
 	return &MockUserService_GetBoardUsers_Call{Call: _e.mock.On("GetBoardUsers", ctx, boardID)}
 }
 
@@ -352,7 +352,7 @@ type MockUserService_IsUserAvailableForKeyMigration_Call struct {
 // IsUserAvailableForKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) IsUserAvailableForKeyMigration(ctx interface{}, id interface{}) *MockUserService_IsUserAvailableForKeyMigration_Call {
+func (_e *MockUserService_Expecter) IsUserAvailableForKeyMigration(ctx any, id any) *MockUserService_IsUserAvailableForKeyMigration_Call {
 	return &MockUserService_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", ctx, id)}
 }
 
@@ -420,7 +420,7 @@ type MockUserService_SetKeyMigration_Call struct {
 // SetKeyMigration is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserService_Expecter) SetKeyMigration(ctx interface{}, id interface{}) *MockUserService_SetKeyMigration_Call {
+func (_e *MockUserService_Expecter) SetKeyMigration(ctx any, id any) *MockUserService_SetKeyMigration_Call {
 	return &MockUserService_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", ctx, id)}
 }
 
@@ -488,7 +488,7 @@ type MockUserService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body UserUpdateRequest
-func (_e *MockUserService_Expecter) Update(ctx interface{}, body interface{}) *MockUserService_Update_Call {
+func (_e *MockUserService_Expecter) Update(ctx any, body any) *MockUserService_Update_Call {
 	return &MockUserService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

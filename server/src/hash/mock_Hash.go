@@ -60,7 +60,7 @@ type MockHash_HashBySalt_Call struct {
 // HashBySalt is a helper method to define mock.On call
 //   - passphrase string
 //   - salt string
-func (_e *MockHash_Expecter) HashBySalt(passphrase interface{}, salt interface{}) *MockHash_HashBySalt_Call {
+func (_e *MockHash_Expecter) HashBySalt(passphrase any, salt any) *MockHash_HashBySalt_Call {
 	return &MockHash_HashBySalt_Call{Call: _e.mock.On("HashBySalt", passphrase, salt)}
 }
 
@@ -135,7 +135,7 @@ type MockHash_HashWithSalt_Call struct {
 
 // HashWithSalt is a helper method to define mock.On call
 //   - passphrase string
-func (_e *MockHash_Expecter) HashWithSalt(passphrase interface{}) *MockHash_HashWithSalt_Call {
+func (_e *MockHash_Expecter) HashWithSalt(passphrase any) *MockHash_HashWithSalt_Call {
 	return &MockHash_HashWithSalt_Call{Call: _e.mock.On("HashWithSalt", passphrase)}
 }
 

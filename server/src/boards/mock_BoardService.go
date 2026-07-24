@@ -65,7 +65,7 @@ type MockBoardService_BoardEditableContext_Call struct {
 
 // BoardEditableContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockBoardService_Expecter) BoardEditableContext(next interface{}) *MockBoardService_BoardEditableContext_Call {
+func (_e *MockBoardService_Expecter) BoardEditableContext(next any) *MockBoardService_BoardEditableContext_Call {
 	return &MockBoardService_BoardEditableContext_Call{Call: _e.mock.On("BoardEditableContext", next)}
 }
 
@@ -129,7 +129,7 @@ type MockBoardService_BoardOverview_Call struct {
 //   - ctx context.Context
 //   - boardIDs []uuid.UUID
 //   - user uuid.UUID
-func (_e *MockBoardService_Expecter) BoardOverview(ctx interface{}, boardIDs interface{}, user interface{}) *MockBoardService_BoardOverview_Call {
+func (_e *MockBoardService_Expecter) BoardOverview(ctx any, boardIDs any, user any) *MockBoardService_BoardOverview_Call {
 	return &MockBoardService_BoardOverview_Call{Call: _e.mock.On("BoardOverview", ctx, boardIDs, user)}
 }
 
@@ -202,7 +202,7 @@ type MockBoardService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body CreateBoardRequest
-func (_e *MockBoardService_Expecter) Create(ctx interface{}, body interface{}) *MockBoardService_Create_Call {
+func (_e *MockBoardService_Expecter) Create(ctx any, body any) *MockBoardService_Create_Call {
 	return &MockBoardService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -259,7 +259,7 @@ type MockBoardService_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardService_Expecter) Delete(ctx interface{}, id interface{}) *MockBoardService_Delete_Call {
+func (_e *MockBoardService_Expecter) Delete(ctx any, id any) *MockBoardService_Delete_Call {
 	return &MockBoardService_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
@@ -327,7 +327,7 @@ type MockBoardService_DeleteTimer_Call struct {
 // DeleteTimer is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardService_Expecter) DeleteTimer(ctx interface{}, id interface{}) *MockBoardService_DeleteTimer_Call {
+func (_e *MockBoardService_Expecter) DeleteTimer(ctx any, id any) *MockBoardService_DeleteTimer_Call {
 	return &MockBoardService_DeleteTimer_Call{Call: _e.mock.On("DeleteTimer", ctx, id)}
 }
 
@@ -395,7 +395,7 @@ type MockBoardService_FullBoard_Call struct {
 // FullBoard is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
-func (_e *MockBoardService_Expecter) FullBoard(ctx interface{}, boardID interface{}) *MockBoardService_FullBoard_Call {
+func (_e *MockBoardService_Expecter) FullBoard(ctx any, boardID any) *MockBoardService_FullBoard_Call {
 	return &MockBoardService_FullBoard_Call{Call: _e.mock.On("FullBoard", ctx, boardID)}
 }
 
@@ -463,7 +463,7 @@ type MockBoardService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardService_Expecter) Get(ctx interface{}, id interface{}) *MockBoardService_Get_Call {
+func (_e *MockBoardService_Expecter) Get(ctx any, id any) *MockBoardService_Get_Call {
 	return &MockBoardService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -531,7 +531,7 @@ type MockBoardService_GetBoards_Call struct {
 // GetBoards is a helper method to define mock.On call
 //   - ctx context.Context
 //   - userID uuid.UUID
-func (_e *MockBoardService_Expecter) GetBoards(ctx interface{}, userID interface{}) *MockBoardService_GetBoards_Call {
+func (_e *MockBoardService_Expecter) GetBoards(ctx any, userID any) *MockBoardService_GetBoards_Call {
 	return &MockBoardService_GetBoards_Call{Call: _e.mock.On("GetBoards", ctx, userID)}
 }
 
@@ -599,7 +599,7 @@ type MockBoardService_IncrementTimer_Call struct {
 // IncrementTimer is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardService_Expecter) IncrementTimer(ctx interface{}, id interface{}) *MockBoardService_IncrementTimer_Call {
+func (_e *MockBoardService_Expecter) IncrementTimer(ctx any, id any) *MockBoardService_IncrementTimer_Call {
 	return &MockBoardService_IncrementTimer_Call{Call: _e.mock.On("IncrementTimer", ctx, id)}
 }
 
@@ -668,7 +668,7 @@ type MockBoardService_SetTimer_Call struct {
 //   - ctx context.Context
 //   - id uuid.UUID
 //   - minutes uint8
-func (_e *MockBoardService_Expecter) SetTimer(ctx interface{}, id interface{}, minutes interface{}) *MockBoardService_SetTimer_Call {
+func (_e *MockBoardService_Expecter) SetTimer(ctx any, id any, minutes any) *MockBoardService_SetTimer_Call {
 	return &MockBoardService_SetTimer_Call{Call: _e.mock.On("SetTimer", ctx, id, minutes)}
 }
 
@@ -741,7 +741,7 @@ type MockBoardService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardUpdateRequest
-func (_e *MockBoardService_Expecter) Update(ctx interface{}, body interface{}) *MockBoardService_Update_Call {
+func (_e *MockBoardService_Expecter) Update(ctx any, body any) *MockBoardService_Update_Call {
 	return &MockBoardService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 
