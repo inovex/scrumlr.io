@@ -136,7 +136,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get boards")
 		span.RecordError(err)
 		log.Errorw("failed to get boards", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -145,7 +145,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get board overview")
 		span.RecordError(err)
 		log.Errorw("failed to get board overview", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	render.Status(r, http.StatusOK)
@@ -236,7 +236,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session")
 		span.RecordError(err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -245,7 +245,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check if participant is banned")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
@@ -265,7 +265,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
-		common.Throw(w, r, common.NotFoundError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -274,7 +274,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
@@ -308,7 +308,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
-				common.Throw(w, r, common.InternalServerError)
+				common.Throw(w, r, mapError(err))
 				return
 			}
 
@@ -394,7 +394,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("Unable to update board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -439,7 +439,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to set board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to set board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -474,7 +474,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to delete board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -602,7 +602,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						span.SetStatus(codes.Error, "failed to get note author user")
 						span.RecordError(err)
-						common.Throw(w, r, err)
+						common.Throw(w, r, mapError(err))
 						return
 					}
 					author = user.Name

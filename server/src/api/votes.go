@@ -54,7 +54,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to add vote")
 		span.RecordError(err)
 		log.Warnw("unable to add vote", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, err) //cannot use mapError here because it would return a 500 which is not what the test expects
 		return
 	}
 
@@ -103,7 +103,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to remove vote")
 		span.RecordError(err)
 		log.Warnw("unable to remove vote", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -170,7 +170,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get votes")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

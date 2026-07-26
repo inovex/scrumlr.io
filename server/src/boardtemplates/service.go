@@ -2,6 +2,8 @@ package boardtemplates
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -89,6 +91,11 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*BoardTemplate, 
 
 	boardTemplate, err := service.database.Get(ctx, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no board template found")
+			span.RecordError(err)
+			return nil, CreateBoardTemplateError(NotFound, "no board template found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get board template")
 		span.RecordError(err)
 		log.Errorw("unable to get board template", "board", id, "err", err)
@@ -109,6 +116,11 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 
 	templates, err := service.database.GetAll(ctx, user)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no board templates found")
+			span.RecordError(err)
+			return nil, CreateBoardTemplateError(NotFound, "no board templates found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get board templates")
 		span.RecordError(err)
 		log.Errorw("unable to list board templates", "user", user, "err", err)

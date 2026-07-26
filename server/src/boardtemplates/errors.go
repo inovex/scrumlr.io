@@ -6,6 +6,7 @@ type BoardTemplateErrorCategory string
 
 const (
 	Internal BoardTemplateErrorCategory = "INTERNAL"
+	NotFound BoardTemplateErrorCategory = "NOT_FOUND"
 )
 
 type BoardTemplateError struct {

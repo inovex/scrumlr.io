@@ -2,6 +2,7 @@ package boards
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/http"
 	"sort"
@@ -111,6 +112,11 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 
 	board, err := service.database.GetBoard(ctx, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no board found")
+			span.RecordError(err)
+			return nil, CreateBoardError(NotFound, "no board found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
