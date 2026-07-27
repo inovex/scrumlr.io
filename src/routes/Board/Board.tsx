@@ -10,6 +10,7 @@ import _ from "underscore";
 import {Outlet} from "react-router";
 import {leaveBoard} from "store/features";
 import {SnowfallWrapper} from "components/SnowfallWrapper/SnowfallWrapper";
+import {isParticipantModerator} from "utils/participant";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
@@ -60,7 +61,7 @@ export const Board = () => {
     _.isEqual
   );
 
-  const currentUserIsModerator = state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR";
+  const userRole = state.participants?.self?.role || "PARTICIPANT";
 
   useEffect(() => {
     if (!state.board.id) {
@@ -102,7 +103,7 @@ export const Board = () => {
   if (state.board.status === "ready") {
     return (
       <>
-        {currentUserIsModerator && (
+        {isParticipantModerator(userRole) && (
           <Requests
             requests={state.requests.filter((request) => request.status === "PENDING")}
             participantsWithRaisedHand={(state.participants!.others ?? []).filter((p) => p.raisedHand)}
@@ -110,9 +111,9 @@ export const Board = () => {
         )}
         <SnowfallWrapper />
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating} locked={!!state.board.locked}>
+        <BoardComponent userRole={userRole} moderating={state.view.moderating} locked={!!state.board.locked}>
           {state.columns
-            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self?.showHiddenColumns))
+            .filter((column) => column.visible || (isParticipantModerator(userRole) && state.participants?.self?.showHiddenColumns))
             .map((column) => (
               <Column key={column.id} id={column.id} index={column.index} name={column.name} description={column.description} visible={column.visible} color={column.color} />
             ))}

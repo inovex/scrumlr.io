@@ -1,6 +1,6 @@
 import {render} from "testUtils";
 import {ColumnDetails, ColumnDetailsProps} from "components/Column/ColumnDetails/ColumnDetails";
-import {Column, ParticipantWithUser, ParticipantRole} from "store/features";
+import {ParticipantWithUser, ParticipantRole} from "store/features";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";

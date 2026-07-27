@@ -13,6 +13,7 @@ type SessionApi interface {
 	UpdateBoardSessions(w http.ResponseWriter, r *http.Request)
 	BoardParticipantContext(next http.Handler) http.Handler
 	BoardModeratorContext(next http.Handler) http.Handler
+	BoardOwnerContext(next http.Handler) http.Handler
 }
 type Router struct {
 	sessionAPI SessionApi

@@ -51,7 +51,6 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         applyOptimistically: true,
       })
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
   // a group is disabled if any property (stored in properties) is found within the disabledOn array of the group.

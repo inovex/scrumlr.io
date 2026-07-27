@@ -1,7 +1,6 @@
 import {API} from "api";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {mergeTemplateAndColumns} from "components/ColumnsConfigurator/ColumnsConfigurator.utils";
-import {ApplicationState} from "store";
 import {Mock} from "vitest";
 
 const {templates: templatesPreloaded, templateColumns: templatesColumnsPreloaded} = getTestApplicationState();

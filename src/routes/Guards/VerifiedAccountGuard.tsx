@@ -12,10 +12,5 @@ export const VerifiedAccountGuard = ({children, override}: VerifiedAccountGuardP
 
   const isVerified = () => !isAnonymous || override;
 
-  return isVerified() ? (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>{children}</>
-  ) : (
-    <Navigate to="/" />
-  );
+  return isVerified() ? <>{children}</> : <Navigate to="/" />;
 };

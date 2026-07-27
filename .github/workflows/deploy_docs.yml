@@ -12,13 +12,13 @@ jobs:
       id-token: write
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Enable corepack # to enable yarn berry
         run: corepack enable
 
       - name: Install, build, and upload your site
-        uses: withastro/action@b7d53628f8b666036b0238aadb0b984a2a489f26 # v6.1.1
+        uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6.1.2
         with:
           path: docs
 

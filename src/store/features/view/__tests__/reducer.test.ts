@@ -154,7 +154,7 @@ describe("viewReducer", () => {
         getTime() {
           return fixedClientTime;
         }
-      } as any;
+      } as typeof Date;
 
       const serverInfo: ServerInfo = {
         anonymousLoginDisabled: false,

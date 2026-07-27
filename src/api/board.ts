@@ -32,7 +32,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`);
+      throw new Error(`unable to create board`, {cause: error});
     }
   },
   importBoard: async (boardJson: BoardImportData) => {
@@ -52,7 +52,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to import board: ${error}`);
+      throw new Error(`unable to import board`, {cause: error});
     }
   },
 
@@ -78,7 +78,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update board: ${error}`);
+      throw new Error(`unable to update board`, {cause: error});
     }
   },
 
@@ -98,7 +98,7 @@ export const BoardAPI = {
         throw new Error(`delete board request resulted in response status ${response.status}`);
       }
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`);
+      throw new Error(`unable to create board`, {cause: error});
     }
   },
 
@@ -126,7 +126,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`);
+      throw new Error(`unable to create board`, {cause: error});
     }
   },
   setTimer: async (id: string, minutes: number) => {
@@ -143,7 +143,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update board timer: ${error}`);
+      throw new Error(`unable to update board timer`, {cause: error});
     }
   },
   deleteTimer: async (id: string) => {
@@ -159,7 +159,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to delete board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to delete board timer: ${error}`);
+      throw new Error(`unable to delete board timer`, {cause: error});
     }
   },
   incrementTimer: async (id: string) => {
@@ -175,7 +175,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to increment board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to increment board timer: ${error}`);
+      throw new Error(`unable to increment board timer`, {cause: error});
     }
   },
 };

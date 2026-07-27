@@ -80,7 +80,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({
   };
 
   return createPortal(
-    <div className={classNames("portal", className)} onClick={handleBackgroundClick} role="dialog" {...otherProps}>
+    <div className={classNames("portal", className)} onClick={handleBackgroundClick} role="presentation" tabIndex={-1} {...otherProps}>
       <FocusLock autoFocus={false} returnFocus>
         <div
           className={classNames(

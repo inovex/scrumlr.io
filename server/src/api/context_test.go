@@ -2,15 +2,18 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 
@@ -128,5 +131,137 @@ func TestAnonymousBoardCreationContext_UserNotFound(t *testing.T) {
 
 	// Should return internal server error when user is not found
 	assert.Equal(t, http.StatusInternalServerError, rr.Code)
+	assert.False(t, nextCalled)
+}
+
+func TestBoardOwnerContext_Exists(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	sessionMock := sessions.NewMockSessionService(t)
+	sessionMock.EXPECT().OwnerSessionExists(mock.Anything, boardId, userId).
+		Return(true, nil)
+
+	server := &Server{
+		sessions: sessionMock,
+	}
+
+	req := httptest.NewRequest("GET", fmt.Sprintf("/boards/%s", boardId), nil)
+	ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userId)
+	chiCtx := chi.NewRouteContext()
+	chiCtx.URLParams.Add("id", boardId.String())
+	ctx = context.WithValue(ctx, chi.RouteCtxKey, chiCtx)
+	req = req.WithContext(ctx)
+
+	rr := httptest.NewRecorder()
+
+	nextCalled := false
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		nextCalled = true
+	})
+
+	handler := server.BoardOwnerContext(next)
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.True(t, nextCalled)
+}
+
+func TestBoardOwnerContext_DoesNotExists(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	sessionMock := sessions.NewMockSessionService(t)
+	sessionMock.EXPECT().OwnerSessionExists(mock.Anything, boardId, userId).
+		Return(false, nil)
+
+	server := &Server{
+		sessions: sessionMock,
+	}
+
+	req := httptest.NewRequest("GET", fmt.Sprintf("/boards/%s", boardId), nil)
+	ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userId)
+	chiCtx := chi.NewRouteContext()
+	chiCtx.URLParams.Add("id", boardId.String())
+	ctx = context.WithValue(ctx, chi.RouteCtxKey, chiCtx)
+	req = req.WithContext(ctx)
+
+	rr := httptest.NewRecorder()
+
+	nextCalled := false
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		nextCalled = true
+	})
+
+	handler := server.BoardOwnerContext(next)
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusForbidden, rr.Code)
+	assert.False(t, nextCalled)
+}
+
+func TestBoardModeratorContext_Exists(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	sessionMock := sessions.NewMockSessionService(t)
+	sessionMock.EXPECT().ModeratorSessionExists(mock.Anything, boardId, userId).
+		Return(true, nil)
+
+	server := &Server{
+		sessions: sessionMock,
+	}
+
+	req := httptest.NewRequest("GET", fmt.Sprintf("/boards/%s", boardId), nil)
+	ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userId)
+	chiCtx := chi.NewRouteContext()
+	chiCtx.URLParams.Add("id", boardId.String())
+	ctx = context.WithValue(ctx, chi.RouteCtxKey, chiCtx)
+	req = req.WithContext(ctx)
+
+	rr := httptest.NewRecorder()
+
+	nextCalled := false
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		nextCalled = true
+	})
+
+	handler := server.BoardModeratorContext(next)
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.True(t, nextCalled)
+}
+
+func TestBoardModeratorContext_DoesNotExists(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	sessionMock := sessions.NewMockSessionService(t)
+	sessionMock.EXPECT().ModeratorSessionExists(mock.Anything, boardId, userId).
+		Return(false, nil)
+
+	server := &Server{
+		sessions: sessionMock,
+	}
+
+	req := httptest.NewRequest("GET", fmt.Sprintf("/boards/%s", boardId), nil)
+	ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userId)
+	chiCtx := chi.NewRouteContext()
+	chiCtx.URLParams.Add("id", boardId.String())
+	ctx = context.WithValue(ctx, chi.RouteCtxKey, chiCtx)
+	req = req.WithContext(ctx)
+
+	rr := httptest.NewRecorder()
+
+	nextCalled := false
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		nextCalled = true
+	})
+
+	handler := server.BoardModeratorContext(next)
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusForbidden, rr.Code)
 	assert.False(t, nextCalled)
 }

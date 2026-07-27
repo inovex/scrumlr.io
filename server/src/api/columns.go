@@ -15,7 +15,23 @@ import (
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
-// createColumn creates a new column
+// Create a new column for a board
+//
+//	@Summary		Create a new column for a board
+//	@Description	Create a new column for a board
+//	@Tags			columns
+//	@Accept			json
+//	@Param			Cookie	header	string					true	"jwt token to authenticate"
+//	@Param			boardId	path	string					true	"id of the board"
+//	@Param			column	body	columns.ColumnRequest	true	"column to create"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created column"
+//	@Success		201	{object}	columns.Column
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/columns [post]
 func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.create")
 	defer span.End()
@@ -48,7 +64,21 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, column)
 }
 
-// deleteColumn deletes a column
+// Delete a column for a board
+//
+//	@Summary		Delete a column for a board
+//	@Description	Delete a column for a board
+//	@Tags			columns
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the column to delete"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/columns/{id} [delete]
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.delete")
 	defer span.End()
@@ -70,7 +100,23 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-// updateColumn updates a column
+// Update a column for a board
+//
+//	@Summary		Update a column for a board
+//	@Description	Update a column for a board
+//	@Tags			columns
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			id		path	string						true	"id of the column to update"
+//	@Param			column	body	columns.ColumnUpdateRequest	true	"values to update the column"
+//	@Produce		json
+//	@Success		200	{object}	columns.Column
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/columns/{id} [put]
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.update")
 	defer span.End()
@@ -104,7 +150,22 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, column)
 }
 
-// getColumn get a column
+// Get a column for a board
+//
+//	@Summary		Get a column for a board
+//	@Description	Get a column for a board
+//	@Tags			columns
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the column"
+//	@Produce		json
+//	@Success		200	{object}	columns.Column
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/columns/{id} [get]
 func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get")
 	defer span.End()
@@ -126,7 +187,21 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, column)
 }
 
-// getColumns get all columns
+// Get all columns for a board
+//
+//	@Summary		Get all columns for a board
+//	@Description	Get all columns for a board
+//	@Tags			columns
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Produce		json
+//	@Success		200	{object}	[]columns.Column
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/columns [get]
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get.all")
 	defer span.End()

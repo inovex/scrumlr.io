@@ -27,14 +27,14 @@ jobs:
         id: install
 
       - name: Set up Kubernetes Auth
-        uses: azure/k8s-set-context@89b837d75b40a7bd2ddafde837473c212db8b313 # v5.0.0
+        uses: azure/k8s-set-context@8698eba2499e9012f0d5085f8798077cce4bc526 # v5.0.1
         with:
           method: service-account
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
           k8s-url: https://kubernetes.default.svc
 
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Replace template variables
         run: |
@@ -51,7 +51,7 @@ jobs:
           cat k8s/deployment.yaml
 
       - name: Deploy to dev cluster
-        uses: Azure/k8s-deploy@c7ebd0d5f39477a23f1b5dea0f52e6db04adf28e # v6.0.0
+        uses: Azure/k8s-deploy@51ca02a8b7225fbd0924aac359c5b336a5f1e5b4 # v7.0.0
         with:
           namespace: scrumlr-dev-deployments
           force: true

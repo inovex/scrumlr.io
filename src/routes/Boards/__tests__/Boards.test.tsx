@@ -48,7 +48,7 @@ describe("Boards", () => {
   });
 
   it("does not show import button on sessions view", () => {
-    mockLocation.pathname = "/boards/sessions";
+    mockLocation.pathname = "/boards/history";
     renderBoards();
     const importBtn = screen.getByRole("button", {name: /Import JSON/});
     expect(importBtn).toBeInTheDocument();

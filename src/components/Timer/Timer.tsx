@@ -77,7 +77,6 @@ export const Timer = (props: TimerProps) => {
     }
 
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playTimesUp]);
 
   useEffect(() => {
@@ -91,14 +90,12 @@ export const Timer = (props: TimerProps) => {
         setTimesUpShouldPlay(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
   useEffect(() => {
     if (isModerator && allParticipantsReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.info({title: t("Toast.allParticipantsDone"), autoClose: TOAST_TIMER_DEFAULT});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allParticipantsReady, isModerator]);
 
   return (

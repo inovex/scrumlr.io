@@ -95,7 +95,7 @@ export const ParticipantsAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update participant: ${error}`);
+      throw new Error(`unable to update participant`, {cause: error});
     }
   },
   /**
@@ -118,7 +118,7 @@ export const ParticipantsAPI = {
 
       throw new Error(`unable to update ready states with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update ready states: ${error}`);
+      throw new Error(`unable to update ready states`, {cause: error});
     }
   },
 };

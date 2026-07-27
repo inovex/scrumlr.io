@@ -45,7 +45,7 @@ export function useStripeOffset<RefElement extends HTMLElement>({
   const [offset, setOffset] = useState(0);
 
   const updateOffset = useCallback(() => {
-    if (!stripedElementRef.current || typeof window === undefined) return;
+    if (!stripedElementRef.current || window === undefined) return;
 
     // find the origin of the gradient on the page, independent of scroll of parent elements
     let el: HTMLElement | null = stripedElementRef.current;

@@ -32,6 +32,7 @@ type SessionDatabase interface {
 	UpdateAll(ctx context.Context, update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)
 	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 	ModeratorExists(ctx context.Context, board, user uuid.UUID) (bool, error)
+	OwnerExists(ctx context.Context, board, user uuid.UUID) (bool, error)
 	IsParticipantBanned(ctx context.Context, board, user uuid.UUID) (bool, error)
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
@@ -145,6 +146,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		ShowHiddenColumns: body.ShowHiddenColumns,
 		Role:              body.Role,
 		Banned:            body.Banned,
+		Favourite:         body.Favourite,
 	})
 
 	if err != nil {
@@ -333,6 +335,18 @@ func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, 
 	)
 
 	return service.database.ModeratorExists(ctx, boardID, userID)
+}
+
+func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.exists.owner")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.sessions.service.exists.owner.board", boardID.String()),
+		attribute.String("scrumlr.sessions.service.exists.owner.user", userID.String()),
+	)
+
+	return service.database.OwnerExists(ctx, boardID, userID)
 }
 
 func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {

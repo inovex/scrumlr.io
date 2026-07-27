@@ -10,7 +10,7 @@ import {Timer as TimerUtils} from "../timer";
 export const useTimer = (timerEnd?: Date) => {
   const [timerExpired, setTimerExpired] = useState(false);
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
     if (timerEnd === undefined) {
       return undefined;
     }

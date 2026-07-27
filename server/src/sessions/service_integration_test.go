@@ -279,7 +279,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 	assert.True(t, exists)
 }
 
-func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
+func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists_Owner() {
 	t := suite.T()
 	ctx := context.Background()
 
@@ -290,6 +290,45 @@ func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 
 	suite.Nil(err)
 	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists_Moderator() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.users["Friend"].ID
+
+	exists, err := suite.sessionService.ModeratorSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_OwnerExists() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.baseData.Users["Stan"].ID
+
+	exists, err := suite.sessionService.OwnerSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_OwnerExists_Moderator() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.users["Friend"].ID
+
+	exists, err := suite.sessionService.OwnerSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.False(t, exists)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {

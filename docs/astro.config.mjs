@@ -1,12 +1,19 @@
 import {defineConfig} from "astro/config";
 import starlight from "@astrojs/starlight";
+import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
-// TODO Later on replace site with docs.scrumlr.io
 export default defineConfig({
-  site: "https://inovex.github.io",
-  // base: "/scrumlr.io/",
+  site: "https://docs.scrumlr.io",
+  base: "/",
   integrations: [
+    mermaid({
+      theme: "default",
+      autoTheme: true,
+      mermaidConfig: {
+        startOnLoad: false,
+      }
+    }),
     starlight({
       title: "Scrumlr Docs",
       customCss: [
@@ -17,17 +24,36 @@ export default defineConfig({
       sidebar: [
         {
           label: "Getting Started",
-          autogenerate: {directory: "getting-started"},
+          items: [
+            {
+              autogenerate: {
+                directory: "getting-started",
+              },
+            },
+          ]
+
         },
         {
           label: "Development",
-          autogenerate: {
-            directory: "dev",
-          },
+          items: [
+            {
+              autogenerate: {
+               directory: "dev",
+              }
+            },
+          ]
+
         },
         {
           label: "Self-Hosted",
-          autogenerate: {directory: "self-hosting"},
+          items: [
+            {
+              autogenerate: {
+                directory: "self-hosting",
+              },
+            },
+          ]
+
         },
       ],
     }),

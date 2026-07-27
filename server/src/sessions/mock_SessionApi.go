@@ -90,6 +90,59 @@ func (_c *MockSessionApi_BoardModeratorContext_Call) RunAndReturn(run func(next 
 	return _c
 }
 
+// BoardOwnerContext provides a mock function for the type MockSessionApi
+func (_mock *MockSessionApi) BoardOwnerContext(next http.Handler) http.Handler {
+	ret := _mock.Called(next)
+
+	if len(ret) == 0 {
+		panic("no return value specified for BoardOwnerContext")
+	}
+
+	var r0 http.Handler
+	if returnFunc, ok := ret.Get(0).(func(http.Handler) http.Handler); ok {
+		r0 = returnFunc(next)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(http.Handler)
+		}
+	}
+	return r0
+}
+
+// MockSessionApi_BoardOwnerContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BoardOwnerContext'
+type MockSessionApi_BoardOwnerContext_Call struct {
+	*mock.Call
+}
+
+// BoardOwnerContext is a helper method to define mock.On call
+//   - next http.Handler
+func (_e *MockSessionApi_Expecter) BoardOwnerContext(next any) *MockSessionApi_BoardOwnerContext_Call {
+	return &MockSessionApi_BoardOwnerContext_Call{Call: _e.mock.On("BoardOwnerContext", next)}
+}
+
+func (_c *MockSessionApi_BoardOwnerContext_Call) Run(run func(next http.Handler)) *MockSessionApi_BoardOwnerContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.Handler
+		if args[0] != nil {
+			arg0 = args[0].(http.Handler)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionApi_BoardOwnerContext_Call) Return(handler http.Handler) *MockSessionApi_BoardOwnerContext_Call {
+	_c.Call.Return(handler)
+	return _c
+}
+
+func (_c *MockSessionApi_BoardOwnerContext_Call) RunAndReturn(run func(next http.Handler) http.Handler) *MockSessionApi_BoardOwnerContext_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // BoardParticipantContext provides a mock function for the type MockSessionApi
 func (_mock *MockSessionApi) BoardParticipantContext(next http.Handler) http.Handler {
 	ret := _mock.Called(next)

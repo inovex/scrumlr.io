@@ -52,7 +52,7 @@ export const TimerDialog = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setCustomTime((prev: number) => Math.max(--prev, 1));
+              setCustomTime((prev: number) => Math.max(prev - 1, 1));
             }}
             className="timer-dialog__time-button"
             data-testid="timer-dialog__minus-button"
@@ -64,7 +64,7 @@ export const TimerDialog = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setCustomTime((prev: number) => Math.min(++prev, 59));
+              setCustomTime((prev: number) => Math.min(prev + 1, 59));
             }}
             className="timer-dialog__time-button"
             data-testid="timer-dialog__plus-button"

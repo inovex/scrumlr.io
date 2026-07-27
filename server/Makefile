@@ -20,6 +20,12 @@ mockery: ## Create all mocks
 	cd src && mockery
 
 .ONESHELL:
+swagger: ## Create the open api docs
+	cd src
+	swag fmt
+	swag init -o swagger --parseDependency
+
+.ONESHELL:
 test: ## Run the go tests
 	cd src
 	go test ./... -cover -coverprofile=coverage.txt

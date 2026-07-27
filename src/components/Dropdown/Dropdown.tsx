@@ -26,10 +26,9 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   // active refers to the option on the very top
   // TODO focus lock (maybe the same way as with note reactions) update: do this with #4917
   const renderDropdownOption = (option: DropdownOption<K>, active: boolean) => (
-    <div
+    <button
       className={classNames("dropdown__option", {"dropdown__option--active": active})}
       key={String(option.key)}
-      role="button"
       tabIndex={0} // TODO check sonarQ when we use this
       onClick={active ? props.onToggleMenu : () => props.onSelect(option.key)}
     >
@@ -45,7 +44,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
           <ArrowIcon />
         </div>
       )}
-    </div>
+    </button>
   );
 
   return (

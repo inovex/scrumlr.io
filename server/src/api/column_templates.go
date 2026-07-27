@@ -15,6 +15,20 @@ import (
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
+// Create a new column template for a board template
+//
+//	@Summary		Create a column template for a board template
+//	@Description	Create a column template for an existing board template
+//	@Tags			column templates
+//	@Accept			json
+//	@Param			Cookie			header	string									true	"jwt token to authenticate"
+//	@Param			boardid			path	string									true	"id of the board template"
+//	@Param			columntemplate	body	columntemplates.ColumnTemplateRequest	true	"column template to create"
+//	@Produce		json
+//	@Success		201	{object}	columntemplates.ColumnTemplate
+//	@Failure		400	{object}	common.APIError
+//	@Failure		429
+//	@Router			/templates/{boardid}/columns [post]
 func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.create")
 	defer span.End()
@@ -47,6 +61,21 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, tColumn)
 }
 
+// Get a column template from a board template
+//
+//	@Summary		Get a column template from a board template
+//	@Description	Get a column template from a board template
+//	@Tags			column templates
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardid	path	string	true	"id of the board template"
+//	@Param			id		path	string	true	"id of the column template"
+//	@Produce		json
+//	@Success		200	{object}	columntemplates.ColumnTemplate
+//	@Failure		400	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Router			/templates/{boardid}/columns/{id} [get]
 func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.get")
 	defer span.End()
@@ -68,6 +97,20 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, columTemplate)
 }
 
+// Get all column templates from a board template
+//
+//	@Summary		Get all column templates from a board template
+//	@Description	Get all column templates from a board template
+//	@Tags			column templates
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardid	path	string	true	"id of the board template"
+//	@Produce		json
+//	@Success		200	{object}	[]columntemplates.ColumnTemplate
+//	@Failure		400	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Router			/templates/{boardid}/columns [get]
 func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.get.all")
 	defer span.End()
@@ -88,6 +131,21 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, columTemplates)
 }
 
+// Update a column template from a board template
+//
+//	@Summary		Update a column template from a board template
+//	@Description	Update a column template from a board template
+//	@Tags			column templates
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardid	path	string	true	"id of the board template"
+//	@Param			id		path	string	true	"id of the column template to update"
+//	@Produce		json
+//	@Success		200	{object}	columntemplates.ColumnTemplate
+//	@Failure		400	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Router			/templates/{boardid}/columns/{id} [put]
 func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.update")
 	defer span.End()
@@ -121,6 +179,21 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, tColumn)
 }
 
+// Delete a column template from a board template
+//
+//	@Summary		Delete a column template from a board template
+//	@Description	Delete a column template from a board template
+//	@Tags			column templates
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardid	path	string	true	"id of the board template"
+//	@Param			id		path	string	true	"id of the column template to delete"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Router			/templates/{boardid}/columns/{id} [delete]
 func (s *Server) deleteColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.column_templates.api.delete")
 	defer span.End()
