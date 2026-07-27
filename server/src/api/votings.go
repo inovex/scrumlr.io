@@ -55,7 +55,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create voting")
 		span.RecordError(err)
-		common.Throw(w, r, err) //cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/votings/%s", board, voting.ID)))

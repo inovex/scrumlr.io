@@ -57,7 +57,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to create note")
 		span.RecordError(err)
 		log.Warnw("unable to create note", "err", err)
-		common.Throw(w, r, err) //cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/notes/%s", board, note.ID)))
@@ -93,7 +93,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get node")
 		span.RecordError(err)
 		log.Warnw("unable to get note", "err", err)
-		common.Throw(w, r, err) // cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -178,7 +178,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to update note")
 		span.RecordError(err)
 		log.Warnw("unable to update node", "note", note, "err", err)
-		common.Throw(w, r, err) // cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -227,7 +227,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to delete note")
 		span.RecordError(err)
 		log.Warnw("unable to delete node", "note", note, "err", err)
-		common.Throw(w, r, err) // cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

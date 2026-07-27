@@ -119,7 +119,7 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "no board templates found")
 			span.RecordError(err)
-			return nil, CreateBoardTemplateError(NotFound, "no board templates found", err)
+			return []*BoardTemplateFull{}, nil // do we need this distinction? look at query type
 		}
 		span.SetStatus(codes.Error, "failed to get board templates")
 		span.RecordError(err)

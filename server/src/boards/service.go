@@ -138,7 +138,12 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 
 	boards, err := service.database.GetBoards(ctx, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no boards found")
+			span.RecordError(err)
+			return nil, CreateBoardError(NotFound, "no boards found", err)
+		}
+		span.SetStatus(codes.Error, "failed to get boards")
 		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
 		return nil, CreateBoardError(Internal, "unable to get boards of user", err)

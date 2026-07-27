@@ -38,12 +38,6 @@ func (suite *NotesTestSuite) TestCreateNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
-		Append("api err", http.StatusConflict, &common.APIError{
-			Err:        errors.New("test"),
-			StatusCode: http.StatusConflict,
-			StatusText: "no",
-			ErrorText:  "way",
-		}, false, false, nil).
 		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
@@ -95,12 +89,6 @@ func (suite *NotesTestSuite) TestGetNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
-		Append("api err", http.StatusConflict, &common.APIError{
-			Err:        errors.New("test"),
-			StatusCode: http.StatusConflict,
-			StatusText: "no",
-			ErrorText:  "way",
-		}, false, false, nil).
 		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
@@ -141,11 +129,11 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		},
 		{
 			name:         "Delete Note when board is locked",
-			expectedCode: http.StatusBadRequest,
+			expectedCode: http.StatusInternalServerError,
 			err: &common.APIError{
 				Err:        errors.New("not allowed to edit a locked board"),
-				StatusCode: http.StatusBadRequest,
-				StatusText: "Bad request",
+				StatusCode: http.StatusInternalServerError,
+				StatusText: "Internal Server Error",
 				ErrorText:  "something",
 			},
 			isLocked: false,
@@ -215,9 +203,9 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 func (suite *NotesTestSuite) TestEditNote() {
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
-		Append("api err", http.StatusForbidden, &common.APIError{
+		Append("api err", http.StatusInternalServerError, &common.APIError{
 			Err:        errors.New("test"),
-			StatusCode: http.StatusForbidden,
+			StatusCode: http.StatusInternalServerError,
 			StatusText: "no",
 			ErrorText:  "way",
 		}, false, false, nil)

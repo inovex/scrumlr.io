@@ -54,7 +54,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to add vote")
 		span.RecordError(err)
 		log.Warnw("unable to add vote", "err", err)
-		common.Throw(w, r, err) //cannot use mapError here because it would return a 500 which is not what the test expects
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

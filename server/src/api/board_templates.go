@@ -82,6 +82,8 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	templateId := ctx.Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	template, err := s.boardTemplates.Get(ctx, templateId)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board template")
+		span.RecordError(err)
 		log.Errorw("unable to get board template", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -112,6 +114,8 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 
 	templates, err := s.boardTemplates.GetAll(ctx, user)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board templates")
+		span.RecordError(err)
 		log.Errorw("unable to get board templates for that user", "user", user, "err", err)
 		common.Throw(w, r, mapError(err))
 		return

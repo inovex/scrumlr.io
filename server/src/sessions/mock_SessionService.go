@@ -757,7 +757,7 @@ type MockSessionService_OwnerSessionExists_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) OwnerSessionExists(ctx any, boardID any, userID any) *MockSessionService_OwnerSessionExists_Call {
+func (_e *MockSessionService_Expecter) OwnerSessionExists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_OwnerSessionExists_Call {
 	return &MockSessionService_OwnerSessionExists_Call{Call: _e.mock.On("OwnerSessionExists", ctx, boardID, userID)}
 }
 

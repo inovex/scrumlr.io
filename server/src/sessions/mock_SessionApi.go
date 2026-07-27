@@ -116,7 +116,7 @@ type MockSessionApi_BoardOwnerContext_Call struct {
 
 // BoardOwnerContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockSessionApi_Expecter) BoardOwnerContext(next any) *MockSessionApi_BoardOwnerContext_Call {
+func (_e *MockSessionApi_Expecter) BoardOwnerContext(next interface{}) *MockSessionApi_BoardOwnerContext_Call {
 	return &MockSessionApi_BoardOwnerContext_Call{Call: _e.mock.On("BoardOwnerContext", next)}
 }
 

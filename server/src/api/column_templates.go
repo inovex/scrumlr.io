@@ -89,7 +89,7 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get column template")
 		span.RecordError(err)
 		log.Errorw("Unable to get column template", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
