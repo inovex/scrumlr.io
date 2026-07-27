@@ -47,7 +47,7 @@ spec:
         - name: landing-page
           securityContext:
             allowPrivilegeEscalation: false
-          image: ghcr.io/inovex/scrumlr.io-landing-page/image:sha-3db9234
+          image: ghcr.io/inovex/scrumlr.io-landing-page/image:sha-8a061a9
           resources:
             requests:
               cpu: "200m"
@@ -82,7 +82,7 @@ spec:
         - name: frontend
           securityContext:
             allowPrivilegeEscalation: false
-          image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.7.1
+          image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:5.2.1
           resources:
             requests:
               cpu: "200m"
@@ -102,7 +102,7 @@ spec:
           ports:
             - containerPort: 80
 ---
-apiVersion: traefik.io/v1alpha1 
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   namespace: scrumlr
@@ -138,7 +138,7 @@ spec:
   tls:
     secretName: scrumlr-cert
 ---
-apiVersion: traefik.io/v1alpha1 
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   namespace: scrumlr
@@ -160,7 +160,7 @@ spec:
 ---
 # redirect middleware
 
-apiVersion: traefik.io/v1alpha1 
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   namespace: scrumlr
@@ -171,7 +171,7 @@ spec:
     permanent: true
 ---
 # redirect www to non-www
-apiVersion: traefik.io/v1alpha1 
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: redirect-to-nonwww
@@ -183,7 +183,7 @@ spec:
     permanent: true
 ---
 # redirect to https
-apiVersion: traefik.io/v1alpha1 
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   namespace: scrumlr
