@@ -44,7 +44,6 @@ type Board struct {
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
 
 	// The id of a note to share with other users.
-	// FIXME omitempty works only with nil in combination with pointers
 	SharedNote uuid.NullUUID `json:"sharedNote"`
 
 	ShowVoting uuid.NullUUID `json:"showVoting"`
