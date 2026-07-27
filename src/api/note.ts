@@ -28,7 +28,7 @@ export const NoteAPI = {
 
       throw new Error(`create note request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create note with error: ${error}`);
+      throw new Error(`unable to create note`, {cause: error});
     }
   },
 
@@ -56,7 +56,7 @@ export const NoteAPI = {
 
       throw new Error(`delete note request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to delete note with error: ${error}`);
+      throw new Error(`unable to delete note`, {cause: error});
     }
   },
 
@@ -79,7 +79,7 @@ export const NoteAPI = {
 
       throw new Error(`unable to update note with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update note: ${error}`);
+      throw new Error(`unable to update note`, {cause: error});
     }
   },
 };

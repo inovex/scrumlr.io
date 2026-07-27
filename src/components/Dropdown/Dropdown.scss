@@ -18,6 +18,7 @@
 }
 
 .dropdown__option {
+  all: unset;
   display: flex;
   flex-direction: row;
   gap: styles.$spacing--base;

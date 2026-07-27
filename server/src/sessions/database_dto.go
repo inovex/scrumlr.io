@@ -20,6 +20,7 @@ type DatabaseBoardSession struct {
 	RaisedHand        bool
 	Role              common.SessionRole
 	Banned            bool
+	Favourite         bool
 	AccountType       common.AccountType
 	CreatedAt         time.Time
 }
@@ -41,4 +42,5 @@ type DatabaseBoardSessionUpdate struct {
 	RaisedHand        *bool
 	Role              *common.SessionRole
 	Banned            *bool
+	Favourite         *bool
 }

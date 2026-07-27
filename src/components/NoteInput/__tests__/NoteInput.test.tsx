@@ -1,12 +1,12 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import {NoteInput} from "components/NoteInput";
 import {I18nextProvider} from "react-i18next";
-import i18nTest from "i18nTest";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
-import i18n from "i18nTest";
 import getTestParticipant from "utils/test/getTestParticipant";
 import getTestApplicationState from "utils/test/getTestApplicationState";
+import i18nTest from "i18nTest";
+import i18n from "i18next";
 
 vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
@@ -58,7 +58,7 @@ describe("Note Input", () => {
 
   // why is this so over-complicated and weird?? TODO fix this mess
   it.skip("should be disabled if the board is locked and the client is participant", () => {
-    const store = getTestStore({
+    const _store = getTestStore({
       board: {
         status: "ready",
         data: {
@@ -78,7 +78,7 @@ describe("Note Input", () => {
       },
     });
 
-    const {container} = createNoteInput("test-columns-id-1");
+    createNoteInput("test-columns-id-1");
     // expect(container.get(i18n.t("NoteInput.placeholder"))).toBeDisabled();
     // expect(container.queryByTitle(i18n.t("NoteInput.create"))).toBeDisabled();
   });

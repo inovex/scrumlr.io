@@ -44,6 +44,10 @@
     line-height: styles.$line-height--medium;
   }
 
+  &__element-button {
+    all: unset;
+  }
+
   &__element:hover,
   &__element--focus {
     background-color: rgba(var(--accent-color--light-rgb), 0.2);

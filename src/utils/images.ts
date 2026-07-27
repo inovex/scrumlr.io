@@ -27,7 +27,7 @@ export const isImageUrl = async (url: string): Promise<boolean> => {
     const response = await fetch(addProtocol(url));
     const contentType = response.headers.get("Content-Type");
     return contentType !== null && contentType.startsWith("image/");
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 };

@@ -398,3 +398,53 @@ func Test_BoardModeratorContext_DoesNotExists(t *testing.T) {
 
 	assert.Equal(t, http.StatusNotFound, rr.Result().StatusCode)
 }
+
+func Test_BoardOwnerContext_Exists(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	sessionServiceMock := NewMockSessionService(t)
+	sessionApi := NewSessionApi(sessionServiceMock)
+	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
+		AddToContext(identifiers.UserIdentifier, userID)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("id", boardID.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	rr := httptest.NewRecorder()
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	sessionServiceMock.EXPECT().OwnerSessionExists(mock.Anything, boardID, userID).Return(true, nil)
+
+	sessionApi.BoardOwnerContext(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
+}
+
+func Test_BoardOwnerContext_DoesNotExists(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	sessionServiceMock := NewMockSessionService(t)
+	sessionApi := NewSessionApi(sessionServiceMock)
+	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
+		AddToContext(identifiers.UserIdentifier, userID)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("id", boardID.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	rr := httptest.NewRecorder()
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	sessionServiceMock.EXPECT().OwnerSessionExists(mock.Anything, boardID, userID).Return(false, nil)
+
+	sessionApi.BoardOwnerContext(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusNotFound, rr.Result().StatusCode)
+}

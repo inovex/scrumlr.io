@@ -94,11 +94,31 @@
       }
     }
   },
-  "Sessions": {
+  "History": {
     "switchTitle": "Histoire",
-    "title": "Vos Boards",
-    "savedBoards": "Vos sessions",
-    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés."
+    "title": "Gérer tes tableaux",
+    "savedBoards": "Dernièrement utilisés",
+    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés.",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} colonne",
+        "amountColumns_other": "{{count}} colonnes",
+        "amountParticipants_one": "{{count}} participant",
+        "amountParticipants_other": "{{count}} participants",
+        "amountNotes_one": "{{count}} notes",
+        "amountNotes_other": "{{count}} notes",
+        "lastUpdated": "Modifié: {{date}}"
+      },
+      "Menu": {
+        "delete": "Supprimer",
+        "copyLink": "Copier le lien",
+        "createTemplate": "Créer un modèle",
+        "edit": "Modifier",
+        "close": "Fermer"
+      },
+      "readOnly": "Verrouillé",
+      "openBoardButton": "Ouvrir la session"
+    }
   },
   "CreateBoard": {
     "title": "Créer un nouveau tableau",
@@ -596,6 +616,16 @@
     "PATTERN_MISMATCH": "non-concordance de modèle",
     "TYPE_MISMATCH": "non-concordance de type",
     "RANGE": "plage"
+  },
+  "TimeDifference": {
+    "now": "À l'instant",
+    "minutes_one": "Il y a {{count}} minute",
+    "minutes_other": "Il y a {{count}} minutes",
+    "hours_one": "Il y a {{count}} heure",
+    "hours_other": "Il y a {{count}} heures",
+    "days_one": "Il y a {{count}} jour",
+    "days_other": "Il y a {{count}} jours",
+    "yesterday": "Hier"
   },
   "Avatar": {
     "random": "Générer un avatar aléatoire",

@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -52,6 +53,7 @@ type Board struct {
 	Salt       *string `json:"-"`
 
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	CreatedAt      time.Time `json:"createdAt"`
 }
 
 func (b *Board) From(board DatabaseBoard) *Board {
@@ -71,6 +73,7 @@ func (b *Board) From(board DatabaseBoard) *Board {
 	b.Passphrase = board.Passphrase
 	b.Salt = board.Salt
 	b.LastModifiedAt = board.LastModifiedAt
+	b.CreatedAt = board.CreatedAt
 	return b
 }
 
@@ -143,11 +146,21 @@ type BoardUpdateRequest struct {
 	ID uuid.UUID `json:"-"`
 }
 
+// JoinBoardRequest represents the request to create a new participant of a board.
+type JoinBoardRequest struct {
+
+	// The passphrase challenge if the access policy is 'BY_PASSPHRASE'.
+	Passphrase string `json:"passphrase"`
+}
+
 type BoardOverview struct {
-	Board        *Board    `json:"board"`
-	Columns      int       `json:"columnsNumber"`
-	CreatedAt    time.Time `json:"createdAt"`
-	Participants int       `json:"participants"`
+	Board        *Board             `json:"board"`
+	Columns      []*columns.Column  `json:"columns"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	Participants int                `json:"participants"`
+	Role         common.SessionRole `json:"role"`
+	Favourite    bool               `json:"favourite"`
+	NoteCount    int                `json:"noteCount"`
 }
 
 type ImportBoardRequest struct {

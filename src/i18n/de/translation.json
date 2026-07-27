@@ -95,11 +95,31 @@
       }
     }
   },
-  "Sessions": {
+  "History": {
     "switchTitle": "Historie",
-    "title": "Deine Boards",
-    "savedBoards": "Deine Boards",
-    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden."
+    "title": "Verwalte deine Boards",
+    "savedBoards": "Zuletzt verwendet",
+    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden.",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} Spalte",
+        "amountColumns_other": "{{count}} Spalten",
+        "amountParticipants_one": "{{count}} Teilnehmer",
+        "amountParticipants_other": "{{count}} Teilnehmer",
+        "amountNotes_one": "{{count}} Kärtchen",
+        "amountNotes_other": "{{count}} Kärtchen",
+        "lastUpdated": "Zuletzt bearbeitet: {{date}}"
+      },
+      "Menu": {
+        "delete": "Löschen",
+        "copyLink": "Link kopieren",
+        "createTemplate": "Vorlage erstellen",
+        "edit": "Bearbeiten",
+        "close": "Schließen"
+      },
+      "readOnly": "Schreibgeschützt",
+      "openBoardButton": "Session öffnen"
+    }
   },
   "CreateBoard": {
     "title": "Ein neues Board erstellen",
@@ -597,6 +617,16 @@
     "PATTERN_MISMATCH": "pattern mismatch",
     "TYPE_MISMATCH": "type mismatch",
     "RANGE": "range"
+  },
+  "TimeDifference": {
+    "now": "Gerade eben",
+    "minutes_one": "vor {{count}} Minute",
+    "minutes_other": "vor {{count}} Minuten",
+    "hours_one": "vor {{count}} Stunde",
+    "hours_other": "vor {{count}} Stunden",
+    "days_one": "vor {{count}} Tag",
+    "days_other": "vor {{count}} Tagen",
+    "yesterday": "Gestern"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",

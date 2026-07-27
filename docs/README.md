@@ -1,20 +1,35 @@
-# Starlight Starter Kit: Basics
+# Scrumlr docs
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+This folder contains the documentation site for Scrumlr.
+It is build using [astro starlight](https://starlight.astro.build) and yarn
 
+## Local development
+
+For local development first run
+
+```bash
+yarn install
 ```
-npm create astro@latest -- --template starlight
+
+This will install all required dependencies.
+After that you can start the development server with
+
+```bash
+yarn dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/starlight/tree/main/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/starlight/tree/main/examples/basics)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwithastro%2Fstarlight%2Ftree%2Fmain%2Fexamples%2Fbasics&project-name=my-starlight-docs&repository-name=my-starlight-docs)
+To access the development server go to your browser and enter [http://localhost:4321](http://localhost:4321).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+For more commands check the [package.json](./package.json) file or read the documentation for astro.
 
-## 🚀 Project Structure
+## Astro Starlight
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+Starlight looks for Markdown files (`.md` or `.mdx`) in the `src/content/docs/` directory.
+Each file is exposed as a route based on its file name.
+Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+Static assets, like favicons, can be placed in the `public/` directory.
+
+That leaves us with the following structure
 
 ```
 .
@@ -30,25 +45,20 @@ Inside of your Astro + Starlight project, you'll see the following folders and f
 └── tsconfig.json
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+For more information read the [astro starlight documentation](https://starlight.astro.build/getting-started/)
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+## Create new pages
 
-Static assets, like favicons, can be placed in the `public/` directory.
+To create a new page add a Markdown file (`.md` or `.mdx`) under the `src/content/docs/` folder.
+The file should have a title and a description e.g.
 
-## 🧞 Commands
+```md
+---
+title: Architecture
+description: Guide for the backend architecture
+sidebar:
+    order: 22
+---
+```
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+To order the pages at the sidebar add the option field `sidebar: order:`.
