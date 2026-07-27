@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 	"sort"
 	"time"
@@ -19,17 +20,14 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
-	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
@@ -204,16 +202,16 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			return board, common.BadRequestError(err)
+			err := CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'"))
+			return board, err
 		}
 
 		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
-			return board, common.BadRequestError(err)
+			err := CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'"))
+			return board, err
 		}
 
 		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)

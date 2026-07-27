@@ -108,7 +108,10 @@ func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
 
 	suite.Error(err)
 	suite.Nil(result)
-	suite.Equal(dbError, err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, Internal)
+	suite.Equal(boardErr.Message, "failed to get board")
 }
 
 func (suite *BoardServiceTestSuite) TestCreate() {
