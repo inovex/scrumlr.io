@@ -9,6 +9,8 @@ jobs:
   clean_scrumlr_server_packages:
     name: "clean scrumlr server packages"
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - if: false
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
@@ -21,6 +23,8 @@ jobs:
   clean_scrumlr_frontend_packages:
     name: "clean scrumlr frontend packages"
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - if: false
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
