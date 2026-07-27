@@ -51,14 +51,13 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 
 	reaction, err := service.database.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
-
 		if errors.Is(err, sql.ErrNoRows) {
-			log.Errorw("Unable to get reaction", "userId", id, "err", err)
+			span.SetStatus(codes.Error, "reaction not found")
+			span.RecordError(err)
 			return nil, CreateReactionError(NotFound, "reaction not found", err)
 		}
-
+		span.SetStatus(codes.Error, "failed to get reaction")
+		span.RecordError(err)
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
 		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}

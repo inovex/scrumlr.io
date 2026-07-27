@@ -116,11 +116,6 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 
 	templates, err := service.database.GetAll(ctx, user)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "no board templates found")
-			span.RecordError(err)
-			return []*BoardTemplateFull{}, nil // do we need this distinction? look at query type
-		}
 		span.SetStatus(codes.Error, "failed to get board templates")
 		span.RecordError(err)
 		log.Errorw("unable to list board templates", "user", user, "err", err)

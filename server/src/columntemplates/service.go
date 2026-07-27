@@ -2,6 +2,8 @@ package columntemplates
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -93,6 +95,11 @@ func (service *Service) Get(ctx context.Context, boardTemplate, columnTemplate u
 
 	column, err := service.database.Get(ctx, boardTemplate, columnTemplate)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no column template found")
+			span.RecordError(err)
+			return nil, CreateColumnTemplateError(NotFound, "no column template found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get column template")
 		span.RecordError(err)
 		log.Errorw("unable to get template column", "board", boardTemplate, "err", err)

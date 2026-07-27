@@ -6,6 +6,7 @@ type ColumnTemplateErrorCategory string
 
 const (
 	Internal ColumnTemplateErrorCategory = "INTERNAL"
+	NotFound ColumnTemplateErrorCategory = "NOT_FOUND"
 )
 
 type ColumnTemplateError struct {
