@@ -72,7 +72,7 @@ type MockColumnTemplateDatabase_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - column DatabaseColumnTemplateInsert
-func (_e *MockColumnTemplateDatabase_Expecter) Create(ctx interface{}, column interface{}) *MockColumnTemplateDatabase_Create_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) Create(ctx any, column any) *MockColumnTemplateDatabase_Create_Call {
 	return &MockColumnTemplateDatabase_Create_Call{Call: _e.mock.On("Create", ctx, column)}
 }
 
@@ -130,7 +130,7 @@ type MockColumnTemplateDatabase_Delete_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - column uuid.UUID
-func (_e *MockColumnTemplateDatabase_Expecter) Delete(ctx interface{}, board interface{}, column interface{}) *MockColumnTemplateDatabase_Delete_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) Delete(ctx any, board any, column any) *MockColumnTemplateDatabase_Delete_Call {
 	return &MockColumnTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column)}
 }
 
@@ -202,7 +202,7 @@ type MockColumnTemplateDatabase_Get_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - id uuid.UUID
-func (_e *MockColumnTemplateDatabase_Expecter) Get(ctx interface{}, board interface{}, id interface{}) *MockColumnTemplateDatabase_Get_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) Get(ctx any, board any, id any) *MockColumnTemplateDatabase_Get_Call {
 	return &MockColumnTemplateDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, id)}
 }
 
@@ -275,7 +275,7 @@ type MockColumnTemplateDatabase_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockColumnTemplateDatabase_Expecter) GetAll(ctx interface{}, board interface{}) *MockColumnTemplateDatabase_GetAll_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) GetAll(ctx any, board any) *MockColumnTemplateDatabase_GetAll_Call {
 	return &MockColumnTemplateDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
@@ -341,7 +341,7 @@ type MockColumnTemplateDatabase_GetIndex_Call struct {
 // GetIndex is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockColumnTemplateDatabase_Expecter) GetIndex(ctx interface{}, board interface{}) *MockColumnTemplateDatabase_GetIndex_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) GetIndex(ctx any, board any) *MockColumnTemplateDatabase_GetIndex_Call {
 	return &MockColumnTemplateDatabase_GetIndex_Call{Call: _e.mock.On("GetIndex", ctx, board)}
 }
 
@@ -407,7 +407,7 @@ type MockColumnTemplateDatabase_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - column DatabaseColumnTemplateUpdate
-func (_e *MockColumnTemplateDatabase_Expecter) Update(ctx interface{}, column interface{}) *MockColumnTemplateDatabase_Update_Call {
+func (_e *MockColumnTemplateDatabase_Expecter) Update(ctx any, column any) *MockColumnTemplateDatabase_Update_Call {
 	return &MockColumnTemplateDatabase_Update_Call{Call: _e.mock.On("Update", ctx, column)}
 }
 

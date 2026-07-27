@@ -74,7 +74,7 @@ type MockBoardTemplateService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body CreateBoardTemplateRequest
-func (_e *MockBoardTemplateService_Expecter) Create(ctx interface{}, body interface{}) *MockBoardTemplateService_Create_Call {
+func (_e *MockBoardTemplateService_Expecter) Create(ctx any, body any) *MockBoardTemplateService_Create_Call {
 	return &MockBoardTemplateService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -131,7 +131,7 @@ type MockBoardTemplateService_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardTemplateService_Expecter) Delete(ctx interface{}, id interface{}) *MockBoardTemplateService_Delete_Call {
+func (_e *MockBoardTemplateService_Expecter) Delete(ctx any, id any) *MockBoardTemplateService_Delete_Call {
 	return &MockBoardTemplateService_Delete_Call{Call: _e.mock.On("Delete", ctx, id)}
 }
 
@@ -199,7 +199,7 @@ type MockBoardTemplateService_Get_Call struct {
 // Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardTemplateService_Expecter) Get(ctx interface{}, id interface{}) *MockBoardTemplateService_Get_Call {
+func (_e *MockBoardTemplateService_Expecter) Get(ctx any, id any) *MockBoardTemplateService_Get_Call {
 	return &MockBoardTemplateService_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
@@ -267,7 +267,7 @@ type MockBoardTemplateService_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - user uuid.UUID
-func (_e *MockBoardTemplateService_Expecter) GetAll(ctx interface{}, user interface{}) *MockBoardTemplateService_GetAll_Call {
+func (_e *MockBoardTemplateService_Expecter) GetAll(ctx any, user any) *MockBoardTemplateService_GetAll_Call {
 	return &MockBoardTemplateService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, user)}
 }
 
@@ -335,7 +335,7 @@ type MockBoardTemplateService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardTemplateUpdateRequest
-func (_e *MockBoardTemplateService_Expecter) Update(ctx interface{}, body interface{}) *MockBoardTemplateService_Update_Call {
+func (_e *MockBoardTemplateService_Expecter) Update(ctx any, body any) *MockBoardTemplateService_Update_Call {
 	return &MockBoardTemplateService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

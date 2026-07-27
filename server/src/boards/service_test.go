@@ -10,8 +10,10 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -20,742 +22,1710 @@ import (
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"scrumlr.io/server/realtime"
 )
 
-func TestGet(t *testing.T) {
-	boardID := uuid.New()
+type BoardServiceTestSuite struct {
+	suite.Suite
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).Return(DatabaseBoard{ID: boardID}, nil)
+	service            BoardService
+	mockBoardDatabase  *MockBoardDatabase
+	sessionsMock       *sessions.MockSessionService
+	sessionRequestMock *sessionrequests.MockSessionRequestService
+	columnMock         *columns.MockColumnService
+	noteMock           *notes.MockNotesService
+	reactionMock       *reactions.MockReactionService
+	votingMock         *votings.MockVotingService
+	userService        *users.MockUserService
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	broker     *realtime.Broker
+	mockBroker *realtime.MockClient
+	mockClock  *timeprovider.MockTimeProvider
+	mockHash   *hash.MockHash
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	boardID   uuid.UUID
+	userID    uuid.UUID
+	updatedAt time.Time
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.Get(context.Background(), boardID)
-
-	require.NoError(t, err)
-	require.NotNil(t, result)
-	assert.Equal(t, boardID, result.ID)
+	boardName        string
+	boardDescription string
+	columnName       string
+	columnColor      common.Color
 }
 
-func TestGet_DatabaseError(t *testing.T) {
-	boardID := uuid.New()
+func TestNotesServiceTestSuite(t *testing.T) {
+	suite.Run(t, new(BoardServiceTestSuite))
+}
+
+func (suite *BoardServiceTestSuite) SetupTest() {
+	suite.mockBoardDatabase = NewMockBoardDatabase(suite.T())
+	suite.sessionsMock = sessions.NewMockSessionService(suite.T())
+	suite.sessionRequestMock = sessionrequests.NewMockSessionRequestService(suite.T())
+	suite.columnMock = columns.NewMockColumnService(suite.T())
+	suite.noteMock = notes.NewMockNotesService(suite.T())
+	suite.reactionMock = reactions.NewMockReactionService(suite.T())
+	suite.votingMock = votings.NewMockVotingService(suite.T())
+	suite.userService = users.NewMockUserService(suite.T())
+
+	suite.mockBroker = realtime.NewMockClient(suite.T())
+	suite.broker = new(realtime.Broker)
+	suite.broker.Con = suite.mockBroker
+
+	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
+	suite.mockHash = hash.NewMockHash(suite.T())
+
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+
+	suite.boardID = uuid.New()
+	suite.userID = uuid.New()
+	suite.updatedAt = time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
+
+	suite.boardName = "Test Board"
+	suite.boardDescription = "A test board"
+	suite.columnName = "Test Column"
+	suite.columnColor = common.ColorGoalGreen
+}
+
+func (suite *BoardServiceTestSuite) TestGet() {
+
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).Return(DatabaseBoard{ID: suite.boardID}, nil)
+
+	result, err := suite.service.Get(context.Background(), suite.boardID)
+
+	suite.NoError(err)
+	suite.NotNil(result)
+	suite.Equal(suite.boardID, result.ID)
+}
+
+func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
 	dbError := errors.New("database error")
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
 		Return(DatabaseBoard{}, dbError)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	result, err := suite.service.Get(context.Background(), suite.boardID)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.Get(context.Background(), boardID)
-
-	require.Error(t, err)
-	assert.Nil(t, result)
-	assert.Equal(t, dbError, err)
+	suite.Error(err)
+	suite.Nil(result)
+	suite.Equal(dbError, err)
 }
 
-func TestCreate(t *testing.T) {
-	boardID := uuid.New()
-	userID := uuid.New()
-	boardName := "Test Board"
-	boardDescription := "A test board"
+func (suite *BoardServiceTestSuite) TestCreate() {
 	accessPolicy := Public
 	index := 0
-
-	columnName := "Test Column"
 	columnDescription := "Test Column Description"
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy}, nil)
 
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().Create(mock.Anything,
+	suite.columnMock.EXPECT().Create(mock.Anything,
 		columns.ColumnRequest{
-			Board:       boardID,
-			Name:        columnName,
+			Board:       suite.boardID,
+			Name:        suite.columnName,
 			Description: columnDescription,
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
-			User:        userID,
+			User:        suite.userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Create(context.Background(),
+	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
-			Owner:        userID,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			Owner:        suite.userID,
 			AccessPolicy: accessPolicy,
 			Columns: []columns.ColumnRequest{
 				{
-					Board:       boardID,
-					Name:        columnName,
+					Board:       suite.boardID,
+					Name:        suite.columnName,
 					Description: columnDescription,
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
-					User:        userID,
+					User:        suite.userID,
 				},
 			}})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, boardName, *board.Name)
-	assert.Equal(t, boardDescription, *board.Description)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
-	assert.Nil(t, board.Passphrase)
-	assert.Nil(t, board.Salt)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
+	suite.Equal(accessPolicy, board.AccessPolicy)
+	suite.Nil(board.Passphrase)
+	suite.Nil(board.Salt)
 }
 
-func TestCreate_ByPassphrase(t *testing.T) {
-	boardID := uuid.New()
-	userID := uuid.New()
-	boardName := "Test Board"
-	boardDescription := "A test board"
+func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 	accessPolicy := ByPassphrase
 	passPhrase := "SuperStrongPassword"
 	salt := "Salt"
 	index := 0
-
-	columnName := "Test Column"
 	columnDescription := "Test Column Description"
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}).
-		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}, nil)
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: accessPolicy, Passphrase: &passPhrase, Salt: &salt}, nil)
 
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().Create(mock.Anything,
+	suite.columnMock.EXPECT().Create(mock.Anything,
 		columns.ColumnRequest{
-			Board:       boardID,
-			Name:        columnName,
+			Board:       suite.boardID,
+			Name:        suite.columnName,
 			Description: columnDescription,
 			Color:       common.ColorGoalGreen,
 			Visible:     nil,
 			Index:       &index,
-			User:        userID,
+			User:        suite.userID,
 		}).
-		Return(&columns.Column{ID: uuid.New(), Name: columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
+		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: userID, Board: boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
 
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-	mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Create(context.Background(),
+	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
-			Name:         &boardName,
-			Description:  &boardDescription,
-			Owner:        userID,
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			Owner:        suite.userID,
 			AccessPolicy: accessPolicy,
 			Passphrase:   &passPhrase,
 			Columns: []columns.ColumnRequest{
 				{
-					Board:       boardID,
-					Name:        columnName,
+					Board:       suite.boardID,
+					Name:        suite.columnName,
 					Description: columnDescription,
 					Color:       common.ColorGoalGreen,
 					Visible:     nil,
 					Index:       &index,
-					User:        userID,
+					User:        suite.userID,
 				},
 			}})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, boardName, *board.Name)
-	assert.Equal(t, boardDescription, *board.Description)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
-	assert.Equal(t, passPhrase, *board.Passphrase)
-	assert.Equal(t, salt, *board.Salt)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
+	suite.Equal(accessPolicy, board.AccessPolicy)
+	suite.Equal(passPhrase, *board.Passphrase)
+	suite.Equal(salt, *board.Salt)
 }
 
-func TestCreate_ByPassphraseMissing(t *testing.T) {
-	userID := uuid.New()
+func (suite *BoardServiceTestSuite) TestCreate_ByPassphraseMissing() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.Create(context.Background(),
+	result, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
 			Name:         new("Test Board"),
 			Description:  new("A test board"),
-			Owner:        userID,
+			Owner:        suite.userID,
 			AccessPolicy: ByPassphrase,
 			Columns:      nil,
 			Passphrase:   nil,
 		},
 	)
 
-	require.Error(t, err)
-	assert.Nil(t, result)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
+	suite.Error(err)
+	suite.Nil(result)
+	suite.Equal(common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
 }
 
-func TestDelete(t *testing.T) {
+func (suite *BoardServiceTestSuite) TestHasValidUniqueColumnIndices() {
+	index0 := 0
+	index1 := 1
+	indexDuplicate := 0
+	indexOutOfBounds := 2
+
+	suite.Run("valid unique indices", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &index1},
+		})
+
+		suite.True(valid)
+	})
+
+	suite.Run("invalid when index is nil", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: nil},
+			{Index: &index1},
+		})
+
+		suite.False(valid)
+	})
+
+	suite.Run("invalid when duplicate index exists", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &indexDuplicate},
+		})
+
+		suite.False(valid)
+	})
+
+	suite.Run("invalid when index is out of bounds", func() {
+		valid := hasValidUniqueColumnIndices([]columns.ColumnRequest{
+			{Index: &index0},
+			{Index: &indexOutOfBounds},
+		})
+
+		suite.False(valid)
+	})
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_UsesProvidedIndices() {
+	service := &Service{columnService: suite.columnMock}
+
 	boardID := uuid.New()
+	ownerID := uuid.New()
+	index0 := 0
+	index1 := 1
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
+	columnsToCreate := []columns.ColumnRequest{
+		{Name: "Second", Color: common.ColorGoalGreen, Index: &index1},
+		{Name: "First", Color: common.ColorGoalGreen, Index: &index0},
+	}
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Second",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index1,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
 
-	mockBroker := realtime.NewMockClient(t)
-	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "First",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index0,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.NoError(err)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_FallsBackToLoopIndicesWhenProvidedIndicesAreInvalid() {
+	service := &Service{columnService: suite.columnMock}
+
+	boardID := uuid.New()
+	ownerID := uuid.New()
+	indexDuplicate := 0
+	indexExpectedSecond := 1
+
+	columnsToCreate := []columns.ColumnRequest{
+		{Name: "First", Color: common.ColorGoalGreen, Index: &indexDuplicate},
+		{Name: "Second", Color: common.ColorGoalGreen, Index: &indexDuplicate},
+	}
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "First",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &indexDuplicate,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Second",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &indexExpectedSecond,
+	}).Return(&columns.Column{ID: uuid.New()}, nil).Once()
+
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.NoError(err)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateColumnsOnBoard_ReturnsErrorWhenColumnCreationFails() {
+	service := &Service{columnService: suite.columnMock}
+
+	boardID := uuid.New()
+	ownerID := uuid.New()
+	index0 := 0
+	createErr := errors.New("create column failed")
+
+	columnsToCreate := []columns.ColumnRequest{{Name: "Only", Color: common.ColorGoalGreen, Index: &index0}}
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:   boardID,
+		User:    ownerID,
+		Name:    "Only",
+		Color:   common.ColorGoalGreen,
+		Visible: nil,
+		Index:   &index0,
+	}).Return(nil, createErr).Once()
+
+	_, err := service.createColumnsOnBoard(context.Background(), boardID, ownerID, columnsToCreate)
+
+	suite.ErrorIs(err, createErr)
+}
+
+func (suite *BoardServiceTestSuite) TestDelete() {
+
+	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, suite.boardID).Return(nil)
+
+	expectedTopic := fmt.Sprintf("board.%s", suite.boardID)
 	expectedEvent := realtime.BoardEvent{Type: realtime.BoardEventBoardDeleted}
-	mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil)
 
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	err := suite.service.Delete(context.Background(), suite.boardID)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	err := service.Delete(context.Background(), boardID)
-
-	require.NoError(t, err)
+	suite.NoError(err)
 }
 
-func TestUpdate(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate() {
+
 	updatedName := "Updated Board Name"
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(updatedAt)
-	mockHash := hash.NewMockHash(t)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName})
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
-
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, updatedName, *board.Name)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(updatedName, *board.Name)
 }
 
-func TestUpdate_EmptyName(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_EmptyName() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("")})
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("")})
-
-	assert.Nil(t, board)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("name cannot be empty")), err)
+	suite.Nil(board)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("name cannot be empty")), err)
 }
 
-func TestUpdate_ToPassphrase(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
+
 	updatedName := "Updated Board Name"
 	accessPolicy := ByPassphrase
 	passphrase := "SuperStrongPassword"
 	salt := "ThisIsTheSalt"
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(updatedAt)
-	mockHash := hash.NewMockHash(t)
-	mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+	suite.mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, updatedName, *board.Name)
-	assert.Equal(t, passphrase, *board.Passphrase)
-	assert.Equal(t, salt, *board.Salt)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(updatedName, *board.Name)
+	suite.Equal(passphrase, *board.Passphrase)
+	suite.Equal(salt, *board.Salt)
+	suite.Equal(accessPolicy, board.AccessPolicy)
 }
 
-func TestUpdate_ToPassphrase_WithoutPassphrase(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_WithoutPassphrase() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByPassphrase)})
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByPassphrase)})
-
-	assert.Nil(t, board)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")), err)
+	suite.Nil(board)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")), err)
 }
 
-func TestUpdate_ToPublic(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToPublic() {
+
 	updatedName := "Updated Board Name"
 	accessPolicy := Public
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*columns.Column{}, nil)
 
-	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(mock.Anything, boardID).
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]*notes.Note{}, nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(updatedAt)
-	mockHash := hash.NewMockHash(t)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
 
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, updatedName, *board.Name)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(updatedName, *board.Name)
+	suite.Equal(accessPolicy, board.AccessPolicy)
 }
 
-func TestUpdate_ToPublic_WithPassphrase(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToPublic_WithPassphrase() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(Public), Passphrase: new("SuperStrongPassword")})
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(Public), Passphrase: new("SuperStrongPassword")})
-
-	assert.Nil(t, board)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	suite.Nil(board)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
 }
 
-func TestUpdate_ToInvite(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToInvite() {
+
 	updatedName := "Updated Board Name"
 	accessPolicy := ByInvite
-	updatedAt := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
-		Return(DatabaseBoard{ID: boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
-		return update.ID == boardID && update.LastModifiedAt.Equal(updatedAt)
-	})).Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{}, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*notes.Note{}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 
-	columnMock := columns.NewMockColumnService(t)
-	columnMock.EXPECT().GetAll(mock.Anything, boardID).
-		Return([]*columns.Column{}, nil)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
 
-	noteMock := notes.NewMockNotesService(t)
-	noteMock.EXPECT().GetAll(mock.Anything, boardID).
-		Return([]*notes.Note{}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(updatedAt)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName, AccessPolicy: &accessPolicy})
-
-	assert.Nil(t, err)
-	assert.Equal(t, boardID, board.ID)
-	assert.Equal(t, updatedName, *board.Name)
-	assert.Equal(t, accessPolicy, board.AccessPolicy)
+	suite.Nil(err)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(updatedName, *board.Name)
+	suite.Equal(accessPolicy, board.AccessPolicy)
 }
 
-func TestUpdate_ToInvite_WithPassphrase(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdate_ToInvite_WithPassphrase() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
+	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByInvite), Passphrase: new("SuperStrongPassword")})
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	board, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: new("Updated Board Name"), AccessPolicy: new(ByInvite), Passphrase: new("SuperStrongPassword")})
-
-	assert.Nil(t, board)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	suite.Nil(board)
+	suite.NotNil(err)
+	suite.Equal(common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
 }
 
-func TestSetTimer(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestSetTimer() {
+
 	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(5))
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
-		Return(DatabaseBoard{ID: boardID, TimerEnd: &timerEnd}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
+		Return(DatabaseBoard{ID: suite.boardID, TimerEnd: &timerEnd}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockClock.EXPECT().Now().Return(timerStart)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(timerStart)
-	mockHash := hash.NewMockHash(t)
+	result, err := suite.service.SetTimer(context.Background(), suite.boardID, 5)
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.SetTimer(context.Background(), boardID, 5)
-
-	require.NoError(t, err)
-	require.NotNil(t, result)
-	assert.Equal(t, boardID, result.ID)
+	suite.NoError(err)
+	suite.NotNil(result)
+	suite.Equal(suite.boardID, result.ID)
 }
 
-func TestDeleteTimer(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestDeleteTimer() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: nil, TimerEnd: nil}).
-		Return(DatabaseBoard{ID: boardID}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: nil, TimerEnd: nil}).
+		Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	result, err := suite.service.DeleteTimer(context.Background(), suite.boardID)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.DeleteTimer(context.Background(), boardID)
-
-	require.NoError(t, err)
-	assert.Equal(t, boardID, result.ID)
-	assert.Equal(t, (*time.Time)(nil), result.TimerStart)
-	assert.Equal(t, (*time.Time)(nil), result.TimerEnd)
+	suite.NoError(err)
+	suite.Equal(suite.boardID, result.ID)
+	suite.Equal((*time.Time)(nil), result.TimerStart)
+	suite.Equal((*time.Time)(nil), result.TimerEnd)
 }
 
-func TestIncrementTimer(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestIncrementTimer() {
+
 	now := time.Now().Local()
 	updatedTimer := now.Add(time.Duration(1) * time.Minute)
 	updatedTimerEnd := updatedTimer.Add(time.Minute * time.Duration(1))
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().GetBoard(mock.Anything, boardID).
-		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
-	mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
-		Return(DatabaseBoard{ID: boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{ID: suite.boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardTimer(mock.Anything, DatabaseBoardTimerUpdate{ID: suite.boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
+		Return(DatabaseBoard{ID: suite.boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
 
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
+	suite.mockClock.EXPECT().Now().Return(now)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockClock.EXPECT().Now().Return(now)
-	mockHash := hash.NewMockHash(t)
+	result, err := suite.service.IncrementTimer(context.Background(), suite.boardID)
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
-	result, err := service.IncrementTimer(context.Background(), boardID)
-
-	require.NoError(t, err)
-	assert.Equal(t, boardID, result.ID)
-	assert.Equal(t, updatedTimerEnd, *result.TimerEnd)
+	suite.NoError(err)
+	suite.Equal(suite.boardID, result.ID)
+	suite.Equal(updatedTimerEnd, *result.TimerEnd)
 }
 
-func TestDelete_BroadcastsCorrectEvent(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestDelete_BroadcastsCorrectEvent() {
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, boardID).Return(nil)
-
-	sessionsMock := sessions.NewMockSessionService(t)
-	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-	columnMock := columns.NewMockColumnService(t)
-	noteMock := notes.NewMockNotesService(t)
-	reactionMock := reactions.NewMockReactionService(t)
-	votingMock := votings.NewMockVotingService(t)
-
-	mockBroker := realtime.NewMockClient(t)
+	suite.mockBoardDatabase.EXPECT().DeleteBoard(mock.Anything, suite.boardID).Return(nil)
 
 	// Verify the exact event that's broadcasted
-	expectedTopic := fmt.Sprintf("board.%s", boardID)
+	expectedTopic := fmt.Sprintf("board.%s", suite.boardID)
 	expectedEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 		Data: nil, // Board deletion event has no data
 	}
 
 	// Set up the expectation to capture the broadcast
-	mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil).Once()
-
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockHash := hash.NewMockHash(t)
-
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock, mockHash)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, expectedTopic, expectedEvent).Return(nil).Once()
 
 	// Act
-	err := service.Delete(context.Background(), boardID)
+	err := suite.service.Delete(context.Background(), suite.boardID)
 
 	// Assert
-	require.NoError(t, err)
+	suite.NoError(err)
 
 	// Verify that all expectations were met (including the Publish call)
-	mockBroker.AssertExpectations(t)
+	suite.mockBroker.AssertExpectations(suite.T())
 }
 
-func TestUpdateLastModified(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdateLastModified() {
+
 	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockBoardDatabase.EXPECT().
-		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
-		Return(DatabaseBoard{ID: boardID}, nil)
+	mockClock := timeprovider.NewMockTimeProvider(suite.T())
+	suite.mockBoardDatabase.EXPECT().
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, LastModifiedAt: now}).
+		Return(DatabaseBoard{ID: suite.boardID}, nil)
 
-	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID, now)
+	updater := NewLastModifiedUpdater(suite.mockBoardDatabase, mockClock)
+	err := updater.UpdateLastModified(context.Background(), suite.boardID, now)
 
-	assert.NoError(t, err)
+	suite.NoError(err)
 }
 
-func TestUpdateLastModified_DatabaseError(t *testing.T) {
-	boardID := uuid.New()
+func (suite *BoardServiceTestSuite) TestUpdateLastModified_DatabaseError() {
+
 	dbErr := errors.New("database error")
 	now := time.Date(2026, 3, 17, 12, 0, 0, 0, time.UTC)
 
-	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockBoardDatabase.EXPECT().
-		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: boardID, LastModifiedAt: now}).
+	mockClock := timeprovider.NewMockTimeProvider(suite.T())
+	suite.mockBoardDatabase.EXPECT().
+		UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, LastModifiedAt: now}).
 		Return(DatabaseBoard{}, dbErr)
 
-	updater := NewLastModifiedUpdater(mockBoardDatabase, mockClock)
-	err := updater.UpdateLastModified(context.Background(), boardID, now)
+	updater := NewLastModifiedUpdater(suite.mockBoardDatabase, mockClock)
+	err := updater.UpdateLastModified(context.Background(), suite.boardID, now)
 
-	assert.ErrorIs(t, err, dbErr)
+	suite.ErrorIs(err, dbErr)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+	importColumnID := uuid.New()
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      importColumnID,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importColumnID,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	board, _, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.NotNil(board)
+	suite.Equal(suite.boardID, board.ID)
+	suite.Equal(suite.boardName, *board.Name)
+	suite.Equal(suite.boardDescription, *board.Description)
+	suite.Equal(Public, board.AccessPolicy)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_CreateFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{}, errors.New("create failed"))
+
+	board, _, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Equal(common.InternalServerError, err)
+}
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_MapsColumnsByIndexNotByReturnedOrder() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	firstSourceColumnID := uuid.New()
+	secondSourceColumnID := uuid.New()
+	firstCreatedColumnID := uuid.New()
+	secondCreatedColumnID := uuid.New()
+
+	firstSourceColumnIndex := 1
+	secondSourceColumnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:    firstSourceColumnID,
+				Name:  "First source",
+				Color: common.ColorGoalGreen,
+				Index: firstSourceColumnIndex,
+			},
+			{
+				ID:    secondSourceColumnID,
+				Name:  "Second source",
+				Color: common.ColorGoalGreen,
+				Index: secondSourceColumnIndex,
+			},
+		},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{ID: suite.boardID, Name: &suite.boardName, Description: &suite.boardDescription, AccessPolicy: Public}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "First source",
+		Color:          common.ColorGoalGreen,
+		Visible:        &body.Columns[0].Visible,
+		Index:          &firstSourceColumnIndex,
+		SourceColumnID: &firstSourceColumnID,
+	}).Return(&columns.Column{ID: firstCreatedColumnID}, nil).Once()
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "Second source",
+		Color:          common.ColorGoalGreen,
+		Visible:        &body.Columns[1].Visible,
+		Index:          &secondSourceColumnIndex,
+		SourceColumnID: &secondSourceColumnID,
+	}).Return(&columns.Column{ID: secondCreatedColumnID}, nil).Once()
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	_, columnMap, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.Equal(firstCreatedColumnID, columnMap[firstSourceColumnID])
+	suite.Equal(secondCreatedColumnID, columnMap[secondSourceColumnID])
+}
+
+func (suite *BoardServiceTestSuite) TestImportSuccess() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      importColumnID,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+		Notes: []notes.Note{},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importColumnID,
+	}).Return(&columns.Column{ID: createdColumnID}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.NoError(err)
+	suite.NotNil(board)
+	suite.Equal(suite.boardID, board.ID)
+}
+
+func (suite *BoardServiceTestSuite) TestImport_FailsWhenCreateImportedBoardFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      uuid.New(),
+			Name:    "Start",
+			Color:   common.ColorGoalGreen,
+			Visible: true,
+			Index:   0,
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{}, errors.New("create failed"))
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Equal(common.InternalServerError, err)
+}
+
+func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFails() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+		notesService:   suite.noteMock,
+		userService:    suite.userService,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+	authorID := uuid.New()
+	importedColumnID := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{{
+			ID:      importedColumnID,
+			Name:    suite.columnName,
+			Color:   suite.columnColor,
+			Visible: columnVisible,
+			Index:   columnIndex,
+		}},
+		Notes: []notes.Note{{
+			ID:     uuid.New(),
+			Author: authorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importedColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+		}},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &importedColumnID,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  owner,
+		Role:  common.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil)
+	suite.noteMock.EXPECT().Import(mock.Anything, mock.MatchedBy(func(request notes.NoteImportRequest) bool {
+		return request.Text == "Imported note" &&
+			request.Board == suite.boardID &&
+			request.User == authorID &&
+			request.Position.Stack == (uuid.NullUUID{}) &&
+			request.Position.Rank == 0 &&
+			request.Position.Column != uuid.Nil
+	})).Return(nil, errors.New("import failed"))
+
+	board, err := service.Import(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.EqualError(err, "import failed")
+
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	parentID := uuid.New()
+	columnID := uuid.New()
+
+	organizedNotes := []stackRootChildrenNotes{{
+		StackRoot: notes.Note{
+			ID: parentID,
+			Position: notes.NotePosition{
+				Column: columnID,
+			},
+		},
+		StackChildren: []notes.Note{
+			{
+				Author: uuid.New(),
+				Text:   "child-1",
+				Position: notes.NotePosition{
+					Rank: 1,
+				},
+			},
+			{
+				Author: uuid.New(),
+				Text:   "child-2",
+				Position: notes.NotePosition{
+					Rank: 2,
+				},
+			},
+		},
+	}}
+
+	for _, child := range organizedNotes[0].StackChildren {
+		notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+			Text:  child.Text,
+			Board: suite.boardID,
+			User:  child.Author,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   child.Position.Rank,
+				Stack: uuid.NullUUID{
+					UUID:  parentID,
+					Valid: true,
+				},
+			},
+		}).Return(&notes.Note{ID: uuid.New()}, nil).Once()
+	}
+
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
+
+	suite.NoError(err)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnFirstFailure() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	parentID := uuid.New()
+	columnID := uuid.New()
+	firstChildAuthor := uuid.New()
+	secondChildAuthor := uuid.New()
+	importErr := errors.New("import child note failed")
+
+	organizedNotes := []stackRootChildrenNotes{{
+		StackRoot: notes.Note{
+			ID:       parentID,
+			Position: notes.NotePosition{Column: columnID},
+		},
+		StackChildren: []notes.Note{
+			{
+				Author:   firstChildAuthor,
+				Text:     "child-1",
+				Position: notes.NotePosition{Rank: 1},
+			},
+			{
+				Author:   secondChildAuthor,
+				Text:     "child-2",
+				Position: notes.NotePosition{Rank: 2},
+			},
+		},
+	}}
+
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "child-1",
+		Board: suite.boardID,
+		User:  firstChildAuthor,
+		Position: notes.NotePosition{
+			Column: columnID,
+			Rank:   1,
+			Stack:  uuid.NullUUID{UUID: parentID, Valid: true},
+		},
+	}).Return(nil, importErr).Once()
+
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
+
+	suite.Error(err)
+	suite.Equal(importErr, err)
+	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.MatchedBy(func(req notes.NoteImportRequest) bool {
+		return req.Text == "child-2" && req.User == secondChildAuthor
+	}))
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportChildNotes_NoChildrenNoOp() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	organizedNotes := []stackRootChildrenNotes{
+		{
+			StackRoot:     notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			StackChildren: []notes.Note{},
+		},
+		{
+			StackRoot:     notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: uuid.New()}},
+			StackChildren: nil,
+		},
+	}
+
+	err := service.importStackChildren(ctx, suite.boardID, organizedNotes)
+
+	suite.NoError(err)
+	notesMock.AssertNotCalled(suite.T(), "Import", mock.Anything, mock.Anything)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
+	columnsMock := columns.NewMockColumnService(suite.T())
+	notesMock := notes.NewMockNotesService(suite.T())
+
+	service := &Service{
+		columnService: columnsMock,
+		notesService:  notesMock,
+		userService:   suite.userService,
+	}
+
+	ctx := context.Background()
+
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	authorID := uuid.New()
+	parentID := uuid.New()
+	importedParentID := uuid.New()
+
+	body := ImportBoardRequest{
+		Columns: []columns.Column{{ID: importColumnID}},
+		Notes: []notes.Note{{
+			ID:     parentID,
+			Author: authorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   3,
+			},
+		}},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "Imported note",
+		Board: suite.boardID,
+		User:  authorID,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   3,
+		},
+	}).Return(&notes.Note{ID: importedParentID}, nil).Once()
+
+	warnings, err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
+
+	suite.NoError(err)
+	suite.Nil(warnings)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
+	columnsMock := columns.NewMockColumnService(suite.T())
+	notesMock := notes.NewMockNotesService(suite.T())
+
+	service := &Service{
+		columnService: columnsMock,
+		notesService:  notesMock,
+		userService:   suite.userService,
+	}
+
+	ctx := context.Background()
+
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	authorID := uuid.New()
+	importError := errors.New("import failed")
+
+	body := ImportBoardRequest{
+		Columns: []columns.Column{{ID: importColumnID}},
+		Notes: []notes.Note{{
+			ID:     uuid.New(),
+			Author: authorID,
+			Text:   "Imported note",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+		}},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil).Once()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "Imported note",
+		Board: suite.boardID,
+		User:  authorID,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
+	}).Return(nil, importError).Once()
+
+	warnings, err := service.processImportedNotes(ctx, suite.boardID, body, map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID})
+
+	suite.Error(err)
+	suite.Equal(importError, err)
+	suite.Nil(warnings)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestCreateImportedBoard_DuplicateSourceColumnID() {
+	service := &Service{
+		database:       suite.mockBoardDatabase,
+		columnService:  suite.columnMock,
+		sessionService: suite.sessionsMock,
+	}
+
+	ctx := context.Background()
+	owner := uuid.New()
+
+	columnVisible := true
+	columnIndex := 0
+	duplicateImportColumnID := uuid.New()
+	secondColumnIndex := 1
+
+	body := ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &suite.boardName,
+			Description:  &suite.boardDescription,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:      duplicateImportColumnID,
+				Name:    suite.columnName,
+				Color:   suite.columnColor,
+				Visible: columnVisible,
+				Index:   columnIndex,
+			},
+			{
+				ID:      duplicateImportColumnID,
+				Name:    "Second",
+				Color:   suite.columnColor,
+				Visible: columnVisible,
+				Index:   secondColumnIndex,
+			},
+		},
+	}
+
+	suite.mockBoardDatabase.EXPECT().CreateBoard(mock.Anything, DatabaseBoardInsert{
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}).Return(DatabaseBoard{
+		ID:           suite.boardID,
+		Name:         &suite.boardName,
+		Description:  &suite.boardDescription,
+		AccessPolicy: Public,
+	}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           suite.columnName,
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &columnIndex,
+		SourceColumnID: &duplicateImportColumnID,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	suite.columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
+		Board:          suite.boardID,
+		User:           owner,
+		Name:           "Second",
+		Color:          suite.columnColor,
+		Visible:        &columnVisible,
+		Index:          &secondColumnIndex,
+		SourceColumnID: &duplicateImportColumnID,
+	}).Return(&columns.Column{ID: uuid.New()}, nil)
+
+	board, columnMap, err := service.createImportedBoard(ctx, owner, body)
+
+	suite.Nil(board)
+	suite.Nil(columnMap)
+	suite.EqualError(err, "duplicate source column id during import mapping: sourceColumnID="+duplicateImportColumnID.String())
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_AllAuthorsExist() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	authorTwo := uuid.New()
+
+	importNotes := []notes.Note{
+		{ID: uuid.New(), Author: authorOne},
+		{ID: uuid.New(), Author: authorTwo},
+		{ID: uuid.New(), Author: authorOne}, // duplicate author should be de-duplicated
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne, authorTwo}).Return([]uuid.UUID{authorOne, authorTwo}, nil).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.True(allAuthorsExist)
+	suite.Nil(existingAuthors)
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_PartialAuthorsExist() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	authorTwo := uuid.New()
+
+	importNotes := []notes.Note{
+		{ID: uuid.New(), Author: authorOne},
+		{ID: uuid.New(), Author: authorTwo},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne, authorTwo}).Return([]uuid.UUID{authorOne}, nil).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.False(allAuthorsExist)
+	suite.Len(existingAuthors, 1)
+	_, exists := existingAuthors[authorOne]
+	suite.True(exists)
+}
+
+func (suite *BoardServiceTestSuite) TestCollectExistingAuthors_Error() {
+	service := &Service{userService: suite.userService}
+
+	authorOne := uuid.New()
+	importNotes := []notes.Note{{ID: uuid.New(), Author: authorOne}}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorOne}).Return(nil, errors.New("database error")).Once()
+
+	existingAuthors, allAuthorsExist, err := service.collectExistingAuthors(context.Background(), importNotes)
+
+	suite.Nil(existingAuthors)
+	suite.False(allAuthorsExist)
+	suite.EqualError(err, "could not get existing authors")
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_EmptyInput() {
+	service := &Service{userService: suite.userService}
+
+	processedResult, err := service.prepareImportNotes(context.Background(), []notes.Note{})
+
+	suite.NoError(err)
+	suite.Empty(processedResult.Notes)
+	suite.Zero(processedResult.RemovedNotesMissingAuthorCount)
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_CollectAuthorsError() {
+	service := &Service{userService: suite.userService}
+
+	author := uuid.New()
+	importNotes := []notes.Note{{ID: uuid.New(), Author: author}}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{author}).Return(nil, errors.New("database error")).Once()
+
+	processedResult, err := service.prepareImportNotes(context.Background(), importNotes)
+
+	suite.Nil(processedResult)
+	suite.EqualError(err, "could not get existing authors")
+}
+
+func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthorsAndRepairsStacks() {
+	service := &Service{userService: suite.userService}
+
+	columnID := uuid.New()
+	missingAuthor := uuid.New()
+	existingAuthorOne := uuid.New()
+	existingAuthorTwo := uuid.New()
+
+	removedRootID := uuid.New()
+	otherRootID := uuid.New()
+	childOneID := uuid.New()
+	childTwoID := uuid.New()
+
+	importNotes := []notes.Note{
+		{
+			ID:     removedRootID,
+			Author: missingAuthor,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   4,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+		{
+			ID:     childOneID,
+			Author: existingAuthorOne,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   10,
+				Stack:  uuid.NullUUID{UUID: removedRootID, Valid: true},
+			},
+		},
+		{
+			ID:     childTwoID,
+			Author: existingAuthorTwo,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   20,
+				Stack:  uuid.NullUUID{UUID: removedRootID, Valid: true},
+			},
+		},
+		{
+			ID:     otherRootID,
+			Author: existingAuthorOne,
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   30,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{missingAuthor, existingAuthorOne, existingAuthorTwo}).Return([]uuid.UUID{existingAuthorOne, existingAuthorTwo}, nil).Once()
+
+	processedResult, err := service.prepareImportNotes(context.Background(), importNotes)
+
+	suite.NoError(err)
+	suite.Len(processedResult.Notes, 3)
+	suite.Equal(1, processedResult.RemovedNotesMissingAuthorCount)
+
+	notesByID := make(map[uuid.UUID]notes.Note, len(processedResult.Notes))
+	for _, note := range processedResult.Notes {
+		notesByID[note.ID] = note
+	}
+
+	replacementRoot := notesByID[childTwoID]
+	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.Equal(0, replacementRoot.Position.Rank)
+
+	stackChild := notesByID[childOneID]
+	suite.True(stackChild.Position.Stack.Valid)
+	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.Equal(0, stackChild.Position.Rank)
+
+	otherRoot := notesByID[otherRootID]
+	suite.False(otherRoot.Position.Stack.Valid)
+	suite.Equal(1, otherRoot.Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestFilterNotesByExistingAuthors() {
+	existingAuthor := uuid.New()
+	missingAuthor := uuid.New()
+
+	noteOne := notes.Note{ID: uuid.New(), Author: existingAuthor}
+	noteTwo := notes.Note{ID: uuid.New(), Author: missingAuthor}
+
+	result := filterNotesByExistingAuthors(
+		[]notes.Note{noteOne, noteTwo},
+		map[uuid.UUID]struct{}{existingAuthor: {}},
+	)
+
+	suite.Len(result.FilteredNotes, 1)
+	suite.Equal(noteOne.ID, result.FilteredNotes[0].ID)
+	suite.Len(result.OriginalNoteByID, 2)
+	suite.Equal(noteOne.ID, result.OriginalNoteByID[noteOne.ID].ID)
+	suite.Equal(noteTwo.ID, result.OriginalNoteByID[noteTwo.ID].ID)
+	suite.Equal(1, result.RemovedNotesMissingAuthorCount)
+}
+
+func (suite *BoardServiceTestSuite) TestIndexAndGroupStacks() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 0}}
+	childOne := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 3}}
+	childTwo := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 7}}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks([]notes.Note{root, childOne, childTwo})
+
+	suite.Len(notesByID, 3)
+	suite.Equal(root.ID, notesByID[root.ID].ID)
+	suite.Len(stackChildrenByRoot, 1)
+	suite.Len(stackChildrenByRoot[rootID], 2)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootExists() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	filteredNotes := []notes.Note{
+		{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 4}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 8}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 2}},
+	}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+	originalByID := map[uuid.UUID]notes.Note{rootID: {ID: rootID, Position: notes.NotePosition{Rank: 4}}}
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
+
+	stackChildren := stackChildrenByRoot[rootID]
+	suite.Len(stackChildren, 2)
+	suite.Equal(0, stackChildren[0].Position.Rank)
+	suite.Equal(1, stackChildren[1].Position.Rank)
+	suite.True(stackChildren[0].Position.Stack.Valid)
+	suite.Equal(rootID, stackChildren[0].Position.Stack.UUID)
+	suite.True(stackChildren[1].Position.Stack.Valid)
+	suite.Equal(rootID, stackChildren[1].Position.Stack.UUID)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromotesLastChild() {
+	removedRootID := uuid.New()
+	childOneID := uuid.New()
+	childTwoID := uuid.New()
+	columnID := uuid.New()
+
+	filteredNotes := []notes.Note{
+		{ID: childOneID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: removedRootID, Valid: true}, Rank: 10}},
+		{ID: childTwoID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: removedRootID, Valid: true}, Rank: 20}},
+	}
+
+	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
+	originalByID := map[uuid.UUID]notes.Note{removedRootID: {ID: removedRootID, Position: notes.NotePosition{Rank: 6}}}
+
+	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
+
+	replacementRoot := notesByID[childTwoID]
+	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.Equal(6, replacementRoot.Position.Rank)
+
+	stackChild := notesByID[childOneID]
+	suite.True(stackChild.Position.Stack.Valid)
+	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.Equal(0, stackChild.Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestReorderStackRootNotes() {
+	columnID := uuid.New()
+
+	rootOneID := uuid.New()
+	rootTwoID := uuid.New()
+
+	processedNotes := []notes.Note{
+		{ID: rootOneID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 10}},
+		{ID: rootTwoID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 1}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootOneID, Valid: true}, Rank: 99}},
+	}
+
+	reorderStackRootNotes(processedNotes)
+
+	notesByID := make(map[uuid.UUID]notes.Note, len(processedNotes))
+	for _, note := range processedNotes {
+		notesByID[note.ID] = note
+	}
+
+	suite.Equal(0, notesByID[rootTwoID].Position.Rank)
+	suite.Equal(1, notesByID[rootOneID].Position.Rank)
+}
+
+func (suite *BoardServiceTestSuite) TestOrganizeStackNotes() {
+	rootID := uuid.New()
+	columnID := uuid.New()
+
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{}, Rank: 0}}
+	child := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: uuid.NullUUID{UUID: rootID, Valid: true}, Rank: 1}}
+
+	stackRootNotes, stackChildrenByRoot := organizeStackNotes([]notes.Note{root, child})
+
+	suite.Len(stackRootNotes, 1)
+	suite.Equal(root.ID, stackRootNotes[rootID].ID)
+	suite.Len(stackChildrenByRoot, 1)
+	suite.Len(stackChildrenByRoot[rootID], 1)
+	suite.Equal(child.ID, stackChildrenByRoot[rootID][0].ID)
+}
+
+func (suite *BoardServiceTestSuite) TestImportStackRoots_SuccessAndSkipsMissingColumnMapping() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	mappedImportColumnID := uuid.New()
+	unmappedImportColumnID := uuid.New()
+	mappedCreatedColumnID := uuid.New()
+
+	firstRootID := uuid.New()
+	secondRootID := uuid.New()
+	author := uuid.New()
+
+	stackRootNotes := map[uuid.UUID]notes.Note{
+		firstRootID: {
+			ID:     firstRootID,
+			Author: author,
+			Text:   "imported-root",
+			Position: notes.NotePosition{
+				Column: mappedImportColumnID,
+				Rank:   2,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+		secondRootID: {
+			ID:     secondRootID,
+			Author: author,
+			Text:   "ignored-root",
+			Position: notes.NotePosition{
+				Column: unmappedImportColumnID,
+				Rank:   9,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	stackChildrenByRoot := map[uuid.UUID][]notes.Note{
+		firstRootID: {
+			{ID: uuid.New(), Text: "child-a"},
+		},
+	}
+
+	columnMap := map[uuid.UUID]uuid.UUID{mappedImportColumnID: mappedCreatedColumnID}
+
+	createdRootID := uuid.New()
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "imported-root",
+		Board: suite.boardID,
+		User:  author,
+		Position: notes.NotePosition{
+			Column: mappedCreatedColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   2,
+		},
+	}).Return(&notes.Note{ID: createdRootID, Position: notes.NotePosition{Column: mappedCreatedColumnID}}, nil).Once()
+
+	stackNotes, err := service.importStackRoots(ctx, suite.boardID, stackRootNotes, stackChildrenByRoot, columnMap)
+
+	suite.NoError(err)
+	suite.Len(stackNotes, 1)
+	suite.Equal(createdRootID, stackNotes[0].StackRoot.ID)
+	suite.Len(stackNotes[0].StackChildren, 1)
+	suite.Equal("child-a", stackNotes[0].StackChildren[0].Text)
+	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
+	notesMock := notes.NewMockNotesService(suite.T())
+	service := &Service{notesService: notesMock}
+
+	ctx := context.Background()
+
+	importColumnID := uuid.New()
+	createdColumnID := uuid.New()
+	rootID := uuid.New()
+	author := uuid.New()
+	importErr := errors.New("import root failed")
+
+	stackRootNotes := map[uuid.UUID]notes.Note{
+		rootID: {
+			ID:     rootID,
+			Author: author,
+			Text:   "imported-root",
+			Position: notes.NotePosition{
+				Column: importColumnID,
+				Rank:   2,
+				Stack:  uuid.NullUUID{},
+			},
+		},
+	}
+
+	columnMap := map[uuid.UUID]uuid.UUID{importColumnID: createdColumnID}
+
+	notesMock.EXPECT().Import(mock.Anything, notes.NoteImportRequest{
+		Text:  "imported-root",
+		Board: suite.boardID,
+		User:  author,
+		Position: notes.NotePosition{
+			Column: createdColumnID,
+			Stack:  uuid.NullUUID{},
+			Rank:   2,
+		},
+	}).Return(nil, importErr).Once()
+
+	stackNotes, err := service.importStackRoots(ctx, suite.boardID, stackRootNotes, nil, columnMap)
+
+	suite.Nil(stackNotes)
+	suite.Equal(importErr, err)
+	notesMock.AssertExpectations(suite.T())
 }
