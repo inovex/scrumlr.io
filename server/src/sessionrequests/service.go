@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/websocket"
 
 	"github.com/go-chi/chi/v5"
@@ -108,7 +109,7 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	}
 
 	if request.Status == RequestAccepted {
-		_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{Board: request.Board, User: request.User, Role: common.ParticipantRole})
+		_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{Board: request.Board, User: request.User, Role: role.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create board session")
 			span.RecordError(err)

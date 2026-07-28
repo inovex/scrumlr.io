@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 )
 
 func TestGetSession(t *testing.T) {
@@ -283,14 +284,14 @@ func TestListSessions_WithFilterRaisedHand(t *testing.T) {
 
 func TestListSessions_WithFilterRole(t *testing.T) {
 	boardId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	moderatorRole := role.ModeratorRole
 	filter := BoardSessionFilter{Role: &moderatorRole}
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetAll(mock.Anything, boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
-			{Board: boardId, Role: common.ModeratorRole},
-			{Board: boardId, Role: common.ModeratorRole},
+			{Board: boardId, Role: role.ModeratorRole},
+			{Board: boardId, Role: role.ModeratorRole},
 		}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -343,7 +344,7 @@ func TestListSessions_DatabaseError(t *testing.T) {
 func TestCreateSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: role}).
@@ -372,7 +373,7 @@ func TestCreateSession(t *testing.T) {
 func TestCreateSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 	dbError := "unable to create"
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -401,15 +402,15 @@ func TestUpdateSession_Role(t *testing.T) {
 	userId := uuid.New()
 	firstColumnId := uuid.New()
 	secondColumnId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	moderatorRole := role.ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
@@ -448,7 +449,7 @@ func TestUpdateSession_Role(t *testing.T) {
 
 	assert.Equal(t, boardId, session.Board)
 	assert.Equal(t, userId, session.UserID)
-	assert.Equal(t, common.ModeratorRole, session.Role)
+	assert.Equal(t, role.ModeratorRole, session.Role)
 }
 
 func TestUpdateSession_RaiseHand(t *testing.T) {
@@ -460,7 +461,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, RaisedHand: raisedHand}, nil)
 	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
@@ -526,7 +527,7 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -542,7 +543,7 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
@@ -559,7 +560,7 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -571,14 +572,14 @@ func TestUpdateSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	moderatorRole := role.ModeratorRole
 	dbError := "unable to execute"
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
@@ -610,7 +611,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ParticipantRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -625,7 +626,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -639,7 +640,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -654,7 +655,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -668,7 +669,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.OwnerRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.OwnerRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -683,7 +684,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
@@ -697,7 +698,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -712,7 +713,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.OwnerRole),
+		Role:   new(role.OwnerRole),
 	})
 
 	assert.Nil(t, session)
@@ -1191,7 +1192,7 @@ func TestFilterfromQueryString_Role(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	role := common.OwnerRole
+	role := role.OwnerRole
 	query := url.Values{}
 	query.Add("role", "OWNER")
 	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
@@ -1202,13 +1203,13 @@ func TestFilterfromQueryString_Role(t *testing.T) {
 func TestCheckSessionRole(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: userId, Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: userId, Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ModeratorRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ModeratorRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)
@@ -1219,13 +1220,13 @@ func TestCheckSessionRole(t *testing.T) {
 func TestCheckSessionRole_NoRole(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: userId, Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: userId, Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ParticipantRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ParticipantRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)
@@ -1236,13 +1237,13 @@ func TestCheckSessionRole_NoRole(t *testing.T) {
 func TestCheckSessionRole_NoUser(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: uuid.New(), Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: uuid.New(), Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ParticipantRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ParticipantRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)

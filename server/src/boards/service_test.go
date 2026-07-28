@@ -9,6 +9,7 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -130,8 +131,8 @@ func (suite *BoardServiceTestSuite) TestCreate() {
 		}).
 		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: role.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: role.OwnerRole}, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
@@ -182,8 +183,8 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 		}).
 		Return(&columns.Column{ID: uuid.New(), Name: suite.columnName, Description: columnDescription, Color: common.ColorGoalGreen, Visible: false, Index: index}, nil)
 
-	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: common.OwnerRole}).
-		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: common.OwnerRole}, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: role.OwnerRole}).
+		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: role.OwnerRole}, nil)
 
 	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
 
@@ -698,8 +699,8 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard() {
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
 		Board: suite.boardID,
 		User:  owner,
-		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+		Role:  role.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: role.OwnerRole}, nil)
 
 	board, _, err := service.createImportedBoard(ctx, owner, body)
 
@@ -820,8 +821,8 @@ func (suite *BoardServiceTestSuite) TestCreateImportedBoard_MapsColumnsByIndexNo
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
 		Board: suite.boardID,
 		User:  owner,
-		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+		Role:  role.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: role.OwnerRole}, nil)
 
 	_, columnMap, err := service.createImportedBoard(ctx, owner, body)
 
@@ -886,8 +887,8 @@ func (suite *BoardServiceTestSuite) TestImportSuccess() {
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
 		Board: suite.boardID,
 		User:  owner,
-		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+		Role:  role.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: role.OwnerRole}, nil)
 
 	board, err := service.Import(ctx, owner, body)
 
@@ -1000,8 +1001,8 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
 		Board: suite.boardID,
 		User:  owner,
-		Role:  common.OwnerRole,
-	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: common.OwnerRole}, nil)
+		Role:  role.OwnerRole,
+	}).Return(&sessions.BoardSession{Board: suite.boardID, UserID: owner, Role: role.OwnerRole}, nil)
 
 	suite.userService.EXPECT().GetExistingUserIDs(mock.Anything, []uuid.UUID{authorID}).Return([]uuid.UUID{authorID}, nil)
 	suite.noteMock.EXPECT().Import(mock.Anything, mock.MatchedBy(func(request notes.NoteImportRequest) bool {

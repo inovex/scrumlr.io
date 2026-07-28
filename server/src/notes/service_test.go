@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 )
 
 type mockWebSocketConnection struct {
@@ -104,7 +105,7 @@ func (suite *NotesServiceTestSuite) expectBoardLastModifiedAtTouched() {
 	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(nil)
 }
 
-func (suite *NotesServiceTestSuite) expectPrecondition(stackingAllowed bool, callerRole common.SessionRole) {
+func (suite *NotesServiceTestSuite) expectPrecondition(stackingAllowed bool, callerRole role.Role) {
 	suite.mockDB.EXPECT().
 		GetPrecondition(mock.Anything, suite.noteID, suite.boardID, suite.authorID).
 		Return(Precondition{
@@ -208,7 +209,7 @@ func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -239,7 +240,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -270,7 +271,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Owner() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
-	callerRole := common.ModeratorRole
+	callerRole := role.ModeratorRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -301,7 +302,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Moderator() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
-	callerRole := common.ModeratorRole
+	callerRole := role.ModeratorRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -332,7 +333,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Moderator() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -364,7 +365,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant() {
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 	callerID := uuid.New()
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	txt := "Updated text"
 	pos := suite.pos
@@ -387,7 +388,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -418,7 +419,7 @@ func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := false
 	pos := suite.pos
 	pos.Rank = 0
@@ -440,7 +441,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	stackIDNote := uuid.NullUUID{Valid: true, UUID: suite.noteID}
 	pos := suite.pos
@@ -465,7 +466,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 	text := "Updated text"
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	dbError := errors.New("database error")
 
@@ -523,7 +524,7 @@ func (suite *NotesServiceTestSuite) Test_Update_GetPreconditionError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_GetLockError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 
 	suite.expectPrecondition(stackAllowed, callerRole)
@@ -539,7 +540,7 @@ func (suite *NotesServiceTestSuite) Test_Update_GetLockError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	otherUser := uuid.New()
 
@@ -556,7 +557,7 @@ func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_NegativeRankIsResetToZero() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -601,7 +602,7 @@ func (suite *NotesServiceTestSuite) expectDeleteSequence(deleteStack bool) {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 	deleteStack := true
 
@@ -615,7 +616,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	deleteStack := true
 
@@ -629,7 +630,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Owner() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
-	callerRole := common.ModeratorRole
+	callerRole := role.ModeratorRole
 	stackAllowed := true
 	deleteStack := true
 
@@ -644,7 +645,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_Moderator() {
 
 func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
 	callerID := uuid.New()
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	deleteStack := true
 
 	suite.mockDB.EXPECT().GetPrecondition(mock.Anything, suite.noteID, suite.boardID, callerID).
@@ -806,7 +807,7 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 }
 
 func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard() {
-	callerRole := common.ParticipantRole
+	callerRole := role.ParticipantRole
 	stackAllowed := true
 
 	noteA := uuid.New()
@@ -1066,7 +1067,7 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Release() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_BoardLastModifiedUpdateError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	stackAllowed := true
 	text := "Updated text"
 
@@ -1095,7 +1096,7 @@ func (suite *NotesServiceTestSuite) Test_Update_BoardLastModifiedUpdateError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_BoardLastModifiedUpdateError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 
 	suite.expectNoLock()
 	suite.expectPrecondition(true, callerRole)
@@ -1120,7 +1121,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_GetPreconditionError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_GetLockError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 
 	suite.expectPrecondition(true, callerRole)
 	suite.mockCache.EXPECT().Get(mock.Anything, suite.noteID.String()).Return(nil, errors.New("cache unavailable"))
@@ -1131,7 +1132,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_GetLockError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	otherUser := uuid.New()
 
 	suite.expectPrecondition(true, callerRole)
@@ -1143,7 +1144,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteStackGetStackError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 
 	suite.expectNoLock()
 	suite.expectPrecondition(true, callerRole)
@@ -1155,7 +1156,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_DeleteStackGetStackError() {
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteNoteError() {
-	callerRole := common.OwnerRole
+	callerRole := role.OwnerRole
 	dbErr := errors.New("delete failed")
 
 	suite.expectNoLock()
