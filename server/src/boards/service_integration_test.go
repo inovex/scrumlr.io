@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/websocket"
 
@@ -726,7 +727,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_CreateImportedBoard() {
 	require.Len(t, fullBoard.BoardSessions, 1)
 
 	assert.Equal(t, owner, fullBoard.BoardSessions[0].UserID)
-	assert.Equal(t, common.OwnerRole, fullBoard.BoardSessions[0].Role)
+	assert.Equal(t, role.OwnerRole, fullBoard.BoardSessions[0].Role)
 
 	columnsByID := make(map[uuid.UUID]*columns.Column, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
@@ -839,7 +840,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 	require.Len(t, fullBoard.BoardSessions, 1)
 
 	assert.Equal(t, owner, fullBoard.BoardSessions[0].UserID)
-	assert.Equal(t, common.OwnerRole, fullBoard.BoardSessions[0].Role)
+	assert.Equal(t, role.OwnerRole, fullBoard.BoardSessions[0].Role)
 
 	columnIDByName := make(map[string]uuid.UUID, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
@@ -963,7 +964,7 @@ func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 	}
 
 	for _, session := range suite.sessions {
-		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false); err != nil {
+		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(role.ParticipantRole), false, true, true, false); err != nil {
 			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}

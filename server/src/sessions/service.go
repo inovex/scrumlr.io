@@ -16,6 +16,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -105,7 +106,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		return nil, fmt.Errorf("unable to get session for board: %w", err)
 	}
 
-	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
+	if sessionOfCaller.Role == role.ParticipantRole && body.User != body.Caller {
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
 		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
@@ -120,17 +121,17 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	}
 
 	if body.Role != nil {
-		if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
+		if sessionOfCaller.Role == role.ParticipantRole && *body.Role != role.ParticipantRole {
 			err := common.ForbiddenError(errors.New("cannot promote role"))
 			span.SetStatus(codes.Error, "cannot promote role")
 			span.RecordError(err)
 			return nil, err
-		} else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
+		} else if sessionOfUserToModify.Role == role.OwnerRole && *body.Role != role.OwnerRole {
 			err := common.ForbiddenError(errors.New("not allowed to change owner role"))
 			span.SetStatus(codes.Error, "not allowed to change owner role")
 			span.RecordError(err)
 			return nil, err
-		} else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
+		} else if sessionOfUserToModify.Role != role.OwnerRole && *body.Role == role.OwnerRole {
 			err := common.ForbiddenError(errors.New("not allowed to promote to owner role"))
 			span.SetStatus(codes.Error, "not allowed to promote to owner role")
 			span.RecordError(err)
@@ -383,7 +384,7 @@ func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query 
 
 	roleFilter := query.Get("role")
 	if roleFilter != "" {
-		filter.Role = (*common.SessionRole)(&roleFilter)
+		filter.Role = (*role.Role)(&roleFilter)
 	}
 
 	return filter
@@ -515,7 +516,7 @@ func (service *BoardSessionService) updatedSessions(ctx context.Context, board u
 	}
 }
 
-func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []common.SessionRole) bool {
+func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []role.Role) bool {
 	for _, session := range sessions {
 		if clientID == session.UserID {
 			if slices.Contains(sessionsRoles, session.Role) {

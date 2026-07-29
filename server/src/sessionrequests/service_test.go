@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -265,7 +265,7 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 func TestUpdatesessionRequest(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 
 	user := users.User{
 		ID: userId,
