@@ -21,27 +21,6 @@ import (
 )
 
 type mockConnection struct{}
-type MockRealTimeBroker struct {
-	mock.Mock
-}
-
-func (m *MockRealTimeBroker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *realtime.BoardEvent, error) {
-	args := m.Called(ctx, boardID)
-	var ch chan *realtime.BoardEvent
-	if args.Get(0) != nil {
-		ch = args.Get(0).(chan *realtime.BoardEvent)
-	}
-	return ch, args.Error(1)
-}
-
-func (m *MockRealTimeBroker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *realtime.BoardSessionRequestEventType, error) {
-	args := m.Called(ctx, board, user)
-	var ch chan *realtime.BoardSessionRequestEventType
-	if args.Get(0) != nil {
-		ch = args.Get(0).(chan *realtime.BoardSessionRequestEventType)
-	}
-	return ch, args.Error(1)
-}
 
 func (m *mockConnection) WriteJSON(ctx context.Context, data any) error {
 	return nil
@@ -240,7 +219,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 	}
 
 	successChan := make(chan *realtime.BoardEvent, 1)
-	mockBroker := new(MockRealTimeBroker)
+	mockBroker := new(realtime.MockBrokerInterface)
 
 	// retry logic: fail 3 times, then succeed on the 4th try
 	mockBroker.On("GetBoardChannel", mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(3)
@@ -276,7 +255,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 		Board: &boards.Board{ID: boardID},
 	}
 
-	mockBroker := new(MockRealTimeBroker)
+	mockBroker := new(realtime.MockBrokerInterface)
 
 	// fail on all retries
 	mockBroker.On("GetBoardChannel", mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(MaxRetries)

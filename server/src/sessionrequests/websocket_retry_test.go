@@ -22,29 +22,6 @@ func (m *mockConn) Read(ctx context.Context) (websocket.MessageType, []byte, err
 }
 func (m *mockConn) Close(reason string) error { return nil }
 
-// Test mock for realtime broker (testify/mock)
-type MockRealTimeBroker struct {
-	mock.Mock
-}
-
-func (m *MockRealTimeBroker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *realtime.BoardSessionRequestEventType, error) {
-	args := m.Called(ctx, board, user)
-	var ch chan *realtime.BoardSessionRequestEventType
-	if args.Get(0) != nil {
-		ch = args.Get(0).(chan *realtime.BoardSessionRequestEventType)
-	}
-	return ch, args.Error(1)
-}
-
-func (m *MockRealTimeBroker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *realtime.BoardEvent, error) {
-	args := m.Called(ctx, boardID)
-	var ch chan *realtime.BoardEvent
-	if args.Get(0) != nil {
-		ch = args.Get(0).(chan *realtime.BoardEvent)
-	}
-	return ch, args.Error(1)
-}
-
 func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	original := SleepBetweenRetries
 	SleepBetweenRetries = time.Millisecond * 10
@@ -55,7 +32,7 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	conn := &mockConn{}
 
 	successChan := make(chan *realtime.BoardSessionRequestEventType, 1)
-	mockBroker := new(MockRealTimeBroker)
+	mockBroker := new(realtime.MockBrokerInterface)
 
 	// fail 2 times, then succeed
 	mockBroker.On("GetBoardSessionRequestChannel", mock.Anything, boardID, userID).Return(nil, errors.New("nats down")).Times(2)
@@ -87,7 +64,7 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	userID := uuid.New()
 	conn := &mockConn{}
 
-	mockBroker := new(MockRealTimeBroker)
+	mockBroker := new(realtime.MockBrokerInterface)
 
 	// always fail
 	mockBroker.On("GetBoardSessionRequestChannel", mock.Anything, boardID, userID).Return(nil, errors.New("nats down")).Times(MaxRetries)
@@ -117,7 +94,7 @@ func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 
 	existingChan := make(chan *realtime.BoardSessionRequestEventType, 1)
 
-	mockBroker := new(MockRealTimeBroker)
+	mockBroker := new(realtime.MockBrokerInterface)
 	// no expectations set
 
 	socket := &sessionRequestWebsocket{
