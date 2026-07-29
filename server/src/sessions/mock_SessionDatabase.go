@@ -584,7 +584,7 @@ type MockSessionDatabase_OwnerExists_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) OwnerExists(ctx interface{}, board interface{}, user interface{}) *MockSessionDatabase_OwnerExists_Call {
+func (_e *MockSessionDatabase_Expecter) OwnerExists(ctx any, board any, user any) *MockSessionDatabase_OwnerExists_Call {
 	return &MockSessionDatabase_OwnerExists_Call{Call: _e.mock.On("OwnerExists", ctx, board, user)}
 }
 
