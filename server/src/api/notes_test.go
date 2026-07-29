@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -89,6 +90,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
+		Append("not found err", http.StatusNotFound, sql.ErrNoRows, false, false, nil).
 		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
@@ -136,6 +138,26 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 				StatusText: "Internal Server Error",
 				ErrorText:  "something",
 			},
+			isLocked: false,
+		},
+		{
+			name:         "Forbidden: not allowed to delete other user's note",
+			expectedCode: http.StatusForbidden,
+			err: notes.CreateNoteError(
+				notes.Forbidden,
+				"not allowed to delete other user's note",
+				errors.New("not allowed to delete note from other user"),
+			),
+			isLocked: false,
+		},
+		{
+			name:         "Conflict: note is currently locked by another user",
+			expectedCode: http.StatusConflict,
+			err: notes.CreateNoteError(
+				notes.Conflict,
+				"note is currently locked",
+				errors.New("note is currently locked"),
+			),
 			isLocked: false,
 		},
 	}
@@ -203,6 +225,16 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 func (suite *NotesTestSuite) TestEditNote() {
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
+		Append("conflict err", http.StatusConflict, notes.CreateNoteError(
+			notes.Conflict,
+			"note is currently locked",
+			errors.New("note is currently locked"),
+		), false, false, nil).
+		Append("forbidden err", http.StatusForbidden, notes.CreateNoteError(
+			notes.Forbidden,
+			"not allowed to stack notes",
+			errors.New("not allowed to stack notes"),
+		), false, false, nil).
 		Append("api err", http.StatusInternalServerError, &common.APIError{
 			Err:        errors.New("test"),
 			StatusCode: http.StatusInternalServerError,

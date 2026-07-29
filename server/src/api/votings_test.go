@@ -33,6 +33,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
+		Append("bad request err", http.StatusBadRequest, votings.CreateVotingError(votings.BadRequest, "only one open voting per session is allowed", errors.New("only one open voting per session is allowed")), false, false, nil).
 		Append("unhandled error", http.StatusInternalServerError, errors.New("that was unexpected"), false, false, nil)
 
 	for _, tt := range testParameterBundles {

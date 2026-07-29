@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
@@ -31,6 +32,7 @@ func (suite *VoteTestSuite) TestAddVote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
+		Append("not found err", http.StatusNotFound, sql.ErrNoRows, false, false, nil).
 		Append("unexpected error", http.StatusInternalServerError, errors.New("teapot?"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
