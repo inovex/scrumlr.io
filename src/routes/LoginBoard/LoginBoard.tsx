@@ -116,7 +116,7 @@ export const LoginBoard = () => {
     return (
       <>
         <p
-          // eslint-disable-next-line
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role -- styled as text, but has to behave like a button
           role="button"
           aria-expanded={showAnonymousContent}
           tabIndex={showAnonymousContent ? -1 : 0} // Remove from tab order if already active
