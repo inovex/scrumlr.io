@@ -60,8 +60,7 @@ func (suite *BoardReactionServiceIntegrationTestSuite) Test_Create() {
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventBoardReactionAdded, msg.Type)
 
-	var boardReaction *BoardReaction
-	boardReaction, err = technical_helper.Unmarshal[BoardReaction](msg.Data)
+	boardReaction, err := technical_helper.Unmarshal[BoardReaction](msg.Data)
 	assert.NoError(t, err)
 	assert.Equal(t, Applause, boardReaction.ReactionType)
 }

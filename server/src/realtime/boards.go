@@ -65,7 +65,6 @@ func (b *Broker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *
 		span.SetStatus(codes.Error, "failed to subscribe to board channel")
 		span.RecordError(err)
 		log.Errorw("failed to subscribe to BoardChannel", "err", err)
-		//bubble up the error instead of returning an nil channel silently
 		return nil, err
 	}
 	return c, nil

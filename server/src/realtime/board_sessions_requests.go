@@ -37,7 +37,6 @@ func (b *Broker) GetBoardSessionRequestChannel(ctx context.Context, board, user 
 		span.RecordError(err)
 		log.Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
 
-		//bubble up the error instead of returning an nil channel silently
 		return nil, err
 	}
 	return c, nil

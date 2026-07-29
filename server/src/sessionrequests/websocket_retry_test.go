@@ -45,7 +45,6 @@ func (m *MockRealTimeBroker) GetBoardChannel(ctx context.Context, boardID uuid.U
 	return ch, args.Error(1)
 }
 
-// 1) Succeeds after a few retries
 func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	original := SleepBetweenRetries
 	SleepBetweenRetries = time.Millisecond * 10

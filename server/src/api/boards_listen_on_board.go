@@ -36,6 +36,7 @@ type InitEvent struct {
 }
 
 const MaxRetries = 10
+
 var SleepBetweenRetries = time.Second * 2
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -111,6 +112,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, initEventData boards.FullBoard) {
+	log := logger.FromContext(ctx)
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]websocket.Connection),
@@ -136,12 +138,12 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 			if err == nil {
 				break
 			}
-			logger.FromContext(ctx).Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
+			log.Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
 			time.Sleep(SleepBetweenRetries) // wait before retrying
 		}
 		// if it completely fails after retries, abort and don't start the goroutine
 		if err != nil {
-			logger.FromContext(ctx).Errorw("could not establish board subscription after retries", "board", boardID, "err", err)
+			log.Errorw("could not establish board subscription after retries", "board", boardID, "err", err)
 			return
 		}
 		b.subscription = ch
