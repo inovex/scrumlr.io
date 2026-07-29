@@ -193,7 +193,7 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, boardTemplate)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardTemplateServiceIntegrationTestSuite) seedBoardTemplatesTestData(db *bun.DB) {

@@ -65,7 +65,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get session request")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -100,7 +100,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 		span.SetStatus(codes.Error, "failed to get all session requests")
 		span.RecordError(err)
 		log.Error(err, "failed to get all session requetsts", "board", board)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -157,7 +157,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 		span.SetStatus(codes.Error, "failed to update session request")
 		span.RecordError(err)
 		log.Errorw("failed to update board session request", "request", body, "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
