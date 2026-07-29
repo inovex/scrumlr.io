@@ -9,6 +9,15 @@ Full documentation of all environment variables that can be used to configure Sc
 
 ## Frontend
 
+The frontend is a static bundle, so it cannot read environment variables at runtime. Instead the nginx container
+translates each `SCRUMLR_*` variable below into a `scrumlr__*` cookie on `/index.html` (with `Max-Age=3600`), and the
+client reads those cookies on startup. The one exception is `SCRUMLR_LISTEN_PORT`, which configures nginx itself.
+
+A consequence worth knowing: a cookie value takes precedence over anything baked in at build time, and when a cookie is
+absent the client falls back to its own default — `SCRUMLR_SHOW_LEGAL_DOCUMENTS`, for instance, defaults to *enabled*, so
+leaving it empty does not hide the legal pages. See
+[Frontend configuration](/dev/frontend/configuration/#runtime-configuration-cookies) for the full resolution order.
+
 ### Show legal documents
 
 Toggle visibility of cookie policy, privacy policy, and terms & conditions in the footer.
@@ -60,6 +69,11 @@ The clarity id to use [Clarity](https://clarity.microsoft.com/).
 ```ini
 SCRUMLR_CLARITY_ID=''
 ```
+
+:::note
+This variable currently has no effect. The `Clarity.init` call in `src/index.tsx` is commented out, pending an explicit
+opt-in mechanism for third-party tracking.
+:::
 
 ## Backend
 
