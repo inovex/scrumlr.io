@@ -12,7 +12,7 @@ import {LegacyButton} from "components/Button";
 import {useAppDispatch, useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
-import {signOut} from "store/features";
+import {setLanguage, signOut} from "store/features";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
@@ -25,9 +25,7 @@ export const Homepage = withTranslation()(() => {
   const currentYear = new Date().getFullYear();
 
   const changeLanguage = (language: string) => () => {
-    i18n.changeLanguage(language).then(() => {
-      document.documentElement.lang = i18n.language;
-    });
+    dispatch(setLanguage(language));
   };
 
   const onLogout = () => {

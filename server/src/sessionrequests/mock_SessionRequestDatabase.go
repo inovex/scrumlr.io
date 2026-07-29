@@ -72,7 +72,7 @@ type MockSessionRequestDatabase_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request DatabaseBoardSessionRequestInsert
-func (_e *MockSessionRequestDatabase_Expecter) Create(ctx interface{}, request interface{}) *MockSessionRequestDatabase_Create_Call {
+func (_e *MockSessionRequestDatabase_Expecter) Create(ctx any, request any) *MockSessionRequestDatabase_Create_Call {
 	return &MockSessionRequestDatabase_Create_Call{Call: _e.mock.On("Create", ctx, request)}
 }
 
@@ -139,7 +139,7 @@ type MockSessionRequestDatabase_Exists_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionRequestDatabase_Expecter) Exists(ctx interface{}, board interface{}, user interface{}) *MockSessionRequestDatabase_Exists_Call {
+func (_e *MockSessionRequestDatabase_Expecter) Exists(ctx any, board any, user any) *MockSessionRequestDatabase_Exists_Call {
 	return &MockSessionRequestDatabase_Exists_Call{Call: _e.mock.On("Exists", ctx, board, user)}
 }
 
@@ -211,7 +211,7 @@ type MockSessionRequestDatabase_Get_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionRequestDatabase_Expecter) Get(ctx interface{}, board interface{}, user interface{}) *MockSessionRequestDatabase_Get_Call {
+func (_e *MockSessionRequestDatabase_Expecter) Get(ctx any, board any, user any) *MockSessionRequestDatabase_Get_Call {
 	return &MockSessionRequestDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, user)}
 }
 
@@ -291,9 +291,9 @@ type MockSessionRequestDatabase_GetAll_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - status ...RequestStatus
-func (_e *MockSessionRequestDatabase_Expecter) GetAll(ctx interface{}, board interface{}, status ...interface{}) *MockSessionRequestDatabase_GetAll_Call {
+func (_e *MockSessionRequestDatabase_Expecter) GetAll(ctx any, board any, status ...any) *MockSessionRequestDatabase_GetAll_Call {
 	return &MockSessionRequestDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{ctx, board}, status...)...)}
+		append([]any{ctx, board}, status...)...)}
 }
 
 func (_c *MockSessionRequestDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID, status ...RequestStatus)) *MockSessionRequestDatabase_GetAll_Call {
@@ -365,7 +365,7 @@ type MockSessionRequestDatabase_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - update DatabaseBoardSessionRequestUpdate
-func (_e *MockSessionRequestDatabase_Expecter) Update(ctx interface{}, update interface{}) *MockSessionRequestDatabase_Update_Call {
+func (_e *MockSessionRequestDatabase_Expecter) Update(ctx any, update any) *MockSessionRequestDatabase_Update_Call {
 	return &MockSessionRequestDatabase_Update_Call{Call: _e.mock.On("Update", ctx, update)}
 }
 

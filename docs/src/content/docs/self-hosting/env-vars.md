@@ -72,6 +72,16 @@ Can be one of `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`. Defaults to `INFO` if n
 SCRUMLR_LOG_LEVEL='INFO'
 ```
 
+### Swagger page
+
+The swagger page can be enabled by setting
+
+```ini
+SCRUMLR_ENABLE_SWAGGER='true'
+```
+
+By deafult the swagger page is disabled.
+
 ### Server Port
 
 The port on which the backend should listen for incoming connections.

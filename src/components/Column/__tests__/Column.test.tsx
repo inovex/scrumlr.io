@@ -19,7 +19,7 @@ const createColumn = (overwrite?: Partial<ApplicationState>) => {
   );
 };
 
-const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
+const _createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
       <CustomDndContext>

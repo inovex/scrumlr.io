@@ -2,7 +2,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
 import {Boards} from "routes/Boards";
 import {Templates} from "routes/Boards/Templates";
-import {Sessions} from "routes/Boards/Sessions";
+import {History} from "routes/Boards/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -101,7 +101,7 @@ const Router = () => {
             </Route>
           </Route>
 
-          <Route path="sessions" element={<Sessions />}>
+          <Route path="history" element={<History />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
               <Route path="feedback" element={<Feedback />} />

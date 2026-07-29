@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/role"
 )
 
 // BoardSession is the response for all participant requests.
@@ -30,12 +30,15 @@ type BoardSession struct {
 	// can only view data, add notes and votes while the users with the other
 	// roles are able to promote users, change board settings, edit columns,
 	// start voting sessions etc.
-	Role common.SessionRole `json:"role"`
+	Role role.Role `json:"role"`
 
 	//Reference for when board_session has been created
 	CreatedAt time.Time `json:"createdAt"`
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
+
+	// Flag indicates whether user has marked the board as one of their favourites.
+	Favourite bool `json:"favourite"`
 
 	Board uuid.UUID `json:"-"`
 }
@@ -43,7 +46,7 @@ type BoardSession struct {
 type BoardSessionCreateRequest struct {
 	Board uuid.UUID
 	User  uuid.UUID
-	Role  common.SessionRole
+	Role  role.Role
 }
 
 // BoardSessionUpdateRequest represents the request to update a single participant.
@@ -63,14 +66,15 @@ type BoardSessionUpdateRequest struct {
 	// Can be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.
 	// Only moderators and owners can promote other participants. A regular participant is not
 	// allowed to change the role.
-	Role *common.SessionRole `json:"role"`
+	Role *role.Role `json:"role"`
 
 	// The banned state of the participant
 	Banned *bool `json:"banned"`
 
-	Board  uuid.UUID `json:"-"`
-	User   uuid.UUID `json:"-"`
-	Caller uuid.UUID `json:"-"`
+	Board     uuid.UUID `json:"-"`
+	User      uuid.UUID `json:"-"`
+	Caller    uuid.UUID `json:"-"`
+	Favourite *bool     `json:"favourite"`
 }
 
 // BoardSessionsUpdateRequest represents the request to update all participants.
@@ -95,6 +99,7 @@ func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
 	b.CreatedAt = session.CreatedAt
 	b.Banned = session.Banned
 	b.Board = session.Board
+	b.Favourite = session.Favourite
 	return b
 }
 
@@ -118,5 +123,5 @@ type BoardSessionFilter struct {
 	Connected  *bool
 	Ready      *bool
 	RaisedHand *bool
-	Role       *common.SessionRole
+	Role       *role.Role
 }

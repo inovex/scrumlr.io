@@ -71,13 +71,12 @@ exports[`ColumnsConfigurator > should render correctly 1`] = `
             placeholder="Title"
             value="sample templates col name 1"
           />
-          <div
+          <button
             class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-            role="button"
             tabindex="0"
           >
             sample templates col name 1
-          </div>
+          </button>
         </div>
         <div
           class="columns-configurator-column__menu"
@@ -138,11 +137,10 @@ exports[`ColumnsConfigurator > should render correctly 1`] = `
               </g>
             </g>
           </svg>
-          <span
+          <button
             aria-label="current colorBacklog Blue"
             class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
             data-cy="columns-configurator-column__color-picker"
-            role="button"
             tabindex="0"
           />
           <button
@@ -245,13 +243,12 @@ exports[`ColumnsConfigurator > should render correctly 1`] = `
             placeholder="Title"
             value="sample templates col name 2"
           />
-          <div
+          <button
             class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-            role="button"
             tabindex="0"
           >
             sample templates col name 2
-          </div>
+          </button>
         </div>
         <div
           class="columns-configurator-column__menu"
@@ -312,11 +309,10 @@ exports[`ColumnsConfigurator > should render correctly 1`] = `
               </g>
             </g>
           </svg>
-          <span
+          <button
             aria-label="current colorPlanning Pink"
             class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
             data-cy="columns-configurator-column__color-picker"
-            role="button"
             tabindex="0"
           />
           <button

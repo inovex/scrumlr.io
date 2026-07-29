@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/timeprovider"
 
 	"github.com/google/uuid"
@@ -546,7 +547,7 @@ func (suite *DatabaseBoardTestSuite) seedData(db *bun.DB) {
 	}
 
 	for _, session := range suite.sessions {
-		err := testDbTemplates.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false)
+		err := testDbTemplates.InsertSession(db, session.user, session.board, string(role.ParticipantRole), false, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}

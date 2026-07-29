@@ -86,6 +86,7 @@ $option-size--small: 18px;
 }
 
 .color-picker__color-option {
+  all: unset;
   width: $option-size--default;
   height: $option-size--default;
   border-radius: styles.$rounded--full;

@@ -37,7 +37,7 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
         setImportData(data);
         setFileName(file.name);
         setFileError(null);
-      } catch (error) {
+      } catch (_error) {
         // error due to invalid JSON format
         Toast.error({title: t("Toast.failedImport")});
         setFileError(t("ImportBoard.errorInvalid"));

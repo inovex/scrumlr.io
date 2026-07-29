@@ -1,0 +1,5295 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the scrumlr backend server.",
+        "title": "Scrumlr backend",
+        "termsOfService": "https://scrumlr.io/terms",
+        "contact": {
+            "email": "info@scrumlr.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/inovex/scrumlr.io/blob/main/LICENSE"
+        },
+        "version": "5.2.2"
+    },
+    "paths": {
+        "/boards": {
+            "get": {
+                "description": "Delete a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Delete a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.BoardOverview"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Create a new board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "board to create",
+                        "name": "board",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.CreateBoardRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/columns": {
+            "get": {
+                "description": "Get all columns for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "columns"
+                ],
+                "summary": "Get all columns for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/columns.Column"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new column for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "columns"
+                ],
+                "summary": "Create a new column for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "column to create",
+                        "name": "column",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/columns.ColumnRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/columns.Column"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/columns/{id}": {
+            "get": {
+                "description": "Get a column for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "columns"
+                ],
+                "summary": "Get a column for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/columns.Column"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a column for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "columns"
+                ],
+                "summary": "Update a column for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the column",
+                        "name": "column",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/columns.ColumnUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/columns.Column"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a column for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "columns"
+                ],
+                "summary": "Delete a column for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/notes": {
+            "get": {
+                "description": "Get all notes on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Get all notes on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/notes.Note"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new note on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Create a new note on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "note to create",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/notes.NoteCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/notes.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/notes/{id}": {
+            "get": {
+                "description": "Create a new note on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Create a new note on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the note",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notes.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a note on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Update a note on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the note",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update a note",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/notes.NoteUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/notes.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a note from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Delete a note from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the note",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/participants": {
+            "get": {
+                "description": "Get all sessions for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Get all sessions for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "true",
+                            "false"
+                        ],
+                        "type": "string",
+                        "description": "only select connected sessions",
+                        "name": "connected",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "true",
+                            "false"
+                        ],
+                        "type": "string",
+                        "description": "only select sessions that are ready",
+                        "name": "ready",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "true",
+                            "false"
+                        ],
+                        "type": "string",
+                        "description": "only select sessions that raised their hand",
+                        "name": "raisedHand",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "OWNER",
+                            "MODERATOR",
+                            "PARTICIPANT"
+                        ],
+                        "type": "string",
+                        "description": "only select sessions with the requested role",
+                        "name": "role",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sessions for the board",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/sessions.BoardSession"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a sessions for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Update a sessions for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the session",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the session",
+                        "name": "session",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sessions.BoardSessionUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "updated session for the board",
+                        "schema": {
+                            "$ref": "#/definitions/sessions.BoardSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/participants/{id}": {
+            "get": {
+                "description": "Get a sessions for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Get a sessions for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the session",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "session for the board",
+                        "schema": {
+                            "$ref": "#/definitions/sessions.BoardSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a sessions for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Update a sessions for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the session",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the session",
+                        "name": "session",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sessions.BoardSessionUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "session for the board",
+                        "schema": {
+                            "$ref": "#/definitions/sessions.BoardSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/reactions": {
+            "get": {
+                "description": "Get all reaction on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reactions"
+                ],
+                "summary": "Get all reaction on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/reactions.Reaction"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new reaction on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reactions"
+                ],
+                "summary": "Create a new reaction on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "reaction to create",
+                        "name": "reaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reactions.ReactionCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/reactions.Reaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/reactions/{id}": {
+            "get": {
+                "description": "Get a reaction on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reactions"
+                ],
+                "summary": "Get a reaction on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the reaction",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/reactions.Reaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a reaction on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reactions"
+                ],
+                "summary": "Update a reaction on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the reaction",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the reaction",
+                        "name": "reaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reactions.ReactionUpdateTypeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove a reaction from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reactions"
+                ],
+                "summary": "Remove a reaction from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the reaction",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/requests": {
+            "get": {
+                "description": "Get all board session request for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board session requests"
+                ],
+                "summary": "Get all board session request for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "boarId for the session requests",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "status to filter the requests",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/sessionrequests.BoardSessionRequest"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/requests/{userId}": {
+            "get": {
+                "description": "Get a board session request for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board session requests"
+                ],
+                "summary": "Get a board session request for a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "boarId for the session request",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId for the session request",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sessionrequests.BoardSessionRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a board session request for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board session requests"
+                ],
+                "summary": "Update a board session request for a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "boarId for the session request",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "userId for the session request",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the board session request",
+                        "name": "sessionRequestUpdate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sessionrequests.BoardSessionRequestUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sessionrequests.BoardSessionRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/votes": {
+            "get": {
+                "description": "Get all votes from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votes"
+                ],
+                "summary": "Get all votes from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of a voting to filter the votes",
+                        "name": "voting",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of a note to filter the votes",
+                        "name": "note",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/votings.Vote"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new vote to a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votes"
+                ],
+                "summary": "Add a new vote to a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "vote to add",
+                        "name": "vote",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/votings.Vote"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove a vote from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votes"
+                ],
+                "summary": "Remove a vote from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "vote to remove",
+                        "name": "vote",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/votings": {
+            "get": {
+                "description": "Get all votings on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votings"
+                ],
+                "summary": "Get all votings on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/votings.Voting"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new voting on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votings"
+                ],
+                "summary": "Create a new voting on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "voting to create",
+                        "name": "voting",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VotingCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/votings.Voting"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/votings/{id}": {
+            "get": {
+                "description": "Get a voting on a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votings"
+                ],
+                "summary": "Get a voting on a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the voting",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/votings.Voting"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a voting on a board to closed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "votings"
+                ],
+                "summary": "Update a voting on a board to closed",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the voting",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/votings.Voting"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{id}": {
+            "get": {
+                "description": "Get a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Get a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to get",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Delete a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards/{id}/board-reactions": {
+            "post": {
+                "description": "Create a board reaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board reactions"
+                ],
+                "summary": "Create a board reaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Board reaction to create",
+                        "name": "boardreaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boardreactions.BoardReactionCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/boards/{id}/participants": {
+            "post": {
+                "description": "Join an existing board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Join an existing board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to join",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "join request for the board",
+                        "name": "join",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/boards.JoinBoardRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "303": {
+                        "description": "See Other"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards{id}": {
+            "put": {
+                "description": "Update a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Update a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the board",
+                        "name": "board",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.BoardUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards{id}/export": {
+            "get": {
+                "description": "Export a board",
+                "consumes": [
+                    "json text/csv"
+                ],
+                "produces": [
+                    "json text/csv"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Export a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to export",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards{id}/timer": {
+            "post": {
+                "description": "Set a new timer for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Set a new timer for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to set the timer",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "timer request",
+                        "name": "timer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.SetTimerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a timer for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Delete a timer for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to delete the timer from",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/boards{id}/timer/increment": {
+            "post": {
+                "description": "Increment a timer for a board by one minute",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Increment a timer for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to increment the timer",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "post": {
+                "description": "Send feedback for scrumlr",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feedback"
+                ],
+                "summary": "Send feedback for scrumlr",
+                "parameters": [
+                    {
+                        "description": "Feedback to send",
+                        "name": "feedback",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/feedback.FeedbackRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Get the health status of the scrumlr backend",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health"
+                ],
+                "summary": "Get the health status",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "503": {
+                        "description": "Service Unavailable"
+                    }
+                }
+            }
+        },
+        "/import": {
+            "post": {
+                "description": "Import a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Import a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "board to import",
+                        "name": "board",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.ImportBoardRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/info": {
+            "get": {
+                "description": "Get the server info with the configured options",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "info"
+                ],
+                "summary": "Show server info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.Info"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Create a new anonymous user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Create a new anonymous user",
+                "parameters": [
+                    {
+                        "description": "user to create",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.AnonymousSignUpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/users.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Log the current user out",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Log the current user out",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/login/{provider}": {
+            "get": {
+                "description": "Redirect the user to the specified auth provider consent page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Redirect the user to the specified auth provider consent page",
+                "parameters": [
+                    {
+                        "enum": [
+                            "GOOGLE",
+                            "MICROSOFT",
+                            "AZURE_AD",
+                            "GITHUB",
+                            "APPLE",
+                            "OIDC"
+                        ],
+                        "type": "string",
+                        "description": "provider to use to login",
+                        "name": "provider",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "307": {
+                        "description": "Temporary Redirect"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/{provider}/callback": {
+            "get": {
+                "description": "Verify the auth provider call and create or update a user. Redirect to the page provider with the state",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify the auth provider call and create or update a user",
+                "parameters": [
+                    {
+                        "description": "user to create",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.AnonymousSignUpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "303": {
+                        "description": "See Other",
+                        "schema": {
+                            "$ref": "#/definitions/users.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/templates": {
+            "get": {
+                "description": "Get all board templates for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board templates"
+                ],
+                "summary": "Get all board templates",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/boardtemplates.BoardTemplateFull"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board templates"
+                ],
+                "summary": "Create a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Board template to create",
+                        "name": "boardtemplate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boardtemplates.CreateBoardTemplateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/boardtemplates.BoardTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/templates/{boardid}/columns": {
+            "get": {
+                "description": "Get all column templates from a board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column templates"
+                ],
+                "summary": "Get all column templates from a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board template",
+                        "name": "boardid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/columntemplates.ColumnTemplate"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a column template for an existing board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column templates"
+                ],
+                "summary": "Create a column template for a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board template",
+                        "name": "boardid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "column template to create",
+                        "name": "columntemplate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/columntemplates.ColumnTemplateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/columntemplates.ColumnTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/templates/{boardid}/columns/{id}": {
+            "get": {
+                "description": "Get a column template from a board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column templates"
+                ],
+                "summary": "Get a column template from a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board template",
+                        "name": "boardid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column template",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/columntemplates.ColumnTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a column template from a board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column templates"
+                ],
+                "summary": "Update a column template from a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board template",
+                        "name": "boardid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column template to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/columntemplates.ColumnTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a column template from a board template",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "column templates"
+                ],
+                "summary": "Delete a column template from a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board template",
+                        "name": "boardid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the column template to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/templates/{id}": {
+            "get": {
+                "description": "Get a board template by its id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board templates"
+                ],
+                "summary": "Get a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the template to get",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boardtemplates.BoardTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a board template for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board templates"
+                ],
+                "summary": "Update a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the template to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Board template to update",
+                        "name": "boardtemplate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boardtemplates.BoardTemplateUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boardtemplates.BoardTemplate"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a board template for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board templates"
+                ],
+                "summary": "Delete a board template",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the template to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "Get the loged in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get the loged in user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update the logged in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update the logged in user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.UserUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/board/{boardId}": {
+            "get": {
+                "description": "Get all users from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/users.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "Get a user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a user by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the user",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete the logged in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete the logged in user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the user to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.AnonymousSignUpRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "The display name of the user.",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Info": {
+            "type": "object",
+            "properties": {
+                "allowAnonymousBoardCreation": {
+                    "type": "boolean"
+                },
+                "allowAnonymousCustomTemplates": {
+                    "type": "boolean"
+                },
+                "anonymousLoginDisabled": {
+                    "type": "boolean"
+                },
+                "authProvider": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.AccountType"
+                    }
+                },
+                "feedbackEnabled": {
+                    "type": "boolean"
+                },
+                "serverTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "avatar.AccessoriesType": {
+            "type": "string",
+            "enum": [
+                "Blank",
+                "Kurt",
+                "Prescription01",
+                "Prescription02",
+                "Round",
+                "Sunglasses",
+                "Wayfarers"
+            ],
+            "x-enum-varnames": [
+                "AccessoriesTypeBlank",
+                "AccessoriesTypeKurt",
+                "AccessoriesTypePrescription01",
+                "AccessoriesTypePrescription02",
+                "AccessoriesTypeRound",
+                "AccessoriesTypeSunglasses",
+                "AccessoriesTypeWayfarers"
+            ]
+        },
+        "avatar.ClotheColor": {
+            "type": "string",
+            "enum": [
+                "Black",
+                "Blue01",
+                "Blue02",
+                "Blue03",
+                "Gray01",
+                "Gray02",
+                "Heather",
+                "PastelBlue",
+                "PastelGreen",
+                "PastelOrange",
+                "PastelRed",
+                "PastelYellow",
+                "Pink",
+                "Red",
+                "White"
+            ],
+            "x-enum-varnames": [
+                "ClotheColorBlack",
+                "ClotheColorBlue01",
+                "ClotheColorBlue02",
+                "ClotheColorBlue03",
+                "ClotheColorGray01",
+                "ClotheColorGray02",
+                "ClotheColorHeather",
+                "ClotheColorPastelBlue",
+                "ClotheColorPastelGreen",
+                "ClotheColorPastelOrange",
+                "ClotheColorPastelRed",
+                "ClotheColorPastelYellow",
+                "ClotheColorPink",
+                "ClotheColorRed",
+                "ClotheColorWhite"
+            ]
+        },
+        "avatar.ClotheType": {
+            "type": "string",
+            "enum": [
+                "BlazerShirt",
+                "BlazerSweater",
+                "CollarSweater",
+                "GraphicShirt",
+                "Hoodie",
+                "Overall",
+                "ShirtCrewNeck",
+                "ShirtScoopNeck",
+                "ShirtVNeck"
+            ],
+            "x-enum-varnames": [
+                "ClotheTypeBlazerShirt",
+                "ClotheTypeBlazerSweater",
+                "ClotheTypeCollarSweater",
+                "ClotheTypeGraphicShirt",
+                "ClotheTypeHoodie",
+                "ClotheTypeOverall",
+                "ClotheTypeShirtCrewNeck",
+                "ClotheTypeShirtScoopNeck",
+                "ClotheTypeShirtVNeck"
+            ]
+        },
+        "avatar.EyeType": {
+            "type": "string",
+            "enum": [
+                "Close",
+                "Cry",
+                "Default",
+                "Dizzy",
+                "EyeRoll",
+                "Happy",
+                "Hearts",
+                "Side",
+                "Squint",
+                "Surprised",
+                "Wink",
+                "WinkWacky"
+            ],
+            "x-enum-varnames": [
+                "EyeTypeClose",
+                "EyeTypeCry",
+                "EyeTypeDefault",
+                "EyeTypeDizzy",
+                "EyeTypeEyeRoll",
+                "EyeTypeHappy",
+                "EyeTypeHearts",
+                "EyeTypeSide",
+                "EyeTypeSquint",
+                "EyeTypeSurprised",
+                "EyeTypeWink",
+                "EyeTypeWinkWacky"
+            ]
+        },
+        "avatar.EyebrowType": {
+            "type": "string",
+            "enum": [
+                "Angry",
+                "AngryNatural",
+                "Default",
+                "DefaultNatural",
+                "FlatNatural",
+                "FrownNatural",
+                "RaisedExcited",
+                "RaisedExcitedNatural",
+                "SadConcerned",
+                "SadConcernedNatural",
+                "UnibrowNatural",
+                "UpDown",
+                "UpDownNatural"
+            ],
+            "x-enum-varnames": [
+                "EyebrowTypeAngry",
+                "EyebrowTypeAngryNatural",
+                "EyebrowTypeDefault",
+                "EyebrowTypeDefaultNatural",
+                "EyebrowTypeFlatNatural",
+                "EyebrowTypeFrownNatural",
+                "EyebrowTypeRaisedExcited",
+                "EyebrowTypeRaisedExcitedNatural",
+                "EyebrowTypeSadConcerned",
+                "EyebrowTypeSadConcernedNatural",
+                "EyebrowTypeUnibrowNatural",
+                "EyebrowTypeUpDown",
+                "EyebrowTypeUpDownNatural"
+            ]
+        },
+        "avatar.FacialHairColor": {
+            "type": "string",
+            "enum": [
+                "Auburn",
+                "Black",
+                "Blonde",
+                "BlondeGolden",
+                "Brown",
+                "BrownDark",
+                "Platinum",
+                "Red"
+            ],
+            "x-enum-varnames": [
+                "FacialHairColorAuburn",
+                "FacialHairColorBlack",
+                "FacialHairColorBlonde",
+                "FacialHairColorBlondeGolden",
+                "FacialHairColorBrown",
+                "FacialHairColorBrownDark",
+                "FacialHairColorPlatinum",
+                "FacialHairColorRed"
+            ]
+        },
+        "avatar.FacialHairType": {
+            "type": "string",
+            "enum": [
+                "Blank",
+                "BeardMedium",
+                "BeardLight",
+                "BeardMajestic",
+                "MoustacheFancy",
+                "MoustacheMagnum"
+            ],
+            "x-enum-varnames": [
+                "FacialHairTypeBlank",
+                "FacialHairTypeBeardMedium",
+                "FacialHairTypeBeardLight",
+                "FacialHairTypeBeardMajestic",
+                "FacialHairTypeMoustacheFancy",
+                "FacialHairTypeMoustacheMagnum"
+            ]
+        },
+        "avatar.GraphicType": {
+            "type": "string",
+            "enum": [
+                "Bat",
+                "Cumbia",
+                "Deer",
+                "Diamond",
+                "Hola",
+                "Pizza",
+                "Resist",
+                "Selena",
+                "Bear",
+                "SkullOutline",
+                "Skull"
+            ],
+            "x-enum-varnames": [
+                "GraphicTypeBat",
+                "GraphicTypeCumbia",
+                "GraphicTypeDeer",
+                "GraphicTypeDiamond",
+                "GraphicTypeHola",
+                "GraphicTypePizza",
+                "GraphicTypeResist",
+                "GraphicTypeSelena",
+                "GraphicTypeBear",
+                "GraphicTypeSkullOutline",
+                "GraphicTypeSkull"
+            ]
+        },
+        "avatar.HairColor": {
+            "type": "string",
+            "enum": [
+                "Auburn",
+                "Black",
+                "Blonde",
+                "BlondeGolden",
+                "Brown",
+                "BrownDark",
+                "PastelPink",
+                "Blue",
+                "Platinum",
+                "Red",
+                "SilverGray"
+            ],
+            "x-enum-varnames": [
+                "HairColorAuburn",
+                "HairColorBlack",
+                "HairColorBlonde",
+                "HairColorBlondeGolden",
+                "HairColorBrown",
+                "HairColorBrownDark",
+                "HairColorPastelPink",
+                "HairColorBlue",
+                "HairColorPlatinum",
+                "HairColorRed",
+                "HairColorSilverGray"
+            ]
+        },
+        "avatar.MouthType": {
+            "type": "string",
+            "enum": [
+                "Concerned",
+                "Default",
+                "Disbelief",
+                "Eating",
+                "Grimace",
+                "Sad",
+                "ScreamOpen",
+                "Serious",
+                "Smile",
+                "Tongue",
+                "Twinkle",
+                "Vomit"
+            ],
+            "x-enum-varnames": [
+                "MouthTypeConcerned",
+                "MouthTypeDefault",
+                "MouthTypeDisbelief",
+                "MouthTypeEating",
+                "MouthTypeGrimace",
+                "MouthTypeSad",
+                "MouthTypeScreamOpen",
+                "MouthTypeSerious",
+                "MouthTypeSmile",
+                "MouthTypeTongue",
+                "MouthTypeTwinkle",
+                "MouthTypeVomit"
+            ]
+        },
+        "avatar.SkinColor": {
+            "type": "string",
+            "enum": [
+                "Tanned",
+                "Yellow",
+                "Pale",
+                "Light",
+                "Brown",
+                "DarkBrown",
+                "Black"
+            ],
+            "x-enum-varnames": [
+                "SkinColorTanned",
+                "SkinColorYellow",
+                "SkinColorPale",
+                "SkinColorLight",
+                "SkinColorBrown",
+                "SkinColorDarkBrown",
+                "SkinColorBlack"
+            ]
+        },
+        "avatar.TopType": {
+            "type": "string",
+            "enum": [
+                "Eyepatch",
+                "Hat",
+                "Hijab",
+                "LongHairBigHair",
+                "LongHairBob",
+                "LongHairBun",
+                "LongHairCurly",
+                "LongHairCurvy",
+                "LongHairDreads",
+                "LongHairFrida",
+                "LongHairFro",
+                "LongHairFroBand",
+                "LongHairMiaWallace",
+                "LongHairNotTooLong",
+                "LongHairShavedSides",
+                "LongHairStraight",
+                "LongHairStraight2",
+                "LongHairStraightStrand",
+                "NoHair",
+                "ShortHairDreads01",
+                "ShortHairDreads02",
+                "ShortHairFrizzle",
+                "ShortHairShaggyMullet",
+                "ShortHairShortCurly",
+                "ShortHairShortFlat",
+                "ShortHairShortRound",
+                "ShortHairShortWaved",
+                "ShortHairSides",
+                "ShortHairTheCaesar",
+                "ShortHairTheCaesarSidePart",
+                "Turban",
+                "WinterHat1",
+                "WinterHat2",
+                "WinterHat3",
+                "WinterHat4"
+            ],
+            "x-enum-varnames": [
+                "TopTypeEyepatch",
+                "TopTypeHat",
+                "TopTypeHijab",
+                "TopTypeLongHairBigHair",
+                "TopTypeLongHairBob",
+                "TopTypeLongHairBun",
+                "TopTypeLongHairCurly",
+                "TopTypeLongHairCurvy",
+                "TopTypeLongHairDreads",
+                "TopTypeLongHairFrida",
+                "TopTypeLongHairFro",
+                "TopTypeLongHairFroBand",
+                "TopTypeLongHairMiaWallace",
+                "TopTypeLongHairNotTooLong",
+                "TopTypeLongHairShavedSides",
+                "TopTypeLongHairStraight",
+                "TopTypeLongHairStraight2",
+                "TopTypeLongHairStraightStrand",
+                "TopTypeNoHair",
+                "TopTypeShortHairDreads01",
+                "TopTypeShortHairDreads02",
+                "TopTypeShortHairFrizzle",
+                "TopTypeShortHairShaggyMullet",
+                "TopTypeShortHairShortCurly",
+                "TopTypeShortHairShortFlat",
+                "TopTypeShortHairShortRound",
+                "TopTypeShortHairShortWaved",
+                "TopTypeShortHairSides",
+                "TopTypeShortHairTheCaesar",
+                "TopTypeShortHairTheCaesarSidePart",
+                "TopTypeTurban",
+                "TopTypeWinterHat1",
+                "TopTypeWinterHat2",
+                "TopTypeWinterHat3",
+                "TopTypeWinterHat4"
+            ]
+        },
+        "boardreactions.BoardReactionCreateRequest": {
+            "type": "object",
+            "properties": {
+                "reactionType": {
+                    "description": "The type of reaction",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/boardreactions.Reaction"
+                        }
+                    ]
+                }
+            }
+        },
+        "boardreactions.Reaction": {
+            "type": "string",
+            "enum": [
+                "tada",
+                "applause",
+                "heart",
+                "like",
+                "dislike"
+            ],
+            "x-enum-varnames": [
+                "Tada",
+                "Applause",
+                "Heart",
+                "Like",
+                "Dislike"
+            ]
+        },
+        "boards.AccessPolicy": {
+            "type": "string",
+            "enum": [
+                "PUBLIC",
+                "BY_PASSPHRASE",
+                "BY_INVITE"
+            ],
+            "x-enum-varnames": [
+                "Public",
+                "ByPassphrase",
+                "ByInvite"
+            ]
+        },
+        "boards.Board": {
+            "type": "object",
+            "properties": {
+                "accessPolicy": {
+                    "description": "The access policy",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/boards.AccessPolicy"
+                        }
+                    ]
+                },
+                "allowStacking": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "description": "Description of the board",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isLocked": {
+                    "type": "boolean"
+                },
+                "lastModifiedAt": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The board name",
+                    "type": "string"
+                },
+                "sharedNote": {
+                    "description": "The id of a note to share with other users.\nFIXME omitempty works only with nil in combination with pointers",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/uuid.NullUUID"
+                        }
+                    ]
+                },
+                "showAuthors": {
+                    "description": "The show authors",
+                    "type": "boolean"
+                },
+                "showNoteReactions": {
+                    "description": "show note reactions",
+                    "type": "boolean"
+                },
+                "showNotesOfOtherUsers": {
+                    "description": "The show notes",
+                    "type": "boolean"
+                },
+                "showVoting": {
+                    "$ref": "#/definitions/uuid.NullUUID"
+                },
+                "timerEnd": {
+                    "type": "string"
+                },
+                "timerStart": {
+                    "type": "string"
+                }
+            }
+        },
+        "boards.BoardOverview": {
+            "type": "object",
+            "properties": {
+                "board": {
+                    "$ref": "#/definitions/boards.Board"
+                },
+                "columnsNumber": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "participants": {
+                    "type": "integer"
+                }
+            }
+        },
+        "boards.BoardUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "accessPolicy": {
+                    "description": "The new access policy of the board.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/boards.AccessPolicy"
+                        }
+                    ]
+                },
+                "allowStacking": {
+                    "description": "Set whether stacking should be allowed to all users or only moderators.",
+                    "type": "boolean"
+                },
+                "description": {
+                    "description": "Description of the board",
+                    "type": "string"
+                },
+                "isLocked": {
+                    "description": "Set whether changes to board should be allowed to all users or only moderators.",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "The name of the board.",
+                    "type": "string"
+                },
+                "passphrase": {
+                    "description": "The passphrase of the board.",
+                    "type": "string"
+                },
+                "sharedNote": {
+                    "description": "Set the note id of the note to share with other users.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/uuid.NullUUID"
+                        }
+                    ]
+                },
+                "showAuthors": {
+                    "description": "Set whether authors of notes should be shown to all users.",
+                    "type": "boolean"
+                },
+                "showNoteReactions": {
+                    "description": "Set whether note reactions should be shown to all users.",
+                    "type": "boolean"
+                },
+                "showNotesOfOtherUsers": {
+                    "description": "Set whether notes of other users should be visible for everyone else.",
+                    "type": "boolean"
+                },
+                "showVoting": {
+                    "$ref": "#/definitions/uuid.NullUUID"
+                },
+                "timerEnd": {
+                    "description": "Set the timer end.",
+                    "type": "string"
+                },
+                "timerStart": {
+                    "description": "Set the timer start.",
+                    "type": "string"
+                }
+            }
+        },
+        "boards.CreateBoardRequest": {
+            "type": "object",
+            "properties": {
+                "accessPolicy": {
+                    "$ref": "#/definitions/boards.AccessPolicy"
+                },
+                "columns": {
+                    "description": "The columns to create for the board.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columns.ColumnRequest"
+                    }
+                },
+                "description": {
+                    "description": "Description of the board",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the board.",
+                    "type": "string"
+                },
+                "passphrase": {
+                    "description": "The passphrase must be set if access policy is defined as by passphrase.",
+                    "type": "string"
+                }
+            }
+        },
+        "boards.ImportBoardRequest": {
+            "type": "object",
+            "properties": {
+                "board": {
+                    "$ref": "#/definitions/boards.CreateBoardRequest"
+                },
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columns.Column"
+                    }
+                },
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/notes.Note"
+                    }
+                },
+                "votings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/votings.Voting"
+                    }
+                }
+            }
+        },
+        "boards.JoinBoardRequest": {
+            "type": "object",
+            "properties": {
+                "passphrase": {
+                    "description": "The passphrase challenge if the access policy is 'BY_PASSPHRASE'.",
+                    "type": "string"
+                }
+            }
+        },
+        "boards.SetTimerRequest": {
+            "type": "object",
+            "properties": {
+                "minutes": {
+                    "type": "integer"
+                }
+            }
+        },
+        "boardtemplates.BoardTemplate": {
+            "type": "object",
+            "properties": {
+                "creator": {
+                    "description": "The board template creator id",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the board template",
+                    "type": "string"
+                },
+                "favourite": {
+                    "description": "The favourite status of the template",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "The board template id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The board template name",
+                    "type": "string"
+                }
+            }
+        },
+        "boardtemplates.BoardTemplateFull": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "description": "Board templates associated column templates",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columntemplates.ColumnTemplate"
+                    }
+                },
+                "template": {
+                    "$ref": "#/definitions/boardtemplates.BoardTemplate"
+                }
+            }
+        },
+        "boardtemplates.BoardTemplateUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "Description of the board template",
+                    "type": "string"
+                },
+                "favourite": {
+                    "description": "The favourite status of the template",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "The board template id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The board template name",
+                    "type": "string"
+                }
+            }
+        },
+        "boardtemplates.CreateBoardTemplateRequest": {
+            "type": "object",
+            "properties": {
+                "columnTemplates": {
+                    "description": "The column templates to create for the board template.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columntemplates.ColumnTemplateRequest"
+                    }
+                },
+                "creator": {
+                    "description": "The user who creates the template",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Description of the board template",
+                    "type": "string"
+                },
+                "favourite": {
+                    "description": "The favourite status of the template",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "The name of the board template.",
+                    "type": "string"
+                }
+            }
+        },
+        "columns.Column": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "description": "The column color.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Color"
+                        }
+                    ]
+                },
+                "description": {
+                    "description": "The column description.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The column id.",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "The column rank.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "The column name.",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "The column visibility.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "columns.ColumnRequest": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "description": "The column color to set.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Color"
+                        }
+                    ]
+                },
+                "description": {
+                    "description": "The column description to set.",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "Sets the index of this column in the sort order.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "The column name to set.",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Sets whether this column should be visible to regular participants.\n\nThe default value on creation is 'false'.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "columns.ColumnUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "description": "The column color to set.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Color"
+                        }
+                    ]
+                },
+                "description": {
+                    "description": "The column description to set.",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "Sets the index of this column in the sort order.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "The column name to set.",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Sets whether this column should be visible to regular participants.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "columntemplates.ColumnTemplate": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "description": "The column template color.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Color"
+                        }
+                    ]
+                },
+                "description": {
+                    "description": "The description of a board template column.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "The column template id.",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "The column template rank.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "The column template name.",
+                    "type": "string"
+                },
+                "template": {
+                    "description": "The board template id, that this column template is bound to.",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "The column template visibility.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "columntemplates.ColumnTemplateRequest": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "description": "The column template color to set.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Color"
+                        }
+                    ]
+                },
+                "description": {
+                    "description": "The columnTemplate description to set.",
+                    "type": "string"
+                },
+                "index": {
+                    "description": "Sets the index of this column template in the sort order.",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "The column template name to set.",
+                    "type": "string"
+                },
+                "visible": {
+                    "description": "Sets whether this column template should be visible to regular participants.\nThe default value on creation is 'false'.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "common.APIError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "common.AccountType": {
+            "type": "string",
+            "enum": [
+                "ANONYMOUS",
+                "GOOGLE",
+                "MICROSOFT",
+                "AZURE_AD",
+                "GITHUB",
+                "APPLE",
+                "OIDC"
+            ],
+            "x-enum-varnames": [
+                "Anonymous",
+                "Google",
+                "Microsoft",
+                "AzureAd",
+                "GitHub",
+                "Apple",
+                "TypeOIDC"
+            ]
+        },
+        "common.Avatar": {
+            "type": "object",
+            "properties": {
+                "accessoriesType": {
+                    "$ref": "#/definitions/avatar.AccessoriesType"
+                },
+                "backgroundColor": {
+                    "$ref": "#/definitions/common.Color"
+                },
+                "clotheColor": {
+                    "$ref": "#/definitions/avatar.ClotheColor"
+                },
+                "clotheType": {
+                    "$ref": "#/definitions/avatar.ClotheType"
+                },
+                "eyeType": {
+                    "$ref": "#/definitions/avatar.EyeType"
+                },
+                "eyebrowType": {
+                    "$ref": "#/definitions/avatar.EyebrowType"
+                },
+                "facialHairColor": {
+                    "$ref": "#/definitions/avatar.FacialHairColor"
+                },
+                "facialHairType": {
+                    "$ref": "#/definitions/avatar.FacialHairType"
+                },
+                "graphicType": {
+                    "$ref": "#/definitions/avatar.GraphicType"
+                },
+                "hairColor": {
+                    "$ref": "#/definitions/avatar.HairColor"
+                },
+                "mouthType": {
+                    "$ref": "#/definitions/avatar.MouthType"
+                },
+                "skinColor": {
+                    "$ref": "#/definitions/avatar.SkinColor"
+                },
+                "topType": {
+                    "$ref": "#/definitions/avatar.TopType"
+                }
+            }
+        },
+        "common.Color": {
+            "type": "string",
+            "enum": [
+                "backlog-blue",
+                "goal-green",
+                "value-violet",
+                "online-orange",
+                "planning-pink",
+                "poker-purple",
+                "yielding-yellow"
+            ],
+            "x-enum-varnames": [
+                "ColorBacklogBlue",
+                "ColorGoalGreen",
+                "ColorValueViolet",
+                "ColorOnlineOrange",
+                "ColorPlanningPink",
+                "ColorPokerPurple",
+                "ColorYieldingYellow"
+            ]
+        },
+        "common.SessionRole": {
+            "type": "string",
+            "enum": [
+                "PARTICIPANT",
+                "MODERATOR",
+                "OWNER"
+            ],
+            "x-enum-varnames": [
+                "ParticipantRole",
+                "ModeratorRole",
+                "OwnerRole"
+            ]
+        },
+        "feedback.FeedbackRequest": {
+            "type": "object",
+            "properties": {
+                "contact": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/feedback.FeedbackType"
+                }
+            }
+        },
+        "feedback.FeedbackType": {
+            "type": "string",
+            "enum": [
+                "BUG_REPORT",
+                "FEATURE_REQUEST",
+                "PRAISE"
+            ],
+            "x-enum-varnames": [
+                "BugReport",
+                "FeatureRequest",
+                "Praise"
+            ]
+        },
+        "notes.Note": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "The author of the note.",
+                    "type": "string"
+                },
+                "edited": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "The id of the note",
+                    "type": "string"
+                },
+                "position": {
+                    "description": "The position of the note.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/notes.NotePosition"
+                        }
+                    ]
+                },
+                "text": {
+                    "description": "The text of the note.",
+                    "type": "string"
+                }
+            }
+        },
+        "notes.NoteCreateRequest": {
+            "type": "object",
+            "properties": {
+                "column": {
+                    "description": "The column of the note.",
+                    "type": "string"
+                },
+                "text": {
+                    "description": "The text of the note.",
+                    "type": "string"
+                }
+            }
+        },
+        "notes.NotePosition": {
+            "type": "object",
+            "properties": {
+                "column": {
+                    "description": "The column of the note.",
+                    "type": "string"
+                },
+                "rank": {
+                    "description": "The note rank.",
+                    "type": "integer"
+                },
+                "stack": {
+                    "description": "The parent note for this note in a stack.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/uuid.NullUUID"
+                        }
+                    ]
+                }
+            }
+        },
+        "notes.NoteUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "position": {
+                    "description": "The position of the note",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/notes.NotePosition"
+                        }
+                    ]
+                },
+                "text": {
+                    "description": "The text of the note.",
+                    "type": "string"
+                }
+            }
+        },
+        "reactions.Reaction": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "reactionType": {
+                    "$ref": "#/definitions/reactions.ReactionType"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "reactions.ReactionCreateRequest": {
+            "type": "object",
+            "properties": {
+                "note": {
+                    "type": "string"
+                },
+                "reactionType": {
+                    "$ref": "#/definitions/reactions.ReactionType"
+                }
+            }
+        },
+        "reactions.ReactionType": {
+            "type": "string",
+            "enum": [
+                "thinking",
+                "heart",
+                "like",
+                "dislike",
+                "joy",
+                "celebration",
+                "poop"
+            ],
+            "x-enum-varnames": [
+                "Thinking",
+                "Heart",
+                "Like",
+                "Dislike",
+                "Joy",
+                "Celebration",
+                "Poop"
+            ]
+        },
+        "reactions.ReactionUpdateTypeRequest": {
+            "type": "object",
+            "properties": {
+                "reactionType": {
+                    "$ref": "#/definitions/reactions.ReactionType"
+                }
+            }
+        },
+        "sessionrequests.BoardSessionRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/sessionrequests.RequestStatus"
+                },
+                "user": {
+                    "$ref": "#/definitions/users.User"
+                }
+            }
+        },
+        "sessionrequests.BoardSessionRequestUpdate": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/sessionrequests.RequestStatus"
+                }
+            }
+        },
+        "sessionrequests.RequestStatus": {
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "ACCEPTED",
+                "REJECTED"
+            ],
+            "x-enum-varnames": [
+                "RequestPending",
+                "RequestAccepted",
+                "RequestRejected"
+            ]
+        },
+        "sessions.BoardSession": {
+            "type": "object",
+            "properties": {
+                "banned": {
+                    "description": "Flag indicates whether the user is banned",
+                    "type": "boolean"
+                },
+                "connected": {
+                    "description": "Flag indicates whether user is online and connected to the board.",
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "description": "Reference for when board_session has been created",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "raisedHand": {
+                    "description": "Flag indicates whether user has raised his hand (...virtually).",
+                    "type": "boolean"
+                },
+                "ready": {
+                    "description": "Flag indicates whether user is marked as ready.",
+                    "type": "boolean"
+                },
+                "role": {
+                    "description": "The role of the participant.\n\nCan be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants\ncan only view data, add notes and votes while the users with the other\nroles are able to promote users, change board settings, edit columns,\nstart voting sessions etc.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.SessionRole"
+                        }
+                    ]
+                },
+                "showHiddenColumns": {
+                    "description": "The configuration of visibility of columns.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "sessions.BoardSessionUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "banned": {
+                    "description": "The banned state of the participant",
+                    "type": "boolean"
+                },
+                "raisedHand": {
+                    "description": "The raised hand state of the participant.",
+                    "type": "boolean"
+                },
+                "ready": {
+                    "description": "The ready state of the participant.",
+                    "type": "boolean"
+                },
+                "role": {
+                    "description": "The role of the participant.\n\nCan be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.\nOnly moderators and owners can promote other participants. A regular participant is not\nallowed to change the role.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.SessionRole"
+                        }
+                    ]
+                },
+                "showHiddenColumns": {
+                    "description": "The configuration of visibility of columns.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "users.User": {
+            "type": "object",
+            "properties": {
+                "accountType": {
+                    "description": "The user's account type configuration",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.AccountType"
+                        }
+                    ]
+                },
+                "avatar": {
+                    "description": "The user's avatar configuration",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/common.Avatar"
+                        }
+                    ]
+                },
+                "id": {
+                    "description": "The id of the user",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The user's display name",
+                    "type": "string"
+                }
+            }
+        },
+        "users.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "$ref": "#/definitions/common.Avatar"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "uuid.NullUUID": {
+            "type": "object",
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if UUID is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "votings.Vote": {
+            "type": "object",
+            "properties": {
+                "note": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "voting": {
+                    "type": "string"
+                }
+            }
+        },
+        "votings.VoteRequest": {
+            "type": "object",
+            "properties": {
+                "note": {
+                    "type": "string"
+                }
+            }
+        },
+        "votings.Voting": {
+            "type": "object",
+            "properties": {
+                "allowMultipleVotes": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isAnonymous": {
+                    "type": "boolean"
+                },
+                "showVotesOfOthers": {
+                    "type": "boolean"
+                },
+                "status": {
+                    "$ref": "#/definitions/votings.VotingStatus"
+                },
+                "voteLimit": {
+                    "type": "integer"
+                },
+                "votes": {
+                    "$ref": "#/definitions/votings.VotingResults"
+                }
+            }
+        },
+        "votings.VotingCreateRequest": {
+            "type": "object",
+            "properties": {
+                "allowMultipleVotes": {
+                    "type": "boolean"
+                },
+                "isAnonymous": {
+                    "type": "boolean"
+                },
+                "showVotesOfOthers": {
+                    "type": "boolean"
+                },
+                "voteLimit": {
+                    "type": "integer"
+                }
+            }
+        },
+        "votings.VotingResults": {
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "votesPerNote": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/votings.VotingResultsPerNote"
+                    }
+                }
+            }
+        },
+        "votings.VotingResultsPerNote": {
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer"
+                },
+                "userVotes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/votings.VotingResultsPerUser"
+                    }
+                }
+            }
+        },
+        "votings.VotingResultsPerUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "votings.VotingStatus": {
+            "type": "string",
+            "enum": [
+                "OPEN",
+                "CLOSED"
+            ],
+            "x-enum-varnames": [
+                "Open",
+                "Closed"
+            ]
+        }
+    }
+}

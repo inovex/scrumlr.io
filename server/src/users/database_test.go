@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 )
 
@@ -45,7 +46,7 @@ func (suite *DatabaseUserTestSuite) SetupTest() {
 	)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAnonymousUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -60,7 +61,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAnonymousUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAppleUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAppleUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -75,7 +76,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAppleUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatAzureAdUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateAzureAdUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -90,7 +91,7 @@ func (suite *DatabaseUserTestSuite) TesDatabaseCreatAzureAdUser() {
 	assert.Nil(t, dbUser.Avatar)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabaseCreatGitHubUser() {
+func (suite *DatabaseUserTestSuite) TestDatabaseCreateGitHubUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
@@ -274,7 +275,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersWithSessions() {
 	boardID := suite.boards["Update"].id
 
 	// call the method under test
-	users, err := database.GetUsers(context.Background(), boardID)
+	users, err := database.GetUsersByBoardID(context.Background(), boardID)
 	assert.Nil(t, err)
 	assert.Len(t, users, 3)
 
@@ -295,10 +296,83 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetBoardUsersEmpty() {
 	database := NewUserDatabase(suite.db)
 	boardID := uuid.New()
 
-	dbUser, err := database.GetUsers(context.Background(), boardID)
+	dbUser, err := database.GetUsersByBoardID(context.Background(), boardID)
 
 	assert.Nil(t, err)
 	assert.Empty(t, dbUser)
+}
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDs() {
+	t := suite.T()
+
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.Nil(t, err)
+	assert.Equal(t, len(userIDs), len(dbUsers))
+	assert.ElementsMatch(t, userIDs, dbUsers)
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsNoContent() {
+	t := suite.T()
+
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, len(dbUsers))
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsMissingUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	missingID := uuid.New()
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+		missingID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.NoError(t, err)
+
+	expected := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+	assert.ElementsMatch(t, expected, dbUsers)
+	assert.NotContains(t, dbUsers, missingID)
+}
+
+func (suite *DatabaseUserTestSuite) TestGetExistingUserIDsDuplicateUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userIDs := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+		suite.users["Friend"].ID,
+	}
+
+	dbUsers, err := database.GetExistingUserIDs(context.Background(), userIDs)
+
+	assert.NoError(t, err)
+
+	expected := []uuid.UUID{
+		suite.users["Stan"].ID,
+		suite.users["Friend"].ID,
+	}
+	assert.ElementsMatch(t, expected, dbUsers)
 }
 
 func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
@@ -314,7 +388,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseGetUserNotFound() {
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAnonymousUserTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -326,7 +400,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseTrue() {
 	assert.True(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAnonymousUserFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -338,7 +412,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAnonymousUseFalse() {
 	assert.False(t, isAnonymous)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioTrue() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAvailableForKeyMigrationTrue() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -350,7 +424,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioTrue() {
 	assert.True(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioFalse() {
+func (suite *DatabaseUserTestSuite) TestDatabaseIsAvailableForKeyMigrationFalse() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -362,7 +436,7 @@ func (suite *DatabaseUserTestSuite) TesDatabasIsAvailableForKeyMigratioFalse() {
 	assert.False(t, isAvailable)
 }
 
-func (suite *DatabaseUserTestSuite) TesDatabasSetKeyMigration() {
+func (suite *DatabaseUserTestSuite) TestDatabaseSetKeyMigration() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
 
@@ -397,9 +471,9 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 
 	// test sessions
 	suite.sessions = make(map[string]sessions.BoardSession, 1)
-	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: common.OwnerRole, Connected: true}
-	suite.sessions["Friend"] = sessions.BoardSession{UserID: suite.users["Friend"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
-	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["Stan"] = sessions.BoardSession{UserID: suite.users["Stan"].ID, Board: suite.boards["Update"].id, Role: role.OwnerRole, Connected: true}
+	suite.sessions["Friend"] = sessions.BoardSession{UserID: suite.users["Friend"].ID, Board: suite.boards["Update"].id, Role: role.ParticipantRole, Connected: true}
+	suite.sessions["Santa"] = sessions.BoardSession{UserID: suite.users["Santa"].ID, Board: suite.boards["Update"].id, Role: role.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
 		var avatar *string

@@ -6,6 +6,9 @@ on:
 
 jobs:
   package:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/package.yml
 
 

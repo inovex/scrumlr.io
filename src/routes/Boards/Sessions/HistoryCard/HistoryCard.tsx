@@ -1,0 +1,238 @@
+import {HistoryBoard} from "routes/Boards/Sessions";
+import {FavouriteButton} from "components/Templates";
+import classNames from "classnames";
+import {
+  CalendarIcon,
+  CloseIcon,
+  ColumnsIcon,
+  Duplicate2Icon,
+  EditIcon,
+  KeyProtectedIcon,
+  KeyWithLockIcon,
+  LinkIcon,
+  LockClosedIcon,
+  MultipleUserIcon,
+  NextIcon,
+  NoteIcon,
+  OpenIcon,
+  ThreeDotsIcon as MenuIcon,
+  TrashIcon,
+} from "components/Icon";
+import {TextArea} from "components/TextArea/TextArea";
+import {Button} from "components/Button";
+import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
+import {AccessPolicy} from "store/features";
+import {ReactElement, useState} from "react";
+import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {Tooltip} from "components/Tooltip";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
+import {useTranslation} from "react-i18next";
+import {useAppSelector} from "store";
+import {decomposeTimeUnitComponents, getTimeDifference, isDateYesterday} from "utils/datetime";
+import "./HistoryCard.scss";
+
+type HistoryCardProps = {
+  board: HistoryBoard;
+};
+
+export const HistoryCard = (props: HistoryCardProps) => {
+  const accessPolicyIconMap: Record<AccessPolicy, ReactElement> = {
+    PUBLIC: (
+      <OpenIcon id={`history-card__access-policy::${props.board.id}`} className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />
+    ),
+    BY_PASSPHRASE: (
+      <LockClosedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")}
+      />
+    ),
+    BY_INVITE: (
+      <KeyProtectedIcon
+        id={`history-card__access-policy::${props.board.id}`}
+        className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")}
+      />
+    ),
+  };
+
+  const {t} = useTranslation();
+
+  const locale = useAppSelector((state) => state.view.language) ?? "en";
+
+  const localizeTimeDifference = (date: Date, now = new Date()) => {
+    const dateThreshold = 3; // "x days ago" before the full date is shown
+    const isYesterday = isDateYesterday(date);
+
+    const diff = decomposeTimeUnitComponents(getTimeDifference(date, now));
+    if (diff.seconds < 60) return t("TimeDifference.now");
+    if (diff.minutes < 60) return t("TimeDifference.minutes", {count: diff.minutes});
+    if (isYesterday) return t("TimeDifference.yesterday");
+    if (diff.hours < 24) return t("TimeDifference.hours", {count: diff.hours});
+    if (diff.days < dateThreshold) return t("TimeDifference.days", {count: diff.days});
+    return date.toLocaleDateString(locale, {year: "numeric", month: "2-digit", day: "2-digit"});
+  };
+
+  const [showMiniMenu, setShowMiniMenu] = useState(false);
+
+  const joinedColumnsNames = props.board.columns.join(", ");
+  const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
+  const formattedModifiedAtDate = localizeTimeDifference(props.board.modifiedAt);
+
+  const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
+  const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
+  const {isTextTruncated: isCreatedAtDateTruncated, textRef: createAtDateRef} = useTextOverflow<HTMLDivElement>(formattedCreatedAtDate);
+  const {isTextTruncated: isModifiedAtDateTruncated, textRef: modifiedAtDateRef} = useTextOverflow<HTMLDivElement>(formattedModifiedAtDate);
+
+  const renderAccessPolicyIcon = (accessPolicy: AccessPolicy) => accessPolicyIconMap[accessPolicy];
+
+  const renderMenu = () =>
+    showMiniMenu ? (
+      <MiniMenu
+        className={classNames("history-card__menu", "history-card__menu--open")}
+        items={[
+          {
+            label: t("History.HistoryCard.Menu.delete"),
+            element: <TrashIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: t("History.HistoryCard.Menu.copyLink"),
+            element: <LinkIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: t("History.HistoryCard.Menu.createTemplate"),
+            element: <Duplicate2Icon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {
+            label: t("History.HistoryCard.Menu.edit"),
+            element: <EditIcon />,
+            onClick: () => {
+              throw new Error("Not implemented yet");
+            },
+          },
+          {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
+        ]}
+        focusBehaviour="trap"
+        onBlur={() => setShowMiniMenu(false)}
+        dataCy="template-card__menu"
+      />
+    ) : (
+      <div className="history-card__menu-icon-container">
+        <MenuIcon className={classNames("history-card__icon", "history-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+      </div>
+    );
+
+  return (
+    <div className="history-card__wrapper">
+      <div className="history-card">
+        <FavouriteButton
+          className="history-card__icon history-card__favourite"
+          active={props.board.favourite}
+          onClick={() => {
+            throw new Error("Not implemented yet");
+          }}
+        />
+
+        <div className={classNames("history-card__head")}>
+          <div ref={boardNameRef} id={`history-card__title::${props.board.id}`} className="history-card__title">
+            {props.board.name}
+          </div>
+
+          {renderAccessPolicyIcon(props.board.accessPolicy)}
+
+          <UserRoleChip className="history-card__user-role-chip" userRole={props.board.userRole} />
+        </div>
+
+        {renderMenu()}
+
+        <TextArea className={classNames("history-card__description")} input={props.board.description} rows={3} setInput={() => {}} readOnly border="none" embedded />
+
+        <div className={classNames("history-card__info-footer")}>
+          <div className="history-card__info-item" id={`history-card__info-item-data-subtitle--columns::${props.board.id}`}>
+            <ColumnsIcon className={classNames("history-card__icon", "history-card__icon--columns")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--columns">
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountColumns", {count: props.board.columns.length})}</div>
+              <div ref={columnsSubtitleRef} className="history-card__info-item-data-subtitle">
+                {joinedColumnsNames}
+              </div>
+            </div>
+          </div>
+
+          <div className="history-card__info-item">
+            <CalendarIcon className={classNames("history-card__icon", "history-card__icon--calendar")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--timestamps">
+              <div ref={createAtDateRef} id={`history-card__info-item-data-title--createdAt::${props.board.id}`} className="history-card__info-item-data-title">
+                {formattedCreatedAtDate}
+              </div>
+              <div ref={modifiedAtDateRef} id={`history-card__info-item-data-subtitle--modifiedAt::${props.board.id}`} className="history-card__info-item-data-subtitle">
+                {t("History.HistoryCard.Info.lastUpdated", {date: formattedModifiedAtDate, interpolation: {escapeValue: false}})}
+              </div>
+            </div>
+          </div>
+
+          <div className="history-card__info-item">
+            <MultipleUserIcon className={classNames("history-card__icon", "history-card__icon--participants")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--participants">
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountParticipants", {count: props.board.participants})}</div>
+            </div>
+          </div>
+
+          <div className="history-card__info-item">
+            <NoteIcon className={classNames("history-card__icon", "history-card__icon--notes")} />
+            <div className="history-card__info-item-data-container history-card__info-item-data-container--notes">
+              <div className="history-card__info-item-data-title">{t("History.HistoryCard.Info.amountNotes", {count: props.board.notes})}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className={classNames("history-card__locked-icon-container", {"history-card__locked-icon-container--is-locked": props.board.isLocked})}>
+          <KeyWithLockIcon id={`history-card__icon--locked::${props.board.id}`} className={classNames("history-card__icon", "history-card__icon--locked")} />
+        </div>
+
+        <Button
+          className={classNames("history-card__button", "history-card__button--start")}
+          small
+          icon={<NextIcon />}
+          onClick={() => {
+            throw new Error("Not implemented yet");
+          }}
+        >
+          {t("History.HistoryCard.openBoardButton")}
+        </Button>
+        <Tooltip anchorId={`history-card__access-policy::${props.board.id}`} color="backlog-blue">
+          {t(`AccessPolicy.${props.board.accessPolicy}`)}
+        </Tooltip>
+        {isBoardNameTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__title::${props.board.id}`} color="backlog-blue">
+            {props.board.name}
+          </Tooltip>
+        )}
+        <Tooltip anchorId={`history-card__icon--locked::${props.board.id}`} color="backlog-blue">
+          {t("History.HistoryCard.readOnly")}
+        </Tooltip>
+        {isColumnsSubtitleTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-subtitle--columns::${props.board.id}`} color="backlog-blue">
+            {joinedColumnsNames}
+          </Tooltip>
+        )}
+        {isCreatedAtDateTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-title--createdAt::${props.board.id}`} color="backlog-blue">
+            {formattedCreatedAtDate}
+          </Tooltip>
+        )}
+        {isModifiedAtDateTruncated.horizontal && (
+          <Tooltip anchorId={`history-card__info-item-data-subtitle--modifiedAt::${props.board.id}`} color="backlog-blue">
+            {formattedModifiedAtDate}
+          </Tooltip>
+        )}
+      </div>
+    </div>
+  );
+};

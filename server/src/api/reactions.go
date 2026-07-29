@@ -16,6 +16,22 @@ import (
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
+// Get a reaction on a board
+//
+//	@Summary		Get a reaction on a board
+//	@Description	Get a reaction on a board
+//	@Tags			reactions
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the reaction"
+//	@Produce		json
+//	@Success		200	{object}	reactions.Reaction
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/reactions/{id} [get]
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.get")
 	defer span.End()
@@ -26,7 +42,7 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get reaction")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -34,6 +50,21 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, reaction)
 }
 
+// Get all reaction on a board
+//
+//	@Summary		Get all reaction on a board
+//	@Description	Get all reaction on a board
+//	@Tags			reactions
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Produce		json
+//	@Success		200	{object}	[]reactions.Reaction
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/reactions [get]
 func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.get.all")
 	defer span.End()
@@ -44,7 +75,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get reactions for board")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -52,11 +83,27 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, reactions)
 }
 
+// Create a new reaction on a board
+//
+//	@Summary		Create a new reaction on a board
+//	@Description	Create a new reaction on a board
+//	@Tags			reactions
+//	@Accept			json
+//	@Param			Cookie		header	string							true	"jwt token to authenticate"
+//	@Param			boardId		path	string							true	"id of the board"
+//	@Param			reaction	body	reactions.ReactionCreateRequest	true	"reaction to create"
+//	@Produce		json
+//	@Success		201	{object}	reactions.Reaction
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/reactions [post]
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.create")
 	defer span.End()
-
 	log := logger.FromContext(ctx)
+
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -77,7 +124,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create reaction")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -85,6 +132,22 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, reaction)
 }
 
+// Remove a reaction from a board
+//
+//	@Summary		Remove a reaction from a board
+//	@Description	Remove a reaction from a board
+//	@Tags			reactions
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"id of the board"
+//	@Param			id		path	string	true	"id of the reaction"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/reactions/{id} [delete]
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.remove")
 	defer span.End()
@@ -96,7 +159,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	if err := s.reactions.Delete(ctx, board, user, id); err != nil {
 		span.SetStatus(codes.Error, "failed to remove reaction")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -104,6 +167,23 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+// Update a reaction on a board
+//
+//	@Summary		Update a reaction on a board
+//	@Description	Update a reaction on a board
+//	@Tags			reactions
+//	@Accept			json
+//	@Param			Cookie		header	string								true	"jwt token to authenticate"
+//	@Param			boardId		path	string								true	"id of the board"
+//	@Param			id			path	string								true	"id of the reaction"
+//	@Param			reaction	body	reactions.ReactionUpdateTypeRequest	true	"values to update the reaction"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{boardId}/reactions/{id} [put]
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	ctx, span := tracer.Start(r.Context(), "scrumlr.reactions.api.update")
@@ -126,7 +206,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update reaction")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

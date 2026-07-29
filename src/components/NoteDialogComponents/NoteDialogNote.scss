@@ -7,6 +7,7 @@ $footer-height: 36px;
   --note-footer-height: 28px;
 
   // TODO: fix NoteReactionList pushing away NoteDialogNoteOptions on smaller screens (#3499)
+  all: unset;
   display: grid;
   grid-template-areas:
     "head head"

@@ -1,4 +1,4 @@
-import {Auth, ParticipantsState, ParticipantWithUser, ParticipantWithUserId} from "../store/features";
+import {Auth, ParticipantRole, ParticipantsState, ParticipantWithUser, ParticipantWithUserId} from "store/features";
 
 export const findParticipantById = (state: ParticipantsState, id: string): ParticipantWithUser | undefined =>
   state.self?.user.id === id ? state.self : state.others?.find((p) => p.user.id === id);
@@ -21,3 +21,5 @@ export const mapSingleParticipant = (participant: ParticipantWithUserId, userDat
   ...participant,
   user: {...userData},
 });
+
+export const isParticipantModerator = (role: ParticipantRole) => role === "OWNER" || role === "MODERATOR";

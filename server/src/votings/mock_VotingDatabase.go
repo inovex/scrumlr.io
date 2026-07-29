@@ -74,7 +74,7 @@ type MockVotingDatabase_AddVote_Call struct {
 //   - board uuid.UUID
 //   - user uuid.UUID
 //   - note uuid.UUID
-func (_e *MockVotingDatabase_Expecter) AddVote(ctx interface{}, board interface{}, user interface{}, note interface{}) *MockVotingDatabase_AddVote_Call {
+func (_e *MockVotingDatabase_Expecter) AddVote(ctx any, board any, user any, note any) *MockVotingDatabase_AddVote_Call {
 	return &MockVotingDatabase_AddVote_Call{Call: _e.mock.On("AddVote", ctx, board, user, note)}
 }
 
@@ -150,7 +150,7 @@ type MockVotingDatabase_Close_Call struct {
 // Close is a helper method to define mock.On call
 //   - ctx context.Context
 //   - update DatabaseVotingUpdate
-func (_e *MockVotingDatabase_Expecter) Close(ctx interface{}, update interface{}) *MockVotingDatabase_Close_Call {
+func (_e *MockVotingDatabase_Expecter) Close(ctx any, update any) *MockVotingDatabase_Close_Call {
 	return &MockVotingDatabase_Close_Call{Call: _e.mock.On("Close", ctx, update)}
 }
 
@@ -216,7 +216,7 @@ type MockVotingDatabase_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - insert DatabaseVotingInsert
-func (_e *MockVotingDatabase_Expecter) Create(ctx interface{}, insert interface{}) *MockVotingDatabase_Create_Call {
+func (_e *MockVotingDatabase_Expecter) Create(ctx any, insert any) *MockVotingDatabase_Create_Call {
 	return &MockVotingDatabase_Create_Call{Call: _e.mock.On("Create", ctx, insert)}
 }
 
@@ -283,7 +283,7 @@ type MockVotingDatabase_Get_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - id uuid.UUID
-func (_e *MockVotingDatabase_Expecter) Get(ctx interface{}, board interface{}, id interface{}) *MockVotingDatabase_Get_Call {
+func (_e *MockVotingDatabase_Expecter) Get(ctx any, board any, id any) *MockVotingDatabase_Get_Call {
 	return &MockVotingDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, id)}
 }
 
@@ -356,7 +356,7 @@ type MockVotingDatabase_GetAll_Call struct {
 // GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockVotingDatabase_Expecter) GetAll(ctx interface{}, board interface{}) *MockVotingDatabase_GetAll_Call {
+func (_e *MockVotingDatabase_Expecter) GetAll(ctx any, board any) *MockVotingDatabase_GetAll_Call {
 	return &MockVotingDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
 }
 
@@ -422,7 +422,7 @@ type MockVotingDatabase_GetOpenVoting_Call struct {
 // GetOpenVoting is a helper method to define mock.On call
 //   - ctx context.Context
 //   - board uuid.UUID
-func (_e *MockVotingDatabase_Expecter) GetOpenVoting(ctx interface{}, board interface{}) *MockVotingDatabase_GetOpenVoting_Call {
+func (_e *MockVotingDatabase_Expecter) GetOpenVoting(ctx any, board any) *MockVotingDatabase_GetOpenVoting_Call {
 	return &MockVotingDatabase_GetOpenVoting_Call{Call: _e.mock.On("GetOpenVoting", ctx, board)}
 }
 
@@ -491,7 +491,7 @@ type MockVotingDatabase_GetVotes_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - f VoteFilter
-func (_e *MockVotingDatabase_Expecter) GetVotes(ctx interface{}, board interface{}, f interface{}) *MockVotingDatabase_GetVotes_Call {
+func (_e *MockVotingDatabase_Expecter) GetVotes(ctx any, board any, f any) *MockVotingDatabase_GetVotes_Call {
 	return &MockVotingDatabase_GetVotes_Call{Call: _e.mock.On("GetVotes", ctx, board, f)}
 }
 
@@ -555,7 +555,7 @@ type MockVotingDatabase_RemoveVote_Call struct {
 //   - board uuid.UUID
 //   - user uuid.UUID
 //   - note uuid.UUID
-func (_e *MockVotingDatabase_Expecter) RemoveVote(ctx interface{}, board interface{}, user interface{}, note interface{}) *MockVotingDatabase_RemoveVote_Call {
+func (_e *MockVotingDatabase_Expecter) RemoveVote(ctx any, board any, user any, note any) *MockVotingDatabase_RemoveVote_Call {
 	return &MockVotingDatabase_RemoveVote_Call{Call: _e.mock.On("RemoveVote", ctx, board, user, note)}
 }
 

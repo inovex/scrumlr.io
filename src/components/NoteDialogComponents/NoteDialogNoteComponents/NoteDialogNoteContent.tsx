@@ -81,23 +81,25 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     <div className="note-dialog__note-content" ref={emoji.containerRef}>
       {isImage ? (
         <>
-          <img
-            src={addProtocol(noteValue)}
-            className={classNames("note-dialog__note-content--image")}
-            alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
-            onClick={() => setImageZoom(!imageZoom)}
-            draggable={false} // safari bugfix
-          />
+          <button className={"note-dialog__note-content-image-container"} onClick={() => setImageZoom(!imageZoom)}>
+            <img
+              src={addProtocol(noteValue)}
+              className={classNames("note-dialog__note-content--image")}
+              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              draggable={false} // safari bugfix
+            />
+          </button>
           {imageZoom &&
             createPortal(
               <>
-                <img
-                  src={addProtocol(noteValue)}
-                  className="note-dialog__note-content--image-zoom"
-                  alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
-                  onClick={() => setImageZoom(false)}
-                />
-                <div className="note-dialog__note-content--image-zoom-backdrop" onClick={() => setImageZoom(false)} role="dialog" />
+                <button className={"note-dialog__note-content-image-container"} onClick={() => setImageZoom(false)}>
+                  <img
+                    src={addProtocol(noteValue)}
+                    className="note-dialog__note-content--image-zoom"
+                    alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+                  />
+                </button>
+                <button className="note-dialog__note-content--image-zoom-backdrop" onClick={() => setImageZoom(false)} tabIndex={-1} />
               </>,
               document.getElementsByClassName("stack-view")[0]!
             )}

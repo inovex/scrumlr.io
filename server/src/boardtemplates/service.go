@@ -2,6 +2,8 @@ package boardtemplates
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -61,7 +63,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 		span.SetStatus(codes.Error, "failed to create board template")
 		span.RecordError(err)
 		log.Errorw("unable to create board template", "creator", body.Creator, "policy", "err", err)
-		return nil, err
+		return nil, CreateBoardTemplateError(Internal, "failed to create board template", err)
 	}
 
 	for index, value := range body.Columns {
@@ -89,10 +91,15 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*BoardTemplate, 
 
 	boardTemplate, err := service.database.Get(ctx, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no board template found")
+			span.RecordError(err)
+			return nil, CreateBoardTemplateError(NotFound, "no board template found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get board template")
 		span.RecordError(err)
 		log.Errorw("unable to get board template", "board", id, "err", err)
-		return nil, err
+		return nil, CreateBoardTemplateError(Internal, "failed to get board template", err)
 	}
 
 	return new(BoardTemplate).From(boardTemplate), err
@@ -109,10 +116,10 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 
 	templates, err := service.database.GetAll(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board templates")
+		span.SetStatus(codes.Error, "failed to get board templates")
 		span.RecordError(err)
 		log.Errorw("unable to list board templates", "user", user, "err", err)
-		return nil, err
+		return nil, CreateBoardTemplateError(Internal, "failed to get board templates", err)
 	}
 
 	var templatesDto []*BoardTemplateFull
@@ -145,7 +152,7 @@ func (service *Service) Update(ctx context.Context, body BoardTemplateUpdateRequ
 		span.SetStatus(codes.Error, "failed to update board template")
 		span.RecordError(err)
 		log.Errorw("unable to update board template", "board", body.ID, "err", err)
-		return nil, err
+		return nil, CreateBoardTemplateError(Internal, "failed to update board template", err)
 	}
 
 	return new(BoardTemplate).From(updatedTemplate), err
@@ -165,7 +172,7 @@ func (service *Service) Delete(ctx context.Context, templateId uuid.UUID) error 
 		span.SetStatus(codes.Error, "failed to delete board template")
 		span.RecordError(err)
 		log.Errorw("unable to delete board template", "board", templateId, "err", err)
-		return err
+		return CreateBoardTemplateError(Internal, "failed to delete board template", err)
 	}
 
 	boardTemplatesDeletedCounter.Add(ctx, 1)

@@ -94,3 +94,18 @@ updates:
           - "go.opentelemetry.io/otel"
           - "go.opentelemetry.io/otel/*"
           - "go.opentelemetry.io/contrib/*"
+
+  # github actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    commit-message:
+      prefix: "gha"
+      include: "scope"

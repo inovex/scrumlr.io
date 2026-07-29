@@ -29,7 +29,7 @@ describe("AddTemplateColumn", () => {
   it("should fire onClick fn parametrized with its alignment and color", () => {
     const alignment: AddTemplateColumnAlignment = "left";
     const color: Color = "poker-purple";
-    const spy = vi.fn<(alignment: AddTemplateColumnAlignment, color: Color) => void>();
+    const spy = vi.fn<(_alignment: AddTemplateColumnAlignment, _color: Color) => void>();
 
     const {container} = renderAddTemplateColumn(alignment, color, false, spy);
     const addTemplateColumnButton = container.getElementsByClassName("add-template-column__button")[0];

@@ -15,7 +15,7 @@ export const TemplatesAPI = {
 
       throw new Error(`get all templates request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates`, {cause: error});
     }
   },
 
@@ -32,14 +32,14 @@ export const TemplatesAPI = {
 
       throw new Error(`get template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates`, {cause: error});
     }
   },
 
   createTemplate: async (templateWithColumns: TemplateWithColumns) => {
     // strip UUIDs as they'll get assigned by the backend
-    const {id: templateId, creator, ...strippedTemplate} = templateWithColumns.template;
-    const strippedColumnTemplates = templateWithColumns.columns.map(({id: columnId, template, ...columnRest}) => columnRest);
+    const {id: _templateId, creator: _creator, ...strippedTemplate} = templateWithColumns.template;
+    const strippedColumnTemplates = templateWithColumns.columns.map(({id: _columnId, template: _template, ...columnRest}) => columnRest);
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/templates`, {
         method: "POST",
@@ -57,7 +57,7 @@ export const TemplatesAPI = {
 
       throw new Error(`create template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create template with error: ${error}`);
+      throw new Error(`unable to create template`, {cause: error});
     }
   },
 
@@ -75,7 +75,7 @@ export const TemplatesAPI = {
 
       throw new Error(`edit template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to edit template with error: ${error}`);
+      throw new Error(`unable to edit template`, {cause: error});
     }
   },
 
@@ -90,9 +90,9 @@ export const TemplatesAPI = {
         return;
       }
 
-      throw new Error(`get all templates request resulted in status ${response.status}`);
+      throw new Error(`delete template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to delete template`, {cause: error});
     }
   },
 };

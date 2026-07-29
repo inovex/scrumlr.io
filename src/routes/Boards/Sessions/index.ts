@@ -1,1 +1,2 @@
-export * from "./Sessions";
+export * from "./History";
+export * from "./HistoryCard/HistoryCard";

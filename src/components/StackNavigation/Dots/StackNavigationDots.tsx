@@ -1,3 +1,4 @@
+import {MouseEvent} from "react";
 import classNames from "classnames";
 import {useNavigate} from "react-router";
 import {Note} from "store/features/notes/types";
@@ -22,7 +23,8 @@ const getCenterDot = (length: number, currentIndex: number) => {
 export const StackNavigationDots = ({stacks, currentIndex, handleModeration}: StackNavigationDotsProps) => {
   const navigate = useNavigate();
 
-  const handleClick = (index: number) => {
+  const handleClick = (event: MouseEvent, index: number) => {
+    event.stopPropagation();
     handleModeration(stacks[index].id);
     navigate(`../note/${stacks[index].id}/stack`);
   };
@@ -30,14 +32,13 @@ export const StackNavigationDots = ({stacks, currentIndex, handleModeration}: St
   const centerDot = getCenterDot(stacks.length, currentIndex);
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className="stack-view__navigation-dots" onClick={(e) => e.stopPropagation()}>
+    <div className="stack-view__navigation-dots">
       {stacks.map((stack, index) => {
         const distance = Math.abs(centerDot - index);
         return (
           <button
             key={stack.id}
-            onClick={() => handleClick(index)}
+            onClick={(e) => handleClick(e, index)}
             className={classNames("stack-view__navigation-dot", {
               "stack-view__navigation-dot--active": index === currentIndex,
               "stack-view__navigation-dot--small": distance === 3 && index !== 0 && index !== stacks.length - 1,

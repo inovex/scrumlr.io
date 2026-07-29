@@ -111,7 +111,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         />
       )}
       <Tooltip anchorId={`note-option-unstack-button-${props.noteId}`} place="left">
-        {props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
+        {t("NoteDialogUnstackNoteButton.title")}
       </Tooltip>
       <Tooltip anchorId={`note-option-delete-button-${props.noteId}`} place="left">
         {props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}

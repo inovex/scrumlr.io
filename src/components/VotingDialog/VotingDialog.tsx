@@ -73,7 +73,7 @@ export const VotingDialog = () => {
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
             <div className="voting-dialog__votes-controls">
               <button
-                onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))}
+                onClick={() => setNumberOfVotes((prev) => Math.max(prev - 1, 1))}
                 className="voting-dialog__vote-button"
                 data-testid="voting-dialog__minus-button"
                 aria-label={t("VoteConfigurationButton.decreaseVotes")}
@@ -82,7 +82,7 @@ export const VotingDialog = () => {
               </button>
               <label className="voting-dialog__vote-label">{numberOfVotes}</label>
               <button
-                onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))}
+                onClick={() => setNumberOfVotes((prev) => Math.min(prev + 1, 99))}
                 className="voting-dialog__vote-button"
                 data-testid="voting-dialog__plus-button"
                 aria-label={t("VoteConfigurationButton.increaseVotes")}

@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router";
 import _ from "underscore";
-import {HiddenIcon, ShareIcon, VisibleIcon} from "components/Icon";
+import {ArrowReturnIcon, HiddenIcon, VisibleIcon} from "components/Icon";
 import {Timer} from "components/Timer";
 import {Tooltip} from "components/Tooltip";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
@@ -49,7 +49,7 @@ export const InfoBar = () => {
           className="info-bar__return-to-shared-note-button"
           to={`note/${state.sharedNote}/stack`}
         >
-          <ShareIcon />
+          <ArrowReturnIcon />
         </Link>
       )}
       <Tooltip anchorId="info-bar__voting-anonymous" color="backlog-blue">

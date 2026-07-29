@@ -57,7 +57,6 @@ export const Note = (props: NoteProps) => {
     return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as ParticipantWithUser[];
   }, isEqual);
 
-  /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
       navigate(`note/${note?.id}/stack`);
@@ -73,7 +72,6 @@ export const Note = (props: NoteProps) => {
       navigate(`.`);
     }
   }, [isShared]);
-  /* eslint-enable */
 
   const isImage = useImageChecker(note?.text ?? "");
   const {isTextTruncated, textRef} = useTextOverflow<HTMLDivElement>(note?.text ?? "");

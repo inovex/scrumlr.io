@@ -83,7 +83,7 @@ const clickMiniMenuItem = (container: HTMLElement & Element, label: string) => {
   const dataCy = "template-card__menu";
   const miniMenuButton = container.querySelector<HTMLButtonElement>(`.mini-menu__item[data-testid="${dataCy}-item-${label}"]`);
   expect(miniMenuButton).toBeInTheDocument();
-  act(() => fireEvent.mouseDown(miniMenuButton!));
+  act(() => fireEvent.click(miniMenuButton!));
 };
 
 describe("TemplateCard", () => {
