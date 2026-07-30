@@ -20,7 +20,7 @@ type BoardSessionRequestSubscription struct {
 }
 
 type sessionRequestWebsocket struct {
-	websocketService                 websocket.WebSocketInterface
+	websocketService                 websocket.Upgrader
 	realtime                         *realtime.Broker
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
@@ -28,7 +28,7 @@ type sessionRequestWebsocket struct {
 const MaxRetries = 10
 const SleepBetweenRetries = time.Second * 2
 
-func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
+func NewSessionRequestWebsocket(webSocketService websocket.Upgrader, rt *realtime.Broker) SessionRequestWebsocket {
 	websocket := new(sessionRequestWebsocket)
 	websocket.websocketService = webSocketService
 	websocket.realtime = rt

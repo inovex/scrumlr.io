@@ -115,4 +115,4 @@ packages:
       dir: websocket
     interfaces:
       Connection:
-      WebSocketInterface:
+      Upgrader:
