@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/websocket"
 )
 
 func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailure() {
@@ -18,7 +19,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 
 	boardID := uuid.New()
 	userID := uuid.New()
-	conn := &mockConnection{}
+	conn := websocket.NewMockConnection(t)
 
 	fullBoard := boards.FullBoard{
 		Board: &boards.Board{ID: boardID},
@@ -51,7 +52,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 
 	boardID := uuid.New()
 	userID := uuid.New()
-	conn := &mockConnection{}
+	conn := websocket.NewMockConnection(t)
 
 	fullBoard := boards.FullBoard{
 		Board: &boards.Board{ID: boardID},

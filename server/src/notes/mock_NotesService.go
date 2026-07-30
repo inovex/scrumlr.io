@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/websocket"
 )
 
 // NewMockNotesService creates a new instance of MockNotesService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -664,7 +665,7 @@ func (_c *MockNotesService_GetStack_Call) RunAndReturn(run func(ctx context.Cont
 }
 
 // HandleWebSocketMessage provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage) {
+func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) {
 	_mock.Called(ctx, boardID, userID, conn, data)
 	return
 }
@@ -678,13 +679,13 @@ type MockNotesService_HandleWebSocketMessage_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-//   - conn WebSocketConnector
+//   - conn websocket.Connection
 //   - data json.RawMessage
 func (_e *MockNotesService_Expecter) HandleWebSocketMessage(ctx any, boardID any, userID any, conn any, data any) *MockNotesService_HandleWebSocketMessage_Call {
 	return &MockNotesService_HandleWebSocketMessage_Call{Call: _e.mock.On("HandleWebSocketMessage", ctx, boardID, userID, conn, data)}
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -698,9 +699,9 @@ func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context
 		if args[2] != nil {
 			arg2 = args[2].(uuid.UUID)
 		}
-		var arg3 WebSocketConnector
+		var arg3 websocket.Connection
 		if args[3] != nil {
-			arg3 = args[3].(WebSocketConnector)
+			arg3 = args[3].(websocket.Connection)
 		}
 		var arg4 json.RawMessage
 		if args[4] != nil {
@@ -722,7 +723,7 @@ func (_c *MockNotesService_HandleWebSocketMessage_Call) Return() *MockNotesServi
 	return _c
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
+func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
 	_c.Run(run)
 	return _c
 }

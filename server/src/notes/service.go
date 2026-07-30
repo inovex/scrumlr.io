@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/websocket"
 )
 
 const DefaultTTL = 10 * time.Second
@@ -554,7 +555,7 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 	return false
 }
 
-func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage) {
+func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -686,7 +687,7 @@ func (service *Service) releaseLock(ctx context.Context, boardID uuid.UUID, note
 	}
 }
 
-func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnector) {
+func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.acquire")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -709,7 +710,7 @@ func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, user
 	}
 }
 
-func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnector) {
+func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.release")
 	defer span.End()
 	log := logger.FromContext(ctx)
