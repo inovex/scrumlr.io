@@ -3,6 +3,7 @@ import {ArrowRightIcon, ArrowLeftIcon} from "components/Icon";
 import "./SettingsCarousel.scss";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
+import {dynamicTranslationKey} from "utils/i18n";
 
 export interface SettingsCarouselProps<T> {
   disabled?: boolean;
@@ -34,7 +35,10 @@ export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselIte
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
-        <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${currentValue}`) : currentValue}</span>
+        <span className="settings-carousel__text-value">
+          {/* the key is composed from the caller's path and the current item, so it can only be resolved at runtime */}
+          {localizationPath !== undefined ? t(dynamicTranslationKey(`${localizationPath}${currentValue}`)) : currentValue}
+        </span>
       </div>
       <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()} aria-label={t("Avatar.nextOption")}>
         <ArrowRightIcon />

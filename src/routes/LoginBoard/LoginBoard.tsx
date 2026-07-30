@@ -31,7 +31,7 @@ const FEATURE_KEYS = [
   "LoginBoard.loginFeature1",
   "LoginBoard.loginFeature2",
   // ...
-];
+] as const;
 
 const TERMS_LINKS = {
   terms: <Link to="/legal/termsAndConditions" target="_blank" />,
