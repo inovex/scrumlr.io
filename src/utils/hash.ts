@@ -6,9 +6,9 @@
 export const hashCode = (s: string) => {
   let hash = 0;
   for (let i = 0; i < s.length; i++) {
-    // Math.imul keeps `hash * 31` within 32-bit integer arithmetic, so the hash stays stable and bounded
-    hash = Math.imul(hash, 31) + s.charCodeAt(i);
+    // Math.imul wraps `hash * 31` to a 32 bit integer, which keeps the hash stable and bounded
+    hash = Math.imul(hash, 31) + (s.codePointAt(i) ?? 0);
   }
-  // Math.imul(x, 1) truncates the final addition to a 32-bit integer as well
+  // imul with 1 wraps the final addition to 32 bits as well
   return Math.abs(Math.imul(hash, 1));
 };
