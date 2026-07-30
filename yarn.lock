@@ -6228,10 +6228,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-md5@npm:^0.8.3":
-  version: 0.8.3
-  resolution: "js-md5@npm:0.8.3"
-  checksum: 10c0/f7e41e95f8e5eb5eeb43085bec3832ae3dfe0020c42fcca5a4efe571213391a9e9594db31bd34624b7280af4f1f12c751b6a50074a15346ecf40a0d54115d77f
+"js-md5@npm:^0.9.2":
+  version: 0.9.2
+  resolution: "js-md5@npm:0.9.2"
+  checksum: 10c0/7b689251c421f885d15ccdda4be978bd5d13571957bdeba2727f047f2169955ba38e237d15711dabe81315f314a8a3b4ea736b6c6ebe2d0c74a65559ef433a3c
   languageName: node
   linkType: hard
 
@@ -8450,7 +8450,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-fs-backend: "npm:^2.6.6"
     js-cookie: "npm:^3.0.8"
-    js-md5: "npm:^0.8.3"
+    js-md5: "npm:^0.9.2"
     linkify-react: "npm:^4.3.3"
     linkifyjs: "npm:^4.3.3"
     lint-staged: "npm:^17.1.0"
