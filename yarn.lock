@@ -6772,12 +6772,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:18.0.6":
-  version: 18.0.6
-  resolution: "marked@npm:18.0.6"
+"marked@npm:18.0.7":
+  version: 18.0.7
+  resolution: "marked@npm:18.0.7"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/85827aa9d7293b0eb5470c40bb0f60bdbd4a1d6647cfce3602afaa3b8e42ed229c74d1d61d3c41d4e7822d56df179862da970f2e11012e94c1a788387e69d36d
+  checksum: 10c0/84fc25d8583ff5c7b200dc6719e238472bb50e93b656b724ddfac4469c71ab1ef36bc8b4c1b2b26efabe713fd9a3437e3fd8af8555379c988dd902299842a730
   languageName: node
   linkType: hard
 
@@ -8429,7 +8429,7 @@ __metadata:
     linkify-react: "npm:^4.3.3"
     linkifyjs: "npm:^4.3.3"
     lint-staged: "npm:^17.1.0"
-    marked: "npm:18.0.6"
+    marked: "npm:18.0.7"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
     prettier: "npm:^3.9.6"
