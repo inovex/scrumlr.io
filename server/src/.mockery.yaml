@@ -65,7 +65,6 @@ packages:
     interfaces:
       SessionRequestService:
       SessionRequestDatabase:
-      SessionRequestWebsocket:
 
   scrumlr.io/server/users:
     config:

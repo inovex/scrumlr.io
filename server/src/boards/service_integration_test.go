@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/events"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/websocket"
@@ -108,10 +109,10 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewWebSocketUpgrader()
-	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
+	websocket := websocket.NewWebSocketUpgrader()
+	eventListener := events.NewEventListener(websocket, broker, false, sessionService, columnService)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, eventListener, sessionService)
 	userDatabase := users.NewUserDatabase(db)
 	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
 	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)

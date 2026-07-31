@@ -5,6 +5,7 @@ import (
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/events"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -113,19 +114,15 @@ func (init *ServiceInitializer) InitializeSessionService(columnService columns.C
 	return sessionService
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessionrequests.SessionRequestWebsocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+func (init *ServiceInitializer) InitializeSessionRequestService(eventListener events.EventListener, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
 	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(init.db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, websocket, sessionService)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, eventListener, sessionService)
 
 	return sessionRequestService
 }
 
 func (init *ServiceInitializer) InitializeWebSocketService() websocket.Upgrader {
 	return websocket.NewWebSocketUpgrader()
-}
-
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.Upgrader) sessionrequests.SessionRequestWebsocket {
-	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
 }
 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService, noteService notes.NotesService) users.UserService {
@@ -148,4 +145,10 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	votingService := votings.NewVotingService(votingDB, init.broker)
 
 	return votingService
+}
+
+func (init *ServiceInitializer) InitializeEventListener(ws websocket.Upgrader, sessionService sessions.SessionService, columnService columns.ColumnService) events.EventListener {
+	listener := events.NewEventListener(ws, init.broker, init.checkOrigin, sessionService, columnService)
+
+	return listener
 }

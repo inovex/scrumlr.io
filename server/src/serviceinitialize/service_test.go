@@ -42,8 +42,13 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	sessionService := sessions.NewMockSessionService(t)
 	userSession := users.NewMockUserService(t)
 	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
-	sessionRequestWebsocket := sessionrequests.NewMockSessionRequestWebsocket(t)
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
+
+	websocket := initializer.InitializeWebSocketService()
+	assert.NotNil(t, websocket)
+
+	eventListener := initializer.InitializeEventListener(websocket, sessionService, columnService)
+	assert.NotNil(t, eventListener)
 
 	assert.NotNil(t, initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession))
 	assert.NotNil(t, initializer.InitializeColumnService(noteService))
@@ -54,11 +59,7 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	assert.NotNil(t, initializer.InitializeHealthService())
 	assert.NotNil(t, initializer.InitializeReactionService())
 	assert.NotNil(t, initializer.InitializeSessionService(columnService, noteService))
-	assert.NotNil(t, initializer.InitializeSessionRequestService(sessionRequestWebsocket, sessionService))
-
-	wsService := initializer.InitializeWebSocketService()
-	assert.NotNil(t, wsService)
-	assert.NotNil(t, initializer.InitializeSessionRequestWebsocket(wsService))
+	assert.NotNil(t, initializer.InitializeSessionRequestService(eventListener, sessionService))
 
 	assert.NotNil(t, initializer.InitializeUserService(sessionService, noteService))
 	assert.NotNil(t, initializer.InitializeNotesService())
