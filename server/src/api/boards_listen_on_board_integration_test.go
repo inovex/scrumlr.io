@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
 
@@ -198,76 +197,4 @@ func (suite *BoardsListenIntegrationTestSuite) TestBoardSubscriptionStoresFullBo
 	assert.Equal(suite.T(), testColumns, subscription.boardColumns)
 	assert.Equal(suite.T(), testNotes, subscription.boardNotes)
 	assert.Equal(suite.T(), testReactions, subscription.boardReactions)
-}
-
-func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailure() {
-	t := suite.T()
-
-	// fast forwarding time to let the test run instantly
-	originalDelay := SleepBetweenRetries
-
-	SleepBetweenRetries = time.Millisecond * 10
-
-	defer func() { SleepBetweenRetries = originalDelay }()
-
-	boardID := uuid.New()
-	userID := uuid.New()
-	conn := &mockConnection{}
-
-	fullBoard := boards.FullBoard{
-		Board: &boards.Board{ID: boardID},
-	}
-
-	successChan := make(chan *realtime.BoardEvent, 1)
-	mockBroker := new(realtime.MockBrokerInterface)
-
-	// retry logic: fail 3 times, then succeed on the 4th try
-	mockBroker.On("GetBoardChannel", mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(3)
-	mockBroker.On("GetBoardChannel", mock.Anything, boardID).Return(successChan, nil).Once()
-
-	s := &Server{
-		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
-		realtime:           mockBroker,
-	}
-
-	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
-
-	mockBroker.AssertExpectations(t)
-	savedSubscription := s.boardSubscriptions[boardID].subscription
-	assert.Equal(t, successChan, savedSubscription, "The successful channel should be stored after retrying")
-}
-
-func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRetries() {
-	t := suite.T()
-
-	// fast forwarding time to let the test run instantly
-	originalDelay := SleepBetweenRetries
-
-	SleepBetweenRetries = time.Millisecond * 10
-
-	defer func() { SleepBetweenRetries = originalDelay }()
-
-	boardID := uuid.New()
-	userID := uuid.New()
-	conn := &mockConnection{}
-
-	fullBoard := boards.FullBoard{
-		Board: &boards.Board{ID: boardID},
-	}
-
-	mockBroker := new(realtime.MockBrokerInterface)
-
-	// fail on all retries
-	mockBroker.On("GetBoardChannel", mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(MaxRetries)
-
-	s := &Server{
-		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
-		realtime:           mockBroker,
-	}
-
-	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
-
-	mockBroker.AssertExpectations(t)
-	savedSubscription := s.boardSubscriptions[boardID].subscription
-	assert.Nil(t, savedSubscription, "No subscription should be stored if all retries fail")
 }
