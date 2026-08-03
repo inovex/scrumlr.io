@@ -540,7 +540,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
@@ -595,7 +595,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {

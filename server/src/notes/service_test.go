@@ -152,7 +152,11 @@ func (suite *NotesServiceTestSuite) Test_Create_EmptyText() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("cannot create note with empty text")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, BadRequest)
+	suite.Equal(noteErr.Message, "cannot create note with empty text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
@@ -166,7 +170,7 @@ func (suite *NotesServiceTestSuite) Test_Create_DatabaseError() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_Import() {
@@ -191,7 +195,11 @@ func (suite *NotesServiceTestSuite) Test_Import_EmptyText() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("cannot import note with empty text")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, BadRequest)
+	suite.Equal(noteErr.Message, "cannot import note with empty text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
@@ -205,7 +213,7 @@ func (suite *NotesServiceTestSuite) Test_Import_DatabaseError() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Text_Owner() {
@@ -384,7 +392,11 @@ func (suite *NotesServiceTestSuite) Test_Update_Text_Participant_NotAllowed() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.ForbiddenError(errors.New("not allowed to change text of note")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Forbidden)
+	suite.Equal(noteErr.Message, "not allowed to change note text")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_Position_Participant() {
@@ -437,7 +449,11 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.ForbiddenError(errors.New("not allowed to stack notes")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Forbidden)
+	suite.Equal(noteErr.Message, "not allowed to stack notes")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
@@ -461,7 +477,11 @@ func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.ForbiddenError(errors.New("not allowed to stack a note on self")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Forbidden)
+	suite.Equal(noteErr.Message, "not allowed to stack a note on self")
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
@@ -490,7 +510,7 @@ func (suite *NotesServiceTestSuite) Test_Update_DatabaseError() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_Import_UpdateLastModifiedError() {
@@ -520,15 +540,16 @@ func (suite *NotesServiceTestSuite) Test_Update_GetPreconditionError() {
 	})
 
 	suite.Nil(note)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_GetLockError() {
 	callerRole := role.OwnerRole
 	stackAllowed := true
+	cacheErr := errors.New("cache unavailable")
 
 	suite.expectPrecondition(stackAllowed, callerRole)
-	suite.mockCache.EXPECT().Get(mock.Anything, suite.noteID.String()).Return(nil, errors.New("cache unavailable"))
+	suite.mockCache.EXPECT().Get(mock.Anything, suite.noteID.String()).Return(nil, cacheErr)
 
 	note, err := suite.service.Update(context.Background(), suite.authorID, NoteUpdateRequest{
 		ID:    suite.noteID,
@@ -536,7 +557,7 @@ func (suite *NotesServiceTestSuite) Test_Update_GetLockError() {
 	})
 
 	suite.Nil(note)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, cacheErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
@@ -553,7 +574,10 @@ func (suite *NotesServiceTestSuite) Test_Update_LockedByOtherUser() {
 	})
 
 	suite.Nil(note)
-	suite.Equal(common.ConflictError(errors.New("note is currently locked")), err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Conflict)
 }
 
 func (suite *NotesServiceTestSuite) Test_Update_NegativeRankIsResetToZero() {
@@ -654,7 +678,10 @@ func (suite *NotesServiceTestSuite) Test_DeleteNote_NotAllowed() {
 	err := suite.service.Delete(suite.ctx, callerID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: deleteStack})
 
 	suite.NotNil(err)
-	suite.Equal(common.ForbiddenError(errors.New("not allowed to delete note from other user")), err)
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Forbidden)
+	suite.Equal(noteErr.Message, "not allowed to delete other user's note")
 }
 
 func (suite *NotesServiceTestSuite) Test_Get() {
@@ -680,7 +707,10 @@ func (suite *NotesServiceTestSuite) Test_Get_NotFound() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, NotFound)
 }
 
 func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
@@ -693,7 +723,7 @@ func (suite *NotesServiceTestSuite) Test_Get_DatabaseError() {
 
 	suite.Nil(note)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll() {
@@ -735,13 +765,12 @@ func (suite *NotesServiceTestSuite) Test_GetAll() {
 func (suite *NotesServiceTestSuite) Test_GetAll_NotFound() {
 
 	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
-		Return([]DatabaseNote{}, sql.ErrNoRows)
+		Return([]DatabaseNote{}, nil)
 
 	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
 
-	suite.Nil(notes)
-	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+	suite.Empty(notes)
+	suite.Nil(err)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetAll_DatabaseError() {
@@ -754,7 +783,7 @@ func (suite *NotesServiceTestSuite) Test_GetAll_DatabaseError() {
 
 	suite.Nil(notes)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetStack() {
@@ -782,7 +811,7 @@ func (suite *NotesServiceTestSuite) Test_GetStack_DatabaseError() {
 
 	suite.Error(err)
 	suite.Nil(result)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
@@ -873,7 +902,7 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard_GetByUserAndBo
 
 	err := suite.service.DeleteUserNotesFromBoard(suite.ctx, suite.authorID, suite.boardID)
 
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_handleAcquire_Success() {
@@ -1117,18 +1146,19 @@ func (suite *NotesServiceTestSuite) Test_Delete_GetPreconditionError() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(dbErr, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_GetLockError() {
 	callerRole := role.OwnerRole
+	cacheErr := errors.New("cache unavailable")
 
 	suite.expectPrecondition(true, callerRole)
-	suite.mockCache.EXPECT().Get(mock.Anything, suite.noteID.String()).Return(nil, errors.New("cache unavailable"))
+	suite.mockCache.EXPECT().Get(mock.Anything, suite.noteID.String()).Return(nil, cacheErr)
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, cacheErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
@@ -1140,19 +1170,22 @@ func (suite *NotesServiceTestSuite) Test_Delete_LockedByOtherUser() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(common.ConflictError(errors.New("note is currently locked")), err)
+	var noteErr NoteError
+	suite.ErrorAs(err, &noteErr)
+	suite.Equal(noteErr.Category, Conflict)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteStackGetStackError() {
 	callerRole := role.OwnerRole
+	stackErr := errors.New("stack query failed")
 
 	suite.expectNoLock()
 	suite.expectPrecondition(true, callerRole)
-	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).Return([]DatabaseNote{}, errors.New("stack query failed"))
+	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).Return([]DatabaseNote{}, stackErr)
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: true})
 
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, stackErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_Delete_DeleteNoteError() {
@@ -1165,7 +1198,7 @@ func (suite *NotesServiceTestSuite) Test_Delete_DeleteNoteError() {
 
 	err := suite.service.Delete(suite.ctx, suite.authorID, NoteDeleteRequest{ID: suite.noteID, Board: suite.boardID, DeleteStack: false})
 
-	suite.Equal(dbErr, err)
+	suite.ErrorIs(err, dbErr)
 }
 
 func (suite *NotesServiceTestSuite) Test_AcquireLock_GetStackError() {
