@@ -44,7 +44,7 @@ import (
 type Server struct {
 	basePath string
 
-	realtime  realtime.BrokerInterface
+	realtime  *realtime.Broker
 	wsService websocket.WebSocketInterface
 	auth      auth.Auth
 
@@ -84,7 +84,7 @@ type Server struct {
 func New(
 	basePath string,
 
-	rt realtime.BrokerInterface,
+	rt *realtime.Broker,
 	wsService websocket.WebSocketInterface,
 	auth auth.Auth,
 

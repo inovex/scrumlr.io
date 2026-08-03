@@ -125,7 +125,7 @@ func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocket
 }
 
 func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketInterface) sessionrequests.SessionRequestWebsocket {
-	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
+	return sessionrequests.NewSessionRequestWebsocket(wsService, *init.broker)
 }
 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService, noteService notes.NotesService) users.UserService {

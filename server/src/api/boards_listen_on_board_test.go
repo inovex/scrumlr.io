@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -24,17 +25,19 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 	}
 
 	successChan := make(chan *realtime.BoardEvent, 1)
-	mockBroker := new(realtime.MockBrokerInterface)
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	mockBroker.EXPECT().GetBoardChannel(mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(3)
-	mockBroker.EXPECT().GetBoardChannel(mock.Anything, boardID).Return(successChan, nil).Once()
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(nil, errors.New("network timeout")).Times(3)
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(successChan, nil).Once()
 
 	s := &Server{
 		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
-		realtime:           mockBroker,
+		realtime:           broker,
 	}
 
-  retryDelay := time.Millisecond * 10
+	retryDelay := time.Millisecond * 10
 	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
 	mockBroker.AssertExpectations(t)
@@ -53,16 +56,18 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 		Board: &boards.Board{ID: boardID},
 	}
 
-	mockBroker := new(realtime.MockBrokerInterface)
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	mockBroker.EXPECT().GetBoardChannel(mock.Anything, boardID).Return(nil, errors.New("network timeout")).Times(MaxRetries)
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(nil, errors.New("network timeout")).Times(MaxRetries)
 
 	s := &Server{
 		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
-		realtime:           mockBroker,
+		realtime:           broker,
 	}
 
-  retryDelay := time.Millisecond * 10
+	retryDelay := time.Millisecond * 10
 	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
 	mockBroker.AssertExpectations(t)

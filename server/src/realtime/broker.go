@@ -28,6 +28,13 @@ type Client interface {
 	// SubscribeToBoardEvents subscribes to the given topic and return a channel
 	//	// with the received BoardEvent
 	SubscribeToBoardEvents(ctx context.Context, subject string) (chan *BoardEvent, error)
+	/*
+		  // GetBoardChannel returns a channel that receives BoardEvent for the given boardID
+			GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *BoardEvent, error)
+
+		  // GetBoardSessionRequestChannel returns a channel that receives BoardSessionRequestEventType for the given boardID and userID
+			GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) (chan *BoardSessionRequestEventType, error)
+	*/
 }
 
 // The Broker enables a user to broadcast and receive events

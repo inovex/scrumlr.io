@@ -25,7 +25,6 @@ packages:
     config:
       dir: realtime
     interfaces:
-      BrokerInterface:
       Client:
 
   scrumlr.io/server/cache:

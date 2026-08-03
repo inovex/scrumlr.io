@@ -3,6 +3,7 @@ package sessionrequests
 import (
 	"context"
 	"errors"
+	"fmt"
 	"testing"
 	"time"
 
@@ -28,19 +29,20 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	conn := &mockConn{}
 
 	successChan := make(chan *realtime.BoardSessionRequestEventType, 1)
-	mockBroker := new(realtime.MockBrokerInterface)
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	// fail 2 times, then succeed
-	mockBroker.On("GetBoardSessionRequestChannel", mock.Anything, boardID, userID).Return(nil, errors.New("nats down")).Times(2)
-	mockBroker.On("GetBoardSessionRequestChannel", mock.Anything, boardID, userID).Return(successChan, nil).Once()
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(nil, errors.New("nats down")).Times(2)
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(successChan, nil).Once()
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
-		realtime:                         mockBroker,
+		realtime:                         *broker,
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
-  retryDelay := time.Millisecond * 10
+	retryDelay := time.Millisecond * 10
 	socket.listenOnBoardSessionRequest(boardID, userID, conn, retryDelay)
 
 	mockBroker.AssertExpectations(t)
@@ -51,20 +53,20 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	}
 }
 
-// 2) Fails all retries and does not store a subscription
 func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	conn := &mockConn{}
 
-	mockBroker := new(realtime.MockBrokerInterface)
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	// always fail
-	mockBroker.On("GetBoardSessionRequestChannel", mock.Anything, boardID, userID).Return(nil, errors.New("nats down")).Times(MaxRetries)
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(nil, errors.New("nats down")).Times(MaxRetries)
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
-		realtime:                         mockBroker,
+		realtime:                         *broker,
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
@@ -80,7 +82,6 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	}
 }
 
-// 3) If subscription already exists, no call to broker should be made
 func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
@@ -88,12 +89,13 @@ func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 
 	existingChan := make(chan *realtime.BoardSessionRequestEventType, 1)
 
-	mockBroker := new(realtime.MockBrokerInterface)
-	// no expectations set
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
 	socket := &sessionRequestWebsocket{
 		websocketService: nil,
-		realtime:         mockBroker,
+		realtime:         *broker,
 		boardSessionRequestSubscriptions: map[uuid.UUID]*BoardSessionRequestSubscription{
 			boardID: {
 				clients:       map[uuid.UUID]websocket.Connection{userID: conn},

@@ -64,7 +64,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 
 	database := NewSessionRequestDatabase(db)
 	wsService := websocket.NewWebSocketService()
-	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, *broker)
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
