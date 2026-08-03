@@ -24,7 +24,7 @@ const docTemplate = `{
     "paths": {
         "/boards": {
             "get": {
-                "description": "Delete a board",
+                "description": "Get all board",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,7 +34,7 @@ const docTemplate = `{
                 "tags": [
                     "boards"
                 ],
-                "summary": "Delete a board",
+                "summary": "Get all board",
                 "parameters": [
                     {
                         "type": "string",
@@ -902,7 +902,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update a sessions for a board",
+                "description": "Update all sessions for a board",
                 "consumes": [
                     "application/json"
                 ],
@@ -912,7 +912,7 @@ const docTemplate = `{
                 "tags": [
                     "sessions"
                 ],
-                "summary": "Update a sessions for a board",
+                "summary": "Update all sessions for a board",
                 "parameters": [
                     {
                         "type": "string",
@@ -1101,7 +1101,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a sessions for a board",
+                "description": "Delete a participant from a board",
                 "consumes": [
                     "application/json"
                 ],
@@ -1111,7 +1111,7 @@ const docTemplate = `{
                 "tags": [
                     "sessions"
                 ],
-                "summary": "Delete a sessions for a board",
+                "summary": "Delete a participant from a board",
                 "parameters": [
                     {
                         "type": "string",
@@ -2257,6 +2257,76 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Update a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Update a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the board",
+                        "name": "board",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.BoardUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a board",
                 "consumes": [
@@ -2409,78 +2479,6 @@ const docTemplate = `{
                     },
                     "429": {
                         "description": "Too Many Requests"
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    }
-                }
-            }
-        },
-        "/boards{id}": {
-            "put": {
-                "description": "Update a board",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "boards"
-                ],
-                "summary": "Update a board",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "jwt token to authenticate",
-                        "name": "Cookie",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "id of the board to update",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "values to update the board",
-                        "name": "board",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/boards.BoardUpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/boards.Board"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -3923,6 +3921,9 @@ const docTemplate = `{
                 "allowAnonymousCustomTemplates": {
                     "type": "boolean"
                 },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
                 "anonymousLoginDisabled": {
                     "type": "boolean"
                 },
@@ -4394,7 +4395,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "sharedNote": {
-                    "description": "The id of a note to share with other users.\nFIXME omitempty works only with nil in combination with pointers",
+                    "description": "The id of a note to share with other users.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/uuid.NullUUID"
@@ -4449,7 +4450,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "role": {
-                    "$ref": "#/definitions/common.SessionRole"
+                    "$ref": "#/definitions/role.Role"
                 }
             }
         },
@@ -4930,19 +4931,6 @@ const docTemplate = `{
                 "ColorYieldingYellow"
             ]
         },
-        "common.SessionRole": {
-            "type": "string",
-            "enum": [
-                "PARTICIPANT",
-                "MODERATOR",
-                "OWNER"
-            ],
-            "x-enum-varnames": [
-                "ParticipantRole",
-                "ModeratorRole",
-                "OwnerRole"
-            ]
-        },
         "feedback.FeedbackRequest": {
             "type": "object",
             "properties": {
@@ -5106,6 +5094,19 @@ const docTemplate = `{
                 }
             }
         },
+        "role.Role": {
+            "type": "string",
+            "enum": [
+                "PARTICIPANT",
+                "MODERATOR",
+                "OWNER"
+            ],
+            "x-enum-varnames": [
+                "ParticipantRole",
+                "ModeratorRole",
+                "OwnerRole"
+            ]
+        },
         "sessionrequests.BoardSessionRequest": {
             "type": "object",
             "properties": {
@@ -5172,7 +5173,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants\ncan only view data, add notes and votes while the users with the other\nroles are able to promote users, change board settings, edit columns,\nstart voting sessions etc.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
@@ -5204,7 +5205,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.\nOnly moderators and owners can promote other participants. A regular participant is not\nallowed to change the role.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
