@@ -1,5 +1,5 @@
-import {SERVER_HTTP_URL} from "config";
 import {ServerInfo} from "store/features";
+import {buildUrl} from "./index";
 
 // type as received from the backend
 interface ServerInformationDto {
@@ -21,8 +21,9 @@ export const InfoAPI = {
    * @returns the server configuration
    */
   getServerInfo: async () => {
+    const url = buildUrl(`/info`);
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/info`);
+      const response = await fetch(url);
 
       if (response.status === 200) {
         const info = (await response.json()) as ServerInformationDto;
