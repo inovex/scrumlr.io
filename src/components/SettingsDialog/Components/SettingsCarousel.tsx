@@ -34,10 +34,7 @@ export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselIte
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
-        {/* eslint-disable */}
-        {/* @ts-ignore */}
         <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${currentValue}`) : currentValue}</span>
-        {/* eslint-enable */}
       </div>
       <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()} aria-label={t("Avatar.nextOption")}>
         <ArrowRightIcon />
