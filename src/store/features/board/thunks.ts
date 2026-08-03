@@ -21,6 +21,13 @@ import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {noteDragStarted, noteDragEnded} from "../dragLocks";
 import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "./types";
 import {TemplateWithColumns} from "../templates";
+import {Column} from "store/features/columns/types";
+import {Note} from "store/features/notes/types";
+import {Reaction} from "store/features/reactions/types";
+import {Request} from "store/features/requests/types";
+import {Vote} from "store/features/votes/types";
+import {Voting} from "store/features/votings/types";
+import {Auth} from "store/features/auth/types";
 
 // helper function to handle board deletion redirects
 const redirectToBoardDeletedPage = () => {
@@ -103,9 +110,41 @@ export const permittedBoardAccess = createAsyncThunk<
 
       switch (message.type) {
         case "INIT": {
-          const {board, columns, notes, reactions, votes, votings, requests} = message.data;
-          const userAuth = await API.getUsers(message.data.board.id);
-          const newParticipants = mapMultipleParticipants(message.data.participants, userAuth);
+          const board = await API.getBoard(boardId);
+          const columns = await API.getColumns(boardId).catch((error) => {
+            return [] as Column[];
+          });
+          const notes = await API.getNotes(boardId).catch((error) => {
+            return [] as Note[];
+          });
+          const reactions = await API.getReactions(boardId).catch((error) => {
+            return [] as Reaction[];
+          });
+          const votes = await API.getVotes(boardId).catch((error) => {
+            return [] as Vote[];
+          });
+          const votings = await API.getVotings(boardId).catch((error) => {
+            return [] as Voting[];
+          });
+          const userAuth = await API.getUsers(boardId).catch((error) => {
+            return [] as Auth[];
+          });
+          const participants = await API.getParticipants(boardId);
+          const newParticipants = mapMultipleParticipants(participants, userAuth);
+          let requests: Request[] = [];
+          if (
+            newParticipants.find((p) => {
+              p.user.id === self.id;
+            })?.role == "MODERATOR" ||
+            newParticipants.find((p) => {
+              p.user.id === self.id;
+            })?.role == "OWNER"
+          ) {
+            requests = await API.getRequests(boardId).catch((error) => {
+              return [] as Request[];
+            });
+          }
+
           dispatch(
             initializeBoard({
               fullBoard: {
