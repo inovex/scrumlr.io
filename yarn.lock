@@ -6586,9 +6586,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^17.1.0":
-  version: 17.1.0
-  resolution: "lint-staged@npm:17.1.0"
+"lint-staged@npm:^17.2.0":
+  version: 17.2.0
+  resolution: "lint-staged@npm:17.2.0"
   dependencies:
     picomatch: "npm:^4.0.5"
     string-argv: "npm:^0.3.2"
@@ -6599,7 +6599,7 @@ __metadata:
       optional: true
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/70d09008f7fb1b451e52ff6743f3d562b9c4d694ea5a6c038159ac11bbff1bb887952fc78ff3ca74af064bf95388a762c1ec32c0a6c3fd47509a29be13b9f013
+  checksum: 10c0/47eb70637304faa5c723a7adee4f7699a78f928b710b09f167240642285656cf0987b316e3ad4ca34bda10466fbad7a1cb4922cfbf470e5ad0d836eb384f2809
   languageName: node
   linkType: hard
 
@@ -8430,7 +8430,7 @@ __metadata:
     js-md5: "npm:^0.9.2"
     linkify-react: "npm:^4.3.3"
     linkifyjs: "npm:^4.3.3"
-    lint-staged: "npm:^17.1.0"
+    lint-staged: "npm:^17.2.0"
     marked: "npm:18.0.7"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
