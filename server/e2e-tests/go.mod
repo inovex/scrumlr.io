@@ -12,7 +12,7 @@ require (
 replace scrumlr.io/server => ../src
 
 require (
-	github.com/ajg/form v1.8.0 // indirect
+	github.com/ajg/form v1.9.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coder/websocket v1.8.15 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
