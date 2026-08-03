@@ -15,13 +15,6 @@ import (
 func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailure() {
 	t := suite.T()
 
-	// fast forwarding time to let the test run instantly
-	originalDelay := SleepBetweenRetries
-
-	SleepBetweenRetries = time.Millisecond * 10
-
-	defer func() { SleepBetweenRetries = originalDelay }()
-
 	boardID := uuid.New()
 	userID := uuid.New()
 	conn := &mockConnection{}
@@ -41,7 +34,8 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 		realtime:           mockBroker,
 	}
 
-	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
+  retryDelay := time.Millisecond * 10
+	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
 	mockBroker.AssertExpectations(t)
 	savedSubscription := s.boardSubscriptions[boardID].subscription
@@ -50,13 +44,6 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 
 func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRetries() {
 	t := suite.T()
-
-	// fast forwarding time to let the test run instantly
-	originalDelay := SleepBetweenRetries
-
-	SleepBetweenRetries = time.Millisecond * 10
-
-	defer func() { SleepBetweenRetries = originalDelay }()
 
 	boardID := uuid.New()
 	userID := uuid.New()
@@ -75,7 +62,8 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 		realtime:           mockBroker,
 	}
 
-	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
+  retryDelay := time.Millisecond * 10
+	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
 	mockBroker.AssertExpectations(t)
 	savedSubscription := s.boardSubscriptions[boardID].subscription

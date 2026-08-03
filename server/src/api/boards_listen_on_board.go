@@ -36,8 +36,7 @@ type InitEvent struct {
 }
 
 const MaxRetries = 10
-
-var SleepBetweenRetries = time.Second * 2
+const SleepBetweenRetries = time.Second * 2
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.listen.api.socket.open")
@@ -89,7 +88,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.listenOnBoard(ctx, id, userID, conn, initEvent.Data)
+	s.listenOnBoard(ctx, id, userID, conn, initEvent.Data, SleepBetweenRetries)
 
 	for {
 		_, message, err := conn.Read(ctx)
@@ -111,7 +110,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, initEventData boards.FullBoard) {
+func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, initEventData boards.FullBoard, retryDelay time.Duration) {
 	log := logger.FromContext(ctx)
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
@@ -139,7 +138,7 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 				break
 			}
 			log.Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
-			time.Sleep(SleepBetweenRetries) // wait before retrying
+			time.Sleep(retryDelay)
 		}
 		// if it completely fails after retries, abort and don't start the goroutine
 		if err != nil {
