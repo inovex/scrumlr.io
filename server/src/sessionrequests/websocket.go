@@ -25,8 +25,7 @@ type sessionRequestWebsocket struct {
 }
 
 const MaxRetries = 10
-
-var SleepBetweenRetries = time.Second * 2
+const SleepBetweenRetries = time.Second * 2
 
 func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt realtime.BrokerInterface) SessionRequestWebsocket {
 	websocket := new(sessionRequestWebsocket)
@@ -63,7 +62,7 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 	websocketOpenedCounter.Add(ctx, 1)
 	defer socket.closeSocket(conn)
 
-	socket.listenOnBoardSessionRequest(boardId, userID, conn)
+	socket.listenOnBoardSessionRequest(boardId, userID, conn, SleepBetweenRetries)
 
 	for {
 		_, _, err := conn.Read(ctx)
@@ -77,7 +76,7 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 	}
 }
 
-func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection) {
+func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration) {
 	if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
 		socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
 			clients:       make(map[uuid.UUID]websocket.Connection),
@@ -99,7 +98,7 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 				break
 			}
 			logger.Get().Errorw("failed to subscribe to board session request channel, retrying...", "board", boardID, "user", userID, "attempt", i+1, "err", err)
-			time.Sleep(SleepBetweenRetries)
+			time.Sleep(retryDelay)
 		}
 
 		// if it completely fails after all retries, abort and don't start the goroutine

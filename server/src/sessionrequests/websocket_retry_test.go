@@ -23,10 +23,6 @@ func (m *mockConn) Read(ctx context.Context) (websocket.MessageType, []byte, err
 func (m *mockConn) Close(reason string) error { return nil }
 
 func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
-	original := SleepBetweenRetries
-	SleepBetweenRetries = time.Millisecond * 10
-	defer func() { SleepBetweenRetries = original }()
-
 	boardID := uuid.New()
 	userID := uuid.New()
 	conn := &mockConn{}
@@ -44,7 +40,8 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
-	socket.listenOnBoardSessionRequest(boardID, userID, conn)
+  retryDelay := time.Millisecond * 10
+	socket.listenOnBoardSessionRequest(boardID, userID, conn, retryDelay)
 
 	mockBroker.AssertExpectations(t)
 
@@ -56,10 +53,6 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 
 // 2) Fails all retries and does not store a subscription
 func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
-	original := SleepBetweenRetries
-	SleepBetweenRetries = time.Millisecond * 10
-	defer func() { SleepBetweenRetries = original }()
-
 	boardID := uuid.New()
 	userID := uuid.New()
 	conn := &mockConn{}
@@ -75,7 +68,8 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
-	socket.listenOnBoardSessionRequest(boardID, userID, conn)
+	retryDelay := time.Millisecond * 10
+	socket.listenOnBoardSessionRequest(boardID, userID, conn, retryDelay)
 
 	mockBroker.AssertExpectations(t)
 
@@ -108,7 +102,8 @@ func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 		},
 	}
 
-	socket.listenOnBoardSessionRequest(boardID, userID, conn)
+	retryDelay := time.Millisecond * 10
+	socket.listenOnBoardSessionRequest(boardID, userID, conn, retryDelay)
 
 	// no expectations to assert on mockBroker; just ensure existing subscription unchanged
 	sub := socket.boardSessionRequestSubscriptions[boardID]
