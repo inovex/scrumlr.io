@@ -1,5 +1,5 @@
-import {SERVER_HTTP_URL} from "../config";
 import {AuthDto} from "../store/features/auth/types";
+import {buildUrl} from "./index";
 
 export const AuthAPI = {
   /**
@@ -9,8 +9,9 @@ export const AuthAPI = {
    * a call to the server is required.
    */
   signOut: async () => {
+    const url = buildUrl(`/login`);
     try {
-      await fetch(`${SERVER_HTTP_URL}/login`, {
+      await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
@@ -25,8 +26,9 @@ export const AuthAPI = {
    * @param name the username of the account
    */
   signInAnonymously: async (name: string) => {
+    const url = buildUrl(`/login/anonymous`);
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/login/anonymous`, {
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({name}),
@@ -52,8 +54,9 @@ export const AuthAPI = {
    * @returns the user or `undefined`
    */
   getCurrentUser: async () => {
+    const url = buildUrl(`/users`);
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users`, {
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
