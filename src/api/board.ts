@@ -12,13 +12,19 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: async (name: string | undefined, accessPolicy: CreateSessionAccessPolicy, columns: {name: string; visible: boolean; color: Color}[]) => {
+  createBoard: async (
+    name: string | undefined,
+    description: string | undefined,
+    accessPolicy: CreateSessionAccessPolicy,
+    columns: {name: string; visible: boolean; color: Color}[]
+  ) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
           name,
+          description,
           accessPolicy: accessPolicy.policy,
           passphrase: accessPolicy.policy === "BY_PASSPHRASE" ? accessPolicy.passphrase : undefined,
           columns,
