@@ -17,7 +17,7 @@ definitions:
         type: boolean
       authProvider:
         items:
-          $ref: '#/definitions/common.AccountType'
+          $ref: "#/definitions/common.AccountType"
         type: array
       feedbackEnabled:
         type: boolean
@@ -26,380 +26,380 @@ definitions:
     type: object
   avatar.AccessoriesType:
     enum:
-    - Blank
-    - Kurt
-    - Prescription01
-    - Prescription02
-    - Round
-    - Sunglasses
-    - Wayfarers
+      - Blank
+      - Kurt
+      - Prescription01
+      - Prescription02
+      - Round
+      - Sunglasses
+      - Wayfarers
     type: string
     x-enum-varnames:
-    - AccessoriesTypeBlank
-    - AccessoriesTypeKurt
-    - AccessoriesTypePrescription01
-    - AccessoriesTypePrescription02
-    - AccessoriesTypeRound
-    - AccessoriesTypeSunglasses
-    - AccessoriesTypeWayfarers
+      - AccessoriesTypeBlank
+      - AccessoriesTypeKurt
+      - AccessoriesTypePrescription01
+      - AccessoriesTypePrescription02
+      - AccessoriesTypeRound
+      - AccessoriesTypeSunglasses
+      - AccessoriesTypeWayfarers
   avatar.ClotheColor:
     enum:
-    - Black
-    - Blue01
-    - Blue02
-    - Blue03
-    - Gray01
-    - Gray02
-    - Heather
-    - PastelBlue
-    - PastelGreen
-    - PastelOrange
-    - PastelRed
-    - PastelYellow
-    - Pink
-    - Red
-    - White
+      - Black
+      - Blue01
+      - Blue02
+      - Blue03
+      - Gray01
+      - Gray02
+      - Heather
+      - PastelBlue
+      - PastelGreen
+      - PastelOrange
+      - PastelRed
+      - PastelYellow
+      - Pink
+      - Red
+      - White
     type: string
     x-enum-varnames:
-    - ClotheColorBlack
-    - ClotheColorBlue01
-    - ClotheColorBlue02
-    - ClotheColorBlue03
-    - ClotheColorGray01
-    - ClotheColorGray02
-    - ClotheColorHeather
-    - ClotheColorPastelBlue
-    - ClotheColorPastelGreen
-    - ClotheColorPastelOrange
-    - ClotheColorPastelRed
-    - ClotheColorPastelYellow
-    - ClotheColorPink
-    - ClotheColorRed
-    - ClotheColorWhite
+      - ClotheColorBlack
+      - ClotheColorBlue01
+      - ClotheColorBlue02
+      - ClotheColorBlue03
+      - ClotheColorGray01
+      - ClotheColorGray02
+      - ClotheColorHeather
+      - ClotheColorPastelBlue
+      - ClotheColorPastelGreen
+      - ClotheColorPastelOrange
+      - ClotheColorPastelRed
+      - ClotheColorPastelYellow
+      - ClotheColorPink
+      - ClotheColorRed
+      - ClotheColorWhite
   avatar.ClotheType:
     enum:
-    - BlazerShirt
-    - BlazerSweater
-    - CollarSweater
-    - GraphicShirt
-    - Hoodie
-    - Overall
-    - ShirtCrewNeck
-    - ShirtScoopNeck
-    - ShirtVNeck
+      - BlazerShirt
+      - BlazerSweater
+      - CollarSweater
+      - GraphicShirt
+      - Hoodie
+      - Overall
+      - ShirtCrewNeck
+      - ShirtScoopNeck
+      - ShirtVNeck
     type: string
     x-enum-varnames:
-    - ClotheTypeBlazerShirt
-    - ClotheTypeBlazerSweater
-    - ClotheTypeCollarSweater
-    - ClotheTypeGraphicShirt
-    - ClotheTypeHoodie
-    - ClotheTypeOverall
-    - ClotheTypeShirtCrewNeck
-    - ClotheTypeShirtScoopNeck
-    - ClotheTypeShirtVNeck
+      - ClotheTypeBlazerShirt
+      - ClotheTypeBlazerSweater
+      - ClotheTypeCollarSweater
+      - ClotheTypeGraphicShirt
+      - ClotheTypeHoodie
+      - ClotheTypeOverall
+      - ClotheTypeShirtCrewNeck
+      - ClotheTypeShirtScoopNeck
+      - ClotheTypeShirtVNeck
   avatar.EyeType:
     enum:
-    - Close
-    - Cry
-    - Default
-    - Dizzy
-    - EyeRoll
-    - Happy
-    - Hearts
-    - Side
-    - Squint
-    - Surprised
-    - Wink
-    - WinkWacky
+      - Close
+      - Cry
+      - Default
+      - Dizzy
+      - EyeRoll
+      - Happy
+      - Hearts
+      - Side
+      - Squint
+      - Surprised
+      - Wink
+      - WinkWacky
     type: string
     x-enum-varnames:
-    - EyeTypeClose
-    - EyeTypeCry
-    - EyeTypeDefault
-    - EyeTypeDizzy
-    - EyeTypeEyeRoll
-    - EyeTypeHappy
-    - EyeTypeHearts
-    - EyeTypeSide
-    - EyeTypeSquint
-    - EyeTypeSurprised
-    - EyeTypeWink
-    - EyeTypeWinkWacky
+      - EyeTypeClose
+      - EyeTypeCry
+      - EyeTypeDefault
+      - EyeTypeDizzy
+      - EyeTypeEyeRoll
+      - EyeTypeHappy
+      - EyeTypeHearts
+      - EyeTypeSide
+      - EyeTypeSquint
+      - EyeTypeSurprised
+      - EyeTypeWink
+      - EyeTypeWinkWacky
   avatar.EyebrowType:
     enum:
-    - Angry
-    - AngryNatural
-    - Default
-    - DefaultNatural
-    - FlatNatural
-    - FrownNatural
-    - RaisedExcited
-    - RaisedExcitedNatural
-    - SadConcerned
-    - SadConcernedNatural
-    - UnibrowNatural
-    - UpDown
-    - UpDownNatural
+      - Angry
+      - AngryNatural
+      - Default
+      - DefaultNatural
+      - FlatNatural
+      - FrownNatural
+      - RaisedExcited
+      - RaisedExcitedNatural
+      - SadConcerned
+      - SadConcernedNatural
+      - UnibrowNatural
+      - UpDown
+      - UpDownNatural
     type: string
     x-enum-varnames:
-    - EyebrowTypeAngry
-    - EyebrowTypeAngryNatural
-    - EyebrowTypeDefault
-    - EyebrowTypeDefaultNatural
-    - EyebrowTypeFlatNatural
-    - EyebrowTypeFrownNatural
-    - EyebrowTypeRaisedExcited
-    - EyebrowTypeRaisedExcitedNatural
-    - EyebrowTypeSadConcerned
-    - EyebrowTypeSadConcernedNatural
-    - EyebrowTypeUnibrowNatural
-    - EyebrowTypeUpDown
-    - EyebrowTypeUpDownNatural
+      - EyebrowTypeAngry
+      - EyebrowTypeAngryNatural
+      - EyebrowTypeDefault
+      - EyebrowTypeDefaultNatural
+      - EyebrowTypeFlatNatural
+      - EyebrowTypeFrownNatural
+      - EyebrowTypeRaisedExcited
+      - EyebrowTypeRaisedExcitedNatural
+      - EyebrowTypeSadConcerned
+      - EyebrowTypeSadConcernedNatural
+      - EyebrowTypeUnibrowNatural
+      - EyebrowTypeUpDown
+      - EyebrowTypeUpDownNatural
   avatar.FacialHairColor:
     enum:
-    - Auburn
-    - Black
-    - Blonde
-    - BlondeGolden
-    - Brown
-    - BrownDark
-    - Platinum
-    - Red
+      - Auburn
+      - Black
+      - Blonde
+      - BlondeGolden
+      - Brown
+      - BrownDark
+      - Platinum
+      - Red
     type: string
     x-enum-varnames:
-    - FacialHairColorAuburn
-    - FacialHairColorBlack
-    - FacialHairColorBlonde
-    - FacialHairColorBlondeGolden
-    - FacialHairColorBrown
-    - FacialHairColorBrownDark
-    - FacialHairColorPlatinum
-    - FacialHairColorRed
+      - FacialHairColorAuburn
+      - FacialHairColorBlack
+      - FacialHairColorBlonde
+      - FacialHairColorBlondeGolden
+      - FacialHairColorBrown
+      - FacialHairColorBrownDark
+      - FacialHairColorPlatinum
+      - FacialHairColorRed
   avatar.FacialHairType:
     enum:
-    - Blank
-    - BeardMedium
-    - BeardLight
-    - BeardMajestic
-    - MoustacheFancy
-    - MoustacheMagnum
+      - Blank
+      - BeardMedium
+      - BeardLight
+      - BeardMajestic
+      - MoustacheFancy
+      - MoustacheMagnum
     type: string
     x-enum-varnames:
-    - FacialHairTypeBlank
-    - FacialHairTypeBeardMedium
-    - FacialHairTypeBeardLight
-    - FacialHairTypeBeardMajestic
-    - FacialHairTypeMoustacheFancy
-    - FacialHairTypeMoustacheMagnum
+      - FacialHairTypeBlank
+      - FacialHairTypeBeardMedium
+      - FacialHairTypeBeardLight
+      - FacialHairTypeBeardMajestic
+      - FacialHairTypeMoustacheFancy
+      - FacialHairTypeMoustacheMagnum
   avatar.GraphicType:
     enum:
-    - Bat
-    - Cumbia
-    - Deer
-    - Diamond
-    - Hola
-    - Pizza
-    - Resist
-    - Selena
-    - Bear
-    - SkullOutline
-    - Skull
+      - Bat
+      - Cumbia
+      - Deer
+      - Diamond
+      - Hola
+      - Pizza
+      - Resist
+      - Selena
+      - Bear
+      - SkullOutline
+      - Skull
     type: string
     x-enum-varnames:
-    - GraphicTypeBat
-    - GraphicTypeCumbia
-    - GraphicTypeDeer
-    - GraphicTypeDiamond
-    - GraphicTypeHola
-    - GraphicTypePizza
-    - GraphicTypeResist
-    - GraphicTypeSelena
-    - GraphicTypeBear
-    - GraphicTypeSkullOutline
-    - GraphicTypeSkull
+      - GraphicTypeBat
+      - GraphicTypeCumbia
+      - GraphicTypeDeer
+      - GraphicTypeDiamond
+      - GraphicTypeHola
+      - GraphicTypePizza
+      - GraphicTypeResist
+      - GraphicTypeSelena
+      - GraphicTypeBear
+      - GraphicTypeSkullOutline
+      - GraphicTypeSkull
   avatar.HairColor:
     enum:
-    - Auburn
-    - Black
-    - Blonde
-    - BlondeGolden
-    - Brown
-    - BrownDark
-    - PastelPink
-    - Blue
-    - Platinum
-    - Red
-    - SilverGray
+      - Auburn
+      - Black
+      - Blonde
+      - BlondeGolden
+      - Brown
+      - BrownDark
+      - PastelPink
+      - Blue
+      - Platinum
+      - Red
+      - SilverGray
     type: string
     x-enum-varnames:
-    - HairColorAuburn
-    - HairColorBlack
-    - HairColorBlonde
-    - HairColorBlondeGolden
-    - HairColorBrown
-    - HairColorBrownDark
-    - HairColorPastelPink
-    - HairColorBlue
-    - HairColorPlatinum
-    - HairColorRed
-    - HairColorSilverGray
+      - HairColorAuburn
+      - HairColorBlack
+      - HairColorBlonde
+      - HairColorBlondeGolden
+      - HairColorBrown
+      - HairColorBrownDark
+      - HairColorPastelPink
+      - HairColorBlue
+      - HairColorPlatinum
+      - HairColorRed
+      - HairColorSilverGray
   avatar.MouthType:
     enum:
-    - Concerned
-    - Default
-    - Disbelief
-    - Eating
-    - Grimace
-    - Sad
-    - ScreamOpen
-    - Serious
-    - Smile
-    - Tongue
-    - Twinkle
-    - Vomit
+      - Concerned
+      - Default
+      - Disbelief
+      - Eating
+      - Grimace
+      - Sad
+      - ScreamOpen
+      - Serious
+      - Smile
+      - Tongue
+      - Twinkle
+      - Vomit
     type: string
     x-enum-varnames:
-    - MouthTypeConcerned
-    - MouthTypeDefault
-    - MouthTypeDisbelief
-    - MouthTypeEating
-    - MouthTypeGrimace
-    - MouthTypeSad
-    - MouthTypeScreamOpen
-    - MouthTypeSerious
-    - MouthTypeSmile
-    - MouthTypeTongue
-    - MouthTypeTwinkle
-    - MouthTypeVomit
+      - MouthTypeConcerned
+      - MouthTypeDefault
+      - MouthTypeDisbelief
+      - MouthTypeEating
+      - MouthTypeGrimace
+      - MouthTypeSad
+      - MouthTypeScreamOpen
+      - MouthTypeSerious
+      - MouthTypeSmile
+      - MouthTypeTongue
+      - MouthTypeTwinkle
+      - MouthTypeVomit
   avatar.SkinColor:
     enum:
-    - Tanned
-    - Yellow
-    - Pale
-    - Light
-    - Brown
-    - DarkBrown
-    - Black
+      - Tanned
+      - Yellow
+      - Pale
+      - Light
+      - Brown
+      - DarkBrown
+      - Black
     type: string
     x-enum-varnames:
-    - SkinColorTanned
-    - SkinColorYellow
-    - SkinColorPale
-    - SkinColorLight
-    - SkinColorBrown
-    - SkinColorDarkBrown
-    - SkinColorBlack
+      - SkinColorTanned
+      - SkinColorYellow
+      - SkinColorPale
+      - SkinColorLight
+      - SkinColorBrown
+      - SkinColorDarkBrown
+      - SkinColorBlack
   avatar.TopType:
     enum:
-    - Eyepatch
-    - Hat
-    - Hijab
-    - LongHairBigHair
-    - LongHairBob
-    - LongHairBun
-    - LongHairCurly
-    - LongHairCurvy
-    - LongHairDreads
-    - LongHairFrida
-    - LongHairFro
-    - LongHairFroBand
-    - LongHairMiaWallace
-    - LongHairNotTooLong
-    - LongHairShavedSides
-    - LongHairStraight
-    - LongHairStraight2
-    - LongHairStraightStrand
-    - NoHair
-    - ShortHairDreads01
-    - ShortHairDreads02
-    - ShortHairFrizzle
-    - ShortHairShaggyMullet
-    - ShortHairShortCurly
-    - ShortHairShortFlat
-    - ShortHairShortRound
-    - ShortHairShortWaved
-    - ShortHairSides
-    - ShortHairTheCaesar
-    - ShortHairTheCaesarSidePart
-    - Turban
-    - WinterHat1
-    - WinterHat2
-    - WinterHat3
-    - WinterHat4
+      - Eyepatch
+      - Hat
+      - Hijab
+      - LongHairBigHair
+      - LongHairBob
+      - LongHairBun
+      - LongHairCurly
+      - LongHairCurvy
+      - LongHairDreads
+      - LongHairFrida
+      - LongHairFro
+      - LongHairFroBand
+      - LongHairMiaWallace
+      - LongHairNotTooLong
+      - LongHairShavedSides
+      - LongHairStraight
+      - LongHairStraight2
+      - LongHairStraightStrand
+      - NoHair
+      - ShortHairDreads01
+      - ShortHairDreads02
+      - ShortHairFrizzle
+      - ShortHairShaggyMullet
+      - ShortHairShortCurly
+      - ShortHairShortFlat
+      - ShortHairShortRound
+      - ShortHairShortWaved
+      - ShortHairSides
+      - ShortHairTheCaesar
+      - ShortHairTheCaesarSidePart
+      - Turban
+      - WinterHat1
+      - WinterHat2
+      - WinterHat3
+      - WinterHat4
     type: string
     x-enum-varnames:
-    - TopTypeEyepatch
-    - TopTypeHat
-    - TopTypeHijab
-    - TopTypeLongHairBigHair
-    - TopTypeLongHairBob
-    - TopTypeLongHairBun
-    - TopTypeLongHairCurly
-    - TopTypeLongHairCurvy
-    - TopTypeLongHairDreads
-    - TopTypeLongHairFrida
-    - TopTypeLongHairFro
-    - TopTypeLongHairFroBand
-    - TopTypeLongHairMiaWallace
-    - TopTypeLongHairNotTooLong
-    - TopTypeLongHairShavedSides
-    - TopTypeLongHairStraight
-    - TopTypeLongHairStraight2
-    - TopTypeLongHairStraightStrand
-    - TopTypeNoHair
-    - TopTypeShortHairDreads01
-    - TopTypeShortHairDreads02
-    - TopTypeShortHairFrizzle
-    - TopTypeShortHairShaggyMullet
-    - TopTypeShortHairShortCurly
-    - TopTypeShortHairShortFlat
-    - TopTypeShortHairShortRound
-    - TopTypeShortHairShortWaved
-    - TopTypeShortHairSides
-    - TopTypeShortHairTheCaesar
-    - TopTypeShortHairTheCaesarSidePart
-    - TopTypeTurban
-    - TopTypeWinterHat1
-    - TopTypeWinterHat2
-    - TopTypeWinterHat3
-    - TopTypeWinterHat4
+      - TopTypeEyepatch
+      - TopTypeHat
+      - TopTypeHijab
+      - TopTypeLongHairBigHair
+      - TopTypeLongHairBob
+      - TopTypeLongHairBun
+      - TopTypeLongHairCurly
+      - TopTypeLongHairCurvy
+      - TopTypeLongHairDreads
+      - TopTypeLongHairFrida
+      - TopTypeLongHairFro
+      - TopTypeLongHairFroBand
+      - TopTypeLongHairMiaWallace
+      - TopTypeLongHairNotTooLong
+      - TopTypeLongHairShavedSides
+      - TopTypeLongHairStraight
+      - TopTypeLongHairStraight2
+      - TopTypeLongHairStraightStrand
+      - TopTypeNoHair
+      - TopTypeShortHairDreads01
+      - TopTypeShortHairDreads02
+      - TopTypeShortHairFrizzle
+      - TopTypeShortHairShaggyMullet
+      - TopTypeShortHairShortCurly
+      - TopTypeShortHairShortFlat
+      - TopTypeShortHairShortRound
+      - TopTypeShortHairShortWaved
+      - TopTypeShortHairSides
+      - TopTypeShortHairTheCaesar
+      - TopTypeShortHairTheCaesarSidePart
+      - TopTypeTurban
+      - TopTypeWinterHat1
+      - TopTypeWinterHat2
+      - TopTypeWinterHat3
+      - TopTypeWinterHat4
   boardreactions.BoardReactionCreateRequest:
     properties:
       reactionType:
         allOf:
-        - $ref: '#/definitions/boardreactions.Reaction'
+          - $ref: "#/definitions/boardreactions.Reaction"
         description: The type of reaction
     type: object
   boardreactions.Reaction:
     enum:
-    - tada
-    - applause
-    - heart
-    - like
-    - dislike
+      - tada
+      - applause
+      - heart
+      - like
+      - dislike
     type: string
     x-enum-varnames:
-    - Tada
-    - Applause
-    - Heart
-    - Like
-    - Dislike
+      - Tada
+      - Applause
+      - Heart
+      - Like
+      - Dislike
   boards.AccessPolicy:
     enum:
-    - PUBLIC
-    - BY_PASSPHRASE
-    - BY_INVITE
+      - PUBLIC
+      - BY_PASSPHRASE
+      - BY_INVITE
     type: string
     x-enum-varnames:
-    - Public
-    - ByPassphrase
-    - ByInvite
+      - Public
+      - ByPassphrase
+      - ByInvite
   boards.Board:
     properties:
       accessPolicy:
         allOf:
-        - $ref: '#/definitions/boards.AccessPolicy'
+          - $ref: "#/definitions/boards.AccessPolicy"
         description: The access policy
       allowStacking:
         type: boolean
@@ -419,7 +419,11 @@ definitions:
         type: string
       sharedNote:
         allOf:
+<<<<<<< HEAD
         - $ref: '#/definitions/uuid.NullUUID'
+=======
+          - $ref: "#/definitions/uuid.NullUUID"
+>>>>>>> 9bc73a77e (Update swagger page)
         description: The id of a note to share with other users.
       showAuthors:
         description: The show authors
@@ -431,7 +435,7 @@ definitions:
         description: The show notes
         type: boolean
       showVoting:
-        $ref: '#/definitions/uuid.NullUUID'
+        $ref: "#/definitions/uuid.NullUUID"
       timerEnd:
         type: string
       timerStart:
@@ -440,10 +444,10 @@ definitions:
   boards.BoardOverview:
     properties:
       board:
-        $ref: '#/definitions/boards.Board'
+        $ref: "#/definitions/boards.Board"
       columns:
         items:
-          $ref: '#/definitions/columns.Column'
+          $ref: "#/definitions/columns.Column"
         type: array
       createdAt:
         type: string
@@ -454,13 +458,17 @@ definitions:
       participants:
         type: integer
       role:
+<<<<<<< HEAD
         $ref: '#/definitions/role.Role'
+=======
+        $ref: "#/definitions/role.Role"
+>>>>>>> 9bc73a77e (Update swagger page)
     type: object
   boards.BoardUpdateRequest:
     properties:
       accessPolicy:
         allOf:
-        - $ref: '#/definitions/boards.AccessPolicy'
+          - $ref: "#/definitions/boards.AccessPolicy"
         description: The new access policy of the board.
       allowStacking:
         description: Set whether stacking should be allowed to all users or only moderators.
@@ -469,7 +477,8 @@ definitions:
         description: Description of the board
         type: string
       isLocked:
-        description: Set whether changes to board should be allowed to all users or
+        description:
+          Set whether changes to board should be allowed to all users or
           only moderators.
         type: boolean
       name:
@@ -480,7 +489,7 @@ definitions:
         type: string
       sharedNote:
         allOf:
-        - $ref: '#/definitions/uuid.NullUUID'
+          - $ref: "#/definitions/uuid.NullUUID"
         description: Set the note id of the note to share with other users.
       showAuthors:
         description: Set whether authors of notes should be shown to all users.
@@ -489,11 +498,12 @@ definitions:
         description: Set whether note reactions should be shown to all users.
         type: boolean
       showNotesOfOtherUsers:
-        description: Set whether notes of other users should be visible for everyone
+        description:
+          Set whether notes of other users should be visible for everyone
           else.
         type: boolean
       showVoting:
-        $ref: '#/definitions/uuid.NullUUID'
+        $ref: "#/definitions/uuid.NullUUID"
       timerEnd:
         description: Set the timer end.
         type: string
@@ -504,11 +514,11 @@ definitions:
   boards.CreateBoardRequest:
     properties:
       accessPolicy:
-        $ref: '#/definitions/boards.AccessPolicy'
+        $ref: "#/definitions/boards.AccessPolicy"
       columns:
         description: The columns to create for the board.
         items:
-          $ref: '#/definitions/columns.ColumnRequest'
+          $ref: "#/definitions/columns.ColumnRequest"
         type: array
       description:
         description: Description of the board
@@ -517,25 +527,26 @@ definitions:
         description: The name of the board.
         type: string
       passphrase:
-        description: The passphrase must be set if access policy is defined as by
+        description:
+          The passphrase must be set if access policy is defined as by
           passphrase.
         type: string
     type: object
   boards.ImportBoardRequest:
     properties:
       board:
-        $ref: '#/definitions/boards.CreateBoardRequest'
+        $ref: "#/definitions/boards.CreateBoardRequest"
       columns:
         items:
-          $ref: '#/definitions/columns.Column'
+          $ref: "#/definitions/columns.Column"
         type: array
       notes:
         items:
-          $ref: '#/definitions/notes.Note'
+          $ref: "#/definitions/notes.Note"
         type: array
       votings:
         items:
-          $ref: '#/definitions/votings.Voting'
+          $ref: "#/definitions/votings.Voting"
         type: array
     type: object
   boards.JoinBoardRequest:
@@ -572,10 +583,10 @@ definitions:
       columns:
         description: Board templates associated column templates
         items:
-          $ref: '#/definitions/columntemplates.ColumnTemplate'
+          $ref: "#/definitions/columntemplates.ColumnTemplate"
         type: array
       template:
-        $ref: '#/definitions/boardtemplates.BoardTemplate'
+        $ref: "#/definitions/boardtemplates.BoardTemplate"
     type: object
   boardtemplates.BoardTemplateUpdateRequest:
     properties:
@@ -597,7 +608,7 @@ definitions:
       columnTemplates:
         description: The column templates to create for the board template.
         items:
-          $ref: '#/definitions/columntemplates.ColumnTemplateRequest'
+          $ref: "#/definitions/columntemplates.ColumnTemplateRequest"
         type: array
       creator:
         description: The user who creates the template
@@ -616,7 +627,7 @@ definitions:
     properties:
       color:
         allOf:
-        - $ref: '#/definitions/common.Color'
+          - $ref: "#/definitions/common.Color"
         description: The column color.
       description:
         description: The column description.
@@ -638,7 +649,7 @@ definitions:
     properties:
       color:
         allOf:
-        - $ref: '#/definitions/common.Color'
+          - $ref: "#/definitions/common.Color"
         description: The column color to set.
       description:
         description: The column description to set.
@@ -660,7 +671,7 @@ definitions:
     properties:
       color:
         allOf:
-        - $ref: '#/definitions/common.Color'
+          - $ref: "#/definitions/common.Color"
         description: The column color to set.
       description:
         description: The column description to set.
@@ -679,7 +690,7 @@ definitions:
     properties:
       color:
         allOf:
-        - $ref: '#/definitions/common.Color'
+          - $ref: "#/definitions/common.Color"
         description: The column template color.
       description:
         description: The description of a board template column.
@@ -704,7 +715,7 @@ definitions:
     properties:
       color:
         allOf:
-        - $ref: '#/definitions/common.Color'
+          - $ref: "#/definitions/common.Color"
         description: The column template color to set.
       description:
         description: The columnTemplate description to set.
@@ -730,62 +741,63 @@ definitions:
     type: object
   common.AccountType:
     enum:
-    - ANONYMOUS
-    - GOOGLE
-    - MICROSOFT
-    - AZURE_AD
-    - GITHUB
-    - APPLE
-    - OIDC
+      - ANONYMOUS
+      - GOOGLE
+      - MICROSOFT
+      - AZURE_AD
+      - GITHUB
+      - APPLE
+      - OIDC
     type: string
     x-enum-varnames:
-    - Anonymous
-    - Google
-    - Microsoft
-    - AzureAd
-    - GitHub
-    - Apple
-    - TypeOIDC
+      - Anonymous
+      - Google
+      - Microsoft
+      - AzureAd
+      - GitHub
+      - Apple
+      - TypeOIDC
   common.Avatar:
     properties:
       accessoriesType:
-        $ref: '#/definitions/avatar.AccessoriesType'
+        $ref: "#/definitions/avatar.AccessoriesType"
       backgroundColor:
-        $ref: '#/definitions/common.Color'
+        $ref: "#/definitions/common.Color"
       clotheColor:
-        $ref: '#/definitions/avatar.ClotheColor'
+        $ref: "#/definitions/avatar.ClotheColor"
       clotheType:
-        $ref: '#/definitions/avatar.ClotheType'
+        $ref: "#/definitions/avatar.ClotheType"
       eyeType:
-        $ref: '#/definitions/avatar.EyeType'
+        $ref: "#/definitions/avatar.EyeType"
       eyebrowType:
-        $ref: '#/definitions/avatar.EyebrowType'
+        $ref: "#/definitions/avatar.EyebrowType"
       facialHairColor:
-        $ref: '#/definitions/avatar.FacialHairColor'
+        $ref: "#/definitions/avatar.FacialHairColor"
       facialHairType:
-        $ref: '#/definitions/avatar.FacialHairType'
+        $ref: "#/definitions/avatar.FacialHairType"
       graphicType:
-        $ref: '#/definitions/avatar.GraphicType'
+        $ref: "#/definitions/avatar.GraphicType"
       hairColor:
-        $ref: '#/definitions/avatar.HairColor'
+        $ref: "#/definitions/avatar.HairColor"
       mouthType:
-        $ref: '#/definitions/avatar.MouthType'
+        $ref: "#/definitions/avatar.MouthType"
       skinColor:
-        $ref: '#/definitions/avatar.SkinColor'
+        $ref: "#/definitions/avatar.SkinColor"
       topType:
-        $ref: '#/definitions/avatar.TopType'
+        $ref: "#/definitions/avatar.TopType"
     type: object
   common.Color:
     enum:
-    - backlog-blue
-    - goal-green
-    - value-violet
-    - online-orange
-    - planning-pink
-    - poker-purple
-    - yielding-yellow
+      - backlog-blue
+      - goal-green
+      - value-violet
+      - online-orange
+      - planning-pink
+      - poker-purple
+      - yielding-yellow
     type: string
     x-enum-varnames:
+<<<<<<< HEAD
     - ColorBacklogBlue
     - ColorGoalGreen
     - ColorValueViolet
@@ -793,6 +805,15 @@ definitions:
     - ColorPlanningPink
     - ColorPokerPurple
     - ColorYieldingYellow
+=======
+      - ColorBacklogBlue
+      - ColorGoalGreen
+      - ColorValueViolet
+      - ColorOnlineOrange
+      - ColorPlanningPink
+      - ColorPokerPurple
+      - ColorYieldingYellow
+>>>>>>> 9bc73a77e (Update swagger page)
   feedback.FeedbackRequest:
     properties:
       contact:
@@ -800,18 +821,18 @@ definitions:
       text:
         type: string
       type:
-        $ref: '#/definitions/feedback.FeedbackType'
+        $ref: "#/definitions/feedback.FeedbackType"
     type: object
   feedback.FeedbackType:
     enum:
-    - BUG_REPORT
-    - FEATURE_REQUEST
-    - PRAISE
+      - BUG_REPORT
+      - FEATURE_REQUEST
+      - PRAISE
     type: string
     x-enum-varnames:
-    - BugReport
-    - FeatureRequest
-    - Praise
+      - BugReport
+      - FeatureRequest
+      - Praise
   notes.Note:
     properties:
       author:
@@ -824,7 +845,7 @@ definitions:
         type: string
       position:
         allOf:
-        - $ref: '#/definitions/notes.NotePosition'
+          - $ref: "#/definitions/notes.NotePosition"
         description: The position of the note.
       text:
         description: The text of the note.
@@ -849,14 +870,14 @@ definitions:
         type: integer
       stack:
         allOf:
-        - $ref: '#/definitions/uuid.NullUUID'
+          - $ref: "#/definitions/uuid.NullUUID"
         description: The parent note for this note in a stack.
     type: object
   notes.NoteUpdateRequest:
     properties:
       position:
         allOf:
-        - $ref: '#/definitions/notes.NotePosition'
+          - $ref: "#/definitions/notes.NotePosition"
         description: The position of the note
       text:
         description: The text of the note.
@@ -869,7 +890,7 @@ definitions:
       note:
         type: string
       reactionType:
-        $ref: '#/definitions/reactions.ReactionType'
+        $ref: "#/definitions/reactions.ReactionType"
       user:
         type: string
     type: object
@@ -878,33 +899,34 @@ definitions:
       note:
         type: string
       reactionType:
-        $ref: '#/definitions/reactions.ReactionType'
+        $ref: "#/definitions/reactions.ReactionType"
     type: object
   reactions.ReactionType:
     enum:
-    - thinking
-    - heart
-    - like
-    - dislike
-    - joy
-    - celebration
-    - poop
+      - thinking
+      - heart
+      - like
+      - dislike
+      - joy
+      - celebration
+      - poop
     type: string
     x-enum-varnames:
-    - Thinking
-    - Heart
-    - Like
-    - Dislike
-    - Joy
-    - Celebration
-    - Poop
+      - Thinking
+      - Heart
+      - Like
+      - Dislike
+      - Joy
+      - Celebration
+      - Poop
   reactions.ReactionUpdateTypeRequest:
     properties:
       reactionType:
-        $ref: '#/definitions/reactions.ReactionType'
+        $ref: "#/definitions/reactions.ReactionType"
     type: object
   role.Role:
     enum:
+<<<<<<< HEAD
     - PARTICIPANT
     - MODERATOR
     - OWNER
@@ -913,28 +935,38 @@ definitions:
     - ParticipantRole
     - ModeratorRole
     - OwnerRole
+=======
+      - PARTICIPANT
+      - MODERATOR
+      - OWNER
+    type: string
+    x-enum-varnames:
+      - ParticipantRole
+      - ModeratorRole
+      - OwnerRole
+>>>>>>> 9bc73a77e (Update swagger page)
   sessionrequests.BoardSessionRequest:
     properties:
       status:
-        $ref: '#/definitions/sessionrequests.RequestStatus'
+        $ref: "#/definitions/sessionrequests.RequestStatus"
       user:
-        $ref: '#/definitions/users.User'
+        $ref: "#/definitions/users.User"
     type: object
   sessionrequests.BoardSessionRequestUpdate:
     properties:
       status:
-        $ref: '#/definitions/sessionrequests.RequestStatus'
+        $ref: "#/definitions/sessionrequests.RequestStatus"
     type: object
   sessionrequests.RequestStatus:
     enum:
-    - PENDING
-    - ACCEPTED
-    - REJECTED
+      - PENDING
+      - ACCEPTED
+      - REJECTED
     type: string
     x-enum-varnames:
-    - RequestPending
-    - RequestAccepted
-    - RequestRejected
+      - RequestPending
+      - RequestAccepted
+      - RequestRejected
   sessions.BoardSession:
     properties:
       banned:
@@ -947,7 +979,8 @@ definitions:
         description: Reference for when board_session has been created
         type: string
       favourite:
-        description: Flag indicates whether user has marked the board as one of their
+        description:
+          Flag indicates whether user has marked the board as one of their
           favourites.
         type: boolean
       id:
@@ -960,7 +993,11 @@ definitions:
         type: boolean
       role:
         allOf:
+<<<<<<< HEAD
         - $ref: '#/definitions/role.Role'
+=======
+          - $ref: "#/definitions/role.Role"
+>>>>>>> 9bc73a77e (Update swagger page)
         description: |-
           The role of the participant.
 
@@ -987,7 +1024,11 @@ definitions:
         type: boolean
       role:
         allOf:
+<<<<<<< HEAD
         - $ref: '#/definitions/role.Role'
+=======
+          - $ref: "#/definitions/role.Role"
+>>>>>>> 9bc73a77e (Update swagger page)
         description: |-
           The role of the participant.
 
@@ -1002,11 +1043,11 @@ definitions:
     properties:
       accountType:
         allOf:
-        - $ref: '#/definitions/common.AccountType'
+          - $ref: "#/definitions/common.AccountType"
         description: The user's account type configuration
       avatar:
         allOf:
-        - $ref: '#/definitions/common.Avatar'
+          - $ref: "#/definitions/common.Avatar"
         description: The user's avatar configuration
       id:
         description: The id of the user
@@ -1018,7 +1059,7 @@ definitions:
   users.UserUpdateRequest:
     properties:
       avatar:
-        $ref: '#/definitions/common.Avatar'
+        $ref: "#/definitions/common.Avatar"
       name:
         type: string
     type: object
@@ -1055,11 +1096,11 @@ definitions:
       showVotesOfOthers:
         type: boolean
       status:
-        $ref: '#/definitions/votings.VotingStatus'
+        $ref: "#/definitions/votings.VotingStatus"
       voteLimit:
         type: integer
       votes:
-        $ref: '#/definitions/votings.VotingResults'
+        $ref: "#/definitions/votings.VotingResults"
     type: object
   votings.VotingCreateRequest:
     properties:
@@ -1078,7 +1119,7 @@ definitions:
         type: integer
       votesPerNote:
         additionalProperties:
-          $ref: '#/definitions/votings.VotingResultsPerNote'
+          $ref: "#/definitions/votings.VotingResultsPerNote"
         type: object
     type: object
   votings.VotingResultsPerNote:
@@ -1087,7 +1128,7 @@ definitions:
         type: integer
       userVotes:
         items:
-          $ref: '#/definitions/votings.VotingResultsPerUser'
+          $ref: "#/definitions/votings.VotingResultsPerUser"
         type: array
     type: object
   votings.VotingResultsPerUser:
@@ -1099,12 +1140,12 @@ definitions:
     type: object
   votings.VotingStatus:
     enum:
-    - OPEN
-    - CLOSED
+      - OPEN
+      - CLOSED
     type: string
     x-enum-varnames:
-    - Open
-    - Closed
+      - Open
+      - Closed
 info:
   contact:
     email: info@scrumlr.io
@@ -1119,1540 +1160,1567 @@ paths:
   /boards:
     get:
       consumes:
+<<<<<<< HEAD
       - application/json
+=======
+        - application/json
+>>>>>>> 9bc73a77e (Update swagger page)
       description: Get all board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.BoardOverview'
+            $ref: "#/definitions/boards.BoardOverview"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/common.APIError'
+=======
+            $ref: "#/definitions/common.APIError"
+>>>>>>> 9bc73a77e (Update swagger page)
       summary: Get all board
       tags:
-      - boards
+        - boards
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: board to create
-        in: body
-        name: board
-        required: true
-        schema:
-          $ref: '#/definitions/boards.CreateBoardRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: board to create
+          in: body
+          name: board
+          required: true
+          schema:
+            $ref: "#/definitions/boards.CreateBoardRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new board
       tags:
-      - boards
+        - boards
   /boards/{boardId}/columns:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all columns for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/columns.Column'
+              $ref: "#/definitions/columns.Column"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all columns for a board
       tags:
-      - columns
+        - columns
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new column for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: column to create
-        in: body
-        name: column
-        required: true
-        schema:
-          $ref: '#/definitions/columns.ColumnRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: column to create
+          in: body
+          name: column
+          required: true
+          schema:
+            $ref: "#/definitions/columns.ColumnRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/columns.Column'
+            $ref: "#/definitions/columns.Column"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new column for a board
       tags:
-      - columns
+        - columns
   /boards/{boardId}/columns/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a column for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the column to delete
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the column to delete
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Delete a column for a board
       tags:
-      - columns
+        - columns
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a column for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the column
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the column
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/columns.Column'
+            $ref: "#/definitions/columns.Column"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a column for a board
       tags:
-      - columns
+        - columns
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a column for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the column to update
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: values to update the column
-        in: body
-        name: column
-        required: true
-        schema:
-          $ref: '#/definitions/columns.ColumnUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the column to update
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: values to update the column
+          in: body
+          name: column
+          required: true
+          schema:
+            $ref: "#/definitions/columns.ColumnUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/columns.Column'
+            $ref: "#/definitions/columns.Column"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a column for a board
       tags:
-      - columns
+        - columns
   /boards/{boardId}/notes:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all notes on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/notes.Note'
+              $ref: "#/definitions/notes.Note"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all notes on a board
       tags:
-      - notes
+        - notes
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new note on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: note to create
-        in: body
-        name: note
-        required: true
-        schema:
-          $ref: '#/definitions/notes.NoteCreateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: note to create
+          in: body
+          name: note
+          required: true
+          schema:
+            $ref: "#/definitions/notes.NoteCreateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/notes.Note'
+            $ref: "#/definitions/notes.Note"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new note on a board
       tags:
-      - notes
+        - notes
   /boards/{boardId}/notes/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a note from a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the note
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the note
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Delete a note from a board
       tags:
-      - notes
+        - notes
     get:
       consumes:
-      - application/json
+        - application/json
       description: Create a new note on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the note
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the note
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/notes.Note'
+            $ref: "#/definitions/notes.Note"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new note on a board
       tags:
-      - notes
+        - notes
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a note on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the note
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: values to update a note
-        in: body
-        name: note
-        required: true
-        schema:
-          $ref: '#/definitions/notes.NoteUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the note
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: values to update a note
+          in: body
+          name: note
+          required: true
+          schema:
+            $ref: "#/definitions/notes.NoteUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/notes.Note'
+            $ref: "#/definitions/notes.Note"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a note on a board
       tags:
-      - notes
+        - notes
   /boards/{boardId}/participants:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all sessions for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: only select connected sessions
-        enum:
-        - "true"
-        - "false"
-        in: query
-        name: connected
-        type: string
-      - description: only select sessions that are ready
-        enum:
-        - "true"
-        - "false"
-        in: query
-        name: ready
-        type: string
-      - description: only select sessions that raised their hand
-        enum:
-        - "true"
-        - "false"
-        in: query
-        name: raisedHand
-        type: string
-      - description: only select sessions with the requested role
-        enum:
-        - OWNER
-        - MODERATOR
-        - PARTICIPANT
-        in: query
-        name: role
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: only select connected sessions
+          enum:
+            - "true"
+            - "false"
+          in: query
+          name: connected
+          type: string
+        - description: only select sessions that are ready
+          enum:
+            - "true"
+            - "false"
+          in: query
+          name: ready
+          type: string
+        - description: only select sessions that raised their hand
+          enum:
+            - "true"
+            - "false"
+          in: query
+          name: raisedHand
+          type: string
+        - description: only select sessions with the requested role
+          enum:
+            - OWNER
+            - MODERATOR
+            - PARTICIPANT
+          in: query
+          name: role
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: sessions for the board
           schema:
             items:
-              $ref: '#/definitions/sessions.BoardSession'
+              $ref: "#/definitions/sessions.BoardSession"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all sessions for a board
       tags:
-      - sessions
+        - sessions
     put:
       consumes:
+<<<<<<< HEAD
       - application/json
+=======
+        - application/json
+>>>>>>> 9bc73a77e (Update swagger page)
       description: Update all sessions for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: values to update the session
-        in: body
-        name: session
-        required: true
-        schema:
-          $ref: '#/definitions/sessions.BoardSessionUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: values to update the session
+          in: body
+          name: session
+          required: true
+          schema:
+            $ref: "#/definitions/sessions.BoardSessionUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: updated session for the board
           schema:
-            $ref: '#/definitions/sessions.BoardSession'
+            $ref: "#/definitions/sessions.BoardSession"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/common.APIError'
+=======
+            $ref: "#/definitions/common.APIError"
+>>>>>>> 9bc73a77e (Update swagger page)
       summary: Update all sessions for a board
       tags:
-      - sessions
+        - sessions
   /boards/{boardId}/participants/{id}:
     delete:
       consumes:
+<<<<<<< HEAD
       - application/json
       description: Delete a participant from a board
+=======
+        - application/json
+      description: Delete a sessions for a board
+>>>>>>> 9bc73a77e (Update swagger page)
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the session
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the session
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/common.APIError'
       summary: Delete a participant from a board
+=======
+            $ref: "#/definitions/common.APIError"
+      summary: Delete a sessions for a board
+>>>>>>> 9bc73a77e (Update swagger page)
       tags:
-      - sessions
+        - sessions
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a sessions for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the session
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the session
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: session for the board
           schema:
-            $ref: '#/definitions/sessions.BoardSession'
+            $ref: "#/definitions/sessions.BoardSession"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a sessions for a board
       tags:
-      - sessions
+        - sessions
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a sessions for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the session
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: values to update the session
-        in: body
-        name: session
-        required: true
-        schema:
-          $ref: '#/definitions/sessions.BoardSessionUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the session
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: values to update the session
+          in: body
+          name: session
+          required: true
+          schema:
+            $ref: "#/definitions/sessions.BoardSessionUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: session for the board
           schema:
-            $ref: '#/definitions/sessions.BoardSession'
+            $ref: "#/definitions/sessions.BoardSession"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a sessions for a board
       tags:
-      - sessions
+        - sessions
   /boards/{boardId}/reactions:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all reaction on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/reactions.Reaction'
+              $ref: "#/definitions/reactions.Reaction"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all reaction on a board
       tags:
-      - reactions
+        - reactions
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new reaction on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: reaction to create
-        in: body
-        name: reaction
-        required: true
-        schema:
-          $ref: '#/definitions/reactions.ReactionCreateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: reaction to create
+          in: body
+          name: reaction
+          required: true
+          schema:
+            $ref: "#/definitions/reactions.ReactionCreateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/reactions.Reaction'
+            $ref: "#/definitions/reactions.Reaction"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new reaction on a board
       tags:
-      - reactions
+        - reactions
   /boards/{boardId}/reactions/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Remove a reaction from a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the reaction
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the reaction
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Remove a reaction from a board
       tags:
-      - reactions
+        - reactions
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a reaction on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the reaction
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the reaction
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/reactions.Reaction'
+            $ref: "#/definitions/reactions.Reaction"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a reaction on a board
       tags:
-      - reactions
+        - reactions
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a reaction on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the reaction
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: values to update the reaction
-        in: body
-        name: reaction
-        required: true
-        schema:
-          $ref: '#/definitions/reactions.ReactionUpdateTypeRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the reaction
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: values to update the reaction
+          in: body
+          name: reaction
+          required: true
+          schema:
+            $ref: "#/definitions/reactions.ReactionUpdateTypeRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a reaction on a board
       tags:
-      - reactions
+        - reactions
   /boards/{boardId}/requests:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all board session request for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: boarId for the session requests
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: status to filter the requests
-        in: query
-        name: status
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: boarId for the session requests
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: status to filter the requests
+          in: query
+          name: status
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/sessionrequests.BoardSessionRequest'
+              $ref: "#/definitions/sessionrequests.BoardSessionRequest"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all board session request for a board
       tags:
-      - board session requests
+        - board session requests
   /boards/{boardId}/requests/{userId}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a board session request for a user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: boarId for the session request
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: userId for the session request
-        in: path
-        name: userId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: boarId for the session request
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: userId for the session request
+          in: path
+          name: userId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/sessionrequests.BoardSessionRequest'
+            $ref: "#/definitions/sessionrequests.BoardSessionRequest"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a board session request for a user
       tags:
-      - board session requests
+        - board session requests
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a board session request for a user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: boarId for the session request
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: userId for the session request
-        in: path
-        name: userId
-        required: true
-        type: string
-      - description: values to update the board session request
-        in: body
-        name: sessionRequestUpdate
-        required: true
-        schema:
-          $ref: '#/definitions/sessionrequests.BoardSessionRequestUpdate'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: boarId for the session request
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: userId for the session request
+          in: path
+          name: userId
+          required: true
+          type: string
+        - description: values to update the board session request
+          in: body
+          name: sessionRequestUpdate
+          required: true
+          schema:
+            $ref: "#/definitions/sessionrequests.BoardSessionRequestUpdate"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/sessionrequests.BoardSessionRequest'
+            $ref: "#/definitions/sessionrequests.BoardSessionRequest"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a board session request for a user
       tags:
-      - board session requests
+        - board session requests
   /boards/{boardId}/votes:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Remove a vote from a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: vote to remove
-        in: body
-        name: vote
-        required: true
-        schema:
-          $ref: '#/definitions/votings.VoteRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: vote to remove
+          in: body
+          name: vote
+          required: true
+          schema:
+            $ref: "#/definitions/votings.VoteRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Remove a vote from a board
       tags:
-      - votes
+        - votes
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all votes from a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of a voting to filter the votes
-        in: query
-        name: voting
-        type: string
-      - description: id of a note to filter the votes
-        in: query
-        name: note
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of a voting to filter the votes
+          in: query
+          name: voting
+          type: string
+        - description: id of a note to filter the votes
+          in: query
+          name: note
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/votings.Vote'
+              $ref: "#/definitions/votings.Vote"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all votes from a board
       tags:
-      - votes
+        - votes
     post:
       consumes:
-      - application/json
+        - application/json
       description: Add a new vote to a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: vote to add
-        in: body
-        name: vote
-        required: true
-        schema:
-          $ref: '#/definitions/votings.VoteRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: vote to add
+          in: body
+          name: vote
+          required: true
+          schema:
+            $ref: "#/definitions/votings.VoteRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/votings.Vote'
+            $ref: "#/definitions/votings.Vote"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Add a new vote to a board
       tags:
-      - votes
+        - votes
   /boards/{boardId}/votings:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all votings on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/votings.Voting'
+              $ref: "#/definitions/votings.Voting"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all votings on a board
       tags:
-      - votings
+        - votings
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new voting on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: voting to create
-        in: body
-        name: voting
-        required: true
-        schema:
-          $ref: '#/definitions/votings.VotingCreateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: voting to create
+          in: body
+          name: voting
+          required: true
+          schema:
+            $ref: "#/definitions/votings.VotingCreateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/votings.Voting'
+            $ref: "#/definitions/votings.Voting"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new voting on a board
       tags:
-      - votings
+        - votings
   /boards/{boardId}/votings/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a voting on a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the voting
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the voting
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/votings.Voting'
+            $ref: "#/definitions/votings.Voting"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a voting on a board
       tags:
-      - votings
+        - votings
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a voting on a board to closed
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
-      - description: id of the voting
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
+        - description: id of the voting
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/votings.Voting'
+            $ref: "#/definitions/votings.Voting"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update a voting on a board to closed
       tags:
-      - votings
+        - votings
   /boards/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to delete
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to delete
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Delete a board
       tags:
-      - boards
+        - boards
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to get
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to get
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a board
       tags:
+<<<<<<< HEAD
       - boards
     put:
       consumes:
@@ -2677,10 +2745,37 @@ paths:
           $ref: '#/definitions/boards.BoardUpdateRequest'
       produces:
       - application/json
+=======
+        - boards
+    put:
+      consumes:
+        - application/json
+      description: Update a board
+      parameters:
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to update
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: values to update the board
+          in: body
+          name: board
+          required: true
+          schema:
+            $ref: "#/definitions/boards.BoardUpdateRequest"
+      produces:
+        - application/json
+>>>>>>> 9bc73a77e (Update swagger page)
       responses:
         "200":
           description: OK
           schema:
+<<<<<<< HEAD
             $ref: '#/definitions/boards.Board'
         "400":
           description: Bad Request
@@ -2701,267 +2796,293 @@ paths:
       summary: Update a board
       tags:
       - boards
+=======
+            $ref: "#/definitions/boards.Board"
+        "400":
+          description: Bad Request
+          schema:
+            $ref: "#/definitions/common.APIError"
+        "403":
+          description: Forbidden
+          schema:
+            $ref: "#/definitions/common.APIError"
+        "404":
+          description: Not Found
+          schema:
+            $ref: "#/definitions/common.APIError"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/common.APIError"
+      summary: Update a board
+      tags:
+        - boards
+>>>>>>> 9bc73a77e (Update swagger page)
   /boards/{id}/board-reactions:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a board reaction
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Board reaction to create
-        in: body
-        name: boardreaction
-        required: true
-        schema:
-          $ref: '#/definitions/boardreactions.BoardReactionCreateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: Board reaction to create
+          in: body
+          name: boardreaction
+          required: true
+          schema:
+            $ref: "#/definitions/boardreactions.BoardReactionCreateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
       summary: Create a board reaction
       tags:
-      - board reactions
+        - board reactions
   /boards/{id}/participants:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Join an existing board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to join
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: join request for the board
-        in: body
-        name: join
-        schema:
-          $ref: '#/definitions/boards.JoinBoardRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to join
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: join request for the board
+          in: body
+          name: join
+          schema:
+            $ref: "#/definitions/boards.JoinBoardRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "303":
           description: See Other
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Join an existing board
       tags:
+<<<<<<< HEAD
       - boards
+=======
+        - boards
+>>>>>>> 9bc73a77e (Update swagger page)
   /boards{id}/export:
     get:
       consumes:
-      - json text/csv
+        - json text/csv
       description: Export a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to export
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to export
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - json text/csv
+        - json text/csv
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "406":
           description: Not Acceptable
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Export a board
       tags:
-      - boards
+        - boards
   /boards{id}/timer:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a timer for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to delete the timer from
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to delete the timer from
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Delete a timer for a board
       tags:
-      - boards
+        - boards
     post:
       consumes:
-      - application/json
+        - application/json
       description: Set a new timer for a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to set the timer
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: timer request
-        in: body
-        name: timer
-        required: true
-        schema:
-          $ref: '#/definitions/boards.SetTimerRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to set the timer
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: timer request
+          in: body
+          name: timer
+          required: true
+          schema:
+            $ref: "#/definitions/boards.SetTimerRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Set a new timer for a board
       tags:
-      - boards
+        - boards
   /boards{id}/timer/increment:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Increment a timer for a board by one minute
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to increment the timer
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board to increment the timer
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Increment a timer for a board
       tags:
-      - boards
+        - boards
   /feedback:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Send feedback for scrumlr
       parameters:
-      - description: Feedback to send
-        in: body
-        name: feedback
-        required: true
-        schema:
-          $ref: '#/definitions/feedback.FeedbackRequest'
+        - description: Feedback to send
+          in: body
+          name: feedback
+          required: true
+          schema:
+            $ref: "#/definitions/feedback.FeedbackRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
@@ -2969,12 +3090,12 @@ paths:
           description: Internal Server Error
       summary: Send feedback for scrumlr
       tags:
-      - feedback
+        - feedback
   /health:
     get:
       description: Get the health status of the scrumlr backend
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
@@ -2982,738 +3103,739 @@ paths:
           description: Service Unavailable
       summary: Get the health status
       tags:
-      - health
+        - health
   /import:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Import a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: board to import
-        in: body
-        name: board
-        required: true
-        schema:
-          $ref: '#/definitions/boards.ImportBoardRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: board to import
+          in: body
+          name: board
+          required: true
+          schema:
+            $ref: "#/definitions/boards.ImportBoardRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/boards.Board'
+            $ref: "#/definitions/boards.Board"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Import a board
       tags:
-      - boards
+        - boards
   /info:
     get:
       description: Get the server info with the configured options
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Info'
+            $ref: "#/definitions/api.Info"
       summary: Show server info
       tags:
-      - info
+        - info
   /login:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Log the current user out
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
       summary: Log the current user out
       tags:
-      - auth
+        - auth
   /login/{provider}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Redirect the user to the specified auth provider consent page
       parameters:
-      - description: provider to use to login
-        enum:
-        - GOOGLE
-        - MICROSOFT
-        - AZURE_AD
-        - GITHUB
-        - APPLE
-        - OIDC
-        in: path
-        name: provider
-        required: true
-        type: string
+        - description: provider to use to login
+          enum:
+            - GOOGLE
+            - MICROSOFT
+            - AZURE_AD
+            - GITHUB
+            - APPLE
+            - OIDC
+          in: path
+          name: provider
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "307":
           description: Temporary Redirect
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Redirect the user to the specified auth provider consent page
       tags:
-      - auth
+        - auth
   /login/{provider}/callback:
     get:
       consumes:
-      - application/json
-      description: Verify the auth provider call and create or update a user. Redirect
+        - application/json
+      description:
+        Verify the auth provider call and create or update a user. Redirect
         to the page provider with the state
       parameters:
-      - description: user to create
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/api.AnonymousSignUpRequest'
+        - description: user to create
+          in: body
+          name: user
+          required: true
+          schema:
+            $ref: "#/definitions/api.AnonymousSignUpRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "303":
           description: See Other
           schema:
-            $ref: '#/definitions/users.User'
+            $ref: "#/definitions/users.User"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Verify the auth provider call and create or update a user
       tags:
-      - auth
+        - auth
   /login/anonymous:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a new anonymous user
       parameters:
-      - description: user to create
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/api.AnonymousSignUpRequest'
+        - description: user to create
+          in: body
+          name: user
+          required: true
+          schema:
+            $ref: "#/definitions/api.AnonymousSignUpRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/users.User'
+            $ref: "#/definitions/users.User"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Create a new anonymous user
       tags:
-      - auth
+        - auth
   /templates:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all board templates for a user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/boardtemplates.BoardTemplateFull'
+              $ref: "#/definitions/boardtemplates.BoardTemplateFull"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Get all board templates
       tags:
-      - board templates
+        - board templates
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Board template to create
-        in: body
-        name: boardtemplate
-        required: true
-        schema:
-          $ref: '#/definitions/boardtemplates.CreateBoardTemplateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: Board template to create
+          in: body
+          name: boardtemplate
+          required: true
+          schema:
+            $ref: "#/definitions/boardtemplates.CreateBoardTemplateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/boardtemplates.BoardTemplate'
+            $ref: "#/definitions/boardtemplates.BoardTemplate"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Create a board template
       tags:
-      - board templates
+        - board templates
   /templates/{boardid}/columns:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all column templates from a board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board template
-        in: path
-        name: boardid
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board template
+          in: path
+          name: boardid
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/columntemplates.ColumnTemplate'
+              $ref: "#/definitions/columntemplates.ColumnTemplate"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Get all column templates from a board template
       tags:
-      - column templates
+        - column templates
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a column template for an existing board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board template
-        in: path
-        name: boardid
-        required: true
-        type: string
-      - description: column template to create
-        in: body
-        name: columntemplate
-        required: true
-        schema:
-          $ref: '#/definitions/columntemplates.ColumnTemplateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board template
+          in: path
+          name: boardid
+          required: true
+          type: string
+        - description: column template to create
+          in: body
+          name: columntemplate
+          required: true
+          schema:
+            $ref: "#/definitions/columntemplates.ColumnTemplateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/columntemplates.ColumnTemplate'
+            $ref: "#/definitions/columntemplates.ColumnTemplate"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Create a column template for a board template
       tags:
-      - column templates
+        - column templates
   /templates/{boardid}/columns/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a column template from a board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board template
-        in: path
-        name: boardid
-        required: true
-        type: string
-      - description: id of the column template to delete
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board template
+          in: path
+          name: boardid
+          required: true
+          type: string
+        - description: id of the column template to delete
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Delete a column template from a board template
       tags:
-      - column templates
+        - column templates
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a column template from a board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board template
-        in: path
-        name: boardid
-        required: true
-        type: string
-      - description: id of the column template
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board template
+          in: path
+          name: boardid
+          required: true
+          type: string
+        - description: id of the column template
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/columntemplates.ColumnTemplate'
+            $ref: "#/definitions/columntemplates.ColumnTemplate"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Get a column template from a board template
       tags:
-      - column templates
+        - column templates
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a column template from a board template
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board template
-        in: path
-        name: boardid
-        required: true
-        type: string
-      - description: id of the column template to update
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board template
+          in: path
+          name: boardid
+          required: true
+          type: string
+        - description: id of the column template to update
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/columntemplates.ColumnTemplate'
+            $ref: "#/definitions/columntemplates.ColumnTemplate"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Update a column template from a board template
       tags:
-      - column templates
+        - column templates
   /templates/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a board template for a user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Id of the template to update
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: Id of the template to update
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
         "500":
           description: Internal Server Error
       summary: Delete a board template
       tags:
-      - board templates
+        - board templates
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a board template by its id
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Id of the template to get
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: Id of the template to get
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boardtemplates.BoardTemplate'
+            $ref: "#/definitions/boardtemplates.BoardTemplate"
         "400":
           description: Bad Request
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a board template
       tags:
-      - board templates
+        - board templates
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a board template for a user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Id of the template to update
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Board template to update
-        in: body
-        name: boardtemplate
-        required: true
-        schema:
-          $ref: '#/definitions/boardtemplates.BoardTemplateUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: Id of the template to update
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Board template to update
+          in: body
+          name: boardtemplate
+          required: true
+          schema:
+            $ref: "#/definitions/boardtemplates.BoardTemplateUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/boardtemplates.BoardTemplate'
+            $ref: "#/definitions/boardtemplates.BoardTemplate"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "429":
           description: Too Many Requests
       summary: Update a board template
       tags:
-      - board templates
+        - board templates
   /users:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get the loged in user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/users.User'
+            $ref: "#/definitions/users.User"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get the loged in user
       tags:
-      - users
+        - users
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update the logged in user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: values to update the user
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/users.UserUpdateRequest'
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: values to update the user
+          in: body
+          name: user
+          required: true
+          schema:
+            $ref: "#/definitions/users.UserUpdateRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/users.User'
+            $ref: "#/definitions/users.User"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Update the logged in user
       tags:
-      - users
+        - users
   /users/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete the logged in user
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the user to delete
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the user to delete
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "204":
           description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Delete the logged in user
       tags:
-      - users
+        - users
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get a user by id
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the user
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the user
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/users.User'
+            $ref: "#/definitions/users.User"
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get a user by id
       tags:
-      - users
+        - users
   /users/board/{boardId}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all users from a board
       parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board
-        in: path
-        name: boardId
-        required: true
-        type: string
+        - description: jwt token to authenticate
+          in: header
+          name: Cookie
+          required: true
+          type: string
+        - description: id of the board
+          in: path
+          name: boardId
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/users.User'
+              $ref: "#/definitions/users.User"
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/common.APIError'
+            $ref: "#/definitions/common.APIError"
       summary: Get all users from a board
       tags:
-      - users
+        - users
 swagger: "2.0"
