@@ -20,7 +20,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get boards`, {cause: error});
+      throw new Error(`unable to get boards`, { cause: error });
     }
   },
 
@@ -45,7 +45,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get board`, {cause: error});
+      throw new Error(`unable to get board`, { cause: error });
     }
   },
 
@@ -63,7 +63,7 @@ export const BoardAPI = {
     name: string | undefined,
     description: string | undefined,
     accessPolicy: CreateSessionAccessPolicy,
-    columns: {name: string; visible: boolean; color: Color}[]
+    columns: { name: string; visible: boolean; color: Color }[]
   ): Promise<string> => {
     const url = buildUrl(`/boards`);
     try {
@@ -86,7 +86,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board`, {cause: error});
+      throw new Error(`unable to create board`, { cause: error });
     }
   },
 
@@ -115,7 +115,7 @@ export const BoardAPI = {
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to import board`, {cause: error});
+      throw new Error(`unable to import board`, { cause: error });
     }
   },
 
@@ -142,7 +142,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update board`, {cause: error});
+      throw new Error(`unable to update board`, { cause: error });
     }
   },
 
@@ -165,7 +165,7 @@ export const BoardAPI = {
 
       throw new Error(`delete board request resulted in response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board`, {cause: error});
+      throw new Error(`unable to create board`, { cause: error });
     }
   },
 
@@ -194,7 +194,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board`, {cause: error});
+      throw new Error(`unable to create board`, { cause: error });
     }
   },
 
@@ -212,7 +212,7 @@ export const BoardAPI = {
       const response = await fetch(url, {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({minutes}),
+        body: JSON.stringify({ minutes }),
       });
 
       if (response.status === 200) {
@@ -221,7 +221,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to update board timer`, {cause: error});
+      throw new Error(`unable to update board timer`, { cause: error });
     }
   },
 
@@ -246,7 +246,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to delete board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to delete board timer`, {cause: error});
+      throw new Error(`unable to delete board timer`, { cause: error });
     }
   },
 
@@ -271,7 +271,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to increment board timer with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to increment board timer`, {cause: error});
+      throw new Error(`unable to increment board timer`, { cause: error });
     }
   },
 };
