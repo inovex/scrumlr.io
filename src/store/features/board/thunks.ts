@@ -7,6 +7,7 @@ import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
+import {dynamicTemplatesKey} from "utils/i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -46,13 +47,13 @@ export const createBoardFromTemplate = createAsyncThunk<
   const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
     template: {
       ...toBeTranslated.template,
-      name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
-      description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+      name: i18n.t(dynamicTemplatesKey(toBeTranslated.template.name), {ns: "templates"}),
+      description: i18n.t(dynamicTemplatesKey(toBeTranslated.template.description), {ns: "templates"}),
     },
     columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
       ...toBeTranslatedColumn,
-      name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
-      description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+      name: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.name), {ns: "templates"}),
+      description: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.description), {ns: "templates"}),
     })),
   });
 

@@ -13,15 +13,16 @@ import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {useOutletContext} from "react-router";
 import {isParticipantModerator} from "utils/participant";
+import {TranslationKey} from "utils/i18n";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 
-const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
+const POLICY_LABEL_KEYS = {
   PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
   BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
   BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
-};
+} satisfies Record<AccessPolicy, TranslationKey>;
 
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();
