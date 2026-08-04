@@ -7,6 +7,7 @@ export const BoardAPI = {
    * Creates a board with the specified parameters and returns the board id.
    *
    * @param name the board name
+   * @param description the board description
    * @param accessPolicy the access policy configuration of the board
    * @param columns the definition of the columns
    *
