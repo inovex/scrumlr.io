@@ -36,7 +36,7 @@ type AnonymousSignUpRequest struct {
 //	@Failure		400	{object}	common.APIError
 //	@Failure		403	{object}	common.APIError
 //	@Failure		500	{object}	common.APIError
-//	@Router			/login [post]
+//	@Router			/login/anonymous [post]
 func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
 	defer span.End()

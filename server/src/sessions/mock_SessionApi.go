@@ -196,6 +196,52 @@ func (_c *MockSessionApi_BoardParticipantContext_Call) RunAndReturn(run func(nex
 	return _c
 }
 
+// DeleteBoardSession provides a mock function for the type MockSessionApi
+func (_mock *MockSessionApi) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
+	_mock.Called(w, r)
+	return
+}
+
+// MockSessionApi_DeleteBoardSession_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteBoardSession'
+type MockSessionApi_DeleteBoardSession_Call struct {
+	*mock.Call
+}
+
+// DeleteBoardSession is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+func (_e *MockSessionApi_Expecter) DeleteBoardSession(w any, r any) *MockSessionApi_DeleteBoardSession_Call {
+	return &MockSessionApi_DeleteBoardSession_Call{Call: _e.mock.On("DeleteBoardSession", w, r)}
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockSessionApi_DeleteBoardSession_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) Return() *MockSessionApi_DeleteBoardSession_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request)) *MockSessionApi_DeleteBoardSession_Call {
+	_c.Run(run)
+	return _c
+}
+
 // GetBoardSession provides a mock function for the type MockSessionApi
 func (_mock *MockSessionApi) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)
