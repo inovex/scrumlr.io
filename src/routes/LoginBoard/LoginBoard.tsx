@@ -22,6 +22,7 @@ import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.svg";
 // styles
 import "./LoginBoard.scss";
+import {TranslationKey} from "utils/i18n";
 
 interface LocationState {
   from: {pathname: string};
@@ -31,7 +32,7 @@ const FEATURE_KEYS = [
   "LoginBoard.loginFeature1",
   "LoginBoard.loginFeature2",
   // ...
-];
+] as const satisfies readonly TranslationKey[];
 
 const TERMS_LINKS = {
   terms: <Link to="/legal/termsAndConditions" target="_blank" />,

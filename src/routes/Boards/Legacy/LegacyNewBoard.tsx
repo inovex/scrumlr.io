@@ -164,7 +164,7 @@ export const LegacyNewBoard = () => {
                     </div>
                   </label>
                 ))}
-                <label className="new-board__mode" aria-label={t("LecacyNewBoard.importBoard")}>
+                <label className="new-board__mode" aria-label={t("LegacyNewBoard.importBoard")}>
                   <input
                     className="new-board__mode-input"
                     type="file"

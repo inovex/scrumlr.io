@@ -54,7 +54,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                   )}
                   {props.text && (
                     <div className="confirmation-dialog__text">
-                      <p>{t(props.text)}</p>
+                      <p>{props.text}</p>
                     </div>
                   )}
                   {props.items && (
@@ -66,7 +66,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                   )}
                   {props.textAfterItems && (
                     <div className="confirmation-dialog__text">
-                      <p>{t(props.textAfterItems)}</p>
+                      <p>{props.textAfterItems}</p>
                     </div>
                   )}
                   {props.checkbox && (
