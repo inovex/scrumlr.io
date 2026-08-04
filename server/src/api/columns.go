@@ -56,7 +56,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to create column")
 		span.RecordError(err)
 		log.Errorw("Unable to create column", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/columns/%s", board, column.ID)))
@@ -179,7 +179,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get column")
 		span.RecordError(err)
 		log.Errorw("Unable to get column", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -214,7 +214,7 @@ func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
 		log.Errorw("Unable to create columns", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

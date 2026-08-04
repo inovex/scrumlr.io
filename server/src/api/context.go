@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
 
@@ -347,10 +348,12 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
-	limiter := httprate.Limit(
+	limiter := httprate.LimitBy(
 		20,
 		1*time.Second,
-		httprate.WithKeyFuncs(httprate.KeyByIP),
+		func(r *http.Request) (string, error) {
+			return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
+		},
 		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusTooManyRequests)

@@ -108,7 +108,10 @@ func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {
 
 	suite.Error(err)
 	suite.Nil(result)
-	suite.Equal(dbError, err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, Internal)
+	suite.Equal(boardErr.Message, "failed to get board")
 }
 
 func (suite *BoardServiceTestSuite) TestCreate() {
@@ -229,9 +232,12 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphraseMissing() {
 		},
 	)
 
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
 	suite.Error(err)
 	suite.Nil(result)
-	suite.Equal(common.BadRequestError(errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")), err)
+	suite.Equal(boardErr.Category, BadRequest)
+	suite.Equal(boardErr.Message, "passphrase must be set on access policy 'BY_PASSPHRASE'")
 }
 
 func (suite *BoardServiceTestSuite) TestHasValidUniqueColumnIndices() {
@@ -418,7 +424,10 @@ func (suite *BoardServiceTestSuite) TestUpdate_EmptyName() {
 
 	suite.Nil(board)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name cannot be empty")), err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, BadRequest)
+	suite.Equal(boardErr.Message, "name cannot be empty")
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
@@ -461,7 +470,10 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_WithoutPassphrase() 
 
 	suite.Nil(board)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")), err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, BadRequest)
+	suite.Equal(boardErr.Message, "passphrase must be set on access policy 'BY_PASSPHRASE'")
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToPublic() {
@@ -499,7 +511,10 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPublic_WithPassphrase() {
 
 	suite.Nil(board)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, BadRequest)
+	suite.Equal(boardErr.Message, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 }
 
 func (suite *BoardServiceTestSuite) TestUpdate_ToInvite() {
@@ -532,7 +547,10 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToInvite_WithPassphrase() {
 
 	suite.Nil(board)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")), err)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(boardErr.Category, BadRequest)
+	suite.Equal(boardErr.Message, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 }
 
 func (suite *BoardServiceTestSuite) TestSetTimer() {

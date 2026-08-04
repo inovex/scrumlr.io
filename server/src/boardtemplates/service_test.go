@@ -121,7 +121,7 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetBoardTemplate(t *testing.T) {
@@ -170,7 +170,7 @@ func TestGetBoardTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetAllBoardTemplate(t *testing.T) {
@@ -256,7 +256,7 @@ func TestGetAllBoardTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateBoardTemplate(t *testing.T) {
@@ -318,7 +318,7 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestDeleteBoardTemplate(t *testing.T) {
@@ -350,5 +350,5 @@ func TestDeleteBoardTemplate_DatabaseError(t *testing.T) {
 	err := boardTemplateService.Delete(context.Background(), id)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
