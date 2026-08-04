@@ -6,6 +6,7 @@ import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
+import {Toast} from "utils/Toast";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {dynamicTemplatesKey} from "utils/i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
@@ -42,7 +43,7 @@ export const createBoardFromTemplate = createAsyncThunk<
     templateWithColumns: TemplateWithColumns;
     accessPolicy: CreateSessionAccessPolicy;
   }
->("board/createBoardFromTemplate", async (payload) => {
+>("board/createBoardFromTemplate", async (payload, {dispatch}) => {
   // finally, translate names and descriptions, since only the keys were stored until this point
   const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
     template: {
@@ -59,12 +60,22 @@ export const createBoardFromTemplate = createAsyncThunk<
 
   const translatedTemplateWithColumns =
     payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
-  return API.createBoard(
-    translatedTemplateWithColumns.template.name,
-    translatedTemplateWithColumns.template.description,
-    payload.accessPolicy,
-    translatedTemplateWithColumns.columns
-  );
+
+  try {
+    return await API.createBoard(
+      translatedTemplateWithColumns.template.name,
+      translatedTemplateWithColumns.template.description,
+      payload.accessPolicy,
+      translatedTemplateWithColumns.columns
+    );
+  } catch (error) {
+    Toast.error({
+      title: i18n.t("Error.createBoard"),
+      buttons: [i18n.t("Error.retry")],
+      firstButtonOnClick: () => dispatch(createBoardFromTemplate(payload)),
+    });
+    throw error;
+  }
 });
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
@@ -404,6 +415,15 @@ export const deleteBoard = createAsyncThunk<
     redirectToBoardDeletedPage();
   });
 });
-export const importBoard = createAsyncThunk<ImportBoardResponse, BoardImportData, {state: ApplicationState}>("board/importBoard", async (payload) => {
-  return API.importBoard(payload);
+export const importBoard = createAsyncThunk<ImportBoardResponse, BoardImportData, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
+  try {
+    return await API.importBoard(payload);
+  } catch (error) {
+    Toast.error({
+      title: i18n.t("Error.importBoard"),
+      buttons: [i18n.t("Error.retry")],
+      firstButtonOnClick: () => dispatch(importBoard(payload)),
+    });
+    throw error;
+  }
 });
