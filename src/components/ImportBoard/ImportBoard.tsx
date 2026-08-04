@@ -10,6 +10,7 @@ import {SimpleModal} from "components/Templates";
 import {WarningIcon} from "components/Icon";
 import {FileDropzoneCard, FilePreview} from "components/ImportBoard";
 import "./ImportBoard.scss";
+import {useNavigate} from "react-router";
 
 type ImportStep = "file" | "access";
 
@@ -19,6 +20,7 @@ interface ImportBoardProps {
 export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [step, setStep] = useState<ImportStep>("file");
   const [isFileLoading, setIsFileLoading] = useState(false);
@@ -92,7 +94,15 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     };
 
     setImportData(updatedData);
-    dispatch(importBoard(updatedData));
+    dispatch(importBoard(updatedData))
+      .unwrap()
+      .then((response) => {
+        const removedNotesCount = response.importWarnings?.removedNotesMissingAuthorCount ?? 0;
+        if (removedNotesCount > 0) {
+          Toast.info({title: t("Toast.importRemovedNotes", {count: removedNotesCount})});
+        }
+        navigate(`/board/${response.id}`);
+      });
   };
 
   const handleCancel = () => {

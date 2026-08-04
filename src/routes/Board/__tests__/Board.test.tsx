@@ -1,7 +1,5 @@
 import {render} from "@testing-library/react";
 import type {ReactNode} from "react";
-import {Toast} from "utils/Toast";
-import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
 import {Board} from "../Board";
 
 const mockDispatch = vi.fn();
@@ -101,7 +99,6 @@ vi.mock("react-router", async () => {
 describe("Board route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    sessionStorage.clear();
     mockApplicationState = {
       board: {
         data: {
@@ -127,27 +124,10 @@ describe("Board route", () => {
     };
   });
 
-  it("shows an import warning toast when warning data matches the current board", () => {
-    sessionStorage.setItem(
-      IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY,
-      JSON.stringify({
-        boardId: "board-1",
-        removedNotesMissingAuthorCount: 2,
-      })
-    );
+  it("renders board content when board state is ready", () => {
+    const {getByTestId} = render(<Board />);
 
-    render(<Board />);
-
-    expect(Toast.info).toHaveBeenCalledWith({title: "Toast.importRemovedNotes:2"});
-    expect(sessionStorage.getItem(IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY)).toBeNull();
-  });
-
-  it("does not show an import warning toast for malformed warning data", () => {
-    sessionStorage.setItem(IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY, "not valid json");
-
-    expect(() => render(<Board />)).not.toThrow();
-
-    expect(Toast.info).not.toHaveBeenCalled();
-    expect(sessionStorage.getItem(IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY)).toBeNull();
+    expect(getByTestId("board-component")).toBeInTheDocument();
+    expect(getByTestId("outlet")).toBeInTheDocument();
   });
 });

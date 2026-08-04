@@ -7,7 +7,6 @@ import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
-import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
 import {dynamicTemplatesKey} from "utils/i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
@@ -19,7 +18,7 @@ import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {noteDragStarted, noteDragEnded} from "../dragLocks";
-import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "./types";
+import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "./types";
 import {TemplateWithColumns} from "../templates";
 
 // helper function to handle board deletion redirects
@@ -405,28 +404,6 @@ export const deleteBoard = createAsyncThunk<
     redirectToBoardDeletedPage();
   });
 });
-export const importBoard = createAsyncThunk<
-  void,
-  BoardImportData,
-  {
-    state: ApplicationState;
-  }
->("board/importBoard", async (payload, {dispatch}) => {
-  retryable(
-    () => API.importBoard(payload),
-    dispatch,
-    () => importBoard(payload),
-    "importBoard"
-  ).then((importResponse) => {
-    const {importWarnings} = importResponse;
-    sessionStorage.setItem(
-      IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY,
-      JSON.stringify({
-        boardId: importResponse.id,
-        removedNotesMissingAuthorCount: importWarnings?.removedNotesMissingAuthorCount ?? 0,
-      })
-    );
-
-    globalThis.location.assign(`/board/${importResponse.id}`);
-  });
+export const importBoard = createAsyncThunk<ImportBoardResponse, BoardImportData, {state: ApplicationState}>("board/importBoard", async (payload) => {
+  return API.importBoard(payload);
 });

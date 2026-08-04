@@ -39,8 +39,8 @@ export type BoardImportData = {
   };
   columns: Column[];
   notes: Note[];
-  participants: ParticipantWithUser;
-  voting: Voting;
+  participants: ParticipantWithUser[];
+  votings: Voting | null;
 };
 
 export interface ImportWarnings {

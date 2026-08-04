@@ -11,8 +11,8 @@ describe("BoardAPI", () => {
     },
     columns: [],
     notes: [],
-    participants: [] as unknown as BoardImportData["participants"],
-    voting: null as unknown as BoardImportData["voting"],
+    participants: [],
+    votings: null,
   } as BoardImportData;
 
   afterEach(() => {
