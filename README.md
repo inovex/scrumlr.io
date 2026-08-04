@@ -99,6 +99,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>jmoehler</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/mateo-ivc">
                     <img src="https://avatars.githubusercontent.com/u/52677920?v=4" width="50;" alt="mateo-ivc"/>
@@ -120,8 +122,6 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>SerseusWasTaken</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/Lennart01">
                     <img src="https://avatars.githubusercontent.com/u/79283124?v=4" width="50;" alt="Lennart01"/>
@@ -150,6 +150,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>SelinaBuff</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/malterusko-ino">
                     <img src="https://avatars.githubusercontent.com/u/265782889?v=4" width="50;" alt="malterusko-ino"/>
@@ -192,8 +194,6 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>CronJorian</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/louiskroener">
                     <img src="https://avatars.githubusercontent.com/u/68269653?v=4" width="50;" alt="louiskroener"/>
@@ -201,6 +201,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>louiskroener</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/timengel">
                     <img src="https://avatars.githubusercontent.com/u/32651718?v=4" width="50;" alt="timengel"/>
@@ -250,6 +252,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>alphapfote</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/kersten">
                     <img src="https://avatars.githubusercontent.com/u/487289?v=4" width="50;" alt="kersten"/>
@@ -264,8 +268,6 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>andiKandi</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/liza-kl">
                     <img src="https://avatars.githubusercontent.com/u/58568446?v=4" width="50;" alt="liza-kl"/>
@@ -301,6 +303,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>doppelreim</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/coehne">
                     <img src="https://avatars.githubusercontent.com/u/16510737?v=4" width="50;" alt="coehne"/>
@@ -336,8 +340,6 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>Yaazizi</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/Janovic1th">
                     <img src="https://avatars.githubusercontent.com/u/56106167?v=4" width="50;" alt="Janovic1th"/>
@@ -352,6 +354,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>Aejkatappaja</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/fabian-rapp">
                     <img src="https://avatars.githubusercontent.com/u/56827034?v=4" width="50;" alt="fabian-rapp"/>
@@ -401,6 +405,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>NatanaelJan</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/Martheos">
                     <img src="https://avatars.githubusercontent.com/u/39419411?v=4" width="50;" alt="Martheos"/>
@@ -408,8 +414,6 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>Martheos</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/the-homeless-god">
                     <img src="https://avatars.githubusercontent.com/u/32175240?v=4" width="50;" alt="the-homeless-god"/>
@@ -452,6 +456,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
                     <sub><b>CodeBrauer</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/dani">
                     <img src="https://avatars.githubusercontent.com/u/526826?v=4" width="50;" alt="dani"/>
