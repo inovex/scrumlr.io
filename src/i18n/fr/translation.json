@@ -6,6 +6,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Nom du tableau",
+    "description": "Description du tableau",
     "createNewBoard": "Créer un nouveau tableau",
     "extendedConfigurationButton": "Configuration avancée",
     "basicConfigurationButton": "Sélection de modèle",

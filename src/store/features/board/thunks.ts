@@ -59,7 +59,12 @@ export const createBoardFromTemplate = createAsyncThunk<
 
   const translatedTemplateWithColumns =
     payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
-  return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+  return API.createBoard(
+    translatedTemplateWithColumns.template.name,
+    translatedTemplateWithColumns.template.description,
+    payload.accessPolicy,
+    translatedTemplateWithColumns.columns
+  );
 });
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {

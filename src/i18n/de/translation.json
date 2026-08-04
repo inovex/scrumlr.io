@@ -6,6 +6,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Sitzungsname",
+    "description": "Sitzungsbeschreibung",
     "createNewBoard": "Erstelle eine Sitzung",
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
@@ -61,7 +62,6 @@
       "saveCreate": "Template erstellen",
       "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
     },
-
     "ColumnsConfiguratorColumn": {
       "defaultColumnName": "Spalte 1",
       "defaultActionsName": "Aktionen",
