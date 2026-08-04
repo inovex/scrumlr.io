@@ -204,7 +204,7 @@ export const LegacyNewBoard = () => {
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
               </TextInputLabel>
 
-              <TextInputLabel label={t("TemplateEditor.description") as string}>
+              <TextInputLabel label={t("LegacyNewBoard.description") as string}>
                 <TextInput onChange={(e) => setBoardDescription(e.target.value)} />
               </TextInputLabel>
 
