@@ -1,14 +1,10 @@
 name: Generate Contributors Image
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
+      - updateContributors
 
   # Allows you to manually run it anytime from the Actions tab
   workflow_dispatch:
@@ -19,7 +15,6 @@ permissions:
 
 jobs:
   build:
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
