@@ -22,5 +22,8 @@ jobs:
 
       - name: Generate contributors section
         uses: akhilmhdh/contributors-readme-action@83ea0b4f1ac928fbfe88b9e8460a932a528eb79f
+        with:
+          image_size: 50
+          columns_per_row: 12
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
