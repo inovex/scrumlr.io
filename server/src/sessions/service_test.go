@@ -1119,6 +1119,178 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 	assert.False(t, banned)
 }
 
+func TestDeleteSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	assert.NoError(t, err)
+}
+
+func TestDeleteConnectedSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: true}, nil)
+	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(false)}).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
+		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]*columns.Column{
+			{ID: firstColumnId},
+			{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(mock.Anything, boardId, []uuid.UUID{firstColumnId, secondColumnId}).
+		Return([]*notes.Note{
+			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	assert.NoError(t, err)
+}
+
+func TestDeleteSession_DifferentCaller(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	callerId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), callerId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Forbidden, sessionError.Category)
+	assert.Equal(t, errors.New("cannot delete a session of another user"), sessionError.Err)
+}
+
+func TestDeleteSession_SessionDoesNotExist(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, NotFound, sessionError.Category)
+}
+
+func TestDeleteSession_OwnerSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.OwnerRole}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Forbidden, sessionError.Category)
+	assert.Equal(t, errors.New("cannot delete the owner session of a board"), sessionError.Err)
+}
+
+func TestDeleteSession_DatabaseError(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(errors.New("database error"))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Internal, sessionError.Category)
+}
+
 func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 

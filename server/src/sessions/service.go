@@ -36,6 +36,7 @@ type SessionDatabase interface {
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
 	GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]DatabaseBoardSession, error)
+	Delete(ctx context.Context, board, user uuid.UUID) error
 }
 
 type BoardSessionService struct {
@@ -389,6 +390,58 @@ func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boa
 	return isBanned, nil
 }
 
+func (service *BoardSessionService) Delete(ctx context.Context, callerID, boardID, userID uuid.UUID) error {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.sessions.service.delete.board", boardID.String()),
+		attribute.String("scrumlr.sessions.service.delete.user", userID.String()),
+		attribute.String("scrumlr.sessions.service.delete.caller", callerID.String()),
+	)
+
+	if callerID != userID {
+		err := CreateSessionError(Forbidden, "cannot delete session of another user", errors.New("cannot delete a session of another user"))
+		span.SetStatus(codes.Error, "cannot delete a session of another user")
+		span.RecordError(err)
+		return err
+	}
+
+	session, err := service.Get(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to retrieve session")
+		span.RecordError(err)
+		return err
+	}
+
+	if session.Role == role.OwnerRole {
+		err = CreateSessionError(Forbidden, "cannot delete the owner session of a board", errors.New("cannot delete the owner session of a board"))
+		span.SetStatus(codes.Error, "cannot delete owner session of a board")
+		span.RecordError(err)
+		return err
+	}
+
+	if session.Connected {
+		err := service.Disconnect(ctx, boardID, userID)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to disconnect session")
+			span.RecordError(err)
+			return err
+		}
+	}
+
+	err = service.database.Delete(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete session")
+		span.RecordError(err)
+		return CreateSessionError(Internal, "unable to delete session", err)
+	}
+
+	service.deleteSession(ctx, boardID, userID)
+
+	return err
+}
+
 func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {
 	filter := BoardSessionFilter{}
 	connectedFilter := query.Get("connected")
@@ -540,6 +593,23 @@ func (service *BoardSessionService) updatedSessions(ctx context.Context, board u
 		span.SetStatus(codes.Error, "failed to send participant update")
 		span.RecordError(err)
 		log.Errorw("unable to send participant update", "board", board, "err", err)
+	}
+}
+
+func (service *BoardSessionService) deleteSession(ctx context.Context, board, user uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventParticipantDeleted,
+		Data: user,
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to send session delete event")
+		span.RecordError(err)
+		log.Errorw("unable to send session delete event", "board", board, "err", err)
 	}
 }
 

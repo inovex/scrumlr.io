@@ -345,6 +345,40 @@ func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
 	assert.True(t, banned)
 }
 
+func (suite *SessionServiceIntegrationTestSuite) TestDelete() {
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].ID
+	userId := suite.baseData.Users["Stan"].ID
+
+	events := suite.broker.GetBoardChannel(ctx, boardId)
+
+	err := suite.sessionService.Delete(ctx, userId, boardId, userId)
+
+	suite.Nil(err)
+
+	session, err := suite.sessionService.Get(ctx, boardId, userId)
+	suite.Nil(session)
+	suite.Error(err)
+
+	msg := <-events
+	suite.Equal(realtime.BoardEventParticipantDeleted, msg.Type)
+	id, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
+	suite.Nil(err)
+	suite.Equal(userId, *id)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) TestDeleteSessionNotExist() {
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].ID
+	userId := uuid.New()
+
+	err := suite.sessionService.Delete(ctx, userId, boardId, userId)
+
+	suite.Error(err)
+}
+
 func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB) {
 	log.Println("Seeding sessions test data")
 
@@ -368,6 +402,7 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	}{
 		// Write board
 		{suite.users["Han"].ID, suite.boards["Write"].ID, role.ParticipantRole, false, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, role.ParticipantRole, false, false, false, false},
 		// Update board
 		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, role.OwnerRole, false, false, false, false},
 		{suite.users["Luke"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, true, false},
