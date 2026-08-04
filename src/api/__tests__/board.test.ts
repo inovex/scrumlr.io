@@ -3,6 +3,10 @@ import {SERVER_HTTP_URL} from "config";
 import {BoardImportData} from "store/features/board/types";
 import {BoardAPI} from "../board";
 
+vi.hoisted(() => {
+  vi.stubEnv("VITE_SERVER_HTTP_URL", "http://localhost:8080");
+});
+
 describe("BoardAPI", () => {
   const payload = {
     board: {
@@ -20,6 +24,10 @@ describe("BoardAPI", () => {
     vi.clearAllMocks();
   });
 
+  afterAll(() => {
+    vi.unstubAllEnvs();
+  });
+
   it("importBoard returns the full import response body", async () => {
     const responseBody = {
       id: "new-board-id",
@@ -35,7 +43,7 @@ describe("BoardAPI", () => {
 
     await expect(BoardAPI.importBoard(payload)).resolves.toEqual(responseBody);
 
-    expect(fetchMock).toHaveBeenCalledWith(`${SERVER_HTTP_URL}/import`, {
+    expect(fetchMock).toHaveBeenCalledWith(new URL(`${SERVER_HTTP_URL}/import`), {
       method: "POST",
       credentials: "include",
       headers: {
