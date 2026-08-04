@@ -46,9 +46,8 @@ This includes a guide on how to self-host Scrumlr, how to contribute, and more.
 
 Thanks to all our users, collaborators, contributors & supporters! ❤️
 
-<!-- CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-[![Contributors](https://contrib.rocks/image?repo=inovex/scrumlr.io)](https://github.com/inovex/scrumlr.io/graphs/contributors)
-<!-- CONTRIBUTORS-LIST:END -->
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
 
 ## Sponsors
 

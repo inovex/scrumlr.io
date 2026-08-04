@@ -1,0 +1,26 @@
+name: Generate Contributors Image
+
+on:
+  push:
+    branches:
+      - main
+      - updateContributors
+
+  # Allows you to manually run it anytime from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Generate contributors section
+        uses: akhilmhdh/contributors-readme-action@83ea0b4f1ac928fbfe88b9e8460a932a528eb79f
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
