@@ -53,7 +53,7 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create column template")
 		span.RecordError(err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -89,7 +89,7 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get column template")
 		span.RecordError(err)
 		log.Errorw("Unable to get column template", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -123,7 +123,7 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get column templates")
 		span.RecordError(err)
 		log.Errorw("Unable to get column templates", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

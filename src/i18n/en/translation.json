@@ -6,6 +6,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Board name",
+    "description": "Board description",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",

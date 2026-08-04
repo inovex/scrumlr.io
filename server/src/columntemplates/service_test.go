@@ -3,7 +3,6 @@ package columntemplates
 import (
 	"context"
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -190,7 +189,7 @@ func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetColumnTemplate(t *testing.T) {
@@ -239,7 +238,7 @@ func TestGetColumnTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get template column: %w", dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetAllColumnTemplate(t *testing.T) {
@@ -295,7 +294,7 @@ func TestGetAllColumnTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get template columns: %w", dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateColumnTemplate(t *testing.T) {
@@ -371,7 +370,7 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateColumnTemplate_NegativeIndex(t *testing.T) {
@@ -449,5 +448,5 @@ func TestDeleteColumnTemplate_DatabaseError(t *testing.T) {
 	err := columnTemplateService.Delete(context.Background(), boardId, columnId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.ErrorIs(t, err, dbError)
 }

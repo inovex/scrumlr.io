@@ -3,7 +3,6 @@ package sessionrequests
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -48,10 +47,10 @@ func TestGetSessionRequest(t *testing.T) {
 func TestGetSessionRequest_NotFound(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "Not found"
+	dbError := errors.New("Not found")
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
+	mockSessionRequestDb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSessionRequest{}, dbError)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -67,7 +66,7 @@ func TestGetSessionRequest_NotFound(t *testing.T) {
 
 	assert.Nil(t, sessionRequest)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Sprintf("failed to load board session request: %s", dbError), err.Error())
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetSessionRequests_WithoutQuery(t *testing.T) {
@@ -107,12 +106,12 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 
 func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	boardId := uuid.New()
-	dbError := "Not found"
+	dbError := errors.New("Not found")
 	query := ""
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId).
-		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
+		Return([]DatabaseBoardSessionRequest{}, dbError)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -127,7 +126,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 
 	assert.Nil(t, sessionRequest)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Sprintf("failed to load board session requests: %s", dbError), err.Error())
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestListSessionRequests_WithQuery(t *testing.T) {
@@ -167,12 +166,12 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 
 func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	boardId := uuid.New()
-	dbError := "Not found"
+	dbError := errors.New("Not found")
 	query := "ACCEPTED"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().GetAll(mock.Anything, boardId, []RequestStatus{RequestAccepted}).
-		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
+		Return([]DatabaseBoardSessionRequest{}, dbError)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -187,7 +186,7 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 
 	assert.Nil(t, sessionRequests)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Sprintf("failed to load board session requests: %s", dbError), err.Error())
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestListSessionRequests_InvalideQuery(t *testing.T) {
@@ -209,7 +208,11 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	assert.Nil(t, sessionRequests)
 	mockSessionRequestDb.AssertNotCalled(t, "GetBoardSessionRequests")
 	assert.NotNil(t, err)
-	assert.Equal(t, "invalid status filter", err.Error())
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, BadRequest)
+	assert.Equal(t, sessionRequestErr.Message, "invalid status filter")
 }
 
 func TestCreateSessionRequest(t *testing.T) {
@@ -259,7 +262,11 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 
 	assert.Nil(t, request)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "unable to create board session request")
 }
 
 func TestUpdatesessionRequest(t *testing.T) {
@@ -315,7 +322,11 @@ func TestUpdatesessionRequest_DBError(t *testing.T) {
 
 	assert.Nil(t, request)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "unable to update board session request")
 }
 
 func TestSessionRequestExists(t *testing.T) {
@@ -358,7 +369,11 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, "database error", err.Error())
+
+	var sessionRequestErr SessionRequestError
+	assert.ErrorAs(t, err, &sessionRequestErr)
+	assert.Equal(t, sessionRequestErr.Category, Internal)
+	assert.Equal(t, sessionRequestErr.Message, "failed to check board session request existence")
 	assert.False(t, exists)
 }
 

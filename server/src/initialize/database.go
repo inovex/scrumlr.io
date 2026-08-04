@@ -3,6 +3,8 @@ package initialize
 import (
 	"database/sql"
 	"embed"
+	"errors"
+	"fmt"
 	"net/http"
 	"runtime"
 
@@ -13,6 +15,7 @@ import (
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
 	"github.com/uptrace/bun/extra/bunotel"
+	"github.com/urfave/cli/v2"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -27,7 +30,18 @@ var Migrations embed.FS
 var traceProvider trace.TracerProvider = otel.GetTracerProvider()
 var meterProvider metric.MeterProvider = otel.GetMeterProvider()
 
-func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
+func InitializeDatabase(ctx *cli.Context) (*bun.DB, error) {
+	log := logger.FromContext(ctx.Context)
+
+	var databaseUrl string
+	if ctx.String("database") != "" {
+		databaseUrl = ctx.String("database")
+	} else if ctx.String("database-host") != "" && ctx.String("database-username") != "" && ctx.String("database-password") != "" {
+		databaseUrl = fmt.Sprintf("postgresql://%s:%s@%s", ctx.String("database-username"), ctx.String("database-password"), ctx.String("database-host"))
+	} else {
+		return nil, errors.New("no valid database connection found")
+	}
+
 	db, err := sql.Open("postgres", databaseUrl)
 	if err != nil {
 		return nil, err
@@ -54,12 +68,13 @@ func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
 	}
 
 	err = m.Up()
-	if err == nil || err == migrate.ErrNoChange {
-		logger.Get().Infow("successfully migrated database")
-		return db, nil
+	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
+		return nil, err
 	}
 
-	return nil, err
+	log.Infow("successfully migrated database")
+
+	return InitializeBun(db, logger.GetLogLevel()), nil
 }
 
 func InitializeBun(db *sql.DB, logLevel zapcore.Level) *bun.DB {

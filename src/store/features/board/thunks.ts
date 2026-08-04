@@ -8,6 +8,7 @@ import {ApplicationState, retryable} from "store";
 import i18n from "i18n";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {IMPORT_BOARD_WARNINGS_SESSION_STORAGE_KEY} from "constants/storage";
+import {dynamicTemplatesKey} from "utils/i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -47,19 +48,24 @@ export const createBoardFromTemplate = createAsyncThunk<
   const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
     template: {
       ...toBeTranslated.template,
-      name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
-      description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+      name: i18n.t(dynamicTemplatesKey(toBeTranslated.template.name), {ns: "templates"}),
+      description: i18n.t(dynamicTemplatesKey(toBeTranslated.template.description), {ns: "templates"}),
     },
     columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
       ...toBeTranslatedColumn,
-      name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
-      description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+      name: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.name), {ns: "templates"}),
+      description: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.description), {ns: "templates"}),
     })),
   });
 
   const translatedTemplateWithColumns =
     payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
-  return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+  return API.createBoard(
+    translatedTemplateWithColumns.template.name,
+    translatedTemplateWithColumns.template.description,
+    payload.accessPolicy,
+    translatedTemplateWithColumns.columns
+  );
 });
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
@@ -85,145 +91,187 @@ export const permittedBoardAccess = createAsyncThunk<
     onmessage: async (evt: MessageEvent<string>) => {
       const message: ServerEvent = JSON.parse(evt.data);
 
-      if (message.type === "INIT") {
-        const {board, columns, notes, reactions, votes, votings, requests} = message.data;
-        const userAuth = await API.getUsers(message.data.board.id);
-        const newParticipants = mapMultipleParticipants(message.data.participants, userAuth);
-        dispatch(
-          initializeBoard({
-            fullBoard: {
-              board,
-              columns,
-              notes: notes ?? [],
-              participants: newParticipants,
-              reactions: reactions ?? [],
-              requests: requests ?? [],
-              votes: votes ?? [],
-              votings: votings ?? [],
-            },
-            serverTimeOffset,
-            self,
-          })
-        );
-      }
-
-      if (message.type === "BOARD_UPDATED") {
-        dispatch(updatedBoard({board: message.data, serverTimeOffset}));
-      }
-
-      if (message.type === "BOARD_TIMER_UPDATED") {
-        dispatch(updatedBoardTimer({board: message.data, serverTimeOffset}));
-      }
-
-      if (message.type === "BOARD_DELETED") {
-        dispatch(leaveBoard());
-        redirectToBoardDeletedPage();
-      }
-
-      if (message.type === "COLUMNS_UPDATED") {
-        const columns = message.data;
-        dispatch(updatedColumns(columns));
-      }
-
-      if (message.type === "COLUMN_DELETED") {
-        const {column, notes} = message.data;
-        dispatch(deletedColumn(column));
-        notes.forEach((noteId) => dispatch(deletedNote(noteId)));
-      }
-
-      if (message.type === "NOTES_UPDATED") {
-        const notes = message.data;
-        dispatch(updatedNotes(notes));
-      }
-      if (message.type === "NOTE_DELETED") {
-        const noteIds = message.data;
-        noteIds.forEach((noteId) => dispatch(deletedNote(noteId)));
-      }
-      if (message.type === "REACTION_ADDED") {
-        const reaction = message.data;
-        dispatch(addedReaction(reaction));
-      }
-      if (message.type === "REACTION_DELETED") {
-        const reactionId = message.data;
-        dispatch(deletedReaction(reactionId));
-      }
-      if (message.type === "REACTION_UPDATED") {
-        const reaction = message.data;
-        dispatch(updatedReaction(reaction));
-      }
-      if (message.type === "NOTES_SYNC") {
-        const notes = message.data;
-        dispatch(syncNotes(notes ?? []));
-      }
-      if (message.type === "PARTICIPANT_CREATED") {
-        const user = await API.getUserById(message.data.id);
-        const participant = mapSingleParticipant(message.data, user);
-        dispatch(createdParticipant(participant));
-      }
-      if (message.type === "PARTICIPANT_UPDATED") {
-        const participant = findParticipantById(getState().participants, message.data.id);
-        if (participant) {
+      switch (message.type) {
+        case "INIT": {
+          const {board, columns, notes, reactions, votes, votings, requests} = message.data;
+          const userAuth = await API.getUsers(message.data.board.id);
+          const newParticipants = mapMultipleParticipants(message.data.participants, userAuth);
           dispatch(
-            updatedParticipant({
-              participant: {...participant, user: message.data},
+            initializeBoard({
+              fullBoard: {
+                board,
+                columns,
+                notes: notes ?? [],
+                participants: newParticipants,
+                reactions: reactions ?? [],
+                requests: requests ?? [],
+                votes: votes ?? [],
+                votings: votings ?? [],
+              },
+              serverTimeOffset,
+              self,
+            })
+          );
+          break;
+        }
+
+        case "BOARD_UPDATED": {
+          dispatch(updatedBoard({board: message.data, serverTimeOffset}));
+          break;
+        }
+
+        case "BOARD_TIMER_UPDATED": {
+          dispatch(updatedBoardTimer({board: message.data, serverTimeOffset}));
+          break;
+        }
+
+        case "BOARD_DELETED": {
+          dispatch(leaveBoard());
+          redirectToBoardDeletedPage();
+          break;
+        }
+
+        case "COLUMNS_UPDATED": {
+          const columns = message.data;
+          dispatch(updatedColumns(columns));
+          break;
+        }
+
+        case "COLUMN_DELETED": {
+          const {column, notes} = message.data;
+          dispatch(deletedColumn(column));
+          notes.forEach((noteId) => dispatch(deletedNote(noteId)));
+          break;
+        }
+
+        case "NOTES_UPDATED": {
+          const notes = message.data;
+          dispatch(updatedNotes(notes));
+          break;
+        }
+
+        case "NOTE_DELETED": {
+          const noteIds = message.data;
+          noteIds.forEach((noteId) => dispatch(deletedNote(noteId)));
+          break;
+        }
+
+        case "REACTION_ADDED": {
+          const reaction = message.data;
+          dispatch(addedReaction(reaction));
+          break;
+        }
+
+        case "REACTION_DELETED": {
+          const reactionId = message.data;
+          dispatch(deletedReaction(reactionId));
+          break;
+        }
+
+        case "REACTION_UPDATED": {
+          const reaction = message.data;
+          dispatch(updatedReaction(reaction));
+          break;
+        }
+
+        case "NOTES_SYNC": {
+          const notes = message.data;
+          dispatch(syncNotes(notes ?? []));
+          break;
+        }
+
+        case "PARTICIPANT_CREATED": {
+          const user = await API.getUserById(message.data.id);
+          const participant = mapSingleParticipant(message.data, user);
+          dispatch(createdParticipant(participant));
+          break;
+        }
+
+        case "PARTICIPANT_UPDATED": {
+          const participant = findParticipantById(getState().participants, message.data.id);
+          if (participant) {
+            dispatch(
+              updatedParticipant({
+                participant: {...participant, user: message.data},
+                self: getState().auth.user!,
+              })
+            );
+          }
+          break;
+        }
+
+        case "PARTICIPANTS_UPDATED": {
+          const userAuth = await API.getUsers(getState().board.data!.id);
+          const participants = mapMultipleParticipants(message.data, userAuth);
+          dispatch(
+            setParticipants({
+              participants,
               self: getState().auth.user!,
             })
           );
+          break;
         }
-      }
 
-      if (message.type === "PARTICIPANTS_UPDATED") {
-        const userAuth = await API.getUsers(getState().board.data!.id);
-        const participants = mapMultipleParticipants(message.data, userAuth);
-        dispatch(
-          setParticipants({
-            participants,
-            self: getState().auth.user!,
-          })
-        );
-      }
-
-      if (message.type === "SESSION_UPDATED") {
-        const participant = findParticipantById(getState().participants, message.data.id);
-        if (participant) {
-          dispatch(
-            updatedParticipant({
-              participant: mapSingleParticipant(message.data, participant.user),
-              self: getState().auth.user!,
-            })
-          );
+        case "SESSION_UPDATED": {
+          const participant = findParticipantById(getState().participants, message.data.id);
+          if (participant) {
+            dispatch(
+              updatedParticipant({
+                participant: mapSingleParticipant(message.data, participant.user),
+                self: getState().auth.user!,
+              })
+            );
+          }
+          break;
         }
-      }
 
-      if (message.type === "VOTING_CREATED") {
-        dispatch(createdVoting(message.data));
-      }
-      if (message.type === "VOTING_UPDATED") {
-        dispatch(updatedVoting({voting: message.data.voting, notes: message.data.notes}));
-      }
+        case "VOTING_CREATED": {
+          dispatch(createdVoting(message.data));
+          break;
+        }
 
-      if (message.type === "VOTES_DELETED") {
-        const votes = message.data;
-        dispatch(deletedVotes(votes));
-      }
+        case "VOTING_UPDATED": {
+          dispatch(updatedVoting({voting: message.data.voting, notes: message.data.notes}));
+          break;
+        }
 
-      if (message.type === "REQUEST_CREATED") {
-        dispatch(createJoinRequest(message.data));
-      }
-      if (message.type === "REQUEST_UPDATED") {
-        dispatch(updateJoinRequest(message.data));
-      }
-      if (message.type === "BOARD_REACTION_ADDED") {
-        dispatch(addedBoardReaction(message.data));
-        setTimeout(() => dispatch(removeBoardReaction(message.data.id)), 5000);
-      }
-      if (message.type === "NOTE_DRAG_START") {
-        const {noteId, userId} = message.data;
-        dispatch(noteDragStarted({noteId, userId}));
-      }
-      if (message.type === "NOTE_DRAG_END") {
-        const {noteId, userId} = message.data;
-        dispatch(noteDragEnded({noteId, userId}));
+        case "VOTES_DELETED": {
+          const votes = message.data;
+          dispatch(deletedVotes(votes));
+          break;
+        }
+
+        case "REQUEST_CREATED": {
+          dispatch(createJoinRequest(message.data));
+          break;
+        }
+
+        case "REQUEST_UPDATED": {
+          dispatch(updateJoinRequest(message.data));
+          break;
+        }
+
+        case "BOARD_REACTION_ADDED": {
+          const boardReaction = message.data;
+          dispatch(addedBoardReaction(boardReaction));
+          setTimeout(() => dispatch(removeBoardReaction(boardReaction.id)), 5000);
+          break;
+        }
+
+        case "NOTE_DRAG_START": {
+          const {noteId, userId} = message.data;
+          dispatch(noteDragStarted({noteId, userId}));
+          break;
+        }
+
+        case "NOTE_DRAG_END": {
+          const {noteId, userId} = message.data;
+          dispatch(noteDragEnded({noteId, userId}));
+          break;
+        }
+
+        default:
+          break;
       }
     },
   });
