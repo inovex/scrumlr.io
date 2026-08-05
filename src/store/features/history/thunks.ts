@@ -33,12 +33,7 @@ export const setBoardFavourite = createAsyncThunk<{boardId: string; favourite: b
       const updateFavouriteOnServer = () => API.editParticipant(boardId, userId, {favourite});
       const retrySetBoardFavourite = () => setBoardFavourite({boardId, favourite});
 
-      await retryable(
-        updateFavouriteOnServer,
-        dispatch,
-        retrySetBoardFavourite,
-        "editSelf"
-      );
+      await retryable(updateFavouriteOnServer, dispatch, retrySetBoardFavourite, "editBoard");
     }
     return {boardId, favourite};
   }
