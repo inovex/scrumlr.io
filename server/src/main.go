@@ -149,6 +149,13 @@ func main() {
 				Value:    true,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "allow-anonymous-history",
+				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_HISTORY"},
+				Usage:    "allows anonymous clients to view their history",
+				Required: false,
+				Value:    false,
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "auth-enable-experimental-file-system-store",
 				EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
 				Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
@@ -439,6 +446,7 @@ func run(ctx *cli.Context) error {
 		ctx.Bool("disable-anonymous-login"),
 		ctx.Bool("allow-anonymous-custom-templates"),
 		ctx.Bool("allow-anonymous-board-creation"),
+		ctx.Bool("allow-anonymous-history"),
 		ctx.Bool("auth-enable-experimental-file-system-store"),
 		ctx.Bool("enable-swagger"),
 	)
