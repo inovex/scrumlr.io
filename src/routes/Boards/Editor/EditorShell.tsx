@@ -94,23 +94,23 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
   const handleSubmit = () => onSubmit({name: nameInput, description: descriptionInput, columns: editableColumns, deletedColumns: deleteColumns});
 
   return (
-    <div className="template-editor">
-      <section className={classNames("template-editor__header", {"template-editor__header--include-debug": debug})}>
-        <div className="template-editor__name">
+    <div className="editor-shell">
+      <section className={classNames("editor-shell__header", {"editor-shell__header--include-debug": debug})}>
+        <div className="editor-shell__name">
           <Input
-            className="template-editor__name-input"
+            className="editor-shell__name-input"
             type="text"
             input={nameInput}
             setInput={setNameInput}
             height="normal"
             placeholder="Board name"
             required
-            dataCy="template-editor__name-input"
+            dataCy="editor-shell__name-input"
           />
         </div>
-        <div className="template-editor__description">
+        <div className="editor-shell__description">
           <TextArea
-            className="template-editor__description-text-area"
+            className="editor-shell__description-text-area"
             input={descriptionInput}
             setInput={setDescriptionInput}
             placeholder="Description (optional)"
@@ -118,7 +118,7 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
           />
         </div>
         {debug && (
-          <div className="template-editor__debug">
+          <div className="editor-shell__debug">
             <table>
               <thead>
                 <tr>
@@ -142,10 +142,10 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
           </div>
         )}
       </section>
-      <section className="template-editor__columns">
-        <div className="template-editor__columns-configurator-wrapper">
+      <section className="editor-shell__columns">
+        <div className="editor-shell__columns-configurator-wrapper">
           <ColumnsConfigurator
-            className="template-editor__columns-configurator"
+            className="editor-shell__columns-configurator"
             templateId={editorId}
             columns={editableColumns}
             addColumn={addColumn}
@@ -154,31 +154,26 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
             deleteColumn={deleteColumn}
           />
         </div>
-        <div className="template-editor__columns-mini-view-wrapper">
+        <div className="editor-shell__columns-mini-view-wrapper">
           <ColumnsMiniView className="columns-configurator__mini-view" columns={editableColumns} />
         </div>
       </section>
-      <section className="template-editor__footer">
-        <div className="template-editor__info">
-          <InfoIcon className="template-editor__info-icon" />
-          <div className="template-editor__info-text">{t("Templates.TemplateEditor.info")}</div>
+      <section className="editor-shell__footer">
+        <div className="editor-shell__info">
+          <InfoIcon className="editor-shell__info-icon" />
+          <div className="editor-shell__info-text">{t("Templates.TemplateEditor.info")}</div>
         </div>
-        <div className="template-editor__buttons">
-          <Button
-            className={classNames("template-editor__button", "template-editor__button--return")}
-            variant="secondary"
-            onClick={onCancel}
-            testId="template-editor__button--return"
-          >
+        <div className="editor-shell__buttons">
+          <Button className={classNames("editor-shell__button", "editor-shell__button--return")} variant="secondary" onClick={onCancel} testId="editor-shell__button--return">
             {t("Templates.TemplateEditor.cancel")}
           </Button>
           <Button
-            className={classNames("template-editor__button", "template-editor__button--create")}
+            className={classNames("editor-shell__button", "editor-shell__button--create")}
             variant="primary"
             icon={submitIcon}
             onClick={handleSubmit}
             disabled={!validForm}
-            testId="template-editor__button--create"
+            testId="editor-shell__button--create"
           >
             {submitLabel}
           </Button>
