@@ -68,14 +68,14 @@ Cypress.Commands.add("createCustomTemplate", (templateName: string)=>{
     .url()
     .should("include", "/boards/create")
 
-  cy.get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+  cy.get<HTMLButtonElement>("[data-cy='editor-shell__button--create']")
     .should("be.disabled")
   cy
-    .get("[data-cy='template-editor__name-input']")
+    .get("[data-cy='editor-shell__name-input']")
     .type(templateName)
 
   cy
-    .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+    .get<HTMLButtonElement>("[data-cy='editor-shell__button--create']")
     .should("not.be.disabled")
     .click()
 })
