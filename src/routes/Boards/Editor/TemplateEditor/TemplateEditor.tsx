@@ -1,19 +1,11 @@
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {
-  EditableTemplateColumn,
-  TemplateWithColumns,
-  createTemplateWithColumns,
-  editTemplate,
-  createTemplateColumn,
-  editTemplateColumn,
-  deleteTemplateColumn,
-} from "store/features";
+import {EditableTemplateColumn, TemplateWithColumns, createTemplateWithColumns, editTemplate, createTemplateColumn, editTemplateColumn, deleteTemplateColumn} from "store/features";
 import {PlusIcon} from "components/Icon";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Outlet, useNavigate, useParams} from "react-router";
-import {TemplatesNavigationState} from "../Templates";
-import {EditorShell, EditorSubmitPayload} from "./EditorShell";
+import {EditorShell, EditorSubmitPayload} from "routes/Boards/Editor";
+import {TemplatesNavigationState} from "routes/Boards/Templates";
 
 export type TemplateEditorProps = {mode: "create" | "edit"; debug?: boolean};
 

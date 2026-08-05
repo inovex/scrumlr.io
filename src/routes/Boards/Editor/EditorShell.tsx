@@ -9,7 +9,7 @@ import {ColumnsMiniView} from "components/ColumnsConfigurator/ColumnsMiniView/Co
 import {InfoIcon} from "components/Icon";
 import {Button} from "components/Button";
 import {arrayMove} from "@dnd-kit/sortable";
-import "./TemplateEditor.scss";
+import "./EditorShell.scss";
 
 export type EditorSubmitPayload = {
   name: string;

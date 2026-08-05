@@ -1,4 +1,4 @@
-import {TemplateEditor, TemplateEditorProps} from "routes/Boards/TemplateEditor/TemplateEditor";
+import {TemplateEditor, TemplateEditorProps} from "routes/Boards/Editor/TemplateEditor/TemplateEditor";
 import {renderWithContext} from "testUtils";
 import {fireEvent} from "@testing-library/react";
 

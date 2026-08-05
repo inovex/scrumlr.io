@@ -23,8 +23,7 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
-import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
-import {BoardEditor} from "./Boards/BoardEditor/BoardEditor";
+import {TemplateEditor, BoardEditor} from "routes/Boards/Editor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
 const renderLegacyRoute = (legacy: boolean) =>
