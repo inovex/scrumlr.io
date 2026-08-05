@@ -101,7 +101,10 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
       .then((response) => {
         const removedNotesCount = response.importWarnings?.removedNotesMissingAuthorCount ?? 0;
         if (removedNotesCount > 0) {
-          Toast.info({title: t("Toast.importRemovedNotes", {count: removedNotesCount})});
+          Toast.info({
+            title: t("Toast.importRemovedNotes", {count: removedNotesCount}),
+            autoClose: 30000, //30s
+          });
         }
         navigate(`/board/${response.id}`);
       });
