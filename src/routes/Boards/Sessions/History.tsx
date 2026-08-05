@@ -31,7 +31,7 @@ export const History = () => {
     import.meta.env.VITE_SHOW_HISTORY_PAGE === "true" ? (
       historyBoards
         .filter(matchSearchInput)
-        .sort((a, b) => Number(b.favourite) - Number(a.favourite)) // move favourites to the top using the fact that true is 1 and false is 0
+        .sort((a, b) => Number(b.favourite) - Number(a.favourite) || b.modifiedAt.getTime() - a.modifiedAt.getTime()) // move favourites to the top, then sort by latest modifiedAt
         .map((hb) => <HistoryCard key={hb.id} board={hb} />)
     ) : (
       <div className="history__teaser-info">
