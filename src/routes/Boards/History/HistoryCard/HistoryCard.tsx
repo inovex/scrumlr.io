@@ -1,4 +1,4 @@
-import {HistoryBoard} from "routes/Boards/Sessions";
+import {HistoryBoard} from "routes/Boards/History";
 import {FavouriteButton} from "components/Templates";
 import classNames from "classnames";
 import {
@@ -20,7 +20,7 @@ import {
 } from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
 import {Button} from "components/Button";
-import {UserRoleChip} from "routes/Boards/Sessions/HistoryCard/AccessPolicyChip/UserRoleChip";
+import {UserRoleChip} from "routes/Boards/History/HistoryCard/AccessPolicyChip/UserRoleChip";
 import {AccessPolicy, deleteHistoryBoard, setBoardFavourite} from "store/features";
 import {ReactElement, useState} from "react";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";

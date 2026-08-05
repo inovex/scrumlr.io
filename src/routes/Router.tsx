@@ -2,7 +2,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
 import {Boards} from "routes/Boards";
 import {Templates} from "routes/Boards/Templates";
-import {History} from "routes/Boards/Sessions";
+import {History} from "routes/Boards/History";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
