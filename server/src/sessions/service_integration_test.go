@@ -356,9 +356,10 @@ func (suite *SessionServiceIntegrationTestSuite) TestDelete() {
 	boardId := suite.boards["Write"].ID
 	userId := suite.baseData.Users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.sessionService.Delete(ctx, userId, boardId, userId)
+	err = suite.sessionService.Delete(ctx, userId, boardId, userId)
 
 	suite.Nil(err)
 
