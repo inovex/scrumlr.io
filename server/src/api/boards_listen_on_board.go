@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -128,18 +129,7 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
-		var ch chan *realtime.BoardEvent
-		var err error
-
-		// retry loop to establish the subscription safely
-		for i := 0; i < MaxRetries; i++ {
-			ch, err = s.realtime.GetBoardChannel(ctx, boardID)
-			if err == nil {
-				break
-			}
-			log.Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
-			time.Sleep(retryDelay)
-		}
+		ch, err := s.getBoardChannelWithRetry(ctx, boardID, retryDelay)
 		if err != nil {
 			log.Errorw("could not establish board subscription after retries", "board", boardID, "err", err)
 			return
@@ -147,6 +137,21 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 		b.subscription = ch
 		go b.startListeningOnBoard()
 	}
+}
+
+func (s *Server) getBoardChannelWithRetry(ctx context.Context, boardID uuid.UUID, retryDelay time.Duration) (chan *realtime.BoardEvent, error) {
+	log := logger.FromContext(ctx)
+
+	for attempt := 1; attempt <= MaxRetries; attempt++ {
+		ch, err := s.realtime.GetBoardChannel(ctx, boardID)
+		if err == nil {
+			return ch, nil
+		}
+		log.Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", attempt, "err", err)
+		time.Sleep(retryDelay)
+	}
+
+	return nil, fmt.Errorf("failed to get board channel for %s after %d retries", boardID, MaxRetries)
 }
 
 func (bs *BoardSubscription) startListeningOnBoard() {

@@ -2,6 +2,7 @@ package sessionrequests
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -90,25 +91,29 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 
 	// if not already done, start listening to board session request changes
 	if _, exist := b.subscriptions[userID]; !exist {
-		var ch chan *realtime.BoardSessionRequestEventType
-		var err error
-
-		for i := 0; i < MaxRetries; i++ {
-			ch, err = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
-			if err == nil {
-				break
-			}
-			log.Errorw("failed to subscribe to board session request channel, retrying...", "board", boardID, "user", userID, "attempt", i+1, "err", err)
-			time.Sleep(retryDelay)
-		}
-
+		ch, err := socket.getBoardSessionRequestChannelWithRetry(boardID, userID, retryDelay)
 		if err != nil {
-			log.Errorw("could not establish board session request subscription after retries ", "board", boardID, "user", userID, "err", err)
+			log.Errorw("could not establish board session request subscription after retries", "err", err)
 			return
 		}
 		b.subscriptions[userID] = ch
 		go b.startListeningOnBoardSessionRequest(userID)
 	}
+}
+
+func (socket *sessionRequestWebsocket) getBoardSessionRequestChannelWithRetry(boardID, userID uuid.UUID, retryDelay time.Duration) (chan *realtime.BoardSessionRequestEventType, error) {
+	log := logger.Get().With("board", boardID, "user", userID)
+
+	for attempt := 1; attempt <= MaxRetries; attempt++ {
+		ch, err := socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
+		if err == nil {
+			return ch, nil
+		}
+		log.Warnw("failed to subscribe to board session request channel, retrying...", "attempt", attempt, "err", err)
+		time.Sleep(retryDelay)
+	}
+
+	return nil, fmt.Errorf("failed to get session request channel for board %s and user %s after %d retries", boardID, userID, MaxRetries)
 }
 
 func (socket *sessionRequestWebsocket) closeSocket(conn websocket.Connection) {
