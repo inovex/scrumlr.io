@@ -9,6 +9,7 @@ interface ServerInformationDto {
   feedbackEnabled: boolean;
   allowAnonymousCustomTemplates: boolean;
   allowAnonymousBoardCreation: boolean;
+  allowAnonymousHistory: boolean;
 }
 
 export const InfoAPI = {
@@ -33,6 +34,7 @@ export const InfoAPI = {
           anonymousLoginDisabled: info.anonymousLoginDisabled,
           allowAnonymousCustomTemplates: info.allowAnonymousCustomTemplates,
           allowAnonymousBoardCreation: info.allowAnonymousBoardCreation,
+          allowAnonymousHistory: info.allowAnonymousHistory,
           feedbackEnabled: info.feedbackEnabled,
         } as ServerInfo;
       }
