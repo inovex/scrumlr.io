@@ -76,6 +76,7 @@ type Server struct {
 	anonymousLoginDisabled        bool
 	allowAnonymousCustomTemplates bool
 	allowAnonymousBoardCreation   bool
+	allowAnonymousHistory         bool
 	experimentalFileSystemStore   bool
 	enableSwagger                 bool
 }
@@ -110,6 +111,7 @@ func New(
 	anonymousLoginDisabled bool,
 	allowAnonymousCustomTemplates bool,
 	allowAnonymousBoardCreation bool,
+	allowAnonymousHistory bool,
 	experimentalFileSystemStore bool,
 	enableSwagger bool,
 ) chi.Router {
@@ -165,6 +167,7 @@ func New(
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
+		allowAnonymousHistory:         allowAnonymousHistory,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
 		enableSwagger:                 enableSwagger,

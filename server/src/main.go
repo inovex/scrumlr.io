@@ -142,6 +142,13 @@ func main() {
 				Value:    false,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "allow-anonymous-history",
+				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_HISTORY"},
+				Usage:    "allows anonymous clients to view their history",
+				Required: false,
+				Value:    true,
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "allow-anonymous-board-creation",
 				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"},
 				Usage:    "allows anonymous clients to create new boards",
@@ -403,7 +410,7 @@ func run(ctx *cli.Context) error {
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
-	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"))
+	userApi := apiInitializer.InitializeUserApi(userService, sessionService, ctx.Bool("allow-anonymous-board-creation"), ctx.Bool("allow-anonymous-custom-templates"), ctx.Bool("allow-anonymous-history"))
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
@@ -439,6 +446,7 @@ func run(ctx *cli.Context) error {
 		ctx.Bool("disable-anonymous-login"),
 		ctx.Bool("allow-anonymous-custom-templates"),
 		ctx.Bool("allow-anonymous-board-creation"),
+		ctx.Bool("allow-anonymous-history"),
 		ctx.Bool("auth-enable-experimental-file-system-store"),
 		ctx.Bool("enable-swagger"),
 	)
