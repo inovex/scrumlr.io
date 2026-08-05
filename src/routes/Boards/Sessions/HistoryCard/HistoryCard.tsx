@@ -117,8 +117,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
             label: t("History.HistoryCard.Menu.copyLink"),
             element: <LinkIcon />,
             onClick: () => {
-              navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`);
-              Toast.success({title: t("History.HistoryCard.linkCopied")});
+              navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`).then(() => {
+                Toast.success({title: t("History.HistoryCard.linkCopied")});
+              });
             },
           },
           {
