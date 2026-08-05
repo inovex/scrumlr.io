@@ -63,7 +63,14 @@ describe("HistoryCard menu role gating", () => {
 
 describe("HistoryCard favourite", () => {
   it("persists the favourite via the participant API and updates the store", async () => {
-    const participant = {user: {id: "u", name: "n", isAnonymous: true}, connected: true, ready: false, raisedHand: false, showHiddenColumns: false, role: "OWNER"} as ParticipantWithUser;
+    const participant = {
+      user: {id: "u", name: "n", isAnonymous: true},
+      connected: true,
+      ready: false,
+      raisedHand: false,
+      showHiddenColumns: false,
+      role: "OWNER",
+    } as ParticipantWithUser;
     const editParticipant = vi.spyOn(API, "editParticipant").mockResolvedValue(participant);
 
     const board = makeBoard("OWNER"); // favourite: false
