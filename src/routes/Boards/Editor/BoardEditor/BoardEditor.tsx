@@ -7,7 +7,7 @@ import {isParticipantModerator} from "utils/participant";
 import {CheckDoneIcon} from "components/Icon";
 import {LoadingScreen} from "components/LoadingScreen";
 import {ErrorPage} from "components/ErrorPage";
-import {EditorShell, EditorSubmitPayload} from "../TemplateEditor/EditorShell";
+import {EditorShell, EditorSubmitPayload} from "routes/Boards/Editor";
 import "./BoardEditor.scss";
 
 // edits an existing board using the shared Temlate EditorShell
@@ -62,7 +62,7 @@ export const BoardEditor = () => {
       .unwrap()
       .then(() => navigate("/boards/history"));
   };
-    //TODO: Maybe add a warn dialog before navigating away from the editor with edits pending
+  //TODO: Maybe add a warn dialog before navigating away from the editor with edits pending
   return (
     <EditorShell
       editorId={board.id}

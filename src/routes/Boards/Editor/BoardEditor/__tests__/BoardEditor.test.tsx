@@ -6,7 +6,7 @@ import getTestStore from "utils/test/getTestStore";
 import {HistoryBoard, ParticipantRole} from "store/features";
 import i18n from "i18nTest";
 import {API} from "api";
-import {BoardEditor} from "../BoardEditor";
+import {BoardEditor} from "routes/Boards/Editor";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -63,7 +63,15 @@ describe("BoardEditor", () => {
     // the save refetches to compare with server truth
     vi.spyOn(API, "getBoards").mockResolvedValue([
       {
-        board: {id: "1", name: "Renamed Board", description: "My description", accessPolicy: "PUBLIC", isLocked: false, createdAt: "2026-01-01T00:00:00Z", lastModifiedAt: "2026-01-01T00:00:00Z"},
+        board: {
+          id: "1",
+          name: "Renamed Board",
+          description: "My description",
+          accessPolicy: "PUBLIC",
+          isLocked: false,
+          createdAt: "2026-01-01T00:00:00Z",
+          lastModifiedAt: "2026-01-01T00:00:00Z",
+        },
         columns: [{id: "c1", name: "Column A", description: "", color: "backlog-blue", visible: true, index: 0}],
         participants: 1,
         role: "OWNER",
@@ -86,7 +94,15 @@ describe("BoardEditor", () => {
   it("loads the history itself when deep-linked into an empty store", async () => {
     vi.spyOn(API, "getBoards").mockResolvedValue([
       {
-        board: {id: "1", name: "Deep Linked Board", description: "desc", accessPolicy: "PUBLIC", isLocked: false, createdAt: "2026-01-01T00:00:00Z", lastModifiedAt: "2026-01-01T00:00:00Z"},
+        board: {
+          id: "1",
+          name: "Deep Linked Board",
+          description: "desc",
+          accessPolicy: "PUBLIC",
+          isLocked: false,
+          createdAt: "2026-01-01T00:00:00Z",
+          lastModifiedAt: "2026-01-01T00:00:00Z",
+        },
         columns: [{id: "c1", name: "Col", description: "", color: "backlog-blue", visible: true, index: 0}],
         participants: 1,
         role: "OWNER",
