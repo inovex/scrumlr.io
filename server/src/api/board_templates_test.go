@@ -386,7 +386,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionServiceMock := sessions.NewMockSessionService(t)
 
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
-			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
+			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false, true)
 			routesInitializer := serviceinitialize.NewRoutesInitializer()
 			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
@@ -418,6 +418,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				false,                            // anonymousLoginDisabled
 				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
 				false,                            // allowAnonymousBoardCreation
+				true,                             // allowAnonymousHistory
 				false,                            // experimentalFileSystemStore
 				false,                            // deactivate swagger page
 			)
