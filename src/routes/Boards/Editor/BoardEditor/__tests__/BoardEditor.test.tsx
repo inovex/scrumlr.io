@@ -51,8 +51,8 @@ describe("BoardEditor", () => {
   it("pre-fills the form with the board's data for an owner", () => {
     const {container} = renderBoardEditor(makeBoard("OWNER"));
 
-    const nameInput = container.querySelector<HTMLInputElement>(".template-editor__name-input input")!;
-    const descriptionInput = container.querySelector<HTMLTextAreaElement>(".template-editor__description-text-area")!;
+    const nameInput = container.querySelector<HTMLInputElement>(".editor-shell__name-input input")!;
+    const descriptionInput = container.querySelector<HTMLTextAreaElement>(".editor-shell__description-text-area")!;
 
     expect(nameInput).toHaveValue("My Board");
     expect(descriptionInput).toHaveValue("My description");
@@ -82,9 +82,9 @@ describe("BoardEditor", () => {
 
     const {store, container} = renderBoardEditor(makeBoard("OWNER"));
 
-    const nameInput = container.querySelector<HTMLInputElement>(".template-editor__name-input input")!;
+    const nameInput = container.querySelector<HTMLInputElement>(".editor-shell__name-input input")!;
     fireEvent.input(nameInput, {target: {value: "Renamed Board"}});
-    fireEvent.click(container.querySelector<HTMLButtonElement>(".template-editor__button--create")!);
+    fireEvent.click(container.querySelector<HTMLButtonElement>(".editor-shell__button--create")!);
 
     expect(await screen.findByText("history page")).toBeInTheDocument();
     expect(editBoard).toHaveBeenCalledWith("1", {name: "Renamed Board", description: "My description"});
@@ -133,6 +133,6 @@ describe("BoardEditor", () => {
     const {container} = renderBoardEditor(makeBoard("PARTICIPANT"));
 
     expect(screen.getByText("history page")).toBeInTheDocument();
-    expect(container.querySelector(".template-editor__name-input input")).toBeNull();
+    expect(container.querySelector(".editor-shell__name-input input")).toBeNull();
   });
 });
