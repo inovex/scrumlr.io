@@ -108,84 +108,6 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 	return new(Column).From(column), err
 }
 
-func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.columns.service.delete.board", board.String()),
-		attribute.String("scrumlr.columns.service.delete.column", column.String()),
-		attribute.String("scrumlr.columns.service.delete.user", user.String()),
-	)
-	// notes and votes are deleted cascading from the database
-	// get all notes that are effected to send the delete event
-	notes, err := service.noteService.GetAll(ctx, board, column)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create columnget notes")
-		span.RecordError(err)
-		log.Errorw("Unable to get notes", "board", board, "column", column)
-		return err
-	}
-
-	noteIds := make([]uuid.UUID, 0, len(notes))
-	for _, n := range notes {
-		noteIds = append(noteIds, n.ID)
-	}
-
-	err = service.database.Delete(ctx, board, column)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete column")
-		span.RecordError(err)
-		log.Errorw("unable to delete column", "err", err)
-		return CreateColumnError(Internal, "failed to delete column", err)
-	}
-
-	service.deletedColumn(ctx, board, column, noteIds)
-	columnsDeletedCounter.Add(ctx, 1)
-	return err
-}
-
-func (service *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*Column, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.update")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.columns.service.update.board", body.Board.String()),
-		attribute.String("scrumlr.columns.service.update.column", body.ID.String()),
-		attribute.String("scrumlr.columns.service.update.color", string(body.Color)),
-		attribute.Bool("scrumlr.columns.service.update.visible", body.Visible),
-	)
-
-	if body.Index < 0 {
-		body.Index = 0
-	}
-
-	column, err := service.database.Update(ctx,
-		DatabaseColumnUpdate{
-			ID:          body.ID,
-			Board:       body.Board,
-			Name:        body.Name,
-			Description: body.Description,
-			Color:       body.Color,
-			Visible:     body.Visible,
-			Index:       body.Index,
-		},
-	)
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to update column")
-		span.RecordError(err)
-		log.Errorw("unable to update column", "err", err)
-		return nil, CreateColumnError(Internal, "failed to update column", err)
-	}
-
-	service.updatedColumns(ctx, body.Board)
-
-	return new(Column).From(column), err
-}
-
 func (service *Service) Get(ctx context.Context, boardID, columnID uuid.UUID) (*Column, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.get")
@@ -249,6 +171,84 @@ func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, e
 	}
 
 	return count, err
+}
+
+func (service *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*Column, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.update.board", body.Board.String()),
+		attribute.String("scrumlr.columns.service.update.column", body.ID.String()),
+		attribute.String("scrumlr.columns.service.update.color", string(body.Color)),
+		attribute.Bool("scrumlr.columns.service.update.visible", body.Visible),
+	)
+
+	if body.Index < 0 {
+		body.Index = 0
+	}
+
+	column, err := service.database.Update(ctx,
+		DatabaseColumnUpdate{
+			ID:          body.ID,
+			Board:       body.Board,
+			Name:        body.Name,
+			Description: body.Description,
+			Color:       body.Color,
+			Visible:     body.Visible,
+			Index:       body.Index,
+		},
+	)
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to update column")
+		span.RecordError(err)
+		log.Errorw("unable to update column", "err", err)
+		return nil, CreateColumnError(Internal, "failed to update column", err)
+	}
+
+	service.updatedColumns(ctx, body.Board)
+
+	return new(Column).From(column), err
+}
+
+func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.columns.service.delete.board", board.String()),
+		attribute.String("scrumlr.columns.service.delete.column", column.String()),
+		attribute.String("scrumlr.columns.service.delete.user", user.String()),
+	)
+	// notes and votes are deleted cascading from the database
+	// get all notes that are effected to send the delete event
+	notes, err := service.noteService.GetAll(ctx, board, column)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create columnget notes")
+		span.RecordError(err)
+		log.Errorw("Unable to get notes", "board", board, "column", column)
+		return err
+	}
+
+	noteIds := make([]uuid.UUID, 0, len(notes))
+	for _, n := range notes {
+		noteIds = append(noteIds, n.ID)
+	}
+
+	err = service.database.Delete(ctx, board, column)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete column")
+		span.RecordError(err)
+		log.Errorw("unable to delete column", "err", err)
+		return CreateColumnError(Internal, "failed to delete column", err)
+	}
+
+	service.deletedColumn(ctx, board, column, noteIds)
+	columnsDeletedCounter.Add(ctx, 1)
+	return err
 }
 
 func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
