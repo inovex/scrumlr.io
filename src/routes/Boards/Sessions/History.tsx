@@ -24,9 +24,10 @@ export const History = () => {
 
   const canViewHistory = !isAnonymous || (allowAnonymousHistory && false);
 
+  // init history boards
   useEffect(() => {
-    if (historyBoards.length === 0) dispatch(getBoards());
-  }, [dispatch, historyBoards.length]);
+    dispatch(getBoards());
+  }, [dispatch]);
 
   const matchSearchInput = (historyBoard: HistoryBoard) => historyBoard.name.toLowerCase().includes(searchBarInput.toLowerCase());
 
