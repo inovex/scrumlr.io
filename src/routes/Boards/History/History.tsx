@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {Outlet, useOutletContext} from "react-router";
+import {Outlet, useNavigate, useOutletContext} from "react-router";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import StanDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
@@ -8,12 +8,14 @@ import {InfoIcon} from "components/Icon";
 import {useAppDispatch, useAppSelector} from "store";
 import {HistoryBoard, getBoards} from "store/features";
 import {HistoryCard} from "./HistoryCard/HistoryCard";
+import {Button} from "components/Button";
 import "./History.scss";
 
 export type {HistoryBoard} from "store/features";
 
 export const History = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
@@ -22,7 +24,7 @@ export const History = () => {
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousHistory = useAppSelector((state) => state.view.allowAnonymousHistory);
 
-  const canViewHistory = !isAnonymous || (allowAnonymousHistory && false);
+  const canViewHistory = !isAnonymous || allowAnonymousHistory;
 
   // init history boards
   useEffect(() => {
@@ -44,7 +46,13 @@ export const History = () => {
           <InfoIcon className="history__require-registered-user-icon" />
           <p className="history__require-registered-user-text">{t("History.requireRegisteredAccount")}</p>
         </div>
-        <p className="history__require-registered-user-register-area">REGISTER BUTTON PLACEHOLDER</p>
+        <div className="history__require-registered-user-register-area">
+          {/*redirect to the login screen and after and then back to here after completion.
+          NOTE: possible subject to change, e.g., by replacing it with an 'upgrade account' functionality*/}
+          <Button className="history__require-registered-user-register-button" onClick={() => navigate("/login", {state: {from: {pathname: "boards/history"}}})}>
+            {t("History.registerNow")}
+          </Button>
+        </div>
       </div>
     );
 

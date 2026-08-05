@@ -105,6 +105,7 @@
     "title": "Verwalte deine Boards",
     "savedBoards": "Zuletzt verwendet",
     "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
+    "registerNow": "Jetzt registrieren",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} Spalte",
