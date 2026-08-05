@@ -87,7 +87,7 @@ const Router = () => {
           </Route>
 
           <Route
-            path="edit/:id"
+            path="edit-template/:id"
             element={
               <VerifiedAccountGuard override={allowAnonymousCustomTemplates}>
                 <TemplateEditor mode="edit" />
