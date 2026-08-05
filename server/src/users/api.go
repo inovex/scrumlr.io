@@ -33,7 +33,6 @@ type API struct {
 	sessions                      sessions.SessionService
 	allowAnonymousBoardCreation   bool
 	allowAnonymousCustomTemplates bool
-	allowAnonymousHistory         bool
 }
 
 // Get the logged in user
@@ -396,12 +395,11 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 	})
 }
 
-func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates, allowAnonymousHistory bool) UsersApi {
+func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
 	api := new(API)
 	api.service = service
 	api.sessions = sessionService
 	api.allowAnonymousBoardCreation = allowAnonymousBoardCreation
 	api.allowAnonymousCustomTemplates = allowAnonymousCustomTemplates
-	api.allowAnonymousHistory = allowAnonymousHistory
 	return api
 }

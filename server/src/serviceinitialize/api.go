@@ -65,8 +65,8 @@ func (init *ApiInitializer) InitializeSessionRequestApi() {
 	panic("Not implemented")
 }
 
-func (init *ApiInitializer) InitializeUserApi(userService users.UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates, allowAnonymousHistory bool) users.UsersApi {
-	usersApi := users.NewUserApi(userService, sessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates, allowAnonymousHistory)
+func (init *ApiInitializer) InitializeUserApi(userService users.UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) users.UsersApi {
+	usersApi := users.NewUserApi(userService, sessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates)
 	return usersApi
 }
 

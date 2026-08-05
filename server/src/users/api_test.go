@@ -30,7 +30,7 @@ func TestGetUser_api(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -55,7 +55,7 @@ func TestGetUser_api_InvalidUUID(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, uuid.Nil)
@@ -75,7 +75,7 @@ func Test_GetUserByID(t *testing.T) {
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 
 	rr := httptest.NewRecorder()
 
@@ -102,7 +102,7 @@ func Test_GetUserByID_api_InvalidUUID(t *testing.T) {
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 
 	rr := httptest.NewRecorder()
 
@@ -118,7 +118,7 @@ func Test_GetUserByID_ServiceError(t *testing.T) {
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 	userId := uuid.New()
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 
 	rr := httptest.NewRecorder()
 
@@ -147,7 +147,7 @@ func Test_GetBoardUsers_api(t *testing.T) {
 
 	mockUserService.EXPECT().GetBoardUsers(mock.Anything, boardID).Return(mockUsers, nil)
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 
 	req := technical_helper.NewTestRequestBuilder("GET", "/board/{id}", nil).AddToContext(identifiers.BoardIdentifier, boardID)
@@ -170,7 +170,7 @@ func Test_GetBoardUsers_ServiceError(t *testing.T) {
 
 	mockUserService.EXPECT().GetBoardUsers(mock.Anything, boardID).Return(nil, errors.New("db error"))
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 
 	req := technical_helper.NewTestRequestBuilder("GET", "/board/{id}", nil).AddToContext(identifiers.BoardIdentifier, boardID)
@@ -192,7 +192,7 @@ func Test_UpdateUser_api(t *testing.T) {
 
 	mockUserService.EXPECT().Update(mock.Anything, updateBody).Return(mockUpdatedUser, nil)
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 
 	bodyBytes, _ := json.Marshal(updateBody)
@@ -218,7 +218,7 @@ func Test_UpdateUser_ServiceError(t *testing.T) {
 
 	mockUserService.EXPECT().Update(mock.Anything, updateBody).Return(nil, errors.New("db error"))
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 
 	bodyBytes, _ := json.Marshal(updateBody)
@@ -241,7 +241,7 @@ func Test_UpdateUserBoards_ServiceError(t *testing.T) {
 
 	mockUserService.EXPECT().Update(mock.Anything, updateBody).Return(mockUpdatedUser, nil)
 
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 
 	bodyBytes, _ := json.Marshal(updateBody)
@@ -259,7 +259,7 @@ func Test_BoardAuthenticatedContext(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -285,7 +285,7 @@ func Test_BoardAuthenticatedContext_NotAuthenticated(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -312,7 +312,7 @@ func Test_BoardAuthenticatedContext_InvalidBoardID(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -337,7 +337,7 @@ func Test_BoardAuthenticatedContext_InvalidUserID(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -360,7 +360,7 @@ func Test_AnonymousBoardCreationContext(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, true, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -385,7 +385,7 @@ func Test_AnonymousBoardCreationContext_NotAllowed(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, false, true, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, false, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
@@ -410,7 +410,7 @@ func Test_AnonymousCustomTemplateCreationContext_NotAllowed(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	userApi := NewUserApi(mockUserService, mockSessionService, false, false, true)
+	userApi := NewUserApi(mockUserService, mockSessionService, false, false)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
