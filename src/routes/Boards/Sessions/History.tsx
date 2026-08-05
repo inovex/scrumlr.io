@@ -19,6 +19,10 @@ export const History = () => {
 
   const dispatch = useAppDispatch();
   const historyBoards = useAppSelector((state) => state.history);
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousHistory = useAppSelector((state) => state.view.allowAnonymousHistory);
+
+  const canViewHistory = !isAnonymous || (allowAnonymousHistory && false);
 
   useEffect(() => {
     if (historyBoards.length === 0) dispatch(getBoards());
@@ -26,17 +30,20 @@ export const History = () => {
 
   const matchSearchInput = (historyBoard: HistoryBoard) => historyBoard.name.toLowerCase().includes(searchBarInput.toLowerCase());
 
-  // for development, only show history boards if the env variable is set to true, otherwise show the teaser
+  // show history for registered users or if the respective env flag is set, otherwise an info section
   const renderHistoryContent = () =>
-    import.meta.env.VITE_SHOW_HISTORY_PAGE === "true" ? (
+    canViewHistory ? (
       historyBoards
         .filter(matchSearchInput)
         .sort((a, b) => Number(b.favourite) - Number(a.favourite) || b.modifiedAt.getTime() - a.modifiedAt.getTime()) // move favourites to the top, then sort by latest modifiedAt
         .map((hb) => <HistoryCard key={hb.id} board={hb} />)
     ) : (
-      <div className="history__teaser-info">
-        <InfoIcon className="history__teaser-icon" />
-        <p className="history__teaser-text">{t("History.teaserText")}</p>
+      <div className={"history__require-registered-user"}>
+        <div className="history__require-registered-user-info">
+          <InfoIcon className="history__require-registered-user-icon" />
+          <p className="history__require-registered-user-text">{t("History.requireRegisteredAccount")}</p>
+        </div>
+        <p className="history__require-registered-user-register-area">REGISTER BUTTON PLACEHOLDER</p>
       </div>
     );
 

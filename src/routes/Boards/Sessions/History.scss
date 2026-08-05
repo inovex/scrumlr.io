@@ -66,14 +66,14 @@ $max-card-width: 680px;
   }
 }
 
-// following teaser styles are temporary while the history is not yet fully implemented
-.history__teaser-info {
+// following is displayed if user is anonymous and the option is set they have to be registered to view the history
+.history__require-registered-user-info {
   display: flex;
   gap: styles.$spacing--sm;
   align-items: flex-start;
 }
 
-.history__teaser-icon {
+.history__require-registered-user-icon {
   width: styles.$icon--large;
   height: styles.$icon--large;
   flex-shrink: 0;
@@ -81,7 +81,7 @@ $max-card-width: 680px;
   color: styles.$navy--600;
 }
 
-.history__teaser-text {
+.history__require-registered-user-text {
   font-weight: 400;
   font-size: styles.$text--md;
   line-height: 28px;
@@ -90,9 +90,9 @@ $max-card-width: 680px;
 }
 
 [data-theme="dark"] {
-  .history__teaser-title,
-  .history__teaser-icon,
-  .history__teaser-text {
+  .history__require-registered-user-title,
+  .history__require-registered-user-icon,
+  .history__require-registered-user-text {
     color: styles.$blue--50;
   }
 }
