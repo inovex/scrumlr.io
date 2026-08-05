@@ -39,9 +39,17 @@ export type BoardImportData = {
   };
   columns: Column[];
   notes: Note[];
-  participants: ParticipantWithUser;
-  voting: Voting;
+  participants: ParticipantWithUser[];
+  votings: Voting | null;
 };
+
+export interface ImportWarnings {
+  removedNotesMissingAuthorCount?: number;
+}
+
+export interface ImportBoardResponse extends Board {
+  importWarnings?: ImportWarnings;
+}
 
 export type BoardActionType = {
   board: Board;
