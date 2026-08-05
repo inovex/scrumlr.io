@@ -105,6 +105,7 @@
     "title": "Gérer tes tableaux",
     "savedBoards": "Dernièrement utilisés",
     "requireRegisteredAccount": "Connecte-toi avec Google, Microsoft ou SSO pour sauvegarder et gérer automatiquement tes tableaux de manière permanente. Les profils anonymes (connexion invité) ne peuvent pas être associés à des tableaux, ils ne seront donc pas enregistrés.",
+    "registerNow": "Inscris-toi",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} colonne",

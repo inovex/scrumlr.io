@@ -89,6 +89,12 @@ $max-card-width: 680px;
   color: styles.$navy--400;
 }
 
+.history__require-registered-user-register-area {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 [data-theme="dark"] {
   .history__require-registered-user-title,
   .history__require-registered-user-icon,
