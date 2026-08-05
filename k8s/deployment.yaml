@@ -99,6 +99,8 @@ spec:
               value: "true"
             - name: SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION
               value: "true"
+            - name: SCRUMLR_ALLOW_ANONYMOUS_HISTORY
+              value: "true"
           ports:
             - containerPort: 8080
 ---
