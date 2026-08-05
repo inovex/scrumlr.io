@@ -49,8 +49,9 @@ type VotingCreateRequest struct {
 
 // VotingCloseRequest represents the request to update a voting session.
 type VotingCloseRequest struct {
-	ID    uuid.UUID `json:"-"`
-	Board uuid.UUID `json:"-"`
+	ID    uuid.UUID   `json:"-"`
+	Board uuid.UUID  `json:"-"`
+	Status VotingStatus `json:"status,omitempty"`
 }
 
 // Voting is the response for all voting requests.
