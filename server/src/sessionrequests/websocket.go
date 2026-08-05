@@ -20,14 +20,14 @@ type BoardSessionRequestSubscription struct {
 
 type sessionRequestWebsocket struct {
 	websocketService                 websocket.WebSocketInterface
-	realtime                         realtime.Broker
+	realtime                         *realtime.Broker
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
 const MaxRetries = 10
 const SleepBetweenRetries = time.Second * 2
 
-func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt realtime.Broker) SessionRequestWebsocket {
+func NewSessionRequestWebsocket(webSocketService websocket.WebSocketInterface, rt *realtime.Broker) SessionRequestWebsocket {
 	websocket := new(sessionRequestWebsocket)
 	websocket.websocketService = webSocketService
 	websocket.realtime = rt
@@ -77,6 +77,7 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 }
 
 func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration) {
+	log := logger.Get().With("board", boardID, "user", userID)
 	if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
 		socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
 			clients:       make(map[uuid.UUID]websocket.Connection),
@@ -97,13 +98,12 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 			if err == nil {
 				break
 			}
-			logger.Get().Errorw("failed to subscribe to board session request channel, retrying...", "board", boardID, "user", userID, "attempt", i+1, "err", err)
+			log.Errorw("failed to subscribe to board session request channel, retrying...", "board", boardID, "user", userID, "attempt", i+1, "err", err)
 			time.Sleep(retryDelay)
 		}
 
-		// if it completely fails after all retries, abort and don't start the goroutine
 		if err != nil {
-			logger.Get().Errorw("could not establish board session request subscription after retries ", "board", boardID, "user", userID, "err", err)
+			log.Errorw("could not establish board session request subscription after retries ", "board", boardID, "user", userID, "err", err)
 			return
 		}
 		b.subscriptions[userID] = ch

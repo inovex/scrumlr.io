@@ -140,7 +140,6 @@ func (s *Server) listenOnBoard(ctx context.Context, boardID, userID uuid.UUID, c
 			log.Warnw("failed to subscribe to board channel, retrying...", "board", boardID, "attempt", i+1, "err", err)
 			time.Sleep(retryDelay)
 		}
-		// if it completely fails after retries, abort and don't start the goroutine
 		if err != nil {
 			log.Errorw("could not establish board subscription after retries", "board", boardID, "err", err)
 			return

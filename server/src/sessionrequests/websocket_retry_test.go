@@ -38,7 +38,7 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
-		realtime:                         *broker,
+		realtime:                         broker,
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
@@ -66,7 +66,7 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
-		realtime:                         *broker,
+		realtime:                         broker,
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 	}
 
@@ -95,7 +95,7 @@ func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 
 	socket := &sessionRequestWebsocket{
 		websocketService: nil,
-		realtime:         *broker,
+		realtime:         broker,
 		boardSessionRequestSubscriptions: map[uuid.UUID]*BoardSessionRequestSubscription{
 			boardID: {
 				clients:       map[uuid.UUID]websocket.Connection{userID: conn},

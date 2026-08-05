@@ -109,7 +109,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
 	wsService := websocket.NewWebSocketService()
-	ws := sessionrequests.NewSessionRequestWebsocket(wsService, *broker)
+	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
 	userDatabase := users.NewUserDatabase(db)

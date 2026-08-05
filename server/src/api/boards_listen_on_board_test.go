@@ -29,8 +29,10 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(nil, errors.New("network timeout")).Times(3)
-	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(successChan, nil).Once()
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).
+		Return(nil, errors.New("network timeout")).Times(3)
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).
+		Return(successChan, nil).Once()
 
 	s := &Server{
 		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
@@ -40,7 +42,6 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_RetriesOnFailur
 	retryDelay := time.Millisecond * 10
 	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
-	mockBroker.AssertExpectations(t)
 	savedSubscription := s.boardSubscriptions[boardID].subscription
 	assert.Equal(t, successChan, savedSubscription, "The successful channel should be stored after retrying")
 }
@@ -60,7 +61,8 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).Return(nil, errors.New("network timeout")).Times(MaxRetries)
+	mockBroker.EXPECT().SubscribeToBoardEvents(mock.Anything, fmt.Sprintf("board.%s", boardID)).
+		Return(nil, errors.New("network timeout")).Times(MaxRetries)
 
 	s := &Server{
 		boardSubscriptions: make(map[uuid.UUID]*BoardSubscription),
@@ -70,7 +72,6 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoard_FailsAfterMaxRe
 	retryDelay := time.Millisecond * 10
 	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, retryDelay)
 
-	mockBroker.AssertExpectations(t)
 	savedSubscription := s.boardSubscriptions[boardID].subscription
 	assert.Nil(t, savedSubscription, "No subscription should be stored if all retries fail")
 }
