@@ -103,7 +103,7 @@
     "switchTitle": "History",
     "title": "Manage your boards",
     "savedBoards": "Recently used",
-    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved.",
+    "requireRegisteredAccount": "Sign in with Google, Microsoft, or SSO to automatically back up and manage your boards permanently. Anonymous profiles (guest login) cannot be associated with boards, so they will not be saved.",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} Column",

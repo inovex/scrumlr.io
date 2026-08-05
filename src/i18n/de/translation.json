@@ -104,7 +104,7 @@
     "switchTitle": "Historie",
     "title": "Verwalte deine Boards",
     "savedBoards": "Zuletzt verwendet",
-    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden.",
+    "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} Spalte",
