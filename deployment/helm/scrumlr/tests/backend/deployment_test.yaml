@@ -5,7 +5,7 @@ templates:
   - /backend/configmap.yaml
   - /backend/secrets.yaml
 tests:
-  - it: should set name, namespace, apiVersion, kind, labels, container name and config map name
+  - it: should set name, namespace, apiVersion, kind, labels, auto mount service token container name and config map name
     release:
       name: scrumlr
       namespace: scrumlr
@@ -23,6 +23,10 @@ tests:
       - equal:
           path: spec.template.metadata.labels.app
           value: scrumlr-backend
+        template: /backend/deployment.yaml
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
         template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].name

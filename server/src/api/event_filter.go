@@ -6,17 +6,17 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []role.Role{role.ModeratorRole, role.OwnerRole})
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
 		if updated, ok := bs.columnsUpdated(event, userID, isMod); ok {
@@ -212,7 +212,7 @@ func (bs *BoardSubscription) sessionUpdated(event *realtime.BoardEvent, isMod bo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []role.Role{role.ModeratorRole, role.OwnerRole})
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]

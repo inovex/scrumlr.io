@@ -11,6 +11,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Sitzungsname",
+    "description": "Sitzungsbeschreibung",
     "createNewBoard": "Erstelle eine Sitzung",
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
@@ -66,7 +67,6 @@
       "saveCreate": "Template erstellen",
       "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
     },
-
     "ColumnsConfiguratorColumn": {
       "defaultColumnName": "Spalte 1",
       "defaultActionsName": "Aktionen",
@@ -453,7 +453,9 @@
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
     "enable": "Aktivieren",
-    "failedImport": "Fehler beim importieren der Datei"
+    "failedImport": "Fehler beim importieren der Datei",
+    "importRemovedNotes_one": "{{count}} Karte wurde beim Import entfernt, weil kein Autor zugeordnet werden konnte.",
+    "importRemovedNotes_other": "{{count}} Karten wurden beim Import entfernt, weil kein Autor zugeordnet werden konnte."
   },
   "Language": {
     "german": "Deutsch",
@@ -590,6 +592,7 @@
     "unshareNote": "Es tut uns leid, aber wir haben ein Problem das Teilen des Kärtchens zu stoppen. Bitte versuche es erneut.",
     "deleteBoard": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Boards. Bitte versuche es erneut.",
     "importBoard": "Es tut uns leid, aber wir haben ein Problem beim Importieren des Boards. Bitte versuche es erneut.",
+    "createBoard": "Es tut uns leid, aber wir haben Probleme beim Erstellen des Boards. Bitte versuche es erneut.",
     "editColumn": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spalte. Bitte versuche es erneut.",
     "createColumn": "Es tut uns leid, aber wir haben ein Problem beim Anlegen der Spalte. Bitte versuche es erneut.",
     "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",

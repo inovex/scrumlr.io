@@ -3,7 +3,6 @@ package columns
 import (
 	"context"
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -87,7 +86,7 @@ func (suite *ColumnServiceTestSuite) TestCreateColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn() {
@@ -114,17 +113,24 @@ func (suite *ColumnServiceTestSuite) TestDeleteColumn_DatabaseError() {
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestDeleteColumn_NoteServiceGetAllError() {
 
-	suite.expectGetAllNotes(nil, common.NotFoundError)
+	mockErr := ColumnError{
+		Category: NotFound,
+	}
+
+	suite.expectGetAllNotes(nil, mockErr)
 
 	err := suite.service.Delete(context.Background(), suite.boardID, suite.columnID, suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+
+	var columnErr ColumnError
+	suite.ErrorAs(err, &columnErr)
+	suite.Equal(columnErr.Category, NotFound)
 }
 
 func (suite *ColumnServiceTestSuite) TestUpdateColumn() {
@@ -163,7 +169,7 @@ func (suite *ColumnServiceTestSuite) TestUpdateColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(dbError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetColumn() {
@@ -193,7 +199,7 @@ func (suite *ColumnServiceTestSuite) TestGetColumn_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(fmt.Errorf("unable to get column: %w", dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetAllColumns() {
@@ -234,7 +240,7 @@ func (suite *ColumnServiceTestSuite) TestGetAllColumns_DatabaseError() {
 
 	suite.Nil(column)
 	suite.NotNil(err)
-	suite.Equal(fmt.Errorf("unable to get columns: %w", dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *ColumnServiceTestSuite) TestGetCount() {
@@ -257,7 +263,7 @@ func (suite *ColumnServiceTestSuite) TestGetCount_DatabaseError() {
 	columnCount, err := suite.service.GetCount(context.Background(), suite.boardID)
 
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 	suite.Equal(count, columnCount)
 }
 

@@ -401,6 +401,8 @@ definitions:
         description: The access policy
       allowStacking:
         type: boolean
+      createdAt:
+        type: string
       description:
         description: Description of the board
         type: string
@@ -439,12 +441,20 @@ definitions:
     properties:
       board:
         $ref: '#/definitions/boards.Board'
-      columnsNumber:
-        type: integer
+      columns:
+        items:
+          $ref: '#/definitions/columns.Column'
+        type: array
       createdAt:
         type: string
+      favourite:
+        type: boolean
+      noteCount:
+        type: integer
       participants:
         type: integer
+      role:
+        $ref: '#/definitions/common.SessionRole'
     type: object
   boards.BoardUpdateRequest:
     properties:
@@ -936,6 +946,10 @@ definitions:
       createdAt:
         description: Reference for when board_session has been created
         type: string
+      favourite:
+        description: Flag indicates whether user has marked the board as one of their
+          favourites.
+        type: boolean
       id:
         type: string
       raisedHand:
@@ -962,6 +976,8 @@ definitions:
     properties:
       banned:
         description: The banned state of the participant
+        type: boolean
+      favourite:
         type: boolean
       raisedHand:
         description: The raised hand state of the participant.
@@ -1707,11 +1723,6 @@ paths:
         name: boardId
         required: true
         type: string
-      - description: id of the session
-        in: path
-        name: id
-        required: true
-        type: string
       - description: values to update the session
         in: body
         name: session
@@ -1741,6 +1752,50 @@ paths:
       tags:
       - sessions
   /boards/{boardId}/participants/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a sessions for a board
+      parameters:
+      - description: jwt token to authenticate
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      - description: id of the board
+        in: path
+        name: boardId
+        required: true
+        type: string
+      - description: id of the session
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.APIError'
+      summary: Delete a sessions for a board
+      tags:
+      - sessions
     get:
       consumes:
       - application/json
@@ -2994,39 +3049,6 @@ paths:
       summary: Log the current user out
       tags:
       - auth
-    post:
-      consumes:
-      - application/json
-      description: Create a new anonymous user
-      parameters:
-      - description: user to create
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/api.AnonymousSignUpRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/users.User'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.APIError'
-      summary: Create a new anonymous user
-      tags:
-      - auth
   /login/{provider}:
     get:
       consumes:
@@ -3090,6 +3112,40 @@ paths:
           schema:
             $ref: '#/definitions/common.APIError'
       summary: Verify the auth provider call and create or update a user
+      tags:
+      - auth
+  /login/anonymous:
+    post:
+      consumes:
+      - application/json
+      description: Create a new anonymous user
+      parameters:
+      - description: user to create
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/api.AnonymousSignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/users.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.APIError'
+      summary: Create a new anonymous user
       tags:
       - auth
   /templates:

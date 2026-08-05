@@ -6,9 +6,9 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
@@ -44,7 +44,6 @@ type Board struct {
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
 
 	// The id of a note to share with other users.
-	// FIXME omitempty works only with nil in combination with pointers
 	SharedNote uuid.NullUUID `json:"sharedNote"`
 
 	ShowVoting uuid.NullUUID `json:"showVoting"`
@@ -154,13 +153,13 @@ type JoinBoardRequest struct {
 }
 
 type BoardOverview struct {
-	Board        *Board             `json:"board"`
-	Columns      []*columns.Column  `json:"columns"`
-	CreatedAt    time.Time          `json:"createdAt"`
-	Participants int                `json:"participants"`
-	Role         common.SessionRole `json:"role"`
-	Favourite    bool               `json:"favourite"`
-	NoteCount    int                `json:"noteCount"`
+	Board        *Board            `json:"board"`
+	Columns      []*columns.Column `json:"columns"`
+	CreatedAt    time.Time         `json:"createdAt"`
+	Participants int               `json:"participants"`
+	Role         role.Role         `json:"role"`
+	Favourite    bool              `json:"favourite"`
+	NoteCount    int               `json:"noteCount"`
 }
 
 type ImportBoardRequest struct {
@@ -168,6 +167,15 @@ type ImportBoardRequest struct {
 	Columns []columns.Column    `json:"columns"`
 	Notes   []notes.Note        `json:"notes"`
 	Votings []votings.Voting    `json:"votings"`
+}
+
+type ImportWarnings struct {
+	RemovedNotesMissingAuthorCount int `json:"removedNotesMissingAuthorCount,omitempty"`
+}
+
+type ImportBoardResponse struct {
+	*Board
+	ImportWarnings *ImportWarnings `json:"importWarnings,omitempty"`
 }
 
 type FullBoard struct {

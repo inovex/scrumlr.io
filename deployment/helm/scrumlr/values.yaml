@@ -51,15 +51,18 @@ frontend:
   ## @param frontend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
-  ## @param frontend.podSecurityContext Pod-level security context
+  ## @param frontend.podSecurityContext.seccompProfile.type Set the seccomp profile type of the pod
   ##
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
-  ## @param frontend.containerSecurityContext Container-level security context
+  ## @param frontend.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
   ##
   containerSecurityContext:
     allowPrivilegeEscalation: false
+  ## @param frontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param frontend.startupProbe.enabled Enable/disable the startup probe
   ## @param frontend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param frontend.startupProbe.periodSeconds How often to perform the probe
@@ -172,15 +175,18 @@ backend:
   ## @param backend.resources Set container requests and limits for different resources like CPU or memory
   ##
   resources: {}
-  ## @param backend.podSecurityContext Pod-level security context
+  ## @param backend.podSecurityContext.seccompProfile.type Set the seccomp profile type of the pod
   ##
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
-  ## @param backend.containerSecurityContext Container-level security context
+  ## @param backend.containerSecurityContext.allowPrivilegeEscalation Set controller container's Security Context allowPrivilegeEscalation
   ##
   containerSecurityContext:
     allowPrivilegeEscalation: false
+  ## @param backend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param backend.startupProbe.enabled Enable/disable the startup probe
   ## @param backend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param backend.startupProbe.periodSeconds How often to perform the probe

@@ -63,7 +63,7 @@ type MockSessionApi_BoardModeratorContext_Call struct {
 
 // BoardModeratorContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockSessionApi_Expecter) BoardModeratorContext(next interface{}) *MockSessionApi_BoardModeratorContext_Call {
+func (_e *MockSessionApi_Expecter) BoardModeratorContext(next any) *MockSessionApi_BoardModeratorContext_Call {
 	return &MockSessionApi_BoardModeratorContext_Call{Call: _e.mock.On("BoardModeratorContext", next)}
 }
 
@@ -169,7 +169,7 @@ type MockSessionApi_BoardParticipantContext_Call struct {
 
 // BoardParticipantContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockSessionApi_Expecter) BoardParticipantContext(next interface{}) *MockSessionApi_BoardParticipantContext_Call {
+func (_e *MockSessionApi_Expecter) BoardParticipantContext(next any) *MockSessionApi_BoardParticipantContext_Call {
 	return &MockSessionApi_BoardParticipantContext_Call{Call: _e.mock.On("BoardParticipantContext", next)}
 }
 
@@ -196,6 +196,52 @@ func (_c *MockSessionApi_BoardParticipantContext_Call) RunAndReturn(run func(nex
 	return _c
 }
 
+// DeleteBoardSession provides a mock function for the type MockSessionApi
+func (_mock *MockSessionApi) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
+	_mock.Called(w, r)
+	return
+}
+
+// MockSessionApi_DeleteBoardSession_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteBoardSession'
+type MockSessionApi_DeleteBoardSession_Call struct {
+	*mock.Call
+}
+
+// DeleteBoardSession is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+func (_e *MockSessionApi_Expecter) DeleteBoardSession(w any, r any) *MockSessionApi_DeleteBoardSession_Call {
+	return &MockSessionApi_DeleteBoardSession_Call{Call: _e.mock.On("DeleteBoardSession", w, r)}
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockSessionApi_DeleteBoardSession_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) Return() *MockSessionApi_DeleteBoardSession_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockSessionApi_DeleteBoardSession_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request)) *MockSessionApi_DeleteBoardSession_Call {
+	_c.Run(run)
+	return _c
+}
+
 // GetBoardSession provides a mock function for the type MockSessionApi
 func (_mock *MockSessionApi) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)
@@ -210,7 +256,7 @@ type MockSessionApi_GetBoardSession_Call struct {
 // GetBoardSession is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionApi_Expecter) GetBoardSession(w interface{}, r interface{}) *MockSessionApi_GetBoardSession_Call {
+func (_e *MockSessionApi_Expecter) GetBoardSession(w any, r any) *MockSessionApi_GetBoardSession_Call {
 	return &MockSessionApi_GetBoardSession_Call{Call: _e.mock.On("GetBoardSession", w, r)}
 }
 
@@ -256,7 +302,7 @@ type MockSessionApi_GetBoardSessions_Call struct {
 // GetBoardSessions is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionApi_Expecter) GetBoardSessions(w interface{}, r interface{}) *MockSessionApi_GetBoardSessions_Call {
+func (_e *MockSessionApi_Expecter) GetBoardSessions(w any, r any) *MockSessionApi_GetBoardSessions_Call {
 	return &MockSessionApi_GetBoardSessions_Call{Call: _e.mock.On("GetBoardSessions", w, r)}
 }
 
@@ -302,7 +348,7 @@ type MockSessionApi_UpdateBoardSession_Call struct {
 // UpdateBoardSession is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionApi_Expecter) UpdateBoardSession(w interface{}, r interface{}) *MockSessionApi_UpdateBoardSession_Call {
+func (_e *MockSessionApi_Expecter) UpdateBoardSession(w any, r any) *MockSessionApi_UpdateBoardSession_Call {
 	return &MockSessionApi_UpdateBoardSession_Call{Call: _e.mock.On("UpdateBoardSession", w, r)}
 }
 
@@ -348,7 +394,7 @@ type MockSessionApi_UpdateBoardSessions_Call struct {
 // UpdateBoardSessions is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionApi_Expecter) UpdateBoardSessions(w interface{}, r interface{}) *MockSessionApi_UpdateBoardSessions_Call {
+func (_e *MockSessionApi_Expecter) UpdateBoardSessions(w any, r any) *MockSessionApi_UpdateBoardSessions_Call {
 	return &MockSessionApi_UpdateBoardSessions_Call{Call: _e.mock.On("UpdateBoardSessions", w, r)}
 }
 

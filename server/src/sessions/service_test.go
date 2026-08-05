@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/url"
 	"testing"
 
@@ -12,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 )
 
 func TestGetSession(t *testing.T) {
@@ -61,16 +60,19 @@ func TestGetSession_NotFound(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, NotFound, sessionErr.Category)
 }
 
 func TestGetSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSession{}, errors.New(dbError))
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -85,7 +87,7 @@ func TestGetSession_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestGetSessions(t *testing.T) {
@@ -157,11 +159,11 @@ func TestGetUserBoardSessions_ConnectedOnly(t *testing.T) {
 
 func TestGetUserBoardSessions_ConnectedOnly_DatabaseError(t *testing.T) {
 	userId := uuid.New()
-	dbError := "database error"
+	dbError := errors.New("database error")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
-		Return([]DatabaseBoardSession{}, errors.New(dbError))
+		Return([]DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -176,7 +178,7 @@ func TestGetUserBoardSessions_ConnectedOnly_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, sessions)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestListSessions_WithFilterConnected(t *testing.T) {
@@ -283,14 +285,14 @@ func TestListSessions_WithFilterRaisedHand(t *testing.T) {
 
 func TestListSessions_WithFilterRole(t *testing.T) {
 	boardId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	moderatorRole := role.ModeratorRole
 	filter := BoardSessionFilter{Role: &moderatorRole}
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetAll(mock.Anything, boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
-			{Board: boardId, Role: common.ModeratorRole},
-			{Board: boardId, Role: common.ModeratorRole},
+			{Board: boardId, Role: role.ModeratorRole},
+			{Board: boardId, Role: role.ModeratorRole},
 		}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -317,12 +319,12 @@ func TestListSessions_WithFilterRole(t *testing.T) {
 
 func TestListSessions_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 	filter := BoardSessionFilter{}
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetAll(mock.Anything, boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{}, errors.New(dbError))
+		Return([]DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -337,13 +339,13 @@ func TestListSessions_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, boardSessions)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestCreateSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: role}).
@@ -372,12 +374,12 @@ func TestCreateSession(t *testing.T) {
 func TestCreateSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	role := common.ParticipantRole
-	dbError := "unable to create"
+	role := role.ParticipantRole
+	dbError := errors.New("unable to create")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Create(mock.Anything, DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: role}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+		Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -392,7 +394,7 @@ func TestCreateSession_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateSession_Role(t *testing.T) {
@@ -401,15 +403,15 @@ func TestUpdateSession_Role(t *testing.T) {
 	userId := uuid.New()
 	firstColumnId := uuid.New()
 	secondColumnId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	moderatorRole := role.ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
@@ -448,7 +450,7 @@ func TestUpdateSession_Role(t *testing.T) {
 
 	assert.Equal(t, boardId, session.Board)
 	assert.Equal(t, userId, session.UserID)
-	assert.Equal(t, common.ModeratorRole, session.Role)
+	assert.Equal(t, role.ModeratorRole, session.Role)
 }
 
 func TestUpdateSession_RaiseHand(t *testing.T) {
@@ -460,7 +462,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, RaisedHand: raisedHand}, nil)
 	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
@@ -508,10 +510,10 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).Return(DatabaseBoardSession{}, errors.New(dbError))
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -526,25 +528,25 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+		Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -559,28 +561,28 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
-	dbError := "unable to execute"
+	moderatorRole := role.ModeratorRole
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ModeratorRole}, nil)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+		Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -600,7 +602,7 @@ func TestUpdateSession_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
@@ -610,7 +612,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: role.ParticipantRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -625,12 +627,16 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 		Board:  boardId,
 		Caller: moderatorId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change other users session")), err)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, "not allowed to change other user's session", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorPromoting(t *testing.T) {
@@ -639,7 +645,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -654,12 +660,16 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("cannot promote role")), err)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, "cannot promote role", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
@@ -668,7 +678,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.OwnerRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.OwnerRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -683,12 +693,16 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.ModeratorRole),
+		Role:   new(role.ModeratorRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change owner role")), err)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, "not allowed to change owner role", sessionErr.Message)
 }
 
 func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
@@ -697,7 +711,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -712,12 +726,16 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 		Board:  boardId,
 		Caller: userId,
 		User:   userId,
-		Role:   new(common.OwnerRole),
+		Role:   new(role.OwnerRole),
 	})
 
 	assert.Nil(t, session)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to promote to owner role")), err)
+
+	var sessionErr SessionError
+	assert.ErrorAs(t, err, &sessionErr)
+	assert.Equal(t, Forbidden, sessionErr.Category)
+	assert.Equal(t, "not allowed to promote to owner role", sessionErr.Message)
 }
 
 func TestUpdateAllSessions(t *testing.T) {
@@ -761,11 +779,11 @@ func TestUpdateAllSessions(t *testing.T) {
 func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	ready := true
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().UpdateAll(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, Ready: &ready}).
-		Return([]DatabaseBoardSession{}, errors.New(dbError))
+		Return([]DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -780,7 +798,7 @@ func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, boardSessions)
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestConnectSession(t *testing.T) {
@@ -829,11 +847,11 @@ func TestConnectSession(t *testing.T) {
 func TestConnectSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+		Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -847,7 +865,7 @@ func TestConnectSession_DatabaseError(t *testing.T) {
 	err := sessionService.Connect(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestDisconnectSession(t *testing.T) {
@@ -896,11 +914,11 @@ func TestDisconnectSession(t *testing.T) {
 func TestDisconnectSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(false)}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+		Return(DatabaseBoardSession{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -914,7 +932,7 @@ func TestDisconnectSession_DatabaseError(t *testing.T) {
 	err := sessionService.Disconnect(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 }
 
 func TestSessionExists(t *testing.T) {
@@ -942,10 +960,10 @@ func TestSessionExists(t *testing.T) {
 func TestSessionExists_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Exists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+	mockSessiondb.EXPECT().Exists(mock.Anything, boardId, userId).Return(false, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -959,7 +977,7 @@ func TestSessionExists_DatabaseError(t *testing.T) {
 	exists, err := sessionService.Exists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 	assert.False(t, exists)
 }
 
@@ -988,10 +1006,10 @@ func TestModeratorSessionExists(t *testing.T) {
 func TestModeratorSessionExists_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().ModeratorExists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+	mockSessiondb.EXPECT().ModeratorExists(mock.Anything, boardId, userId).Return(false, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -1005,7 +1023,7 @@ func TestModeratorSessionExists_DatabaseError(t *testing.T) {
 	exists, err := sessionService.ModeratorSessionExists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 	assert.False(t, exists)
 }
 
@@ -1034,10 +1052,10 @@ func TestOwnerSessionExists(t *testing.T) {
 func TestOwnerSessionExists_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+	mockSessiondb.EXPECT().OwnerExists(mock.Anything, boardId, userId).Return(false, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -1051,7 +1069,7 @@ func TestOwnerSessionExists_DatabaseError(t *testing.T) {
 	exists, err := sessionService.OwnerSessionExists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 	assert.False(t, exists)
 }
 
@@ -1080,10 +1098,10 @@ func TestIsParticipantBanned(t *testing.T) {
 func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().IsParticipantBanned(mock.Anything, boardId, userId).Return(false, errors.New(dbError))
+	mockSessiondb.EXPECT().IsParticipantBanned(mock.Anything, boardId, userId).Return(false, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -1097,8 +1115,180 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 	banned, err := sessionService.IsParticipantBanned(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
+	assert.ErrorIs(t, err, dbError)
 	assert.False(t, banned)
+}
+
+func TestDeleteSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	assert.NoError(t, err)
+}
+
+func TestDeleteConnectedSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: true}, nil)
+	mockSessiondb.EXPECT().Update(mock.Anything, DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(false)}).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ModeratorRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().GetUserBoardSessions(mock.Anything, userId, true).
+		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]*columns.Column{
+			{ID: firstColumnId},
+			{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(mock.Anything, boardId, []uuid.UUID{firstColumnId, secondColumnId}).
+		Return([]*notes.Note{
+			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	assert.NoError(t, err)
+}
+
+func TestDeleteSession_DifferentCaller(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	callerId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), callerId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Forbidden, sessionError.Category)
+	assert.Equal(t, errors.New("cannot delete a session of another user"), sessionError.Err)
+}
+
+func TestDeleteSession_SessionDoesNotExist(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, NotFound, sessionError.Category)
+}
+
+func TestDeleteSession_OwnerSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.OwnerRole}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Forbidden, sessionError.Category)
+	assert.Equal(t, errors.New("cannot delete the owner session of a board"), sessionError.Err)
+}
+
+func TestDeleteSession_DatabaseError(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessiondb := NewMockSessionDatabase(t)
+	mockSessiondb.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: role.ParticipantRole, Connected: false}, nil)
+	mockSessiondb.EXPECT().Delete(mock.Anything, boardId, userId).
+		Return(errors.New("database error"))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+
+	err := sessionService.Delete(context.Background(), userId, boardId, userId)
+
+	var sessionError SessionError
+	assert.Error(t, err)
+	assert.ErrorAs(t, err, &sessionError)
+	assert.Equal(t, Internal, sessionError.Category)
 }
 
 func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
@@ -1191,7 +1381,7 @@ func TestFilterfromQueryString_Role(t *testing.T) {
 
 	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
-	role := common.OwnerRole
+	role := role.OwnerRole
 	query := url.Values{}
 	query.Add("role", "OWNER")
 	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
@@ -1202,13 +1392,13 @@ func TestFilterfromQueryString_Role(t *testing.T) {
 func TestCheckSessionRole(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: userId, Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: userId, Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ModeratorRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ModeratorRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)
@@ -1219,13 +1409,13 @@ func TestCheckSessionRole(t *testing.T) {
 func TestCheckSessionRole_NoRole(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: userId, Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: userId, Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ParticipantRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ParticipantRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)
@@ -1236,13 +1426,13 @@ func TestCheckSessionRole_NoRole(t *testing.T) {
 func TestCheckSessionRole_NoUser(t *testing.T) {
 	userId := uuid.New()
 	sessions := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
-		{UserID: uuid.New(), Role: common.ModeratorRole},
-		{UserID: uuid.New(), Role: common.OwnerRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
+		{UserID: uuid.New(), Role: role.ModeratorRole},
+		{UserID: uuid.New(), Role: role.OwnerRole},
 	}
-	roles := []common.SessionRole{
-		common.ParticipantRole,
-		common.OwnerRole,
+	roles := []role.Role{
+		role.ParticipantRole,
+		role.OwnerRole,
 	}
 
 	check := CheckSessionRole(userId, sessions, roles)

@@ -53,7 +53,7 @@ type MockSessionRequestWebsocket_OpenSocket_Call struct {
 // OpenSocket is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionRequestWebsocket_Expecter) OpenSocket(w interface{}, r interface{}) *MockSessionRequestWebsocket_OpenSocket_Call {
+func (_e *MockSessionRequestWebsocket_Expecter) OpenSocket(w any, r any) *MockSessionRequestWebsocket_OpenSocket_Call {
 	return &MockSessionRequestWebsocket_OpenSocket_Call{Call: _e.mock.On("OpenSocket", w, r)}
 }
 
@@ -98,7 +98,7 @@ type MockSessionRequestWebsocket_closeSocket_Call struct {
 
 // closeSocket is a helper method to define mock.On call
 //   - conn websocket.Connection
-func (_e *MockSessionRequestWebsocket_Expecter) closeSocket(conn interface{}) *MockSessionRequestWebsocket_closeSocket_Call {
+func (_e *MockSessionRequestWebsocket_Expecter) closeSocket(conn any) *MockSessionRequestWebsocket_closeSocket_Call {
 	return &MockSessionRequestWebsocket_closeSocket_Call{Call: _e.mock.On("closeSocket", conn)}
 }
 
@@ -140,7 +140,7 @@ type MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call struct {
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
 //   - conn websocket.Connection
-func (_e *MockSessionRequestWebsocket_Expecter) listenOnBoardSessionRequest(boardID interface{}, userID interface{}, conn interface{}) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+func (_e *MockSessionRequestWebsocket_Expecter) listenOnBoardSessionRequest(boardID any, userID any, conn any) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
 	return &MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call{Call: _e.mock.On("listenOnBoardSessionRequest", boardID, userID, conn)}
 }
 

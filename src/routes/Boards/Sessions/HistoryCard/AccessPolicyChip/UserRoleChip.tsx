@@ -1,6 +1,7 @@
 import {ReactElement} from "react";
 import {ModeratorIcon, ParticipantIcon, OwnerIcon} from "components/Icon";
 import {ParticipantRole} from "store/features";
+import {TranslationKey} from "utils/i18n";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import "./UserRoleChip.scss";
@@ -19,11 +20,11 @@ const userRoleIconMap: Record<ParticipantRole, ReactElement> = {
 export const UserRoleChip = (props: UserRoleChipProps) => {
   const {t} = useTranslation();
 
-  const userRoleTranslationKeyMap: Record<ParticipantRole, string> = {
+  const userRoleTranslationKeyMap = {
     PARTICIPANT: "UserRole.Participant",
     MODERATOR: "UserRole.Moderator",
     OWNER: "UserRole.Owner",
-  };
+  } satisfies Record<ParticipantRole, TranslationKey>;
 
   const renderUserRoleIcon = (userRole: ParticipantRole) => userRoleIconMap[userRole];
 

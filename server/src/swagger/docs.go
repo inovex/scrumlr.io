@@ -929,13 +929,6 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "id of the session",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "values to update the session",
                         "name": "session",
                         "in": "body",
@@ -1095,6 +1088,71 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a sessions for a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Delete a sessions for a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the session",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/common.APIError"
                         }
@@ -2829,6 +2887,26 @@ const docTemplate = `{
             }
         },
         "/login": {
+            "delete": {
+                "description": "Log the current user out",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Log the current user out",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/login/anonymous": {
             "post": {
                 "description": "Create a new anonymous user",
                 "consumes": [
@@ -2876,24 +2954,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.APIError"
                         }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Log the current user out",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Log the current user out",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
                     }
                 }
             }
@@ -4313,6 +4373,9 @@ const docTemplate = `{
                 "allowStacking": {
                     "type": "boolean"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "description": {
                     "description": "Description of the board",
                     "type": "string"
@@ -4367,14 +4430,26 @@ const docTemplate = `{
                 "board": {
                     "$ref": "#/definitions/boards.Board"
                 },
-                "columnsNumber": {
-                    "type": "integer"
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columns.Column"
+                    }
                 },
                 "createdAt": {
                     "type": "string"
                 },
+                "favourite": {
+                    "type": "boolean"
+                },
+                "noteCount": {
+                    "type": "integer"
+                },
                 "participants": {
                     "type": "integer"
+                },
+                "role": {
+                    "$ref": "#/definitions/common.SessionRole"
                 }
             }
         },
@@ -5078,6 +5153,10 @@ const docTemplate = `{
                     "description": "Reference for when board_session has been created",
                     "type": "string"
                 },
+                "favourite": {
+                    "description": "Flag indicates whether user has marked the board as one of their favourites.",
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -5108,6 +5187,9 @@ const docTemplate = `{
             "properties": {
                 "banned": {
                     "description": "The banned state of the participant",
+                    "type": "boolean"
+                },
+                "favourite": {
                     "type": "boolean"
                 },
                 "raisedHand": {

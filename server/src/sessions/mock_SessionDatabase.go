@@ -72,7 +72,7 @@ type MockSessionDatabase_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardSession DatabaseBoardSessionInsert
-func (_e *MockSessionDatabase_Expecter) Create(ctx interface{}, boardSession interface{}) *MockSessionDatabase_Create_Call {
+func (_e *MockSessionDatabase_Expecter) Create(ctx any, boardSession any) *MockSessionDatabase_Create_Call {
 	return &MockSessionDatabase_Create_Call{Call: _e.mock.On("Create", ctx, boardSession)}
 }
 
@@ -100,6 +100,69 @@ func (_c *MockSessionDatabase_Create_Call) Return(databaseBoardSession DatabaseB
 }
 
 func (_c *MockSessionDatabase_Create_Call) RunAndReturn(run func(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)) *MockSessionDatabase_Create_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Delete provides a mock function for the type MockSessionDatabase
+func (_mock *MockSessionDatabase) Delete(ctx context.Context, board uuid.UUID, user uuid.UUID) error {
+	ret := _mock.Called(ctx, board, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Delete")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, board, user)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockSessionDatabase_Delete_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Delete'
+type MockSessionDatabase_Delete_Call struct {
+	*mock.Call
+}
+
+// Delete is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board uuid.UUID
+//   - user uuid.UUID
+func (_e *MockSessionDatabase_Expecter) Delete(ctx any, board any, user any) *MockSessionDatabase_Delete_Call {
+	return &MockSessionDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, board, user)}
+}
+
+func (_c *MockSessionDatabase_Delete_Call) Run(run func(ctx context.Context, board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_Delete_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionDatabase_Delete_Call) Return(err error) *MockSessionDatabase_Delete_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockSessionDatabase_Delete_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, user uuid.UUID) error) *MockSessionDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -139,7 +202,7 @@ type MockSessionDatabase_Exists_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) Exists(ctx interface{}, board interface{}, user interface{}) *MockSessionDatabase_Exists_Call {
+func (_e *MockSessionDatabase_Expecter) Exists(ctx any, board any, user any) *MockSessionDatabase_Exists_Call {
 	return &MockSessionDatabase_Exists_Call{Call: _e.mock.On("Exists", ctx, board, user)}
 }
 
@@ -211,7 +274,7 @@ type MockSessionDatabase_Get_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) Get(ctx interface{}, board interface{}, user interface{}) *MockSessionDatabase_Get_Call {
+func (_e *MockSessionDatabase_Expecter) Get(ctx any, board any, user any) *MockSessionDatabase_Get_Call {
 	return &MockSessionDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, user)}
 }
 
@@ -291,9 +354,9 @@ type MockSessionDatabase_GetAll_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - filter ...BoardSessionFilter
-func (_e *MockSessionDatabase_Expecter) GetAll(ctx interface{}, board interface{}, filter ...interface{}) *MockSessionDatabase_GetAll_Call {
+func (_e *MockSessionDatabase_Expecter) GetAll(ctx any, board any, filter ...any) *MockSessionDatabase_GetAll_Call {
 	return &MockSessionDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{ctx, board}, filter...)...)}
+		append([]any{ctx, board}, filter...)...)}
 }
 
 func (_c *MockSessionDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter)) *MockSessionDatabase_GetAll_Call {
@@ -368,7 +431,7 @@ type MockSessionDatabase_GetUserBoardSessions_Call struct {
 //   - ctx context.Context
 //   - user uuid.UUID
 //   - connectedOnly bool
-func (_e *MockSessionDatabase_Expecter) GetUserBoardSessions(ctx interface{}, user interface{}, connectedOnly interface{}) *MockSessionDatabase_GetUserBoardSessions_Call {
+func (_e *MockSessionDatabase_Expecter) GetUserBoardSessions(ctx any, user any, connectedOnly any) *MockSessionDatabase_GetUserBoardSessions_Call {
 	return &MockSessionDatabase_GetUserBoardSessions_Call{Call: _e.mock.On("GetUserBoardSessions", ctx, user, connectedOnly)}
 }
 
@@ -440,7 +503,7 @@ type MockSessionDatabase_IsParticipantBanned_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) IsParticipantBanned(ctx interface{}, board interface{}, user interface{}) *MockSessionDatabase_IsParticipantBanned_Call {
+func (_e *MockSessionDatabase_Expecter) IsParticipantBanned(ctx any, board any, user any) *MockSessionDatabase_IsParticipantBanned_Call {
 	return &MockSessionDatabase_IsParticipantBanned_Call{Call: _e.mock.On("IsParticipantBanned", ctx, board, user)}
 }
 
@@ -512,7 +575,7 @@ type MockSessionDatabase_ModeratorExists_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) ModeratorExists(ctx interface{}, board interface{}, user interface{}) *MockSessionDatabase_ModeratorExists_Call {
+func (_e *MockSessionDatabase_Expecter) ModeratorExists(ctx any, board any, user any) *MockSessionDatabase_ModeratorExists_Call {
 	return &MockSessionDatabase_ModeratorExists_Call{Call: _e.mock.On("ModeratorExists", ctx, board, user)}
 }
 
@@ -655,7 +718,7 @@ type MockSessionDatabase_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - update DatabaseBoardSessionUpdate
-func (_e *MockSessionDatabase_Expecter) Update(ctx interface{}, update interface{}) *MockSessionDatabase_Update_Call {
+func (_e *MockSessionDatabase_Expecter) Update(ctx any, update any) *MockSessionDatabase_Update_Call {
 	return &MockSessionDatabase_Update_Call{Call: _e.mock.On("Update", ctx, update)}
 }
 
@@ -723,7 +786,7 @@ type MockSessionDatabase_UpdateAll_Call struct {
 // UpdateAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - update DatabaseBoardSessionUpdate
-func (_e *MockSessionDatabase_Expecter) UpdateAll(ctx interface{}, update interface{}) *MockSessionDatabase_UpdateAll_Call {
+func (_e *MockSessionDatabase_Expecter) UpdateAll(ctx any, update any) *MockSessionDatabase_UpdateAll_Call {
 	return &MockSessionDatabase_UpdateAll_Call{Call: _e.mock.On("UpdateAll", ctx, update)}
 }
 

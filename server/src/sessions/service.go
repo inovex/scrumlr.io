@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/url"
 	"slices"
 	"strconv"
@@ -16,9 +15,9 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -37,6 +36,7 @@ type SessionDatabase interface {
 	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSession, error)
 	GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
 	GetUserBoardSessions(ctx context.Context, user uuid.UUID, connectedOnly bool) ([]DatabaseBoardSession, error)
+	Delete(ctx context.Context, board, user uuid.UUID) error
 }
 
 type BoardSessionService struct {
@@ -77,7 +77,7 @@ func (service *BoardSessionService) Create(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to create board session")
 		span.RecordError(err)
 		log.Errorw("unable to create board session", "board", body.Board, "user", body.User, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to create board session", err)
 	}
 
 	service.createdSession(ctx, body.Board, session)
@@ -102,13 +102,14 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get board session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
-	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
+	if sessionOfCaller.Role == role.ParticipantRole && body.User != body.Caller {
+		err := CreateSessionError(Forbidden, "not allowed to change other user's session", errors.New("not allowed to change other user's session"))
 		span.SetStatus(codes.Error, "not allowed to change user session")
 		span.RecordError(err)
-		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
+		return nil, err
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
@@ -116,22 +117,22 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	if body.Role != nil {
-		if sessionOfCaller.Role == common.ParticipantRole && *body.Role != common.ParticipantRole {
-			err := common.ForbiddenError(errors.New("cannot promote role"))
+		if sessionOfCaller.Role == role.ParticipantRole && *body.Role != role.ParticipantRole {
+			err := CreateSessionError(Forbidden, "cannot promote role", errors.New("cannot promote role"))
 			span.SetStatus(codes.Error, "cannot promote role")
 			span.RecordError(err)
 			return nil, err
-		} else if sessionOfUserToModify.Role == common.OwnerRole && *body.Role != common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to change owner role"))
+		} else if sessionOfUserToModify.Role == role.OwnerRole && *body.Role != role.OwnerRole {
+			err := CreateSessionError(Forbidden, "not allowed to change owner role", errors.New("not allowed to change owner role"))
 			span.SetStatus(codes.Error, "not allowed to change owner role")
 			span.RecordError(err)
 			return nil, err
-		} else if sessionOfUserToModify.Role != common.OwnerRole && *body.Role == common.OwnerRole {
-			err := common.ForbiddenError(errors.New("not allowed to promote to owner role"))
+		} else if sessionOfUserToModify.Role != role.OwnerRole && *body.Role == role.OwnerRole {
+			err := CreateSessionError(Forbidden, "not allowed to promote to owner role", errors.New("not allowed to promote to owner role"))
 			span.SetStatus(codes.Error, "not allowed to promote to owner role")
 			span.RecordError(err)
 			return nil, err
@@ -153,7 +154,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		span.SetStatus(codes.Error, "failed to update board session")
 		span.RecordError(err)
 		log.Errorw("unable to update board session", "board", body.Board, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to update board session", err)
 	}
 
 	service.updatedSession(ctx, body.Board, body.User)
@@ -184,7 +185,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 		span.SetStatus(codes.Error, "failed to update all sessions")
 		span.RecordError(err)
 		log.Errorw("unable to update all sessions for a board", "board", body.Board, "error", err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to update all sessions for a board", err)
 	}
 
 	service.updatedSessions(ctx, body.Board, sessions)
@@ -204,16 +205,16 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "session not found")
 			span.RecordError(err)
-			return nil, common.NotFoundError
+			return nil, CreateSessionError(NotFound, "session not found", err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get session")
 		span.RecordError(err)
 		log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
-		return nil, fmt.Errorf("unable to get session for board: %w", err)
+		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	return new(BoardSession).From(session), err
@@ -231,7 +232,7 @@ func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUI
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get all session")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "unable to get all sessions for board", err)
 	}
 
 	return BoardSessions(sessions), err
@@ -249,7 +250,7 @@ func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, us
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get user boards")
 		span.RecordError(err)
-		return nil, err
+		return nil, CreateSessionError(Internal, "failed to get user boards", err)
 	}
 
 	return BoardSessions(sessions), err
@@ -275,7 +276,7 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 		span.SetStatus(codes.Error, "failed to connect to board session")
 		span.RecordError(err)
 		log.Errorw("unable to connect to board session", "board", boardID, "user", userID, "error", err)
-		return err
+		return CreateSessionError(Internal, "unable to connect to board session", err)
 	}
 
 	service.updatedSession(ctx, boardID, userID)
@@ -304,7 +305,7 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 		span.SetStatus(codes.Error, "failed to disconnect from board session")
 		span.RecordError(err)
 		log.Errorw("unable to disconnect from board session", "board", boardID, "user", userID, "error", err)
-		return err
+		return CreateSessionError(Internal, "unable to disconnect from board session", err)
 	}
 
 	service.updatedSession(ctx, boardID, userID)
@@ -322,7 +323,14 @@ func (service *BoardSessionService) Exists(ctx context.Context, boardID, userID 
 		attribute.String("scrumlr.sessions.service.exists.user", userID.String()),
 	)
 
-	return service.database.Exists(ctx, boardID, userID)
+	exists, err := service.database.Exists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check board session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check board session existence", err)
+	}
+
+	return exists, nil
 }
 
 func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
@@ -334,7 +342,14 @@ func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, 
 		attribute.String("scrumlr.sessions.service.exists.moderator.user", userID.String()),
 	)
 
-	return service.database.ModeratorExists(ctx, boardID, userID)
+	moderatorExists, err := service.database.ModeratorExists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check moderator session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check moderator session existence", err)
+	}
+
+	return moderatorExists, nil
 }
 
 func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
@@ -346,7 +361,14 @@ func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boar
 		attribute.String("scrumlr.sessions.service.exists.owner.user", userID.String()),
 	)
 
-	return service.database.OwnerExists(ctx, boardID, userID)
+	ownerExists, err := service.database.OwnerExists(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check owner session existence")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check owner session existence", err)
+	}
+
+	return ownerExists, nil
 }
 
 func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
@@ -358,7 +380,66 @@ func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boa
 		attribute.String("scrumlr.sessions.service.is_banned.user", userID.String()),
 	)
 
-	return service.database.IsParticipantBanned(ctx, boardID, userID)
+	isBanned, err := service.database.IsParticipantBanned(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check participant ban status")
+		span.RecordError(err)
+		return false, CreateSessionError(Internal, "failed to check participant ban status", err)
+	}
+
+	return isBanned, nil
+}
+
+func (service *BoardSessionService) Delete(ctx context.Context, callerID, boardID, userID uuid.UUID) error {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.sessions.service.delete.board", boardID.String()),
+		attribute.String("scrumlr.sessions.service.delete.user", userID.String()),
+		attribute.String("scrumlr.sessions.service.delete.caller", callerID.String()),
+	)
+
+	if callerID != userID {
+		err := CreateSessionError(Forbidden, "cannot delete session of another user", errors.New("cannot delete a session of another user"))
+		span.SetStatus(codes.Error, "cannot delete a session of another user")
+		span.RecordError(err)
+		return err
+	}
+
+	session, err := service.Get(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to retrieve session")
+		span.RecordError(err)
+		return err
+	}
+
+	if session.Role == role.OwnerRole {
+		err = CreateSessionError(Forbidden, "cannot delete the owner session of a board", errors.New("cannot delete the owner session of a board"))
+		span.SetStatus(codes.Error, "cannot delete owner session of a board")
+		span.RecordError(err)
+		return err
+	}
+
+	if session.Connected {
+		err := service.Disconnect(ctx, boardID, userID)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to disconnect session")
+			span.RecordError(err)
+			return err
+		}
+	}
+
+	err = service.database.Delete(ctx, boardID, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete session")
+		span.RecordError(err)
+		return CreateSessionError(Internal, "unable to delete session", err)
+	}
+
+	service.deleteSession(ctx, boardID, userID)
+
+	return err
 }
 
 func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {
@@ -383,7 +464,7 @@ func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query 
 
 	roleFilter := query.Get("role")
 	if roleFilter != "" {
-		filter.Role = (*common.SessionRole)(&roleFilter)
+		filter.Role = (*role.Role)(&roleFilter)
 	}
 
 	return filter
@@ -515,7 +596,24 @@ func (service *BoardSessionService) updatedSessions(ctx context.Context, board u
 	}
 }
 
-func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []common.SessionRole) bool {
+func (service *BoardSessionService) deleteSession(ctx context.Context, board, user uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.sessions.service.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventParticipantDeleted,
+		Data: user,
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to send session delete event")
+		span.RecordError(err)
+		log.Errorw("unable to send session delete event", "board", board, "err", err)
+	}
+}
+
+func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []role.Role) bool {
 	for _, session := range sessions {
 		if clientID == session.UserID {
 			if slices.Contains(sessionsRoles, session.Role) {

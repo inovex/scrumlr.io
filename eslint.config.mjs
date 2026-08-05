@@ -1,4 +1,5 @@
 import { defineConfig, globalIgnores } from "eslint/config";
+import { fixupPluginRules } from "@eslint/compat";
 import js from "@eslint/js";
 import globals from "globals";
 import onlyWarn from "eslint-plugin-only-warn";
@@ -48,7 +49,7 @@ export default defineConfig([
 
     plugins: {
       "only-warn": onlyWarn,
-      react,
+      react: fixupPluginRules(react),
       "jsx-a11y": jsxA11y,
       import: importPlugin,
       "@typescript-eslint": tsPlugin,

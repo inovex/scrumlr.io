@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -59,7 +60,6 @@ func Test_GetBoardSessions_ServiceError(t *testing.T) {
 	api.GetBoardSessions(rr, req.Request())
 
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
-
 }
 
 func Test_GetBoardSession_api(t *testing.T) {
@@ -113,7 +113,6 @@ func Test_GetBoardSession_InvalidUUID(t *testing.T) {
 
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
-	// Keine Mocks, da der Aufruf fehlschlagen sollte, bevor der Service erreicht wird
 
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/sessions/not-a-uuid", nil).AddToContext(identifiers.BoardIdentifier, uuid.Nil)
@@ -121,7 +120,6 @@ func Test_GetBoardSession_InvalidUUID(t *testing.T) {
 	api.GetBoardSession(rr, req.Request())
 
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
-
 }
 
 func Test_UpdateBoardSession_api(t *testing.T) {
@@ -139,7 +137,7 @@ func Test_UpdateBoardSession_api(t *testing.T) {
 		User:   targetUserID,
 		Ready:  &ready,
 	}
-	mockResponse := &BoardSession{Board: boardID, UserID: targetUserID, Role: common.ParticipantRole, Ready: ready}
+	mockResponse := &BoardSession{Board: boardID, UserID: targetUserID, Role: role.ParticipantRole, Ready: ready}
 
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
@@ -148,7 +146,10 @@ func Test_UpdateBoardSession_api(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 	bodyBytes, _ := json.Marshal(body)
-	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+targetUserID.String(), bytes.NewReader(bodyBytes)).AddToContext(identifiers.BoardIdentifier, boardID).AddToContext(identifiers.UserIdentifier, callerID)
+	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+targetUserID.String(), bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardIdentifier, boardID).
+		AddToContext(identifiers.UserIdentifier, callerID)
+
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("session", targetUserID.String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
@@ -168,7 +169,9 @@ func Test_UpdateBoardSession_NoUUID(t *testing.T) {
 	api := NewSessionApi(mockService)
 
 	rr := httptest.NewRecorder()
-	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).AddToContext(identifiers.BoardIdentifier, uuid.New()).AddToContext(identifiers.UserIdentifier, uuid.New())
+	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).
+		AddToContext(identifiers.BoardIdentifier, uuid.New()).
+		AddToContext(identifiers.UserIdentifier, uuid.New())
 
 	api.UpdateBoardSession(rr, req.Request())
 	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
@@ -179,7 +182,9 @@ func Test_UpdateBoardSession_BadBody(t *testing.T) {
 	api := NewSessionApi(mockService)
 
 	rr := httptest.NewRecorder()
-	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).AddToContext(identifiers.BoardIdentifier, uuid.New()).AddToContext(identifiers.UserIdentifier, uuid.New())
+	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).
+		AddToContext(identifiers.BoardIdentifier, uuid.New()).
+		AddToContext(identifiers.UserIdentifier, uuid.New())
 
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("session", uuid.NewString())
@@ -212,7 +217,10 @@ func Test_UpdateBoardSession_ServiceError(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 	bodyBytes, _ := json.Marshal(body)
-	req := technical_helper.NewTestRequestBuilder("PUT", "/", bytes.NewReader(bodyBytes)).AddToContext(identifiers.BoardIdentifier, boardID).AddToContext(identifiers.UserIdentifier, callerID)
+	req := technical_helper.NewTestRequestBuilder("PUT", "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardIdentifier, boardID).
+		AddToContext(identifiers.UserIdentifier, callerID)
+
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("session", targetUserID.String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
@@ -229,7 +237,7 @@ func Test_UpdateBoardSessions_api(t *testing.T) {
 	}
 	serviceArg := BoardSessionsUpdateRequest{Board: boardID}
 	mockResponse := []*BoardSession{
-		{UserID: uuid.New(), Role: common.ParticipantRole},
+		{UserID: uuid.New(), Role: role.ParticipantRole},
 	}
 
 	mockService := NewMockSessionService(t)
@@ -269,6 +277,103 @@ func Test_UpdateBoardSessions_ServiceError(t *testing.T) {
 	api.UpdateBoardSessions(rr, req.Request())
 
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
+}
+
+func Test_DeleteBoardSession(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockService := NewMockSessionService(t)
+	mockService.EXPECT().Delete(mock.Anything, userId, boardId, userId).
+		Return(nil)
+
+	api := NewSessionApi(mockService)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder("DELETE", "/boards/"+boardId.String()+"/participants/"+userId.String(), nil).
+		AddToContext(identifiers.BoardIdentifier, boardId).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("session", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	api.DeleteBoardSession(rr, req.Req)
+
+	assert.Equal(t, http.StatusNoContent, rr.Result().StatusCode)
+}
+
+func Test_DeleteBoardSessionDifferentCaller(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	callerId := uuid.New()
+
+	mockService := NewMockSessionService(t)
+	mockService.EXPECT().Delete(mock.Anything, callerId, boardId, userId).
+		Return(common.ForbiddenError(errors.New("cannot delete a session of another user")))
+
+	api := NewSessionApi(mockService)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder("DELETE", "/boards/"+boardId.String()+"/participants/"+userId.String(), nil).
+		AddToContext(identifiers.BoardIdentifier, boardId).
+		AddToContext(identifiers.UserIdentifier, callerId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("session", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	api.DeleteBoardSession(rr, req.Req)
+
+	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
+}
+
+func Test_DeleteBoardsessionNotFound(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockService := NewMockSessionService(t)
+	mockService.EXPECT().Delete(mock.Anything, userId, boardId, userId).
+		Return(common.NotFoundError)
+
+	api := NewSessionApi(mockService)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder("DELETE", "/boards/"+boardId.String()+"/participants/"+userId.String(), nil).
+		AddToContext(identifiers.BoardIdentifier, boardId).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("session", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	api.DeleteBoardSession(rr, req.Req)
+
+	assert.Equal(t, http.StatusNotFound, rr.Result().StatusCode)
+}
+
+func Test_DeleteBoardsessionForbidden(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockService := NewMockSessionService(t)
+	mockService.EXPECT().Delete(mock.Anything, userId, boardId, userId).
+		Return(common.ForbiddenError(errors.New("cannot delete the owner session of a board")))
+
+	api := NewSessionApi(mockService)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder("DELETE", "/boards/"+boardId.String()+"/participants/"+userId.String(), nil).
+		AddToContext(identifiers.BoardIdentifier, boardId).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("session", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	api.DeleteBoardSession(rr, req.Req)
+
+	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 }
 
 func Test_BoardParticipantContext(t *testing.T) {

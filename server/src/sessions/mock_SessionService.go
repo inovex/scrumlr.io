@@ -63,7 +63,7 @@ type MockSessionService_BoardSessionFilterTypeFromQueryString_Call struct {
 
 // BoardSessionFilterTypeFromQueryString is a helper method to define mock.On call
 //   - query url.Values
-func (_e *MockSessionService_Expecter) BoardSessionFilterTypeFromQueryString(query interface{}) *MockSessionService_BoardSessionFilterTypeFromQueryString_Call {
+func (_e *MockSessionService_Expecter) BoardSessionFilterTypeFromQueryString(query any) *MockSessionService_BoardSessionFilterTypeFromQueryString_Call {
 	return &MockSessionService_BoardSessionFilterTypeFromQueryString_Call{Call: _e.mock.On("BoardSessionFilterTypeFromQueryString", query)}
 }
 
@@ -116,7 +116,7 @@ type MockSessionService_Connect_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) Connect(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_Connect_Call {
+func (_e *MockSessionService_Expecter) Connect(ctx any, boardID any, userID any) *MockSessionService_Connect_Call {
 	return &MockSessionService_Connect_Call{Call: _e.mock.On("Connect", ctx, boardID, userID)}
 }
 
@@ -189,7 +189,7 @@ type MockSessionService_Create_Call struct {
 // Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardSessionCreateRequest
-func (_e *MockSessionService_Expecter) Create(ctx interface{}, body interface{}) *MockSessionService_Create_Call {
+func (_e *MockSessionService_Expecter) Create(ctx any, body any) *MockSessionService_Create_Call {
 	return &MockSessionService_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
@@ -221,6 +221,75 @@ func (_c *MockSessionService_Create_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
+// Delete provides a mock function for the type MockSessionService
+func (_mock *MockSessionService) Delete(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID) error {
+	ret := _mock.Called(ctx, callerID, boardID, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Delete")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, callerID, boardID, userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockSessionService_Delete_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Delete'
+type MockSessionService_Delete_Call struct {
+	*mock.Call
+}
+
+// Delete is a helper method to define mock.On call
+//   - ctx context.Context
+//   - callerID uuid.UUID
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+func (_e *MockSessionService_Expecter) Delete(ctx any, callerID any, boardID any, userID any) *MockSessionService_Delete_Call {
+	return &MockSessionService_Delete_Call{Call: _e.mock.On("Delete", ctx, callerID, boardID, userID)}
+}
+
+func (_c *MockSessionService_Delete_Call) Run(run func(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID)) *MockSessionService_Delete_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 uuid.UUID
+		if args[3] != nil {
+			arg3 = args[3].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionService_Delete_Call) Return(err error) *MockSessionService_Delete_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockSessionService_Delete_Call) RunAndReturn(run func(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID) error) *MockSessionService_Delete_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Disconnect provides a mock function for the type MockSessionService
 func (_mock *MockSessionService) Disconnect(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) error {
 	ret := _mock.Called(ctx, boardID, userID)
@@ -247,7 +316,7 @@ type MockSessionService_Disconnect_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) Disconnect(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_Disconnect_Call {
+func (_e *MockSessionService_Expecter) Disconnect(ctx any, boardID any, userID any) *MockSessionService_Disconnect_Call {
 	return &MockSessionService_Disconnect_Call{Call: _e.mock.On("Disconnect", ctx, boardID, userID)}
 }
 
@@ -319,7 +388,7 @@ type MockSessionService_Exists_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) Exists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_Exists_Call {
+func (_e *MockSessionService_Expecter) Exists(ctx any, boardID any, userID any) *MockSessionService_Exists_Call {
 	return &MockSessionService_Exists_Call{Call: _e.mock.On("Exists", ctx, boardID, userID)}
 }
 
@@ -393,7 +462,7 @@ type MockSessionService_Get_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) Get(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_Get_Call {
+func (_e *MockSessionService_Expecter) Get(ctx any, boardID any, userID any) *MockSessionService_Get_Call {
 	return &MockSessionService_Get_Call{Call: _e.mock.On("Get", ctx, boardID, userID)}
 }
 
@@ -467,7 +536,7 @@ type MockSessionService_GetAll_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - filter BoardSessionFilter
-func (_e *MockSessionService_Expecter) GetAll(ctx interface{}, boardID interface{}, filter interface{}) *MockSessionService_GetAll_Call {
+func (_e *MockSessionService_Expecter) GetAll(ctx any, boardID any, filter any) *MockSessionService_GetAll_Call {
 	return &MockSessionService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardID, filter)}
 }
 
@@ -541,7 +610,7 @@ type MockSessionService_GetUserBoardSessions_Call struct {
 //   - ctx context.Context
 //   - user uuid.UUID
 //   - connectedOnly bool
-func (_e *MockSessionService_Expecter) GetUserBoardSessions(ctx interface{}, user interface{}, connectedOnly interface{}) *MockSessionService_GetUserBoardSessions_Call {
+func (_e *MockSessionService_Expecter) GetUserBoardSessions(ctx any, user any, connectedOnly any) *MockSessionService_GetUserBoardSessions_Call {
 	return &MockSessionService_GetUserBoardSessions_Call{Call: _e.mock.On("GetUserBoardSessions", ctx, user, connectedOnly)}
 }
 
@@ -613,7 +682,7 @@ type MockSessionService_IsParticipantBanned_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) IsParticipantBanned(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_IsParticipantBanned_Call {
+func (_e *MockSessionService_Expecter) IsParticipantBanned(ctx any, boardID any, userID any) *MockSessionService_IsParticipantBanned_Call {
 	return &MockSessionService_IsParticipantBanned_Call{Call: _e.mock.On("IsParticipantBanned", ctx, boardID, userID)}
 }
 
@@ -685,7 +754,7 @@ type MockSessionService_ModeratorSessionExists_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionService_Expecter) ModeratorSessionExists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionService_ModeratorSessionExists_Call {
+func (_e *MockSessionService_Expecter) ModeratorSessionExists(ctx any, boardID any, userID any) *MockSessionService_ModeratorSessionExists_Call {
 	return &MockSessionService_ModeratorSessionExists_Call{Call: _e.mock.On("ModeratorSessionExists", ctx, boardID, userID)}
 }
 
@@ -830,7 +899,7 @@ type MockSessionService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardSessionUpdateRequest
-func (_e *MockSessionService_Expecter) Update(ctx interface{}, body interface{}) *MockSessionService_Update_Call {
+func (_e *MockSessionService_Expecter) Update(ctx any, body any) *MockSessionService_Update_Call {
 	return &MockSessionService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 
@@ -898,7 +967,7 @@ type MockSessionService_UpdateAll_Call struct {
 // UpdateAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardSessionsUpdateRequest
-func (_e *MockSessionService_Expecter) UpdateAll(ctx interface{}, body interface{}) *MockSessionService_UpdateAll_Call {
+func (_e *MockSessionService_Expecter) UpdateAll(ctx any, body any) *MockSessionService_UpdateAll_Call {
 	return &MockSessionService_UpdateAll_Call{Call: _e.mock.On("UpdateAll", ctx, body)}
 }
 

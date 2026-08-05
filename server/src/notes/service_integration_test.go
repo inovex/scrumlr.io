@@ -16,6 +16,7 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -266,7 +267,10 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, note)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var noteErr NoteError
+	assert.ErrorAs(t, err, &noteErr)
+	assert.Equal(t, noteErr.Category, NotFound)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
@@ -296,6 +300,19 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Equal(t, suite.notes[24].Rank, notes[0].Position.Rank)
 	assert.Equal(t, suite.notes[24].Stack, notes[0].Position.Stack)
 	assert.Equal(t, suite.notes[24].Edited, notes[0].Edited)
+}
+
+func (suite *NoteServiceIntegrationTestSuite) Test_GetAll_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := uuid.New()
+	columnId := uuid.New()
+
+	notes, err := suite.noteService.GetAll(ctx, boardId, columnId)
+
+	assert.Empty(t, notes)
+	assert.Nil(t, err)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetStack() {
@@ -345,7 +362,7 @@ func (suite *NoteServiceIntegrationTestSuite) seedNotesTestData(db *bun.DB) {
 	}
 
 	// Insert session for Write board
-	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(common.ParticipantRole), false, false, true, false); err != nil {
+	if err := testDbTemplates.InsertSession(db, suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, string(role.ParticipantRole), false, false, true, false); err != nil {
 		log.Fatalf("Failed to insert session: %s", err)
 	}
 

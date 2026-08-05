@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -11,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
@@ -68,7 +68,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("failed to create board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -136,7 +136,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get boards")
 		span.RecordError(err)
 		log.Errorw("failed to get boards", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -145,7 +145,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get board overview")
 		span.RecordError(err)
 		log.Errorw("failed to get board overview", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	render.Status(r, http.StatusOK)
@@ -181,17 +181,15 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.Get(ctx, boardId)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "no board found")
-			span.RecordError(err)
-			common.Throw(w, r, common.NotFoundError)
-			return
+		mappedErr := mapError(err)
+		if errors.Is(mappedErr, common.NotFoundError) {
+			span.SetStatus(codes.Error, "board not found")
+		} else {
+			span.SetStatus(codes.Error, "failed to get board")
 		}
-
-		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to access board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mappedErr)
 		return
 	}
 
@@ -238,7 +236,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session")
 		span.RecordError(err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -247,7 +245,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check if participant is banned")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
@@ -267,16 +265,16 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
-		common.Throw(w, r, common.NotFoundError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
 	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
@@ -306,11 +304,11 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
-				common.Throw(w, r, common.InternalServerError)
+				common.Throw(w, r, mapError(err))
 				return
 			}
 
@@ -396,7 +394,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("Unable to update board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -441,7 +439,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to set board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to set board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -476,7 +474,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to delete board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -511,7 +509,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to increment board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to increment board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -546,7 +544,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get full board")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -604,7 +602,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						span.SetStatus(codes.Error, "failed to get note author user")
 						span.RecordError(err)
-						common.Throw(w, r, err)
+						common.Throw(w, r, mapError(err))
 						return
 					}
 					author = user.Name
@@ -690,110 +688,13 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
-
-	for _, column := range body.Columns {
-		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:        column.Name,
-			Description: column.Description,
-			Color:       column.Color,
-			Visible:     &column.Visible,
-			Index:       &column.Index,
-		})
-	}
-	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{
-		Name:         body.Board.Name,
-		Description:  body.Board.Description,
-		AccessPolicy: body.Board.AccessPolicy,
-		Passphrase:   body.Board.Passphrase,
-		Columns:      importColumns,
-		Owner:        owner,
-	})
-
+	b, err := s.boards.Import(ctx, owner, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import board")
 		span.RecordError(err)
 		log.Errorw("Could not import board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
-	}
-
-	cols, err := s.columns.GetAll(ctx, b.ID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns from imported board")
-		span.RecordError(err)
-		_ = s.boards.Delete(ctx, b.ID)
-	}
-
-	type ParentChildNotes struct {
-		Parent   notes.Note
-		Children []notes.Note
-	}
-	parentNotes := make(map[uuid.UUID]notes.Note)
-	childNotes := make(map[uuid.UUID][]notes.Note)
-
-	for _, note := range body.Notes {
-		if !note.Position.Stack.Valid {
-			parentNotes[note.ID] = note
-		} else {
-			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
-		}
-	}
-
-	var organizedNotes []ParentChildNotes
-	for parentID, parentNote := range parentNotes {
-		for i, column := range body.Columns {
-			if parentNote.Position.Column == column.ID {
-
-				note, err := s.notes.Import(ctx, notes.NoteImportRequest{
-					Text: parentNote.Text,
-					Position: notes.NotePosition{
-						Column: cols[i].ID,
-						Stack:  uuid.NullUUID{},
-						Rank:   0,
-					},
-					Board: b.ID,
-					User:  parentNote.Author,
-				})
-				if err != nil {
-					span.SetStatus(codes.Error, "failed to import notes")
-					span.RecordError(err)
-					_ = s.boards.Delete(ctx, b.ID)
-					common.Throw(w, r, err)
-					return
-				}
-				parentNote = *note
-			}
-		}
-		organizedNotes = append(organizedNotes, ParentChildNotes{
-			Parent:   parentNote,
-			Children: childNotes[parentID],
-		})
-	}
-
-	for _, node := range organizedNotes {
-		for _, note := range node.Children {
-			_, err := s.notes.Import(ctx, notes.NoteImportRequest{
-				Text:  note.Text,
-				Board: b.ID,
-				User:  note.Author,
-				Position: notes.NotePosition{
-					Column: node.Parent.Position.Column,
-					Rank:   note.Position.Rank,
-					Stack: uuid.NullUUID{
-						UUID:  node.Parent.ID,
-						Valid: true,
-					},
-				},
-			})
-			if err != nil {
-				span.SetStatus(codes.Error, "failed to import note")
-				span.RecordError(err)
-				_ = s.boards.Delete(ctx, b.ID)
-				common.Throw(w, r, err)
-				return
-			}
-		}
 	}
 
 	render.Status(r, http.StatusCreated)

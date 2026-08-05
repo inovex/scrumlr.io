@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -831,7 +832,7 @@ func (suite *DatabaseNoteTestSuite) seedData(db *bun.DB) {
 	}
 
 	for _, session := range suite.sessions {
-		err := testDbTemplates.InsertSession(db, session.userID, session.boardID, string(common.ParticipantRole), false, false, true, false)
+		err := testDbTemplates.InsertSession(db, session.userID, session.boardID, string(role.ParticipantRole), false, false, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test session %s", err)
 		}
