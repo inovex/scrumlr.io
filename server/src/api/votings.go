@@ -110,7 +110,26 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	voting, err := s.votings.Close(ctx, id, board, affectedNotes)
+	var body votings.VotingCloseRequest
+
+	if r.ContentLength != 0 {
+		if err := render.Decode(r, &body); err != nil {
+			span.SetStatus(codes.Error, "unable to decode body")
+			span.RecordError(err)
+			common.Throw(w, r, common.BadRequestError(err))
+			return
+		}
+	}
+	body.ID = id
+	body.Board = board
+
+	var voting *votings.Voting
+	if body.Status == votings.Canceled {
+		voting, err = s.votings.Cancel(ctx, id, board, affectedNotes)
+	} else {
+		voting, err = s.votings.Close(ctx, id, board, affectedNotes)
+	}
+
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update voting")
 		span.RecordError(err)

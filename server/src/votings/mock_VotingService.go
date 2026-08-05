@@ -106,6 +106,86 @@ func (_c *MockVotingService_AddVote_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
+// Cancel provides a mock function for the type MockVotingService
+func (_mock *MockVotingService) Cancel(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
+	ret := _mock.Called(ctx, id, board, affectedNotes)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Cancel")
+	}
+
+	var r0 *Voting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note) (*Voting, error)); ok {
+		return returnFunc(ctx, id, board, affectedNotes)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note) *Voting); ok {
+		r0 = returnFunc(ctx, id, board, affectedNotes)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Voting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID, []Note) error); ok {
+		r1 = returnFunc(ctx, id, board, affectedNotes)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockVotingService_Cancel_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Cancel'
+type MockVotingService_Cancel_Call struct {
+	*mock.Call
+}
+
+// Cancel is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+//   - board uuid.UUID
+//   - affectedNotes []Note
+func (_e *MockVotingService_Expecter) Cancel(ctx any, id any, board any, affectedNotes any) *MockVotingService_Cancel_Call {
+	return &MockVotingService_Cancel_Call{Call: _e.mock.On("Cancel", ctx, id, board, affectedNotes)}
+}
+
+func (_c *MockVotingService_Cancel_Call) Run(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note)) *MockVotingService_Cancel_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 []Note
+		if args[3] != nil {
+			arg3 = args[3].([]Note)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockVotingService_Cancel_Call) Return(voting *Voting, err error) *MockVotingService_Cancel_Call {
+	_c.Call.Return(voting, err)
+	return _c
+}
+
+func (_c *MockVotingService_Cancel_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)) *MockVotingService_Cancel_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Close provides a mock function for the type MockVotingService
 func (_mock *MockVotingService) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
 	ret := _mock.Called(ctx, id, board, affectedNotes)
