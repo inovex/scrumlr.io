@@ -209,10 +209,10 @@ SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION=true
 ### Allow Anonymous History
 
 If set to `false`, anonymous users (i.e., not using OAuth) won't be able to view their board history.
-Default is `true`.
+Default is `false`.
 
 ```ini
-SCRUMLR_ALLOW_ANONYMOUS_HISTORY=true
+SCRUMLR_ALLOW_ANONYMOUS_HISTORY=false
 ```
 
 ### Enable Experimental File System Store

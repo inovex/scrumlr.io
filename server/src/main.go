@@ -142,18 +142,18 @@ func main() {
 				Value:    false,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:     "allow-anonymous-history",
-				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_HISTORY"},
-				Usage:    "allows anonymous clients to view their history",
-				Required: false,
-				Value:    true,
-			}),
-			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "allow-anonymous-board-creation",
 				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"},
 				Usage:    "allows anonymous clients to create new boards",
 				Required: false,
 				Value:    true,
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "allow-anonymous-history",
+				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_HISTORY"},
+				Usage:    "allows anonymous clients to view their history",
+				Required: false,
+				Value:    false,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "auth-enable-experimental-file-system-store",
