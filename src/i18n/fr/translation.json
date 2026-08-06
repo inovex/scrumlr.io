@@ -42,6 +42,19 @@
       "removeFile": "Supprimer le fichier"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Titre",
+    "boardDescriptionPlaceholder": "Description (optionnel)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Colonne 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Colonne {{index}}",
+      "namePlaceholder": "Titre",
+      "descriptionPlaceholder": "Description (optionnel)",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
+  },
   "Templates": {
     "switchTitle": "Modèles",
     "title": "Choisir un modèle",
@@ -66,15 +79,6 @@
       "saveEdit": "Enregistrer",
       "saveCreate": "Créer le modèle",
       "info": "Les modifications peuvent être apportées à tout moment, y compris sur le tableau."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Colonne 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Colonne {{index}}",
-      "namePlaceholder": "Titre",
-      "descriptionPlaceholder": "Description (optionnel)",
-      "save": "Enregistrer",
-      "cancel": "Annuler"
     },
     "AccessSettings": {
       "title": "Paramètres d'accès",

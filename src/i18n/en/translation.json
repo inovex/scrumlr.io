@@ -42,6 +42,19 @@
       "removeFile": "Delete file"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Description (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Column 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -66,15 +79,6 @@
       "saveEdit": "Save",
       "saveCreate": "Create template",
       "info": "Changes can be made at any time, including on the board."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Column 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Column {{index}}",
-      "namePlaceholder": "Title",
-      "descriptionPlaceholder": "Description (optional)",
-      "save": "Save",
-      "cancel": "Cancel"
     },
     "AccessSettings": {
       "title": "Access Settings",

@@ -42,6 +42,19 @@
       "removeFile": "Datei entfernen"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Beschreibung (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Spalte 1",
+      "defaultActionsName": "Aktionen",
+      "indexedColumnName": "Spalte {{index}}",
+      "namePlaceholder": "Titel",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    }
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -66,15 +79,6 @@
       "saveEdit": "Speichern",
       "saveCreate": "Template erstellen",
       "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Spalte 1",
-      "defaultActionsName": "Aktionen",
-      "indexedColumnName": "Spalte {{index}}",
-      "namePlaceholder": "Titel",
-      "descriptionPlaceholder": "Beschreibung (optional)",
-      "save": "Speichern",
-      "cancel": "Abbrechen"
     },
     "AccessSettings": {
       "title": "Zugriffseinstellungen",

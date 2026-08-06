@@ -67,13 +67,13 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     {
       className: "mini-menu-item--cancel",
       element: <CloseIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.cancel"),
+      label: t("EditorShell.ColumnsConfiguratorColumn.cancel"),
       onClick: cancelChanges,
     },
     {
       className: "mini-menu-item--save",
       element: <CheckDoneIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.save"),
+      label: t("EditorShell.ColumnsConfiguratorColumn.save"),
       onClick: saveChanges,
     },
   ];
@@ -89,7 +89,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         ref={nameInputRef}
         className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": isEditing})}
         value={name}
-        placeholder={t("Templates.ColumnsConfiguratorColumn.namePlaceholder")}
+        placeholder={t("EditorShell.ColumnsConfiguratorColumn.namePlaceholder")}
         onInput={(e) => setName(e.currentTarget.value)}
         onFocus={() => props.setOpenState("nameFirst")}
         autoComplete="off"
@@ -112,7 +112,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             className="column-configurator-column-name-details__description-text-area"
             input={description}
             setInput={setDescription}
-            placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
+            placeholder={t("EditorShell.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
             fitted
             autoFocus={props.openState === "descriptionFirst"}
@@ -131,7 +131,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
           tabIndex={0}
           onClick={openDescriptionWithCurrentValue}
         >
-          {props.description ? props.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
+          {props.description ? props.description : t("EditorShell.ColumnsConfiguratorColumn.descriptionPlaceholder")}
         </button>
       )}
     </div>

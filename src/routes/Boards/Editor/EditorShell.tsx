@@ -103,7 +103,7 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
             input={nameInput}
             setInput={setNameInput}
             height="normal"
-            placeholder="Board name"
+            placeholder={t("EditorShell.boardNamePlaceholder")}
             required
             dataCy="editor-shell__name-input"
           />
@@ -113,7 +113,7 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
             className="editor-shell__description-text-area"
             input={descriptionInput}
             setInput={setDescriptionInput}
-            placeholder="Description (optional)"
+            placeholder={t("EditorShell.boardDescriptionPlaceholder")}
             border="transparent"
           />
         </div>
