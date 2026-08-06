@@ -78,7 +78,7 @@ func (socket *sessionRequestWebsocket) OpenSocket(w http.ResponseWriter, r *http
 }
 
 func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration) {
-	log := logger.Get().With("board", boardID, "user", userID)
+	log := logger.Get()
 	if _, exist := socket.boardSessionRequestSubscriptions[boardID]; !exist {
 		socket.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
 			clients:       make(map[uuid.UUID]websocket.Connection),
@@ -102,7 +102,7 @@ func (socket *sessionRequestWebsocket) listenOnBoardSessionRequest(boardID, user
 }
 
 func (socket *sessionRequestWebsocket) getBoardSessionRequestChannelWithRetry(boardID, userID uuid.UUID, retryDelay time.Duration) (chan *realtime.BoardSessionRequestEventType, error) {
-	log := logger.Get().With("board", boardID, "user", userID)
+	log := logger.Get()
 
 	for attempt := 1; attempt <= MaxRetries; attempt++ {
 		ch, err := socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)

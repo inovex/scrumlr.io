@@ -33,8 +33,10 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(nil, errors.New("nats down")).Times(2)
-	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(successChan, nil).Once()
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).
+		Return(nil, errors.New("nats down")).Times(2)
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).
+		Return(successChan, nil).Once()
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
@@ -62,7 +64,8 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).Return(nil, errors.New("nats down")).Times(MaxRetries)
+	mockBroker.EXPECT().SubscribeToBoardSessionEvents(mock.Anything, fmt.Sprintf("request.%s.%s", boardID, userID)).
+		Return(nil, errors.New("nats down")).Times(MaxRetries)
 
 	socket := &sessionRequestWebsocket{
 		websocketService:                 nil,
