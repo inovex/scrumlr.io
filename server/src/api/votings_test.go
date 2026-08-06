@@ -114,6 +114,43 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 
 }
 
+func (suite *VotingTestSuite) TestCancelVoting() {
+
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusOK, nil, false, false, nil).
+		Append("unexpected error", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
+		suite.Run(tt.name, func() {
+			s := new(Server)
+			//s.basePath = "/"
+			votingMock := votings.NewMockVotingService(suite.T())
+			notesMock := notes.NewMockNotesService(suite.T())
+
+			boardId, _ := uuid.NewRandom()
+			votingId, _ := uuid.NewRandom()
+			s.votings = votingMock
+			s.notes = notesMock
+
+			req := technical_helper.NewTestRequestBuilder("PUT", "/", strings.NewReader(`{"status": "ABORTED"}`))
+			req.Req = logger.InitTestLoggerRequest(req.Request())
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
+				AddToContext(identifiers.VotingIdentifier, votingId)
+
+			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
+
+			votingMock.EXPECT().Cancel(mock.Anything, votingId, boardId, []votings.Note(nil)).
+				Return(&votings.Voting{Status: votings.Canceled}, tt.err)
+
+			rr := httptest.NewRecorder()
+			s.updateVoting(rr, req.Request())
+			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			votingMock.AssertExpectations(suite.T())
+			votingMock.AssertNumberOfCalls(suite.T(), "Cancel", 1)
+		})
+	}
+}
+
 func (suite *VotingTestSuite) TestGetVoting() {
 	s := new(Server)
 	votingMock := votings.NewMockVotingService(suite.T())
