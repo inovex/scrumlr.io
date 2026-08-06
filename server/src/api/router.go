@@ -45,7 +45,7 @@ type Server struct {
 	basePath string
 
 	realtime  *realtime.Broker
-	wsService websocket.WebSocketInterface
+	wsService websocket.Upgrader
 	auth      auth.Auth
 
 	userRoutes    chi.Router
@@ -85,7 +85,7 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	wsService websocket.WebSocketInterface,
+	wsService websocket.Upgrader,
 	auth auth.Auth,
 
 	userRoutes chi.Router,
