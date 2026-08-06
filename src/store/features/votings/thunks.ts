@@ -24,3 +24,14 @@ export const closeVoting = createAsyncThunk<void, string, {state: ApplicationSta
     "closeVoting"
   );
 });
+
+export const cancelVoting = createAsyncThunk<void, string, {state: ApplicationState}>("votings/cancelVoting", async (payload, {dispatch, getState}) => {
+  const boardId = getState().board.data!.id;
+
+  await retryable(
+    () => API.changeVotingStatus(boardId, payload, "ABORTED"),
+    dispatch,
+    () => cancelVoting(payload),
+    "cancelVoting"
+  );
+});
