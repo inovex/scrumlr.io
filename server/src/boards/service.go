@@ -626,8 +626,6 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
-// from here only private
-
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
 	var board DatabaseBoardInsert
 

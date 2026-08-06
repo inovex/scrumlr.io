@@ -31,6 +31,14 @@ type Service struct {
 	columnTemplateService columntemplates.ColumnTemplateService
 }
 
+func NewBoardTemplateService(db BoardTemplateDatabase, columnTempalteService columntemplates.ColumnTemplateService) BoardTemplateService {
+	service := new(Service)
+	service.database = db
+	service.columnTemplateService = columnTempalteService
+
+	return service
+}
+
 func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequest) (*BoardTemplate, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.board_templates.service.create")
@@ -169,12 +177,4 @@ func (service *Service) Delete(ctx context.Context, templateId uuid.UUID) error 
 
 	boardTemplatesDeletedCounter.Add(ctx, 1)
 	return err
-}
-
-func NewBoardTemplateService(db BoardTemplateDatabase, columnTempalteService columntemplates.ColumnTemplateService) BoardTemplateService {
-	service := new(Service)
-	service.database = db
-	service.columnTemplateService = columnTempalteService
-
-	return service
 }
