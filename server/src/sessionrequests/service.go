@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"time"
 
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/websocket"
@@ -34,7 +35,7 @@ type SessionRequestDatabase interface {
 
 type SessionRequestWebsocket interface {
 	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection)
+	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)
 	closeSocket(conn websocket.Connection)
 }
 
@@ -80,44 +81,6 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 	service.createdSessionRequest(ctx, boardID, request)
 
 	sessionRequestsCreatedCounter.Add(ctx, 1)
-	return new(BoardSessionRequest).From(request), err
-}
-
-func (service *BoardSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.session_requests.service.update")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.session_requests.service.update.board", body.Board.String()),
-		attribute.String("scrumlr.session_requests.service.update.user", body.User.String()),
-		attribute.String("scrumlr.session_requests.service.update.status", string(body.Status)),
-	)
-
-	request, err := service.database.Update(ctx, DatabaseBoardSessionRequestUpdate{
-		Board:  body.Board,
-		User:   body.User,
-		Status: body.Status,
-	})
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board session request")
-		span.RecordError(err)
-		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
-		return nil, CreateSessionRequestError(Internal, "unable to update board session request", err)
-	}
-
-	if request.Status == RequestAccepted {
-		_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{Board: request.Board, User: request.User, Role: role.ParticipantRole})
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to create board session")
-			span.RecordError(err)
-			return nil, err
-		}
-	}
-
-	service.updatedSessionRequest(ctx, body.Board, request)
-
 	return new(BoardSessionRequest).From(request), err
 }
 
@@ -201,6 +164,44 @@ func (service *BoardSessionRequestService) Exists(ctx context.Context, boardID, 
 	return exists, nil
 }
 
+func (service *BoardSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.session_requests.service.update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.session_requests.service.update.board", body.Board.String()),
+		attribute.String("scrumlr.session_requests.service.update.user", body.User.String()),
+		attribute.String("scrumlr.session_requests.service.update.status", string(body.Status)),
+	)
+
+	request, err := service.database.Update(ctx, DatabaseBoardSessionRequestUpdate{
+		Board:  body.Board,
+		User:   body.User,
+		Status: body.Status,
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board session request")
+		span.RecordError(err)
+		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
+		return nil, CreateSessionRequestError(Internal, "unable to update board session request", err)
+	}
+
+	if request.Status == RequestAccepted {
+		_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{Board: request.Board, User: request.User, Role: role.ParticipantRole})
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to create board session")
+			span.RecordError(err)
+			return nil, err
+		}
+	}
+
+	service.updatedSessionRequest(ctx, body.Board, request)
+
+	return new(BoardSessionRequest).From(request), err
+}
+
 func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	_, span := tracer.Start(ctx, "scrumlr.session_requests.service.open_socket")
 	defer span.End()
@@ -208,35 +209,7 @@ func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w htt
 	service.websocket.OpenSocket(w, r)
 }
 
-func (service *BoardSessionRequestService) createdSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
-	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventSessionRequestCreated,
-		Data: new(BoardSessionRequest).From(request),
-	})
-}
-
-func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
-	var status realtime.BoardSessionRequestEventType
-	switch request.Status {
-	case RequestAccepted:
-		status = realtime.RequestAccepted
-	case RequestRejected:
-		status = realtime.RequestRejected
-	}
-
-	if status != "" {
-		_ = service.broker.BroadcastUpdateOnBoardSessionRequest(ctx, board, request.User, status)
-	}
-
-	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventSessionRequestUpdated,
-		Data: new(BoardSessionRequest).From(request),
-	})
-
-}
-
 // this needs to be moved to the middleware later
-
 func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx, span := tracer.Start(r.Context(), "scrumlr.sessionrequest.service.context.boardCandidate")
@@ -276,4 +249,31 @@ func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handl
 		boardContext := context.WithValue(ctx, identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
+}
+
+func (service *BoardSessionRequestService) createdSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
+	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventSessionRequestCreated,
+		Data: new(BoardSessionRequest).From(request),
+	})
+}
+
+func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
+	var status realtime.BoardSessionRequestEventType
+	switch request.Status {
+	case RequestAccepted:
+		status = realtime.RequestAccepted
+	case RequestRejected:
+		status = realtime.RequestRejected
+	}
+
+	if status != "" {
+		_ = service.broker.BroadcastUpdateOnBoardSessionRequest(ctx, board, request.User, status)
+	}
+
+	_ = service.broker.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventSessionRequestUpdated,
+		Data: new(BoardSessionRequest).From(request),
+	})
+
 }

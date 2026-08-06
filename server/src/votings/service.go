@@ -42,77 +42,6 @@ func NewVotingService(db VotingDatabase, rt *realtime.Broker) VotingService {
 	return service
 }
 
-func (service *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.add")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votes.service.add.board", body.Board.String()),
-		attribute.String("scrumlr.votes.service.add.note", body.Note.String()),
-	)
-
-	vote, err := service.database.AddVote(ctx, body.Board, body.User, body.Note)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "No rows returned")
-			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
-		}
-
-		span.SetStatus(codes.Error, "failed to add vote")
-		span.RecordError(err)
-		log.Warnw("unable to add vote", "board", body.Board, "user", body.User, "note", body.Note, "err", err)
-		return nil, CreateVotingError(Internal, "failed to add vote", err)
-	}
-
-	voteCreatedCounter.Add(ctx, 1)
-	return new(Vote).From(vote), err
-}
-
-func (service *Service) RemoveVote(ctx context.Context, body VoteRequest) error {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.remove")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votes.service.remove.board", body.Board.String()),
-		attribute.String("scrumlr.votes.service.remove.note", body.Note.String()),
-		attribute.String("scrumlr.votes.service.remove.user", body.User.String()),
-	)
-
-	err := service.database.RemoveVote(ctx, body.Board, body.User, body.Note)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to remove vote")
-		span.RecordError(err)
-		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
-		return CreateVotingError(Internal, "failed to remove vote", err)
-	}
-
-	voteDeletedCounter.Add(ctx, 1)
-	return nil
-}
-
-func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.get.all")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votes.service.get.all.filter_board", board.String()),
-	)
-
-	votes, err := service.database.GetVotes(ctx, board, f)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
-		span.RecordError(err)
-		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, "failed to get votes", err)
-	}
-
-	return Votes(votes), err
-}
-
 func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.create")
@@ -172,47 +101,6 @@ func (service *Service) Create(ctx context.Context, body VotingCreateRequest) (*
 
 	votingCreatedCounter.Add(ctx, 1)
 	return new(Voting).From(voting, nil), err
-}
-
-func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.close")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votings.service.close.voting", id.String()),
-		attribute.String("scrumlr.votings.service.close.board", board.String()),
-	)
-
-	voting, err := service.database.Close(ctx, DatabaseVotingUpdate{
-		ID:     id,
-		Board:  board,
-		Status: Closed,
-	})
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "No voting found to update")
-			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
-		}
-
-		span.SetStatus(codes.Error, "failed to close voting")
-		span.RecordError(err)
-		log.Errorw("unable to close voting", "err", err)
-		return nil, CreateVotingError(Internal, "failed to close voting", err)
-	}
-
-	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
-		span.RecordError(err)
-		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, "failed to get votes", err)
-	}
-
-	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
-	return new(Voting).From(voting, receivedVotes), err
 }
 
 func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting, error) {
@@ -302,6 +190,118 @@ func (service *Service) GetOpen(ctx context.Context, boardID uuid.UUID) (*Voting
 	}
 
 	return new(Voting).From(voting, nil), err
+}
+
+func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.get.all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votes.service.get.all.filter_board", board.String()),
+	)
+
+	votes, err := service.database.GetVotes(ctx, board, f)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votes")
+		span.RecordError(err)
+		log.Errorw("unable to get votes", "err", err)
+		return nil, CreateVotingError(Internal, "failed to get votes", err)
+	}
+
+	return Votes(votes), err
+}
+
+func (service *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.add")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votes.service.add.board", body.Board.String()),
+		attribute.String("scrumlr.votes.service.add.note", body.Note.String()),
+	)
+
+	vote, err := service.database.AddVote(ctx, body.Board, body.User, body.Note)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "No rows returned")
+			span.RecordError(err)
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to add vote")
+		span.RecordError(err)
+		log.Warnw("unable to add vote", "board", body.Board, "user", body.User, "note", body.Note, "err", err)
+		return nil, CreateVotingError(Internal, "failed to add vote", err)
+	}
+
+	voteCreatedCounter.Add(ctx, 1)
+	return new(Vote).From(vote), err
+}
+
+func (service *Service) RemoveVote(ctx context.Context, body VoteRequest) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.votes.service.remove")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votes.service.remove.board", body.Board.String()),
+		attribute.String("scrumlr.votes.service.remove.note", body.Note.String()),
+		attribute.String("scrumlr.votes.service.remove.user", body.User.String()),
+	)
+
+	err := service.database.RemoveVote(ctx, body.Board, body.User, body.Note)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to remove vote")
+		span.RecordError(err)
+		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+		return CreateVotingError(Internal, "failed to remove vote", err)
+	}
+
+	voteDeletedCounter.Add(ctx, 1)
+	return nil
+}
+
+func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.close")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votings.service.close.voting", id.String()),
+		attribute.String("scrumlr.votings.service.close.board", board.String()),
+	)
+
+	voting, err := service.database.Close(ctx, DatabaseVotingUpdate{
+		ID:     id,
+		Board:  board,
+		Status: Closed,
+	})
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "No voting found to update")
+			span.RecordError(err)
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to close voting")
+		span.RecordError(err)
+		log.Errorw("unable to close voting", "err", err)
+		return nil, CreateVotingError(Internal, "failed to close voting", err)
+	}
+
+	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votes")
+		span.RecordError(err)
+		log.Errorw("unable to get votes", "err", err)
+		return nil, CreateVotingError(Internal, "failed to get votes", err)
+	}
+
+	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
+	return new(Voting).From(voting, receivedVotes), err
 }
 
 func (service *Service) createdVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting) {

@@ -51,7 +51,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.CreateUser(ctx, "", body.Name, "", common.Anonymous)
+	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create anonyoums user")
 		span.RecordError(err)
@@ -168,7 +168,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	}
 
 	var internalUser *users.User
-	internalUser, err = s.users.CreateUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
+	internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)

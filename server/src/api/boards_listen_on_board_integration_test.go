@@ -65,7 +65,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardCreatesNewSubscr
 		clients:      make(map[uuid.UUID]websocket.Connection),
 		subscription: eventChan,
 	}
-	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard)
+	s.listenOnBoard(context.Background(), boardID, userID, conn, fullBoard, SleepBetweenRetries)
 	assert.NotNil(suite.T(), s.boardSubscriptions[boardID])
 	assert.Equal(suite.T(), conn, s.boardSubscriptions[boardID].clients[userID])
 	assert.Equal(suite.T(), fullBoard.Board, s.boardSubscriptions[boardID].boardSettings)
@@ -93,7 +93,7 @@ func (suite *BoardsListenIntegrationTestSuite) TestListenOnBoardAddsClientToExis
 		Board: &boards.Board{ID: boardID},
 	}
 	conn2 := &mockConnection{}
-	s.listenOnBoard(context.Background(), boardID, userID2, conn2, fullBoard)
+	s.listenOnBoard(context.Background(), boardID, userID2, conn2, fullBoard, SleepBetweenRetries)
 	assert.Len(suite.T(), s.boardSubscriptions[boardID].clients, 2)
 	assert.Equal(suite.T(), conn1, s.boardSubscriptions[boardID].clients[userID1])
 	assert.Equal(suite.T(), conn2, s.boardSubscriptions[boardID].clients[userID2])
