@@ -1,5 +1,5 @@
-import {CreateVotingRequest, Voting} from "store/features/votings/types";
-import {buildUrl} from "./index";
+import { CreateVotingRequest, Voting } from "store/features/votings/types";
+import { buildUrl } from "./index";
 
 export const VotingAPI = {
   /**
@@ -23,7 +23,7 @@ export const VotingAPI = {
 
       throw new Error(`get votings request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get votings`, {cause: error});
+      throw new Error(`unable to get votings`, { cause: error });
     }
   },
 
@@ -49,7 +49,7 @@ export const VotingAPI = {
 
       throw new Error(`get voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get voting`, {cause: error});
+      throw new Error(`unable to get voting`, { cause: error });
     }
   },
 
@@ -75,7 +75,7 @@ export const VotingAPI = {
 
       throw new Error(`create voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create voting`, {cause: error});
+      throw new Error(`unable to create voting`, { cause: error });
     }
   },
 
@@ -87,13 +87,18 @@ export const VotingAPI = {
    *
    * @returns updated voting
    */
-  changeVotingStatus: async (boardId: string, votingId: string): Promise<Voting> => {
+  changeVotingStatus: async (board: string, voting: string, status?: string): Promise<Voting> => {
     try {
-      const url = buildUrl(`./boards/${boardId}/votings/${votingId}`);
+      const url = buildUrl(`./boards/${board}/votings/${voting}`);
       const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
       });
+
+      if (typeof status !== "undefined") {
+        response.body = JSON.stringify({ status });
+        response.headers = { "Content-Type": "application/json" };
+      }
 
       if (response.status === 200) {
         return (await response.json()) as Voting;
@@ -101,7 +106,7 @@ export const VotingAPI = {
 
       throw new Error(`change voting status request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to change voting status`, {cause: error});
+      throw new Error(`unable to change voting status`, { cause: error });
     }
   },
 };
