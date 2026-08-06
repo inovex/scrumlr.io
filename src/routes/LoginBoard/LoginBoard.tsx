@@ -37,7 +37,6 @@ export const LoginBoard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const loginFeatures = t("LoginBoard.loginFeatures", {returnObjects: true});
-  const renderedLoginFeatures = Array.isArray(loginFeatures) ? loginFeatures.filter((feature): feature is string => typeof feature === "string") : [];
 
   const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
   const enabledProviders = useAppSelector((state) => state.view.enabledAuthProvider);
@@ -67,7 +66,7 @@ export const LoginBoard = () => {
         <>
           <h1>{t("LoginBoard.subtitleLogin")}</h1>
           <div className="login-board__features">
-            {renderedLoginFeatures.map((feature, index) => (
+            {loginFeatures.map((feature, index) => (
               <div key={`${feature}-${index}`} className="login-board__feature">
                 <MarkAsDoneIcon className="login-board__feature-icon" />
                 <span>{feature}</span>
