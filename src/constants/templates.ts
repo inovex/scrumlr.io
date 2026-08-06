@@ -20,7 +20,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: t("Templates.ColumnsConfiguratorColumn.defaultColumnName"),
+      name: t("EditorShell.ColumnsConfiguratorColumn.defaultColumnName"),
       description: "",
       color: "backlog-blue",
       visible: true,
@@ -29,7 +29,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: t("Templates.ColumnsConfiguratorColumn.defaultActionsName"),
+      name: t("EditorShell.ColumnsConfiguratorColumn.defaultActionsName"),
       description: "",
       color: "planning-pink",
       visible: false,
