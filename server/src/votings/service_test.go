@@ -281,6 +281,72 @@ func TestCloseVoting(t *testing.T) {
 	assert.Equal(t, Closed, voting.Status)
 }
 
+func TestCancelVoting(t *testing.T) {
+	boardId := uuid.New()
+	votingID := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
+		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: Canceled}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, voting)
+	assert.Equal(t, Canceled, voting.Status)
+}
+
+func TestCancelVoting_NotFound(t *testing.T) {
+	boardId := uuid.New()
+	votingID := uuid.New()
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
+		Return(DatabaseVoting{}, sql.ErrNoRows)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, NotFound, votingErr.Category)
+}
+
+func TestCancelVoting_Failed(t *testing.T) {
+	boardId := uuid.New()
+	votingID := uuid.New()
+	dbError := errors.New("failed to cancel")
+
+	mockDb := NewMockVotingDatabase(t)
+	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
+		Return(DatabaseVoting{}, dbError)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	service := NewVotingService(mockDb, broker)
+	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+
+	assert.Nil(t, voting)
+	assert.NotNil(t, err)
+	assert.ErrorIs(t, err, dbError)
+}
+
 func TestCloseVoting_NotFound(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()

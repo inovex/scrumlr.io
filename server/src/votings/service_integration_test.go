@@ -228,6 +228,35 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
 }
 
+func (suite *VotingServiceIntegrationTestSuite) Test_CancelVoting() {
+	t := suite.T()
+	ctx := context.Background()
+
+	votingId := suite.baseData.Votings["Update"].ID
+	boardId := suite.baseData.Boards["Update"].ID
+
+	events := suite.broker.GetBoardChannel(ctx, boardId)
+
+	affectedNotes := []Note{
+		{ID: suite.baseData.Notes["Update1"].ID, Author: suite.baseData.Notes["Update1"].AuthorID, Text: suite.baseData.Notes["Update1"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update1"].ColumnID}},
+		{ID: suite.baseData.Notes["Update2"].ID, Author: suite.baseData.Notes["Update2"].AuthorID, Text: suite.baseData.Notes["Update2"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update2"].ColumnID}},
+		{ID: suite.baseData.Notes["Update3"].ID, Author: suite.baseData.Notes["Update3"].AuthorID, Text: suite.baseData.Notes["Update3"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update3"].ColumnID}},
+	}
+	voting, err := suite.votingService.Cancel(ctx, votingId, boardId, affectedNotes)
+
+	require.NoError(t, err)
+	assert.Equal(t, votingId, voting.ID)
+	assert.Equal(t, Canceled, voting.Status)
+	assert.Nil(t, voting.VotingResults)
+
+	msg := <-events
+	assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
+	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
+	require.NoError(t, err)
+	assert.Equal(t, Canceled, votingData.Voting.Status)
+	assert.Nil(t, votingData.Voting.VotingResults)
+}
+
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() {
 	t := suite.T()
 	ctx := context.Background()
