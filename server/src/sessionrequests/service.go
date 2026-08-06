@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"time"
 
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/websocket"
@@ -34,7 +35,7 @@ type SessionRequestDatabase interface {
 
 type SessionRequestWebsocket interface {
 	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection)
+	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)
 	closeSocket(conn websocket.Connection)
 }
 
