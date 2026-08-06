@@ -7,11 +7,11 @@ import (
 )
 
 type ReactionService interface {
+	Create(ctx context.Context, body ReactionCreateRequest) (*Reaction, error)
 	Get(ctx context.Context, id uuid.UUID) (*Reaction, error)
 	GetAll(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error)
-	Create(ctx context.Context, body ReactionCreateRequest) (*Reaction, error)
-	Delete(ctx context.Context, board, user, id uuid.UUID) error
 	Update(ctx context.Context, board, user, id uuid.UUID, body ReactionUpdateTypeRequest) (*Reaction, error)
+	Delete(ctx context.Context, board, user, id uuid.UUID) error
 }
 
 type ReactionApi struct {

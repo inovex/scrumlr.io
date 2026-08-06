@@ -22,11 +22,9 @@ type NotesService interface {
 	Update(ctx context.Context, userID uuid.UUID, body NoteUpdateRequest) (*Note, error)
 	Delete(ctx context.Context, userID uuid.UUID, body NoteDeleteRequest) error
 	DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error
-
 	AcquireLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
 	ReleaseLock(ctx context.Context, noteID, userID, boardID uuid.UUID) bool
 	GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error)
 	IsLocked(ctx context.Context, noteID uuid.UUID) bool
-
 	HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage)
 }

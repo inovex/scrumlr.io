@@ -134,7 +134,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -148,7 +148,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -161,7 +161,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -178,7 +178,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -198,7 +198,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -213,7 +213,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -227,7 +227,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -246,7 +246,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -267,7 +267,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -282,7 +282,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -296,7 +296,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -314,7 +314,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -334,7 +334,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -349,7 +349,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -363,7 +363,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -381,7 +381,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -401,7 +401,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -416,7 +416,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -430,7 +430,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -448,7 +448,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -468,7 +468,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -483,7 +483,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -497,7 +497,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -515,7 +515,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -535,7 +535,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -550,7 +550,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -564,7 +564,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)
@@ -582,7 +582,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)

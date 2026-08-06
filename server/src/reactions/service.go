@@ -40,51 +40,6 @@ func NewReactionService(db ReactionDatabase, rt *realtime.Broker) ReactionServic
 	return service
 }
 
-func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.get")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.reactions.service.get.reaction", id.String()),
-	)
-
-	reaction, err := service.database.Get(ctx, id)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "reaction not found")
-			span.RecordError(err)
-			return nil, CreateReactionError(NotFound, "reaction not found", err)
-		}
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
-		log.Errorw("Unable to get reaction", "userId", id, "err", err)
-		return nil, CreateReactionError(Internal, "unable to get reaction", err)
-	}
-
-	return new(Reaction).From(reaction), err
-}
-
-func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.get.all")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.reactions.service.get.all.board", boardId.String()),
-	)
-
-	reactions, err := service.database.GetAll(ctx, boardId)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reactions for board")
-		span.RecordError(err)
-		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
-		return nil, CreateReactionError(Internal, "unable to get reaction", err)
-	}
-
-	return Reactions(reactions), err
-}
-
 func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) (*Reaction, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.create")
@@ -132,43 +87,49 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 	return new(Reaction).From(reaction), err
 }
 
-func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) error {
+func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error) {
 	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.delete")
+	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.get")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.reactions.service.delete.user", user.String()),
-		attribute.String("scrumlr.reactions.service.deleteboard", board.String()),
-		attribute.String("scrumlr.reactions.service.delete.reaction", id.String()),
+		attribute.String("scrumlr.reactions.service.get.reaction", id.String()),
 	)
 
-	reaction, err := service.Get(ctx, id)
+	reaction, err := service.database.Get(ctx, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "reaction not found")
+			span.RecordError(err)
+			return nil, CreateReactionError(NotFound, "reaction not found", err)
+		}
 		span.SetStatus(codes.Error, "failed to get reaction")
 		span.RecordError(err)
-		return err
+		log.Errorw("Unable to get reaction", "userId", id, "err", err)
+		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
 
-	if reaction.User != user {
-		err := CreateReactionError(Forbidden, "forbidden to delete other user's reaction", errors.New("forbidden to delete other user's reaction"))
-		span.SetStatus(codes.Error, "cannot remove reaction from other user")
-		span.RecordError(err)
-		log.Errorw("Unable to remove reaction from other users", "reactionUserId", reaction.User, "user", user)
-		return err
-	}
+	return new(Reaction).From(reaction), err
+}
 
-	err = service.database.Delete(ctx, id)
+func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.get.all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.reactions.service.get.all.board", boardId.String()),
+	)
+
+	reactions, err := service.database.GetAll(ctx, boardId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete reaction")
+		span.SetStatus(codes.Error, "failed to get reactions for board")
 		span.RecordError(err)
-		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
-		return CreateReactionError(Internal, "failed to delete reaction", err)
+		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
+		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
 
-	service.deleteReaction(ctx, board, id)
-	reactionRemovedCounter.Add(ctx, 1)
-	return err
+	return Reactions(reactions), err
 }
 
 func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, body ReactionUpdateTypeRequest) (*Reaction, error) {
@@ -211,6 +172,45 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 	return new(Reaction).From(reaction), err
 }
 
+func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.reactions.service.delete.user", user.String()),
+		attribute.String("scrumlr.reactions.service.deleteboard", board.String()),
+		attribute.String("scrumlr.reactions.service.delete.reaction", id.String()),
+	)
+
+	reaction, err := service.Get(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get reaction")
+		span.RecordError(err)
+		return err
+	}
+
+	if reaction.User != user {
+		err := CreateReactionError(Forbidden, "forbidden to delete other user's reaction", errors.New("forbidden to delete other user's reaction"))
+		span.SetStatus(codes.Error, "cannot remove reaction from other user")
+		span.RecordError(err)
+		log.Errorw("Unable to remove reaction from other users", "reactionUserId", reaction.User, "user", user)
+		return err
+	}
+
+	err = service.database.Delete(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete reaction")
+		span.RecordError(err)
+		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
+		return CreateReactionError(Internal, "failed to delete reaction", err)
+	}
+
+	service.deleteReaction(ctx, board, id)
+	reactionRemovedCounter.Add(ctx, 1)
+	return err
+}
+
 func (service *Service) addReaction(ctx context.Context, board uuid.UUID, reaction DatabaseReaction) {
 	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.add")
 	defer span.End()
@@ -232,25 +232,6 @@ func (service *Service) addReaction(ctx context.Context, board uuid.UUID, reacti
 	}
 }
 
-func (service *Service) deleteReaction(ctx context.Context, board, reaction uuid.UUID) {
-	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.delete")
-	defer span.End()
-
-	err := service.realtime.BroadcastToBoard(
-		ctx,
-		board,
-		realtime.BoardEvent{
-			Type: realtime.BoardEventReactionDeleted,
-			Data: reaction,
-		},
-	)
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to send delete reaction message")
-		span.RecordError(err)
-	}
-}
-
 func (service *Service) updateReaction(ctx context.Context, board uuid.UUID, reaction DatabaseReaction) {
 	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.update")
 	defer span.End()
@@ -268,6 +249,25 @@ func (service *Service) updateReaction(ctx context.Context, board uuid.UUID, rea
 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to send update reaction message")
+		span.RecordError(err)
+	}
+}
+
+func (service *Service) deleteReaction(ctx context.Context, board, reaction uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.reactions.service.delete")
+	defer span.End()
+
+	err := service.realtime.BroadcastToBoard(
+		ctx,
+		board,
+		realtime.BoardEvent{
+			Type: realtime.BoardEventReactionDeleted,
+			Data: reaction,
+		},
+	)
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to send delete reaction message")
 		span.RecordError(err)
 	}
 }

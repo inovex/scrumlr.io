@@ -39,12 +39,12 @@ func (_m *MockUserService) EXPECT() *MockUserService_Expecter {
 	return &MockUserService_Expecter{mock: &_m.Mock}
 }
 
-// CreateUser provides a mock function for the type MockUserService
-func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error) {
+// Create provides a mock function for the type MockUserService
+func (_mock *MockUserService) Create(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error) {
 	ret := _mock.Called(ctx, id, name, avatarUrl, accountType)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateUser")
+		panic("no return value specified for Create")
 	}
 
 	var r0 *User
@@ -67,22 +67,22 @@ func (_mock *MockUserService) CreateUser(ctx context.Context, id string, name st
 	return r0, r1
 }
 
-// MockUserService_CreateUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateUser'
-type MockUserService_CreateUser_Call struct {
+// MockUserService_Create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Create'
+type MockUserService_Create_Call struct {
 	*mock.Call
 }
 
-// CreateUser is a helper method to define mock.On call
+// Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
 //   - accountType common.AccountType
-func (_e *MockUserService_Expecter) CreateUser(ctx any, id any, name any, avatarUrl any, accountType any) *MockUserService_CreateUser_Call {
-	return &MockUserService_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, id, name, avatarUrl, accountType)}
+func (_e *MockUserService_Expecter) Create(ctx any, id any, name any, avatarUrl any, accountType any) *MockUserService_Create_Call {
+	return &MockUserService_Create_Call{Call: _e.mock.On("Create", ctx, id, name, avatarUrl, accountType)}
 }
 
-func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserService_CreateUser_Call {
+func (_c *MockUserService_Create_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserService_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -115,12 +115,12 @@ func (_c *MockUserService_CreateUser_Call) Run(run func(ctx context.Context, id 
 	return _c
 }
 
-func (_c *MockUserService_CreateUser_Call) Return(user *User, err error) *MockUserService_CreateUser_Call {
+func (_c *MockUserService_Create_Call) Return(user *User, err error) *MockUserService_Create_Call {
 	_c.Call.Return(user, err)
 	return _c
 }
 
-func (_c *MockUserService_CreateUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error)) *MockUserService_CreateUser_Call {
+func (_c *MockUserService_Create_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error)) *MockUserService_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
