@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/websocket"
 )
@@ -50,9 +51,8 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	mockBroker.AssertExpectations(t)
 
 	sub := socket.boardSessionRequestSubscriptions[boardID]
-	if assert.NotNil(t, sub) {
-		assert.Equal(t, successChan, sub.subscriptions[userID])
-	}
+	require.NotNil(t, sub)
+	assert.Equal(t, successChan, sub.subscriptions[userID])
 }
 
 func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
@@ -79,10 +79,9 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	mockBroker.AssertExpectations(t)
 
 	sub := socket.boardSessionRequestSubscriptions[boardID]
-	if assert.NotNil(t, sub) {
-		_, exists := sub.subscriptions[userID]
-		assert.False(t, exists, "subscription should not exist after exhausting retries")
-	}
+	require.NotNil(t, sub)
+	_, exists := sub.subscriptions[userID]
+	assert.False(t, exists, "subscription should not exist after exhausting retries")
 }
 
 func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
@@ -112,7 +111,6 @@ func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 
 	// no expectations to assert on mockBroker; just ensure existing subscription unchanged
 	sub := socket.boardSessionRequestSubscriptions[boardID]
-	if assert.NotNil(t, sub) {
-		assert.Equal(t, existingChan, sub.subscriptions[userID])
-	}
+	require.NotNil(t, sub)
+	assert.Equal(t, existingChan, sub.subscriptions[userID])
 }
