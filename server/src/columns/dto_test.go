@@ -17,7 +17,17 @@ func TestShouldColumnContainNote(t *testing.T) {
 
 	testColumnSlice := ColumnSlice{testColumn}
 
-	testNote := buildNote(columnId)
+	testNote := &notes.Note{
+		ID:     uuid.New(),
+		Author: uuid.New(),
+		Text:   "I belong to the column",
+		Edited: false,
+		Position: notes.NotePosition{
+			Column: columnId,
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
+	}
 
 	assert.True(t, testColumnSlice.ContainsNote(testNote))
 }
@@ -28,7 +38,17 @@ func TestShouldNotColumnContainNote(t *testing.T) {
 
 	testColumnSlice := ColumnSlice{testColumn}
 
-	testNote := buildNote(uuid.New())
+	testNote := &notes.Note{
+		ID:     uuid.New(),
+		Author: uuid.New(),
+		Text:   "I belong to another column",
+		Edited: false,
+		Position: notes.NotePosition{
+			Column: uuid.New(),
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
+	}
 
 	assert.False(t, testColumnSlice.ContainsNote(testNote))
 }
@@ -125,21 +145,6 @@ func buildColumn(id uuid.UUID, visible bool) *Column {
 		ID:      id,
 		Visible: visible,
 		Color:   common.ColorBacklogBlue,
-	}
-}
-
-// return a Note with its position set to the given columnId
-func buildNote(columnId uuid.UUID) *notes.Note {
-	return &notes.Note{
-		ID:     uuid.New(),
-		Author: uuid.New(),
-		Text:   "",
-		Edited: false,
-		Position: notes.NotePosition{
-			Column: columnId,
-			Stack:  uuid.NullUUID{},
-			Rank:   0,
-		},
 	}
 }
 
