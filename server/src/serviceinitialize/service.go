@@ -120,11 +120,11 @@ func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessio
 	return sessionRequestService
 }
 
-func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocketInterface {
-	return websocket.NewWebSocketService()
+func (init *ServiceInitializer) InitializeWebSocketService() websocket.Upgrader {
+	return websocket.NewWebSocketUpgrader()
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketInterface) sessionrequests.SessionRequestWebsocket {
+func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.Upgrader) sessionrequests.SessionRequestWebsocket {
 	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
 }
 

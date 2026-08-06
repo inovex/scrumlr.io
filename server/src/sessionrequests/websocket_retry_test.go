@@ -1,7 +1,6 @@
 package sessionrequests
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"testing"
@@ -15,19 +14,11 @@ import (
 	"scrumlr.io/server/websocket"
 )
 
-// mock connection implementing websocket.Connection
-type mockConn struct{}
-
-func (m *mockConn) WriteJSON(ctx context.Context, data any) error { return nil }
-func (m *mockConn) Read(ctx context.Context) (websocket.MessageType, []byte, error) {
-	return websocket.MessageText, nil, nil
-}
-func (m *mockConn) Close(reason string) error { return nil }
-
 func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
-	conn := &mockConn{}
+
+	conn := websocket.NewMockConnection(t)
 
 	successChan := make(chan *realtime.BoardSessionRequestEventType, 1)
 	mockBroker := realtime.NewMockClient(t)
@@ -58,7 +49,8 @@ func TestListenOnBoardSessionRequest_RetriesThenSucceeds(t *testing.T) {
 func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
-	conn := &mockConn{}
+
+	conn := websocket.NewMockConnection(t)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -87,7 +79,8 @@ func TestListenOnBoardSessionRequest_FailsAllRetries(t *testing.T) {
 func TestListenOnBoardSessionRequest_AlreadySubscribed(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
-	conn := &mockConn{}
+
+	conn := websocket.NewMockConnection(t)
 
 	existingChan := make(chan *realtime.BoardSessionRequestEventType, 1)
 
