@@ -34,6 +34,15 @@ type API struct {
 	allowAnonymousCustomTemplates bool
 }
 
+func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
+	api := new(API)
+	api.service = service
+	api.sessions = sessionService
+	api.allowAnonymousBoardCreation = allowAnonymousBoardCreation
+	api.allowAnonymousCustomTemplates = allowAnonymousCustomTemplates
+	return api
+}
+
 // Get the logged in user
 //
 //	@Summary		Get the loged in user
@@ -392,13 +401,4 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
-}
-
-func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
-	api := new(API)
-	api.service = service
-	api.sessions = sessionService
-	api.allowAnonymousBoardCreation = allowAnonymousBoardCreation
-	api.allowAnonymousCustomTemplates = allowAnonymousCustomTemplates
-	return api
 }
