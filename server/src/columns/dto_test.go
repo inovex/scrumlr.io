@@ -8,7 +8,30 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/notes"
 )
+
+func TestShouldColumnContainNote(t *testing.T) {
+	columnId := uuid.New()
+	testColumn := buildColumn(columnId, true)
+
+	testColumnSlice := ColumnSlice{testColumn}
+
+	testNote := buildNote(columnId)
+
+	assert.True(t, testColumnSlice.ContainsNote(testNote))
+}
+
+func TestShouldNotColumnContainNote(t *testing.T) {
+	columnId := uuid.New()
+	testColumn := buildColumn(columnId, true)
+
+	testColumnSlice := ColumnSlice{testColumn}
+
+	testNote := buildNote(uuid.New())
+
+	assert.False(t, testColumnSlice.ContainsNote(testNote))
+}
 
 func TestShouldFilterVisibleColumns(t *testing.T) {
 
@@ -102,6 +125,21 @@ func buildColumn(id uuid.UUID, visible bool) *Column {
 		ID:      id,
 		Visible: visible,
 		Color:   common.ColorBacklogBlue,
+	}
+}
+
+// return a Note with its position set to the given columnId
+func buildNote(columnId uuid.UUID) *notes.Note {
+	return &notes.Note{
+		ID:     uuid.New(),
+		Author: uuid.New(),
+		Text:   "",
+		Edited: false,
+		Position: notes.NotePosition{
+			Column: columnId,
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
 	}
 }
 
