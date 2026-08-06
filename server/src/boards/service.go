@@ -18,6 +18,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/columns"
@@ -252,7 +253,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 			return nil, err
 		}
 
-		notes, err := service.notesService.GetAll(ctx, id)
+		boardNotes, err := service.notesService.GetAll(ctx, id)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to get notes")
 			span.RecordError(err)
@@ -262,10 +263,15 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 		participantNum := len(boardSessions)
 		for _, session := range boardSessions {
-			// Participants should not be able to see hidden collumns
+			// Participants should not be able to see hidden columns and their respective notes.
 			if session.UserID == user {
 				if !session.Role.CanSeeHiddenColumns() {
 					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
+					// also filter those notes where their respective column is hidden,
+					// at this point boardColumns only contains visible columns.
+					boardNotes = technical_helper.Filter(boardNotes, func(note *notes.Note) bool {
+						return columns.ColumnSlice(boardColumns).ContainsNote(note)
+					})
 				}
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        board,
@@ -274,7 +280,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 					Participants: participantNum,
 					Role:         session.Role,
 					Favourite:    session.Favourite,
-					NoteCount:    len(notes),
+					NoteCount:    len(boardNotes),
 				})
 			}
 		}
