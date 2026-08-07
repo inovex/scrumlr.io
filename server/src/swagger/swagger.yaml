@@ -3085,6 +3085,10 @@ paths:
       description: Verify the auth provider call and create or update a user. Redirect
         to the page provider with the state
       parameters:
+      - description: jwt token to for upgrading an existing user
+        in: header
+        name: Cookie
+        type: string
       - description: user to create
         in: body
         name: user
