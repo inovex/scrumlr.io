@@ -82,6 +82,30 @@
   box-shadow: 0 5px 4px color.change(styles.$pink--500, $alpha: 0.25);
 
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+.rejection-page__return-button--retry {
+  background: styles.$blue--500;
+  box-shadow: 0 5px 4px color.change(styles.$blue--500, $alpha: 0.25);
+}
+
+.rejection-page__hint {
+  margin-top: styles.$spacing--xs;
+  font-style: italic;
+  font-size: styles.$text--sm;
+  opacity: 0.75;
+}
+
+.rejection-page__button-group {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--xs;
+  align-items: center;
 }
 
 // default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
@@ -132,6 +156,12 @@
 
   .rejection-page__content {
     align-items: flex-start; // prevent button from taking the whole space
+  }
+
+  .rejection-page__button-group {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: styles.$spacing--base;
   }
 
   .rejection-page__logo-stan {
