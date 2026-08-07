@@ -36,6 +36,7 @@ type UserServiceIntegrationTestsuite struct {
 
 	// Additional test-specific data
 	updateUser   testDbTemplates.TestUser
+	upgradeUser  testDbTemplates.TestUser
 	deleteUser   testDbTemplates.TestUser
 	updateBoard  testDbTemplates.TestBoard
 	deleteColumn testDbTemplates.TestColumn
@@ -62,6 +63,11 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	suite.updateUser = testDbTemplates.TestUser{
 		Name:        "UpdateMe",
 		ID:          uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+		AccountType: common.Anonymous,
+	}
+	suite.upgradeUser = testDbTemplates.TestUser{
+		Name:        "Upgrade Me",
+		ID:          uuid.New(),
 		AccountType: common.Anonymous,
 	}
 	suite.deleteUser = testDbTemplates.TestUser{
@@ -209,6 +215,18 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	suite.Equal(suite.testUserName, userData.Name)
 }
 
+func (suite *UserServiceIntegrationTestsuite) TestUpgradeAnonymousUserToGoogleUser() {
+	ctx := context.Background()
+	userId := suite.upgradeUser.ID
+
+	user, err := suite.userService.UpgradeAnonymousUser(ctx, userId, "googleId", "Stan", "", common.Google)
+
+	suite.Nil(err)
+	suite.Equal(userId, user.ID)
+	suite.Equal(common.Google, user.AccountType)
+	suite.Equal(suite.upgradeUser.Name, user.Name)
+}
+
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	ctx := context.Background()
 	userId := suite.deleteUser.ID
@@ -324,6 +342,9 @@ func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 	log.Println("Seeding users test data")
 
 	if err := testDbTemplates.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType), nil); err != nil {
+		log.Fatalf("Failed to insert update user: %s", err)
+	}
+	if err := testDbTemplates.InsertUser(db, suite.upgradeUser.ID, suite.upgradeUser.Name, string(suite.upgradeUser.AccountType), nil); err != nil {
 		log.Fatalf("Failed to insert update user: %s", err)
 	}
 	if err := testDbTemplates.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType), nil); err != nil {
