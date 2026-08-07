@@ -1094,3 +1094,507 @@ func (_c *MockUserDatabase_UpdateUser_Call) RunAndReturn(run func(ctx context.Co
 	_c.Call.Return(run)
 	return _c
 }
+
+// UpgradeToAppleUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToAppleUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToAppleUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToAppleUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToAppleUser'
+type MockUserDatabase_UpgradeToAppleUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToAppleUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToAppleUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToAppleUser_Call {
+	return &MockUserDatabase_UpgradeToAppleUser_Call{Call: _e.mock.On("UpgradeToAppleUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToAppleUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToAppleUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToAppleUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToAppleUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToAppleUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToAppleUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeToAzureUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToAzureUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToAzureUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToAzureUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToAzureUser'
+type MockUserDatabase_UpgradeToAzureUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToAzureUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToAzureUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToAzureUser_Call {
+	return &MockUserDatabase_UpgradeToAzureUser_Call{Call: _e.mock.On("UpgradeToAzureUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToAzureUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToAzureUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToAzureUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToAzureUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToAzureUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToAzureUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeToGitHubUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToGitHubUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToGitHubUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToGitHubUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToGitHubUser'
+type MockUserDatabase_UpgradeToGitHubUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToGitHubUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToGitHubUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToGitHubUser_Call {
+	return &MockUserDatabase_UpgradeToGitHubUser_Call{Call: _e.mock.On("UpgradeToGitHubUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToGitHubUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToGitHubUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToGitHubUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToGitHubUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToGitHubUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToGitHubUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeToGoogleUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToGoogleUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToGoogleUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToGoogleUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToGoogleUser'
+type MockUserDatabase_UpgradeToGoogleUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToGoogleUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToGoogleUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToGoogleUser_Call {
+	return &MockUserDatabase_UpgradeToGoogleUser_Call{Call: _e.mock.On("UpgradeToGoogleUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToGoogleUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToGoogleUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToGoogleUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToGoogleUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToGoogleUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToGoogleUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeToMicrosoftUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToMicrosoftUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToMicrosoftUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToMicrosoftUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToMicrosoftUser'
+type MockUserDatabase_UpgradeToMicrosoftUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToMicrosoftUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToMicrosoftUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToMicrosoftUser_Call {
+	return &MockUserDatabase_UpgradeToMicrosoftUser_Call{Call: _e.mock.On("UpgradeToMicrosoftUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToMicrosoftUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToMicrosoftUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToMicrosoftUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToMicrosoftUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToMicrosoftUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToMicrosoftUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeToOIDCUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeToOIDCUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeToOIDCUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeToOIDCUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeToOIDCUser'
+type MockUserDatabase_UpgradeToOIDCUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeToOIDCUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+func (_e *MockUserDatabase_Expecter) UpgradeToOIDCUser(ctx any, userId any, id any, name any, avatarUrl any) *MockUserDatabase_UpgradeToOIDCUser_Call {
+	return &MockUserDatabase_UpgradeToOIDCUser_Call{Call: _e.mock.On("UpgradeToOIDCUser", ctx, userId, id, name, avatarUrl)}
+}
+
+func (_c *MockUserDatabase_UpgradeToOIDCUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string)) *MockUserDatabase_UpgradeToOIDCUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToOIDCUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeToOIDCUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeToOIDCUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_UpgradeToOIDCUser_Call {
+	_c.Call.Return(run)
+	return _c
+}

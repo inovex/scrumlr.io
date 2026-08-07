@@ -71,6 +71,30 @@ func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (Databa
 	return user, err
 }
 
+func (db *DB) UpgradeToAppleUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.Apple, "apple_users")
+}
+
+func (db *DB) UpgradeToAzureUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.AzureAd, "azure_ad_users")
+}
+
+func (db *DB) UpgradeToGitHubUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.GitHub, "github_users")
+}
+
+func (db *DB) UpgradeToGoogleUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.Google, "google_users")
+}
+
+func (db *DB) UpgradeToMicrosoftUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.Microsoft, "microsoft_users")
+}
+
+func (db *DB) UpgradeToOIDCUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.upgradeToExternalUser(ctx, userId, id, name, avatarUrl, common.TypeOIDC, "oidc_users")
+}
+
 func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	err := db.db.NewSelect().
@@ -157,6 +181,15 @@ func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, 
 	return user, err
 }
 
+func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	_, err := db.db.NewDelete().
+		Model((*DatabaseUser)(nil)).
+		Where("id = ?", id).
+		Exec(ctx)
+
+	return err
+}
+
 func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
 	var user DatabaseUser
@@ -229,11 +262,53 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 	return user, err
 }
 
-func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
-	_, err := db.db.NewDelete().
-		Model((*DatabaseUser)(nil)).
-		Where("id = ?", id).
-		Exec(ctx)
+func (db *DB) upgradeToExternalUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
+	var user DatabaseUser
 
-	return err
+	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
+		var extUser struct {
+			UserID uuid.UUID `bun:"user"`
+			Name   string    `bun:"name"`
+		}
+
+		err := tx.NewSelect().
+			Table(table).
+			Column("user", "name").
+			Where("\"user\" = ?", userId).
+			Scan(ctx, &extUser)
+
+		if err == nil {
+			return errors.New("user is already connected")
+		}
+
+		err = tx.NewSelect().
+			Model((*DatabaseUser)(nil)).
+			Where("id = ?", userId).
+			Where("account_type = ?", common.Anonymous).
+			Scan(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		user.AccountType = accountType
+		_, err = tx.NewUpdate().
+			Model(&user).
+			Where("id = ?", userId).
+			Returning("*").
+			Exec(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewRaw(
+			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
+			user.ID, id, name, avatarUrl,
+		).Exec(ctx)
+
+		return err
+	})
+
+	return user, err
 }
