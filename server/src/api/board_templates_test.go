@@ -10,7 +10,6 @@ import (
 
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
-	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/auth"
@@ -48,65 +47,6 @@ func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateR
 		Description: new("Updated Description"),
 		Favourite:   new(true),
 	}
-}
-
-// createTestAuth creates a minimal auth implementation for testing
-// This allows requests to pass through without actual authentication
-func createTestAuth() auth.Auth {
-	return &testAuthService{}
-}
-
-// testAuthService implements auth.Auth interface for testing purposes
-type testAuthService struct{}
-
-func (t *testAuthService) Sign(_ map[string]any) (string, error) {
-	return "test-token", nil
-}
-
-func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Create proper JWT context using jwtauth library
-			// Extract user ID from context if present, otherwise use test user ID
-			userID := "test-user-id"
-			if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
-				if userUUID, ok := uid.(uuid.UUID); ok {
-					userID = userUUID.String()
-				}
-			}
-
-			// Create JWT token and context using jwtauth
-			tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
-			claims := map[string]any{"id": userID}
-			token, _, _ := tokenAuth.Encode(claims)
-
-			// Set the JWT context the way jwtauth expects it
-			ctx := jwtauth.NewContext(r.Context(), token, nil)
-			next.ServeHTTP(w, r.WithContext(ctx))
-		})
-	}
-}
-
-func (t *testAuthService) Authenticator() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Pass through without authentication for testing
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-func (t *testAuthService) Exists(_ common.AccountType) bool {
-	return true
-}
-
-func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
-	return &auth.UserInformation{
-		Provider:  accountType,
-		Ident:     "test-user",
-		Name:      "Test User",
-		AvatarURL: "",
-	}, nil
 }
 
 // Test suite for AnonymousCustomTemplateCreationContext middleware
@@ -350,7 +290,37 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
 
 			// Create a simple auth mock that allows all requests to pass
-			mockAuth := createTestAuth()
+			mockAuth := auth.NewMockAuth(t)
+			mockAuth.EXPECT().Verifier().
+				Return(func(next http.Handler) http.Handler {
+					return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						// Create proper JWT context using jwtauth library
+						// Extract user ID from context if present, otherwise use test user ID
+						userID := "test-user-id"
+						if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
+							if userUUID, ok := uid.(uuid.UUID); ok {
+								userID = userUUID.String()
+							}
+						}
+
+						// Create JWT token and context using jwtauth
+						tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
+						claims := map[string]any{"id": userID}
+						token, _, _ := tokenAuth.Encode(claims)
+
+						// Set the JWT context the way jwtauth expects it
+						ctx := jwtauth.NewContext(r.Context(), token, nil)
+						next.ServeHTTP(w, r.WithContext(ctx))
+					})
+				})
+
+			mockAuth.EXPECT().Authenticator().
+				Return(func(next http.Handler) http.Handler {
+					return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						// Pass through without authentication for testing
+						next.ServeHTTP(w, r)
+					})
+				})
 
 			// Create mock handlers that return proper template objects
 			templateID := uuid.New()
