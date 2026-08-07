@@ -14,17 +14,8 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/websocket"
 )
-
-type mockWebSocketConnection struct {
-	writes []any
-	err    error
-}
-
-func (m *mockWebSocketConnection) WriteJSON(_ context.Context, v any) error {
-	m.writes = append(m.writes, v)
-	return m.err
-}
 
 type NotesServiceTestSuite struct {
 	suite.Suite
@@ -907,17 +898,32 @@ func (suite *NotesServiceTestSuite) Test_DeleteUserNotesFromBoard_GetByUserAndBo
 
 func (suite *NotesServiceTestSuite) Test_handleAcquire_Success() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	dragLockResponse := DragLockResponse{
+		Type:    WebSocketMessageTypeDragLock,
+		Action:  DragLockActionAcquire,
+		NoteID:  suite.noteID,
+		Success: true,
+	}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, dragLockResponse).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).Return(nil)
+	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).
+		Return(nil)
 	suite.expectPublish()
 
 	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
 	suite.Equal(DragLockActionAcquire, response.Action)
@@ -928,16 +934,24 @@ func (suite *NotesServiceTestSuite) Test_handleAcquire_Success() {
 
 func (suite *NotesServiceTestSuite) Test_handleAcquire_Failure() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionAcquire, NoteID: suite.noteID, Success: false, Error: "Note is currently being dragged by another user"}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).Return(errors.New("lock exists"))
+	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).
+		Return(errors.New("lock exists"))
 
 	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(DragLockActionAcquire, response.Action)
 	suite.False(response.Success)
@@ -946,34 +960,44 @@ func (suite *NotesServiceTestSuite) Test_handleAcquire_Failure() {
 
 func (suite *NotesServiceTestSuite) Test_handleAcquire_WriteJSONError() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{err: errors.New("write failed")}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionAcquire, NoteID: suite.noteID, Success: true}).
+		Return(errors.New("write failed"))
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).Return(nil)
+	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).
+		Return(nil)
 	suite.expectPublish()
 
 	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
-	suite.True(ok)
-	suite.Equal(DragLockActionAcquire, response.Action)
+	suite.Len(writes, 0)
 }
 
 func (suite *NotesServiceTestSuite) Test_handleRelease_Success() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionRelease, NoteID: suite.noteID, Success: true}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).Return(nil)
+	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).
+		Return(nil)
 	suite.expectPublish()
 
 	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
 	suite.Equal(DragLockActionRelease, response.Action)
@@ -984,16 +1008,24 @@ func (suite *NotesServiceTestSuite) Test_handleRelease_Success() {
 
 func (suite *NotesServiceTestSuite) Test_handleRelease_Failure() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionRelease, NoteID: suite.noteID, Success: false, Error: "Lock not owned by user or already released"}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).Return(errors.New("release failed"))
+	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).
+		Return(errors.New("release failed"))
 
 	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(DragLockActionRelease, response.Action)
 	suite.False(response.Success)
@@ -1002,29 +1034,38 @@ func (suite *NotesServiceTestSuite) Test_handleRelease_Failure() {
 
 func (suite *NotesServiceTestSuite) Test_handleRelease_WriteJSONError() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{err: errors.New("write failed")}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionRelease, NoteID: suite.noteID, Success: true}).
+		Return(errors.New("write failed"))
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).Return(nil)
+	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).
+		Return(nil)
 	suite.expectPublish()
 
 	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
-	suite.True(ok)
-	suite.Equal(DragLockActionRelease, response.Action)
+	suite.Len(writes, 0)
 }
 
 func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_InvalidJSON() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: "ERROR", Success: false, Error: "Invalid message format"}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, json.RawMessage("{invalid"))
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(WebSocketMessageTypeDragLock, response.Type)
 	suite.Equal("ERROR", response.Action)
@@ -1034,16 +1075,24 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_InvalidJSON() {
 
 func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_UnknownAction() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
 
 	unknownAction := "UNKNOWN"
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: unknownAction, NoteID: suite.noteID, Success: false, Error: "Unknown action"}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
+
 	payload, err := json.Marshal(DragLockMessage{Action: unknownAction, NoteID: suite.noteID})
 	suite.NoError(err)
 
 	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(unknownAction, response.Action)
 	suite.Equal(suite.noteID, response.NoteID)
@@ -1053,11 +1102,19 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_UnknownAction() 
 
 func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Acquire() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionAcquire, NoteID: suite.noteID, Success: true}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
-	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).Return(nil)
+	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).
+		Return(nil)
 	suite.expectPublish()
 
 	payload, err := json.Marshal(DragLockMessage{Action: DragLockActionAcquire, NoteID: suite.noteID})
@@ -1065,8 +1122,8 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Acquire() {
 
 	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(DragLockActionAcquire, response.Action)
 	suite.True(response.Success)
@@ -1075,7 +1132,14 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Acquire() {
 
 func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Release() {
 	service := suite.service.(*Service)
-	conn := &mockWebSocketConnection{}
+
+	writes := make([]any, 0, 1)
+	conn := websocket.NewMockConnection(suite.T())
+	conn.EXPECT().WriteJSON(mock.Anything, DragLockResponse{Type: WebSocketMessageTypeDragLock, Action: DragLockActionRelease, NoteID: suite.noteID, Success: true}).
+		RunAndReturn(func(ctx context.Context, data any) error {
+			writes = append(writes, data)
+			return nil
+		})
 
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
 		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}}, nil)
@@ -1087,8 +1151,8 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Release() {
 
 	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
-	suite.Len(conn.writes, 1)
-	response, ok := conn.writes[0].(DragLockResponse)
+	suite.Len(writes, 1)
+	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
 	suite.Equal(DragLockActionRelease, response.Action)
 	suite.True(response.Success)

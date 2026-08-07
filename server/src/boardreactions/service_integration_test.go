@@ -52,13 +52,15 @@ func (suite *BoardReactionServiceIntegrationTestSuite) Test_Create() {
 	userId := uuid.New()
 	reaction := Applause
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	suite.service.Create(ctx, boardId, BoardReactionCreateRequest{User: userId, ReactionType: reaction})
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventBoardReactionAdded, msg.Type)
+
 	boardReaction, err := technical_helper.Unmarshal[BoardReaction](msg.Data)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, Applause, boardReaction.ReactionType)
 }

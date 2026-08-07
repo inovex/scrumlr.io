@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -79,6 +80,18 @@ type ColumnUpdateRequest struct {
 
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`
+}
+
+func (c ColumnSlice) ContainsNote(note *notes.Note) bool {
+	if note == nil {
+		return false
+	}
+	for _, col := range c {
+		if col != nil && col.ID == note.Position.Column {
+			return true
+		}
+	}
+	return false
 }
 
 func (c ColumnSlice) FilterVisibleColumns() []*Column {

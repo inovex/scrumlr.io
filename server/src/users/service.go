@@ -60,7 +60,7 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create")
 	defer span.End()
 
@@ -115,6 +115,63 @@ func (service *Service) CreateUser(ctx context.Context, id, name, avatarUrl stri
 	specificCounter.Add(ctx, 1)
 
 	return new(User).From(user), nil
+}
+
+func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.get.id", userID.String()),
+	)
+
+	user, err := service.database.GetUser(ctx, userID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "user not found")
+			span.RecordError(err)
+			return nil, CreateUserError(NotFound, "user not found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to get user")
+		span.RecordError(err)
+		log.Errorw("unable to get user", "user", userID, "err", err)
+		return nil, CreateUserError(Internal, "failed to get user", err)
+	}
+
+	return new(User).From(user), err
+}
+
+func (service *Service) GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_ids")
+	defer span.End()
+
+	retrievedIDs, err := service.database.GetExistingUserIDs(ctx, userIDs)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get userIDs")
+		span.RecordError(err)
+		log.Errorw("unable to get retrievedIDs", "userIDs", userIDs, "error", err)
+		return nil, common.InternalServerError
+	}
+	return retrievedIDs, nil
+}
+
+func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_by_board")
+	defer span.End()
+
+	users, err := service.database.GetUsersByBoardID(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get users")
+		span.RecordError(err)
+		log.Errorw("unable to get users", "board", boardID, "err", err)
+		return nil, CreateUserError(Internal, "failed to get users", err)
+	}
+
+	return UserSlice(users), nil
 }
 
 func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {
@@ -193,63 +250,6 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 
 	deletedUserCounter.Add(ctx, 1)
 	return err
-}
-
-func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.users.service.get.id", userID.String()),
-	)
-
-	user, err := service.database.GetUser(ctx, userID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "user not found")
-			span.RecordError(err)
-			return nil, CreateUserError(NotFound, "user not found", err)
-		}
-
-		span.SetStatus(codes.Error, "failed to get user")
-		span.RecordError(err)
-		log.Errorw("unable to get user", "user", userID, "err", err)
-		return nil, CreateUserError(Internal, "failed to get user", err)
-	}
-
-	return new(User).From(user), err
-}
-
-func (service *Service) GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_ids")
-	defer span.End()
-
-	retrievedIDs, err := service.database.GetExistingUserIDs(ctx, userIDs)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get userIDs")
-		span.RecordError(err)
-		log.Errorw("unable to get retrievedIDs", "userIDs", userIDs, "error", err)
-		return nil, common.InternalServerError
-	}
-	return retrievedIDs, nil
-}
-
-func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.users.service.get_by_board")
-	defer span.End()
-
-	users, err := service.database.GetUsersByBoardID(ctx, boardID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get users")
-		span.RecordError(err)
-		log.Errorw("unable to get users", "board", boardID, "err", err)
-		return nil, CreateUserError(Internal, "failed to get users", err)
-	}
-
-	return UserSlice(users), nil
 }
 
 func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {

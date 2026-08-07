@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/urfave/cli/v2"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
@@ -25,7 +26,7 @@ type Client interface {
 	SubscribeToBoardSessionEvents(ctx context.Context, subject string) (chan *BoardSessionRequestEventType, error)
 
 	// SubscribeToBoardEvents subscribes to the given topic and return a channel
-	//	// with the received BoardEvent
+	// with the received BoardEvent
 	SubscribeToBoardEvents(ctx context.Context, subject string) (chan *BoardEvent, error)
 }
 

@@ -24,6 +24,13 @@ type Router struct {
 	sessionApi sessions.SessionApi
 }
 
+func NewUsersRouter(usersApi UsersApi, sessionApi sessions.SessionApi) *Router {
+	r := new(Router)
+	r.usersApi = usersApi
+	r.sessionApi = sessionApi
+	return r
+}
+
 func (r *Router) RegisterRoutes() chi.Router {
 	router := chi.NewRouter()
 	router.Route("/users", func(router chi.Router) {
@@ -34,11 +41,4 @@ func (r *Router) RegisterRoutes() chi.Router {
 		router.With(r.sessionApi.BoardParticipantContext).Get("/board/{id}", r.usersApi.GetUsersFromBoard)
 	})
 	return router
-}
-
-func NewUsersRouter(usersApi UsersApi, sessionApi sessions.SessionApi) *Router {
-	r := new(Router)
-	r.usersApi = usersApi
-	r.sessionApi = sessionApi
-	return r
 }

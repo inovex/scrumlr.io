@@ -17,13 +17,12 @@ import (
 )
 
 type UserService interface {
-	CreateUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
-	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
-	Delete(ctx context.Context, id uuid.UUID) error
+	Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
 	GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
 	GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error)
-
+	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)
 }
@@ -33,6 +32,15 @@ type API struct {
 	sessions                      sessions.SessionService
 	allowAnonymousBoardCreation   bool
 	allowAnonymousCustomTemplates bool
+}
+
+func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
+	api := new(API)
+	api.service = service
+	api.sessions = sessionService
+	api.allowAnonymousBoardCreation = allowAnonymousBoardCreation
+	api.allowAnonymousCustomTemplates = allowAnonymousCustomTemplates
+	return api
 }
 
 // Get the logged in user
@@ -393,13 +401,4 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
-}
-
-func NewUserApi(service UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) UsersApi {
-	api := new(API)
-	api.service = service
-	api.sessions = sessionService
-	api.allowAnonymousBoardCreation = allowAnonymousBoardCreation
-	api.allowAnonymousCustomTemplates = allowAnonymousCustomTemplates
-	return api
 }

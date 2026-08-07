@@ -108,7 +108,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	userId := suite.users["Luke"].ID
 	role := role.ParticipantRole
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
 	session, err := suite.sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
@@ -135,7 +136,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	userId := suite.users["Luke"].ID
 	callerId := suite.baseData.Users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
 	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(role.ModeratorRole)})
@@ -164,7 +166,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 
 	boardId := suite.boards["UpdateAll"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
 	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: new(false), RaisedHand: new(false)})
@@ -234,10 +237,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Luke"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
-	err := suite.sessionService.Connect(ctx, boardId, userId)
+	err = suite.sessionService.Connect(ctx, boardId, userId)
 
 	// then
 	suite.Nil(err)
@@ -253,10 +257,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Leia"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
-	err := suite.sessionService.Disconnect(ctx, boardId, userId)
+	err = suite.sessionService.Disconnect(ctx, boardId, userId)
 
 	// then
 	suite.Nil(err)
@@ -351,9 +356,10 @@ func (suite *SessionServiceIntegrationTestSuite) TestDelete() {
 	boardId := suite.boards["Write"].ID
 	userId := suite.baseData.Users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.sessionService.Delete(ctx, userId, boardId, userId)
+	err = suite.sessionService.Delete(ctx, userId, boardId, userId)
 
 	suite.Nil(err)
 

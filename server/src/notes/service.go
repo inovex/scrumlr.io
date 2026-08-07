@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/websocket"
 )
 
 const DefaultTTL = 10 * time.Second
@@ -138,6 +139,96 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	}
 
 	return new(Note).From(note), err
+}
+
+func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.note", id.String()),
+	)
+
+	note, err := service.database.Get(ctx, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "note not found")
+			span.RecordError(err)
+			return nil, CreateNoteError(NotFound, "note not found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to get note")
+		span.RecordError(err)
+		log.Errorw("unable to get note", "note", id, "error", err)
+		return nil, CreateNoteError(Internal, "failed to get note", err)
+	}
+	return new(Note).From(note), err
+}
+
+func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.all.board", boardID.String()),
+	)
+
+	notes, err := service.database.GetAll(ctx, boardID, columnID...)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to get notes")
+		log.Errorw("unable to get notes", "board", boardID, "error", err)
+		return nil, CreateNoteError(Internal, "failed to get notes", err)
+	}
+	return Notes(notes), nil
+}
+
+func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.by_user_and_board")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.user", userID.String()),
+		attribute.String("scrumlr.notes.service.get.by_user_and_board.board", boardID.String()),
+	)
+
+	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "notes not found")
+			span.RecordError(err)
+			return nil, CreateNoteError(NotFound, "note not found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
+		log.Errorw("unable to get notes", "error", err)
+		return nil, CreateNoteError(Internal, "failed to get notes", err)
+	}
+	return Notes(notes), nil
+}
+
+func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.stack")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.notes.service.get.stack.note", note.String()),
+	)
+
+	notes, err := service.database.GetStack(ctx, note)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get note stack")
+		span.RecordError(err)
+		log.Errorw("unable to get stack", "note", note, "err", err)
+		return nil, CreateNoteError(Internal, "failed to get note stack", err)
+	}
+
+	return Notes(notes), err
 }
 
 func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpdateRequest) (*Note, error) {
@@ -312,68 +403,39 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	return nil
 }
 
-func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
+func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get")
+	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.notes.service.get.note", id.String()),
+		attribute.String("board_id", boardID.String()),
+		attribute.String("user_id", userID.String()),
 	)
 
-	note, err := service.database.Get(ctx, id)
+	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "note not found")
-			span.RecordError(err)
-			return nil, CreateNoteError(NotFound, "note not found", err)
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "failed to fetch notes")
+		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
+		return err
+	}
+
+	for _, note := range userNotes {
+
+		req := NoteDeleteRequest{
+			ID:          note.ID,
+			Board:       boardID,
+			DeleteStack: false,
 		}
 
-		span.SetStatus(codes.Error, "failed to get note")
-		span.RecordError(err)
-		log.Errorw("unable to get note", "note", id, "error", err)
-		return nil, CreateNoteError(Internal, "failed to get note", err)
-	}
-	return new(Note).From(note), err
-}
-
-func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.all")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.notes.service.get.all.board", boardID.String()),
-	)
-
-	notes, err := service.database.GetAll(ctx, boardID, columnID...)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to get notes")
-		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
-	}
-	return Notes(notes), nil
-}
-
-func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.stack")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.notes.service.get.stack.note", note.String()),
-	)
-
-	notes, err := service.database.GetStack(ctx, note)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get note stack")
-		span.RecordError(err)
-		log.Errorw("unable to get stack", "note", note, "err", err)
-		return nil, CreateNoteError(Internal, "failed to get note stack", err)
+		if err := service.Delete(ctx, userID, req); err != nil {
+			span.RecordError(err)
+			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
+		}
 	}
 
-	return Notes(notes), err
+	return nil
 }
 
 func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userID uuid.UUID, boardID uuid.UUID) bool {
@@ -493,7 +555,7 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 	return false
 }
 
-func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn WebSocketConnector, data json.RawMessage) {
+func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -533,67 +595,6 @@ func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, use
 			log.Errorw("failed to send drag lock response", "error", err, "response", response)
 		}
 	}
-}
-
-func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) ([]*Note, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.get.by_user_and_board")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.notes.service.get.by_user_and_board.user", userID.String()),
-		attribute.String("scrumlr.notes.service.get.by_user_and_board.board", boardID.String()),
-	)
-
-	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "notes not found")
-			span.RecordError(err)
-			return nil, CreateNoteError(NotFound, "note not found", err)
-		}
-
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
-		log.Errorw("unable to get notes", "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
-	}
-	return Notes(notes), nil
-}
-
-func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uuid.UUID, boardID uuid.UUID) error {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "notest.service.delete_user_notes")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("board_id", boardID.String()),
-		attribute.String("user_id", userID.String()),
-	)
-
-	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to fetch notes")
-		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
-		return err
-	}
-
-	for _, note := range userNotes {
-
-		req := NoteDeleteRequest{
-			ID:          note.ID,
-			Board:       boardID,
-			DeleteStack: false,
-		}
-
-		if err := service.Delete(ctx, userID, req); err != nil {
-			span.RecordError(err)
-			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
-		}
-	}
-
-	return nil
 }
 
 func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
@@ -686,7 +687,7 @@ func (service *Service) releaseLock(ctx context.Context, boardID uuid.UUID, note
 	}
 }
 
-func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnector) {
+func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.acquire")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -709,7 +710,7 @@ func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, user
 	}
 }
 
-func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn WebSocketConnector) {
+func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.release")
 	defer span.End()
 	log := logger.FromContext(ctx)
