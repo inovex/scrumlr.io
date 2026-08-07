@@ -126,6 +126,7 @@ func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Re
 //	@Description	Verify the auth provider call and create or update a user. Redirect to the page provider with the state
 //	@Tags			auth
 //	@Accept			json
+//	@Param			Cookie	header	string					false	"jwt token to for upgrading an existing user"
 //	@Param			user	body	AnonymousSignUpRequest	true	"user to create"
 //	@Produce		json
 //	@Header			303	{string}	Cookie		"jwt token to sign in"
@@ -168,13 +169,35 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	}
 
 	var internalUser *users.User
-	internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("could not create user", "err", err)
-		return
+
+	id, err := s.auth.ExtractUserId(r)
+	if err == nil {
+		user, err := s.users.Get(ctx, id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Errorw("unable to fetch user", "err", err)
+			return
+		}
+
+		if user.AccountType == common.Anonymous {
+			internalUser, err = s.users.UpgradeAnonymousUser(ctx, id, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				log.Errorw("unable to upgrade user", "err", err)
+				return
+			}
+		}
+	}
+
+	if internalUser == nil {
+		internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to create user")
+			span.RecordError(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Errorw("could not create user", "err", err)
+			return
+		}
 	}
 
 	tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
