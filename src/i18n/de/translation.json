@@ -108,6 +108,7 @@
     "switchTitle": "Historie",
     "title": "Verwalte deine Boards",
     "savedBoards": "Zuletzt verwendet",
+    "empty": "Deine Session-Historie ist leer — betritt oder erstelle ein Board und es wird hier angezeigt!",
     "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
     "registerNow": "Jetzt registrieren",
     "HistoryCard": {

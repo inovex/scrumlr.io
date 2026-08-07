@@ -67,13 +67,13 @@ $max-card-width: 680px;
 }
 
 // following is displayed if user is anonymous and the option is set they have to be registered to view the history
-.history__require-registered-user-info {
+.history__info-container {
   display: flex;
   gap: styles.$spacing--sm;
   align-items: flex-start;
 }
 
-.history__require-registered-user-icon {
+.history__info-icon {
   width: styles.$icon--large;
   height: styles.$icon--large;
   flex-shrink: 0;
@@ -81,7 +81,7 @@ $max-card-width: 680px;
   color: styles.$navy--600;
 }
 
-.history__require-registered-user-text {
+.history__info-text {
   font-weight: 400;
   font-size: styles.$text--md;
   line-height: 28px;

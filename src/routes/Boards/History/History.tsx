@@ -33,28 +33,44 @@ export const History = () => {
 
   const matchSearchInput = (historyBoard: HistoryBoard) => historyBoard.name.toLowerCase().includes(searchBarInput.toLowerCase());
 
-  // show history for registered users or if the respective env flag is set, otherwise an info section
-  const renderHistoryContent = () =>
-    canViewHistory ? (
-      historyBoards
-        .filter(matchSearchInput)
-        .sort((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime()) // move favourites to the top, then sort by latest modifiedAt
-        .map((hb) => <HistoryCard key={hb.id} board={hb} />)
-    ) : (
-      <div className={"history__require-registered-user"}>
-        <div className="history__require-registered-user-info">
-          <InfoIcon className="history__require-registered-user-icon" />
-          <p className="history__require-registered-user-text">{t("History.requireRegisteredAccount")}</p>
-        </div>
-        <div className="history__require-registered-user-register-area">
-          {/*redirect to the login screen and after and then back to here after completion.
-          NOTE: possible subject to change, e.g., by replacing it with an 'upgrade account' functionality*/}
-          <Button className="history__require-registered-user-register-button" onClick={() => navigate("/login", {state: {from: {pathname: "boards/history"}}})}>
-            {t("History.registerNow")}
-          </Button>
-        </div>
+  const renderRequireRegisteredUser = () => (
+    <div className={"history__info"}>
+      <div className="history__info-container">
+        <InfoIcon className="history__info-icon" />
+        <p className="history__info-text">{t("History.requireRegisteredAccount")}</p>
       </div>
-    );
+      <div className="history__require-registered-user-register-area">
+        {/*redirect to the login screen and after and then back to here after completion.
+          NOTE: possible subject to change, e.g., by replacing it with an 'upgrade account' functionality*/}
+        <Button className="history__require-registered-user-register-button" onClick={() => navigate("/login", {state: {from: {pathname: "boards/history"}}})}>
+          {t("History.registerNow")}
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderEmptyHistory = () => (
+    <div className="history__info">
+      <div className="history__info-container">
+        <InfoIcon className="history__info-icon" />
+        <p className="history__info-text">{t("History.empty")}</p>
+      </div>
+    </div>
+  );
+
+  // show history for registered users or if the respective env flag is set and if there are history boards, otherwise an info section
+  const renderHistoryContent = () => {
+    if (!canViewHistory) {
+      return renderRequireRegisteredUser();
+    }
+    if (historyBoards.length === 0) {
+      return renderEmptyHistory();
+    }
+    return historyBoards
+      .filter(matchSearchInput)
+      .sort((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime()) // move favourites to the top, then sort by latest modifiedAt
+      .map((hb) => <HistoryCard key={hb.id} board={hb} />);
+  };
 
   return (
     <>
