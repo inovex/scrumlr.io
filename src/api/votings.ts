@@ -27,12 +27,19 @@ export const VotingAPI = {
     }
   },
 
-  changeVotingStatus: async (board: string, voting: string) => {
+  changeVotingStatus: async (board: string, voting: string, status?: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings/${voting}`, {
+      const options: RequestInit = {
         method: "PUT",
         credentials: "include",
-      });
+      };
+
+      if (typeof status !== "undefined") {
+        options.body = JSON.stringify({status});
+        options.headers = {"Content-Type": "application/json"};
+      }
+
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings/${voting}`, options);
 
       if (response.status === 200) {
         return await response.json();
