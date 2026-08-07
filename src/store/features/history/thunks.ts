@@ -1,8 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState, retryable} from "store";
+import {BoardOverview, EditableTemplateColumn, HistoryBoard} from "store/features";
 import {API} from "api";
-import {EditableTemplateColumn} from "../templateColumns/types";
-import {BoardOverview, HistoryBoard} from "./types";
 
 // maps the raw GET /boards shape to the app-facing HistoryBoard
 const toHistoryBoard = (overview: BoardOverview): HistoryBoard => ({

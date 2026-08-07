@@ -1,6 +1,4 @@
-import {AccessPolicy} from "../board/types";
-import {Column} from "../columns/types";
-import {ParticipantRole} from "../participants/types";
+import {AccessPolicy, Column, ParticipantRole} from "store/features";
 
 // a board shown in the History list (one of the user's past board sessions).
 export type HistoryBoard = {
