@@ -66,18 +66,23 @@ $max-card-width: 680px;
   }
 }
 
-// following is displayed if user is anonymous and the option is set they have to be registered to view the history
+// info is displayed if history is empty or user has to register
+.history__info {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--sm;
+}
+
 .history__info-container {
   display: flex;
   gap: styles.$spacing--sm;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .history__info-icon {
   width: styles.$icon--large;
   height: styles.$icon--large;
   flex-shrink: 0;
-  margin-top: styles.$spacing--xxs;
   color: styles.$navy--600;
 }
 
@@ -85,7 +90,7 @@ $max-card-width: 680px;
   font-weight: 400;
   font-size: styles.$text--md;
   line-height: 28px;
-  margin-top: styles.$spacing--xxs;
+  margin: 0;
   color: styles.$navy--400;
 }
 
