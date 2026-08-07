@@ -20,7 +20,7 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
             <input
               class="input__input input__input--text"
               data-cy="editor-shell__name-input"
-              placeholder="Board name"
+              placeholder="Name"
               required=""
               tabindex="0"
               type="text"
@@ -953,7 +953,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
             <input
               class="input__input input__input--text"
               data-cy="editor-shell__name-input"
-              placeholder="Board name"
+              placeholder="Name"
               required=""
               tabindex="0"
               type="text"
