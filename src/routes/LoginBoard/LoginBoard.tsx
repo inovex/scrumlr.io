@@ -22,17 +22,10 @@ import StanOkayDark from "assets/stan/Stan_Okay_Cutted_Darkblue_Shirt.svg";
 import StanOkayLight from "assets/stan/Stan_Okay_Cutted_White_Shirt.svg";
 // styles
 import "./LoginBoard.scss";
-import {TranslationKey} from "utils/i18n";
 
 interface LocationState {
   from: {pathname: string};
 }
-
-const FEATURE_KEYS = [
-  "LoginBoard.loginFeature1",
-  "LoginBoard.loginFeature2",
-  // ...
-] as const satisfies readonly TranslationKey[];
 
 const TERMS_LINKS = {
   terms: <Link to="/legal/termsAndConditions" target="_blank" />,
@@ -43,6 +36,7 @@ export const LoginBoard = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const loginFeatures = t("LoginBoard.loginFeatures", {returnObjects: true});
 
   const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
   const enabledProviders = useAppSelector((state) => state.view.enabledAuthProvider);
@@ -72,10 +66,10 @@ export const LoginBoard = () => {
         <>
           <h1>{t("LoginBoard.subtitleLogin")}</h1>
           <div className="login-board__features">
-            {FEATURE_KEYS.map((key) => (
-              <div key={key} className="login-board__feature">
+            {loginFeatures.map((feature, index) => (
+              <div key={`${feature}-${index}`} className="login-board__feature">
                 <MarkAsDoneIcon className="login-board__feature-icon" />
-                <span>{t(key)}</span>
+                <span>{feature}</span>
               </div>
             ))}
           </div>
