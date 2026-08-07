@@ -22,6 +22,7 @@ type UserService interface {
 	GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
 	GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error)
 	Update(ctx context.Context, body UserUpdateRequest) (*User, error)
+	UpgradeAnonymousUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
 	SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error)
