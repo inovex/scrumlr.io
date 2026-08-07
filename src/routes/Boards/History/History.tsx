@@ -38,7 +38,7 @@ export const History = () => {
     canViewHistory ? (
       historyBoards
         .filter(matchSearchInput)
-        .sort((a, b) => Number(b.favourite) - Number(a.favourite) || b.modifiedAt.getTime() - a.modifiedAt.getTime()) // move favourites to the top, then sort by latest modifiedAt
+        .sort((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime()) // move favourites to the top, then sort by latest modifiedAt
         .map((hb) => <HistoryCard key={hb.id} board={hb} />)
     ) : (
       <div className={"history__require-registered-user"}>

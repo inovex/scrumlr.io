@@ -86,8 +86,8 @@ export const HistoryCard = (props: HistoryCardProps) => {
   const canDelete = props.board.userRole === "OWNER";
 
   const joinedColumnsNames = props.board.columns.map((column) => column.name).join(", ");
-  const formattedCreatedAtDate = props.board.createdAt.toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
-  const formattedModifiedAtDate = localizeTimeDifference(props.board.modifiedAt);
+  const formattedCreatedAtDate = new Date(props.board.createdAt).toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
+  const formattedModifiedAtDate = localizeTimeDifference(new Date(props.board.modifiedAt));
 
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
   const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
