@@ -12,6 +12,7 @@ import {UserAPI} from "api/user";
 import {BoardReactionAPI} from "api/boardReaction";
 import {TemplatesAPI} from "api/templates";
 import {TemplateColumnsAPI} from "api/templateColumns";
+import {SERVER_HTTP_URL} from "../config";
 
 export const API = {
   ...InfoAPI,
@@ -29,3 +30,27 @@ export const API = {
   ...TemplatesAPI,
   ...TemplateColumnsAPI,
 };
+
+interface QueryParameter {
+  key: string;
+  value: string | number | boolean | string[] | number[] | null | undefined;
+}
+
+export function buildUrl(path: string, queryParameter: QueryParameter[] = []): URL {
+  const url = new URL(path, SERVER_HTTP_URL);
+  for (let param of queryParameter) {
+    if (param.value !== null && param.value !== undefined) {
+      if (Array.isArray(param.value)) {
+        param.value.forEach((item) => {
+          if (item !== null && item !== undefined) {
+            url.searchParams.append(param.key, String(item));
+          }
+        });
+      } else {
+        url.searchParams.append(param.key, String(param.value));
+      }
+    }
+  }
+
+  return url;
+}

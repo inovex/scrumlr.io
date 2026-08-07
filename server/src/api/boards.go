@@ -114,8 +114,8 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 
 // Get all boards
 //
-//	@Summary		Delete a board
-//	@Description	Delete a board
+//	@Summary		Get all board
+//	@Description	Get all board
 //	@Tags			boards
 //	@Accept			json
 //	@Param			Cookie	header	string	true	"jwt token to authenticate"
@@ -371,7 +371,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 //	@Failure		403	{object}	common.APIError
 //	@Failure		404	{object}	common.APIError
 //	@Failure		500	{object}	common.APIError
-//	@Router			/boards{id} [put]
+//	@Router			/boards/{id} [put]
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
 	defer span.End()
