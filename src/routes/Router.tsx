@@ -2,7 +2,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
 import {Boards} from "routes/Boards";
 import {Templates} from "routes/Boards/Templates";
-import {History} from "routes/Boards/Sessions";
+import {History} from "routes/Boards/History";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -23,7 +23,7 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
-import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
+import {TemplateEditor, BoardEditor} from "routes/Boards/Editor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
 const renderLegacyRoute = (legacy: boolean) =>
@@ -87,7 +87,7 @@ const Router = () => {
           </Route>
 
           <Route
-            path="edit/:id"
+            path="edit-template/:id"
             element={
               <VerifiedAccountGuard override={allowAnonymousCustomTemplates}>
                 <TemplateEditor mode="edit" />
@@ -100,6 +100,8 @@ const Router = () => {
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
+
+          <Route path="edit-board/:boardId" element={<BoardEditor />} />
 
           <Route path="history" element={<History />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>

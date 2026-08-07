@@ -185,6 +185,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     anonymousLoginDisabled: false,
     allowAnonymousCustomTemplates: true,
     allowAnonymousBoardCreation: true,
+    allowAnonymousHistory: true,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
@@ -255,5 +256,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   dragLocks: {
     lockedNotes: {},
   },
+  history: [],
   ...overwrite,
 });

@@ -66,33 +66,44 @@ $max-card-width: 680px;
   }
 }
 
-// following teaser styles are temporary while the history is not yet fully implemented
-.history__teaser-info {
+// info is displayed if history is empty or user has to register
+.history__info {
   display: flex;
+  flex-direction: column;
   gap: styles.$spacing--sm;
-  align-items: flex-start;
 }
 
-.history__teaser-icon {
+.history__info-container {
+  display: flex;
+  gap: styles.$spacing--sm;
+  align-items: center;
+}
+
+.history__info-icon {
   width: styles.$icon--large;
   height: styles.$icon--large;
   flex-shrink: 0;
-  margin-top: styles.$spacing--xxs;
   color: styles.$navy--600;
 }
 
-.history__teaser-text {
+.history__info-text {
   font-weight: 400;
   font-size: styles.$text--md;
   line-height: 28px;
-  margin-top: styles.$spacing--xxs;
+  margin: 0;
   color: styles.$navy--400;
 }
 
+.history__require-registered-user-register-area {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 [data-theme="dark"] {
-  .history__teaser-title,
-  .history__teaser-icon,
-  .history__teaser-text {
+  .history__require-registered-user-title,
+  .history__require-registered-user-icon,
+  .history__require-registered-user-text {
     color: styles.$blue--50;
   }
 }

@@ -1,4 +1,4 @@
-import {TemplateEditor, TemplateEditorProps} from "routes/Boards/TemplateEditor/TemplateEditor";
+import {TemplateEditor, TemplateEditorProps} from "routes/Boards/Editor/TemplateEditor/TemplateEditor";
 import {renderWithContext} from "testUtils";
 import {fireEvent} from "@testing-library/react";
 
@@ -19,8 +19,8 @@ describe("TemplateEditor create", () => {
 
   it("should only allow clicking create if name is set", () => {
     const {container} = renderTemplateEditor({mode: "create"});
-    const nameInputNode = container.querySelector<HTMLInputElement>(".template-editor__name-input input")!;
-    const createTemplateButtonNode = container.querySelector<HTMLButtonElement>(".template-editor__button--create")!;
+    const nameInputNode = container.querySelector<HTMLInputElement>(".editor-shell__name-input input")!;
+    const createTemplateButtonNode = container.querySelector<HTMLButtonElement>(".editor-shell__button--create")!;
 
     expect(createTemplateButtonNode).toBeDisabled();
 
@@ -42,8 +42,8 @@ describe("TemplateEditor edit", () => {
   it("fill form with data from the corresponding template", () => {
     const {container} = renderTemplateEditor({mode: "edit"}, "test-templates-id-1");
 
-    const nameInputNode = container.querySelector<HTMLInputElement>(".template-editor__name-input input")!;
-    const descriptionInputNode = container.querySelector<HTMLTextAreaElement>(".template-editor__description-text-area")!;
+    const nameInputNode = container.querySelector<HTMLInputElement>(".editor-shell__name-input input")!;
+    const descriptionInputNode = container.querySelector<HTMLTextAreaElement>(".editor-shell__description-text-area")!;
 
     expect(nameInputNode).toHaveValue("sample name 1");
     expect(descriptionInputNode).toHaveValue("sample description 1");
