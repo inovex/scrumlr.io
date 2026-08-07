@@ -10,8 +10,8 @@ export type HistoryBoard = {
   accessPolicy: AccessPolicy;
   columns: Column[];
   participants: number;
-  createdAt: Date;
-  modifiedAt: Date;
+  createdAt: string;
+  modifiedAt: string;
   notes: number;
   isLocked: boolean;
   userRole: ParticipantRole;
