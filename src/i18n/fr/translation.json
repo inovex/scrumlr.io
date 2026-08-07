@@ -108,6 +108,7 @@
     "switchTitle": "Histoire",
     "title": "Gérer tes tableaux",
     "savedBoards": "Dernièrement utilisés",
+    "empty": "De ta session historique est vide — rejoint ou crée un tableau et il apparaîtra ici!",
     "requireRegisteredAccount": "Connecte-toi avec Google, Microsoft ou SSO pour sauvegarder et gérer automatiquement tes tableaux de manière permanente. Les profils anonymes (connexion invité) ne peuvent pas être associés à des tableaux, ils ne seront donc pas enregistrés.",
     "registerNow": "Inscris-toi",
     "HistoryCard": {

@@ -108,6 +108,7 @@
     "switchTitle": "History",
     "title": "Manage your boards",
     "savedBoards": "Recently used",
+    "empty": "Your session history is empty — join or create a board and it will pop up here!",
     "requireRegisteredAccount": "Sign in with Google, Microsoft, or SSO to automatically back up and manage your boards permanently. Anonymous profiles (guest login) cannot be associated with boards, so they will not be saved.",
     "registerNow": "Register now",
     "HistoryCard": {
