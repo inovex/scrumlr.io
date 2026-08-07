@@ -30,11 +30,17 @@ type UserDatabase interface {
 	CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
+
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
+	UpgradeUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType) (DatabaseUser, error)
+	MergeUser(ctx context.Context, mergeInto uuid.UUID, merge uuid.UUID) (DatabaseUser, error)
+
 	DeleteUser(ctx context.Context, id uuid.UUID) error
+
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
 	GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
 	GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.UUID, error)
+	GetUserIdByExternalId(ctx context.Context, id string, accountType common.AccountType) (uuid.UUID, error)
 
 	IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error)
 	IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error)
@@ -204,6 +210,68 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	service.updatedUser(ctx, user)
 
 	return new(User).From(user), err
+}
+
+func (service *Service) UpgradeAnonymousUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.upgrade_anonymous_user")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := validateUsername(name)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to validate user name"))
+		return nil, err
+	}
+
+	var specificCounter metric.Int64Counter
+
+	switch accountType {
+	case common.Apple:
+		specificCounter = appleUserUpgradedCounter
+	case common.AzureAd:
+		specificCounter = azureAdUserUpgradedCounter
+	case common.GitHub:
+		specificCounter = githubUserUpgradedCounter
+	case common.Google:
+		specificCounter = googleUserUpgradedCounter
+	case common.Microsoft:
+		specificCounter = microsoftUserUpgradedCounter
+	case common.TypeOIDC:
+		specificCounter = oicdUserUpgradedCounter
+	default:
+		return nil, CreateUserError(BadRequest, "invalid account type", errors.New("invalid account type"))
+	}
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.userId", userId.String()),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.id", id),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.name", name),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.accountType", string(accountType)),
+	)
+
+	var user DatabaseUser
+
+	externalUserId, err := service.database.GetUserIdByExternalId(ctx, id, accountType)
+	if errors.Is(err, sql.ErrNoRows) {
+		// no sso user exists -> upgrade the anonymous user
+		user, err = service.database.UpgradeUser(ctx, userId, id, name, avatarUrl, accountType)
+	} else if err == nil {
+		// external user already exists, merge the anonymous and sso user
+		user, err = service.database.MergeUser(ctx, externalUserId, userId)
+	}
+
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to upgrade user"))
+		log.Errorw("unable to upgrade user", "user", userId, "accountType", accountType)
+		return nil, CreateUserError(Internal, "failed to upgrade user", err)
+	}
+
+	userUpgradedCounter.Add(ctx, 1)
+	specificCounter.Add(ctx, 1)
+
+	service.updatedUser(ctx, user)
+
+	return new(User).From(user), nil
 }
 
 func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
