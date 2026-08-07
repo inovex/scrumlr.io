@@ -18,9 +18,9 @@ The following steps should be followed when creating a new release
 
 1. Make sure all PRs that the release should include are merged
 2. Create a new PR to update the version number for Scrumlr and merge it. This PR should include the following files
-    - `src/package.json`
+    - `package.json` (in the repository root)
     - `deployment/docker/.env.example`
-    - `deployment/docker/docker-compose.yaml`
+    - `deployment/docker/docker-compose.yml`
     - `deployment/helm/scrumlr/Chart.yaml`
     - `deployment/helm/scrumlr/tests/backend/deployment_test.yaml`
     - `deployment/helm/scrumlr/tests/frontend/deployment_test.yaml`
