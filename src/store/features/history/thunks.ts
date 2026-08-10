@@ -53,7 +53,7 @@ export const saveBoardEdit = createAsyncThunk<
   void,
   {boardId: string; name: string; description: string; columns: EditableTemplateColumn[]; deletedColumns: EditableTemplateColumn[]},
   {state: ApplicationState}
->("history/saveBoardEdit", async ({boardId, name, description, columns, deletedColumns}, {dispatch}) => {
+>("history/saveBoardEdit", async ({boardId, name, description, columns, deletedColumns}) => {
   await API.editBoard(boardId, {name, description});
 
   const columnsToCreate = columns.filter((column) => column.mode === "create");
@@ -80,6 +80,4 @@ export const saveBoardEdit = createAsyncThunk<
     ),
     ...columnsToDelete.map((column) => API.deleteColumn(boardId, column.id)),
   ]);
-
-  await dispatch(getBoards());
 });
