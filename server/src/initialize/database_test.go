@@ -3,14 +3,13 @@ package initialize
 import (
 	"context"
 	"errors"
-	"flag"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 const POSTGRES_IMAGE = "postgres:18.4-alpine"
@@ -37,17 +36,19 @@ func TestInitializeDatabase_DatabaseUrl(t *testing.T) {
 	host, err := container.Host(ctx)
 	assert.NoError(t, err, "failed to get host from container")
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("database", "", "")
-	flagset.String("database-host", "", "")
-	flagset.String("database-username", "", "")
-	flagset.String("database-password", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "database"},
+			&cli.StringFlag{Name: "database-host"},
+			&cli.StringFlag{Name: "database-username"},
+			&cli.StringFlag{Name: "database-password"},
+		},
+	}
 
 	err = init.Set("database", fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", DATABASE_USERNAME, DATABASE_PASSWORD, host, mappedPort.Port(), DATABASE_NAME))
 	assert.NoError(t, err)
 
-	bun, err := InitializeDatabase(init)
+	bun, err := InitializeDatabase(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, bun)
@@ -77,12 +78,14 @@ func TestInitializeDatabase_DatabaseParameter(t *testing.T) {
 	host, err := container.Host(ctx)
 	assert.NoError(t, err, "failed to get host from container")
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("database", "", "")
-	flagset.String("database-host", "", "")
-	flagset.String("database-username", "", "")
-	flagset.String("database-password", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "database"},
+			&cli.StringFlag{Name: "database-host"},
+			&cli.StringFlag{Name: "database-username"},
+			&cli.StringFlag{Name: "database-password"},
+		},
+	}
 
 	err = init.Set("database-host", fmt.Sprintf("%s:%s/%s?sslmode=disable", host, mappedPort.Port(), DATABASE_NAME))
 	assert.NoError(t, err)
@@ -91,7 +94,7 @@ func TestInitializeDatabase_DatabaseParameter(t *testing.T) {
 	err = init.Set("database-password", DATABASE_PASSWORD)
 	assert.NoError(t, err)
 
-	bun, err := InitializeDatabase(init)
+	bun, err := InitializeDatabase(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, bun)
@@ -115,14 +118,16 @@ func TestInitializeDatabase_NotConfigured(t *testing.T) {
 
 	assert.NoError(t, err, "failed to create test container")
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("database", "", "")
-	flagset.String("database-host", "", "")
-	flagset.String("database-username", "", "")
-	flagset.String("database-password", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "database"},
+			&cli.StringFlag{Name: "database-host"},
+			&cli.StringFlag{Name: "database-username"},
+			&cli.StringFlag{Name: "database-password"},
+		},
+	}
 
-	bun, err := InitializeDatabase(init)
+	bun, err := InitializeDatabase(ctx, init)
 
 	assert.Error(t, err)
 	assert.Equal(t, errors.New("no valid database connection found"), err)
@@ -152,12 +157,14 @@ func TestInitializeDatabase_PrefereDatabaseUrl(t *testing.T) {
 	host, err := container.Host(ctx)
 	assert.NoError(t, err, "failed to get host from container")
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("database", "", "")
-	flagset.String("database-host", "", "")
-	flagset.String("database-username", "", "")
-	flagset.String("database-password", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "database"},
+			&cli.StringFlag{Name: "database-host"},
+			&cli.StringFlag{Name: "database-username"},
+			&cli.StringFlag{Name: "database-password"},
+		},
+	}
 
 	err = init.Set("database", fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", DATABASE_USERNAME, DATABASE_PASSWORD, host, mappedPort.Port(), DATABASE_NAME))
 	assert.NoError(t, err)
@@ -168,7 +175,7 @@ func TestInitializeDatabase_PrefereDatabaseUrl(t *testing.T) {
 	err = init.Set("database-password", DATABASE_PASSWORD)
 	assert.NoError(t, err)
 
-	bun, err := InitializeDatabase(init)
+	bun, err := InitializeDatabase(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, bun)
