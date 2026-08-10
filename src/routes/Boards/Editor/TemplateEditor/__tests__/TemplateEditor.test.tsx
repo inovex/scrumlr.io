@@ -7,8 +7,8 @@ const renderTemplateEditor = (props: TemplateEditorProps, editTemplateId?: strin
     ? renderWithContext(<TemplateEditor {...props} />, {context: undefined, initialRouteEntries: [{pathname: "/boards/create"}], currentPath: "/boards/create"})
     : renderWithContext(<TemplateEditor {...props} />, {
         context: undefined,
-        initialRouteEntries: [{pathname: `/boards/edit/${editTemplateId}`}],
-        currentPath: "/boards/edit/:id",
+        initialRouteEntries: [{pathname: `/boards/edit-template/${editTemplateId}`}],
+        currentPath: "/boards/edit-template/:id",
       });
 
 describe("TemplateEditor create", () => {
