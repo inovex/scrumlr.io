@@ -8,8 +8,6 @@ import (
 
 type VotingService interface {
 	Create(ctx context.Context, body VotingCreateRequest) (*Voting, error)
-	Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)
-	Cancel(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (*Voting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]*Voting, error)
 	GetOpen(ctx context.Context, board uuid.UUID) (*Voting, error)
@@ -17,6 +15,7 @@ type VotingService interface {
 	AddVote(ctx context.Context, req VoteRequest) (*Vote, error)
 	RemoveVote(ctx context.Context, req VoteRequest) error
 	Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)
+	Cancel(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)
 }
 
 type VotingApi struct {

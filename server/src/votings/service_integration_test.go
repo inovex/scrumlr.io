@@ -235,7 +235,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CancelVoting() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	affectedNotes := []Note{
 		{ID: suite.baseData.Notes["Update1"].ID, Author: suite.baseData.Notes["Update1"].AuthorID, Text: suite.baseData.Notes["Update1"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update1"].ColumnID}},
