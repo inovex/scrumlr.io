@@ -532,7 +532,7 @@ func configureAuthProvider(ctx *cli.Context, basePath string) (map[string]auth.A
 		return nil, errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	log.Debug("Configured %d auth provider", len(providersMap))
+	log.Debugf("Configured %d auth provider", len(providersMap))
 
 	return providersMap, nil
 }
