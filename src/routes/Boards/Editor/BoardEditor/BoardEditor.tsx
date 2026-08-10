@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Navigate, useNavigate, useParams} from "react-router";
+import {Navigate, Outlet, useNavigate, useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {EditableTemplateColumn, getBoards, saveBoardEdit} from "store/features";
@@ -64,15 +64,18 @@ export const BoardEditor = () => {
   };
   //TODO: Maybe add a warn dialog before navigating away from the editor with edits pending
   return (
-    <EditorShell
-      editorId={board.id}
-      initialName={board.name}
-      initialDescription={board.description}
-      initialColumns={initialColumns}
-      submitLabel={t("BoardEditor.save")}
-      submitIcon={<CheckDoneIcon />}
-      onSubmit={saveBoard}
-      onCancel={() => navigate("/boards/history")}
-    />
+    <>
+      <EditorShell
+        editorId={board.id}
+        initialName={board.name}
+        initialDescription={board.description}
+        initialColumns={initialColumns}
+        submitLabel={t("BoardEditor.save")}
+        submitIcon={<CheckDoneIcon />}
+        onSubmit={saveBoard}
+        onCancel={() => navigate("/boards/history")}
+      />
+      <Outlet /> {/* settings */}
+    </>
   );
 };

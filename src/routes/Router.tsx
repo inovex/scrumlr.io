@@ -23,7 +23,7 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
-import {TemplateEditor, BoardEditor} from "routes/Boards/Editor";
+import {BoardEditor, TemplateEditor} from "routes/Boards/Editor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
 const renderLegacyRoute = (legacy: boolean) =>
@@ -101,7 +101,13 @@ const Router = () => {
             </Route>
           </Route>
 
-          <Route path="edit-board/:boardId" element={<BoardEditor />} />
+          <Route path="edit-board/:boardId" element={<BoardEditor />}>
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
 
           <Route path="history" element={<History />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>

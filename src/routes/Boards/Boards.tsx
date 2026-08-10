@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation, useNavigate, useParams} from "react-router";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
@@ -12,20 +12,21 @@ import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
-type BoardView = "templates" | "history" | "create" | "edit" | "edit-board";
+type BoardView = "templates" | "history" | "create" | "edit-template" | "edit-board";
 
 export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const {id: editTemplateId} = useParams();
   const dispatch = useAppDispatch();
 
-  const [boardView, setBoardView] = useState<BoardView>("templates");
+  // path segments after "/boards", e.g. ["edit-board", "<uuid>", "settings"].
+  const subPaths = location.pathname.split("/").filter(Boolean).slice(1);
+  const boardView = (subPaths[0] ?? "templates") as BoardView;
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
   const viewType = ["templates", "history"].includes(boardView) ? "overview" : "edit";
-  // for edit route, expand location prefix used for settings with the edit template uuid
-  const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
+  // for edit routes, expand location prefix used for settings with the uuid of the edited template/board
+  const locationPrefix = boardView === "edit-template" || boardView === "edit-board" ? `${boardView}/${subPaths[1]}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
@@ -34,12 +35,6 @@ export const Boards = () => {
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
   const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
-
-  useEffect(() => {
-    // first sub path after "/boards"
-    const subRoute = location.pathname.split("/").filter(Boolean)[1] as BoardView;
-    setBoardView(subRoute);
-  }, [location]);
 
   // init templates
   useEffect(() => {
@@ -56,7 +51,7 @@ export const Boards = () => {
         return t("Templates.TemplateEditor.createTitle");
       case "edit-board":
         return t("BoardEditor.editTitle");
-      case "edit":
+      case "edit-template":
       default: // TS is smart enough to recognize boardView is exhaustive, but ESLint isn't
         return t("Templates.TemplateEditor.editTitle");
     }
