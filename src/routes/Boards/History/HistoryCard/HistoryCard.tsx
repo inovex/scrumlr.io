@@ -247,7 +247,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
       {showDeleteConfirmation && (
         <ConfirmationDialog
           title={t("History.HistoryCard.deleteConfirmationTitle")}
-          text="History.HistoryCard.deleteConfirmationText"
+          text={t("History.HistoryCard.deleteConfirmationText")}
           icon={TrashIcon}
           warning
           onAccept={() => {
