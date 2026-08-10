@@ -42,7 +42,7 @@ export const History = () => {
       <div className="history__require-registered-user-register-area">
         {/*redirect to the login screen and after and then back to here after completion.
           NOTE: possible subject to change, e.g., by replacing it with an 'upgrade account' functionality*/}
-        <Button className="history__require-registered-user-register-button" onClick={() => navigate("/login", {state: {from: {pathname: "boards/history"}}})}>
+        <Button className="history__require-registered-user-register-button" onClick={() => navigate("/login", {state: {from: {pathname: "/boards/history"}}})}>
           {t("History.registerNow")}
         </Button>
       </div>
