@@ -45,13 +45,13 @@ export const HistoryCard = (props: HistoryCardProps) => {
       <OpenIcon id={`history-card__access-policy::${props.board.id}`} className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--public")} />
     ),
     BY_PASSPHRASE: (
-      <LockClosedIcon
+      <KeyProtectedIcon
         id={`history-card__access-policy::${props.board.id}`}
         className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--passphrase")}
       />
     ),
     BY_INVITE: (
-      <KeyProtectedIcon
+      <LockClosedIcon
         id={`history-card__access-policy::${props.board.id}`}
         className={classNames("history-card__access-policy", "history-card__icon", "history-card__icon--private")}
       />
