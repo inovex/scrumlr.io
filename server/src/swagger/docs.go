@@ -1101,7 +1101,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a sessions for a board",
+                "description": "Delete a participant from a board",
                 "consumes": [
                     "application/json"
                 ],
@@ -1111,7 +1111,7 @@ const docTemplate = `{
                 "tags": [
                     "sessions"
                 ],
-                "summary": "Delete a sessions for a board",
+                "summary": "Delete a participant from a board",
                 "parameters": [
                     {
                         "type": "string",
@@ -3923,6 +3923,9 @@ const docTemplate = `{
                 "allowAnonymousCustomTemplates": {
                     "type": "boolean"
                 },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
                 "anonymousLoginDisabled": {
                     "type": "boolean"
                 },
@@ -4394,7 +4397,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "sharedNote": {
-                    "description": "The id of a note to share with other users.\nFIXME omitempty works only with nil in combination with pointers",
+                    "description": "The id of a note to share with other users.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/uuid.NullUUID"
@@ -4449,7 +4452,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "role": {
-                    "$ref": "#/definitions/common.SessionRole"
+                    "$ref": "#/definitions/role.Role"
                 }
             }
         },
@@ -4930,19 +4933,6 @@ const docTemplate = `{
                 "ColorYieldingYellow"
             ]
         },
-        "common.SessionRole": {
-            "type": "string",
-            "enum": [
-                "PARTICIPANT",
-                "MODERATOR",
-                "OWNER"
-            ],
-            "x-enum-varnames": [
-                "ParticipantRole",
-                "ModeratorRole",
-                "OwnerRole"
-            ]
-        },
         "feedback.FeedbackRequest": {
             "type": "object",
             "properties": {
@@ -5106,6 +5096,19 @@ const docTemplate = `{
                 }
             }
         },
+        "role.Role": {
+            "type": "string",
+            "enum": [
+                "PARTICIPANT",
+                "MODERATOR",
+                "OWNER"
+            ],
+            "x-enum-varnames": [
+                "ParticipantRole",
+                "ModeratorRole",
+                "OwnerRole"
+            ]
+        },
         "sessionrequests.BoardSessionRequest": {
             "type": "object",
             "properties": {
@@ -5172,7 +5175,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants\ncan only view data, add notes and votes while the users with the other\nroles are able to promote users, change board settings, edit columns,\nstart voting sessions etc.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
@@ -5204,7 +5207,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.\nOnly moderators and owners can promote other participants. A regular participant is not\nallowed to change the role.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
@@ -5386,7 +5389,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "5.2.2",
+	Version:          "5.3.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
