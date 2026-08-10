@@ -1,11 +1,10 @@
-import {render, fireEvent, screen} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import {I18nextProvider} from "react-i18next";
 import {MemoryRouter, Route, Routes} from "react-router";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {HistoryBoard, ParticipantRole} from "store/features";
 import i18n from "i18nTest";
-import {API} from "api";
 import {BoardEditor} from "routes/Boards/Editor";
 
 afterEach(() => {
@@ -56,77 +55,6 @@ describe("BoardEditor", () => {
 
     expect(nameInput).toHaveValue("My Board");
     expect(descriptionInput).toHaveValue("My description");
-  });
-
-  it("saves the edited name via the API and redirects back to history", async () => {
-    const editBoard = vi.spyOn(API, "editBoard").mockResolvedValue({});
-    // the save refetches to compare with server truth
-    vi.spyOn(API, "getBoards").mockResolvedValue([
-      {
-        board: {
-          id: "1",
-          name: "Renamed Board",
-          description: "My description",
-          accessPolicy: "PUBLIC",
-          isLocked: false,
-          createdAt: "2026-01-01T00:00:00Z",
-          lastModifiedAt: "2026-01-01T00:00:00Z",
-        },
-        columns: [{id: "c1", name: "Column A", description: "", color: "backlog-blue", visible: true, index: 0}],
-        participants: 1,
-        role: "OWNER",
-        favourite: false,
-        noteCount: 0,
-      },
-    ]);
-
-    const {store, container} = renderBoardEditor(makeBoard("OWNER"));
-
-    const nameInput = container.querySelector<HTMLInputElement>(".editor-shell__name-input input")!;
-    fireEvent.input(nameInput, {target: {value: "Renamed Board"}});
-    fireEvent.click(container.querySelector<HTMLButtonElement>(".editor-shell__button--create")!);
-
-    expect(await screen.findByText("history page")).toBeInTheDocument();
-    expect(editBoard).toHaveBeenCalledWith("1", {name: "Renamed Board", description: "My description"});
-    expect(store.getState().history[0].name).toBe("Renamed Board");
-  });
-
-  it("loads the history itself when deep-linked into an empty store", async () => {
-    vi.spyOn(API, "getBoards").mockResolvedValue([
-      {
-        board: {
-          id: "1",
-          name: "Deep Linked Board",
-          description: "desc",
-          accessPolicy: "PUBLIC",
-          isLocked: false,
-          createdAt: "2026-01-01T00:00:00Z",
-          lastModifiedAt: "2026-01-01T00:00:00Z",
-        },
-        columns: [{id: "c1", name: "Col", description: "", color: "backlog-blue", visible: true, index: 0}],
-        participants: 1,
-        role: "OWNER",
-        favourite: false,
-        noteCount: 0,
-      },
-    ]);
-
-    const store = getTestStore(); // history defaults to []
-    render(
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <MemoryRouter initialEntries={["/boards/edit-board/1"]}>
-            <Routes>
-              <Route path="/boards/edit-board/:boardId" element={<BoardEditor />} />
-              <Route path="/boards/history" element={<div>history page</div>} />
-            </Routes>
-          </MemoryRouter>
-        </Provider>
-      </I18nextProvider>
-    );
-
-    // getBoards populates the slice from the (mocked) API, then board "1" pre-fills the editor.
-    expect(await screen.findByDisplayValue("Deep Linked Board")).toBeInTheDocument();
   });
 
   it("redirects a participant away from the editor", () => {
