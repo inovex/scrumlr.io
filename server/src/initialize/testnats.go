@@ -8,7 +8,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 )
 
-const NATS_IMAGE = "nats:2.12.1-alpine"
+const NATS_IMAGE = "nats:2.14.4-alpine"
 
 func StartTestNats() (*nats.NATSContainer, string) {
 	ctx := context.Background()

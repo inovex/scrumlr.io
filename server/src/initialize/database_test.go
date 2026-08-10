@@ -13,7 +13,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const POSTGRES_IMAGE = "postgres:18.1-alpine"
+const POSTGRES_IMAGE = "postgres:18.4-alpine"
 const DATABASE_NAME = "scrumlr_test"
 const DATABASE_USERNAME = "stan"
 const DATABASE_PASSWORD = "scrumlr"
