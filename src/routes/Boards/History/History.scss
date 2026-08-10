@@ -135,4 +135,9 @@ $max-card-width: 680px;
       display: initial;
     }
   }
+
+  .history__info-icon,
+  .history__info-text {
+    color: styles.$gray--000;
+  }
 }
