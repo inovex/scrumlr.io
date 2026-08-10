@@ -28,8 +28,10 @@ export const History = () => {
 
   // init history boards
   useEffect(() => {
-    dispatch(getBoards());
-  }, [dispatch]);
+    if (canViewHistory) {
+      dispatch(getBoards());
+    }
+  }, [dispatch, canViewHistory]);
 
   const matchSearchInput = (historyBoard: HistoryBoard) => historyBoard.name.toLowerCase().includes(searchBarInput.toLowerCase());
 
