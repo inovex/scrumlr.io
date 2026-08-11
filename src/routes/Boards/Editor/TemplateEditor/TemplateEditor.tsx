@@ -14,6 +14,7 @@ import {
 import {PlusIcon} from "components/Icon";
 import {LoadingScreen} from "components/LoadingScreen";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
+import {MAX_TEMPLATE_DESCRIPTION_LENGTH} from "constants/misc";
 import {Outlet, useNavigate, useParams} from "react-router";
 import {EditorShell, EditorSubmitPayload} from "routes/Boards/Editor";
 import {TemplatesNavigationState} from "routes/Boards/Templates";
@@ -112,6 +113,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
         submitIcon={<PlusIcon />}
         onSubmit={saveTemplate}
         onCancel={cancelAndGoBack}
+        descriptionMaxLength={MAX_TEMPLATE_DESCRIPTION_LENGTH}
         debug={debug}
       />
       <Outlet />
