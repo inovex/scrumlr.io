@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from "store";
 import {AVATAR_CONFIG} from "constants/avatar";
 import {AvataaarProps, AvatarGroup} from "types/avatar";
 import {editSelf} from "store/features";
+import {isEqual} from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
@@ -45,13 +46,15 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   };
 
   useEffect(() => {
+    if (isEqual(properties, self.avatar)) return;
+
     dispatch(
       editSelf({
         auth: {...self, avatar: properties},
         applyOptimistically: true,
       })
     );
-  }, [properties]);
+  }, [dispatch, properties, self]);
 
   // a group is disabled if any property (stored in properties) is found within the disabledOn array of the group.
   const checkDisabled = (group: AvatarGroup): boolean =>
