@@ -12,7 +12,7 @@ import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
-type BoardView = "templates" | "history" | "create" | "edit-template" | "edit-board";
+type BoardView = "templates" | "history" | "create" | "create-template" | "edit-template" | "edit-board";
 
 export const Boards = () => {
   const {t} = useTranslation();
@@ -25,8 +25,8 @@ export const Boards = () => {
   const boardView = (subPaths[0] ?? "templates") as BoardView;
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
   const viewType = ["templates", "history"].includes(boardView) ? "overview" : "edit";
-  // for edit routes, expand location prefix used for settings with the uuid of the edited template/board
-  const locationPrefix = boardView === "edit-template" || boardView === "edit-board" ? `${boardView}/${subPaths[1]}` : boardView;
+  // for edit/create-from-board routes, expand location prefix used for settings with the uuid of the edited template/board
+  const locationPrefix = ["edit-template", "edit-board", "create-template"].includes(boardView) ? `${boardView}/${subPaths[1]}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
@@ -48,6 +48,7 @@ export const Boards = () => {
       case "history":
         return t("History.title");
       case "create":
+      case "create-template":
         return t("Templates.TemplateEditor.createTitle");
       case "edit-board":
         return t("BoardEditor.editTitle");

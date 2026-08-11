@@ -123,10 +123,9 @@ export const HistoryCard = (props: HistoryCardProps) => {
             },
           },
           {
-            // TODO: Disabled until implemented. Maybe add a coming soon tooltip?
             label: t("History.HistoryCard.Menu.createTemplate"),
             element: <Duplicate2Icon />,
-            disabled: true,
+            onClick: () => navigate(`/boards/create-template/${props.board.id}`),
           },
           ...(canEdit
             ? [
