@@ -41,6 +41,8 @@ export const TemplateCard = (props: TemplateCardProps) => {
 
   const {t} = useTranslation();
 
+  const getDisplayText = (text: string) => (props.templateType === "RECOMMENDED" ? t(dynamicTemplatesKey(text), {ns: "templates"}) : text);
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const closeMenu = () => {
@@ -79,17 +81,17 @@ export const TemplateCard = (props: TemplateCardProps) => {
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={t(dynamicTemplatesKey(template.name), {ns: "templates"})} disabled />
+        <input className="template-card__title" type="text" value={getDisplayText(template.name)} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={t(dynamicTemplatesKey(template.description), {ns: "templates"})} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={getDisplayText(template.description)} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
         <div className="template-card__columns-subtitle">
           {columns
             .toSorted((a, b) => a.index - b.index)
-            .map((c) => t(dynamicTemplatesKey(c.name), {ns: "templates"}))
+            .map((c) => getDisplayText(c.name))
             .join(", ")}
         </div>
       </div>
