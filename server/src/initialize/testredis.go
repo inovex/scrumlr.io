@@ -10,7 +10,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-const REDIS_IMAGE = "redis:8.2.1-alpine"
+const REDIS_IMAGE = "redis:8.10.0-alpine"
 
 func StartTestRedis() (*redis.RedisContainer, string) {
 	ctx := context.Background()
