@@ -35,9 +35,9 @@ describe("TemplateEditor create", () => {
 
     expect(container.querySelector(".character-count-indicator")).toBeNull();
 
-    fireEvent.input(descriptionInputNode, {target: {value: "a".repeat(768)}});
+    fireEvent.input(descriptionInputNode, {target: {value: "a".repeat(250)}});
 
-    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("250/300");
   });
 
   // need to spy on store

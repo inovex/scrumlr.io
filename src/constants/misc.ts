@@ -17,3 +17,7 @@ export const MAX_BOARD_NAME_LENGTH = 128;
 export const MAX_BOARD_DESCRIPTION_LENGTH = 1024;
 export const MAX_COLUMN_NAME_LENGTH = 128;
 export const MAX_COLUMN_DESCRIPTION_LENGTH = 1024;
+
+// matches the database schema: board_templates.description varchar(300), column_templates.description varchar(128)
+export const MAX_TEMPLATE_DESCRIPTION_LENGTH = 300;
+export const MAX_TEMPLATE_COLUMN_DESCRIPTION_LENGTH = 128;
