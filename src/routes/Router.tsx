@@ -101,6 +101,21 @@ const Router = () => {
             </Route>
           </Route>
 
+          <Route
+            path="create-template/:boardId"
+            element={
+              <VerifiedAccountGuard override={allowAnonymousCustomTemplates}>
+                <TemplateEditor mode="createFromBoard" />
+              </VerifiedAccountGuard>
+            }
+          >
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
+
           <Route path="edit-board/:boardId" element={<BoardEditor />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />

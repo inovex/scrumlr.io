@@ -1,24 +1,36 @@
+import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {EditableTemplateColumn, TemplateWithColumns, createTemplateWithColumns, editTemplate, createTemplateColumn, editTemplateColumn, deleteTemplateColumn} from "store/features";
+import {
+  EditableTemplateColumn,
+  TemplateWithColumns,
+  createTemplateWithColumns,
+  editTemplate,
+  createTemplateColumn,
+  editTemplateColumn,
+  deleteTemplateColumn,
+  getBoards,
+} from "store/features";
 import {PlusIcon} from "components/Icon";
+import {LoadingScreen} from "components/LoadingScreen";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Outlet, useNavigate, useParams} from "react-router";
 import {EditorShell, EditorSubmitPayload} from "routes/Boards/Editor";
 import {TemplatesNavigationState} from "routes/Boards/Templates";
 
-export type TemplateEditorProps = {mode: "create" | "edit"; debug?: boolean};
+export type TemplateEditorProps = {mode: "create" | "edit" | "createFromBoard"; debug?: boolean};
 
-// component to edit a template.
-// can be either used to edit an existing template (referred by their uuid) or create one from scratch.
+// component to edit or create a template.
+// can be used to edit an existing template (referred by their uuid), create one from scratch,
+// or create one pre-filled from an existing board (referred by their boardId).
 // changes will only be saved after clicking the button and are local till then.
 export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // id is set in /edit/:id route (not checked whether its valid though)
-  const {id} = useParams();
+  // id is set in /edit-template/:id route, boardId in /create-template/:boardId route (neither validated here)
+  const {id, boardId} = useParams();
 
   const templateId = id ?? DEFAULT_TEMPLATE_ID;
 
@@ -27,10 +39,25 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   // template columns are displayed in order of their index.
   const basisColumns = useAppSelector((state) => state.templateColumns.filter((tmplCol) => tmplCol.template === templateId)).sort((a, b) => a.index - b.index);
 
+  // when creating from an existing board, its name/description/columns seed the editor.
+  const historyLoaded = useAppSelector((state) => state.history.length > 0);
+  const board = useAppSelector((state) => state.history.find((b) => b.id === boardId));
+  // `attempted` tracks whether we've finished trying to load the history, so an empty history doesn't spin forever.
+  const [attempted, setAttempted] = useState(false);
+
+  // when deep-linked/refreshed straight into create-from-board, the History page never ran the fetch, so load it here.
+  useEffect(() => {
+    if (mode !== "createFromBoard" || historyLoaded) {
+      setAttempted(true);
+      return;
+    }
+    dispatch(getBoards()).finally(() => setAttempted(true));
+  }, [dispatch, mode, historyLoaded]);
+
   const cancelAndGoBack = () => navigate("/boards/templates");
 
   const saveTemplate = (payload: EditorSubmitPayload) => {
-    if (mode === "create") {
+    if (mode === "create" || mode === "createFromBoard") {
       // create template based on the editor state
       const newTemplateWithColumns: TemplateWithColumns = {
         template: {...basisTemplate!, name: payload.name, description: payload.description},
@@ -58,18 +85,30 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
     }
   };
 
-  if (!basisTemplate || basisColumns.length === 0) return <div>Error loading template</div>;
+  if (mode === "createFromBoard") {
+    if (!attempted && !board) return <LoadingScreen />;
+    if (!basisTemplate || !board) return <div>Error loading template</div>;
+  } else if (!basisTemplate || basisColumns.length === 0) {
+    return <div>Error loading template</div>;
+  }
 
-  const initialColumns: EditableTemplateColumn[] = basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined}));
+  // seed columns from the board (create-from-board) or from the basis template (create/edit).
+  const initialColumns: EditableTemplateColumn[] =
+    mode === "createFromBoard"
+      ? [...board!.columns].sort((a, b) => a.index - b.index).map((column) => ({...column, template: templateId, persisted: true, mode: undefined}))
+      : basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined}));
+
+  const initialName = mode === "createFromBoard" ? board!.name : id ? basisTemplate!.name : "";
+  const initialDescription = mode === "createFromBoard" ? board!.description : id ? basisTemplate!.description : "";
 
   return (
     <>
       <EditorShell
         editorId={templateId}
-        initialName={id ? basisTemplate.name : ""}
-        initialDescription={id ? basisTemplate.description : ""}
+        initialName={initialName}
+        initialDescription={initialDescription}
         initialColumns={initialColumns}
-        submitLabel={t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
+        submitLabel={t(`Templates.TemplateEditor.save${mode === "edit" ? "Edit" : "Create"}`)}
         submitIcon={<PlusIcon />}
         onSubmit={saveTemplate}
         onCancel={cancelAndGoBack}
