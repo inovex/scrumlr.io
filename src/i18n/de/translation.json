@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Board bearbeiten",
+    "save": "Speichern",
+    "loadError": "Dieses Board konnte leider nicht geladen werden."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
     "VotingIsAnonymous": "Abstimmung ist anonym",
@@ -37,6 +42,19 @@
       "removeFile": "Datei entfernen"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Beschreibung (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Spalte 1",
+      "defaultActionsName": "Aktionen",
+      "indexedColumnName": "Spalte {{index}}",
+      "namePlaceholder": "Titel",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    }
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -61,15 +79,6 @@
       "saveEdit": "Speichern",
       "saveCreate": "Template erstellen",
       "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Spalte 1",
-      "defaultActionsName": "Aktionen",
-      "indexedColumnName": "Spalte {{index}}",
-      "namePlaceholder": "Titel",
-      "descriptionPlaceholder": "Beschreibung (optional)",
-      "save": "Speichern",
-      "cancel": "Abbrechen"
     },
     "AccessSettings": {
       "title": "Zugriffseinstellungen",
@@ -99,7 +108,9 @@
     "switchTitle": "Historie",
     "title": "Verwalte deine Boards",
     "savedBoards": "Zuletzt verwendet",
-    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden.",
+    "empty": "Deine Session-Historie ist leer — betritt oder erstelle ein Board und es wird hier angezeigt!",
+    "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
+    "registerNow": "Jetzt registrieren",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} Spalte",
@@ -118,7 +129,10 @@
         "close": "Schließen"
       },
       "readOnly": "Schreibgeschützt",
-      "openBoardButton": "Session öffnen"
+      "openBoardButton": "Session öffnen",
+      "linkCopied": "Board-Link kopiert!",
+      "deleteConfirmationTitle": "Board löschen?",
+      "deleteConfirmationText": "Dies löscht das Board dauerhaft für alle. Diese Aktion kann nicht rückgängig gemacht werden."
     }
   },
   "CreateBoard": {

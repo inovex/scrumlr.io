@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Modifier le tableau",
+    "save": "Enregistrer",
+    "loadError": "Désolé, nous n'avons pas pu charger ce tableau."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Retour à la note présentée",
     "VotingIsAnonymous": "Le vote est anonyme",
@@ -37,6 +42,19 @@
       "removeFile": "Supprimer le fichier"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Titre",
+    "boardDescriptionPlaceholder": "Description (optionnel)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Colonne 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Colonne {{index}}",
+      "namePlaceholder": "Titre",
+      "descriptionPlaceholder": "Description (optionnel)",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
+  },
   "Templates": {
     "switchTitle": "Modèles",
     "title": "Choisir un modèle",
@@ -61,15 +79,6 @@
       "saveEdit": "Enregistrer",
       "saveCreate": "Créer le modèle",
       "info": "Les modifications peuvent être apportées à tout moment, y compris sur le tableau."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Colonne 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Colonne {{index}}",
-      "namePlaceholder": "Titre",
-      "descriptionPlaceholder": "Description (optionnel)",
-      "save": "Enregistrer",
-      "cancel": "Annuler"
     },
     "AccessSettings": {
       "title": "Paramètres d'accès",
@@ -99,7 +108,9 @@
     "switchTitle": "Histoire",
     "title": "Gérer tes tableaux",
     "savedBoards": "Dernièrement utilisés",
-    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés.",
+    "empty": "De ta session historique est vide — rejoint ou crée un tableau et il apparaîtra ici!",
+    "requireRegisteredAccount": "Connecte-toi avec Google, Microsoft ou SSO pour sauvegarder et gérer automatiquement tes tableaux de manière permanente. Les profils anonymes (connexion invité) ne peuvent pas être associés à des tableaux, ils ne seront donc pas enregistrés.",
+    "registerNow": "Inscris-toi",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} colonne",
@@ -118,7 +129,10 @@
         "close": "Fermer"
       },
       "readOnly": "Verrouillé",
-      "openBoardButton": "Ouvrir la session"
+      "openBoardButton": "Ouvrir la session",
+      "linkCopied": "Lien du tableau copié !",
+      "deleteConfirmationTitle": "Supprimer le tableau ?",
+      "deleteConfirmationText": "Cela supprime définitivement le tableau pour tout le monde. Cette action est irréversible."
     }
   },
   "CreateBoard": {

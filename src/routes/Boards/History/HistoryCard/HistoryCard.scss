@@ -281,7 +281,7 @@ $description-height: 3 * styles.$line-height--medium;
     box-shadow: 0 2px 20px 0 rgba(styles.$navy--700, 0.5);
   }
 
-  .history-card__icon,
+  .history-card__icon:not(.history-card__favourite),
   .history-card__title,
   .history-card__description,
   .history-card__info-item-data-title {

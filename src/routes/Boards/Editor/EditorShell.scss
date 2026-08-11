@@ -2,7 +2,7 @@
 
 $stable-content-width: 80%;
 
-.template-editor {
+.editor-shell {
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--base;
@@ -15,7 +15,7 @@ $stable-content-width: 80%;
 }
 
 // name, description, debug. contained width
-.template-editor__header {
+.editor-shell__header {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
@@ -35,11 +35,11 @@ $stable-content-width: 80%;
   }
 }
 
-.template-editor__name {
+.editor-shell__name {
   grid-area: name;
 }
 
-.template-editor__name-input {
+.editor-shell__name-input {
   .input__input {
     color: styles.$navy--600;
 
@@ -48,17 +48,17 @@ $stable-content-width: 80%;
     }
   }
 }
-.template-editor__description {
+.editor-shell__description {
   grid-area: description;
 }
-.template-editor__debug {
+.editor-shell__debug {
   grid-area: debug;
   justify-self: center;
   color: styles.$pink--500;
 }
 
 // columns, mini view. width extending up to inherited bleeding edges
-.template-editor__columns {
+.editor-shell__columns {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: bleed-start / bleed-end; // defined by parent grid
@@ -69,7 +69,7 @@ $stable-content-width: 80%;
 }
 
 // info, buttons. contained width like header
-.template-editor__footer {
+.editor-shell__footer {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
@@ -82,7 +82,7 @@ $stable-content-width: 80%;
   width: $stable-content-width;
 }
 
-.template-editor__columns-configurator-wrapper {
+.editor-shell__columns-configurator-wrapper {
   grid-area: columns;
 
   display: flex;
@@ -96,7 +96,7 @@ $stable-content-width: 80%;
   overflow-x: auto;
 }
 
-.template-editor__columns-mini-view-wrapper {
+.editor-shell__columns-mini-view-wrapper {
   grid-area: mini;
   justify-self: center;
 
@@ -106,7 +106,7 @@ $stable-content-width: 80%;
   display: none;
 }
 
-.template-editor__info {
+.editor-shell__info {
   grid-area: info;
 
   display: flex;
@@ -116,12 +116,12 @@ $stable-content-width: 80%;
   gap: styles.$spacing--xs;
 }
 
-.template-editor__info-text {
+.editor-shell__info-text {
   color: styles.$navy--900;
   font-weight: 400;
 }
 
-.template-editor__buttons {
+.editor-shell__buttons {
   grid-area: buttons;
   display: flex;
   justify-content: flex-end;
@@ -132,14 +132,14 @@ $stable-content-width: 80%;
 
 @media (screen and max-width: styles.$breakpoint--smartphone) {
   // on smaller screens, align all content to bleeding edges
-  .template-editor__header,
-  .template-editor__footer {
+  .editor-shell__header,
+  .editor-shell__footer {
     width: 100%; // override stable content width
     grid-template-columns: subgrid;
     grid-column: bleed-start / bleed-end;
   }
 
-  .template-editor__columns {
+  .editor-shell__columns {
     grid-template-rows: min-content min-content;
 
     grid-template-areas:
@@ -147,18 +147,18 @@ $stable-content-width: 80%;
       "mini";
   }
 
-  .template-editor__columns-mini-view-wrapper {
+  .editor-shell__columns-mini-view-wrapper {
     display: initial;
   }
 }
 
 [data-theme="dark"] {
-  .template-editor__info,
-  .template-editor__info-text {
+  .editor-shell__info,
+  .editor-shell__info-text {
     color: styles.$gray--000;
   }
 
-  .template-editor__name-input {
+  .editor-shell__name-input {
     .input__input {
       color: styles.$gray--000;
 

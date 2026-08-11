@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Edit a Board",
+    "save": "Save",
+    "loadError": "Sorry, we couldn't load this board."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note",
     "VotingIsAnonymous": "Voting is anonymous",
@@ -37,6 +42,19 @@
       "removeFile": "Delete file"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Description (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Column 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -61,15 +79,6 @@
       "saveEdit": "Save",
       "saveCreate": "Create template",
       "info": "Changes can be made at any time, including on the board."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Column 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Column {{index}}",
-      "namePlaceholder": "Title",
-      "descriptionPlaceholder": "Description (optional)",
-      "save": "Save",
-      "cancel": "Cancel"
     },
     "AccessSettings": {
       "title": "Access Settings",
@@ -99,7 +108,9 @@
     "switchTitle": "History",
     "title": "Manage your boards",
     "savedBoards": "Recently used",
-    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved.",
+    "empty": "Your session history is empty — join or create a board and it will pop up here!",
+    "requireRegisteredAccount": "Sign in with Google, Microsoft, or SSO to automatically back up and manage your boards permanently. Anonymous profiles (guest login) cannot be associated with boards, so they will not be saved.",
+    "registerNow": "Register now",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} Column",
@@ -118,7 +129,10 @@
         "close": "Close"
       },
       "readOnly": "Read only",
-      "openBoardButton": "Go to Session"
+      "openBoardButton": "Go to Session",
+      "linkCopied": "Board link copied!",
+      "deleteConfirmationTitle": "Delete board?",
+      "deleteConfirmationText": "This permanently deletes the board for everyone. This action cannot be undone."
     }
   },
   "CreateBoard": {
