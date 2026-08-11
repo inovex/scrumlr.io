@@ -1,0 +1,6 @@
+@use "constants/styles";
+
+.character-count-indicator {
+  color: styles.$gray--700;
+  font-size: styles.$text--base;
+}
