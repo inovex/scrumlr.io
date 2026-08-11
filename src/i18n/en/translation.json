@@ -149,8 +149,7 @@
   "LoginBoard": {
     "title": "Sign in",
     "subtitleLogin": "Log in and enjoy the benefits",
-    "loginFeature1": "Create and save custom templates",
-    "loginFeature2": "Custom settings are saved in your profile",
+    "loginFeatures": ["Create and save custom templates", "Custom settings are saved in your profile", "Access and manage past boards at any time"],
     "subtitleAnonymous": "Log in anonymously",
     "anonymousLogin": "Continue anonymously as a guest (limited features)",
     "noLoginAvailable": "There isn't any valid login available",

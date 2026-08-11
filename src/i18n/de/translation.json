@@ -149,8 +149,11 @@
   "LoginBoard": {
     "title": "Login",
     "subtitleLogin": "Einloggen und Vorteile nutzen",
-    "loginFeature1": "Eigene Vorlagen erstellen und dauerhaft speichern",
-    "loginFeature2": "Individuelle Einstellungen werden im Profil gespeichert",
+    "loginFeatures": [
+      "Eigene Vorlagen erstellen und dauerhaft speichern",
+      "Individuelle Einstellungen werden im Profil gespeichert",
+      "Vergangene Boards jederzeit einsehen und verwalten"
+    ],
     "subtitleAnonymous": "Anonym Einloggen",
     "anonymousLogin": "Als Gast anonym fortfahren (eingeschränkte Funktionen)",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",

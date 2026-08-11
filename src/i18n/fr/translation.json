@@ -149,8 +149,11 @@
   "LoginBoard": {
     "title": "Se connecter",
     "subtitleLogin": "Connectez-vous et profitez des avantages",
-    "loginFeature1": "Créer et sauvegarder des modèles personnalisés",
-    "loginFeature2": "Les paramètres personnalisés sont sauvegardés dans le profil",
+    "loginFeatures": [
+      "Créer et sauvegarder des modèles personnalisés",
+      "Les paramètres personnalisés sont sauvegardés dans le profil",
+      "Consulter et gérer vos anciens tableaux à tout moment"
+    ],
     "subtitleAnonymous": "Connexion anonyme",
     "anonymousLogin": "Continuer anonymement en tant qu'invité (fonctionnalités limitées)",
     "noLoginAvailable": "Aucune connexion valide n'est disponible",
