@@ -94,12 +94,12 @@ export const VotingAPI = {
       const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ status: resolvedStatus }),
+        body: JSON.stringify({ status: status }),
         headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 200) {
-        return (await response.json()) as Voting;
+        return (await response.json());
       }
 
       throw new Error(`change voting status request resulted in response with status ${response.status}`);
