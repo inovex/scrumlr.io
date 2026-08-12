@@ -29,12 +29,10 @@ export const VotingAPI = {
 
   changeVotingStatus: async (board: string, voting: string, status?: VotingStatus) => {
     try {
-      const resolvedStatus: VotingStatus = typeof status === "undefined" || status === null ? "CLOSED" : status;
-
       const options: RequestInit = {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ status: resolvedStatus }),
+        body: JSON.stringify({ status: status }),
         headers: { "Content-Type": "application/json" },
       };
 

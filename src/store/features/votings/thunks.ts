@@ -18,7 +18,7 @@ export const closeVoting = createAsyncThunk<void, string, { state: ApplicationSt
   const boardId = getState().board.data!.id;
 
   await retryable(
-    () => API.changeVotingStatus(boardId, payload),
+    () => API.changeVotingStatus(boardId, payload, "CLOSED"),
     dispatch,
     () => closeVoting(payload),
     "closeVoting"
