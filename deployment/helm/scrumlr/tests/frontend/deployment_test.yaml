@@ -50,7 +50,7 @@ tests:
         template: /frontend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-frontend:5.2.2
+          value: scrumlr/scrumlr-frontend:5.3.0
         template: /frontend/deployment.yaml
 
   - it: should set image tag
