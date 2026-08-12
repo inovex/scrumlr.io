@@ -12,7 +12,7 @@ const (
 	// Open is the state for an open voting session, meaning that votes are allowed.
 	Open VotingStatus = "OPEN"
 
-	// Canceled represents a canceled voting session (the DB enum uses ABORTED)
+	// Aborted represents an aborted voting session (the DB enum uses ABORTED)
 	Aborted VotingStatus = "ABORTED"
 
 	// Closed is the state for a closed voting session.
