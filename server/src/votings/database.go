@@ -29,7 +29,7 @@ func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseV
 	return voting, err
 }
 
-func (d *DB) Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
+func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
 	var voting DatabaseVoting
 
 	if update.Status == Closed {

@@ -263,7 +263,7 @@ func TestCloseVoting(t *testing.T) {
 	votingID := uuid.New()
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: Closed}, nil)
 	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingID}).
 		Return([]DatabaseVote{}, nil)
@@ -274,20 +274,20 @@ func TestCloseVoting(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Close(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, voting)
 	assert.Equal(t, Closed, voting.Status)
 }
 
-func TestCancelVoting(t *testing.T) {
+func TestAbortVoting(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
-		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: Canceled}, nil)
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Aborted}).
+		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: Aborted}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -295,19 +295,19 @@ func TestCancelVoting(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, voting)
-	assert.Equal(t, Canceled, voting.Status)
+	assert.Equal(t, Aborted, voting.Status)
 }
 
-func TestCancelVoting_NotFound(t *testing.T) {
+func TestAbortVoting_NotFound(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Aborted}).
 		Return(DatabaseVoting{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -315,7 +315,7 @@ func TestCancelVoting_NotFound(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -326,13 +326,13 @@ func TestCancelVoting_NotFound(t *testing.T) {
 	assert.Equal(t, NotFound, votingErr.Category)
 }
 
-func TestCancelVoting_Failed(t *testing.T) {
+func TestAbortVoting_Failed(t *testing.T) {
 	boardId := uuid.New()
 	votingID := uuid.New()
-	dbError := errors.New("failed to cancel")
+	dbError := errors.New("failed to abort")
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Canceled}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Aborted}).
 		Return(DatabaseVoting{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -340,7 +340,7 @@ func TestCancelVoting_Failed(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Cancel(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -352,7 +352,7 @@ func TestCloseVoting_NotFound(t *testing.T) {
 	votingID := uuid.New()
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
 		Return(DatabaseVoting{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -360,7 +360,7 @@ func TestCloseVoting_NotFound(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Close(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -377,7 +377,7 @@ func TestCloseVoting_Failed(t *testing.T) {
 	dbError := errors.New("failed to close")
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: Closed}).
 		Return(DatabaseVoting{}, dbError)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -385,7 +385,7 @@ func TestCloseVoting_Failed(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Close(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -399,7 +399,7 @@ func TestCloseVoting_FailedToGetVotes(t *testing.T) {
 	dbError := errors.New("failed to get votes")
 
 	mockDb := NewMockVotingDatabase(t)
-	mockDb.EXPECT().Close(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
+	mockDb.EXPECT().Update(mock.Anything, DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
 		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
 	mockDb.EXPECT().GetVotes(mock.Anything, boardId, VoteFilter{Voting: &votingID}).
 		Return([]DatabaseVote{}, dbError)
@@ -409,7 +409,7 @@ func TestCloseVoting_FailedToGetVotes(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Close(context.Background(), votingID, boardId, nil)
+	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)

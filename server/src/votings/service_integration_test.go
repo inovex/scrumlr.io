@@ -211,7 +211,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 		{ID: suite.baseData.Notes["Update2"].ID, Author: suite.baseData.Notes["Update2"].AuthorID, Text: suite.baseData.Notes["Update2"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update2"].ColumnID}},
 		{ID: suite.baseData.Notes["Update3"].ID, Author: suite.baseData.Notes["Update3"].AuthorID, Text: suite.baseData.Notes["Update3"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Close(ctx, votingId, boardId, affectedNotes)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Closed)
 
 	require.NoError(t, err)
 	assert.Equal(t, votingId, voting.ID)
@@ -228,7 +228,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 	assert.Equal(t, 6, votingData.Voting.VotingResults.Total)
 }
 
-func (suite *VotingServiceIntegrationTestSuite) Test_CancelVoting() {
+func (suite *VotingServiceIntegrationTestSuite) Test_AbortVoting() {
 	t := suite.T()
 	ctx := context.Background()
 
@@ -243,18 +243,18 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CancelVoting() {
 		{ID: suite.baseData.Notes["Update2"].ID, Author: suite.baseData.Notes["Update2"].AuthorID, Text: suite.baseData.Notes["Update2"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update2"].ColumnID}},
 		{ID: suite.baseData.Notes["Update3"].ID, Author: suite.baseData.Notes["Update3"].AuthorID, Text: suite.baseData.Notes["Update3"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Cancel(ctx, votingId, boardId, affectedNotes)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Aborted)
 
 	require.NoError(t, err)
 	assert.Equal(t, votingId, voting.ID)
-	assert.Equal(t, Canceled, voting.Status)
+	assert.Equal(t, Aborted, voting.Status)
 	assert.Nil(t, voting.VotingResults)
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventVotingUpdated, msg.Type)
 	votingData, err := technical_helper.Unmarshal[UpdateVoting](msg.Data)
 	require.NoError(t, err)
-	assert.Equal(t, Canceled, votingData.Voting.Status)
+	assert.Equal(t, Aborted, votingData.Voting.Status)
 	assert.Nil(t, votingData.Voting.VotingResults)
 }
 
@@ -274,7 +274,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() 
 		{ID: suite.baseData.Notes["SortedUpdate2"].ID, Author: suite.baseData.Notes["SortedUpdate2"].AuthorID, Text: suite.baseData.Notes["SortedUpdate2"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate2"].ColumnID}},
 		{ID: suite.baseData.Notes["SortedUpdate3"].ID, Author: suite.baseData.Notes["SortedUpdate3"].AuthorID, Text: suite.baseData.Notes["SortedUpdate3"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Close(ctx, votingId, boardId, affectedNotes)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Closed)
 
 	require.NoError(t, err)
 	expectedVoting.Status = string(Closed)
