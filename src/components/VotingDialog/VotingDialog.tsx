@@ -8,7 +8,7 @@ import { getNumberFromStorage, saveToStorage, getFromStorage } from "utils/stora
 import { CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY } from "constants/storage";
 import { PlusIcon, MinusIcon } from "components/Icon";
 import "./VotingDialog.scss";
-import { closeVoting, createVoting, cancelVoting } from "store/features";
+import { closeVoting, createVoting, abortVoting } from "store/features";
 
 export const VotingDialog = () => {
   const dispatch = useAppDispatch();
@@ -46,8 +46,8 @@ export const VotingDialog = () => {
     navigate("..");
   };
 
-  const abortVoting = () => {
-    dispatch(cancelVoting(voting!));
+  const abort_voting = () => {
+    dispatch(abortVoting(voting!));
     navigate("..");
   }
 
@@ -59,7 +59,7 @@ export const VotingDialog = () => {
             <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
 
-          <button className="voting-dialog__start-button voting-dialog__cancel-button" data-testid="voting-dialog__cancel-button" onClick={() => abortVoting()}>
+          <button className="voting-dialog__start-button voting-dialog__cancel-button" data-testid="voting-dialog__cancel-button" onClick={() => abort_voting()}>
             <label>{t("VoteConfigurationButton.cancelVoting")}</label>
           </button>
         </>

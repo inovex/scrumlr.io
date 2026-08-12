@@ -1,5 +1,5 @@
-import {CreateVotingRequest} from "store/features/votings/types";
-import {SERVER_HTTP_URL} from "../config";
+import { CreateVotingRequest, VotingStatus } from "store/features/votings/types";
+import { SERVER_HTTP_URL } from "../config";
 
 export const VotingAPI = {
   /**
@@ -23,21 +23,20 @@ export const VotingAPI = {
 
       throw new Error(`create voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create voting`, {cause: error});
+      throw new Error(`unable to create voting`, { cause: error });
     }
   },
 
-  changeVotingStatus: async (board: string, voting: string, status?: string) => {
+  changeVotingStatus: async (board: string, voting: string, status?: VotingStatus) => {
     try {
+      const resolvedStatus: VotingStatus = typeof status === "undefined" || status === null ? "CLOSED" : status;
+
       const options: RequestInit = {
         method: "PUT",
         credentials: "include",
+        body: JSON.stringify({ status: resolvedStatus }),
+        headers: { "Content-Type": "application/json" },
       };
-
-      if (typeof status !== "undefined") {
-        options.body = JSON.stringify({status});
-        options.headers = {"Content-Type": "application/json"};
-      }
 
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings/${voting}`, options);
 
@@ -47,7 +46,7 @@ export const VotingAPI = {
 
       throw new Error(`change voting status request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to change voting status`, {cause: error});
+      throw new Error(`unable to change voting status`, { cause: error });
     }
   },
 };
