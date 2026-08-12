@@ -78,7 +78,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Close() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	dbVoting, err := database.Close(context.Background(),
+	dbVoting, err := database.Update(context.Background(),
 		DatabaseVotingUpdate{
 			ID:     votingId,
 			Board:  boardId,
@@ -290,18 +290,18 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Cancel() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	dbVoting, err := database.Close(context.Background(),
+	dbVoting, err := database.Update(context.Background(),
 		DatabaseVotingUpdate{
 			ID:     votingId,
 			Board:  boardId,
-			Status: Canceled,
+			Status: Aborted,
 		},
 	)
 
 	assert.Nil(t, err)
 	assert.Equal(t, votingId, dbVoting.ID)
 	assert.Equal(t, boardId, dbVoting.Board)
-	assert.Equal(t, Canceled, dbVoting.Status)
+	assert.Equal(t, Aborted, dbVoting.Status)
 	assert.Equal(t, 7, dbVoting.VoteLimit)
 	assert.True(t, dbVoting.AllowMultipleVotes)
 	assert.False(t, dbVoting.ShowVotesOfOthers)

@@ -13,7 +13,7 @@ const (
 	Open VotingStatus = "OPEN"
 
 	// Canceled represents a canceled voting session (the DB enum uses ABORTED)
-	Canceled VotingStatus = "ABORTED"
+	Aborted VotingStatus = "ABORTED"
 
 	// Closed is the state for a closed voting session.
 	//
@@ -28,7 +28,7 @@ func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	}
 	unmarshalledVotingStatus := VotingStatus(s)
 	switch unmarshalledVotingStatus {
-	case Open, Closed, Canceled:
+	case Open, Closed, Aborted:
 		*votingStatus = unmarshalledVotingStatus
 		return nil
 	}
