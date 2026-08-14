@@ -1114,7 +1114,7 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.3.0
+  version: 5.3.1
 paths:
   /boards:
     get:
