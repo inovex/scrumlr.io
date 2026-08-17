@@ -10,9 +10,6 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
-const requestBoard = "board = ?"
-const requestID = "id = ?"
-
 type DB struct {
 	db *bun.DB
 }
@@ -31,7 +28,7 @@ func (db *DB) Create(ctx context.Context, column DatabaseColumnInsert) (Database
 		Model((*DatabaseColumn)(nil)).
 		Set("index = index+1").
 		Where("index >= ?", column.Index).
-		Where(requestBoard, column.Board)
+		Where("board = ?", column.Board)
 
 	var c DatabaseColumn
 	_, err := db.db.NewInsert().
@@ -48,20 +45,20 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 	selectPrevious := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
 		Column("board", "index").
-		Where(requestID, column.ID).
-		Where(requestBoard, column.Board)
+		Where("id = ?", column.ID).
+		Where("board = ?", column.Board)
 
 	maxIndexSelect := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
 		Column("index").
-		Where(requestBoard, column.Board)
+		Where("board = ?", column.Board)
 
 	updateOnSmallerIndex := db.db.NewUpdate().
 		Model((*DatabaseColumn)(nil)).
 		Column("index").
 		Set("index = index+1").
 		Where("index < (SELECT index FROM \"selectPrevious\")").
-		Where(requestBoard, column.Board).
+		Where("board = ?", column.Board).
 		Where("(SELECT index FROM \"selectPrevious\") > ?", column.Index).
 		Where("index >= ?", column.Index)
 
@@ -70,7 +67,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 		Column("index").
 		Set("index = index-1").
 		Where("index > (SELECT index FROM \"selectPrevious\")").
-		Where(requestBoard, column.Board).
+		Where("board = ?", column.Board).
 		Where("(SELECT index FROM \"selectPrevious\") < ?", column.Index).
 		Where("index <= ?", column.Index)
 
@@ -82,7 +79,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (Database
 		With("updateOnGreaterIndex", updateOnGreaterIndex).
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", column.Index)).
-		Where(requestID, column.ID).
+		Where("id = ?", column.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, column.Board), &c)
 
@@ -95,7 +92,7 @@ func (db *DB) Delete(ctx context.Context, affectedBoard, column uuid.UUID) error
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
 		Column("index", "board").
-		Where(requestID, column)
+		Where("id = ?", column)
 
 	indexUpdate := db.db.NewUpdate().
 		With("selectPreviousIndex", selectPreviousIndex).
@@ -112,7 +109,7 @@ func (db *DB) Delete(ctx context.Context, affectedBoard, column uuid.UUID) error
 		With("boardUpdate", boardUpdate).
 		With("indexUpdate", indexUpdate).
 		Model((*DatabaseColumn)(nil)).
-		Where(requestID, column).
+		Where("id = ?", column).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, "Result", &columns), &columns)
 
@@ -124,8 +121,8 @@ func (db *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumn, err
 	var column DatabaseColumn
 	err := db.db.NewSelect().
 		Model(&column).
-		Where(requestBoard, board).
-		Where(requestID, id).
+		Where("board = ?", board).
+		Where("id = ?", id).
 		Scan(ctx)
 
 	return column, err
@@ -136,7 +133,7 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, er
 	var columns []DatabaseColumn
 	err := db.db.NewSelect().
 		Model(&columns).
-		Where(requestBoard, board).
+		Where("board = ?", board).
 		Order("index ASC").
 		Scan(ctx)
 
@@ -146,14 +143,14 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, er
 func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
 	return db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
-		Where(requestBoard, board).
+		Where("board = ?", board).
 		Count(ctx)
 }
 
 func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
 	count, err := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
-		Where(requestBoard, board).
+		Where("board = ?", board).
 		Count(ctx)
 
 	return count, err
