@@ -33,6 +33,12 @@ import (
 	"scrumlr.io/server/votings"
 )
 
+const getBoardFailureMessage = "failed to get board"
+const getColumnsFailureMessage = "failed to get columns"
+const getNotesFailureMessage = "failed to get notes"
+const passphraseByPassphraseMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
+const boardTimerUpdateFailureMessage = "failed to update board timer"
+
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
 
@@ -183,10 +189,10 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 			span.RecordError(err)
 			return nil, CreateBoardError(NotFound, "no board found", err)
 		}
-		span.SetStatus(codes.Error, "failed to get board")
+		span.SetStatus(codes.Error, getBoardFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, CreateBoardError(Internal, "failed to get board", err)
+		return nil, CreateBoardError(Internal, getBoardFailureMessage, err)
 	}
 
 	return new(Board).From(board), err
@@ -231,7 +237,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 	for _, id := range boardIDs {
 		board, err := service.Get(ctx, id)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get board")
+			span.SetStatus(codes.Error, getBoardFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
@@ -247,7 +253,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get columns")
+			span.SetStatus(codes.Error, getColumnsFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
@@ -255,7 +261,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 		boardNotes, err := service.notesService.GetAll(ctx, id)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get notes")
+			span.SetStatus(codes.Error, getNotesFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
@@ -299,7 +305,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 	board, err := service.Get(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
+		span.SetStatus(codes.Error, getBoardFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
@@ -323,7 +329,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 	boardColumns, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
+		span.SetStatus(codes.Error, getColumnsFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
@@ -331,7 +337,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 	boardNotes, err := service.notesService.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
+		span.SetStatus(codes.Error, getNotesFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
@@ -408,10 +414,10 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		switch *body.AccessPolicy {
 		case ByInvite, Public:
 			if body.Passphrase != nil {
-				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
-				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
+				err := errors.New(passphraseByPassphraseMessage)
+				span.SetStatus(codes.Error, passphraseByPassphraseMessage)
 				span.RecordError(err)
-				return nil, CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", err)
+				return nil, CreateBoardError(BadRequest, passphraseByPassphraseMessage, err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
@@ -494,10 +500,10 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 
 	board, err := service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board timer")
+		span.SetStatus(codes.Error, boardTimerUpdateFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, "failed to update board timer", err)
+		return nil, CreateBoardError(Internal, boardTimerUpdateFailureMessage, err)
 	}
 
 	service.updatedBoardTimer(ctx, board)
@@ -517,10 +523,10 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 
 	board, err := service.database.GetBoard(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
+		span.SetStatus(codes.Error, getBoardFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, CreateBoardError(Internal, "failed to get board", err)
+		return nil, CreateBoardError(Internal, getBoardFailureMessage, err)
 	}
 
 	var timerStart time.Time
@@ -544,10 +550,10 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 
 	board, err = service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board timer")
+		span.SetStatus(codes.Error, boardTimerUpdateFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, "failed to update board timer", err)
+		return nil, CreateBoardError(Internal, boardTimerUpdateFailureMessage, err)
 	}
 
 	service.updatedBoardTimer(ctx, board)
@@ -638,7 +644,7 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'"))
+			err := CreateBoardError(BadRequest, passphraseByPassphraseMessage, errors.New(passphraseByPassphraseMessage))
 			return board, err
 		}
 
@@ -754,7 +760,7 @@ func (service *Service) syncBoardSettingChange(ctx context.Context, boardID uuid
 
 	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
+		span.SetStatus(codes.Error, getColumnsFailureMessage)
 		span.RecordError(err)
 		return CreateBoardError(Internal, "unable to retrieve columns, following a updated board call", err)
 	}
@@ -766,7 +772,7 @@ func (service *Service) syncBoardSettingChange(ctx context.Context, boardID uuid
 
 	notesOnBoard, err := service.notesService.GetAll(ctx, boardID, columnsID...)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
+		span.SetStatus(codes.Error, getNotesFailureMessage)
 		span.RecordError(err)
 		return CreateBoardError(Internal, "unable to retrieve notes, following a updated board call", err)
 	}

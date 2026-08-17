@@ -39,7 +39,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
+		span.SetStatus(codes.Error, decodeFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -88,7 +88,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
+		span.SetStatus(codes.Error, decodeFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -144,7 +144,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if votingQuery != "" {
 		voting, err := uuid.Parse(votingQuery)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
+			span.SetStatus(codes.Error, decodeFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
@@ -157,7 +157,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if noteQuery != "" {
 		note, err := uuid.Parse(noteQuery)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
+			span.SetStatus(codes.Error, decodeFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))

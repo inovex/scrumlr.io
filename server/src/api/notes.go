@@ -42,7 +42,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
+		span.SetStatus(codes.Error, decodeFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -164,7 +164,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
+		span.SetStatus(codes.Error, decodeFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -213,7 +213,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
+		span.SetStatus(codes.Error, decodeFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
