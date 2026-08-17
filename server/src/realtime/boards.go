@@ -30,6 +30,7 @@ const (
 	BoardEventSessionRequestUpdated BoardEventType = "REQUEST_UPDATED"
 	BoardEventParticipantCreated    BoardEventType = "PARTICIPANT_CREATED"
 	BoardEventParticipantUpdated    BoardEventType = "PARTICIPANT_UPDATED"
+	BoardEventParticipantDeleted    BoardEventType = "PARTICIPANT_DELETED"
 	BoardEventParticipantsUpdated   BoardEventType = "PARTICIPANTS_UPDATED"
 	BoardEventUserDeleted           BoardEventType = "USER_DELETED"
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
@@ -54,19 +55,19 @@ func (b *Broker) BroadcastToBoard(ctx context.Context, boardID uuid.UUID, msg Bo
 	return b.Con.Publish(ctx, boardsSubject(boardID), msg)
 }
 
-func (b *Broker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) chan *BoardEvent {
+func (b *Broker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *BoardEvent, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.realtime.board.subscribe")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
 	c, err := b.Con.SubscribeToBoardEvents(ctx, boardsSubject(boardID))
 	if err != nil {
-		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		span.SetStatus(codes.Error, "failed to subscribe to board channel")
 		span.RecordError(err)
 		log.Errorw("failed to subscribe to BoardChannel", "err", err)
+		return nil, err
 	}
-	return c
+	return c, nil
 }
 
 func boardsSubject(boardID uuid.UUID) string {

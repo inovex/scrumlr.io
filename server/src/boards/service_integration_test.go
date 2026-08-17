@@ -108,7 +108,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewWebSocketService()
+	wsService := websocket.NewWebSocketUpgrader()
 	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
@@ -276,7 +276,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	name := "New Name"
 	description := "This is a new description"
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -316,7 +317,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	boardId := suite.boards["UpdatePublicToPassphrase"].ID
 	accessPolicy := ByPassphrase
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -349,7 +351,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	boardId := suite.boards["UpdatePublicToInvite"].ID
 	accessPolicy := ByInvite
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -381,7 +384,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	boardId := suite.boards["UpdatePassphraseToPublic"].ID
 	accessPolicy := Public
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -413,7 +417,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	boardId := suite.boards["UpdatePassphraseToInvite"].ID
 	accessPolicy := ByInvite
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -445,7 +450,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	boardId := suite.boards["UpdateInviteToPublic"].ID
 	accessPolicy := Public
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -477,7 +483,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	boardId := suite.boards["UpdateInviteToPassphrase"].ID
 	accessPolicy := ByPassphrase
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -540,7 +547,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
@@ -595,7 +602,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {

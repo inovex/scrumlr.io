@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/testcontainers/testcontainers-go/modules/redis"
@@ -52,7 +53,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -73,7 +75,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -94,7 +97,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -115,7 +119,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -136,7 +141,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest
 	broker, err := NewNats(suite.natsConnectionString)
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -157,7 +163,8 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
 	assert.Nil(t, err)
 
-	eventChannel := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	eventChannel, err := broker.GetBoardSessionRequestChannel(ctx, boardId, userId)
+	require.NoError(t, err, "Failed to subscribe to board session request channel")
 
 	err = broker.BroadcastUpdateOnBoardSessionRequest(ctx, boardId, userId, eventType)
 	assert.Nil(t, err)
@@ -182,10 +189,12 @@ func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionReques
 
 	// Subscriber 1: user who will close the tab
 	ctx1, cancel1 := context.WithCancel(context.Background())
-	ch1 := broker.GetBoardSessionRequestChannel(ctx1, boardId, userId1)
+	ch1, err := broker.GetBoardSessionRequestChannel(ctx1, boardId, userId1)
+	require.NoError(t, err)
 
 	// Subscriber 2: another user still waiting
-	ch2 := broker.GetBoardSessionRequestChannel(context.Background(), boardId, userId2)
+	ch2, err := broker.GetBoardSessionRequestChannel(context.Background(), boardId, userId2)
+	require.NoError(t, err)
 
 	// Subscriber 1 closes browser tab → context cancelled
 	cancel1()

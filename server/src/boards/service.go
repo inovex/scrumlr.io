@@ -2,12 +2,14 @@ package boards
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
 	"sort"
 	"time"
 
+	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -16,9 +18,9 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
 
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
@@ -98,52 +100,6 @@ func NewBoardService(
 	return b
 }
 
-func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.get.board", id.String()),
-	)
-
-	board, err := service.database.GetBoard(ctx, id)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
-		span.RecordError(err)
-		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
-	}
-
-	return new(Board).From(board), err
-}
-
-// GetBoards get all associated boards of a given user
-func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get.all")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.get.all.user", userID.String()),
-	)
-
-	boards, err := service.database.GetBoards(ctx, userID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
-		span.RecordError(err)
-		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
-		return nil, common.InternalServerError
-	}
-
-	result := make([]uuid.UUID, 0, len(boards))
-	for _, board := range boards {
-		result = append(result, board.ID)
-	}
-
-	return result, nil
-}
-
 func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.create")
@@ -152,7 +108,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	span.SetAttributes(
 		attribute.String("scrumlr.boards.service.create.user", body.Owner.String()),
 		attribute.String("scrumlr.boards.service.create.access_policy", string(body.AccessPolicy)),
-		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
+		attribute.Int("scrumlr.boards.service.create.columns.count", len(body.Columns)),
 	)
 
 	board, err := service.mapCreateBoardInsert(body)
@@ -168,7 +124,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
-		return nil, common.InternalServerError
+		return nil, CreateBoardError(Internal, "unable to create board for owner", err)
 	}
 
 	if _, err = service.createColumnsOnBoard(ctx, b.ID, body.Owner, body.Columns); err != nil {
@@ -190,97 +146,146 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	return new(Board).From(b), nil
 }
 
-func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
-	var board DatabaseBoardInsert
+func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*ImportBoardResponse, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
+	defer span.End()
 
-	switch body.AccessPolicy {
-	case Public, ByInvite:
-		if body.Passphrase != nil {
-			err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
-			return board, common.BadRequestError(err)
-		}
-
-		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
-
-	case ByPassphrase:
-		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
-			return board, common.BadRequestError(err)
-		}
-
-		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
-		board = DatabaseBoardInsert{
-			Name:         body.Name,
-			Description:  body.Description,
-			AccessPolicy: body.AccessPolicy,
-			Passphrase:   encodedPassphrase,
-			Salt:         salt,
-		}
+	board, columnMap, err := service.createImportedBoard(ctx, owner, request)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import board")
+		span.RecordError(err)
+		return nil, err
 	}
 
-	return board, nil
+	warnings, err := service.processImportedNotes(ctx, board.ID, request, columnMap)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to import notes or columns")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
-func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) (map[uuid.UUID]uuid.UUID, error) {
-	useProvidedIndices := hasValidUniqueColumnIndices(columnsToCreate)
-	sourceToCreatedColumnMap := make(map[uuid.UUID]uuid.UUID)
+func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
+	defer span.End()
 
-	for index, value := range columnsToCreate {
-		finalIndex := index
-		if useProvidedIndices {
-			finalIndex = *value.Index
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.get.board", id.String()),
+	)
+
+	board, err := service.database.GetBoard(ctx, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "no board found")
+			span.RecordError(err)
+			return nil, CreateBoardError(NotFound, "no board found", err)
 		}
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
+		log.Errorw("unable to get board", "boardID", id, "err", err)
+		return nil, CreateBoardError(Internal, "failed to get board", err)
+	}
 
-		column := columns.ColumnRequest{
-			Board:          boardID,
-			User:           owner,
-			Name:           value.Name,
-			Description:    value.Description,
-			Color:          value.Color,
-			Visible:        value.Visible,
-			Index:          &finalIndex,
-			SourceColumnID: value.SourceColumnID,
-		}
+	return new(Board).From(board), err
+}
 
-		createdColumn, err := service.columnService.Create(ctx, column)
+// GetBoards get all associated boards of a given user
+func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get.all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.get.all.user", userID.String()),
+	)
+
+	boards, err := service.database.GetBoards(ctx, userID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get boards")
+		span.RecordError(err)
+		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
+		return nil, CreateBoardError(Internal, "unable to get boards of user", err)
+	}
+
+	result := make([]uuid.UUID, 0, len(boards))
+	for _, board := range boards {
+		result = append(result, board.ID)
+	}
+
+	return result, nil
+}
+
+func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.get.overview")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.get.overview.user", user.String()),
+	)
+
+	overviewBoards := make([]*BoardOverview, 0, len(boardIDs))
+	for _, id := range boardIDs {
+		board, err := service.Get(ctx, id)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to get board")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 
-		if value.SourceColumnID == nil {
-			continue
+		boardSessions, err := service.sessionService.GetAll(ctx, id, sessions.BoardSessionFilter{})
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get sessions")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
 		}
 
-		if _, exists := sourceToCreatedColumnMap[*value.SourceColumnID]; exists {
-			return nil, fmt.Errorf("duplicate source column id during import mapping: sourceColumnID=%s", value.SourceColumnID)
+		boardColumns, err := service.columnService.GetAll(ctx, id)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get columns")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
 		}
 
-		sourceToCreatedColumnMap[*value.SourceColumnID] = createdColumn.ID
-	}
-
-	if len(sourceToCreatedColumnMap) == 0 {
-		return nil, nil
-	}
-
-	if len(sourceToCreatedColumnMap) != len(columnsToCreate) {
-		return nil, fmt.Errorf("source column id missing during import mapping: expected=%d mapped=%d", len(columnsToCreate), len(sourceToCreatedColumnMap))
-	}
-
-	return sourceToCreatedColumnMap, nil
-}
-
-func hasValidUniqueColumnIndices(columnsToCreate []columns.ColumnRequest) bool {
-	seenIndices := make([]bool, len(columnsToCreate))
-
-	for _, col := range columnsToCreate {
-		if col.Index == nil || *col.Index < 0 || *col.Index >= len(columnsToCreate) || seenIndices[*col.Index] {
-			return false
+		boardNotes, err := service.notesService.GetAll(ctx, id)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get notes")
+			span.RecordError(err)
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
 		}
 
-		seenIndices[*col.Index] = true
+		participantNum := len(boardSessions)
+		for _, session := range boardSessions {
+			// Participants should not be able to see hidden columns and their respective notes.
+			if session.UserID == user {
+				if !session.Role.CanSeeHiddenColumns() {
+					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
+					// also filter those notes where their respective column is hidden,
+					// at this point boardColumns only contains visible columns.
+					boardNotes = technical_helper.Filter(boardNotes, func(note *notes.Note) bool {
+						return columns.ColumnSlice(boardColumns).ContainsNote(note)
+					})
+				}
+				overviewBoards = append(overviewBoards, &BoardOverview{
+					Board:        board,
+					Columns:      boardColumns,
+					CreatedAt:    board.CreatedAt,
+					Participants: participantNum,
+					Role:         session.Role,
+					Favourite:    session.Favourite,
+					NoteCount:    len(boardNotes),
+				})
+			}
+		}
 	}
-
-	return true
+	return overviewBoards, nil
 }
 
 func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
@@ -365,95 +370,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		Reactions:            boardReactions,
 		Votings:              boardVotings,
 		Votes:                boardVotes,
-	}, err
-}
-
-func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.get.overview")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.board.get.overview.user", user.String()),
-	)
-
-	overviewBoards := make([]*BoardOverview, 0, len(boardIDs))
-	for _, id := range boardIDs {
-		board, err := service.Get(ctx, id)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to get board")
-			span.RecordError(err)
-			log.Errorw("unable to get board overview", "board", id, "err", err)
-			return nil, err
-		}
-
-		boardSessions, err := service.sessionService.GetAll(ctx, id, sessions.BoardSessionFilter{})
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to get sessions")
-			span.RecordError(err)
-			log.Errorw("unable to get board overview", "board", id, "err", err)
-			return nil, err
-		}
-
-		boardColumns, err := service.columnService.GetAll(ctx, id)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to get columns")
-			span.RecordError(err)
-			log.Errorw("unable to get board overview", "board", id, "err", err)
-			return nil, err
-		}
-
-		notes, err := service.notesService.GetAll(ctx, id)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to get notes")
-			span.RecordError(err)
-			log.Errorw("unable to get board overview", "board", id, "err", err)
-			return nil, err
-		}
-
-		participantNum := len(boardSessions)
-		for _, session := range boardSessions {
-			// Participants should not be able to see hidden collumns
-			if session.UserID == user {
-				if !session.Role.CanSeeHiddenColumns() {
-					boardColumns = columns.ColumnSlice(boardColumns).FilterVisibleColumns()
-				}
-				overviewBoards = append(overviewBoards, &BoardOverview{
-					Board:        board,
-					Columns:      boardColumns,
-					CreatedAt:    board.CreatedAt,
-					Participants: participantNum,
-					Role:         session.Role,
-					Favourite:    session.Favourite,
-					NoteCount:    len(notes),
-				})
-			}
-		}
-	}
-	return overviewBoards, nil
-}
-
-func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.board.delete.board", id.String()),
-	)
-
-	err := service.database.DeleteBoard(ctx, id)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete board")
-		span.RecordError(err)
-		log.Errorw("unable to delete board", "err", err)
-		return err
-	}
-
-	service.DeletedBoard(ctx, id)
-	boardDeletedCounter.Add(ctx, 1)
-
-	return nil
+	}, nil
 }
 
 func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
@@ -465,13 +382,11 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		attribute.String("scrumlr.boards.service.board.update.board", body.ID.String()),
 	)
 
-	if body.Name != nil {
-		if len(*body.Name) == 0 {
-			err := errors.New("name cannot be empty")
-			span.SetStatus(codes.Error, "name cannot be empty")
-			span.RecordError(err)
-			return nil, common.BadRequestError(err)
-		}
+	if body.Name != nil && len(*body.Name) == 0 {
+		err := errors.New("name cannot be empty")
+		span.SetStatus(codes.Error, "name cannot be empty")
+		span.RecordError(err)
+		return nil, CreateBoardError(BadRequest, "name cannot be empty", err)
 	}
 
 	update := DatabaseBoardUpdate{
@@ -496,14 +411,14 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.SetStatus(codes.Error, "passphrase should not be set for policies except 'BY_PASSPHRASE'")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
 				span.SetStatus(codes.Error, "no passphrase provided")
 				span.RecordError(err)
-				return nil, common.BadRequestError(err)
+				return nil, CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", err)
 			}
 
 			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
@@ -511,7 +426,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				span.SetStatus(codes.Error, "failed to encode passphrase")
 				span.RecordError(err)
 				log.Error("failed to encode passphrase")
-				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
+				return nil, CreateBoardError(Internal, "failed to encode passphrase", err)
 			}
 
 			update.Passphrase = passphrase
@@ -524,16 +439,39 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board", err)
 	}
 
 	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board.ID, service.clock.Now()); err != nil {
 		log.Warnw("unable to update last modified", "board", board, "err", err)
 	}
 
-	service.UpdatedBoard(ctx, board)
+	service.updatedBoard(ctx, board)
 
 	return new(Board).From(board), err
+}
+
+func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.delete.board", id.String()),
+	)
+
+	err := service.database.DeleteBoard(ctx, id)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete board")
+		span.RecordError(err)
+		log.Errorw("unable to delete board", "err", err)
+		return CreateBoardError(Internal, "failed to delete board", err)
+	}
+
+	service.deletedBoard(ctx, id)
+	boardDeletedCounter.Add(ctx, 1)
+
+	return nil
 }
 
 func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*Board, error) {
@@ -559,41 +497,12 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
-	service.UpdatedBoardTimer(ctx, board)
+	service.updatedBoardTimer(ctx, board)
 
 	boardTimerSetCounter.Add(ctx, 1)
-	return new(Board).From(board), err
-}
-
-func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.timer.delete")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.board.timer.delete.board", id.String()),
-	)
-
-	update := DatabaseBoardTimerUpdate{
-		ID:         id,
-		TimerStart: nil,
-		TimerEnd:   nil,
-	}
-
-	board, err := service.database.UpdateBoardTimer(ctx, update)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete board timer")
-		span.RecordError(err)
-		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
-	}
-
-	service.UpdatedBoardTimer(ctx, board)
-
-	boardTimerDeletedCounter.Add(ctx, 1)
 	return new(Board).From(board), err
 }
 
@@ -611,7 +520,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to get board", err)
 	}
 
 	var timerStart time.Time
@@ -638,86 +547,45 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		span.SetStatus(codes.Error, "failed to update board timer")
 		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, err
+		return nil, CreateBoardError(Internal, "failed to update board timer", err)
 	}
 
-	service.UpdatedBoardTimer(ctx, board)
+	service.updatedBoardTimer(ctx, board)
 
 	return new(Board).From(board), nil
 }
 
-func (service *Service) UpdatedBoardTimer(ctx context.Context, board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
-		Type: realtime.BoardEventBoardTimerUpdated,
-		Data: new(Board).From(board),
-	})
-}
-
-func (service *Service) UpdatedBoard(ctx context.Context, board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
-		Type: realtime.BoardEventBoardUpdated,
-		Data: new(Board).From(board),
-	})
-
-	err := service.SyncBoardSettingChange(ctx, board.ID)
-	if err != nil {
-		logger.Get().Errorw("unable to sync board setting change", "err", err)
-	}
-}
-
-func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid.UUID) error {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.sync")
+func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.timer.delete")
 	defer span.End()
 
 	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.board.sync.board", boardID.String()),
+		attribute.String("scrumlr.boards.service.board.timer.delete.board", id.String()),
 	)
 
-	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
+	update := DatabaseBoardTimerUpdate{
+		ID:         id,
+		TimerStart: nil,
+		TimerEnd:   nil,
+	}
+
+	board, err := service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
+		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve columns, following a updated board call: %w", err)
+		log.Errorw("unable to update board timer", "err", err)
+		return nil, CreateBoardError(Internal, "failed to delete board timer", err)
 	}
 
-	var columnsID []uuid.UUID
-	for _, column := range columnsOnBoard {
-		columnsID = append(columnsID, column.ID)
-	}
+	service.updatedBoardTimer(ctx, board)
 
-	notesOnBoard, err := service.notesService.GetAll(ctx, boardID, columnsID...)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
-		return fmt.Errorf("unable to retrieve notes, following a updated board call: %w", err)
-	}
-
-	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
-		Type: realtime.BoardEventNotesSync,
-		Data: notesOnBoard,
-	})
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to broadcast notes")
-		span.RecordError(err)
-		return fmt.Errorf("unable to broadcast notes, following a updated board call: %w", err)
-	}
-
-	return nil
+	boardTimerDeletedCounter.Add(ctx, 1)
+	return new(Board).From(board), err
 }
 
-func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.boards.service.board.delete.board", board.String()),
-	)
-
-	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventBoardDeleted,
-	})
-}
+// This middleware checks if the user has a moderator session for the board and if the board is locked. If the user is not a moderator and the board is locked, it returns a forbidden error. Otherwise, it adds the board's editability status to the context and calls the next handler.
+// NOTE: The BoardEditableContext needs to be outsourced to the API layer -> more refactoring work required
 
 func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -764,29 +632,174 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
-func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
-	return &LastModifiedUpdater{database: database, clock: clock}
+func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
+	var board DatabaseBoardInsert
+
+	switch body.AccessPolicy {
+	case Public, ByInvite:
+		if body.Passphrase != nil {
+			err := CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'"))
+			return board, err
+		}
+
+		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+
+	case ByPassphrase:
+		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
+			err := CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'"))
+			return board, err
+		}
+
+		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
+		board = DatabaseBoardInsert{
+			Name:         body.Name,
+			Description:  body.Description,
+			AccessPolicy: body.AccessPolicy,
+			Passphrase:   encodedPassphrase,
+			Salt:         salt,
+		}
+	}
+
+	return board, nil
 }
 
-func (service *Service) Import(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*ImportBoardResponse, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.import")
+func (service *Service) createColumnsOnBoard(ctx context.Context, boardID uuid.UUID, owner uuid.UUID, columnsToCreate []columns.ColumnRequest) (map[uuid.UUID]uuid.UUID, error) {
+	useProvidedIndices := hasValidUniqueColumnIndices(columnsToCreate)
+	sourceToCreatedColumnMap := make(map[uuid.UUID]uuid.UUID)
+
+	for index, value := range columnsToCreate {
+		finalIndex := index
+		if useProvidedIndices {
+			finalIndex = *value.Index
+		}
+
+		column := columns.ColumnRequest{
+			Board:          boardID,
+			User:           owner,
+			Name:           value.Name,
+			Description:    value.Description,
+			Color:          value.Color,
+			Visible:        value.Visible,
+			Index:          &finalIndex,
+			SourceColumnID: value.SourceColumnID,
+		}
+
+		createdColumn, err := service.columnService.Create(ctx, column)
+		if err != nil {
+			return nil, err
+		}
+
+		if value.SourceColumnID == nil {
+			continue
+		}
+
+		if _, exists := sourceToCreatedColumnMap[*value.SourceColumnID]; exists {
+			return nil, fmt.Errorf("duplicate source column id during import mapping: sourceColumnID=%s", value.SourceColumnID)
+		}
+
+		sourceToCreatedColumnMap[*value.SourceColumnID] = createdColumn.ID
+	}
+
+	if len(sourceToCreatedColumnMap) == 0 {
+		return nil, nil
+	}
+
+	if len(sourceToCreatedColumnMap) != len(columnsToCreate) {
+		return nil, fmt.Errorf("source column id missing during import mapping: expected=%d mapped=%d", len(columnsToCreate), len(sourceToCreatedColumnMap))
+	}
+
+	return sourceToCreatedColumnMap, nil
+}
+
+func hasValidUniqueColumnIndices(columnsToCreate []columns.ColumnRequest) bool {
+	seenIndices := make([]bool, len(columnsToCreate))
+
+	for _, col := range columnsToCreate {
+		if col.Index == nil || *col.Index < 0 || *col.Index >= len(columnsToCreate) || seenIndices[*col.Index] {
+			return false
+		}
+
+		seenIndices[*col.Index] = true
+	}
+
+	return true
+}
+
+func (service *Service) updatedBoardTimer(ctx context.Context, board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
+		Type: realtime.BoardEventBoardTimerUpdated,
+		Data: new(Board).From(board),
+	})
+}
+
+func (service *Service) updatedBoard(ctx context.Context, board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
+		Type: realtime.BoardEventBoardUpdated,
+		Data: new(Board).From(board),
+	})
+
+	err := service.syncBoardSettingChange(ctx, board.ID)
+	if err != nil {
+		logger.Get().Errorw("unable to sync board setting change", "err", err)
+	}
+}
+
+func (service *Service) syncBoardSettingChange(ctx context.Context, boardID uuid.UUID) error {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.sync")
 	defer span.End()
 
-	board, columnMap, err := service.createImportedBoard(ctx, owner, request)
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.sync.board", boardID.String()),
+	)
+
+	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to import board")
+		span.SetStatus(codes.Error, "failed to get columns")
 		span.RecordError(err)
-		return nil, err
+		return CreateBoardError(Internal, "unable to retrieve columns, following a updated board call", err)
 	}
 
-	warnings, err := service.processImportedNotes(ctx, board.ID, request, columnMap)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to import notes or columns")
-		span.RecordError(err)
-		return nil, err
+	var columnsID []uuid.UUID
+	for _, column := range columnsOnBoard {
+		columnsID = append(columnsID, column.ID)
 	}
 
-	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
+	notesOnBoard, err := service.notesService.GetAll(ctx, boardID, columnsID...)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
+		return CreateBoardError(Internal, "unable to retrieve notes, following a updated board call", err)
+	}
+
+	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: notesOnBoard,
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast notes")
+		span.RecordError(err)
+		return CreateBoardError(Internal, "unable to broadcast notes, following a updated board call", err)
+	}
+
+	return nil
+}
+
+func (service *Service) deletedBoard(ctx context.Context, board uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.delete.board", board.String()),
+	)
+
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventBoardDeleted,
+	})
+}
+
+func NewLastModifiedUpdater(database BoardDatabase, clock timeprovider.TimeProvider) *LastModifiedUpdater {
+	return &LastModifiedUpdater{database: database, clock: clock}
 }
 
 func (service *Service) createImportedBoard(ctx context.Context, owner uuid.UUID, request ImportBoardRequest) (*Board, map[uuid.UUID]uuid.UUID, error) {

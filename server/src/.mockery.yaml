@@ -109,3 +109,10 @@ packages:
     interfaces:
       ColumnService:
       ColumnDatabase:
+
+  scrumlr.io/server/websocket:
+    config:
+      dir: websocket
+    interfaces:
+      Connection:
+      Upgrader:

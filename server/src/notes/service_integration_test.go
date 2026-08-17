@@ -143,7 +143,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Create() {
 	columnId := suite.columns["Write"].ID
 	text := "This is a created note"
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	note, err := suite.noteService.Create(ctx, NoteCreateRequest{Board: boardId, User: authorId, Column: columnId, Text: text})
 
@@ -189,7 +190,8 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Update() {
 	text := "This note was updated"
 	rank := 1
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	note, err := suite.noteService.Update(ctx, userId, NoteUpdateRequest{
 		ID:     noteId,
@@ -226,9 +228,10 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Delete() {
 	userId := suite.baseData.Users["Santa"].ID
 	deleteStack := true
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.noteService.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
+	err = suite.noteService.Delete(ctx, userId, NoteDeleteRequest{ID: noteId, Board: boardId, DeleteStack: deleteStack})
 
 	assert.Nil(t, err)
 
@@ -267,7 +270,10 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, note)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.NotFoundError, err)
+
+	var noteErr NoteError
+	assert.ErrorAs(t, err, &noteErr)
+	assert.Equal(t, noteErr.Category, NotFound)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
@@ -297,6 +303,19 @@ func (suite *NoteServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Equal(t, suite.notes[24].Rank, notes[0].Position.Rank)
 	assert.Equal(t, suite.notes[24].Stack, notes[0].Position.Stack)
 	assert.Equal(t, suite.notes[24].Edited, notes[0].Edited)
+}
+
+func (suite *NoteServiceIntegrationTestSuite) Test_GetAll_NotFound() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := uuid.New()
+	columnId := uuid.New()
+
+	notes, err := suite.noteService.GetAll(ctx, boardId, columnId)
+
+	assert.Empty(t, notes)
+	assert.Nil(t, err)
 }
 
 func (suite *NoteServiceIntegrationTestSuite) Test_GetStack() {

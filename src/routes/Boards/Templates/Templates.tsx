@@ -56,7 +56,7 @@ export const Templates = () => {
   };
 
   const navigateToEdit = (templateId: string) => {
-    navigate(`../edit/${templateId}`);
+    navigate(`../edit-template/${templateId}`);
   };
 
   const deleteTemplateAndColumns = (templateId: string) => {

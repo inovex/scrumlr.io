@@ -19,7 +19,7 @@ type Connection interface {
 	Close(reason string) error
 }
 
-type WebSocketInterface interface {
+type Upgrader interface {
 	Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error)
 	IsNormalClose(err error) bool
 }

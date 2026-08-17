@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Modifier le tableau",
+    "save": "Enregistrer",
+    "loadError": "Désolé, nous n'avons pas pu charger ce tableau."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Retour à la note présentée",
     "VotingIsAnonymous": "Le vote est anonyme",
@@ -6,6 +11,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Nom du tableau",
+    "description": "Description du tableau",
     "createNewBoard": "Créer un nouveau tableau",
     "extendedConfigurationButton": "Configuration avancée",
     "basicConfigurationButton": "Sélection de modèle",
@@ -36,6 +42,19 @@
       "removeFile": "Supprimer le fichier"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Titre",
+    "boardDescriptionPlaceholder": "Description (optionnel)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Colonne 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Colonne {{index}}",
+      "namePlaceholder": "Titre",
+      "descriptionPlaceholder": "Description (optionnel)",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
+  },
   "Templates": {
     "switchTitle": "Modèles",
     "title": "Choisir un modèle",
@@ -60,15 +79,6 @@
       "saveEdit": "Enregistrer",
       "saveCreate": "Créer le modèle",
       "info": "Les modifications peuvent être apportées à tout moment, y compris sur le tableau."
-    },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Colonne 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Colonne {{index}}",
-      "namePlaceholder": "Titre",
-      "descriptionPlaceholder": "Description (optionnel)",
-      "save": "Enregistrer",
-      "cancel": "Annuler"
     },
     "AccessSettings": {
       "title": "Paramètres d'accès",
@@ -98,7 +108,9 @@
     "switchTitle": "Histoire",
     "title": "Gérer tes tableaux",
     "savedBoards": "Dernièrement utilisés",
-    "teaserText": "Les utilisateurs inscrits pourront prochainement consulter et gérer l'ensemble de leurs propres tableaux ici. Les tableaux créés en mode invité ne peuvent être ni rattachés à un compte, ni sauvegardés.",
+    "empty": "De ta session historique est vide — rejoint ou crée un tableau et il apparaîtra ici!",
+    "requireRegisteredAccount": "Connecte-toi avec Google, Microsoft ou SSO pour sauvegarder et gérer automatiquement tes tableaux de manière permanente. Les profils anonymes (connexion invité) ne peuvent pas être associés à des tableaux, ils ne seront donc pas enregistrés.",
+    "registerNow": "Inscris-toi",
     "HistoryCard": {
       "Info": {
         "amountColumns_one": "{{count}} colonne",
@@ -117,7 +129,10 @@
         "close": "Fermer"
       },
       "readOnly": "Verrouillé",
-      "openBoardButton": "Ouvrir la session"
+      "openBoardButton": "Ouvrir la session",
+      "linkCopied": "Lien du tableau copié !",
+      "deleteConfirmationTitle": "Supprimer le tableau ?",
+      "deleteConfirmationText": "Cela supprime définitivement le tableau pour tout le monde. Cette action est irréversible."
     }
   },
   "CreateBoard": {
@@ -134,8 +149,11 @@
   "LoginBoard": {
     "title": "Se connecter",
     "subtitleLogin": "Connectez-vous et profitez des avantages",
-    "loginFeature1": "Créer et sauvegarder des modèles personnalisés",
-    "loginFeature2": "Les paramètres personnalisés sont sauvegardés dans le profil",
+    "loginFeatures": [
+      "Créer et sauvegarder des modèles personnalisés",
+      "Les paramètres personnalisés sont sauvegardés dans le profil",
+      "Consulter et gérer vos anciens tableaux à tout moment"
+    ],
     "subtitleAnonymous": "Connexion anonyme",
     "anonymousLogin": "Continuer anonymement en tant qu'invité (fonctionnalités limitées)",
     "noLoginAvailable": "Aucune connexion valide n'est disponible",
@@ -444,7 +462,9 @@
     "readyButton": "Prêt !",
     "boardReactionsDisabled": "Les réactions du tableau sont désactivées",
     "enable": "Activer",
-    "failedImport": "Erreur lors de l'importation du fichier"
+    "failedImport": "Erreur lors de l'importation du fichier",
+    "importRemovedNotes_one": "{{count}} note a été supprimée pendant l'import car aucun auteur n'a pu être déterminé.",
+    "importRemovedNotes_other": "{{count}} notes ont été supprimées pendant l'import car aucun auteur n'a pu être déterminé."
   },
   "Language": {
     "german": "Allemand",
@@ -581,6 +601,7 @@
     "unshareNote": "Désolé, mais nous avons des difficultés à arrêter le partage de la note. Veuillez réessayer.",
     "deleteBoard": "Désolé, mais nous avons des difficultés à supprimer le tableau. Veuillez réessayer.",
     "importBoard": "Désolé, mais nous avons des difficultés à importer le tableau. Veuillez réessayer.",
+    "createBoard": "Désolé, nous rencontrons des difficultés pour créer le tableau. Veuillez réessayer.",
     "editColumn": "Désolé, mais nous avons des difficultés à mettre à jour la colonne. Veuillez réessayer.",
     "createColumn": "Désolé, mais nous avons des difficultés à ajouter la colonne. Veuillez réessayer.",
     "deleteColumn": "Désolé, mais nous avons des difficultés à supprimer la colonne. Veuillez réessayer.",

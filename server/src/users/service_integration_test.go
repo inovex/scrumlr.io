@@ -121,7 +121,7 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "", suite.testUserName, "", common.Anonymous)
+	user, err := suite.userService.Create(ctx, "", suite.testUserName, "", common.Anonymous)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -131,7 +131,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "appleId", suite.testUserName, "", common.Apple)
+	user, err := suite.userService.Create(ctx, "appleId", suite.testUserName, "", common.Apple)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -141,7 +141,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "azureId", suite.testUserName, "", common.AzureAd)
+	user, err := suite.userService.Create(ctx, "azureId", suite.testUserName, "", common.AzureAd)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -151,7 +151,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "githubId", suite.testUserName, "", common.GitHub)
+	user, err := suite.userService.Create(ctx, "githubId", suite.testUserName, "", common.GitHub)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -161,7 +161,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "googleId", suite.testUserName, "", common.Google)
+	user, err := suite.userService.Create(ctx, "googleId", suite.testUserName, "", common.Google)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -171,7 +171,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "microsoftId", suite.testUserName, "", common.Microsoft)
+	user, err := suite.userService.Create(ctx, "microsoftId", suite.testUserName, "", common.Microsoft)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -181,7 +181,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.CreateUser(ctx, "oidcId", suite.testUserName, "", common.TypeOIDC)
+	user, err := suite.userService.Create(ctx, "oidcId", suite.testUserName, "", common.TypeOIDC)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
@@ -193,7 +193,8 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	userId := suite.updateUser.ID
 	boardId := suite.updateBoard.ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	user, err := suite.userService.Update(ctx, UserUpdateRequest{ID: userId, Name: suite.testUserName})
 
@@ -217,9 +218,10 @@ func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	suite.Nil(preDeleteErr)
 	suite.Len(preDeleteNotes, 1)
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
-	err := suite.userService.Delete(ctx, userId)
+	err = suite.userService.Delete(ctx, userId)
 
 	suite.Nil(err)
 
@@ -275,7 +277,11 @@ func (suite *UserServiceIntegrationTestsuite) Test_Get_NotFound() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(NotFound, userErr.Category)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_GetBoardUsers() {

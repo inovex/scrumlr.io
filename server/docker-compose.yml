@@ -2,7 +2,7 @@
 name: scrumlr
 services:
   nats:
-    image: nats:2.12.3-alpine
+    image: nats:2.14.4-alpine
     command: ["-js"]
     ports:
       - "4222:4222"
@@ -17,7 +17,7 @@ services:
       - build
 
   database:
-    image: postgres:18.1
+    image: postgres:18.4
     ports:
       - "5432:5432"
     environment:
@@ -48,6 +48,7 @@ services:
       SCRUMLR_SERVER_DATABASE_URL: "postgres://admin:supersecret@database:5432/scrumlr?sslmode=disable"
       SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES: true
       SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION: true
+      SCRUMLR_ALLOW_ANONYMOUS_HISTORY: true
     depends_on:
       database:
         condition: service_healthy

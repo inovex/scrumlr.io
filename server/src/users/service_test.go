@@ -6,13 +6,13 @@ import (
 	"errors"
 	"testing"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 )
 
@@ -60,12 +60,16 @@ func (suite *UserServiceTestSuite) TestGetUser_NotFound() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.NotFoundError, err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(NotFound, userErr.Category)
 }
 
 func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().GetUser(mock.Anything, suite.userID).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().GetUser(mock.Anything, suite.userID).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
@@ -74,7 +78,7 @@ func (suite *UserServiceTestSuite) TestGetUser_DatabaseError() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestGetExistingUserIDs() {
@@ -130,7 +134,7 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -144,11 +148,11 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_DatabaseError() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
@@ -157,12 +161,15 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	expectedErr := common.BadRequestError(errors.New("name may not be empty"))
-	suite.Equal(expectedErr, err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
@@ -171,12 +178,15 @@ func (suite *UserServiceTestSuite) TestCreateAnonymusUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), "", name, "", common.Anonymous)
+	user, err := userService.Create(context.Background(), "", name, "", common.Anonymous)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	expectedErr := common.BadRequestError(errors.New("name may not contain newline characters"))
-	suite.Equal(expectedErr, err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser() {
@@ -188,7 +198,7 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -197,17 +207,17 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser() {
 func (suite *UserServiceTestSuite) TestCreateAppleUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
@@ -217,11 +227,16 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
@@ -231,11 +246,16 @@ func (suite *UserServiceTestSuite) TestCreateAppleUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Apple)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser() {
@@ -247,7 +267,7 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -256,17 +276,17 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser() {
 func (suite *UserServiceTestSuite) TestCreateAzureUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
@@ -276,11 +296,15 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
@@ -290,11 +314,15 @@ func (suite *UserServiceTestSuite) TestCreateAzureUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.AzureAd)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
@@ -306,7 +334,7 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -315,17 +343,17 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser() {
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
@@ -335,11 +363,15 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
@@ -349,11 +381,15 @@ func (suite *UserServiceTestSuite) TestCreateGitHubUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.GitHub)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
@@ -365,7 +401,7 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -374,17 +410,17 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser() {
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
@@ -394,11 +430,15 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
@@ -408,11 +448,15 @@ func (suite *UserServiceTestSuite) TestCreateGoogleUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Google)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
@@ -424,7 +468,7 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -433,17 +477,17 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser() {
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
@@ -453,11 +497,15 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
@@ -467,11 +515,15 @@ func (suite *UserServiceTestSuite) TestCreateMicrosoftUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.Microsoft)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
@@ -483,7 +535,7 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(err)
 	suite.NotNil(user)
@@ -492,17 +544,17 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser() {
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_DatabaseError() {
 	name := "Stan"
 	avatarUrl := ""
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, suite.userID.String(), name, avatarUrl).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
@@ -512,11 +564,15 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_EmptyUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
@@ -526,11 +582,15 @@ func (suite *UserServiceTestSuite) TestCreateOIDCUser_NewLineUsername() {
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
 
-	user, err := userService.CreateUser(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
+	user, err := userService.Create(context.Background(), suite.userID.String(), name, avatarUrl, common.TypeOIDC)
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser() {
@@ -561,9 +621,9 @@ func (suite *UserServiceTestSuite) TestUpdateUser() {
 
 func (suite *UserServiceTestSuite) TestUpdateUser_DatabaseError() {
 	name := "Stan"
-	dbError := "unable to execute"
+	dbError := errors.New("unable to execute")
 	suite.mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: suite.userID, Name: name}).
-		Return(DatabaseUser{}, errors.New(dbError))
+		Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
@@ -572,7 +632,7 @@ func (suite *UserServiceTestSuite) TestUpdateUser_DatabaseError() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
@@ -585,7 +645,11 @@ func (suite *UserServiceTestSuite) TestUpdateUser_EmptyUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not be empty")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not be empty", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
@@ -598,7 +662,11 @@ func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(common.BadRequestError(errors.New("name may not contain newline characters")), err)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {
@@ -614,8 +682,8 @@ func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {
 }
 
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration_DatabaseError() {
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, suite.userID).Return(false, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, suite.userID).Return(false, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
@@ -624,7 +692,7 @@ func (suite *UserServiceTestSuite) TestAvailableForKeyMigration_DatabaseError() 
 
 	suite.False(available)
 	suite.NotNil(err)
-	suite.Equal(errors.New(dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestSetKeyMigration() {
@@ -640,8 +708,8 @@ func (suite *UserServiceTestSuite) TestSetKeyMigration() {
 }
 
 func (suite *UserServiceTestSuite) TestSetKeymigration_DatabaseError() {
-	dbError := "unable to execute"
-	suite.mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, suite.userID).Return(DatabaseUser{}, errors.New(dbError))
+	dbError := errors.New("unable to execute")
+	suite.mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, suite.userID).Return(DatabaseUser{}, dbError)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
 	mockNotesService := notes.NewMockNotesService(suite.T())
 	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
@@ -650,7 +718,7 @@ func (suite *UserServiceTestSuite) TestSetKeymigration_DatabaseError() {
 
 	suite.Nil(user)
 	suite.NotNil(err)
-	suite.Equal(errors.New(dbError), err)
+	suite.ErrorIs(err, dbError)
 }
 
 func (suite *UserServiceTestSuite) TestDeleteUser() {
@@ -678,5 +746,5 @@ func (suite *UserServiceTestSuite) TestDeleteUser_DatabaseError() {
 	err := userService.Delete(context.Background(), suite.userID)
 
 	suite.NotNil(err)
-	suite.Equal(common.InternalServerError, err)
+	suite.ErrorIs(err, dbError)
 }

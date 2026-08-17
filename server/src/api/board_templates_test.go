@@ -418,6 +418,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				false,                            // anonymousLoginDisabled
 				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
 				false,                            // allowAnonymousBoardCreation
+				true,                             // allowAnonymousHistory
 				false,                            // experimentalFileSystemStore
 				false,                            // deactivate swagger page
 			)

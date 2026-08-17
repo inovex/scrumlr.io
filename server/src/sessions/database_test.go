@@ -170,7 +170,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 	database := NewSessionDatabase(suite.db)
 
 	userId := suite.users["Leia"].id
-	boardId := suite.boards["update"].id
+	boardId := suite.boards["Update"].id
 
 	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(role.OwnerRole)})
 
@@ -639,6 +639,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
 	suite.Equal([]DatabaseBoardSession(nil), dbSessions)
 }
 
+func (suite *DatabaseSessionTestSuite) TestDatabaseDelete() {
+	database := NewSessionDatabase(suite.db)
+
+	userId := suite.users["Friend"].id
+	boardId := suite.boards["Write"].id
+
+	err := database.Delete(context.Background(), boardId, userId)
+
+	suite.NoError(err)
+}
+
 type TestUser struct {
 	id          uuid.UUID
 	name        string
@@ -670,9 +681,10 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.boards["UpdateAll"] = TestBoard{id: uuid.New(), name: "UpdateAll"}
 
 	// test sessions
-	suite.sessions = make(map[string]DatabaseBoardSession, 16)
+	suite.sessions = make(map[string]DatabaseBoardSession, 17)
 	// test sessions for the write board
 	suite.sessions["Write"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["Write"].id, Role: role.ParticipantRole}
+	suite.sessions["Delete"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["Write"].id, Role: role.ModeratorRole}
 	// test sessions for the update board
 	suite.sessions["UpdateParticipantModerator"] = DatabaseBoardSession{User: suite.users["Luke"].id, Board: suite.boards["Update"].id, Role: role.ParticipantRole}
 	suite.sessions["UpdateParticipantOwner"] = DatabaseBoardSession{User: suite.users["Leia"].id, Board: suite.boards["Update"].id, Role: role.ParticipantRole}

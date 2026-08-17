@@ -99,6 +99,8 @@ spec:
               value: "true"
             - name: SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION
               value: "true"
+            - name: SCRUMLR_ALLOW_ANONYMOUS_HISTORY
+              value: "true"
           ports:
             - containerPort: 8080
 ---
@@ -251,7 +253,7 @@ kind: Cluster
 metadata:
   name: cluster-PR_NUMBER
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4
   instances: 1
   storage:
     storageClass: csi-cinder-sc-delete
@@ -298,7 +300,7 @@ spec:
   chart:
     spec:
       chart: nats
-      version: 2.12.1
+      version: 2.14.4
       sourceRef:
         kind: HelmRepository
         name: nats

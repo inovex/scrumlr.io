@@ -1,24 +1,53 @@
 import {Color} from "constants/colors";
-import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
+import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "store/features/board/types";
+import {BoardOverview} from "store/features/history/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
   /**
+   * Returns an overview of all boards the current user has a session on (the History list).
+   *
+   * @returns the list of board overviews
+   */
+  getBoards: async (): Promise<BoardOverview[]> => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as BoardOverview[];
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get boards`, {cause: error});
+    }
+  },
+  /**
    * Creates a board with the specified parameters and returns the board id.
    *
    * @param name the board name
+   * @param description the board description
    * @param accessPolicy the access policy configuration of the board
    * @param columns the definition of the columns
    *
    * @returns the board id of the created board
    */
-  createBoard: async (name: string | undefined, accessPolicy: CreateSessionAccessPolicy, columns: {name: string; visible: boolean; color: Color}[]) => {
+  createBoard: async (
+    name: string | undefined,
+    description: string | undefined,
+    accessPolicy: CreateSessionAccessPolicy,
+    columns: {name: string; visible: boolean; color: Color}[]
+  ) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
           name,
+          description,
           accessPolicy: accessPolicy.policy,
           passphrase: accessPolicy.policy === "BY_PASSPHRASE" ? accessPolicy.passphrase : undefined,
           columns,
@@ -47,8 +76,7 @@ export const BoardAPI = {
       });
 
       if (response.status === 201) {
-        const body = (await response.json()) as Board;
-        return body.id;
+        return (await response.json()) as ImportBoardResponse;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);

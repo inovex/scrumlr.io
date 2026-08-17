@@ -150,7 +150,7 @@ describe("LegacyNewBoard", () => {
     fireEvent.click(createButton);
 
     await waitFor(() => {
-      expect(API.createBoard).toHaveBeenCalledWith(undefined, {policy: "PUBLIC"}, expect.any(Array));
+      expect(API.createBoard).toHaveBeenCalledWith(undefined, undefined, {policy: "PUBLIC"}, expect.any(Array));
       expect(mockNavigate).toHaveBeenCalledWith("/board/board-id-123");
     });
   });

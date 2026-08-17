@@ -6,6 +6,7 @@ package sessionrequests
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
@@ -126,8 +127,8 @@ func (_c *MockSessionRequestWebsocket_closeSocket_Call) RunAndReturn(run func(co
 }
 
 // listenOnBoardSessionRequest provides a mock function for the type MockSessionRequestWebsocket
-func (_mock *MockSessionRequestWebsocket) listenOnBoardSessionRequest(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection) {
-	_mock.Called(boardID, userID, conn)
+func (_mock *MockSessionRequestWebsocket) listenOnBoardSessionRequest(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration) {
+	_mock.Called(boardID, userID, conn, retryDelay)
 	return
 }
 
@@ -140,11 +141,12 @@ type MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call struct {
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
 //   - conn websocket.Connection
-func (_e *MockSessionRequestWebsocket_Expecter) listenOnBoardSessionRequest(boardID any, userID any, conn any) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
-	return &MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call{Call: _e.mock.On("listenOnBoardSessionRequest", boardID, userID, conn)}
+//   - retryDelay time.Duration
+func (_e *MockSessionRequestWebsocket_Expecter) listenOnBoardSessionRequest(boardID any, userID any, conn any, retryDelay any) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+	return &MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call{Call: _e.mock.On("listenOnBoardSessionRequest", boardID, userID, conn, retryDelay)}
 }
 
-func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
@@ -158,10 +160,15 @@ func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Run(run 
 		if args[2] != nil {
 			arg2 = args[2].(websocket.Connection)
 		}
+		var arg3 time.Duration
+		if args[3] != nil {
+			arg3 = args[3].(time.Duration)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -172,7 +179,7 @@ func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) Return()
 	return _c
 }
 
-func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) RunAndReturn(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
+func (_c *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call) RunAndReturn(run func(boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)) *MockSessionRequestWebsocket_listenOnBoardSessionRequest_Call {
 	_c.Run(run)
 	return _c
 }

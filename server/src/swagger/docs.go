@@ -929,13 +929,6 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "id of the session",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "values to update the session",
                         "name": "session",
                         "in": "body",
@@ -1095,6 +1088,71 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a participant from a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Delete a participant from a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the session",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/common.APIError"
                         }
@@ -2829,6 +2887,26 @@ const docTemplate = `{
             }
         },
         "/login": {
+            "delete": {
+                "description": "Log the current user out",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Log the current user out",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/login/anonymous": {
             "post": {
                 "description": "Create a new anonymous user",
                 "consumes": [
@@ -2876,24 +2954,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/common.APIError"
                         }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Log the current user out",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Log the current user out",
-                "responses": {
-                    "204": {
-                        "description": "No Content"
                     }
                 }
             }
@@ -3863,6 +3923,9 @@ const docTemplate = `{
                 "allowAnonymousCustomTemplates": {
                     "type": "boolean"
                 },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
                 "anonymousLoginDisabled": {
                     "type": "boolean"
                 },
@@ -4313,6 +4376,9 @@ const docTemplate = `{
                 "allowStacking": {
                     "type": "boolean"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
                 "description": {
                     "description": "Description of the board",
                     "type": "string"
@@ -4331,7 +4397,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "sharedNote": {
-                    "description": "The id of a note to share with other users.\nFIXME omitempty works only with nil in combination with pointers",
+                    "description": "The id of a note to share with other users.",
                     "allOf": [
                         {
                             "$ref": "#/definitions/uuid.NullUUID"
@@ -4367,14 +4433,26 @@ const docTemplate = `{
                 "board": {
                     "$ref": "#/definitions/boards.Board"
                 },
-                "columnsNumber": {
-                    "type": "integer"
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/columns.Column"
+                    }
                 },
                 "createdAt": {
                     "type": "string"
                 },
+                "favourite": {
+                    "type": "boolean"
+                },
+                "noteCount": {
+                    "type": "integer"
+                },
                 "participants": {
                     "type": "integer"
+                },
+                "role": {
+                    "$ref": "#/definitions/role.Role"
                 }
             }
         },
@@ -4855,19 +4933,6 @@ const docTemplate = `{
                 "ColorYieldingYellow"
             ]
         },
-        "common.SessionRole": {
-            "type": "string",
-            "enum": [
-                "PARTICIPANT",
-                "MODERATOR",
-                "OWNER"
-            ],
-            "x-enum-varnames": [
-                "ParticipantRole",
-                "ModeratorRole",
-                "OwnerRole"
-            ]
-        },
         "feedback.FeedbackRequest": {
             "type": "object",
             "properties": {
@@ -5031,6 +5096,19 @@ const docTemplate = `{
                 }
             }
         },
+        "role.Role": {
+            "type": "string",
+            "enum": [
+                "PARTICIPANT",
+                "MODERATOR",
+                "OWNER"
+            ],
+            "x-enum-varnames": [
+                "ParticipantRole",
+                "ModeratorRole",
+                "OwnerRole"
+            ]
+        },
         "sessionrequests.BoardSessionRequest": {
             "type": "object",
             "properties": {
@@ -5078,6 +5156,10 @@ const docTemplate = `{
                     "description": "Reference for when board_session has been created",
                     "type": "string"
                 },
+                "favourite": {
+                    "description": "Flag indicates whether user has marked the board as one of their favourites.",
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -5093,7 +5175,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants\ncan only view data, add notes and votes while the users with the other\nroles are able to promote users, change board settings, edit columns,\nstart voting sessions etc.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
@@ -5110,6 +5192,9 @@ const docTemplate = `{
                     "description": "The banned state of the participant",
                     "type": "boolean"
                 },
+                "favourite": {
+                    "type": "boolean"
+                },
                 "raisedHand": {
                     "description": "The raised hand state of the participant.",
                     "type": "boolean"
@@ -5122,7 +5207,7 @@ const docTemplate = `{
                     "description": "The role of the participant.\n\nCan be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.\nOnly moderators and owners can promote other participants. A regular participant is not\nallowed to change the role.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/common.SessionRole"
+                            "$ref": "#/definitions/role.Role"
                         }
                     ]
                 },
@@ -5304,7 +5389,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "5.2.2",
+	Version:          "5.3.1",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

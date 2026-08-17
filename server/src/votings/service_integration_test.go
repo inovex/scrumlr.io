@@ -2,7 +2,6 @@ package votings
 
 import (
 	"context"
-	"errors"
 	"log"
 	"testing"
 
@@ -16,7 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"
 )
@@ -96,7 +94,10 @@ func (suite *VotingServiceIntegrationTestSuite) Test_AddVote_ClosedVoting() {
 
 	assert.Nil(t, vote)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("voting limit reached or no active voting session found")), err)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+	assert.Equal(t, NotFound, votingErr.Category)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_RemoveVote() {
@@ -148,7 +149,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting() {
 	anonymous := false
 	status := Open
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	voting, err := suite.votingService.Create(ctx, VotingCreateRequest{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous})
 
@@ -186,7 +188,12 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CreateVoting_Duplicate() {
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
-	assert.Equal(t, common.BadRequestError(errors.New("only one open voting per session is allowed")), err)
+
+	var votingErr VotingError
+	assert.ErrorAs(t, err, &votingErr)
+
+	assert.Equal(t, BadRequest, votingErr.Category)
+	assert.Equal(t, "only one open voting per session is allowed", votingErr.Message)
 }
 
 func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
@@ -196,7 +203,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	affectedNotes := []Note{
 		{ID: suite.baseData.Notes["Update1"].ID, Author: suite.baseData.Notes["Update1"].AuthorID, Text: suite.baseData.Notes["Update1"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update1"].ColumnID}},
@@ -228,7 +236,8 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() 
 	votingId := expectedVoting.ID
 	boardId := suite.baseData.Boards["SortedUpdate"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	affectedNotes := []Note{
 		{ID: suite.baseData.Notes["SortedUpdate1"].ID, Author: suite.baseData.Notes["SortedUpdate1"].AuthorID, Text: suite.baseData.Notes["SortedUpdate1"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate1"].ColumnID}},

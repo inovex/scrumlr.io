@@ -11,10 +11,12 @@ type SessionApi interface {
 	GetBoardSession(w http.ResponseWriter, r *http.Request)
 	UpdateBoardSession(w http.ResponseWriter, r *http.Request)
 	UpdateBoardSessions(w http.ResponseWriter, r *http.Request)
+	DeleteBoardSession(w http.ResponseWriter, r *http.Request)
 	BoardParticipantContext(next http.Handler) http.Handler
 	BoardModeratorContext(next http.Handler) http.Handler
 	BoardOwnerContext(next http.Handler) http.Handler
 }
+
 type Router struct {
 	sessionAPI SessionApi
 }
@@ -28,6 +30,7 @@ func (r *Router) RegisterRoutes() chi.Router {
 		router.Use(r.sessionAPI.BoardParticipantContext)
 		router.Get("/", r.sessionAPI.GetBoardSession)
 		router.Put("/", r.sessionAPI.UpdateBoardSession)
+		router.Delete("/", r.sessionAPI.DeleteBoardSession)
 	})
 	return router
 }

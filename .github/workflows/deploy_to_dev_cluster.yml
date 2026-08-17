@@ -80,5 +80,5 @@ jobs:
             - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
 
             </details>
-          comment_tag: dev-deployment
+          comment-tag: dev-deployment
           mode: recreate

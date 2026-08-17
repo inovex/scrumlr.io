@@ -20,6 +20,7 @@ export const LegacyNewBoard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();
+  const [boardDescription, setBoardDescription] = useState<string | undefined>();
   const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
   const [accessPolicy, setAccessPolicy] = useState<AccessPolicy>("PUBLIC");
   const [passphrase, setPassphrase] = useState("");
@@ -118,7 +119,7 @@ export const LegacyNewBoard = () => {
 
     if (columnTemplate) {
       // todo: use thunk instead
-      const boardId = await API.createBoard(boardName, createAccessPolicy, legacyColumnTemplates[columnTemplate].columns);
+      const boardId = await API.createBoard(boardName, boardDescription, createAccessPolicy, legacyColumnTemplates[columnTemplate].columns);
       navigate(`/board/${boardId}`);
     }
   };
@@ -164,7 +165,7 @@ export const LegacyNewBoard = () => {
                     </div>
                   </label>
                 ))}
-                <label className="new-board__mode" aria-label={t("LecacyNewBoard.importBoard")}>
+                <label className="new-board__mode" aria-label={t("LegacyNewBoard.importBoard")}>
                   <input
                     className="new-board__mode-input"
                     type="file"
@@ -201,6 +202,10 @@ export const LegacyNewBoard = () => {
 
               <TextInputLabel label={t("LegacyNewBoard.boardName")}>
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
+              </TextInputLabel>
+
+              <TextInputLabel label={t("LegacyNewBoard.description") as string}>
+                <TextInput onChange={(e) => setBoardDescription(e.target.value)} />
               </TextInputLabel>
 
               <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />

@@ -221,6 +221,75 @@ func (_c *MockSessionService_Create_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
+// Delete provides a mock function for the type MockSessionService
+func (_mock *MockSessionService) Delete(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID) error {
+	ret := _mock.Called(ctx, callerID, boardID, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Delete")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, callerID, boardID, userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockSessionService_Delete_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Delete'
+type MockSessionService_Delete_Call struct {
+	*mock.Call
+}
+
+// Delete is a helper method to define mock.On call
+//   - ctx context.Context
+//   - callerID uuid.UUID
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+func (_e *MockSessionService_Expecter) Delete(ctx any, callerID any, boardID any, userID any) *MockSessionService_Delete_Call {
+	return &MockSessionService_Delete_Call{Call: _e.mock.On("Delete", ctx, callerID, boardID, userID)}
+}
+
+func (_c *MockSessionService_Delete_Call) Run(run func(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID)) *MockSessionService_Delete_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 uuid.UUID
+		if args[3] != nil {
+			arg3 = args[3].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSessionService_Delete_Call) Return(err error) *MockSessionService_Delete_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockSessionService_Delete_Call) RunAndReturn(run func(ctx context.Context, callerID uuid.UUID, boardID uuid.UUID, userID uuid.UUID) error) *MockSessionService_Delete_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Disconnect provides a mock function for the type MockSessionService
 func (_mock *MockSessionService) Disconnect(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) error {
 	ret := _mock.Called(ctx, boardID, userID)
