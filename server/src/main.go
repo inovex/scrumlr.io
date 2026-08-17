@@ -25,6 +25,26 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const basePathFlag = "base-path"
+const allowAnonymousCustomTemplatesFlag = "allow-anonymous-custom-templates"
+const allowAnonymousBoardCreationFlag = "allow-anonymous-board-creation"
+const authGoogleClientIDFlag = "auth-google-client-id"
+const authGoogleClientSecretFlag = "auth-google-client-secret"
+const authGithubClientIDFlag = "auth-github-client-id"
+const authGithubClientSecretFlag = "auth-github-client-secret"
+const authMicrosoftClientIDFlag = "auth-microsoft-client-id"
+const authMicrosoftClientSecretFlag = "auth-microsoft-client-secret"
+const authAzureADTenantIDFlag = "auth-azure-ad-tenant-id"
+const authAzureADClientIDFlag = "auth-azure-ad-client-id"
+const authAzureADClientSecretFlag = "auth-azure-ad-client-secret"
+const authAppleClientIDFlag = "auth-apple-client-id"
+const authAppleClientSecretFlag = "auth-apple-client-secret"
+const authOIDCClientIDFlag = "auth-oidc-client-id"
+const authOIDCClientSecretFlag = "auth-oidc-client-secret"
+const authOIDCDiscoveryURLFlag = "auth-oidc-discovery-url"
+const authOIDCUserIdentScopeFlag = "auth-oidc-user-ident-scope"
+const authOIDCUserNameScopeFlag = "auth-oidc-user-name-scope"
+
 // @title			Scrumlr backend
 // @version		5.3.1
 // @description	This is the scrumlr backend server.
