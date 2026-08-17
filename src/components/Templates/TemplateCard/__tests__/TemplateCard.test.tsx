@@ -45,20 +45,29 @@ const renderCustomTemplateCard = (
     onDeleteTemplate = vi.fn(),
     onToggleFavourite = vi.fn(),
     onNavigateToEdit = vi.fn(),
+    templateName,
   }: {
     onSelectTemplate?: (template: TemplateWithColumns) => void;
     onDeleteTemplate?: (templateId: string) => void;
     onToggleFavourite?: (templateId: string, favourite: boolean) => void;
     onNavigateToEdit?: (templateId: string) => void;
+    templateName?: string;
   } = {},
   disabled: boolean = false,
   disabledReason?: string
 ) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
+  const patchedTemplateWithColumns = {
+    ...templateWithColumns,
+    template: {
+      ...templateWithColumns.template,
+      name: templateName ?? templateWithColumns.template.name,
+    },
+  };
 
   return render(
     <TemplateCard
-      template={templateWithColumns}
+      template={patchedTemplateWithColumns}
       templateType={"CUSTOM"}
       onSelectTemplate={onSelectTemplate}
       onDeleteTemplate={onDeleteTemplate}
@@ -95,6 +104,12 @@ describe("TemplateCard", () => {
   it("should render correctly (custom)", () => {
     const {container} = renderCustomTemplateCard("test-templates-id-1");
     expect(container).toMatchSnapshot();
+  });
+
+  it("should render custom template names without translating them", () => {
+    const {container} = renderCustomTemplateCard("test-templates-id-1", {templateName: "template"});
+
+    expect(container.querySelector<HTMLInputElement>(".template-card__title")).toHaveValue("template");
   });
 
   it("should call back on select", () => {

@@ -11,6 +11,8 @@ definitions:
         type: boolean
       allowAnonymousCustomTemplates:
         type: boolean
+      allowAnonymousHistory:
+        type: boolean
       anonymousLoginDisabled:
         type: boolean
       authProvider:
@@ -418,9 +420,7 @@ definitions:
       sharedNote:
         allOf:
         - $ref: '#/definitions/uuid.NullUUID'
-        description: |-
-          The id of a note to share with other users.
-          FIXME omitempty works only with nil in combination with pointers
+        description: The id of a note to share with other users.
       showAuthors:
         description: The show authors
         type: boolean
@@ -454,7 +454,7 @@ definitions:
       participants:
         type: integer
       role:
-        $ref: '#/definitions/common.SessionRole'
+        $ref: '#/definitions/role.Role'
     type: object
   boards.BoardUpdateRequest:
     properties:
@@ -793,16 +793,6 @@ definitions:
     - ColorPlanningPink
     - ColorPokerPurple
     - ColorYieldingYellow
-  common.SessionRole:
-    enum:
-    - PARTICIPANT
-    - MODERATOR
-    - OWNER
-    type: string
-    x-enum-varnames:
-    - ParticipantRole
-    - ModeratorRole
-    - OwnerRole
   feedback.FeedbackRequest:
     properties:
       contact:
@@ -913,6 +903,16 @@ definitions:
       reactionType:
         $ref: '#/definitions/reactions.ReactionType'
     type: object
+  role.Role:
+    enum:
+    - PARTICIPANT
+    - MODERATOR
+    - OWNER
+    type: string
+    x-enum-varnames:
+    - ParticipantRole
+    - ModeratorRole
+    - OwnerRole
   sessionrequests.BoardSessionRequest:
     properties:
       status:
@@ -960,7 +960,7 @@ definitions:
         type: boolean
       role:
         allOf:
-        - $ref: '#/definitions/common.SessionRole'
+        - $ref: '#/definitions/role.Role'
         description: |-
           The role of the participant.
 
@@ -987,7 +987,7 @@ definitions:
         type: boolean
       role:
         allOf:
-        - $ref: '#/definitions/common.SessionRole'
+        - $ref: '#/definitions/role.Role'
         description: |-
           The role of the participant.
 
@@ -1114,7 +1114,7 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.2.2
+  version: 5.3.1
 paths:
   /boards:
     get:
@@ -1755,7 +1755,7 @@ paths:
     delete:
       consumes:
       - application/json
-      description: Delete a sessions for a board
+      description: Delete a participant from a board
       parameters:
       - description: jwt token to authenticate
         in: header
@@ -1793,7 +1793,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.APIError'
-      summary: Delete a sessions for a board
+      summary: Delete a participant from a board
       tags:
       - sessions
     get:
