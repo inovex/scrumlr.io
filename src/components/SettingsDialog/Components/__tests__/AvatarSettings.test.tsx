@@ -56,7 +56,6 @@ describe("AvatarSettings", () => {
     await waitFor(() => expect(API.editUser).toHaveBeenCalledTimes(1));
     expect(API.editUser).toHaveBeenCalledWith({...auth, avatar: nextAvatar});
     expect(store.getState().auth.user).toEqual({...auth, avatar: nextAvatar});
-    expect(API.editUser).toHaveBeenCalledTimes(1);
   });
 
   test("persists an old avatar without a background color exactly once", async () => {
@@ -67,7 +66,6 @@ describe("AvatarSettings", () => {
     const migratedAvatar = {...oldAvatar, backgroundColor: completeAvatar.backgroundColor};
     expect(API.editUser).toHaveBeenCalledWith({...auth, avatar: migratedAvatar});
     expect(store.getState().auth.user?.avatar).toEqual(migratedAvatar);
-    expect(API.editUser).toHaveBeenCalledTimes(1);
   });
 
   test.each([null, undefined])("persists a generated avatar when the stored avatar is %s", async (avatar) => {
@@ -76,7 +74,6 @@ describe("AvatarSettings", () => {
     await waitFor(() => expect(API.editUser).toHaveBeenCalledTimes(1));
     expect(API.editUser).toHaveBeenCalledWith({...auth, avatar: completeAvatar});
     expect(store.getState().auth.user?.avatar).toEqual(completeAvatar);
-    expect(API.editUser).toHaveBeenCalledTimes(1);
   });
 
   test("does not update when shuffle produces the current avatar", async () => {
