@@ -32,7 +32,7 @@
     "marked": "18.0.9",
     "plausible-tracker": "^0.3.9",
     "qrcode.react": "^4.2.0",
-    "query-string": "^9.4.1",
+    "query-string": "^9.5.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-focus-lock": "^2.13.7",
