@@ -10,6 +10,8 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
+const requestID = "id = ?"
+
 type DB struct {
 	db *bun.DB
 }
@@ -37,7 +39,7 @@ func (db *DB) Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, err
 	// Get settings
 	err := db.db.NewSelect().
 		Model(&tBoard).
-		Where("id = ?", id).
+		Where(requestID, id).
 		Scan(ctx)
 
 	return tBoard, err
@@ -96,7 +98,7 @@ func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (Da
 
 	var boardTemplate DatabaseBoardTemplate
 	_, err := querySettings.
-		Where("id = ?", board.ID).
+		Where(requestID, board.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, "Result", &boardTemplate), &boardTemplate)
 
@@ -106,7 +108,7 @@ func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (Da
 func (db *DB) Delete(ctx context.Context, templateId uuid.UUID) error {
 	_, err := db.db.NewDelete().
 		Model((*DatabaseBoardTemplate)(nil)).
-		Where("id = ?", templateId).
+		Where(requestID, templateId).
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, templateId))
 
 	return err

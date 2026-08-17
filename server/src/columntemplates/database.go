@@ -10,6 +10,9 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
+const requestBoardTemplate = "board_template = ?"
+const requestID = "id = ?"
+
 type DB struct {
 	db *bun.DB
 }
@@ -28,7 +31,7 @@ func (db *DB) Create(ctx context.Context, column DatabaseColumnTemplateInsert) (
 		Model((*DatabaseColumnTemplate)(nil)).
 		Set("index = index+1").
 		Where("index >= ?", column.Index).
-		Where("board_template = ?", column.BoardTemplate)
+		Where(requestBoardTemplate, column.BoardTemplate)
 
 	var c DatabaseColumnTemplate
 	_, err := db.db.NewInsert().
@@ -45,8 +48,8 @@ func (db *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumnTempl
 	var column DatabaseColumnTemplate
 	err := db.db.NewSelect().
 		Model(&column).
-		Where("board_template = ?", board).
-		Where("id = ?", id).
+		Where(requestBoardTemplate, board).
+		Where(requestID, id).
 		Scan(ctx)
 
 	return column, err
@@ -56,7 +59,7 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemp
 	var columns []DatabaseColumnTemplate
 	err := db.db.NewSelect().
 		Model(&columns).
-		Where("board_template = ?", board).
+		Where(requestBoardTemplate, board).
 		Order("index ASC").
 		Scan(ctx)
 
@@ -66,7 +69,7 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemp
 func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
 	return db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
-		Where("board_template = ?", board).
+		Where(requestBoardTemplate, board).
 		Count(ctx)
 }
 
@@ -75,20 +78,20 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 	selectPrevious := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Column("board_template", "index").
-		Where("id = ?", column.ID).
-		Where("board_template = ?", column.BoardTemplate)
+		Where(requestID, column.ID).
+		Where(requestBoardTemplate, column.BoardTemplate)
 
 	maxIndexSelect := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Column("index").
-		Where("board_template = ?", column.BoardTemplate)
+		Where(requestBoardTemplate, column.BoardTemplate)
 
 	updateOnSmallerIndex := db.db.NewUpdate().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Column("index").
 		Set("index = index+1").
 		Where("index < (SELECT index FROM \"selectPrevious\")").
-		Where("board_template = ?", column.BoardTemplate).
+		Where(requestBoardTemplate, column.BoardTemplate).
 		Where("(SELECT index FROM \"selectPrevious\") > ?", column.Index).
 		Where("index >= ?", column.Index)
 
@@ -97,7 +100,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 		Column("index").
 		Set("index = index-1").
 		Where("index > (SELECT index FROM \"selectPrevious\")").
-		Where("board_template = ?", column.BoardTemplate).
+		Where(requestBoardTemplate, column.BoardTemplate).
 		Where("(SELECT index FROM \"selectPrevious\") < ?", column.Index).
 		Where("index <= ?", column.Index)
 
@@ -109,7 +112,7 @@ func (db *DB) Update(ctx context.Context, column DatabaseColumnTemplateUpdate) (
 		With("updateOnGreaterIndex", updateOnGreaterIndex).
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", column.Index)).
-		Where("id = ?", column.ID).
+		Where(requestID, column.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
@@ -122,7 +125,7 @@ func (db *DB) Delete(ctx context.Context, board, column uuid.UUID) error {
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Column("index", "board_template").
-		Where("id = ?", column)
+		Where(requestID, column)
 
 	indexUpdate := db.db.NewUpdate().
 		With("selectPreviousIndex", selectPreviousIndex).
@@ -133,7 +136,7 @@ func (db *DB) Delete(ctx context.Context, board, column uuid.UUID) error {
 	_, err := db.db.NewDelete().
 		With("indexUpdate", indexUpdate).
 		Model((*DatabaseColumnTemplate)(nil)).
-		Where("id = ?", column).
+		Where(requestID, column).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, "Result", &columns), &columns)
 
