@@ -21,6 +21,7 @@ import (
 )
 
 const boardsPath = "/boards/"
+const votesPath = "/votes"
 
 // Client is a typed Go client for the scrumlr API.
 // Uses types from the server module for type safety.
@@ -347,13 +348,13 @@ func (c *Client) CloseVoting(boardID, votingID uuid.UUID) (*votings.Voting, erro
 // --- Votes ---
 
 func (c *Client) AddVote(boardID uuid.UUID, req votings.VoteRequest) error {
-	_, err := c.do("POST", boardsPath+boardID.String()+"/votes", req, nil)
+	_, err := c.do("POST", boardsPath+boardID.String()+votesPath, req, nil)
 	return err
 }
 
 func (c *Client) GetVotes(boardID uuid.UUID) ([]*votings.Vote, error) {
 	var list []*votings.Vote
-	_, err := c.do("GET", boardsPath+boardID.String()+"/votes", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+votesPath, nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get votes: %w", err)
 	}
@@ -361,7 +362,7 @@ func (c *Client) GetVotes(boardID uuid.UUID) ([]*votings.Vote, error) {
 }
 
 func (c *Client) RemoveVote(boardID uuid.UUID, req votings.VoteRequest) error {
-	_, err := c.do("DELETE", boardsPath+boardID.String()+"/votes", req, nil)
+	_, err := c.do("DELETE", boardsPath+boardID.String()+votesPath, req, nil)
 	return err
 }
 

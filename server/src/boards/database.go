@@ -13,6 +13,8 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
+const requestID = "id = ?"
+
 type DB struct {
 	db    *bun.DB
 	clock timeprovider.TimeProvider
@@ -41,7 +43,7 @@ func (d *DB) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpda
 	_, err := d.db.NewUpdate().
 		Model(&update).
 		Column("timer_start", "timer_end").
-		Where("id = ?", update.ID).
+		Where(requestID, update.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
 
@@ -97,19 +99,19 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 			Model((*common.DatabaseVoting)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
-			Where("id = ?", update.ShowVoting.UUID).
+			Where(requestID, update.ShowVoting.UUID).
 			Where("status = ?", votings.Closed)
 
 		_, err = query.
 			With("voting", votingQuery).
 			With("rankUpdate", common.GetRankUpdateQueryForClosedVoting(d.db, "voting")).
 			Set("show_voting = (SELECT \"id\" FROM \"voting\")").
-			Where("id = ?", update.ID).
+			Where(requestID, update.ID).
 			Returning("*").
 			Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
 	} else {
 		_, err = query.
-			Where("id = ?", update.ID).
+			Where(requestID, update.ID).
 			Returning("*").
 			Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
 	}
@@ -121,7 +123,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 func (d *DB) DeleteBoard(ctx context.Context, id uuid.UUID) error {
 	_, err := d.db.NewDelete().
 		Model((*DatabaseBoard)(nil)).
-		Where("id = ?", id).
+		Where(requestID, id).
 		Exec(common.ContextWithValues(ctx, "Database", d, identifiers.BoardIdentifier, id))
 
 	return err
@@ -131,7 +133,7 @@ func (d *DB) GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error) 
 	var board DatabaseBoard
 	err := d.db.NewSelect().
 		Model(&board).
-		Where("id = ?", id).
+		Where(requestID, id).
 		Scan(ctx)
 
 	return board, err
