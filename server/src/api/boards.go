@@ -55,7 +55,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	// parse request
 	var body boards.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -277,7 +277,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		var body boards.JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to decode body"))
+			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 			log.Errorw("Unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
@@ -365,7 +365,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -409,7 +409,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
 		return
@@ -655,7 +655,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.ImportBoardRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("Could not read body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
