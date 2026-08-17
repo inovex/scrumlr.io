@@ -20,6 +20,8 @@ import (
 	"scrumlr.io/server/votings"
 )
 
+const boardsPath = "/boards/"
+
 // Client is a typed Go client for the scrumlr API.
 // Uses types from the server module for type safety.
 type Client struct {
@@ -159,7 +161,7 @@ func (c *Client) CreateBoard(req boards.CreateBoardRequest) (*boards.Board, erro
 
 func (c *Client) GetBoard(id uuid.UUID) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("GET", "/boards/"+id.String(), nil, &board)
+	_, err := c.do("GET", boardsPath+id.String(), nil, &board)
 	if err != nil {
 		return nil, fmt.Errorf("get board: %w", err)
 	}
@@ -177,7 +179,7 @@ func (c *Client) GetBoards() ([]*boards.Board, error) {
 
 func (c *Client) UpdateBoard(id uuid.UUID, req boards.BoardUpdateRequest) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("PUT", "/boards/"+id.String(), req, &board)
+	_, err := c.do("PUT", boardsPath+id.String(), req, &board)
 	if err != nil {
 		return nil, fmt.Errorf("update board: %w", err)
 	}
@@ -185,7 +187,7 @@ func (c *Client) UpdateBoard(id uuid.UUID, req boards.BoardUpdateRequest) (*boar
 }
 
 func (c *Client) DeleteBoard(id uuid.UUID) error {
-	_, err := c.do("DELETE", "/boards/"+id.String(), nil, nil)
+	_, err := c.do("DELETE", boardsPath+id.String(), nil, nil)
 	return err
 }
 
@@ -193,7 +195,7 @@ func (c *Client) DeleteBoard(id uuid.UUID) error {
 
 func (c *Client) SetTimer(boardID uuid.UUID, minutes uint8) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/timer", boards.SetTimerRequest{Minutes: minutes}, &board)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/timer", boards.SetTimerRequest{Minutes: minutes}, &board)
 	if err != nil {
 		return nil, fmt.Errorf("set timer: %w", err)
 	}
@@ -202,7 +204,7 @@ func (c *Client) SetTimer(boardID uuid.UUID, minutes uint8) (*boards.Board, erro
 
 func (c *Client) IncrementTimer(boardID uuid.UUID) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/timer/increment", nil, &board)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/timer/increment", nil, &board)
 	if err != nil {
 		return nil, fmt.Errorf("increment timer: %w", err)
 	}
@@ -211,7 +213,7 @@ func (c *Client) IncrementTimer(boardID uuid.UUID) (*boards.Board, error) {
 
 func (c *Client) DeleteTimer(boardID uuid.UUID) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("DELETE", "/boards/"+boardID.String()+"/timer", nil, &board)
+	_, err := c.do("DELETE", boardsPath+boardID.String()+"/timer", nil, &board)
 	if err != nil {
 		return nil, fmt.Errorf("delete timer: %w", err)
 	}
@@ -222,7 +224,7 @@ func (c *Client) DeleteTimer(boardID uuid.UUID) (*boards.Board, error) {
 
 func (c *Client) GetColumns(boardID uuid.UUID) ([]*columns.Column, error) {
 	var list []*columns.Column
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/columns", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/columns", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get columns: %w", err)
 	}
@@ -240,7 +242,7 @@ func (c *Client) GetColumn(boardID, columnID uuid.UUID) (*columns.Column, error)
 
 func (c *Client) CreateColumn(boardID uuid.UUID, req columns.ColumnRequest) (*columns.Column, error) {
 	var col columns.Column
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/columns", req, &col)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/columns", req, &col)
 	if err != nil {
 		return nil, fmt.Errorf("create column: %w", err)
 	}
@@ -265,7 +267,7 @@ func (c *Client) DeleteColumn(boardID, columnID uuid.UUID) error {
 
 func (c *Client) GetNotes(boardID uuid.UUID) ([]*notes.Note, error) {
 	var list []*notes.Note
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/notes", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/notes", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get notes: %w", err)
 	}
@@ -283,7 +285,7 @@ func (c *Client) GetNote(boardID, noteID uuid.UUID) (*notes.Note, error) {
 
 func (c *Client) CreateNote(boardID uuid.UUID, req notes.NoteCreateRequest) (*notes.Note, error) {
 	var note notes.Note
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/notes", req, &note)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/notes", req, &note)
 	if err != nil {
 		return nil, fmt.Errorf("create note: %w", err)
 	}
@@ -308,7 +310,7 @@ func (c *Client) DeleteNote(boardID, noteID uuid.UUID, req notes.NoteDeleteReque
 
 func (c *Client) CreateVoting(boardID uuid.UUID, req votings.VotingCreateRequest) (*votings.Voting, error) {
 	var voting votings.Voting
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/votings", req, &voting)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/votings", req, &voting)
 	if err != nil {
 		return nil, fmt.Errorf("create voting: %w", err)
 	}
@@ -317,7 +319,7 @@ func (c *Client) CreateVoting(boardID uuid.UUID, req votings.VotingCreateRequest
 
 func (c *Client) GetVotings(boardID uuid.UUID) ([]*votings.Voting, error) {
 	var list []*votings.Voting
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/votings", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/votings", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get votings: %w", err)
 	}
@@ -345,13 +347,13 @@ func (c *Client) CloseVoting(boardID, votingID uuid.UUID) (*votings.Voting, erro
 // --- Votes ---
 
 func (c *Client) AddVote(boardID uuid.UUID, req votings.VoteRequest) error {
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/votes", req, nil)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/votes", req, nil)
 	return err
 }
 
 func (c *Client) GetVotes(boardID uuid.UUID) ([]*votings.Vote, error) {
 	var list []*votings.Vote
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/votes", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/votes", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get votes: %w", err)
 	}
@@ -359,7 +361,7 @@ func (c *Client) GetVotes(boardID uuid.UUID) ([]*votings.Vote, error) {
 }
 
 func (c *Client) RemoveVote(boardID uuid.UUID, req votings.VoteRequest) error {
-	_, err := c.do("DELETE", "/boards/"+boardID.String()+"/votes", req, nil)
+	_, err := c.do("DELETE", boardsPath+boardID.String()+"/votes", req, nil)
 	return err
 }
 
@@ -367,7 +369,7 @@ func (c *Client) RemoveVote(boardID uuid.UUID, req votings.VoteRequest) error {
 
 func (c *Client) CreateReaction(boardID uuid.UUID, req reactions.ReactionCreateRequest) (*reactions.Reaction, error) {
 	var reaction reactions.Reaction
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/reactions", req, &reaction)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/reactions", req, &reaction)
 	if err != nil {
 		return nil, fmt.Errorf("create reaction: %w", err)
 	}
@@ -376,7 +378,7 @@ func (c *Client) CreateReaction(boardID uuid.UUID, req reactions.ReactionCreateR
 
 func (c *Client) GetReactions(boardID uuid.UUID) ([]*reactions.Reaction, error) {
 	var list []*reactions.Reaction
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/reactions", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/reactions", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get reactions: %w", err)
 	}
@@ -409,13 +411,13 @@ func (c *Client) DeleteReaction(boardID, reactionID uuid.UUID) error {
 // --- Participants ---
 
 func (c *Client) JoinBoard(boardID uuid.UUID) error {
-	_, err := c.do("POST", "/boards/"+boardID.String()+"/participants", nil, nil)
+	_, err := c.do("POST", boardsPath+boardID.String()+"/participants", nil, nil)
 	return err
 }
 
 func (c *Client) GetParticipants(boardID uuid.UUID) ([]*sessions.BoardSession, error) {
 	var list []*sessions.BoardSession
-	_, err := c.do("GET", "/boards/"+boardID.String()+"/participants", nil, &list)
+	_, err := c.do("GET", boardsPath+boardID.String()+"/participants", nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get participants: %w", err)
 	}
