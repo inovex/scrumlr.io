@@ -119,7 +119,7 @@
         "amountParticipants_other": "{{count}} participants",
         "amountNotes_one": "{{count}} note",
         "amountNotes_other": "{{count}} notes",
-        "lastUpdated": "Dernière modification : {{date}}"
+        "lastUpdated": "Modifié : {{date}}"
       },
       "Menu": {
         "delete": "Supprimer",
