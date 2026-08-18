@@ -150,30 +150,25 @@ export const Templates = () => {
       return showLoading ? <LoadingIndicator /> : null;
     }
 
-    return (
-      <>
-        <CreateTemplateCard onClick={showCreateTemplateView} />
-        {sortBy(
-          templates
-            .filter((template) => template.type === "CUSTOM")
-            .filter(matchSearchInput)
-            .filter(excludeDefaultTemplate),
-          (template: Template) => !template.favourite
-        ).map((template: Template) => (
-          <TemplateCard
-            templateType="CUSTOM"
-            template={mergeTemplateWithColumns(template)}
-            onSelectTemplate={onSelectTemplateWithColumns}
-            onDeleteTemplate={deleteTemplateAndColumns}
-            onNavigateToEdit={navigateToEdit}
-            onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
-            disabled={!canCreateBoard}
-            disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
-            key={template.id}
-          />
-        ))}
-      </>
-    );
+    return sortBy(
+      templates
+        .filter((template) => template.type === "CUSTOM")
+        .filter(matchSearchInput)
+        .filter(excludeDefaultTemplate),
+      (template: Template) => !template.favourite
+    ).map((template: Template) => (
+      <TemplateCard
+        templateType="CUSTOM"
+        template={mergeTemplateWithColumns(template)}
+        onSelectTemplate={onSelectTemplateWithColumns}
+        onDeleteTemplate={deleteTemplateAndColumns}
+        onNavigateToEdit={navigateToEdit}
+        onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+        disabled={!canCreateBoard}
+        disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
+        key={template.id}
+      />
+    ));
   };
 
   return (
@@ -217,7 +212,10 @@ export const Templates = () => {
         {showCustomTemplates && (
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
-            <div className="templates__card-container">{renderCustomTemplatesContent()}</div>
+            <div className="templates__card-container">
+              <CreateTemplateCard onClick={showCreateTemplateView} />
+              {renderCustomTemplatesContent()}
+            </div>
           </section>
         )}
       </div>
