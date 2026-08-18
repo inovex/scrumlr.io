@@ -37,9 +37,9 @@ describe("ColumnConfiguratorColumnNameDetails render", () => {
   });
 
   it("should show the character count indicator for a long description", () => {
-    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "descriptionFirst", description: "a".repeat(100)}));
+    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "descriptionFirst", description: "a".repeat(768)}));
 
-    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("100/128");
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
   });
 
   it("should match title and description", () => {

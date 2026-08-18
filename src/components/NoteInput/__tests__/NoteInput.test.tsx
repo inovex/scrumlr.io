@@ -61,9 +61,9 @@ describe("Note Input", () => {
 
     expect(container.querySelector(".character-count-indicator")).toBeNull();
 
-    fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "a".repeat(768)}});
+    fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "a".repeat(1536)}});
 
-    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("1536/2048");
   });
 
   // why is this so over-complicated and weird?? TODO fix this mess

@@ -9,7 +9,7 @@ export const MOVE_THRESHOLD = 0.63;
 export const TOAST_TIMER_DEFAULT = 5000;
 export const TOAST_TIMER_SHORT = 3000;
 
-export const MAX_NOTE_LENGTH = 1024;
+export const MAX_NOTE_LENGTH = 2048;
 export const MAX_EMOJI_SUGGESTION_COUNT = 25;
 export const MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS = 2;
 
@@ -17,7 +17,3 @@ export const MAX_BOARD_NAME_LENGTH = 128;
 export const MAX_BOARD_DESCRIPTION_LENGTH = 1024;
 export const MAX_COLUMN_NAME_LENGTH = 128;
 export const MAX_COLUMN_DESCRIPTION_LENGTH = 1024;
-
-// matches the database schema: board_templates.description varchar(300), column_templates.description varchar(128)
-export const MAX_TEMPLATE_DESCRIPTION_LENGTH = 300;
-export const MAX_TEMPLATE_COLUMN_DESCRIPTION_LENGTH = 128;

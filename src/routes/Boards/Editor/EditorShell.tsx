@@ -5,6 +5,7 @@ import {EditableTemplateColumn, TemplateColumn, TemplateColumnAction} from "stor
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
 import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
+import {MAX_BOARD_DESCRIPTION_LENGTH} from "constants/misc";
 import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {ColumnsMiniView} from "components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
 import {InfoIcon} from "components/Icon";
@@ -30,11 +31,10 @@ export type EditorShellProps = {
   submitIcon: ReactNode;
   onSubmit: (payload: EditorSubmitPayload) => void;
   onCancel: () => void;
-  descriptionMaxLength?: number;
   debug?: boolean;
 };
 
-export const EditorShell = ({editorId, initialName, initialDescription, initialColumns, submitLabel, submitIcon, onSubmit, onCancel, descriptionMaxLength, debug}: EditorShellProps) => {
+export const EditorShell = ({editorId, initialName, initialDescription, initialColumns, submitLabel, submitIcon, onSubmit, onCancel, debug}: EditorShellProps) => {
   const {t} = useTranslation();
 
   const [nameInput, setNameInput] = useState(initialName);
@@ -117,9 +117,9 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
             setInput={setDescriptionInput}
             placeholder={t("EditorShell.boardDescriptionPlaceholder")}
             border="transparent"
-            maxLength={descriptionMaxLength}
+            maxLength={MAX_BOARD_DESCRIPTION_LENGTH}
           />
-          {descriptionMaxLength && <CharacterCountIndicator value={descriptionInput} maxLength={descriptionMaxLength} />}
+          <CharacterCountIndicator value={descriptionInput} maxLength={MAX_BOARD_DESCRIPTION_LENGTH} />
         </div>
         {debug && (
           <div className="editor-shell__debug">

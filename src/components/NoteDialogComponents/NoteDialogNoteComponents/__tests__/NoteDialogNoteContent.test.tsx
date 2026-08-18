@@ -6,7 +6,7 @@ import {NoteDialogNoteContent} from "components/NoteDialogComponents/NoteDialogN
 
 describe("NoteDialogNoteContent", () => {
   it("should render the character count in the same row as the edited marker", () => {
-    const longText = "a".repeat(768);
+    const longText = "a".repeat(1536);
     const editedNote = {...getTestApplicationState().notes[0], text: longText}; // notes[0] is marked as edited
     const viewer = getTestApplicationState().participants.self!;
 
@@ -22,6 +22,6 @@ describe("NoteDialogNoteContent", () => {
     const footer = textarea.nextElementSibling!;
     expect(footer).toHaveClass("note-dialog__note-content-footer");
     expect(footer.querySelector(".note-dialog__marker-edited")).toBeTruthy();
-    expect(footer.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+    expect(footer.querySelector(".character-count-indicator")).toHaveTextContent("1536/2048");
   });
 });
