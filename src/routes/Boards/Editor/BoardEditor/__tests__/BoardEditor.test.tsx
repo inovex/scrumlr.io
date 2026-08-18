@@ -1,4 +1,4 @@
-import {render, screen} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import {I18nextProvider} from "react-i18next";
 import {MemoryRouter, Route, Routes} from "react-router";
 import {Provider} from "react-redux";
@@ -62,5 +62,14 @@ describe("BoardEditor", () => {
 
     expect(screen.getByText("history page")).toBeInTheDocument();
     expect(container.querySelector(".editor-shell__name-input input")).toBeNull();
+  });
+
+  it("uses the shared description limit and character count", () => {
+    const {container} = renderBoardEditor(makeBoard("OWNER"));
+    const descriptionInput = container.querySelector<HTMLTextAreaElement>(".editor-shell__description-text-area")!;
+
+    expect(descriptionInput).toHaveAttribute("maxlength", "1024");
+    fireEvent.input(descriptionInput, {target: {value: "a".repeat(768)}});
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
   });
 });

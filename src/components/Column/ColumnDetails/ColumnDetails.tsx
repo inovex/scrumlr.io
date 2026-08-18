@@ -6,6 +6,7 @@ import {ArrowDownIcon, ThreeDotsIcon as SettingsIcon, CheckDoneIcon, CloseIcon, 
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";
+import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
@@ -289,6 +290,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         }}
         onSubmit={updateColumnDetails}
       />
+      <CharacterCountIndicator value={localDescription} maxLength={MAX_COLUMN_DESCRIPTION_LENGTH} />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} transparent />
     </>
   );
