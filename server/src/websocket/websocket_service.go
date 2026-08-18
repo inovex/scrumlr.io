@@ -25,13 +25,13 @@ func (c *webSocketConnection) Close(reason string) error {
 	return c.conn.Close(websocket.StatusNormalClosure, reason)
 }
 
-type webSocketService struct{}
+type webSocketUpgrader struct{}
 
-func NewWebSocketService() WebSocketInterface {
-	return &webSocketService{}
+func NewWebSocketUpgrader() Upgrader {
+	return &webSocketUpgrader{}
 }
 
-func (c *webSocketService) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
+func (c *webSocketUpgrader) Accept(w http.ResponseWriter, r *http.Request, checkOrigin bool) (Connection, error) {
 	conn, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		InsecureSkipVerify: !checkOrigin,
 		CompressionMode:    websocket.CompressionDisabled, // compression doesn't work with Safari and led to #5777: see https://pkg.go.dev/github.com/coder/websocket#CompressionMode
@@ -42,7 +42,7 @@ func (c *webSocketService) Accept(w http.ResponseWriter, r *http.Request, checkO
 	return &webSocketConnection{conn: conn}, nil
 }
 
-func (c *webSocketService) IsNormalClose(err error) bool {
+func (c *webSocketUpgrader) IsNormalClose(err error) bool {
 	if err == nil {
 		return false
 	}

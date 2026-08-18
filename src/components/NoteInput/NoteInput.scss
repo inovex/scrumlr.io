@@ -2,6 +2,7 @@
 
 $note-input__input-left: 20px;
 $note-input__input-right: 40px;
+$note-input__border-width: 2px;
 
 .note-input {
   display: flex;
@@ -11,11 +12,11 @@ $note-input__input-right: 40px;
   min-height: 36px;
   width: 100%;
   position: relative;
-  margin-bottom: styles.$spacing--base;
+  margin-bottom: calc(styles.$spacing--base + styles.$spacing--xxs);
   background-color: styles.$gray--300;
   border-radius: styles.$rounded--medium;
   transition: all 0.12s ease-in-out;
-  border: 2px solid transparent;
+  border: $note-input__border-width solid transparent;
   container-type: inline-size;
 
   &:not(:has(.note-input__input:disabled)):hover,
@@ -23,6 +24,14 @@ $note-input__input-right: 40px;
     border-color: rgba(var(--accent-color--light-rgb), 0.5);
     box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.16);
   }
+}
+
+// the count sits below the input box, aligned to its right edge, within the gap left by the margin
+.note-input .character-count-indicator {
+  position: absolute;
+  top: calc(100% + styles.$spacing--xxs + $note-input__border-width);
+  right: styles.$spacing--xxs;
+  line-height: styles.$spacing--base;
 }
 
 .note-input__lock-icon {
@@ -72,7 +81,7 @@ $note-input__input-right: 40px;
   display: flex;
   align-self: flex-start;
   padding: styles.$spacing--xxs 0;
-  color: var(--accent-color);
+  color: var(--chip-accent-color);
 
   &:disabled {
     color: styles.$gray--800;

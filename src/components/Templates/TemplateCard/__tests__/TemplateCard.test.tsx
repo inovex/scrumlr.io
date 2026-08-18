@@ -45,20 +45,29 @@ const renderCustomTemplateCard = (
     onDeleteTemplate = vi.fn(),
     onToggleFavourite = vi.fn(),
     onNavigateToEdit = vi.fn(),
+    templateName,
   }: {
     onSelectTemplate?: (template: TemplateWithColumns) => void;
     onDeleteTemplate?: (templateId: string) => void;
     onToggleFavourite?: (templateId: string, favourite: boolean) => void;
     onNavigateToEdit?: (templateId: string) => void;
+    templateName?: string;
   } = {},
   disabled: boolean = false,
   disabledReason?: string
 ) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
+  const patchedTemplateWithColumns = {
+    ...templateWithColumns,
+    template: {
+      ...templateWithColumns.template,
+      name: templateName ?? templateWithColumns.template.name,
+    },
+  };
 
   return render(
     <TemplateCard
-      template={templateWithColumns}
+      template={patchedTemplateWithColumns}
       templateType={"CUSTOM"}
       onSelectTemplate={onSelectTemplate}
       onDeleteTemplate={onDeleteTemplate}
@@ -83,7 +92,7 @@ const clickMiniMenuItem = (container: HTMLElement & Element, label: string) => {
   const dataCy = "template-card__menu";
   const miniMenuButton = container.querySelector<HTMLButtonElement>(`.mini-menu__item[data-testid="${dataCy}-item-${label}"]`);
   expect(miniMenuButton).toBeInTheDocument();
-  act(() => fireEvent.mouseDown(miniMenuButton!));
+  act(() => fireEvent.click(miniMenuButton!));
 };
 
 describe("TemplateCard", () => {
@@ -95,6 +104,12 @@ describe("TemplateCard", () => {
   it("should render correctly (custom)", () => {
     const {container} = renderCustomTemplateCard("test-templates-id-1");
     expect(container).toMatchSnapshot();
+  });
+
+  it("should render custom template names without translating them", () => {
+    const {container} = renderCustomTemplateCard("test-templates-id-1", {templateName: "template"});
+
+    expect(container.querySelector<HTMLInputElement>(".template-card__title")).toHaveValue("template");
   });
 
   it("should call back on select", () => {
@@ -189,14 +204,6 @@ describe("TemplateCard", () => {
       expect(startButton).toBeDisabled();
     });
 
-    it("should show tooltip on disabled start button", () => {
-      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, true, "Anonymous users cannot create boards");
-
-      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
-      expect(startButton).toHaveAttribute("data-tooltip-id", "template-card-tooltip");
-      expect(startButton).toHaveAttribute("data-tooltip-content", "Anonymous users cannot create boards");
-    });
-
     it("should not call onSelectTemplate when disabled start button is clicked", () => {
       const onSelectTemplate = vi.fn();
       const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
@@ -205,15 +212,6 @@ describe("TemplateCard", () => {
       act(() => fireEvent.click(startButton));
 
       expect(onSelectTemplate).not.toHaveBeenCalled();
-    });
-
-    it("should not show tooltip attributes when template card is enabled", () => {
-      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, false);
-
-      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
-      expect(startButton).not.toHaveAttribute("data-tooltip-id");
-      expect(startButton).not.toHaveAttribute("data-tooltip-content");
-      expect(startButton).not.toBeDisabled();
     });
 
     it("should still allow favourite functionality when template card is disabled", () => {
@@ -234,7 +232,6 @@ describe("TemplateCard", () => {
 
       const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
       expect(startButton).toBeDisabled();
-      expect(startButton).toHaveAttribute("data-tooltip-content", "Custom disabled reason");
 
       act(() => fireEvent.click(startButton));
       expect(onSelectTemplate).not.toHaveBeenCalled();

@@ -12,15 +12,17 @@ import {isEqual} from "underscore";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {useOutletContext} from "react-router";
+import {isParticipantModerator} from "utils/participant";
+import {TranslationKey} from "utils/i18n";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 
-const POLICY_LABEL_KEYS: Record<AccessPolicy, string> = {
+const POLICY_LABEL_KEYS = {
   PUBLIC: "BoardSettings.AccessPolicyPublicLabel",
   BY_INVITE: "BoardSettings.AccessPolicyByInviteLabel",
   BY_PASSPHRASE: "BoardSettings.AccessPolicyByPassphraseLabel",
-};
+} satisfies Record<AccessPolicy, TranslationKey>;
 
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ export const BoardSettings = () => {
     (applicationState) => ({
       board: applicationState.board.data!,
       me: applicationState.participants?.self,
-      currentUserIsModerator: applicationState.participants?.self?.role === "OWNER" || applicationState.participants?.self?.role === "MODERATOR",
+      userRole: applicationState.participants?.self?.role ?? "PARTICIPANT",
       hotkeysAreActive: applicationState.view.hotkeysAreActive,
     }),
     isEqual
@@ -42,6 +44,8 @@ export const BoardSettings = () => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const [localPolicy, setLocalPolicy] = useState(state.board.accessPolicy);
   const lastSubmittedPassword = useRef("");
+
+  const isUserModerator = isParticipantModerator(state.userRole);
 
   useEffect(() => {
     setBoardName(state.board.name ?? "");
@@ -92,7 +96,7 @@ export const BoardSettings = () => {
             label={t("BoardSettings.BoardName")}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
             submit={() => dispatch(editBoard({name: boardName}))}
-            disabled={!state.currentUserIsModerator}
+            disabled={!isUserModerator}
             placeholder={DEFAULT_BOARD_NAME}
             maxLength={128}
           />
@@ -103,8 +107,8 @@ export const BoardSettings = () => {
                 {index > 0 && <hr className="settings-dialog__separator" />}
                 <button
                   className={classNames("board-settings__access-option", {"board-settings__access-option--selected": localPolicy === policy})}
-                  onClick={() => state.currentUserIsModerator && handlePolicyChange(policy)}
-                  disabled={!state.currentUserIsModerator}
+                  onClick={() => isUserModerator && handlePolicyChange(policy)}
+                  disabled={!isUserModerator}
                   role="radio"
                   aria-checked={localPolicy === policy}
                 >
@@ -116,7 +120,7 @@ export const BoardSettings = () => {
                 </button>
               </Fragment>
             ))}
-            {localPolicy === "BY_PASSPHRASE" && state.currentUserIsModerator && (
+            {localPolicy === "BY_PASSPHRASE" && isUserModerator && (
               <div className="board-settings__password-section">
                 <SettingsInput
                   id="boardSettingsPassword"
@@ -131,7 +135,7 @@ export const BoardSettings = () => {
               </div>
             )}
           </div>
-          {state.currentUserIsModerator && (
+          {isUserModerator && (
             <>
               <div className="settings-dialog__group">
                 <SettingsButton
@@ -230,13 +234,16 @@ export const BoardSettings = () => {
                 </a>
               </div>
 
-              <SettingsButton
-                className={classNames("board-settings__delete-button")}
-                label={t("BoardSettings.DeleteBoard")}
-                onClick={() => setShowConfirmationDialog(true)}
-                icon={TrashIcon}
-                reverseOrder
-              />
+              {/* only owner may delete board */}
+              {state.userRole === "OWNER" && (
+                <SettingsButton
+                  className={classNames("board-settings__delete-button")}
+                  label={t("BoardSettings.DeleteBoard")}
+                  onClick={() => setShowConfirmationDialog(true)}
+                  icon={TrashIcon}
+                  reverseOrder
+                />
+              )}
             </>
           )}
 

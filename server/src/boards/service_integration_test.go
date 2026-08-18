@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/role"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
@@ -36,6 +38,14 @@ type testSession struct {
 	user  uuid.UUID
 }
 
+type testColumn struct {
+	id      uuid.UUID
+	board   uuid.UUID
+	name    string
+	visible bool
+	index   int
+}
+
 type BoardServiceIntegrationTestSuite struct {
 	suite.Suite
 	natsContainer        *nats.NATSContainer
@@ -46,6 +56,7 @@ type BoardServiceIntegrationTestSuite struct {
 	// Additional test-specific data
 	users    map[string]testDbTemplates.TestUser
 	boards   map[string]Board
+	columns  map[string]testColumn
 	sessions map[string]testSession
 }
 
@@ -85,6 +96,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(db)
 	votingService := votings.NewVotingService(votingDatabase, broker)
+
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-boards")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
@@ -96,11 +108,13 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewWebSocketService()
+	wsService := websocket.NewWebSocketUpgrader()
 	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
-	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, clock, generatedHash)
+	userDatabase := users.NewUserDatabase(db)
+	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
+	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
@@ -112,6 +126,8 @@ func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 	suite.boards = map[string]Board{
 		"Read1":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567101"), Name: new("Read1"), Description: new("This is a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Read2":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567102"), Name: new("Read2"), Description: new("This is also a board"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"OverviewParticipant":      {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710c"), Name: new("OverviewParticipant"), Description: new("Board with hidden participant column"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
+		"OverviewVisibleOnly":      {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef123456710d"), Name: new("OverviewVisibleOnly"), Description: new("Board with only visible columns"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Timer":                    {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567103"), Name: new("TimerUpdate"), Description: new("This is a board to update the timer"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"Update":                   {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567104"), Name: new("Update"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
 		"UpdatePublicToPassphrase": {ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567105"), Name: new("UpdateToPassphrase"), Description: new("This is a board to update"), AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false},
@@ -124,8 +140,16 @@ func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 	}
 
 	suite.sessions = map[string]testSession{
-		"Read1": {board: suite.boards["Read1"].ID, user: suite.users["Stan"].ID},
-		"Read2": {board: suite.boards["Read2"].ID, user: suite.users["Stan"].ID},
+		"Read1":               {board: suite.boards["Read1"].ID, user: suite.users["Stan"].ID},
+		"Read2":               {board: suite.boards["Read2"].ID, user: suite.users["Stan"].ID},
+		"OverviewParticipant": {board: suite.boards["OverviewParticipant"].ID, user: suite.users["Santa"].ID},
+		"OverviewVisibleOnly": {board: suite.boards["OverviewVisibleOnly"].ID, user: suite.users["Santa"].ID},
+	}
+
+	suite.columns = map[string]testColumn{
+		"OverviewParticipantVisible": {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567101"), board: suite.boards["OverviewParticipant"].ID, name: "Visible Column", visible: true, index: 0},
+		"OverviewParticipantHidden":  {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567102"), board: suite.boards["OverviewParticipant"].ID, name: "Hidden Column", visible: false, index: 1},
+		"OverviewVisibleOnly":        {id: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567103"), board: suite.boards["OverviewVisibleOnly"].ID, name: "Only Visible Column", visible: true, index: 0},
 	}
 }
 
@@ -252,7 +276,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Update() {
 	name := "New Name"
 	description := "This is a new description"
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -292,7 +317,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToPassphrase() {
 	boardId := suite.boards["UpdatePublicToPassphrase"].ID
 	accessPolicy := ByPassphrase
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -325,7 +351,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePublicToInvite() {
 	boardId := suite.boards["UpdatePublicToInvite"].ID
 	accessPolicy := ByInvite
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -357,7 +384,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToPublic() {
 	boardId := suite.boards["UpdatePassphraseToPublic"].ID
 	accessPolicy := Public
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -389,7 +417,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdatePassphraseToInvite() {
 	boardId := suite.boards["UpdatePassphraseToInvite"].ID
 	accessPolicy := ByInvite
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -421,7 +450,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPublic() {
 	boardId := suite.boards["UpdateInviteToPublic"].ID
 	accessPolicy := Public
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -453,7 +483,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_UpdateInviteToPassphrase() {
 	boardId := suite.boards["UpdateInviteToPassphrase"].ID
 	accessPolicy := ByPassphrase
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(t, err, "Failed to subscribe to board channel")
 
 	board, err := suite.service.Update(
 		ctx,
@@ -516,7 +547,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Get_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
@@ -531,8 +562,10 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetAll() {
 	assert.Len(t, boards, 2)
 
 	firstBoard := checkBoardInList(boards, suite.boards["Read1"].ID)
+	require.NotNil(t, firstBoard)
 	assert.Equal(t, suite.boards["Read1"].ID, *firstBoard)
 	secondBoard := checkBoardInList(boards, suite.boards["Read2"].ID)
+	require.NotNil(t, secondBoard)
 	assert.Equal(t, suite.boards["Read2"].ID, *secondBoard)
 }
 
@@ -569,32 +602,33 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
-	assert.Equal(t, sql.ErrNoRows, err)
+	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {
 	t := suite.T()
 	ctx := context.Background()
 
-	boardIds := []uuid.UUID{suite.boards["Read1"].ID, suite.boards["Read2"].ID}
-	userId := suite.users["Stan"].ID
+	boardIds := []uuid.UUID{suite.boards["OverviewParticipant"].ID, suite.boards["OverviewVisibleOnly"].ID}
+	userId := suite.users["Santa"].ID
 
 	boards, err := suite.service.BoardOverview(ctx, boardIds, userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, boards, 2)
 
-	assert.Equal(t, suite.boards["Read1"].ID, boards[0].Board.ID)
-	assert.Equal(t, suite.boards["Read1"].Name, boards[0].Board.Name)
-	assert.Equal(t, suite.boards["Read1"].Description, boards[0].Board.Description)
-	assert.Equal(t, suite.boards["Read1"].AccessPolicy, boards[0].Board.AccessPolicy)
-	assert.Equal(t, suite.boards["Read1"].ShowAuthors, boards[0].Board.ShowAuthors)
+	// OverviewParticipant has one hidden and one visible column so user Santa (Participant) should only see one.
+	assert.Equal(t, suite.boards["OverviewParticipant"].ID, boards[0].Board.ID)
+	assert.Len(t, boards[0].Columns, 1)
+	assert.True(t, boards[0].Columns[0].Visible)
+	// ensure ONLY visible columns can be seen by user Santa
+	for _, column := range boards[0].Columns {
+		assert.True(t, column.Visible)
+	}
 
-	assert.Equal(t, suite.boards["Read2"].ID, boards[1].Board.ID)
-	assert.Equal(t, suite.boards["Read2"].Name, boards[1].Board.Name)
-	assert.Equal(t, suite.boards["Read2"].Description, boards[1].Board.Description)
-	assert.Equal(t, suite.boards["Read2"].AccessPolicy, boards[1].Board.AccessPolicy)
-	assert.Equal(t, suite.boards["Read2"].ShowAuthors, boards[1].Board.ShowAuthors)
+	assert.Equal(t, suite.boards["OverviewVisibleOnly"].ID, boards[1].Board.ID)
+	assert.Len(t, boards[1].Columns, 1)
+	assert.True(t, boards[1].Columns[0].Visible)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_SetTimer() {
@@ -641,6 +675,280 @@ func (suite *BoardServiceIntegrationTestSuite) Test_IncrementTimer() {
 	assert.Equal(t, minutes+1, uint8(board.TimerEnd.Sub(*board.TimerStart).Minutes()))
 }
 
+func (suite *BoardServiceIntegrationTestSuite) Test_CreateImportedBoard() {
+	t := suite.T()
+	ctx := context.Background()
+
+	owner := suite.users["Santa"].ID
+	name := "Imported Board via createImportedBoard"
+	description := "Board created directly through import helper"
+
+	sourceFirstColumnID := uuid.New()
+	sourceSecondColumnID := uuid.New()
+
+	service, ok := suite.service.(*Service)
+	require.True(t, ok)
+
+	board, columnMap, err := service.createImportedBoard(ctx, owner, ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &name,
+			Description:  &description,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:          sourceFirstColumnID,
+				Name:        "Imported First",
+				Description: "First imported column",
+				Color:       common.ColorBacklogBlue,
+				Visible:     true,
+				Index:       0,
+			},
+			{
+				ID:          sourceSecondColumnID,
+				Name:        "Imported Second",
+				Description: "Second imported column",
+				Color:       common.ColorOnlineOrange,
+				Visible:     false,
+				Index:       1,
+			},
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, board)
+	require.Len(t, columnMap, 2)
+	assert.Equal(t, name, *board.Name)
+	assert.Equal(t, description, *board.Description)
+	assert.Equal(t, Public, board.AccessPolicy)
+
+	createdFirstColumnID, firstMapped := columnMap[sourceFirstColumnID]
+	require.True(t, firstMapped)
+	createdSecondColumnID, secondMapped := columnMap[sourceSecondColumnID]
+	require.True(t, secondMapped)
+	assert.NotEqual(t, createdFirstColumnID, createdSecondColumnID)
+
+	fullBoard, err := suite.service.FullBoard(ctx, board.ID)
+	require.NoError(t, err)
+	require.Len(t, fullBoard.Columns, 2)
+	require.Len(t, fullBoard.BoardSessions, 1)
+
+	assert.Equal(t, owner, fullBoard.BoardSessions[0].UserID)
+	assert.Equal(t, role.OwnerRole, fullBoard.BoardSessions[0].Role)
+
+	columnsByID := make(map[uuid.UUID]*columns.Column, len(fullBoard.Columns))
+	for _, column := range fullBoard.Columns {
+		columnsByID[column.ID] = column
+	}
+
+	firstColumn, exists := columnsByID[createdFirstColumnID]
+	require.True(t, exists)
+	assert.Equal(t, "Imported First", firstColumn.Name)
+	assert.Equal(t, "First imported column", firstColumn.Description)
+	assert.Equal(t, common.ColorBacklogBlue, firstColumn.Color)
+	assert.True(t, firstColumn.Visible)
+	assert.Equal(t, 0, firstColumn.Index)
+
+	secondColumn, exists := columnsByID[createdSecondColumnID]
+	require.True(t, exists)
+	assert.Equal(t, "Imported Second", secondColumn.Name)
+	assert.Equal(t, "Second imported column", secondColumn.Description)
+	assert.Equal(t, common.ColorOnlineOrange, secondColumn.Color)
+	assert.False(t, secondColumn.Visible)
+	assert.Equal(t, 1, secondColumn.Index)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
+	t := suite.T()
+	ctx := context.Background()
+
+	owner := suite.users["Santa"].ID
+	authorRoot := suite.users["Stan"].ID
+	authorChild := suite.users["Santa"].ID
+
+	name := "Imported Board"
+	description := "Imported via service.Import"
+
+	sourceColumnIdeasID := uuid.New()
+	sourceColumnActionsID := uuid.New()
+	sourceRootNoteID := uuid.New()
+
+	importResponse, err := suite.service.Import(ctx, owner, ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &name,
+			Description:  &description,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:          sourceColumnIdeasID,
+				Name:        "Ideas",
+				Description: "Imported ideas",
+				Color:       common.ColorGoalGreen,
+				Visible:     true,
+				Index:       0,
+			},
+			{
+				ID:          sourceColumnActionsID,
+				Name:        "Actions",
+				Description: "Imported actions",
+				Color:       common.ColorBacklogBlue,
+				Visible:     true,
+				Index:       1,
+			},
+		},
+		Notes: []notes.Note{
+			{
+				ID:     sourceRootNoteID,
+				Author: authorRoot,
+				Text:   "Root note",
+				Position: notes.NotePosition{
+					Column: sourceColumnIdeasID,
+					Stack:  uuid.NullUUID{},
+					Rank:   0,
+				},
+			},
+			{
+				ID:     uuid.New(),
+				Author: authorChild,
+				Text:   "Child note",
+				Position: notes.NotePosition{
+					Column: sourceColumnIdeasID,
+					Stack: uuid.NullUUID{
+						UUID:  sourceRootNoteID,
+						Valid: true,
+					},
+					Rank: 0,
+				},
+			},
+			{
+				ID:     uuid.New(),
+				Author: authorChild,
+				Text:   "Action note",
+				Position: notes.NotePosition{
+					Column: sourceColumnActionsID,
+					Stack:  uuid.NullUUID{},
+					Rank:   0,
+				},
+			},
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, importResponse)
+	assert.Nil(t, importResponse.ImportWarnings)
+	assert.Equal(t, name, *importResponse.Name)
+	assert.Equal(t, description, *importResponse.Description)
+
+	fullBoard, err := suite.service.FullBoard(ctx, importResponse.ID)
+	require.NoError(t, err)
+	require.Len(t, fullBoard.Columns, 2)
+	require.Len(t, fullBoard.Notes, 3)
+	require.Len(t, fullBoard.BoardSessions, 1)
+
+	assert.Equal(t, owner, fullBoard.BoardSessions[0].UserID)
+	assert.Equal(t, role.OwnerRole, fullBoard.BoardSessions[0].Role)
+
+	columnIDByName := make(map[string]uuid.UUID, len(fullBoard.Columns))
+	for _, column := range fullBoard.Columns {
+		columnIDByName[column.Name] = column.ID
+	}
+
+	rootColumnID, found := columnIDByName["Ideas"]
+	require.True(t, found)
+	actionsColumnID, found := columnIDByName["Actions"]
+	require.True(t, found)
+
+	notesByText := make(map[string]*notes.Note, len(fullBoard.Notes))
+	for _, note := range fullBoard.Notes {
+		notesByText[note.Text] = note
+	}
+
+	rootNote, found := notesByText["Root note"]
+	require.True(t, found)
+	assert.Equal(t, rootColumnID, rootNote.Position.Column)
+	assert.False(t, rootNote.Position.Stack.Valid)
+	assert.Equal(t, 0, rootNote.Position.Rank)
+
+	childNote, found := notesByText["Child note"]
+	require.True(t, found)
+	assert.Equal(t, rootColumnID, childNote.Position.Column)
+	assert.True(t, childNote.Position.Stack.Valid)
+	assert.Equal(t, rootNote.ID, childNote.Position.Stack.UUID)
+	assert.Equal(t, 0, childNote.Position.Rank)
+
+	actionNote, found := notesByText["Action note"]
+	require.True(t, found)
+	assert.Equal(t, actionsColumnID, actionNote.Position.Column)
+	assert.False(t, actionNote.Position.Stack.Valid)
+	assert.Equal(t, 0, actionNote.Position.Rank)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Import_WithMissingAuthorWarning() {
+	t := suite.T()
+	ctx := context.Background()
+
+	owner := suite.users["Santa"].ID
+	existingAuthor := suite.users["Stan"].ID
+	missingAuthor := uuid.New()
+
+	name := "Imported Board With Warnings"
+	description := "Imported board that contains notes with missing authors"
+
+	sourceColumnID := uuid.New()
+
+	importResponse, err := suite.service.Import(ctx, owner, ImportBoardRequest{
+		Board: &CreateBoardRequest{
+			Name:         &name,
+			Description:  &description,
+			AccessPolicy: Public,
+		},
+		Columns: []columns.Column{
+			{
+				ID:          sourceColumnID,
+				Name:        "Warnings",
+				Description: "Column for warning checks",
+				Color:       common.ColorBacklogBlue,
+				Visible:     true,
+				Index:       0,
+			},
+		},
+		Notes: []notes.Note{
+			{
+				ID:     uuid.New(),
+				Author: existingAuthor,
+				Text:   "Kept note",
+				Position: notes.NotePosition{
+					Column: sourceColumnID,
+					Stack:  uuid.NullUUID{},
+					Rank:   0,
+				},
+			},
+			{
+				ID:     uuid.New(),
+				Author: missingAuthor,
+				Text:   "Removed note",
+				Position: notes.NotePosition{
+					Column: sourceColumnID,
+					Stack:  uuid.NullUUID{},
+					Rank:   1,
+				},
+			},
+		},
+	})
+
+	require.NoError(t, err)
+	require.NotNil(t, importResponse)
+	require.NotNil(t, importResponse.ImportWarnings)
+	assert.Equal(t, 1, importResponse.ImportWarnings.RemovedNotesMissingAuthorCount)
+
+	fullBoard, err := suite.service.FullBoard(ctx, importResponse.ID)
+	require.NoError(t, err)
+	require.Len(t, fullBoard.Notes, 1)
+	assert.Equal(t, "Kept note", fullBoard.Notes[0].Text)
+	assert.Equal(t, existingAuthor, fullBoard.Notes[0].Author)
+}
+
 func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 	log.Println("Seeding boards test data")
 
@@ -656,8 +964,14 @@ func (suite *BoardServiceIntegrationTestSuite) seedBoardsTestData(db *bun.DB) {
 		}
 	}
 
+	for _, column := range suite.columns {
+		if err := testDbTemplates.InsertColumn(db, column.id, column.board, column.name, "", string(common.ColorBacklogBlue), column.visible, column.index); err != nil {
+			log.Fatalf("Failed to insert column %s: %s", column.name, err)
+		}
+	}
+
 	for _, session := range suite.sessions {
-		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(common.ParticipantRole), false, true, true, false); err != nil {
+		if err := testDbTemplates.InsertSession(db, session.user, session.board, string(role.ParticipantRole), false, true, true, false); err != nil {
 			log.Fatalf("Failed to insert session: %s", err)
 		}
 	}

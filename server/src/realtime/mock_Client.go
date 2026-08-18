@@ -62,7 +62,7 @@ type MockClient_Publish_Call struct {
 // Publish is a helper method to define mock.On call
 //   - ctx context.Context
 //   - subject string
-//   - event interface{}
+//   - event any
 func (_e *MockClient_Expecter) Publish(ctx any, subject any, event any) *MockClient_Publish_Call {
 	return &MockClient_Publish_Call{Call: _e.mock.On("Publish", ctx, subject, event)}
 }

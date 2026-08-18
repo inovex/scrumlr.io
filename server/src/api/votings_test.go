@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,7 +11,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/votings"
@@ -33,15 +33,17 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
-		Append("api error", http.StatusBadRequest, common.BadRequestError(errors.New("foo")), false, false, nil).
+		Append("bad request err", http.StatusBadRequest, votings.CreateVotingError(votings.BadRequest, "only one open voting per session is allowed", errors.New("only one open voting per session is allowed")), false, false, nil).
 		Append("unhandled error", http.StatusInternalServerError, errors.New("that was unexpected"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			votingMock := votings.NewMockVotingService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
+			boardId := uuid.New()
+			votingID := uuid.New()
 			s.votings = votingMock
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(`{
@@ -57,6 +59,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 				ShowVotesOfOthers:  false,
 				Board:              boardId,
 			}).Return(&votings.Voting{
+				ID:                 votingID,
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 			}, tt.err)
@@ -64,6 +67,9 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			rr := httptest.NewRecorder()
 			s.createVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			if tt.err == nil {
+				suite.Equal(fmt.Sprintf("/boards/%s/votings/%s", boardId, votingID), rr.Result().Header.Get("Location"))
+			}
 			votingMock.AssertExpectations(suite.T())
 			votingMock.AssertNumberOfCalls(suite.T(), "Create", 1)
 		})

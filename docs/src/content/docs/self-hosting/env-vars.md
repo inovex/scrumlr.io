@@ -72,6 +72,16 @@ Can be one of `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`. Defaults to `INFO` if n
 SCRUMLR_LOG_LEVEL='INFO'
 ```
 
+### Swagger page
+
+The swagger page can be enabled by setting
+
+```ini
+SCRUMLR_ENABLE_SWAGGER='true'
+```
+
+By deafult the swagger page is disabled.
+
 ### Server Port
 
 The port on which the backend should listen for incoming connections.
@@ -99,6 +109,8 @@ Only configure one of the two.
 SCRUMLR_SERVER_NATS_URL=''
 ```
 
+**Note**: If a redis and nats address are defined, the redis address takes precedence and will be used.
+
 ### Redis Variables
 
 You can either use a NATS server or a Redis server for the backend communication.
@@ -109,6 +121,8 @@ SCRUMLR_SERVER_REDIS_HOST=''
 SCRUMLR_SERVER_REDIS_USERNAME=''
 SCRUMLR_SERVER_REDIS_PASSWORD=''
 ```
+
+**Note**: If a redis and nats address are defined, the redis address takes precedence and will be used.
 
 ### Insecure Mode
 
@@ -128,15 +142,30 @@ Please generate a new key for production use and keep it secure.
 SCRUMLR_PRIVATE_KEY=''
 ```
 
-### Database URL
+### Database
 
-The URL of the PostgreSQL database.
+To configure the database you can choose between two options.
+The first option is to configure the URL of the PostgreSQL database.
 Credentials are passed in the URL.
 If you havent configured postgres for TLS, you can use the `?sslmode=disable` parameter.
 
 ```ini
 SCRUMLR_SERVER_DATABASE_URL='postgres://user:password@host:port/database'
 ```
+
+The second option is to configure the database with the following three variables
+
+```ini
+SCRUMLR_SERVER_DATABASE_HOST=host:port/database
+SCRUMLR_SERVER_DATABASE_USER=user
+SCRUMLR_SERVER_DATABASE_PASSWORD=password
+```
+
+From these variables the database url is created. All three variables must be set that this option to be used.
+If you haven't configured postgres for TLS, you can use the `?sslmode=disable` parameter for the database host.
+
+**Note:** If both options are configured, the database url takes precedence and will be used.
+
 
 ### Base Path
 
@@ -175,6 +204,15 @@ Default is `true`.
 
 ```ini
 SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION=true
+```
+
+### Allow Anonymous History
+
+If set to `false`, anonymous users (i.e., not using OAuth) won't be able to view their board history.
+Default is `false`.
+
+```ini
+SCRUMLR_ALLOW_ANONYMOUS_HISTORY=false
 ```
 
 ### Enable Experimental File System Store

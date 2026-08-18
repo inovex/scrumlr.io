@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Board bearbeiten",
+    "save": "Speichern",
+    "loadError": "Dieses Board konnte leider nicht geladen werden."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
     "VotingIsAnonymous": "Abstimmung ist anonym",
@@ -6,6 +11,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Sitzungsname",
+    "description": "Sitzungsbeschreibung",
     "createNewBoard": "Erstelle eine Sitzung",
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
@@ -36,6 +42,19 @@
       "removeFile": "Datei entfernen"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Beschreibung (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Spalte 1",
+      "defaultActionsName": "Aktionen",
+      "indexedColumnName": "Spalte {{index}}",
+      "namePlaceholder": "Titel",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    }
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -61,16 +80,6 @@
       "saveCreate": "Template erstellen",
       "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
     },
-
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Spalte 1",
-      "defaultActionsName": "Aktionen",
-      "indexedColumnName": "Spalte {{index}}",
-      "namePlaceholder": "Titel",
-      "descriptionPlaceholder": "Beschreibung (optional)",
-      "save": "Speichern",
-      "cancel": "Abbrechen"
-    },
     "AccessSettings": {
       "title": "Zugriffseinstellungen",
       "Options": {
@@ -95,11 +104,36 @@
       }
     }
   },
-  "Sessions": {
+  "History": {
     "switchTitle": "Historie",
-    "title": "Deine Boards",
-    "savedBoards": "Deine Boards",
-    "teaserText": "Demnächst können registrierte Nutzer hier ihre Boards einsehen und verwalten. Erstellte Boards mit einem anonymen Profil (Gäste Login) können weder mit einem Konto verknüpft noch dauerhaft gespeichert werden."
+    "title": "Verwalte deine Boards",
+    "savedBoards": "Zuletzt verwendet",
+    "empty": "Deine Session-Historie ist leer — betritt oder erstelle ein Board und es wird hier angezeigt!",
+    "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
+    "registerNow": "Jetzt registrieren",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} Spalte",
+        "amountColumns_other": "{{count}} Spalten",
+        "amountParticipants_one": "{{count}} Teilnehmer",
+        "amountParticipants_other": "{{count}} Teilnehmer",
+        "amountNotes_one": "{{count}} Kärtchen",
+        "amountNotes_other": "{{count}} Kärtchen",
+        "lastUpdated": "Zuletzt bearbeitet: {{date}}"
+      },
+      "Menu": {
+        "delete": "Löschen",
+        "copyLink": "Link kopieren",
+        "createTemplate": "Vorlage erstellen",
+        "edit": "Bearbeiten",
+        "close": "Schließen"
+      },
+      "readOnly": "Schreibgeschützt",
+      "openBoardButton": "Session öffnen",
+      "linkCopied": "Board-Link kopiert!",
+      "deleteConfirmationTitle": "Board löschen?",
+      "deleteConfirmationText": "Dies löscht das Board dauerhaft für alle. Diese Aktion kann nicht rückgängig gemacht werden."
+    }
   },
   "CreateBoard": {
     "title": "Ein neues Board erstellen",
@@ -115,8 +149,11 @@
   "LoginBoard": {
     "title": "Login",
     "subtitleLogin": "Einloggen und Vorteile nutzen",
-    "loginFeature1": "Eigene Vorlagen erstellen und dauerhaft speichern",
-    "loginFeature2": "Individuelle Einstellungen werden im Profil gespeichert",
+    "loginFeatures": [
+      "Eigene Vorlagen erstellen und dauerhaft speichern",
+      "Individuelle Einstellungen werden im Profil gespeichert",
+      "Vergangene Boards jederzeit einsehen und verwalten"
+    ],
     "subtitleAnonymous": "Anonym Einloggen",
     "anonymousLogin": "Als Gast anonym fortfahren (eingeschränkte Funktionen)",
     "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
@@ -425,7 +462,9 @@
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
     "enable": "Aktivieren",
-    "failedImport": "Fehler beim importieren der Datei"
+    "failedImport": "Fehler beim importieren der Datei",
+    "importRemovedNotes_one": "{{count}} Karte wurde beim Import entfernt, weil kein Autor zugeordnet werden konnte.",
+    "importRemovedNotes_other": "{{count}} Karten wurden beim Import entfernt, weil kein Autor zugeordnet werden konnte."
   },
   "Language": {
     "german": "Deutsch",
@@ -561,6 +600,8 @@
     "shareNote": "Es tut uns leid, aber wir haben ein Problem beim Teilen des Kärtchens. Bitte versuche es erneut.",
     "unshareNote": "Es tut uns leid, aber wir haben ein Problem das Teilen des Kärtchens zu stoppen. Bitte versuche es erneut.",
     "deleteBoard": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Boards. Bitte versuche es erneut.",
+    "importBoard": "Es tut uns leid, aber wir haben ein Problem beim Importieren des Boards. Bitte versuche es erneut.",
+    "createBoard": "Es tut uns leid, aber wir haben Probleme beim Erstellen des Boards. Bitte versuche es erneut.",
     "editColumn": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spalte. Bitte versuche es erneut.",
     "createColumn": "Es tut uns leid, aber wir haben ein Problem beim Anlegen der Spalte. Bitte versuche es erneut.",
     "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",
@@ -596,6 +637,16 @@
     "PATTERN_MISMATCH": "pattern mismatch",
     "TYPE_MISMATCH": "type mismatch",
     "RANGE": "range"
+  },
+  "TimeDifference": {
+    "now": "Gerade eben",
+    "minutes_one": "vor {{count}} Minute",
+    "minutes_other": "vor {{count}} Minuten",
+    "hours_one": "vor {{count}} Stunde",
+    "hours_other": "vor {{count}} Stunden",
+    "days_one": "vor {{count}} Tag",
+    "days_other": "vor {{count}} Tagen",
+    "yesterday": "Gestern"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",

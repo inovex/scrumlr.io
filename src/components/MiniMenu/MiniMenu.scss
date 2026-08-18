@@ -118,6 +118,7 @@ $height--small: 36px;
   }
   .mini-menu {
     background-color: styles.$navy--400;
+    box-shadow: 0 2px 20px rgba(styles.$navy--700, 0.5);
 
     &--transparent {
       background: none; // reset transparent bgc

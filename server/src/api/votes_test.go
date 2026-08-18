@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
@@ -8,7 +9,6 @@ import (
 	"strings"
 	"testing"
 
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/technical_helper"
@@ -32,12 +32,7 @@ func (suite *VoteTestSuite) TestAddVote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
-		Append("specific error", http.StatusTeapot, &common.APIError{
-			Err:        errors.New("check"),
-			StatusCode: http.StatusTeapot,
-			StatusText: "teapot",
-			ErrorText:  "Error",
-		}, false, false, nil).
+		Append("not found err", http.StatusNotFound, sql.ErrNoRows, false, false, nil).
 		Append("unexpected error", http.StatusInternalServerError, errors.New("teapot?"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
@@ -45,9 +40,9 @@ func (suite *VoteTestSuite) TestAddVote() {
 			s := new(Server)
 			votingMock := votings.NewMockVotingService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			noteId, _ := uuid.NewRandom()
+			boardId := uuid.New()
+			userId := uuid.New()
+			noteId := uuid.New()
 
 			s.votings = votingMock
 

@@ -18,7 +18,7 @@ type Service struct {
 	realtime *realtime.Broker
 }
 
-func NewBoardReactionService(rt *realtime.Broker) BoardReactionService {
+func NewBoardReactionService(rt *realtime.Broker) BoardReactionCreater {
 	service := new(Service)
 	service.realtime = rt
 

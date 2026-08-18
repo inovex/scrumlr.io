@@ -11,13 +11,12 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (c
       placeholder="Title"
       value="Default Name"
     />
-    <div
+    <button
       class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
-      role="button"
       tabindex="0"
     >
       Default Description
-    </div>
+    </button>
   </div>
 </div>
 `;
@@ -52,6 +51,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item"
+          data-autofocus="false"
           data-cy="undefined-item-Cancel"
           data-testid="undefined-item-Cancel"
           id="mini-menu-Cancel-_r_1_-0"
@@ -75,13 +75,11 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item"
+          data-autofocus="true"
           data-cy="undefined-item-Save"
           data-testid="undefined-item-Save"
           id="mini-menu-Save-_r_1_-1"
@@ -101,9 +99,6 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
       </div>
     </div>
@@ -141,6 +136,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item"
+          data-autofocus="false"
           data-cy="undefined-item-Cancel"
           data-testid="undefined-item-Cancel"
           id="mini-menu-Cancel-_r_0_-0"
@@ -164,13 +160,11 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item"
+          data-autofocus="true"
           data-cy="undefined-item-Save"
           data-testid="undefined-item-Save"
           id="mini-menu-Save-_r_0_-1"
@@ -190,9 +184,6 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
               stroke-width="1.75"
             />
           </svg>
-          <div
-            class="tooltip-container"
-          />
         </button>
       </div>
     </div>
@@ -211,13 +202,12 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (v
       placeholder="Title"
       value="Default Name"
     />
-    <div
+    <button
       class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback column-configurator-column-name-details__inline-description--has-content"
-      role="button"
       tabindex="0"
     >
       Default Description
-    </div>
+    </button>
   </div>
 </div>
 `;

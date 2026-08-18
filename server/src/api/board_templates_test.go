@@ -399,6 +399,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				mockAuth, // auth
 				userRoutes,
 				sessionRoutes,
+				nil,                              // swaggerRoutes
 				nil,                              // boards
 				nil,                              // columns
 				nil,                              // votings
@@ -417,7 +418,9 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				false,                            // anonymousLoginDisabled
 				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
 				false,                            // allowAnonymousBoardCreation
+				true,                             // allowAnonymousHistory
 				false,                            // experimentalFileSystemStore
+				false,                            // deactivate swagger page
 			)
 
 			// Create request with body if needed

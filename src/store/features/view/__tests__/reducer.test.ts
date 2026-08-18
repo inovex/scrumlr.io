@@ -9,6 +9,7 @@ describe("viewReducer", () => {
     anonymousLoginDisabled: false,
     allowAnonymousCustomTemplates: false,
     allowAnonymousBoardCreation: false,
+    allowAnonymousHistory: false,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
@@ -28,6 +29,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: ["google", "github"],
         allowAnonymousCustomTemplates: true,
         allowAnonymousBoardCreation: true,
+        allowAnonymousHistory: false,
         serverTime: new Date("2023-01-01T12:00:00Z").getTime(),
         feedbackEnabled: true,
       };
@@ -54,6 +56,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: [],
         allowAnonymousCustomTemplates: false,
         allowAnonymousBoardCreation: false,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: false,
       };
@@ -75,6 +78,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: [],
         allowAnonymousCustomTemplates: false,
         allowAnonymousBoardCreation: true,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: false,
       };
@@ -91,6 +95,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: ["microsoft"],
         allowAnonymousCustomTemplates: false,
         allowAnonymousBoardCreation: true,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: true,
       };
@@ -119,6 +124,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: ["apple"],
         allowAnonymousCustomTemplates: true,
         allowAnonymousBoardCreation: false,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: false,
       };
@@ -154,13 +160,14 @@ describe("viewReducer", () => {
         getTime() {
           return fixedClientTime;
         }
-      } as any;
+      } as typeof Date;
 
       const serverInfo: ServerInfo = {
         anonymousLoginDisabled: false,
         enabledAuthProvider: [],
         allowAnonymousCustomTemplates: false,
         allowAnonymousBoardCreation: true,
+        allowAnonymousHistory: false,
         serverTime: fixedServerTime,
         feedbackEnabled: false,
       };
@@ -181,6 +188,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: [],
         allowAnonymousCustomTemplates: false,
         allowAnonymousBoardCreation: false,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: false,
       };
@@ -201,6 +209,7 @@ describe("viewReducer", () => {
         enabledAuthProvider: ["google", "github", "microsoft", "apple"],
         allowAnonymousCustomTemplates: true,
         allowAnonymousBoardCreation: true,
+        allowAnonymousHistory: false,
         serverTime: new Date().getTime(),
         feedbackEnabled: true,
       };

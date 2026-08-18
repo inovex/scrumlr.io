@@ -28,9 +28,8 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
 
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
   return (
-    <div
+    <button
       className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)}
       onClick={(e) => e.stopPropagation()}
     >
@@ -48,7 +47,6 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
       <footer className="note-dialog-note__footer">
         <NoteDialogNoteComponents.Footer {...props} />
       </footer>
-    </div>
+    </button>
   );
-  /* eslint-enable jsx-a11y/no-static-element-interactions */
 };

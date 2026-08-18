@@ -10,6 +10,7 @@ import {SimpleModal} from "components/Templates";
 import {WarningIcon} from "components/Icon";
 import {FileDropzoneCard, FilePreview} from "components/ImportBoard";
 import "./ImportBoard.scss";
+import {useNavigate} from "react-router";
 
 type ImportStep = "file" | "access";
 
@@ -19,6 +20,7 @@ interface ImportBoardProps {
 export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [step, setStep] = useState<ImportStep>("file");
   const [isFileLoading, setIsFileLoading] = useState(false);
@@ -26,41 +28,43 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
   const [fileName, setFileName] = useState<string>("");
   const [fileError, setFileError] = useState<string | null>(null);
 
-  const readFile = (file: File) => {
+  const readFile = async (file: File) => {
     setIsFileLoading(true);
     setFileError(null);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target?.result as string;
+    try {
+      const content = await file.text();
+
       try {
         const data = JSON.parse(content) as BoardImportData;
         setImportData(data);
         setFileName(file.name);
         setFileError(null);
       } catch (error) {
+        if (!(error instanceof SyntaxError)) {
+          throw error;
+        }
+
         // error due to invalid JSON format
         Toast.error({title: t("Toast.failedImport")});
         setFileError(t("ImportBoard.errorInvalid"));
         setFileName("");
         setImportData(null);
-      } finally {
-        // small artificial delay to give users visual feedback
-        setTimeout(() => {
-          setIsFileLoading(false);
-        }, 500);
       }
-    };
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
 
-    // error due to file reading (e.g., file not found, permission denied, etc.)
-    reader.onerror = () => {
       Toast.error({title: t("Toast.failedImport")});
       setFileError(t("ImportBoard.errorRead"));
       setFileName("");
       setImportData(null);
-      setIsFileLoading(false);
-    };
-
-    reader.readAsText(file);
+    } finally {
+      // small artificial delay to give users visual feedback
+      setTimeout(() => {
+        setIsFileLoading(false);
+      }, 500);
+    }
   };
 
   const handleRemoveFile = () => {
@@ -92,7 +96,18 @@ export const ImportBoard = ({onClose}: ImportBoardProps) => {
     };
 
     setImportData(updatedData);
-    dispatch(importBoard(updatedData));
+    dispatch(importBoard(updatedData))
+      .unwrap()
+      .then((response) => {
+        const removedNotesCount = response.importWarnings?.removedNotesMissingAuthorCount ?? 0;
+        if (removedNotesCount > 0) {
+          Toast.info({
+            title: t("Toast.importRemovedNotes", {count: removedNotesCount}),
+            autoClose: 30000, //30s
+          });
+        }
+        navigate(`/board/${response.id}`);
+      });
   };
 
   const handleCancel = () => {

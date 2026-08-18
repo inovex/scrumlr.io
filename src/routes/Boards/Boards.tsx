@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation, useNavigate, useParams} from "react-router";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
@@ -12,20 +12,21 @@ import {SearchIcon} from "components/Icon";
 import "./Boards.scss";
 
 // keeps track of the current view, i.e. sub route
-type BoardView = "templates" | "sessions" | "create" | "edit";
+type BoardView = "templates" | "history" | "create" | "create-template" | "edit-template" | "edit-board";
 
 export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const {id: editTemplateId} = useParams();
   const dispatch = useAppDispatch();
 
-  const [boardView, setBoardView] = useState<BoardView>("templates");
+  // path segments after "/boards", e.g. ["edit-board", "<uuid>", "settings"].
+  const subPaths = location.pathname.split("/").filter(Boolean).slice(1);
+  const boardView = (subPaths[0] ?? "templates") as BoardView;
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
-  const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
-  // for edit route, expand location prefix used for settings with the edit template uuid
-  const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
+  const viewType = ["templates", "history"].includes(boardView) ? "overview" : "edit";
+  // for edit/create-from-board routes, expand location prefix used for settings with the uuid of the edited template/board
+  const locationPrefix = ["edit-template", "edit-board", "create-template"].includes(boardView) ? `${boardView}/${subPaths[1]}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
   const [showImportModal, setShowImportModal] = useState(false);
@@ -34,12 +35,6 @@ export const Boards = () => {
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
   const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
-
-  useEffect(() => {
-    // first sub path after "/boards"
-    const subRoute = location.pathname.split("/").filter(Boolean)[1] as BoardView;
-    setBoardView(subRoute);
-  }, [location]);
 
   // init templates
   useEffect(() => {
@@ -50,11 +45,14 @@ export const Boards = () => {
     switch (boardView) {
       case "templates":
         return t("Templates.title");
-      case "sessions":
-        return t("Sessions.title");
+      case "history":
+        return t("History.title");
       case "create":
+      case "create-template":
         return t("Templates.TemplateEditor.createTitle");
-      case "edit":
+      case "edit-board":
+        return t("BoardEditor.editTitle");
+      case "edit-template":
       default: // TS is smart enough to recognize boardView is exhaustive, but ESLint isn't
         return t("Templates.TemplateEditor.editTitle");
     }
@@ -70,11 +68,11 @@ export const Boards = () => {
           <div className="boards__switch-wrapper">
             <Switch
               leftText={t("Templates.switchTitle")}
-              rightText={t("Sessions.switchTitle")}
+              rightText={t("History.switchTitle")}
               activeDirection={boardView === "templates" ? "left" : "right"}
-              toggle={() => navigate(boardView === "templates" ? "/boards/sessions" : "/boards/templates")}
+              toggle={() => navigate(boardView === "templates" ? "/boards/history" : "/boards/templates")}
             />
-            <span className="boards__coming-soon-badge">Coming Soon</span>
+            <span className="boards__coming-soon-badge">New!</span>
           </div>
 
           {/* desktop search bar */}

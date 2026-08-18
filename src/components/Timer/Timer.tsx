@@ -77,7 +77,6 @@ export const Timer = (props: TimerProps) => {
     }
 
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playTimesUp]);
 
   useEffect(() => {
@@ -91,14 +90,12 @@ export const Timer = (props: TimerProps) => {
         setTimesUpShouldPlay(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
   useEffect(() => {
     if (isModerator && allParticipantsReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.info({title: t("Toast.allParticipantsDone"), autoClose: TOAST_TIMER_DEFAULT});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allParticipantsReady, isModerator]);
 
   return (
@@ -135,9 +132,15 @@ export const Timer = (props: TimerProps) => {
           <PlusOneIconIcon />
         </button>
       )}
-      <Tooltip anchorId="timer__end-timer">{t("Timer.endTimer")}</Tooltip>
-      <Tooltip anchorId="timer__done-toggle">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</Tooltip>
-      <Tooltip anchorId="timer__increment">{t("Timer.addOneMinute")}</Tooltip>
+      <Tooltip anchorId="timer__end-timer" color="backlog-blue">
+        {t("Timer.endTimer")}
+      </Tooltip>
+      <Tooltip anchorId="timer__done-toggle" color="backlog-blue">
+        {isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+      </Tooltip>
+      <Tooltip anchorId="timer__increment" color="backlog-blue">
+        {t("Timer.addOneMinute")}
+      </Tooltip>
     </div>
   );
 };

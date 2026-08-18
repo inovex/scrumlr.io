@@ -18,7 +18,7 @@ export const BoardReactionAPI = {
 
       throw new Error(`create board reaction request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board reaction with error: ${error}`);
+      throw new Error(`unable to create board reaction`, {cause: error});
     }
   },
 };

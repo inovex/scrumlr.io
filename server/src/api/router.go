@@ -45,11 +45,12 @@ type Server struct {
 	basePath string
 
 	realtime  *realtime.Broker
-	wsService websocket.WebSocketInterface
+	wsService websocket.Upgrader
 	auth      auth.Auth
 
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
+	swaggerRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -61,7 +62,7 @@ type Server struct {
 	sessionRequests sessionrequests.SessionRequestService
 	health          health.HealthService
 	feedback        feedback.FeedbackService
-	boardReactions  boardreactions.BoardReactionService
+	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
@@ -75,18 +76,21 @@ type Server struct {
 	anonymousLoginDisabled        bool
 	allowAnonymousCustomTemplates bool
 	allowAnonymousBoardCreation   bool
+	allowAnonymousHistory         bool
 	experimentalFileSystemStore   bool
+	enableSwagger                 bool
 }
 
 func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	wsService websocket.WebSocketInterface,
+	wsService websocket.Upgrader,
 	auth auth.Auth,
 
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
+	swaggerRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -98,7 +102,7 @@ func New(
 	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
-	boardReactions boardreactions.BoardReactionService,
+	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
 
@@ -107,11 +111,14 @@ func New(
 	anonymousLoginDisabled bool,
 	allowAnonymousCustomTemplates bool,
 	allowAnonymousBoardCreation bool,
+	allowAnonymousHistory bool,
 	experimentalFileSystemStore bool,
+	enableSwagger bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
+	r.Use(middleware.ClientIPFromHeader("X-Real-IP"))
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(otelhttp.NewMiddleware("scrumlr"))
@@ -139,6 +146,7 @@ func New(
 		wsService:                        wsService,
 		userRoutes:                       userRoutes,
 		sessionRoutes:                    sessionRoutes,
+		swaggerRoutes:                    swaggerRoutes,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
@@ -159,8 +167,10 @@ func New(
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
+		allowAnonymousHistory:         allowAnonymousHistory,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
+		enableSwagger:                 enableSwagger,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -173,15 +183,11 @@ func New(
 		gothic.Store = store
 	}
 
-	if s.basePath == "/" {
-		s.publicRoutes(r)
-		s.protectedRoutes(r)
-	} else {
-		r.Route(s.basePath, func(router chi.Router) {
-			s.publicRoutes(router)
-			s.protectedRoutes(router)
-		})
-	}
+	r.Route(s.basePath, func(router chi.Router) {
+		s.publicRoutes(router)
+		s.protectedRoutes(router)
+	})
+
 	return r
 }
 
@@ -199,6 +205,11 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+
+		if s.enableSwagger {
+			r.Mount("/swagger", s.swaggerRoutes)
+		}
+
 	})
 }
 
@@ -247,7 +258,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardModeratorContext).Delete("/timer", s.deleteTimer)
 			r.With(s.BoardModeratorContext).Post("/timer/increment", s.incrementTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
-			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
+			r.With(s.BoardOwnerContext).Delete("/", s.deleteBoard)
 
 			s.initBoardSessionRequestResources(r)
 			s.initBoardSessionResources(r)
@@ -280,7 +291,6 @@ func (s *Server) initVotingResources(r chi.Router) {
 	r.Route("/votings", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getVotings)
 		r.With(s.BoardModeratorContext).Post("/", s.createVoting)
-		r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 
 		r.Route("/{voting}", func(r chi.Router) {
 			r.Use(s.VotingContext)
@@ -293,10 +303,12 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(httprate.Limit(
+			r.Use(httprate.LimitBy(
 				3,
 				5*time.Second,
-				httprate.WithKeyFuncs(httprate.KeyByIP),
+				func(r *http.Request) (string, error) {
+					return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
+				},
 				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(http.StatusTooManyRequests)
@@ -378,4 +390,14 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+// buildRelativeURL constructs an relative URL from path and the basePath.
+// If basePath is not "/", it prepends it.
+func (s *Server) buildRelativeURL(path string) string {
+	result := ""
+	if s.basePath != "/" {
+		result += s.basePath
+	}
+	return result + path
 }

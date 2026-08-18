@@ -1,0 +1,170 @@
+@use "constants/styles";
+
+$stable-content-width: 80%;
+
+.editor-shell {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--base;
+
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+
+  overflow: visible;
+}
+
+// name, description, debug. contained width
+.editor-shell__header {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "name"
+    "description";
+  row-gap: styles.$spacing--base;
+  align-self: center;
+
+  min-width: 0;
+  width: $stable-content-width;
+
+  &--include-debug {
+    grid-template-areas:
+      "name"
+      "description"
+      "debug";
+  }
+}
+
+.editor-shell__name {
+  grid-area: name;
+}
+
+.editor-shell__name-input {
+  .input__input {
+    color: styles.$navy--600;
+
+    &:focus {
+      color: styles.$navy--600;
+    }
+  }
+}
+.editor-shell__description {
+  grid-area: description;
+}
+.editor-shell__debug {
+  grid-area: debug;
+  justify-self: center;
+  color: styles.$pink--500;
+}
+
+// columns, mini view. width extending up to inherited bleeding edges
+.editor-shell__columns {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: bleed-start / bleed-end; // defined by parent grid
+  grid-template-rows: min-content;
+  row-gap: styles.$spacing--base;
+
+  grid-template-areas: "columns";
+}
+
+// info, buttons. contained width like header
+.editor-shell__footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "info"
+    "buttons";
+  align-self: center;
+  row-gap: styles.$spacing--lg;
+
+  min-width: 0;
+  width: $stable-content-width;
+}
+
+.editor-shell__columns-configurator-wrapper {
+  grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+
+  // lock scrolling
+  max-width: 100%;
+  height: max-content; // correct height!
+
+  overflow-x: auto;
+}
+
+.editor-shell__columns-mini-view-wrapper {
+  grid-area: mini;
+  justify-self: center;
+
+  max-width: 100%;
+  overflow-x: auto;
+
+  display: none;
+}
+
+.editor-shell__info {
+  grid-area: info;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: styles.$spacing--xs;
+}
+
+.editor-shell__info-text {
+  color: styles.$navy--900;
+  font-weight: 400;
+}
+
+.editor-shell__buttons {
+  grid-area: buttons;
+  display: flex;
+  justify-content: flex-end;
+  gap: styles.$spacing--base;
+
+  width: 100%;
+}
+
+@media (screen and max-width: styles.$breakpoint--smartphone) {
+  // on smaller screens, align all content to bleeding edges
+  .editor-shell__header,
+  .editor-shell__footer {
+    width: 100%; // override stable content width
+    grid-template-columns: subgrid;
+    grid-column: bleed-start / bleed-end;
+  }
+
+  .editor-shell__columns {
+    grid-template-rows: min-content min-content;
+
+    grid-template-areas:
+      "columns"
+      "mini";
+  }
+
+  .editor-shell__columns-mini-view-wrapper {
+    display: initial;
+  }
+}
+
+[data-theme="dark"] {
+  .editor-shell__info,
+  .editor-shell__info-text {
+    color: styles.$gray--000;
+  }
+
+  .editor-shell__name-input {
+    .input__input {
+      color: styles.$gray--000;
+
+      &:focus {
+        color: styles.$gray--000;
+      }
+    }
+  }
+}

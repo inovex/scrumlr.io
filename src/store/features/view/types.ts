@@ -10,6 +10,7 @@ export type ServerInfo = {
   enabledAuthProvider: string[];
   allowAnonymousCustomTemplates: boolean;
   allowAnonymousBoardCreation: boolean;
+  allowAnonymousHistory: boolean;
   serverTime: number;
   feedbackEnabled: boolean;
 };
@@ -28,6 +29,8 @@ export interface View {
   allowAnonymousCustomTemplates: boolean;
 
   allowAnonymousBoardCreation: boolean;
+
+  allowAnonymousHistory: boolean;
 
   enabledAuthProvider: string[];
 

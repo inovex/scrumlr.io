@@ -1,6 +1,6 @@
 import {render} from "testUtils";
 import {ColumnDetails, ColumnDetailsProps} from "components/Column/ColumnDetails/ColumnDetails";
-import {Column, ParticipantWithUser, ParticipantRole} from "store/features";
+import {ParticipantWithUser, ParticipantRole} from "store/features";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";
@@ -43,6 +43,13 @@ describe("ColumnDetails", () => {
 
     fireEvent.click(columnDetailNameNode);
     expect(changeModeSpy).toHaveBeenCalledWith("edit");
+  });
+
+  it("should show the character count indicator for a long description", () => {
+    const columnWithLongDescription = {...getTestApplicationState().columns[0], description: "a".repeat(768)};
+    const {container} = renderColumnDetails({column: columnWithLongDescription, mode: "edit"});
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
   });
 
   it("should not switch to edit mode (self is participant)", () => {

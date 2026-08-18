@@ -18,6 +18,7 @@ import (
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -105,9 +106,10 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Create() {
 	// given
 	boardId := suite.boards["Write"].ID
 	userId := suite.users["Luke"].ID
-	role := common.ParticipantRole
+	role := role.ParticipantRole
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
 	session, err := suite.sessionService.Create(ctx, BoardSessionCreateRequest{Board: boardId, User: userId, Role: role})
@@ -134,16 +136,17 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	userId := suite.users["Luke"].ID
 	callerId := suite.baseData.Users["Stan"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
-	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(common.ModeratorRole)})
+	session, err := suite.sessionService.Update(ctx, BoardSessionUpdateRequest{Caller: callerId, Board: boardId, User: userId, Role: new(role.ModeratorRole)})
 
 	// then
 	suite.Nil(err)
 	suite.Equal(boardId, session.Board)
 	suite.Equal(userId, session.UserID)
-	suite.Equal(common.ModeratorRole, session.Role)
+	suite.Equal(role.ModeratorRole, session.Role)
 
 	msgSession := <-events
 	msgColumns := <-events
@@ -154,7 +157,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Update() {
 	sessionData, err := technical_helper.Unmarshal[BoardSession](msgSession.Data)
 	suite.Nil(err)
 	suite.Equal(userId, session.UserID)
-	suite.Equal(common.ModeratorRole, sessionData.Role)
+	suite.Equal(role.ModeratorRole, sessionData.Role)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
@@ -163,7 +166,8 @@ func (suite *SessionServiceIntegrationTestSuite) Test_UpdateAll() {
 
 	boardId := suite.boards["UpdateAll"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
 	sessions, err := suite.sessionService.UpdateAll(ctx, BoardSessionsUpdateRequest{Board: boardId, Ready: new(false), RaisedHand: new(false)})
@@ -233,10 +237,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Connect() {
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Luke"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
-	err := suite.sessionService.Connect(ctx, boardId, userId)
+	err = suite.sessionService.Connect(ctx, boardId, userId)
 
 	// then
 	suite.Nil(err)
@@ -252,10 +257,11 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Disconnect() {
 	boardId := suite.boards["Update"].ID
 	userId := suite.users["Leia"].ID
 
-	events := suite.broker.GetBoardChannel(ctx, boardId)
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
 
 	// when
-	err := suite.sessionService.Disconnect(ctx, boardId, userId)
+	err = suite.sessionService.Disconnect(ctx, boardId, userId)
 
 	// then
 	suite.Nil(err)
@@ -279,7 +285,7 @@ func (suite *SessionServiceIntegrationTestSuite) Test_Exists() {
 	assert.True(t, exists)
 }
 
-func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
+func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists_Owner() {
 	t := suite.T()
 	ctx := context.Background()
 
@@ -290,6 +296,45 @@ func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists() {
 
 	suite.Nil(err)
 	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_ModeratorExists_Moderator() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.users["Friend"].ID
+
+	exists, err := suite.sessionService.ModeratorSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_OwnerExists() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.baseData.Users["Stan"].ID
+
+	exists, err := suite.sessionService.OwnerSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.True(t, exists)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) Test_OwnerExists_Moderator() {
+	t := suite.T()
+	ctx := context.Background()
+
+	boardId := suite.boards["Read"].ID
+	userId := suite.users["Friend"].ID
+
+	exists, err := suite.sessionService.OwnerSessionExists(ctx, boardId, userId)
+
+	suite.Nil(err)
+	assert.False(t, exists)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
@@ -303,6 +348,41 @@ func (suite *SessionServiceIntegrationTestSuite) Test_IsParticipantBanned() {
 
 	suite.Nil(err)
 	assert.True(t, banned)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) TestDelete() {
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].ID
+	userId := suite.baseData.Users["Stan"].ID
+
+	events, err := suite.broker.GetBoardChannel(ctx, boardId)
+	require.NoError(suite.T(), err, "Failed to subscribe to board channel")
+
+	err = suite.sessionService.Delete(ctx, userId, boardId, userId)
+
+	suite.Nil(err)
+
+	session, err := suite.sessionService.Get(ctx, boardId, userId)
+	suite.Nil(session)
+	suite.Error(err)
+
+	msg := <-events
+	suite.Equal(realtime.BoardEventParticipantDeleted, msg.Type)
+	id, err := technical_helper.Unmarshal[uuid.UUID](msg.Data)
+	suite.Nil(err)
+	suite.Equal(userId, *id)
+}
+
+func (suite *SessionServiceIntegrationTestSuite) TestDeleteSessionNotExist() {
+	ctx := context.Background()
+
+	boardId := suite.boards["Write"].ID
+	userId := uuid.New()
+
+	err := suite.sessionService.Delete(ctx, userId, boardId, userId)
+
+	suite.Error(err)
 }
 
 func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB) {
@@ -323,31 +403,32 @@ func (suite *SessionServiceIntegrationTestSuite) seedSessionsTestData(db *bun.DB
 	sessions := []struct {
 		userID                               uuid.UUID
 		boardID                              uuid.UUID
-		role                                 common.SessionRole
+		role                                 role.Role
 		banned, ready, connected, raisedHand bool
 	}{
 		// Write board
-		{suite.users["Han"].ID, suite.boards["Write"].ID, common.ParticipantRole, false, false, false, false},
+		{suite.users["Han"].ID, suite.boards["Write"].ID, role.ParticipantRole, false, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Write"].ID, role.ParticipantRole, false, false, false, false},
 		// Update board
-		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, common.OwnerRole, false, false, false, false},
-		{suite.users["Luke"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Leia"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Han"].ID, suite.boards["Update"].ID, common.ParticipantRole, false, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Update"].ID, role.OwnerRole, false, false, false, false},
+		{suite.users["Luke"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Leia"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["Update"].ID, role.ParticipantRole, false, false, false, false},
 		// Read board
-		{suite.baseData.Users["Stan"].ID, suite.boards["Read"].ID, common.OwnerRole, false, false, false, false},
-		{suite.users["Friend"].ID, suite.boards["Read"].ID, common.ModeratorRole, false, false, false, false},
-		{suite.baseData.Users["Santa"].ID, suite.boards["Read"].ID, common.ParticipantRole, false, false, false, false},
-		{suite.users["Bob"].ID, suite.boards["Read"].ID, common.ParticipantRole, true, false, false, false},
+		{suite.baseData.Users["Stan"].ID, suite.boards["Read"].ID, role.OwnerRole, false, false, false, false},
+		{suite.users["Friend"].ID, suite.boards["Read"].ID, role.ModeratorRole, false, false, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["Read"].ID, role.ParticipantRole, false, false, false, false},
+		{suite.users["Bob"].ID, suite.boards["Read"].ID, role.ParticipantRole, true, false, false, false},
 		// ReadFilter board
-		{suite.baseData.Users["Stan"].ID, suite.boards["ReadFilter"].ID, common.OwnerRole, false, true, true, false},
-		{suite.users["Friend"].ID, suite.boards["ReadFilter"].ID, common.ModeratorRole, false, true, false, false},
-		{suite.baseData.Users["Santa"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, true, true},
-		{suite.users["Bob"].ID, suite.boards["ReadFilter"].ID, common.ParticipantRole, false, false, false, true},
+		{suite.baseData.Users["Stan"].ID, suite.boards["ReadFilter"].ID, role.OwnerRole, false, true, true, false},
+		{suite.users["Friend"].ID, suite.boards["ReadFilter"].ID, role.ModeratorRole, false, true, false, false},
+		{suite.baseData.Users["Santa"].ID, suite.boards["ReadFilter"].ID, role.ParticipantRole, false, false, true, true},
+		{suite.users["Bob"].ID, suite.boards["ReadFilter"].ID, role.ParticipantRole, false, false, false, true},
 		// UpdateAll board
-		{suite.baseData.Users["Stan"].ID, suite.boards["UpdateAll"].ID, common.OwnerRole, false, false, true, true},
-		{suite.users["Luke"].ID, suite.boards["UpdateAll"].ID, common.ModeratorRole, false, true, true, false},
-		{suite.users["Leia"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, false, true, false},
-		{suite.users["Han"].ID, suite.boards["UpdateAll"].ID, common.ParticipantRole, false, true, true, true},
+		{suite.baseData.Users["Stan"].ID, suite.boards["UpdateAll"].ID, role.OwnerRole, false, false, true, true},
+		{suite.users["Luke"].ID, suite.boards["UpdateAll"].ID, role.ModeratorRole, false, true, true, false},
+		{suite.users["Leia"].ID, suite.boards["UpdateAll"].ID, role.ParticipantRole, false, false, true, false},
+		{suite.users["Han"].ID, suite.boards["UpdateAll"].ID, role.ParticipantRole, false, true, true, true},
 	}
 
 	for _, s := range sessions {

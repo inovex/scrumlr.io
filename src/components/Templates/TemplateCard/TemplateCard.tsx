@@ -8,6 +8,8 @@ import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
 import {useAppSelector} from "store";
 import {ThreeDotsIcon as MenuIcon, ColumnsIcon, NextIcon, CloseIcon, TrashIcon, EditIcon} from "components/Icon";
+import {Tooltip} from "components/Tooltip";
+import {dynamicTemplatesKey} from "utils/i18n";
 import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
@@ -39,6 +41,8 @@ export const TemplateCard = (props: TemplateCardProps) => {
 
   const {t} = useTranslation();
 
+  const getDisplayText = (text: string) => (props.templateType === "RECOMMENDED" ? t(dynamicTemplatesKey(text), {ns: "templates"}) : text);
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const closeMenu = () => {
@@ -56,16 +60,14 @@ export const TemplateCard = (props: TemplateCardProps) => {
           {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
-        focusBehaviour="moveFocus"
+        focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
       />
     ) : (
-      <MenuIcon
-        className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")}
-        onClick={() => setShowMiniMenu(true)}
-        data-cy="template-card__menu"
-      />
+      <div className="template-card__menu-icon-container">
+        <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} data-cy="template-card__menu" />
+      </div>
     );
   };
 
@@ -79,32 +81,32 @@ export const TemplateCard = (props: TemplateCardProps) => {
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={t(template.name, {ns: "templates"})} disabled />
+        <input className="template-card__title" type="text" value={getDisplayText(template.name)} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={t(template.description, {ns: "templates"})} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={getDisplayText(template.description)} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
         <div className="template-card__columns-subtitle">
           {columns
             .toSorted((a, b) => a.index - b.index)
-            .map((c) => t(c.name, {ns: "templates"}))
+            .map((c) => getDisplayText(c.name))
             .join(", ")}
         </div>
       </div>
       <Button
+        id={`template-card__start-button--${template.id}`}
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
         onClick={props.disabled ? undefined : () => props.onSelectTemplate({template, columns})}
         disabled={props.disabled}
-        dataTooltipId={props.disabled ? "template-card-tooltip" : undefined}
-        dataTooltipContent={props.disabled ? props.disabledReason : undefined}
         testId="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
       </Button>
+      {props.disabled && <Tooltip anchorId={`template-card__start-button--${template.id}`}>{props.disabledReason}</Tooltip>}
     </div>
   );
 };

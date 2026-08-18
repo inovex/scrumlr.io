@@ -6,10 +6,12 @@ import (
 	"log"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/notes"
 )
 
 type DatabaseVotingTestSuite struct {
@@ -93,7 +95,19 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Close() {
 	assert.False(t, dbVoting.ShowVotesOfOthers)
 	assert.False(t, dbVoting.IsAnonymous)
 	assert.NotNil(t, dbVoting.CreatedAt)
-	// TODO: test note rank
+	// Verify notes are re-ranked by vote count after closing
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	dbNotes, notesErr := noteDatabase.GetAll(context.Background(), boardId)
+	assert.Nil(t, notesErr)
+
+	noteRankMap := make(map[uuid.UUID]int)
+	for _, n := range dbNotes {
+		noteRankMap[n.ID] = n.Rank
+	}
+
+	assert.Equal(t, 0, noteRankMap[suite.baseData.Notes["Update2"].ID])
+	assert.Equal(t, 1, noteRankMap[suite.baseData.Notes["Update1"].ID])
+	assert.Equal(t, 2, noteRankMap[suite.baseData.Notes["Update3"].ID])
 }
 
 func (suite *DatabaseVotingTestSuite) Test_Database_Get_Open() {

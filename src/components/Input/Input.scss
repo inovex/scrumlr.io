@@ -85,6 +85,8 @@ $padding--mobile: 12.5px styles.$spacing--base;
 }
 
 .input__icon-container {
+  all: unset;
+
   width: styles.$icon--large;
   height: styles.$icon--large;
 

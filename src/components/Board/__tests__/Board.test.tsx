@@ -14,7 +14,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   return (
     <Provider store={getTestStore()}>
       <CustomDndContext>
-        <BoardComponent currentUserIsModerator moderating={false} locked={false}>
+        <BoardComponent userRole={"PARTICIPANT"} moderating={false} locked={false}>
           {colors.map((color, index) => (
             <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" description="" visible={false} index={index} />
           ))}

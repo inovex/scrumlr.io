@@ -54,20 +54,19 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                   )}
                   {props.text && (
                     <div className="confirmation-dialog__text">
-                      <p>{t(props.text)}</p>
+                      <p>{props.text}</p>
                     </div>
                   )}
                   {props.items && (
                     <ul className="confirmation-dialog__items">
                       {props.items.split("\n").map((item, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
                         <li key={`${item}-${index}`}>{item}</li>
                       ))}
                     </ul>
                   )}
                   {props.textAfterItems && (
                     <div className="confirmation-dialog__text">
-                      <p>{t(props.textAfterItems)}</p>
+                      <p>{props.textAfterItems}</p>
                     </div>
                   )}
                   {props.checkbox && (

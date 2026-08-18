@@ -77,7 +77,7 @@ describe("ColumnConfiguratorColumn render", () => {
   // opens color picker, select pink color, then checks if editColumn fn has been called
   it("should be able to change color", async () => {
     const columnId = "test-templates-columns-id-1";
-    const editColumnSpy = vi.fn<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void>();
+    const editColumnSpy = vi.fn<(_templateColumn: EditableTemplateColumn, _overwrite: Partial<EditableTemplateColumn>) => void>();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", columnId, 0, editColumnSpy);
 
     const colorPickerElement = container.querySelector(".columns-configurator-column__color-picker")!;
@@ -92,7 +92,7 @@ describe("ColumnConfiguratorColumn render", () => {
   });
 
   it("should be able to toggle visibility", () => {
-    const editColumnSpy = vi.fn<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void>();
+    const editColumnSpy = vi.fn<(_templateColumn: EditableTemplateColumn, _overwrite: Partial<EditableTemplateColumn>) => void>();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, editColumnSpy);
     const visibilityButtonElement = container.querySelector(".column-configurator-column__visibility-button")! as HTMLButtonElement;
 
@@ -101,7 +101,7 @@ describe("ColumnConfiguratorColumn render", () => {
   });
 
   it("should be deletable", () => {
-    const deleteColumnSpy = vi.fn<(templateColumn: EditableTemplateColumn) => void>();
+    const deleteColumnSpy = vi.fn<(_templateColumn: EditableTemplateColumn) => void>();
     const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, undefined, deleteColumnSpy);
     const deleteButtonElement = container.querySelector(".column-configurator-column__delete-button")! as HTMLButtonElement;
 

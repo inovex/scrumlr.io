@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -38,25 +39,21 @@ func (suite *NotesTestSuite) TestCreateNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusCreated, nil, false, false, nil).
-		Append("api err", http.StatusConflict, &common.APIError{
-			Err:        errors.New("test"),
-			StatusCode: http.StatusConflict,
-			StatusText: "no",
-			ErrorText:  "way",
-		}, false, false, nil).
 		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
+			s.basePath = "/"
 			noteMock := notes.NewMockNotesService(suite.T())
 
 			s.notes = noteMock
 
 			testText := "asdf"
-			boardID, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			colId, _ := uuid.NewRandom()
+			boardID := uuid.New()
+			userId := uuid.New()
+			colId := uuid.New()
+			noteID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
@@ -72,6 +69,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				Text:   testText,
 				Column: colId,
 			}).Return(&notes.Note{
+				ID:   noteID,
 				Text: testText,
 			}, tt.err)
 
@@ -79,6 +77,9 @@ func (suite *NotesTestSuite) TestCreateNote() {
 
 			s.createNote(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+			if tt.err == nil {
+				suite.Equal(fmt.Sprintf("/boards/%s/notes/%s", boardID, noteID), rr.Result().Header.Get("Location"))
+			}
 			noteMock.AssertExpectations(suite.T())
 		})
 	}
@@ -89,12 +90,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
-		Append("api err", http.StatusConflict, &common.APIError{
-			Err:        errors.New("test"),
-			StatusCode: http.StatusConflict,
-			StatusText: "no",
-			ErrorText:  "way",
-		}, false, false, nil).
+		Append("not found err", http.StatusNotFound, sql.ErrNoRows, false, false, nil).
 		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
 	for _, tt := range testParameterBundles {
@@ -135,13 +131,33 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		},
 		{
 			name:         "Delete Note when board is locked",
-			expectedCode: http.StatusBadRequest,
+			expectedCode: http.StatusInternalServerError,
 			err: &common.APIError{
 				Err:        errors.New("not allowed to edit a locked board"),
-				StatusCode: http.StatusBadRequest,
-				StatusText: "Bad request",
+				StatusCode: http.StatusInternalServerError,
+				StatusText: "Internal Server Error",
 				ErrorText:  "something",
 			},
+			isLocked: false,
+		},
+		{
+			name:         "Forbidden: not allowed to delete other user's note",
+			expectedCode: http.StatusForbidden,
+			err: notes.CreateNoteError(
+				notes.Forbidden,
+				"not allowed to delete other user's note",
+				errors.New("not allowed to delete note from other user"),
+			),
+			isLocked: false,
+		},
+		{
+			name:         "Conflict: note is currently locked by another user",
+			expectedCode: http.StatusConflict,
+			err: notes.CreateNoteError(
+				notes.Conflict,
+				"note is currently locked",
+				errors.New("note is currently locked"),
+			),
 			isLocked: false,
 		},
 	}
@@ -209,9 +225,19 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 func (suite *NotesTestSuite) TestEditNote() {
 	testParameterBundles := *TestParameterBundles{}.
 		Append("all ok", http.StatusOK, nil, false, false, nil).
-		Append("api err", http.StatusForbidden, &common.APIError{
+		Append("conflict err", http.StatusConflict, notes.CreateNoteError(
+			notes.Conflict,
+			"note is currently locked",
+			errors.New("note is currently locked"),
+		), false, false, nil).
+		Append("forbidden err", http.StatusForbidden, notes.CreateNoteError(
+			notes.Forbidden,
+			"not allowed to stack notes",
+			errors.New("not allowed to stack notes"),
+		), false, false, nil).
+		Append("api err", http.StatusInternalServerError, &common.APIError{
 			Err:        errors.New("test"),
-			StatusCode: http.StatusForbidden,
+			StatusCode: http.StatusInternalServerError,
 			StatusText: "no",
 			ErrorText:  "way",
 		}, false, false, nil)

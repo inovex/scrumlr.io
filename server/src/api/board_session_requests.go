@@ -17,6 +17,21 @@ import (
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
+// Get a board session request for a user
+//
+//	@Summary		Get a board session request for a user
+//	@Description	Get a board session request for a user
+//	@Tags			board session requests
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"boarId for the session request"
+//	@Param			userId	path	string	true	"userId for the session request"
+//	@Produce		json
+//	@Success		200	{object}	sessionrequests.BoardSessionRequest
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Router			/boards/{boardId}/requests/{userId} [get]
 func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.get")
 	defer span.End()
@@ -50,7 +65,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get session request")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -58,6 +73,20 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	render.Respond(w, r, request)
 }
 
+// Get all board session request for a board
+//
+//	@Summary		Get all board session request for a board
+//	@Description	Get all board session request for a board
+//	@Tags			board session requests
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			boardId	path	string	true	"boarId for the session requests"
+//	@Param			status	query	string	false	"status to filter the requests"
+//	@Produce		json
+//	@Success		200	{object}	[]sessionrequests.BoardSessionRequest
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Router			/boards/{boardId}/requests [get]
 func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.get.all")
 	defer span.End()
@@ -71,7 +100,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 		span.SetStatus(codes.Error, "failed to get all session requests")
 		span.RecordError(err)
 		log.Error(err, "failed to get all session requetsts", "board", board)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -79,6 +108,22 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 	render.Respond(w, r, requests)
 }
 
+// Update a board session request for a user
+//
+//	@Summary		Update a board session request for a user
+//	@Description	Update a board session request for a user
+//	@Tags			board session requests
+//	@Accept			json
+//	@Param			Cookie					header	string										true	"jwt token to authenticate"
+//	@Param			boardId					path	string										true	"boarId for the session request"
+//	@Param			userId					path	string										true	"userId for the session request"
+//	@Param			sessionRequestUpdate	body	sessionrequests.BoardSessionRequestUpdate	true	"values to update the board session request"
+//	@Produce		json
+//	@Success		200	{object}	sessionrequests.BoardSessionRequest
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Router			/boards/{boardId}/requests/{userId} [put]
 func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.session_requests.api.update")
 	defer span.End()
@@ -112,7 +157,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 		span.SetStatus(codes.Error, "failed to update session request")
 		span.RecordError(err)
 		log.Errorw("failed to update board session request", "request", body, "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 

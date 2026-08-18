@@ -270,7 +270,7 @@ func TestSortNotesByVotesEmptyInput(t *testing.T) {
 	assert.Empty(t, notes)
 }
 
-func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *DatabaseVote {
+func buildVote(votingId, noteId, userId uuid.UUID) *DatabaseVote {
 	return &DatabaseVote{
 		Voting:    votingId,
 		BaseModel: bun.BaseModel{},

@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"math"
 	"net/http"
 	"strings"
@@ -24,7 +23,20 @@ type AnonymousSignUpRequest struct {
 	Name string
 }
 
-// signInAnonymously create a new anonymous user
+// Create a new anonymous user
+//
+//	@Summary		Create a new anonymous user
+//	@Description	Create a new anonymous user
+//	@Tags			auth
+//	@Accept			json
+//	@Param			user	body	AnonymousSignUpRequest	true	"user to create"
+//	@Produce		json
+//	@Header			201	{string}	Cookie	"jwt token to sign in"
+//	@Success		201	{object}	users.User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/login/anonymous [post]
 func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
 	defer span.End()
@@ -39,7 +51,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.CreateAnonymous(ctx, body.Name)
+	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create anonyoums user")
 		span.RecordError(err)
@@ -64,6 +76,15 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
+// Log the current user out
+//
+//	@Summary		Log the current user out
+//	@Description	Log the current user out
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Success		204
+//	@Router			/login [delete]
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	_, span := tracer.Start(r.Context(), "scrumlr.login.api.logout")
 	defer span.End()
@@ -83,12 +104,37 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-// beginAuthProviderVerification will redirect the user to the specified auth provider consent page
+// Redirect the user to the specified auth provider consent page
+//
+//	@Summary		Redirect the user to the specified auth provider consent page
+//	@Description	Redirect the user to the specified auth provider consent page
+//	@Tags			auth
+//	@Accept			json
+//	@Param			provider	path	string	true	"provider to use to login"	Enums(GOOGLE, MICROSOFT, AZURE_AD, GITHUB, APPLE, OIDC)
+//	@Produce		json
+//	@Success		307
+//	@Failure		400	{object}	common.APIError
+//	@Router			/login/{provider} [get]
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
 	gothic.BeginAuthHandler(w, r)
 }
 
-// verifyAuthProviderCallback will verify the auth provider call, create or update a user and redirect to the page provider with the state
+// Verify the auth provider call and create or update a user
+// Redirect to the page provider with the state
+//
+//	@Summary		Verify the auth provider call and create or update a user
+//	@Description	Verify the auth provider call and create or update a user. Redirect to the page provider with the state
+//	@Tags			auth
+//	@Accept			json
+//	@Param			user	body	AnonymousSignUpRequest	true	"user to create"
+//	@Produce		json
+//	@Header			303	{string}	Cookie		"jwt token to sign in"
+//	@Header			303	{string}	Location	"Redirect url"
+//	@Success		303	{object}	users.User
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/login/{provider}/callback [get]
 func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_auth_provider")
 	defer span.End()
@@ -122,20 +168,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	}
 
 	var internalUser *users.User
-	switch provider {
-	case common.Google:
-		internalUser, err = s.users.CreateGoogleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.GitHub:
-		internalUser, err = s.users.CreateGitHubUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Microsoft:
-		internalUser, err = s.users.CreateMicrosoftUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.AzureAd:
-		internalUser, err = s.users.CreateAzureAdUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.Apple:
-		internalUser, err = s.users.CreateAppleUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case common.TypeOIDC:
-		internalUser, err = s.users.CreateOIDCUser(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	}
+	internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create user")
 		span.RecordError(err)
@@ -154,11 +187,8 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	if len(stateSplit) > 1 {
 		w.Header().Set("Location", stateSplit[1])
 		w.WriteHeader(http.StatusSeeOther)
+		return
 	}
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
-	}
+	w.Header().Set("Location", s.buildRelativeURL("/"))
 	w.WriteHeader(http.StatusSeeOther)
 }

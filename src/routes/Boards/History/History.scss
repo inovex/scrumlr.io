@@ -1,0 +1,143 @@
+@use "constants/styles";
+
+$stan-height: 50vh;
+$max-card-width: 680px;
+
+.history {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  border-radius: styles.$rounded--default;
+  background-color: styles.$blue--50;
+  overflow: visible;
+}
+
+.history__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: styles.$spacing--lg;
+
+  overflow: hidden;
+}
+
+.history__container-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+
+  padding: styles.$spacing--xl styles.$spacing--xl 0 styles.$spacing--xl;
+}
+
+.history__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
+  gap: styles.$spacing--md;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 0 styles.$spacing--xl styles.$spacing--xl styles.$spacing--xl;
+}
+
+.history__stan-spacing {
+  height: styles.$spacing--3xl;
+}
+
+.history__stan-container {
+  position: absolute;
+  right: 0;
+  height: $stan-height;
+  // align left edge of stan to the right edge of the card
+  transform: translateX(100%);
+}
+
+.history__stan {
+  height: 100%;
+
+  &--dark {
+    display: initial;
+  }
+
+  &--light {
+    display: none;
+  }
+}
+
+// info is displayed if history is empty or user has to register
+.history__info {
+  display: flex;
+  flex-direction: column;
+  gap: styles.$spacing--sm;
+}
+
+.history__info-container {
+  display: flex;
+  gap: styles.$spacing--sm;
+  align-items: center;
+}
+
+.history__info-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+  flex-shrink: 0;
+  color: styles.$navy--600;
+}
+
+.history__info-text {
+  font-weight: 400;
+  font-size: styles.$text--md;
+  line-height: 28px;
+  margin: 0;
+  color: styles.$navy--400;
+}
+
+.history__require-registered-user-register-area {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+[data-theme="dark"] {
+  .history__require-registered-user-title,
+  .history__require-registered-user-icon,
+  .history__require-registered-user-text {
+    color: styles.$blue--50;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--desktop) {
+  .history__stan-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: styles.$breakpoint--smartphone) {
+  .history__container-header {
+    justify-content: center;
+    gap: styles.$spacing--md;
+  }
+}
+
+[data-theme="dark"] {
+  .history {
+    background-color: styles.$navy--700;
+  }
+
+  .history__stan {
+    &--dark {
+      display: none;
+    }
+
+    &--light {
+      display: initial;
+    }
+  }
+
+  .history__info-icon,
+  .history__info-text {
+    color: styles.$gray--000;
+  }
+}

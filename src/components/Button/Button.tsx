@@ -23,8 +23,6 @@ type ButtonProps = {
   small?: boolean;
   hideLabel?: boolean;
   title?: string; // Tooltip text shown on hover
-  dataTooltipId?: string; // ID for react-tooltip integration
-  dataTooltipContent?: string; // Content for react-tooltip
   fullWidth?: boolean; // If true, button takes full width of its container. Defaults to false.
 
   // Icon Props
@@ -87,8 +85,6 @@ export const Button = (props: ButtonProps) => {
       disabled={props.disabled}
       onClick={props.onClick}
       title={props.title}
-      data-tooltip-id={props.dataTooltipId}
-      data-tooltip-content={props.dataTooltipContent}
       data-cy={props.testId}
       data-testid={props.testId}
       aria-label={isIconOnly ? props.title || "Button" : undefined}

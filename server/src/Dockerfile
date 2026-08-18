@@ -6,8 +6,8 @@ ARG TARGETOS
 
 WORKDIR /go/src/github.com/inovex/scrumlr.io/
 COPY ./ .
-RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main \
-    && GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o healthcheck ./cmd/healthcheck
+RUN GOOS="$TARGETOS" GOARCH="$TARGETARCH" CGO_ENABLED=0 go build -a -o main \
+    && GOOS="$TARGETOS" GOARCH="$TARGETARCH" CGO_ENABLED=0 go build -a -o healthcheck ./cmd/healthcheck
 
 # Start application
 FROM gcr.io/distroless/static:nonroot

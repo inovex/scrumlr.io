@@ -65,7 +65,7 @@ type MockSessionRequestService_BoardCandidateContext_Call struct {
 
 // BoardCandidateContext is a helper method to define mock.On call
 //   - next http.Handler
-func (_e *MockSessionRequestService_Expecter) BoardCandidateContext(next interface{}) *MockSessionRequestService_BoardCandidateContext_Call {
+func (_e *MockSessionRequestService_Expecter) BoardCandidateContext(next any) *MockSessionRequestService_BoardCandidateContext_Call {
 	return &MockSessionRequestService_BoardCandidateContext_Call{Call: _e.mock.On("BoardCandidateContext", next)}
 }
 
@@ -129,7 +129,7 @@ type MockSessionRequestService_Create_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) Create(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Create_Call {
+func (_e *MockSessionRequestService_Expecter) Create(ctx any, boardID any, userID any) *MockSessionRequestService_Create_Call {
 	return &MockSessionRequestService_Create_Call{Call: _e.mock.On("Create", ctx, boardID, userID)}
 }
 
@@ -201,7 +201,7 @@ type MockSessionRequestService_Exists_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) Exists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Exists_Call {
+func (_e *MockSessionRequestService_Expecter) Exists(ctx any, boardID any, userID any) *MockSessionRequestService_Exists_Call {
 	return &MockSessionRequestService_Exists_Call{Call: _e.mock.On("Exists", ctx, boardID, userID)}
 }
 
@@ -275,7 +275,7 @@ type MockSessionRequestService_Get_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) Get(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Get_Call {
+func (_e *MockSessionRequestService_Expecter) Get(ctx any, boardID any, userID any) *MockSessionRequestService_Get_Call {
 	return &MockSessionRequestService_Get_Call{Call: _e.mock.On("Get", ctx, boardID, userID)}
 }
 
@@ -349,7 +349,7 @@ type MockSessionRequestService_GetAll_Call struct {
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - statusQuery string
-func (_e *MockSessionRequestService_Expecter) GetAll(ctx interface{}, boardID interface{}, statusQuery interface{}) *MockSessionRequestService_GetAll_Call {
+func (_e *MockSessionRequestService_Expecter) GetAll(ctx any, boardID any, statusQuery any) *MockSessionRequestService_GetAll_Call {
 	return &MockSessionRequestService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardID, statusQuery)}
 }
 
@@ -401,7 +401,7 @@ type MockSessionRequestService_OpenSocket_Call struct {
 //   - ctx context.Context
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionRequestService_Expecter) OpenSocket(ctx interface{}, w interface{}, r interface{}) *MockSessionRequestService_OpenSocket_Call {
+func (_e *MockSessionRequestService_Expecter) OpenSocket(ctx any, w any, r any) *MockSessionRequestService_OpenSocket_Call {
 	return &MockSessionRequestService_OpenSocket_Call{Call: _e.mock.On("OpenSocket", ctx, w, r)}
 }
 
@@ -474,7 +474,7 @@ type MockSessionRequestService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardSessionRequestUpdate
-func (_e *MockSessionRequestService_Expecter) Update(ctx interface{}, body interface{}) *MockSessionRequestService_Update_Call {
+func (_e *MockSessionRequestService_Expecter) Update(ctx any, body any) *MockSessionRequestService_Update_Call {
 	return &MockSessionRequestService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 

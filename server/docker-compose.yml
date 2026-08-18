@@ -2,12 +2,12 @@
 name: scrumlr
 services:
   nats:
-    image: nats:2.12.3-alpine
+    image: nats:2.14.4-alpine
     command: ["-js"]
     ports:
       - "4222:4222"
     healthcheck:
-      test: [ "CMD", "ping", "nats", "-c", "2" ]
+      test: ["CMD", "ping", "nats", "-c", "2"]
       start_period: 5s
       interval: 10s
       timeout: 5s
@@ -17,7 +17,7 @@ services:
       - build
 
   database:
-    image: postgres:18.1
+    image: postgres:18.4
     ports:
       - "5432:5432"
     environment:
@@ -26,7 +26,7 @@ services:
       POSTGRES_DB: &db_name "scrumlr"
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", *db_name, "-U", *db_user ]
+      test: ["CMD", "pg_isready", "-q", "-d", *db_name, "-U", *db_user]
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -48,6 +48,7 @@ services:
       SCRUMLR_SERVER_DATABASE_URL: "postgres://admin:supersecret@database:5432/scrumlr?sslmode=disable"
       SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES: true
       SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION: true
+      SCRUMLR_ALLOW_ANONYMOUS_HISTORY: true
     depends_on:
       database:
         condition: service_healthy

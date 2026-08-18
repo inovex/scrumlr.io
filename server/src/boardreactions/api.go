@@ -6,6 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type BoardReactionService interface {
+type BoardReactionCreater interface {
 	Create(ctx context.Context, board uuid.UUID, body BoardReactionCreateRequest)
 }

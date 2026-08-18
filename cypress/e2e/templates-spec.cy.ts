@@ -112,7 +112,7 @@ describe("templates", () => {
       .trigger("mouseup", {force:true})
 
     cy
-      .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+      .get<HTMLButtonElement>("[data-cy='editor-shell__button--create']")
       .click()
   });
 })

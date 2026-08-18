@@ -1,8 +1,23 @@
 import "./CustomToast.scss";
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, FunctionComponent, SVGProps, useEffect, useRef, useState} from "react";
 import {CloseIcon} from "components/Icon";
 import {ToastTypes} from "utils/Toast";
 import classNames from "classnames";
+
+const TITLE_MAX_HEIGHT_DESKTOP = 38; // two lines of text
+const TITLE_MAX_HEIGHT_MOBILE = 19; // one line of text
+const MAX_WIDTH_MOBILE = 767; // $smartphone: "screen and (max-width: 767px)"
+
+// on mobile, a title next to two buttons never fits on a single line, otherwise it depends on the rendered height
+const isMultiLineTitle = (titleHeight: number, isMobile: boolean, buttons?: string[]) => {
+  if (!isMobile || !buttons) {
+    return titleHeight > TITLE_MAX_HEIGHT_DESKTOP;
+  }
+  if (buttons.length >= 2) {
+    return true;
+  }
+  return titleHeight > TITLE_MAX_HEIGHT_MOBILE;
+};
 
 export interface CustomToastProps {
   title: string;
@@ -12,7 +27,7 @@ export interface CustomToastProps {
   buttons?: string[];
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
-  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   iconName?: string;
   type?: ToastTypes;
 }
@@ -23,10 +38,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   const titleRef = useRef<HTMLDivElement>(null);
   const standardIcon = ["info", "success", "error"].includes(iconName!);
   const Icon = icon;
-
-  const TITLE_MAX_HEIGHT_DESKTOP = 38; // two lines of text
-  const TITLE_MAX_HEIGHT_MOBILE = 19; // one line of text
-  const MAX_WIDTH_MOBILE = 767; // $smartphone: "screen and (max-width: 767px)"
 
   // check whether screensize is mobile/desktop
   useEffect(() => {
@@ -40,28 +51,10 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
 
   // detects whether the title spans one or two lines
   useEffect(() => {
-    if (!titleRef.current) {
-      return;
+    const titleHeight = titleRef.current?.offsetHeight;
+    if (titleHeight !== undefined && isMultiLineTitle(titleHeight, isMobile, buttons)) {
+      setIsSingleToastTitle(false);
     }
-    if (!isMobile) {
-      if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_DESKTOP) {
-        setIsSingleToastTitle(false);
-      }
-    }
-    if (isMobile) {
-      if (buttons) {
-        if (buttons.length < 2) {
-          if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_MOBILE) {
-            setIsSingleToastTitle(false);
-          }
-        } else {
-          setIsSingleToastTitle(false);
-        }
-      } else if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_DESKTOP) {
-        setIsSingleToastTitle(false);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, isMobile]);
 
   const isSingleToast = (!buttons || buttons?.length <= 1) && isSingleToastTitle && !message && !hintMessage;
@@ -95,19 +88,13 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       )}
       {message && <div className="toast__message">{message}</div>}
       {hintMessage && (
-        <label
-          className="toast__hint"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <label className="toast__hint">
           <input
             type="checkbox"
             name="checkbox"
             onClick={(e) => {
               e.stopPropagation();
-              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              hintOnClick && hintOnClick();
+              hintOnClick?.();
             }}
           />
           {hintMessage}
@@ -120,7 +107,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
               if (index > 1) return false;
               return (
                 <button
-                  // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   className={
                     index === 0

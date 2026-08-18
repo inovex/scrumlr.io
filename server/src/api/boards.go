@@ -1,7 +1,6 @@
 package api
 
 import (
-	"database/sql"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -11,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
@@ -27,9 +27,24 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const boardParticipantsPath = "/boards/%s/participants/%s"
+const boardsRequestsPath = "/boards/%s/requests/%s"
+
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
-// createBoard creates a new board
+// Create a new board
+//
+//	@Summary		Create a new board
+//	@Description	Create a new board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			board	body	boards.CreateBoardRequest	true	"board to create"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created board"
+//	@Success		201	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Router			/boards [post]
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.create")
 	defer span.End()
@@ -53,21 +68,30 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to create board")
 		span.RecordError(err)
 		log.Errorw("failed to create board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
 	// build the response
-	if s.basePath == "/" {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s", common.GetProtocol(r), r.Host, b.ID))
-	} else {
-		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s", common.GetProtocol(r), r.Host, s.basePath, b.ID))
-	}
+	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s", b.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
 }
 
-// deleteBoard deletes a board
+// Delete a board
+//
+//	@Summary		Delete a board
+//	@Description	Delete a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to delete"
+//	@Produce		json
+//	@Success		204
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id} [delete]
 func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.delete")
 	defer span.End()
@@ -88,6 +112,18 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+// Get all boards
+//
+//	@Summary		Delete a board
+//	@Description	Delete a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Produce		json
+//	@Success		200	{object}	boards.BoardOverview
+//	@Failure		400	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards [get]
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
 	defer span.End()
@@ -100,7 +136,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get boards")
 		span.RecordError(err)
 		log.Errorw("failed to get boards", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -109,14 +145,28 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to get board overview")
 		span.RecordError(err)
 		log.Errorw("failed to get board overview", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, OverviewBoards)
 }
 
-// getBoard get a board
+// Get a board by its id
+//
+//	@Summary		Get a board
+//	@Description	Get a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to get"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id} [get]
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get")
 	defer span.End()
@@ -131,17 +181,15 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.Get(ctx, boardId)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			span.SetStatus(codes.Error, "no board found")
-			span.RecordError(err)
-			common.Throw(w, r, common.NotFoundError)
-			return
+		mappedErr := mapError(err)
+		if errors.Is(mappedErr, common.NotFoundError) {
+			span.SetStatus(codes.Error, "board not found")
+		} else {
+			span.SetStatus(codes.Error, "failed to get board")
 		}
-
-		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
 		log.Errorw("unable to access board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mappedErr)
 		return
 	}
 
@@ -149,14 +197,24 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
-// JoinBoardRequest represents the request to create a new participant of a board.
-type JoinBoardRequest struct {
-
-	// The passphrase challenge if the access policy is 'BY_PASSPHRASE'.
-	Passphrase string `json:"passphrase"`
-}
-
-// joinBoard create a new participant
+// Join a board
+//
+//	@Summary		Join an existing board
+//	@Description	Join an existing board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string					true	"jwt token to authenticate"
+//	@Param			id		path	string					true	"id of the board to join"
+//	@Param			join	body	boards.JoinBoardRequest	false	"join request for the board"
+//	@Produce		json
+//	@Header			201	{string}	Location	"Path to the created session"
+//	@Success		303
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		429
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards/{id}/participants [post]
 func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.join")
 	defer span.End()
@@ -171,22 +229,23 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
+
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	exists, err := s.sessions.Exists(ctx, board, user)
+	sessionExists, err := s.sessions.Exists(ctx, board, user)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session")
 		span.RecordError(err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
-	if exists {
+	if sessionExists {
 		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check if participant is banned")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
@@ -198,43 +257,34 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if s.basePath == "/" {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user), http.StatusSeeOther)
-		} else {
-			http.Redirect(w, r, fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user), http.StatusSeeOther)
-		}
+		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
 	b, err := s.boards.Get(ctx, board)
-
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get board")
 		span.RecordError(err)
-		common.Throw(w, r, common.NotFoundError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
 	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
+		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to create session")
 			span.RecordError(err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, mapError(err))
 			return
 		}
 
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-		}
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
 
 	if b.AccessPolicy == boards.ByPassphrase {
-		var body JoinBoardRequest
+		var body boards.JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to decode body")
@@ -243,6 +293,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
+
 		if body.Passphrase == "" {
 			err := errors.New("missing passphrase")
 			span.SetStatus(codes.Error, "no passphrase provided")
@@ -250,23 +301,21 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
+
 		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: common.ParticipantRole})
+			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 			if err != nil {
 				span.SetStatus(codes.Error, "failed to create session")
 				span.RecordError(err)
-				common.Throw(w, r, common.InternalServerError)
+				common.Throw(w, r, mapError(err))
 				return
 			}
 
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-			}
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
 			w.WriteHeader(http.StatusCreated)
 			return
+
 		} else {
 			err := errors.New("wrong passphrase")
 			span.SetStatus(codes.Error, "wrong passphrase provided")
@@ -277,7 +326,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == boards.ByInvite {
-		sessionExists, err := s.sessionRequests.Exists(ctx, board, user)
+		sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to check session requests")
 			span.RecordError(err)
@@ -285,12 +334,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if sessionExists {
-			if s.basePath == "/" {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
-			} else {
-				w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-			}
+		if sessionRequestExists {
+			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 			w.WriteHeader(http.StatusSeeOther)
 			return
 		}
@@ -302,11 +347,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
-		if s.basePath == "/" {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, board, user))
-		} else {
-			w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/requests/%s", common.GetProtocol(r), r.Host, s.basePath, board, user))
-		}
+
+		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}
@@ -314,7 +356,22 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusBadRequest)
 }
 
-// updateBoard updates a board
+// Update a board
+//
+//	@Summary		Update a board
+//	@Description	Update a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			id		path	string						true	"id of the board to update"
+//	@Param			board	body	boards.BoardUpdateRequest	true	"values to update the board"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id} [put]
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.get.all")
 	defer span.End()
@@ -337,7 +394,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to update board")
 		span.RecordError(err)
 		log.Errorw("Unable to update board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -345,6 +402,22 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Set a new timer for a board
+//
+//	@Summary		Set a new timer for a board
+//	@Description	Set a new timer for a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string					true	"jwt token to authenticate"
+//	@Param			id		path	string					true	"id of the board to set the timer"
+//	@Param			timer	body	boards.SetTimerRequest	true	"timer request"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer [post]
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.set")
 	defer span.End()
@@ -366,7 +439,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to set board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to set board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -374,6 +447,21 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Delete a timer for a board
+//
+//	@Summary		Delete a timer for a board
+//	@Description	Delete a timer for a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to delete the timer from"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer [delete]
 func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.delete")
 	defer span.End()
@@ -386,7 +474,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to delete board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to delete board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -394,6 +482,21 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Increment a timer for a board
+//
+//	@Summary		Increment a timer for a board
+//	@Description	Increment a timer for a board by one minute
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to increment the timer"
+//	@Produce		json
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/timer/increment [post]
 func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.timer.increment")
 	defer span.End()
@@ -406,7 +509,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 		span.SetStatus(codes.Error, "failed to increment board timer")
 		span.RecordError(err)
 		log.Errorw("Unable to increment board timer", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -414,6 +517,22 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// Export a board
+//
+//	@Summary		Export a board
+//	@Description	Export a board
+//	@Tags			boards
+//	@Accept			json text/csv
+//	@Param			Cookie	header	string	true	"jwt token to authenticate"
+//	@Param			id		path	string	true	"id of the board to export"
+//	@Produce		json text/csv
+//	@Success		200	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		404	{object}	common.APIError
+//	@Failure		406
+//	@Failure		500	{object}	common.APIError
+//	@Router			/boards{id}/export [get]
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
 	defer span.End()
@@ -425,7 +544,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get full board")
 		span.RecordError(err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
@@ -479,7 +598,13 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
 				if session.UserID == note.Author {
-					user, _ := s.users.Get(ctx, session.UserID) // TODO handle error
+					user, err := s.users.Get(ctx, session.UserID)
+					if err != nil {
+						span.SetStatus(codes.Error, "failed to get note author user")
+						span.RecordError(err)
+						common.Throw(w, r, mapError(err))
+						return
+					}
 					author = user.Name
 				}
 			}
@@ -532,6 +657,20 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+// Import a board
+//
+//	@Summary		Import a board
+//	@Description	Import a board
+//	@Tags			boards
+//	@Accept			json
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			board	body	boards.ImportBoardRequest	true	"board to import"
+//	@Produce		json
+//	@Success		201	{object}	boards.Board
+//	@Failure		400	{object}	common.APIError
+//	@Failure		403	{object}	common.APIError
+//	@Failure		500	{object}	common.APIError
+//	@Router			/import [post]
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.import")
 	defer span.End()
@@ -549,109 +688,13 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
-
-	for _, column := range body.Columns {
-		importColumns = append(importColumns, columns.ColumnRequest{
-			Name:    column.Name,
-			Color:   column.Color,
-			Visible: &column.Visible,
-			Index:   &column.Index,
-		})
-	}
-	b, err := s.boards.Create(ctx, boards.CreateBoardRequest{
-		Name:         body.Board.Name,
-		Description:  body.Board.Description,
-		AccessPolicy: body.Board.AccessPolicy,
-		Passphrase:   body.Board.Passphrase,
-		Columns:      importColumns,
-		Owner:        owner,
-	})
-
+	b, err := s.boards.Import(ctx, owner, body)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to import board")
 		span.RecordError(err)
 		log.Errorw("Could not import board", "err", err)
-		common.Throw(w, r, err)
+		common.Throw(w, r, mapError(err))
 		return
-	}
-
-	cols, err := s.columns.GetAll(ctx, b.ID)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns from imported board")
-		span.RecordError(err)
-		_ = s.boards.Delete(ctx, b.ID)
-	}
-
-	type ParentChildNotes struct {
-		Parent   notes.Note
-		Children []notes.Note
-	}
-	parentNotes := make(map[uuid.UUID]notes.Note)
-	childNotes := make(map[uuid.UUID][]notes.Note)
-
-	for _, note := range body.Notes {
-		if !note.Position.Stack.Valid {
-			parentNotes[note.ID] = note
-		} else {
-			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
-		}
-	}
-
-	var organizedNotes []ParentChildNotes
-	for parentID, parentNote := range parentNotes {
-		for i, column := range body.Columns {
-			if parentNote.Position.Column == column.ID {
-
-				note, err := s.notes.Import(ctx, notes.NoteImportRequest{
-					Text: parentNote.Text,
-					Position: notes.NotePosition{
-						Column: cols[i].ID,
-						Stack:  uuid.NullUUID{},
-						Rank:   0,
-					},
-					Board: b.ID,
-					User:  parentNote.Author,
-				})
-				if err != nil {
-					span.SetStatus(codes.Error, "failed to import notes")
-					span.RecordError(err)
-					_ = s.boards.Delete(ctx, b.ID)
-					common.Throw(w, r, err)
-					return
-				}
-				parentNote = *note
-			}
-		}
-		organizedNotes = append(organizedNotes, ParentChildNotes{
-			Parent:   parentNote,
-			Children: childNotes[parentID],
-		})
-	}
-
-	for _, node := range organizedNotes {
-		for _, note := range node.Children {
-			_, err := s.notes.Import(ctx, notes.NoteImportRequest{
-				Text:  note.Text,
-				Board: b.ID,
-				User:  note.Author,
-				Position: notes.NotePosition{
-					Column: node.Parent.Position.Column,
-					Rank:   note.Position.Rank,
-					Stack: uuid.NullUUID{
-						UUID:  node.Parent.ID,
-						Valid: true,
-					},
-				},
-			})
-			if err != nil {
-				span.SetStatus(codes.Error, "failed to import note")
-				span.RecordError(err)
-				_ = s.boards.Delete(ctx, b.ID)
-				common.Throw(w, r, err)
-				return
-			}
-		}
 	}
 
 	render.Status(r, http.StatusCreated)

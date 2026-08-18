@@ -74,31 +74,6 @@ describe("Button", () => {
     expect(button).toHaveAttribute("title", "Native tooltip");
   });
 
-  it("should render with react-tooltip data attributes", () => {
-    render(
-      <Button dataTooltipId="custom-tooltip" dataTooltipContent="Custom tooltip content">
-        With Tooltip
-      </Button>
-    );
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("data-tooltip-id", "custom-tooltip");
-    expect(button).toHaveAttribute("data-tooltip-content", "Custom tooltip content");
-  });
-
-  it("should render with both title and react-tooltip attributes", () => {
-    render(
-      <Button title="Native tooltip" dataTooltipId="react-tooltip" dataTooltipContent="React tooltip content">
-        With Both Tooltips
-      </Button>
-    );
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("title", "Native tooltip");
-    expect(button).toHaveAttribute("data-tooltip-id", "react-tooltip");
-    expect(button).toHaveAttribute("data-tooltip-content", "React tooltip content");
-  });
-
   it("should render with data-cy attribute for testing", () => {
     render(<Button testId="test-button">Test Button</Button>);
 
@@ -120,36 +95,12 @@ describe("Button", () => {
     expect(button).toHaveClass("accent-color__planning-pink");
   });
 
-  it("should render tooltip attributes for accessibility when disabled", () => {
-    render(
-      <Button disabled dataTooltipId="disabled-tooltip" dataTooltipContent="This action is disabled">
-        Disabled with Tooltip
-      </Button>
-    );
-
-    const button = screen.getByRole("button");
-    expect(button).toBeDisabled();
-    expect(button).toHaveAttribute("data-tooltip-id", "disabled-tooltip");
-    expect(button).toHaveAttribute("data-tooltip-content", "This action is disabled");
-  });
-
   it("should maintain all functionality when all props are provided", () => {
     const handleClick = vi.fn();
     const icon = <span data-testid="complex-icon">🔥</span>;
 
     render(
-      <Button
-        variant="secondary"
-        className="complex-button"
-        color="value-violet"
-        small
-        icon={icon}
-        title="Complex button"
-        dataTooltipId="complex-tooltip"
-        dataTooltipContent="This is a complex button with all features"
-        onClick={handleClick}
-        testId="complex-test"
-      >
+      <Button variant="secondary" className="complex-button" color="value-violet" small icon={icon} title="Complex button" onClick={handleClick} testId="complex-test">
         Complex Button
       </Button>
     );
@@ -161,8 +112,6 @@ describe("Button", () => {
 
     // Check all attributes
     expect(button).toHaveAttribute("title", "Complex button");
-    expect(button).toHaveAttribute("data-tooltip-id", "complex-tooltip");
-    expect(button).toHaveAttribute("data-tooltip-content", "This is a complex button with all features");
     expect(button).toHaveAttribute("data-cy", "complex-test");
 
     // Check icon

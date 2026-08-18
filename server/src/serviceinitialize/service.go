@@ -50,9 +50,9 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 	return *initializer
 }
 
-func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
+func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardService := boards.NewBoardService(boardDB, init.broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, init.clock, init.hash)
+	boardService := boards.NewBoardService(boardDB, init.broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
 
 	return boardService
 }
@@ -66,7 +66,7 @@ func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesS
 	return columnService
 }
 
-func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionService {
+func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionCreater {
 	boardreactionService := boardreactions.NewBoardReactionService(init.broker)
 
 	return boardreactionService
@@ -93,7 +93,7 @@ func (init *ServiceInitializer) InitializeFeedbackService(webhookUrl string) fee
 }
 
 func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
-	healthDb := health.NewHealthDatabase(init.db)
+	healthDb := health.NewHealthDatabaseChecker(init.db)
 	healthService := health.NewHealthService(healthDb, init.broker)
 
 	return healthService
@@ -120,11 +120,11 @@ func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessio
 	return sessionRequestService
 }
 
-func (init *ServiceInitializer) InitializeWebSocketService() websocket.WebSocketInterface {
-	return websocket.NewWebSocketService()
+func (init *ServiceInitializer) InitializeWebSocketService() websocket.Upgrader {
+	return websocket.NewWebSocketUpgrader()
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.WebSocketInterface) sessionrequests.SessionRequestWebsocket {
+func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.Upgrader) sessionrequests.SessionRequestWebsocket {
 	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
 }
 

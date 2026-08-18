@@ -14,6 +14,12 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
         image: postgres:16.4-alpine
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+          limits:
+            memory: "250Mi"
         env:
         - name: DB_URL
           value: "$DB_URL"

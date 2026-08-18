@@ -3,6 +3,7 @@ import {useOnBlur} from "utils/hooks/useOnBlur";
 import {useTranslation} from "react-i18next";
 import {CloseIcon, CheckDoneIcon} from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
+import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState} from "react";
 import {MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
@@ -67,13 +68,13 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     {
       className: "mini-menu-item--cancel",
       element: <CloseIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.cancel"),
+      label: t("EditorShell.ColumnsConfiguratorColumn.cancel"),
       onClick: cancelChanges,
     },
     {
       className: "mini-menu-item--save",
       element: <CheckDoneIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.save"),
+      label: t("EditorShell.ColumnsConfiguratorColumn.save"),
       onClick: saveChanges,
     },
   ];
@@ -89,7 +90,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         ref={nameInputRef}
         className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": isEditing})}
         value={name}
-        placeholder={t("Templates.ColumnsConfiguratorColumn.namePlaceholder")}
+        placeholder={t("EditorShell.ColumnsConfiguratorColumn.namePlaceholder")}
         onInput={(e) => setName(e.currentTarget.value)}
         onFocus={() => props.setOpenState("nameFirst")}
         autoComplete="off"
@@ -112,7 +113,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             className="column-configurator-column-name-details__description-text-area"
             input={description}
             setInput={setDescription}
-            placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
+            placeholder={t("EditorShell.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
             fitted
             autoFocus={props.openState === "descriptionFirst"}
@@ -120,20 +121,20 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             onSubmit={saveChanges}
             onCancel={cancelChanges}
           />
+          <CharacterCountIndicator value={description} maxLength={MAX_COLUMN_DESCRIPTION_LENGTH} />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} transparent />
         </div>
       ) : (
-        <div
+        <button
           className={classNames("column-configurator-column-name-details__inline-description", {
             "column-configurator-column-name-details__inline-description--visual-feedback": props.openState === "visualFeedback",
             "column-configurator-column-name-details__inline-description--has-content": props.description && props.description.trim().length > 0,
           })}
-          role="button"
           tabIndex={0}
           onClick={openDescriptionWithCurrentValue}
         >
-          {props.description ? props.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
-        </div>
+          {props.description ? props.description : t("EditorShell.ColumnsConfiguratorColumn.descriptionPlaceholder")}
+        </button>
       )}
     </div>
   );

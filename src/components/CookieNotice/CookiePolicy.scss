@@ -57,5 +57,5 @@
 
 .cookie-policy__button:focus-visible,
 .cookie-policy__button:hover {
-  transform: scale(1.05);
+  box-shadow: 0 -4px 16px rgba(styles.$blue--500, 0.16);
 }

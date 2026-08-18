@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/role"
 )
 
 type DatabaseNote struct {
@@ -48,6 +48,6 @@ type DatabaseNoteUpdate struct {
 
 type Precondition struct {
 	StackingAllowed bool
-	CallerRole      common.SessionRole
+	CallerRole      role.Role
 	Author          uuid.UUID
 }

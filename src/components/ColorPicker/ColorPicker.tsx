@@ -40,11 +40,10 @@ export const ColorPicker = (props: ColorPickerProps) => {
 
   if (!props.open) {
     return (
-      <span
+      <button
         className={classNames(props.className, "color-picker__color-option", "color-picker__color-option--selected", {"color-picker__color-option--small": props.small})}
         aria-label={`current color${formatColorName(props.activeColor)}`}
         tabIndex={0}
-        role="button"
         onClick={props.attemptOpenColorPicker}
         data-cy={props.dataCy}
       />

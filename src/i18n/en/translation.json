@@ -1,4 +1,9 @@
 {
+  "BoardEditor": {
+    "editTitle": "Edit a Board",
+    "save": "Save",
+    "loadError": "Sorry, we couldn't load this board."
+  },
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note",
     "VotingIsAnonymous": "Voting is anonymous",
@@ -6,6 +11,7 @@
   },
   "LegacyNewBoard": {
     "boardName": "Board name",
+    "description": "Board description",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",
@@ -36,6 +42,19 @@
       "removeFile": "Delete file"
     }
   },
+  "EditorShell": {
+    "boardNamePlaceholder": "Name",
+    "boardDescriptionPlaceholder": "Description (optional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Column 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",
@@ -61,15 +80,6 @@
       "saveCreate": "Create template",
       "info": "Changes can be made at any time, including on the board."
     },
-    "ColumnsConfiguratorColumn": {
-      "defaultColumnName": "Column 1",
-      "defaultActionsName": "Actions",
-      "indexedColumnName": "Column {{index}}",
-      "namePlaceholder": "Title",
-      "descriptionPlaceholder": "Description (optional)",
-      "save": "Save",
-      "cancel": "Cancel"
-    },
     "AccessSettings": {
       "title": "Access Settings",
       "Options": {
@@ -94,11 +104,36 @@
       }
     }
   },
-  "Sessions": {
+  "History": {
     "switchTitle": "History",
-    "title": "Your Boards",
-    "savedBoards": "Your boards",
-    "teaserText": "Soon, registered users will be able to view and manage all their boards here. Boards created with anonymous profiles (guest login) cannot be linked to an account and are not saved."
+    "title": "Manage your boards",
+    "savedBoards": "Recently used",
+    "empty": "Your session history is empty — join or create a board and it will pop up here!",
+    "requireRegisteredAccount": "Sign in with Google, Microsoft, or SSO to automatically back up and manage your boards permanently. Anonymous profiles (guest login) cannot be associated with boards, so they will not be saved.",
+    "registerNow": "Register now",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} Column",
+        "amountColumns_other": "{{count}} Columns",
+        "amountParticipants_one": "{{count}} Participant",
+        "amountParticipants_other": "{{count}} Participants",
+        "amountNotes_one": "{{count}} Note",
+        "amountNotes_other": "{{count}} Notes",
+        "lastUpdated": "Last updated: {{date}}"
+      },
+      "Menu": {
+        "delete": "Delete",
+        "copyLink": "Copy link",
+        "createTemplate": "Create a template",
+        "edit": "Edit",
+        "close": "Close"
+      },
+      "readOnly": "Read only",
+      "openBoardButton": "Go to Session",
+      "linkCopied": "Board link copied!",
+      "deleteConfirmationTitle": "Delete board?",
+      "deleteConfirmationText": "This permanently deletes the board for everyone. This action cannot be undone."
+    }
   },
   "CreateBoard": {
     "title": "Create a new Board",
@@ -114,8 +149,7 @@
   "LoginBoard": {
     "title": "Sign in",
     "subtitleLogin": "Log in and enjoy the benefits",
-    "loginFeature1": "Create and save custom templates",
-    "loginFeature2": "Custom settings are saved in your profile",
+    "loginFeatures": ["Create and save custom templates", "Custom settings are saved in your profile", "Access and manage past boards at any time"],
     "subtitleAnonymous": "Log in anonymously",
     "anonymousLogin": "Continue anonymously as a guest (limited features)",
     "noLoginAvailable": "There isn't any valid login available",
@@ -424,7 +458,9 @@
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
     "enable": "Enable",
-    "failedImport": "Error importing the file"
+    "failedImport": "Error importing the file",
+    "importRemovedNotes_one": "{{count}} note was removed during import because no author could be resolved.",
+    "importRemovedNotes_other": "{{count}} notes were removed during import because no author could be resolved."
   },
   "Language": {
     "german": "German",
@@ -560,6 +596,8 @@
     "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
     "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
     "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
+    "importBoard": "Sorry, but we're having trouble importing the board. Please try again.",
+    "createBoard": "Sorry, but we're having trouble creating the board. Please try again.",
     "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
     "createColumn": "Sorry, but we're having trouble adding the column. Please try again.",
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
@@ -595,6 +633,16 @@
     "PATTERN_MISMATCH": "pattern mismatch",
     "TYPE_MISMATCH": "type mismatch",
     "RANGE": "range"
+  },
+  "TimeDifference": {
+    "now": "Now",
+    "minutes_one": "{{count}} minute ago",
+    "minutes_other": "{{count}} minutes ago",
+    "hours_one": "{{count}} hour ago",
+    "hours_other": "{{count}} hours ago",
+    "days_one": "{{count}} day ago",
+    "days_other": "{{count}} days ago",
+    "yesterday": "Yesterday"
   },
   "Avatar": {
     "random": "Generate random avatar",

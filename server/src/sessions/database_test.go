@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
@@ -43,12 +44,12 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Participant()
 	userId := suite.users["Luke"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: role.ParticipantRole})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(common.ParticipantRole, dbSession.Role)
+	suite.Equal(role.ParticipantRole, dbSession.Role)
 	suite.True(dbSession.ShowHiddenColumns)
 	suite.False(dbSession.Connected)
 	suite.False(dbSession.Ready)
@@ -63,12 +64,12 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Moderator() {
 	userId := suite.users["Leia"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ModeratorRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: role.ModeratorRole})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(common.ModeratorRole, dbSession.Role)
+	suite.Equal(role.ModeratorRole, dbSession.Role)
 	suite.True(dbSession.ShowHiddenColumns)
 	suite.False(dbSession.Connected)
 	suite.False(dbSession.Ready)
@@ -83,7 +84,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Duplicate() {
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: role.ParticipantRole})
 
 	suite.NotNil(err)
 	suite.Equal(DatabaseBoardSession{}, dbSession)
@@ -111,12 +112,12 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Ready() {
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: new(true)})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Ready: new(true)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.True(dbSession.Connected)
+	suite.True(dbSession.Ready)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_RaisedHand() {
@@ -156,12 +157,12 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 	userId := suite.users["Luke"].id
 	boardId := suite.boards["Update"].id
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.ModeratorRole)})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(role.ModeratorRole)})
 
 	suite.Nil(err)
 	suite.Equal(userId, dbSession.User)
 	suite.Equal(boardId, dbSession.Board)
-	suite.Equal(common.ModeratorRole, dbSession.Role)
+	suite.Equal(role.ModeratorRole, dbSession.Role)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantToOwner() {
@@ -169,9 +170,9 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 	database := NewSessionDatabase(suite.db)
 
 	userId := suite.users["Leia"].id
-	boardId := suite.boards["update"].id
+	boardId := suite.boards["Update"].id
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.OwnerRole)})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(role.OwnerRole)})
 
 	suite.NotNil(err)
 	suite.Equal(err, sql.ErrNoRows)
@@ -185,7 +186,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ModeratorToOw
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(common.OwnerRole)})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: new(role.OwnerRole)})
 
 	suite.NotNil(err)
 	suite.Equal(err, sql.ErrNoRows)
@@ -308,6 +309,45 @@ func (suite *DatabaseSessionTestSuite) Test_Database_ModeratorExists_Participant
 	suite.False(exists)
 }
 
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Stan"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.True(exists)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists_Moderator() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Friend"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.False(exists)
+}
+
+func (suite *DatabaseSessionTestSuite) Test_Database_OwnerExists_Participant() {
+
+	database := NewSessionDatabase(suite.db)
+
+	boardId := suite.boards["Read"].id
+	userId := suite.users["Santa"].id
+
+	exists, err := database.OwnerExists(context.Background(), boardId, userId)
+
+	suite.Nil(err)
+	suite.False(exists)
+}
+
 func (suite *DatabaseSessionTestSuite) Test_Database_IsBanned() {
 
 	database := NewSessionDatabase(suite.db)
@@ -346,7 +386,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetSession() {
 	suite.Nil(err)
 	suite.Equal(boardId, dbSession.Board)
 	suite.Equal(userId, dbSession.User)
-	suite.Equal(common.ParticipantRole, dbSession.Role)
+	suite.Equal(role.ParticipantRole, dbSession.Role)
 	suite.True(dbSession.ShowHiddenColumns)
 	suite.False(dbSession.Connected)
 	suite.False(dbSession.Ready)
@@ -492,7 +532,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 
 	boardId := suite.boards["ReadFilter"].id
 
-	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Role: new(common.OwnerRole)})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Role: new(role.OwnerRole)})
 
 	suite.Nil(err)
 	suite.Len(dbSessions, 1)
@@ -599,6 +639,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetBoards_NoBoards() {
 	suite.Equal([]DatabaseBoardSession(nil), dbSessions)
 }
 
+func (suite *DatabaseSessionTestSuite) TestDatabaseDelete() {
+	database := NewSessionDatabase(suite.db)
+
+	userId := suite.users["Friend"].id
+	boardId := suite.boards["Write"].id
+
+	err := database.Delete(context.Background(), boardId, userId)
+
+	suite.NoError(err)
+}
+
 type TestUser struct {
 	id          uuid.UUID
 	name        string
@@ -630,28 +681,29 @@ func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	suite.boards["UpdateAll"] = TestBoard{id: uuid.New(), name: "UpdateAll"}
 
 	// test sessions
-	suite.sessions = make(map[string]DatabaseBoardSession, 16)
+	suite.sessions = make(map[string]DatabaseBoardSession, 17)
 	// test sessions for the write board
-	suite.sessions["Write"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["Write"].id, Role: common.ParticipantRole}
+	suite.sessions["Write"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["Write"].id, Role: role.ParticipantRole}
+	suite.sessions["Delete"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["Write"].id, Role: role.ModeratorRole}
 	// test sessions for the update board
-	suite.sessions["UpdateParticipantModerator"] = DatabaseBoardSession{User: suite.users["Luke"].id, Board: suite.boards["Update"].id, Role: common.ParticipantRole}
-	suite.sessions["UpdateParticipantOwner"] = DatabaseBoardSession{User: suite.users["Leia"].id, Board: suite.boards["Update"].id, Role: common.ParticipantRole}
-	suite.sessions["UpdateModeratorOwner"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["Update"].id, Role: common.ParticipantRole}
+	suite.sessions["UpdateParticipantModerator"] = DatabaseBoardSession{User: suite.users["Luke"].id, Board: suite.boards["Update"].id, Role: role.ParticipantRole}
+	suite.sessions["UpdateParticipantOwner"] = DatabaseBoardSession{User: suite.users["Leia"].id, Board: suite.boards["Update"].id, Role: role.ParticipantRole}
+	suite.sessions["UpdateModeratorOwner"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["Update"].id, Role: role.ParticipantRole}
 	// test sessions for the read board
-	suite.sessions["Read1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["Read"].id, Role: common.OwnerRole}
-	suite.sessions["Read2"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["Read"].id, Role: common.ModeratorRole}
-	suite.sessions["Read3"] = DatabaseBoardSession{User: suite.users["Santa"].id, Board: suite.boards["Read"].id, Role: common.ParticipantRole}
-	suite.sessions["Read4"] = DatabaseBoardSession{User: suite.users["Bob"].id, Board: suite.boards["Read"].id, Role: common.ParticipantRole, Banned: true}
+	suite.sessions["Read1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["Read"].id, Role: role.OwnerRole}
+	suite.sessions["Read2"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["Read"].id, Role: role.ModeratorRole}
+	suite.sessions["Read3"] = DatabaseBoardSession{User: suite.users["Santa"].id, Board: suite.boards["Read"].id, Role: role.ParticipantRole}
+	suite.sessions["Read4"] = DatabaseBoardSession{User: suite.users["Bob"].id, Board: suite.boards["Read"].id, Role: role.ParticipantRole, Banned: true}
 	// test sessions for the read filter board
-	suite.sessions["ReadFilter1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["ReadFilter"].id, Role: common.OwnerRole, Ready: true, Connected: true}
-	suite.sessions["ReadFilter2"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["ReadFilter"].id, Role: common.ModeratorRole, Ready: true}
-	suite.sessions["ReadFilter3"] = DatabaseBoardSession{User: suite.users["Santa"].id, Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true, Connected: true}
-	suite.sessions["ReadFilter4"] = DatabaseBoardSession{User: suite.users["Bob"].id, Board: suite.boards["ReadFilter"].id, Role: common.ParticipantRole, RaisedHand: true}
+	suite.sessions["ReadFilter1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["ReadFilter"].id, Role: role.OwnerRole, Ready: true, Connected: true}
+	suite.sessions["ReadFilter2"] = DatabaseBoardSession{User: suite.users["Friend"].id, Board: suite.boards["ReadFilter"].id, Role: role.ModeratorRole, Ready: true}
+	suite.sessions["ReadFilter3"] = DatabaseBoardSession{User: suite.users["Santa"].id, Board: suite.boards["ReadFilter"].id, Role: role.ParticipantRole, RaisedHand: true, Connected: true}
+	suite.sessions["ReadFilter4"] = DatabaseBoardSession{User: suite.users["Bob"].id, Board: suite.boards["ReadFilter"].id, Role: role.ParticipantRole, RaisedHand: true}
 	// test sessions for the update all board
-	suite.sessions["UpdateAll1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["UpdateAll"].id, Role: common.OwnerRole, Connected: true}
-	suite.sessions["UpdateAll2"] = DatabaseBoardSession{User: suite.users["Luke"].id, Board: suite.boards["UpdateAll"].id, Role: common.ModeratorRole, Connected: true}
-	suite.sessions["UpdateAll3"] = DatabaseBoardSession{User: suite.users["Leia"].id, Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true}
-	suite.sessions["UpdateAll4"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["UpdateAll"].id, Role: common.ParticipantRole, Connected: true}
+	suite.sessions["UpdateAll1"] = DatabaseBoardSession{User: suite.users["Stan"].id, Board: suite.boards["UpdateAll"].id, Role: role.OwnerRole, Connected: true}
+	suite.sessions["UpdateAll2"] = DatabaseBoardSession{User: suite.users["Luke"].id, Board: suite.boards["UpdateAll"].id, Role: role.ModeratorRole, Connected: true}
+	suite.sessions["UpdateAll3"] = DatabaseBoardSession{User: suite.users["Leia"].id, Board: suite.boards["UpdateAll"].id, Role: role.ParticipantRole, Connected: true}
+	suite.sessions["UpdateAll4"] = DatabaseBoardSession{User: suite.users["Han"].id, Board: suite.boards["UpdateAll"].id, Role: role.ParticipantRole, Connected: true}
 
 	for _, user := range suite.users {
 		err := testDbTemplates.InsertUser(db, user.id, user.name, string(user.accountType), nil)

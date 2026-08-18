@@ -172,7 +172,19 @@ $icon-edge-gap--small: 2px;
   box-sizing: border-box;
   gap: $content-gap;
 
-  @include mixins.compensate-padding(styles.$spacing--sm, $border-width);
+  @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--md styles.$spacing--sm styles.$spacing--lg, $border-width);
+
+  &[data-pos="left"] {
+    @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--lg styles.$spacing--sm styles.$spacing--md, $border-width);
+  }
+
+  &[data-size="small"] {
+    @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--sm styles.$spacing--sm styles.$spacing--md, $border-width);
+
+    &[data-pos="left"] {
+      @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--md styles.$spacing--sm styles.$spacing--sm, $border-width);
+    }
+  }
 
   &[data-align="spaced"] {
     display: grid;

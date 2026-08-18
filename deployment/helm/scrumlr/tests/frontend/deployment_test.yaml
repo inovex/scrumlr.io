@@ -25,6 +25,10 @@ tests:
           value: scrumlr-frontend
         template: /frontend/deployment.yaml
       - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
+        template: /frontend/deployment.yaml
+      - equal:
           path: spec.template.spec.containers[0].name
           value: scrumlr-frontend
         template: /frontend/deployment.yaml
@@ -46,7 +50,7 @@ tests:
         template: /frontend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-frontend:5.1.0
+          value: scrumlr/scrumlr-frontend:5.3.1
         template: /frontend/deployment.yaml
 
   - it: should set image tag

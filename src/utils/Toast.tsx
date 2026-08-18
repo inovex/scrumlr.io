@@ -4,6 +4,7 @@ import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
 import {InfoIcon, CheckDoneIcon, CloseIcon} from "components/Icon";
+import {FunctionComponent, SVGProps} from "react";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -22,7 +23,7 @@ export type Options = {
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
   autoClose?: number | false;
-  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   iconName?: string;
 };
 

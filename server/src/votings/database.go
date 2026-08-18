@@ -2,7 +2,6 @@ package votings
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -47,33 +46,12 @@ func (d *DB) Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVo
 	err := d.db.NewSelect().
 		With("updateQuery", updateQuery).
 		With("updateBoard", updateBoard).
-		With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
+		With("rankUpdate", common.GetRankUpdateQueryForClosedVoting(d.db, "updateQuery")).
 		Model((*DatabaseVoting)(nil)).
 		ModelTableExpr("\"updateQuery\" AS voting").
 		Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 
 	return voting, err
-}
-
-func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
-	newRankSelect := d.db.NewSelect().
-		TableExpr("notes as note").
-		ColumnExpr(fmt.Sprintf(
-			"ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY "+
-				"(SELECT COUNT(*) FROM notes AS n INNER JOIN (SELECT * FROM votes WHERE voting = (SELECT id FROM \"%s\")) as v ON n.id = v.note WHERE n.id = note.id OR n.stack = note.id), rank)-1 AS new_rank",
-			votingQuery)).
-		Column("id").
-		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
-		GroupExpr("id")
-
-	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*common.DatabaseNote)(nil)).
-		TableExpr("_data").
-		Set("rank = _data.new_rank").
-		WhereOr("note.id = _data.id").
-		WhereOr("note.stack = _data.id")
-
-	return rankUpdate
 }
 
 func (d *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, error) {

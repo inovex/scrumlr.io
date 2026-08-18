@@ -36,6 +36,12 @@ describe("ColumnConfiguratorColumnNameDetails render", () => {
     expect(container).toMatchSnapshot();
   });
 
+  it("should show the character count indicator for a long description", () => {
+    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "descriptionFirst", description: "a".repeat(768)}));
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+  });
+
   it("should match title and description", () => {
     const name = "Custom Title";
     const description = "Custom Description";
@@ -82,7 +88,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
 
   it("should close after losing focus", () => {
     const setOpenStateSpy = vi.fn();
-    const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
+    render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     // note: useOnBlur does not actually use the native blur event, but scans for clicks outside the element instead.
     // this is why to simulate the blur, we just click somewhere on the document.
@@ -98,7 +104,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     const {container} = render(renderColumnConfiguratorColumnNameDetails({openState: "nameFirst", setOpenState: setOpenStateSpy}));
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(setOpenStateSpy).toHaveBeenCalledWith("closed");
   });
@@ -114,7 +120,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     fireEvent.input(inputElement, {target: {value: "Custom Title"}});
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(setOpenStateSpy).toHaveBeenCalledWith("visualFeedback");
     expect(updateColumnTitleSpy).toHaveBeenCalledWith("Custom Title", expect.anything());
@@ -134,7 +140,7 @@ describe("ColumnConfiguratorColumnNameDetails behaviour", () => {
     fireEvent.input(inputElement, {target: {value: "Custom Title"}});
 
     const saveChangesButtonElement = container.querySelector<HTMLButtonElement>(".mini-menu-item--save")!;
-    fireEvent.mouseDown(saveChangesButtonElement);
+    fireEvent.click(saveChangesButtonElement);
 
     expect(updateColumnTitleSpy).toHaveBeenCalledWith("Custom Title", expect.anything());
   });

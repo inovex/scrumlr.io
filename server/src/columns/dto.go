@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -52,6 +53,9 @@ type ColumnRequest struct {
 	// Sets the index of this column in the sort order.
 	Index *int `json:"index"`
 
+	// SourceColumnID is only used during imports to map source to created columns.
+	SourceColumnID *uuid.UUID `json:"-"`
+
 	Board uuid.UUID `json:"-"`
 	User  uuid.UUID `json:"-"`
 }
@@ -76,6 +80,18 @@ type ColumnUpdateRequest struct {
 
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`
+}
+
+func (c ColumnSlice) ContainsNote(note *notes.Note) bool {
+	if note == nil {
+		return false
+	}
+	for _, col := range c {
+		if col != nil && col.ID == note.Position.Column {
+			return true
+		}
+	}
+	return false
 }
 
 func (c ColumnSlice) FilterVisibleColumns() []*Column {
