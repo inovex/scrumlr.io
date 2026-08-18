@@ -112,6 +112,7 @@
     "requireRegisteredAccount": "Connecte-toi avec Google, Microsoft ou SSO pour sauvegarder et gérer automatiquement tes tableaux de manière permanente. Les profils anonymes (connexion invité) ne peuvent pas être associés à des tableaux, ils ne seront donc pas enregistrés.",
     "registerNow": "Inscris-toi",
     "HistoryCard": {
+      "namePlaceholder": "<Vide>",
       "Info": {
         "amountColumns_one": "{{count}} colonne",
         "amountColumns_other": "{{count}} colonnes",

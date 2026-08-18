@@ -85,12 +85,14 @@ export const HistoryCard = (props: HistoryCardProps) => {
   const canEdit = isParticipantModerator(props.board.userRole);
   const canDelete = props.board.userRole === "OWNER";
 
+  const boardName = props.board.name ? props.board.name : t("History.HistoryCard.namePlaceholder"); // in rare cases, board name is empty
+
   const joinedColumnsNames = props.board.columns.map((column) => column.name).join(", ");
   const formattedCreatedAtDate = new Date(props.board.createdAt).toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
   const formattedModifiedAtDate = localizeTimeDifference(new Date(props.board.modifiedAt));
 
   const {isTextTruncated: isColumnsSubtitleTruncated, textRef: columnsSubtitleRef} = useTextOverflow<HTMLDivElement>(joinedColumnsNames);
-  const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(props.board.name);
+  const {isTextTruncated: isBoardNameTruncated, textRef: boardNameRef} = useTextOverflow<HTMLDivElement>(boardName);
   const {isTextTruncated: isCreatedAtDateTruncated, textRef: createAtDateRef} = useTextOverflow<HTMLDivElement>(formattedCreatedAtDate);
   const {isTextTruncated: isModifiedAtDateTruncated, textRef: modifiedAtDateRef} = useTextOverflow<HTMLDivElement>(formattedModifiedAtDate);
 
@@ -159,7 +161,7 @@ export const HistoryCard = (props: HistoryCardProps) => {
 
         <div className={classNames("history-card__head")}>
           <div ref={boardNameRef} id={`history-card__title::${props.board.id}`} className="history-card__title">
-            {props.board.name}
+            {boardName}
           </div>
 
           {renderAccessPolicyIcon(props.board.accessPolicy)}
