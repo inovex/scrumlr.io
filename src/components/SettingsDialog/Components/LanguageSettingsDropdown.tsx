@@ -5,7 +5,6 @@ import Spanish from "assets/flags/ES.svg?react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {setLanguage} from "store/features";
-import {AppLanguage} from "i18n";
 import {SettingsDropdown} from "./SettingsDropdown";
 
 export const LanguageSettingsDropdown = () => {
@@ -13,7 +12,7 @@ export const LanguageSettingsDropdown = () => {
   const dispatch = useAppDispatch();
   const currentLanguage = useAppSelector((state) => state.view.language);
 
-  const changeLanguage = (language: AppLanguage) => {
+  const changeLanguage = (language: string) => {
     dispatch(setLanguage(language));
   };
 
