@@ -10,6 +10,7 @@ import {HistoryBoard, getBoards} from "store/features";
 import {HistoryCard} from "./HistoryCard/HistoryCard";
 import {Button} from "components/Button";
 import {LoadingIndicator} from "components/LoadingIndicator";
+import {useDelayedLoading} from "utils/hooks/useDelayedLoading";
 import "./History.scss";
 
 export type {HistoryBoard} from "store/features";
@@ -23,6 +24,7 @@ export const History = () => {
   const dispatch = useAppDispatch();
   const historyBoards = useAppSelector((state) => state.history);
   const [isLoading, setIsLoading] = useState(false);
+  const showLoading = useDelayedLoading(isLoading, 200);
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousHistory = useAppSelector((state) => state.view.allowAnonymousHistory);
 
@@ -70,7 +72,7 @@ export const History = () => {
     }
 
     if (isLoading) {
-      return <LoadingIndicator />;
+      return showLoading ? <LoadingIndicator /> : null;
     }
 
     if (historyBoards.length === 0) {
