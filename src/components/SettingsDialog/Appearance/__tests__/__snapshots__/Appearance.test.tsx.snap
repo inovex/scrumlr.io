@@ -588,7 +588,7 @@ exports[`Appearance > should render all Settings correctly with Snowfall 1`] = `
               </g>
             </svg>
             <span>
-              Español
+              Spanish
             </span>
           </button>
         </li>
@@ -1168,7 +1168,7 @@ exports[`Appearance > should render all Settings correctly without Snowfall 1`] 
               </g>
             </svg>
             <span>
-              Español
+              Spanish
             </span>
           </button>
         </li>

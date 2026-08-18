@@ -469,7 +469,8 @@
   "Language": {
     "german": "Deutsch",
     "english": "Englisch",
-    "french": "Französisch"
+    "french": "Französisch",
+    "spanish": "Spanisch"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, mit ❤️ von <inovex>inovex</inovex>",
