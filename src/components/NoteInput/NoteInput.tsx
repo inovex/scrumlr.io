@@ -8,6 +8,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
+import {MAX_NOTE_LENGTH} from "constants/misc";
 import {useAppDispatch, useAppSelector} from "store";
 import {addNote, Column, editColumn} from "store/features";
 import "./NoteInput.scss";
@@ -126,6 +128,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
       >
         <PlusIcon className="note-input__icon--add" />
       </button>
+      <CharacterCountIndicator value={value} maxLength={MAX_NOTE_LENGTH} />
     </form>
   );
 };

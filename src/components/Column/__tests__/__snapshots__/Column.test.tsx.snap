@@ -123,7 +123,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
         <textarea
           class="note-input__input"
           data-clarity-mask="True"
-          maxlength="1024"
+          maxlength="2048"
           placeholder="Add your note..."
         />
         <div
@@ -1393,7 +1393,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
           <textarea
             class="note-input__input"
             data-clarity-mask="True"
-            maxlength="1024"
+            maxlength="2048"
             placeholder="Add your note..."
           />
           <div

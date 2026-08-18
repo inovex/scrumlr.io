@@ -56,6 +56,16 @@ describe("Note Input", () => {
     fireEvent.keyDown(container.querySelector(".note-input__input")!, {key: "Enter", code: "Enter", charCode: 13});
   });
 
+  test("should show the character count indicator for a long note", () => {
+    const {container} = createNoteInput("test-columns-id-1");
+
+    expect(container.querySelector(".character-count-indicator")).toBeNull();
+
+    fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "a".repeat(1536)}});
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("1536/2048");
+  });
+
   // why is this so over-complicated and weird?? TODO fix this mess
   it.skip("should be disabled if the board is locked and the client is participant", () => {
     const _store = getTestStore({

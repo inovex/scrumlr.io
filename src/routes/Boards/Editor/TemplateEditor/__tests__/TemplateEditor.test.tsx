@@ -29,6 +29,17 @@ describe("TemplateEditor create", () => {
     expect(createTemplateButtonNode).not.toBeDisabled();
   });
 
+  it("should show the character count indicator for a long description", () => {
+    const {container} = renderTemplateEditor({mode: "create"});
+    const descriptionInputNode = container.querySelector<HTMLTextAreaElement>(".editor-shell__description-text-area")!;
+
+    expect(container.querySelector(".character-count-indicator")).toBeNull();
+
+    fireEvent.input(descriptionInputNode, {target: {value: "a".repeat(768)}});
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+  });
+
   // need to spy on store
   it.skip("should dispatch create template", () => {});
 });
