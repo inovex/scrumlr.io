@@ -84,6 +84,10 @@ export const HistoryCard = (props: HistoryCardProps) => {
   // owner: edit + delete; moderator: edit only; participant: neither.
   const canEdit = isParticipantModerator(props.board.userRole);
   const canDelete = props.board.userRole === "OWNER";
+  // creating templates from boards is only allowed if templates are available to the user
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
+  const canCreateTemplate = !isAnonymous || allowAnonymousCustomTemplates;
 
   const joinedColumnsNames = props.board.columns.map((column) => column.name).join(", ");
   const formattedCreatedAtDate = new Date(props.board.createdAt).toLocaleDateString(locale, {weekday: "long", year: "numeric", month: "2-digit", day: "2-digit"});
@@ -122,11 +126,15 @@ export const HistoryCard = (props: HistoryCardProps) => {
               });
             },
           },
-          {
-            label: t("History.HistoryCard.Menu.createTemplate"),
-            element: <Duplicate2Icon />,
-            onClick: () => navigate(`/boards/create-template/${props.board.id}`),
-          },
+          ...(canCreateTemplate
+            ? [
+                {
+                  label: t("History.HistoryCard.Menu.createTemplate"),
+                  element: <Duplicate2Icon />,
+                  onClick: () => navigate(`/boards/create-template/${props.board.id}`),
+                },
+              ]
+            : []),
           ...(canEdit
             ? [
                 {
