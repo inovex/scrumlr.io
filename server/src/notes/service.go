@@ -553,33 +553,41 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 	return false
 }
 
-func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) {
+func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
 	var message DragLockMessage
-	if err := json.Unmarshal(data, &message); err != nil {
+	err := json.Unmarshal(data, &message)
+	if err != nil {
 		span.SetStatus(codes.Error, "failed to unmarschal lock message")
 		span.RecordError(err)
 		log.Errorw("failed to unmarshal drag lock message", "error", err, "data", string(data))
+
 		response := DragLockResponse{
 			Type:    WebSocketMessageTypeDragLock,
 			Action:  "ERROR",
 			Success: false,
 			Error:   "Invalid message format",
 		}
-		if err := conn.WriteJSON(ctx, response); err != nil {
+
+		err := conn.WriteJSON(ctx, response)
+		if err != nil {
 			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+			span.SetStatus(codes.Error, "failed to send drag lock response")
+			span.RecordError(err)
+			return err
 		}
-		return
+
+		return err
 	}
 
 	switch message.Action {
 	case DragLockActionAcquire:
-		service.handleAcquire(ctx, message.NoteID, boardID, userID, conn)
+		_ = service.handleAcquire(ctx, message.NoteID, boardID, userID, conn)
 	case DragLockActionRelease:
-		service.handleRelease(ctx, message.NoteID, boardID, userID, conn)
+		_ = service.handleRelease(ctx, message.NoteID, boardID, userID, conn)
 	default:
 		log.Warnw("unknown drag lock action", "action", message.Action, "userId", userID)
 		response := DragLockResponse{
@@ -589,10 +597,17 @@ func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, use
 			Success: false,
 			Error:   "Unknown action",
 		}
-		if err := conn.WriteJSON(ctx, response); err != nil {
+
+		err := conn.WriteJSON(ctx, response)
+		if err != nil {
 			log.Errorw("failed to send drag lock response", "error", err, "response", response)
+			span.SetStatus(codes.Error, "failed to send drag lock response")
+			span.RecordError(err)
+			return err
 		}
 	}
+
+	return nil
 }
 
 func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
@@ -685,7 +700,7 @@ func (service *Service) releaseLock(ctx context.Context, boardID uuid.UUID, note
 	}
 }
 
-func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
+func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.acquire")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -703,12 +718,18 @@ func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, user
 		response.Error = "Note is currently being dragged by another user"
 	}
 
-	if err := conn.WriteJSON(ctx, response); err != nil {
+	err := conn.WriteJSON(ctx, response)
+	if err != nil {
 		log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		span.SetStatus(codes.Error, "failed to broadcast release lock")
+		span.RecordError(err)
+		return err
 	}
+
+	return nil
 }
 
-func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) {
+func (service *Service) handleRelease(ctx context.Context, noteID, boardID, userID uuid.UUID, conn websocket.Connection) error {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.handler.release")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -726,7 +747,13 @@ func (service *Service) handleRelease(ctx context.Context, noteID, boardID, user
 		response.Error = "Lock not owned by user or already released"
 	}
 
-	if err := conn.WriteJSON(ctx, response); err != nil {
+	err := conn.WriteJSON(ctx, response)
+	if err != nil {
 		log.Errorw("failed to send drag lock response", "error", err, "response", response)
+		span.SetStatus(codes.Error, "failed to broadcast release lock")
+		span.RecordError(err)
+		return err
 	}
+
+	return nil
 }

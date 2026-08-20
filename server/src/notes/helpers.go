@@ -7,15 +7,10 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-type ColumnVisability struct {
-	ID      uuid.UUID
-	Visible bool
-}
-
-func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns []ColumnVisability) NoteSlice {
+func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columnIds []uuid.UUID) NoteSlice {
 	visibleNotes := technical_helper.Filter[*Note](n, func(note *Note) bool {
-		for _, column := range columns {
-			if (note.Position.Column == column.ID) && column.Visible {
+		for _, columnId := range columnIds {
+			if note.Position.Column == columnId {
 				// BoardSettings -> Remove other participant cards
 				if showNotesOfOtherUsers {
 					return true
@@ -30,7 +25,7 @@ func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUI
 	return visibleNotes
 }
 
-func UnmarshallNotaData(data any) (NoteSlice, error) {
+func UnmarshallNoteData(data any) (NoteSlice, error) {
 	notes, err := technical_helper.UnmarshalSlice[Note](data)
 
 	if err != nil {
