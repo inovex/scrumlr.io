@@ -37,6 +37,59 @@ func (_m *MockTimeProvider) EXPECT() *MockTimeProvider_Expecter {
 	return &MockTimeProvider_Expecter{mock: &_m.Mock}
 }
 
+// NewTimer provides a mock function for the type MockTimeProvider
+func (_mock *MockTimeProvider) NewTimer(duration time.Duration) *time.Timer {
+	ret := _mock.Called(duration)
+
+	if len(ret) == 0 {
+		panic("no return value specified for NewTimer")
+	}
+
+	var r0 *time.Timer
+	if returnFunc, ok := ret.Get(0).(func(time.Duration) *time.Timer); ok {
+		r0 = returnFunc(duration)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*time.Timer)
+		}
+	}
+	return r0
+}
+
+// MockTimeProvider_NewTimer_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'NewTimer'
+type MockTimeProvider_NewTimer_Call struct {
+	*mock.Call
+}
+
+// NewTimer is a helper method to define mock.On call
+//   - duration time.Duration
+func (_e *MockTimeProvider_Expecter) NewTimer(duration any) *MockTimeProvider_NewTimer_Call {
+	return &MockTimeProvider_NewTimer_Call{Call: _e.mock.On("NewTimer", duration)}
+}
+
+func (_c *MockTimeProvider_NewTimer_Call) Run(run func(duration time.Duration)) *MockTimeProvider_NewTimer_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 time.Duration
+		if args[0] != nil {
+			arg0 = args[0].(time.Duration)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockTimeProvider_NewTimer_Call) Return(timer *time.Timer) *MockTimeProvider_NewTimer_Call {
+	_c.Call.Return(timer)
+	return _c
+}
+
+func (_c *MockTimeProvider_NewTimer_Call) RunAndReturn(run func(duration time.Duration) *time.Timer) *MockTimeProvider_NewTimer_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Now provides a mock function for the type MockTimeProvider
 func (_mock *MockTimeProvider) Now() time.Time {
 	ret := _mock.Called()
