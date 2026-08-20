@@ -10,7 +10,6 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/users"
-	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -26,7 +25,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/timeprovider"
@@ -108,13 +106,9 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewWebSocketUpgrader()
-	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
-	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
 	userDatabase := users.NewUserDatabase(db)
 	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
-	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
+	suite.service = NewBoardService(database, broker, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
@@ -584,7 +578,6 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	assert.Equal(t, suite.boards["Read1"].Description, board.Board.Description)
 	assert.Equal(t, suite.boards["Read1"].AccessPolicy, board.Board.AccessPolicy)
 	assert.Equal(t, suite.boards["Read1"].ShowAuthors, board.Board.ShowAuthors)
-	assert.Nil(t, board.BoardSessionRequests)
 	assert.Nil(t, board.Columns)
 	assert.Nil(t, board.Notes)
 	assert.Nil(t, board.Votes)

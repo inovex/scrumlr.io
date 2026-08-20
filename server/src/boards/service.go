@@ -25,7 +25,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
@@ -37,13 +36,12 @@ type Service struct {
 	realtime                 *realtime.Broker
 	boardLastModifiedUpdater BoardLastModifiedUpdater
 
-	columnService         columns.ColumnService
-	notesService          notes.NotesService
-	sessionService        sessions.SessionService
-	sessionRequestService sessionrequests.SessionRequestService
-	reactionService       reactions.ReactionService
-	votingService         votings.VotingService
-	userService           users.UserService
+	columnService   columns.ColumnService
+	notesService    notes.NotesService
+	sessionService  sessions.SessionService
+	reactionService reactions.ReactionService
+	votingService   votings.VotingService
+	userService     users.UserService
 }
 
 type LastModifiedUpdater struct {
@@ -67,7 +65,6 @@ type BoardLastModifiedUpdater interface {
 func NewBoardService(
 	db BoardDatabase,
 	rt *realtime.Broker,
-	sessionRequestService sessionrequests.SessionRequestService,
 	sessionService sessions.SessionService,
 	columnService columns.ColumnService,
 	noteService notes.NotesService,
@@ -83,7 +80,6 @@ func NewBoardService(
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
-	b.sessionRequestService = sessionRequestService
 	b.columnService = columnService
 	b.notesService = noteService
 	b.reactionService = reactionService
@@ -288,13 +284,6 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		return nil, err
 	}
 
-	boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, string(sessionrequests.RequestAccepted))
-	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get session requests"))
-		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
-		return nil, err
-	}
-
 	boardSessions, err := service.sessionService.GetAll(ctx, boardID, sessions.BoardSessionFilter{})
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get sessions"))
@@ -338,14 +327,13 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 	}
 
 	return &FullBoard{
-		Board:                board,
-		BoardSessionRequests: boardRequests,
-		BoardSessions:        boardSessions,
-		Columns:              boardColumns,
-		Notes:                boardNotes,
-		Reactions:            boardReactions,
-		Votings:              boardVotings,
-		Votes:                boardVotes,
+		Board:         board,
+		BoardSessions: boardSessions,
+		Columns:       boardColumns,
+		Notes:         boardNotes,
+		Reactions:     boardReactions,
+		Votings:       boardVotings,
+		Votes:         boardVotes,
 	}, nil
 }
 
