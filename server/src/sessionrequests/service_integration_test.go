@@ -6,7 +6,14 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/eventfilter"
+	"scrumlr.io/server/events"
+	"scrumlr.io/server/hash"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/timeprovider"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/websocket"
 
@@ -63,8 +70,10 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	suite.broker = broker
 
 	database := NewSessionRequestDatabase(db)
-	wsService := websocket.NewWebSocketUpgrader()
-	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+	websocket := websocket.NewWebSocketUpgrader()
+	clock := timeprovider.NewMockTimeProvider(suite.T())
+	hashService := hash.NewHashSha512()
+
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
@@ -75,7 +84,25 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	suite.service = NewSessionRequestService(database, broker, sessionRequestWebsocket, sessionService)
+	reactionDatabase := reactions.NewReactionsDatabase(db)
+	reactionService := reactions.NewReactionService(reactionDatabase, broker)
+	votingDatabase := votings.NewVotingDatabase(db)
+	votingService := votings.NewVotingService(votingDatabase, broker)
+	userDatabase := users.NewUserDatabase(db)
+	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
+	boardDatabase := boards.NewBoardDatabase(db, clock)
+	boardService := boards.NewBoardService(boardDatabase, broker, sessionService, columnService, noteService, reactionService, votingService, userService, clock, hashService)
+	filterRules := []eventfilter.FilterRule{
+		eventfilter.NewColumnRuleFilter(sessionService),
+		eventfilter.NewNoteRuleFilter(boardService, columnService, sessionService),
+		eventfilter.NewVotingRuleFilter(boardService, columnService, sessionService),
+		eventfilter.NewVoteRuleFilter(),
+	}
+	filter := eventfilter.NewEventFilter(filterRules...)
+	boardConnection := events.NewBoardConnectionManager(broker, clock, filter)
+	sessionRequestconnection := events.NewSessionRequestConnectionManager(broker, clock)
+	eventListener := events.NewEventListener(websocket, false, boardConnection, sessionRequestconnection, sessionService, noteService)
+	suite.service = NewSessionRequestService(database, broker, eventListener, sessionService)
 }
 
 func (suite *SessionRequestServiceIntegrationTestSuite) TearDownSuite() {
