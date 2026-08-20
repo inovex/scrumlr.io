@@ -110,6 +110,13 @@ packages:
       ColumnService:
       ColumnDatabase:
 
+  scrumlr.io/server/eventfilter:
+    config:
+      dir: eventfilter
+    interfaces:
+      EventFilter:
+      FilterRule:
+
   scrumlr.io/server/websocket:
     config:
       dir: websocket
