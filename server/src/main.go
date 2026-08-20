@@ -379,8 +379,8 @@ func run(ctx *cli.Context) error {
 
 	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
 
-	wsService := initializer.InitializeWebSocketService()
-	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
+	websocket := initializer.InitializeWebSocketService()
+
 	feedbackService := initializer.InitializeFeedbackService(ctx.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 
@@ -395,9 +395,12 @@ func run(ctx *cli.Context) error {
 	columnService := initializer.InitializeColumnService(noteService)
 
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
-
 	userService := initializer.InitializeUserService(sessionService, noteService)
+	boardService := initializer.InitializeBoardService(sessionService, columnService, noteService, reactionService, votingService, userService)
+
+	eventFilter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
+	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
+	sessionRequestService := initializer.InitializeSessionRequestService(eventListener, sessionService)
 
 	keyWithNewlines := strings.ReplaceAll(ctx.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(ctx.String("unsafe-key"), "\\n", "\n")
@@ -405,8 +408,6 @@ func run(ctx *cli.Context) error {
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
-
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
@@ -420,7 +421,6 @@ func run(ctx *cli.Context) error {
 	s := api.New(
 		basePath,
 		rt,
-		wsService,
 		authConfig,
 
 		userRoutes,
@@ -440,6 +440,7 @@ func run(ctx *cli.Context) error {
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,
+		eventListener,
 
 		logger.GetLogLevel() == zap.DebugLevel,
 		!ctx.Bool("disable-check-origin"),
