@@ -531,8 +531,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 
 	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
 
-	wsService := initializer.InitializeWebSocketService()
-	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
+	websocket := initializer.InitializeWebSocketService()
+
 	feedbackService := initializer.InitializeFeedbackService(cli.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 
@@ -547,9 +547,12 @@ func run(ctx context.Context, cli *cli.Command) error {
 	columnService := initializer.InitializeColumnService(noteService)
 
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
-
 	userService := initializer.InitializeUserService(sessionService, noteService)
+	boardService := initializer.InitializeBoardService(sessionService, columnService, noteService, reactionService, votingService, userService)
+
+	eventFilter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
+	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
+	sessionRequestService := initializer.InitializeSessionRequestService(eventListener, sessionService)
 
 	keyWithNewlines := strings.ReplaceAll(cli.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(cli.String("unsafe-key"), "\\n", "\n")
@@ -566,7 +569,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 	}
 
 	infoService := initializer.InitializeInfoService(authConfig, feedbackService, serverconfig)
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	healthApi := apiInitializer.InitializeHealthApi(healthService)
@@ -585,12 +587,11 @@ func run(ctx context.Context, cli *cli.Command) error {
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
 	boardTemplateRoutes := routesInitializer.InitializeBoardTemplateRoutes(boardTemplateApi)
-  columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
+	columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
 
 	s := api.New(
 		basePath,
 		rt,
-		wsService,
 		authConfig,
 
 		healthRoutes,
@@ -610,6 +611,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		sessionService,
 		sessionRequestService,
 		boardReactionService,
+		eventListener,
 
 		logger.GetLogLevel() == zap.DebugLevel,
 		!cli.Bool("disable-check-origin"),
