@@ -117,6 +117,13 @@ packages:
       EventFilter:
       FilterRule:
 
+  scrumlr.io/server/events:
+    config:
+      dir: events
+    interfaces:
+      EventListener:
+      BoardConnectionManager:
+      SessionRequestConnectionManager:
   scrumlr.io/server/websocket:
     config:
       dir: websocket
