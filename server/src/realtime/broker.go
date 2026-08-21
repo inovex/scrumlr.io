@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
@@ -35,16 +35,16 @@ type Broker struct {
 	Con Client
 }
 
-func InitializeRealtime(ctx *cli.Context) (*Broker, error) {
-	log := logger.FromContext(ctx.Context)
+func InitializeRealtime(ctx context.Context, cli *cli.Command) (*Broker, error) {
+	log := logger.FromContext(ctx)
 
 	var broker *Broker
 
-	if ctx.String("redis-address") != "" {
+	if cli.String("redis-address") != "" {
 		redis := RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
+			Addr:     cli.String("redis-address"),
+			Username: cli.String("redis-username"),
+			Password: cli.String("redis-password"),
 		}
 
 		log.Infof("Connecting to redis at %v as message broker", redis.Addr)
@@ -53,8 +53,8 @@ func InitializeRealtime(ctx *cli.Context) (*Broker, error) {
 		return broker, err
 	}
 
-	if ctx.String("nats") != "" {
-		address := ctx.String("nats")
+	if cli.String("nats") != "" {
+		address := cli.String("nats")
 
 		log.Infof("Connecting to nats at %v as message broker", address)
 

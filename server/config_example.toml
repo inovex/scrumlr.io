@@ -1,6 +1,9 @@
 # Specify the port number for the server application to run on.
 port = 8080
 
+# Specify the address on which the server listens
+address = ""
+
 # Set the log level for the server
 log-level = "INFO"
 
@@ -28,6 +31,15 @@ key = ""
 # Set the connection string for the PostgreSQL database.
 database = "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable"
 
+# Set the database host name for the PsotgreSQL database
+database-host = ""
+
+# Set the database username for the PostgreSQL database
+database-username = ""
+
+# Set the database password for the PostgreSQL database
+database-password = ""
+
 # Define the base path for the application.
 base-path = "/"
 
@@ -40,8 +52,11 @@ allow-anonymous-custom-templates = false
 # Enable/Disable the board creation for anonymous clients
 allow-anonymous-board-creation = true
 
+# Enable/Disable history for anonymous clients
+allow-anonymous-history = false
+
 # enables/disables experimental file system store, in order to allow larger session cookie sizes
-auth-experimental-file-system-store = false
+auth-enable-experimental-file-system-store = false
 
 # Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
 auth-callback-host = ""
@@ -94,8 +109,14 @@ auth-oidc-user-ident-scope = ""
 # Set the JWT scope to request from the IDP for user name information.
 auth-oidc-user-name-scope = ""
 
-# Enable or disable verbose logging.
-verbose = true
+# Set the session secret for the authentication providers
+session-secret = ""
+
+# Set the OTel grpc endpoint for sending logs, traces and metrics
+otel-grpc = ""
+
+# Set the OTel http endpoint for sending logs, traces and metrics
+otel-http = ""
 
 # Disable check origin (strongly suggestion to only use this for development)
 disable-check-origin = true
@@ -103,6 +124,5 @@ disable-check-origin = true
 # Specify the URL for the feedback webhook.
 feedback-webhook-url = ""
 
-# Sepcify the OTel endpoint for sending logs, traces and metrics
-otel-grpc = ""
-otel-http = ""
+# Enable/Disable the swagger page
+enable-swagger = false
