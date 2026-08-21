@@ -114,7 +114,7 @@ export const Participants = () => {
                 .every((s) => participant.user.name.toLowerCase().includes(s))
             )
             .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
-            .filter((participant) => participant.connected === onlineFilter)
+            .filter((participant) => participant.banned || participant.connected === onlineFilter)
             .map((participant) => (
               <li data-clarity-mask="True" key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
                 <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
