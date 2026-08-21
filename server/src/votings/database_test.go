@@ -78,7 +78,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Close() {
 	votingId := suite.baseData.Votings["Update"].ID
 	boardId := suite.baseData.Boards["Update"].ID
 
-	dbVoting, err := database.Close(context.Background(),
+	dbVoting, err := database.Update(context.Background(),
 		DatabaseVotingUpdate{
 			ID:     votingId,
 			Board:  boardId,
@@ -281,6 +281,46 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetVotes() {
 
 	assert.Nil(t, err)
 	assert.Len(t, dbVotes, 18)
+}
+
+func (suite *DatabaseVotingTestSuite) Test_Database_Cancel() {
+	t := suite.T()
+	database := NewVotingDatabase(suite.db)
+
+	votingId := suite.baseData.Votings["Update"].ID
+	boardId := suite.baseData.Boards["Update"].ID
+
+	dbVoting, err := database.Update(context.Background(),
+		DatabaseVotingUpdate{
+			ID:     votingId,
+			Board:  boardId,
+			Status: Aborted,
+		},
+	)
+
+	assert.Nil(t, err)
+	assert.Equal(t, votingId, dbVoting.ID)
+	assert.Equal(t, boardId, dbVoting.Board)
+	assert.Equal(t, Aborted, dbVoting.Status)
+	assert.Equal(t, 7, dbVoting.VoteLimit)
+	assert.True(t, dbVoting.AllowMultipleVotes)
+	assert.False(t, dbVoting.ShowVotesOfOthers)
+	assert.False(t, dbVoting.IsAnonymous)
+	assert.NotNil(t, dbVoting.CreatedAt)
+
+	// Verify notes are NOT re-ranked after cancel
+	noteDatabase := notes.NewNotesDatabase(suite.db)
+	dbNotes, notesErr := noteDatabase.GetAll(context.Background(), boardId)
+	assert.Nil(t, notesErr)
+
+	noteRankMap := make(map[uuid.UUID]int)
+	for _, n := range dbNotes {
+		noteRankMap[n.ID] = n.Rank
+	}
+
+	assert.Equal(t, 0, noteRankMap[suite.baseData.Notes["Update2"].ID])
+	assert.Equal(t, 0, noteRankMap[suite.baseData.Notes["Update1"].ID])
+	assert.Equal(t, 0, noteRankMap[suite.baseData.Notes["Update3"].ID])
 }
 
 func (suite *DatabaseVotingTestSuite) seedVotes(db *bun.DB) {

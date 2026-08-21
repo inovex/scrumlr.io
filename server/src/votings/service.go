@@ -20,7 +20,7 @@ var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
 
 type VotingDatabase interface {
 	Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error)
-	Close(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
+	Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, error)
 	GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]DatabaseVote, error)
@@ -263,47 +263,6 @@ func (service *Service) RemoveVote(ctx context.Context, body VoteRequest) error 
 	return nil
 }
 
-func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
-	log := logger.FromContext(ctx)
-	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.close")
-	defer span.End()
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votings.service.close.voting", id.String()),
-		attribute.String("scrumlr.votings.service.close.board", board.String()),
-	)
-
-	voting, err := service.database.Close(ctx, DatabaseVotingUpdate{
-		ID:     id,
-		Board:  board,
-		Status: Closed,
-	})
-
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "No voting found to update")
-			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
-		}
-
-		span.SetStatus(codes.Error, "failed to close voting")
-		span.RecordError(err)
-		log.Errorw("unable to close voting", "err", err)
-		return nil, CreateVotingError(Internal, "failed to close voting", err)
-	}
-
-	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
-		span.RecordError(err)
-		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, "failed to get votes", err)
-	}
-
-	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
-	return new(Voting).From(voting, receivedVotes), err
-}
-
 func (service *Service) createdVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting) {
 	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.create")
 	defer span.End()
@@ -324,6 +283,50 @@ func (service *Service) createdVoting(ctx context.Context, board uuid.UUID, voti
 		span.RecordError(err)
 		log.Errorw("unable to send voting created", "err", err)
 	}
+}
+
+func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus) (*Voting, error) {
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votings.service.update.voting", id.String()),
+		attribute.String("scrumlr.votings.service.update.board", board.String()),
+	)
+
+	voting, err := service.database.Update(ctx, DatabaseVotingUpdate{
+		ID:     id,
+		Board:  board,
+		Status: votingStatus,
+	})
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			span.SetStatus(codes.Error, "No voting found to update")
+			span.RecordError(err)
+			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+		}
+
+		span.SetStatus(codes.Error, "failed to update voting")
+		span.RecordError(err)
+		log.Errorw("unable to update voting", "err", err)
+		return nil, CreateVotingError(Internal, "failed to update voting", err)
+	}
+
+	var receivedVotes []DatabaseVote
+	if votingStatus == Closed {
+		receivedVotes, err = service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get votes")
+			span.RecordError(err)
+			log.Errorw("unable to get votes", "err", err)
+			return nil, CreateVotingError(Internal, "failed to get votes", err)
+		}
+	}
+
+	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
+	return new(Voting).From(voting, receivedVotes), nil
 }
 
 func (service *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting, votes []DatabaseVote, affectedNotes []Note) {

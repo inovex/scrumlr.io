@@ -5,12 +5,15 @@ import (
 	"errors"
 )
 
-// VotingStatus is the state of a voting session and can be one of open, aborted or closed.
+// VotingStatus is the state of a voting session and can be one of open, canceled or closed.
 type VotingStatus string
 
 const (
 	// Open is the state for an open voting session, meaning that votes are allowed.
 	Open VotingStatus = "OPEN"
+
+	// Aborted represents an aborted voting session (the DB enum uses ABORTED)
+	Aborted VotingStatus = "ABORTED"
 
 	// Closed is the state for a closed voting session.
 	//
@@ -25,7 +28,7 @@ func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	}
 	unmarshalledVotingStatus := VotingStatus(s)
 	switch unmarshalledVotingStatus {
-	case Open, Closed:
+	case Open, Closed, Aborted:
 		*votingStatus = unmarshalledVotingStatus
 		return nil
 	}
