@@ -62,4 +62,28 @@ describe("auth thunks", () => {
       })
     );
   });
+
+  // The toast retry dispatches a new signOut thunk, which must perform the
+  // post-logout redirect independently of the original rejected dispatch.
+  it("redirects after a successful logout retry", async () => {
+    const error = new Error("Sign out failed");
+    (API.signOut as Mock).mockRejectedValueOnce(error).mockResolvedValueOnce(undefined);
+    const replace = vi.spyOn(window.location, "replace").mockImplementation(() => undefined);
+    const user = {id: "user-id", name: "User", isAnonymous: true};
+    const store = getTestStore({auth: {initializationSucceeded: true, user}});
+
+    const result = await store.dispatch(signOut());
+
+    expect(signOut.rejected.match(result)).toBe(true);
+    expect(replace).not.toHaveBeenCalled();
+
+    const toastOptions = vi.mocked(Toast.error).mock.calls[0][0];
+    toastOptions.firstButtonOnClick?.();
+
+    await vi.waitFor(() => {
+      expect(API.signOut).toHaveBeenCalledTimes(2);
+      expect(replace).toHaveBeenCalledWith("/login");
+    });
+    expect(store.getState().auth.user).toEqual(user);
+  });
 });
