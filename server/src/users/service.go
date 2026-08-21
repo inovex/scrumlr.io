@@ -33,6 +33,12 @@ type UserDatabase interface {
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
 	UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)
+	UpgradeToAppleUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
+	UpgradeToAzureUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
+	UpgradeToGitHubUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
+	UpgradeToGoogleUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
+	UpgradeToMicrosoftUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
+	UpgradeToOIDCUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string) (DatabaseUser, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error)
 	GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error)
@@ -214,6 +220,66 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 	service.updatedUser(ctx, user)
 
 	return new(User).From(user), err
+}
+
+func (service *Service) UpgradeAnonymousUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.users.service.upgrade_anonymous_user")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	err := validateUsername(name)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to validate user name")
+		span.RecordError(err)
+		return nil, err
+	}
+
+	span.SetAttributes(
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.userId", userId.String()),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.id", id),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.name", name),
+		attribute.String("scrumlr.users.service.upgrade_anonymous_user.accountType", string(accountType)),
+	)
+
+	var user DatabaseUser
+	var specificCounter metric.Int64Counter
+
+	switch accountType {
+	case common.Apple:
+		specificCounter = appleUserCreatedCounter
+		user, err = service.database.UpgradeToAppleUser(ctx, userId, id, name, avatarUrl)
+	case common.AzureAd:
+		specificCounter = azureAdUserCreatedCounter
+		user, err = service.database.UpgradeToAzureUser(ctx, userId, id, name, avatarUrl)
+	case common.GitHub:
+		specificCounter = githubUserCreatedCounter
+		user, err = service.database.UpgradeToGitHubUser(ctx, userId, id, name, avatarUrl)
+	case common.Google:
+		specificCounter = googleUserCreatedCounter
+		user, err = service.database.UpgradeToGoogleUser(ctx, userId, id, name, avatarUrl)
+	case common.Microsoft:
+		specificCounter = microsoftUserCreatedCounter
+		user, err = service.database.UpgradeToMicrosoftUser(ctx, userId, id, name, avatarUrl)
+	case common.TypeOIDC:
+		specificCounter = oicdUserCreatedCounter
+		user, err = service.database.UpgradeToOIDCUser(ctx, userId, id, name, avatarUrl)
+	default:
+		return nil, CreateUserError(BadRequest, "invalid account type", errors.New("invalid account type"))
+	}
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to upgrade user")
+		span.RecordError(err)
+		log.Errorw("unable to upgrade user", "user", userId, "accountType", accountType)
+		return nil, CreateUserError(Internal, "failed to upgrade user", err)
+	}
+
+	specificCounter.Add(ctx, 1)
+	anonymousUserCreatedCounter.Add(ctx, -1)
+
+	service.updatedUser(ctx, user)
+
+	return new(User).From(user), nil
 }
 
 func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {

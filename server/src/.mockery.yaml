@@ -116,3 +116,9 @@ packages:
     interfaces:
       Connection:
       Upgrader:
+
+  scrumlr.io/server/auth:
+    config:
+      dir: auth
+    interfaces:
+      Auth:

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"testing"
 
@@ -241,6 +242,124 @@ func (suite *DatabaseUserTestSuite) TestDatabaseUpdateUser() {
 	assert.NotNil(t, dbUser.CreatedAt)
 }
 
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToAppleUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeApple"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToAppleUser(context.Background(), user.ID, "appleId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.Apple, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToAzureUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeAzure"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToAzureUser(context.Background(), user.ID, "azureId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.AzureAd, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToGitHubUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeGitHub"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToGitHubUser(context.Background(), user.ID, "githubId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.GitHub, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToGoogleUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeGoogle"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToGoogleUser(context.Background(), user.ID, "googleId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToMicrosoftUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeMicrosoft"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToMicrosoftUser(context.Background(), user.ID, "microsoftId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.Microsoft, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserToOIDCUser() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	user := suite.users["UpgradeOIDC"]
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToOIDCUser(context.Background(), user.ID, "oidcId", userName, "")
+
+	assert.Nil(t, err)
+	assert.Equal(t, user.ID, dbUser.ID)
+	assert.Equal(t, common.TypeOIDC, dbUser.AccountType)
+	assert.Equal(t, user.Name, dbUser.Name)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserIsAlreadyOIDC() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := suite.users["Stan"].ID
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToOIDCUser(context.Background(), userId, "oidcId", userName, "")
+
+	assert.NotNil(t, err)
+	assert.Equal(t, DatabaseUser{}, dbUser)
+	assert.Equal(t, sql.ErrNoRows, err)
+}
+
+func (suite *DatabaseUserTestSuite) TestDatabaseUpgradeAnonymousUserIsAlreadyGoogle() {
+	t := suite.T()
+	database := NewUserDatabase(suite.db)
+
+	userId := suite.users["ExistingGoogleUser"].ID
+	userName := "Stan"
+
+	dbUser, err := database.UpgradeToGoogleUser(context.Background(), userId, "existingGoogleId", userName, "")
+
+	assert.NotNil(t, err)
+	assert.Equal(t, DatabaseUser{}, dbUser)
+	assert.Equal(t, errors.New("user is already connected"), err)
+}
+
 func (suite *DatabaseUserTestSuite) TestDatabaseDeleteUser() {
 	t := suite.T()
 	database := NewUserDatabase(suite.db)
@@ -456,7 +575,7 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	log.Println("Seeding users database test data")
 
 	// test users
-	suite.users = make(map[string]DatabaseUser, 6)
+	suite.users = make(map[string]DatabaseUser, 13)
 	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
 	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
 	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
@@ -464,6 +583,12 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
 	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
 	suite.users["ExistingGoogleUserManualName"] = DatabaseUser{ID: uuid.New(), Name: "CustomName", AccountType: common.Google}
+	suite.users["UpgradeApple"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade Apple", AccountType: common.Anonymous}
+	suite.users["UpgradeAzure"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade Azure", AccountType: common.Anonymous}
+	suite.users["UpgradeGitHub"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade GitHub", AccountType: common.Anonymous}
+	suite.users["UpgradeGoogle"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade Google", AccountType: common.Anonymous}
+	suite.users["UpgradeMicrosoft"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade Microsoft", AccountType: common.Anonymous}
+	suite.users["UpgradeOIDC"] = DatabaseUser{ID: uuid.New(), Name: "Upgrade OIDC", AccountType: common.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]testBoard, 1)

@@ -669,6 +669,207 @@ func (suite *UserServiceTestSuite) TestUpdateUser_NewLineUsername() {
 	suite.Equal("name may not contain newline characters", userErr.Message)
 }
 
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToApple() {
+	name := "Stan"
+	appleId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToAppleUser(mock.Anything, suite.userID, appleId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.Apple}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, appleId, name, avatarUrl, common.Apple)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.Apple, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToAzure() {
+	name := "Stan"
+	azureId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToAzureUser(mock.Anything, suite.userID, azureId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.AzureAd}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, azureId, name, avatarUrl, common.AzureAd)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.AzureAd, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToGitHub() {
+	name := "Stan"
+	githubId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToGitHubUser(mock.Anything, suite.userID, githubId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.GitHub}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, githubId, name, avatarUrl, common.GitHub)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.GitHub, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToGoogle() {
+	name := "Stan"
+	googleId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToGoogleUser(mock.Anything, suite.userID, googleId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.Google}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, googleId, name, avatarUrl, common.Google)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.Google, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToMicrosoft() {
+	name := "Stan"
+	microsoftId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToMicrosoftUser(mock.Anything, suite.userID, microsoftId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.Microsoft}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, microsoftId, name, avatarUrl, common.Microsoft)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.Microsoft, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserToOIDC() {
+	name := "Stan"
+	oidcId := uuid.New().String()
+	avatarUrl := ""
+
+	suite.mockUserDatabase.EXPECT().UpgradeToOIDCUser(mock.Anything, suite.userID, oidcId, name, avatarUrl).
+		Return(DatabaseUser{ID: suite.userID, Name: name, AccountType: common.TypeOIDC}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).
+		Return(nil)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockSessionService.EXPECT().GetUserBoardSessions(mock.Anything, suite.userID, true).
+		Return([]*sessions.BoardSession{{UserID: suite.userID, Board: uuid.New()}}, nil)
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, oidcId, name, avatarUrl, common.TypeOIDC)
+
+	suite.Nil(err)
+	suite.NotNil(user)
+	suite.Equal(common.TypeOIDC, user.AccountType)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserInvalideProvider() {
+	name := "Stan"
+	oidcId := uuid.New().String()
+	avatarUrl := ""
+
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, oidcId, name, avatarUrl, common.Anonymous)
+
+	suite.NotNil(err)
+	suite.Nil(user)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserDatabaseError() {
+	name := "Stan"
+	oidcId := uuid.New().String()
+	avatarUrl := ""
+	dbError := errors.New("database error")
+
+	suite.mockUserDatabase.EXPECT().UpgradeToOIDCUser(mock.Anything, suite.userID, oidcId, name, avatarUrl).
+		Return(DatabaseUser{}, dbError)
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, oidcId, name, avatarUrl, common.TypeOIDC)
+
+	suite.NotNil(err)
+	suite.Nil(user)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(Internal, userErr.Category)
+}
+
+func (suite *UserServiceTestSuite) TestUpgradeAnonymouseUserInvalidName() {
+	name := "Stan\n"
+	oidcId := uuid.New().String()
+	avatarUrl := ""
+
+	mockSessionService := sessions.NewMockSessionService(suite.T())
+	mockNotesService := notes.NewMockNotesService(suite.T())
+
+	userService := NewUserService(suite.mockUserDatabase, suite.broker, mockSessionService, mockNotesService)
+
+	user, err := userService.UpgradeAnonymousUser(context.Background(), suite.userID, oidcId, name, avatarUrl, common.TypeOIDC)
+
+	suite.NotNil(err)
+	suite.Nil(user)
+
+	var userErr UserError
+	suite.ErrorAs(err, &userErr)
+	suite.Equal(BadRequest, userErr.Category)
+}
+
 func (suite *UserServiceTestSuite) TestAvailableForKeyMigration() {
 	suite.mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, suite.userID).Return(true, nil)
 	mockSessionService := sessions.NewMockSessionService(suite.T())
