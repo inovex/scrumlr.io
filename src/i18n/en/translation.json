@@ -519,7 +519,7 @@
     "ShareSession": "Share Session",
     "ShareSessionDescription": "QR Code, URL",
     "ExportBoard": "Export Board",
-    "ExportBoardDescription": "Share the board",
+    "ExportBoardDescription": "Download or share",
     "Feedback": "Feedback",
     "FeedbackDescription": "We love to hear from you",
     "ProfileDescription": "Edit profile",
@@ -793,7 +793,7 @@
       "Wayfarers": "Wayfarers"
     },
     "clotheColor": {
-      "label": "Clothe color",
+      "label": "Clothing color",
       "Black": "Black",
       "Blue01": "Blue #1",
       "Blue02": "Blue #2",
@@ -811,7 +811,7 @@
       "White": "White"
     },
     "clotheType": {
-      "label": "Clothe type",
+      "label": "Clothing type",
       "BlazerShirt": "Blazer with shirt",
       "BlazerSweater": "Blazer with sweater",
       "CollarSweater": "Collar sweater",
