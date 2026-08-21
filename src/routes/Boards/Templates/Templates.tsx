@@ -13,6 +13,8 @@ import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {toggleRecommendedFavourite} from "store/features/templates";
 import sortBy from "lodash/sortBy";
+import {LoadingIndicator} from "components/LoadingIndicator";
+import {useDelayedLoading} from "utils/hooks/useDelayedLoading";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -28,6 +30,8 @@ export const Templates = () => {
 
   const [selectedTemplateWithColumns, setSelectedTemplateWithColumns] = useState<TemplateWithColumns | null>(null);
   const [showAccessSettingsPortal, setShowAccessSettingsPortal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const showLoading = useDelayedLoading(isLoading, 200);
 
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
@@ -44,7 +48,8 @@ export const Templates = () => {
 
   // init templates
   useEffect(() => {
-    dispatch(getTemplates());
+    setIsLoading(true);
+    dispatch(getTemplates()).finally(() => setIsLoading(false));
   }, [dispatch]);
 
   const toggleFavourite = (templateId: string, favourite: boolean, type: "RECOMMENDED" | "CUSTOM") => {
@@ -140,6 +145,32 @@ export const Templates = () => {
       </header>
     );
 
+  const renderCustomTemplatesContent = () => {
+    if (isLoading) {
+      return showLoading ? <LoadingIndicator /> : null;
+    }
+
+    return sortBy(
+      templates
+        .filter((template) => template.type === "CUSTOM")
+        .filter(matchSearchInput)
+        .filter(excludeDefaultTemplate),
+      (template: Template) => !template.favourite
+    ).map((template: Template) => (
+      <TemplateCard
+        templateType="CUSTOM"
+        template={mergeTemplateWithColumns(template)}
+        onSelectTemplate={onSelectTemplateWithColumns}
+        onDeleteTemplate={deleteTemplateAndColumns}
+        onNavigateToEdit={navigateToEdit}
+        onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+        disabled={!canCreateBoard}
+        disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
+        key={template.id}
+      />
+    ));
+  };
+
   return (
     <>
       <Outlet /> {/* settings */}
@@ -183,25 +214,7 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {sortBy(
-                templates
-                  .filter((template) => template.type === "CUSTOM")
-                  .filter(matchSearchInput)
-                  .filter(excludeDefaultTemplate),
-                (template: Template) => !template.favourite
-              ).map((template: Template) => (
-                <TemplateCard
-                  templateType="CUSTOM"
-                  template={mergeTemplateWithColumns(template)}
-                  onSelectTemplate={onSelectTemplateWithColumns}
-                  onDeleteTemplate={deleteTemplateAndColumns}
-                  onNavigateToEdit={navigateToEdit}
-                  onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
-                  disabled={!canCreateBoard}
-                  disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
-                  key={template.id}
-                />
-              ))}
+              {renderCustomTemplatesContent()}
             </div>
           </section>
         )}
