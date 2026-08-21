@@ -115,7 +115,6 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
   const handleLogout = () => {
     dispatch(signOut());
-    navigate("/login");
   };
   return (
     <Portal onClose={() => navigate(`..`)} align="center" backdrop="blur">
