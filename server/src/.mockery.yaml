@@ -65,7 +65,6 @@ packages:
     interfaces:
       SessionRequestService:
       SessionRequestDatabase:
-      SessionRequestWebsocket:
 
   scrumlr.io/server/users:
     config:
@@ -109,6 +108,28 @@ packages:
     interfaces:
       ColumnService:
       ColumnDatabase:
+
+  scrumlr.io/server/eventfilter:
+    config:
+      dir: eventfilter
+    interfaces:
+      EventFilter:
+      FilterRule:
+
+  scrumlr.io/server/events:
+    config:
+      dir: events
+    interfaces:
+      EventListener:
+      BoardConnectionManager:
+      SessionRequestConnectionManager:
+
+  scrumlr.io/server/eventfilter:
+    config:
+      dir: eventfilter
+    interfaces:
+      EventFilter:
+      FilterRule:
 
   scrumlr.io/server/websocket:
     config:

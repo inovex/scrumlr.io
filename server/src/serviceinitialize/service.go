@@ -5,6 +5,8 @@ import (
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/eventfilter"
+	"scrumlr.io/server/events"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -50,9 +52,9 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 	return *initializer
 }
 
-func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
+func (init *ServiceInitializer) InitializeBoardService(sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardService := boards.NewBoardService(boardDB, init.broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
+	boardService := boards.NewBoardService(boardDB, init.broker, sessionService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
 
 	return boardService
 }
@@ -113,19 +115,15 @@ func (init *ServiceInitializer) InitializeSessionService(columnService columns.C
 	return sessionService
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessionrequests.SessionRequestWebsocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+func (init *ServiceInitializer) InitializeSessionRequestService(eventListener events.EventListener, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
 	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(init.db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, websocket, sessionService)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, eventListener, sessionService)
 
 	return sessionRequestService
 }
 
 func (init *ServiceInitializer) InitializeWebSocketService() websocket.Upgrader {
 	return websocket.NewWebSocketUpgrader()
-}
-
-func (init *ServiceInitializer) InitializeSessionRequestWebsocket(wsService websocket.Upgrader) sessionrequests.SessionRequestWebsocket {
-	return sessionrequests.NewSessionRequestWebsocket(wsService, init.broker)
 }
 
 func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService, noteService notes.NotesService) users.UserService {
@@ -148,4 +146,25 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 	votingService := votings.NewVotingService(votingDB, init.broker)
 
 	return votingService
+}
+
+func (init *ServiceInitializer) InitializeEventFilter(boardService boards.BoardService, columnService columns.ColumnService, sessionService sessions.SessionService) eventfilter.EventFilter {
+	filterRules := []eventfilter.FilterRule{
+		eventfilter.NewColumnRuleFilter(sessionService),
+		eventfilter.NewNoteRuleFilter(boardService, columnService, sessionService),
+		eventfilter.NewVotingRuleFilter(boardService, columnService, sessionService),
+		eventfilter.NewVoteRuleFilter(),
+	}
+
+	filter := eventfilter.NewEventFilter(filterRules...)
+
+	return filter
+}
+
+func (init *ServiceInitializer) InitializeEventListener(ws websocket.Upgrader, filter eventfilter.EventFilter, sessionService sessions.SessionService, noteService notes.NotesService) events.EventListener {
+	boardConnection := events.NewBoardConnectionManager(init.broker, init.clock, filter)
+	sessionRequestconnection := events.NewSessionRequestConnectionManager(init.broker, init.clock)
+	listener := events.NewEventListener(ws, init.checkOrigin, boardConnection, sessionRequestconnection, sessionService, noteService)
+
+	return listener
 }
