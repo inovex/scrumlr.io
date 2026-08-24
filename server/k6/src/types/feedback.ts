@@ -1,4 +1,1 @@
-export type Feedback =
-  | "BUG_REPORT"
-  | "FEATURE_REQUEST"
-  | "PRAISE";
+export type Feedback = "BUG_REPORT" | "FEATURE_REQUEST" | "PRAISE";

@@ -1,4 +1,4 @@
-import { Options } from "k6/options";
+import type { Options } from "k6/options";
 
 /**
  * The base url for the k6 load tests.
@@ -13,10 +13,10 @@ export const BASE_URL = __ENV.BASEURL || "http://localhost:8080";
  * Define options for the k6 load tests.
  */
 export const options: Options = {
-  blockHostnames: ["scrumlr.io"],
-  userAgent: "scrumlrLoadTests",
-  iterations: 10,
-  vus: 10,
-  duration: "30s",
-  insecureSkipTLSVerify: true
+	blockHostnames: ["scrumlr.io"],
+	userAgent: "scrumlrLoadTests",
+	iterations: 10,
+	vus: 10,
+	duration: "30s",
+	insecureSkipTLSVerify: true,
 };
