@@ -28,6 +28,7 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const decodeFailureMessageBoard = "failed to decode body"
 const boardParticipantsPath = "/boards/%s/participants/%s"
 const boardsRequestsPath = "/boards/%s/requests/%s"
 
