@@ -1,4 +1,4 @@
-import { CreateVotingRequest, VotingStatus } from "store/features/votings/types";
+import { CreateVotingRequest, Voting, VotingStatus } from "store/features/votings/types";
 import { buildUrl } from "./index";
 
 export const VotingAPI = {
@@ -94,7 +94,7 @@ export const VotingAPI = {
       const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ status: status }),
+        body: JSON.stringify({ status: resolvedStatus }),
         headers: { "Content-Type": "application/json" },
       });
 
