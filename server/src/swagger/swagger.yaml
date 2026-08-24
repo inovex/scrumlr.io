@@ -1120,7 +1120,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Delete a board
+      description: Get all board
       parameters:
       - description: jwt token to authenticate
         in: header
@@ -1142,7 +1142,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.APIError'
-      summary: Delete a board
+      summary: Get all board
       tags:
       - boards
     post:
@@ -1711,7 +1711,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update a sessions for a board
+      description: Update all sessions for a board
       parameters:
       - description: jwt token to authenticate
         in: header
@@ -1748,7 +1748,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.APIError'
-      summary: Update a sessions for a board
+      summary: Update all sessions for a board
       tags:
       - sessions
   /boards/{boardId}/participants/{id}:
@@ -2654,6 +2654,53 @@ paths:
       summary: Get a board
       tags:
       - boards
+    put:
+      consumes:
+      - application/json
+      description: Update a board
+      parameters:
+      - description: jwt token to authenticate
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      - description: id of the board to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: values to update the board
+        in: body
+        name: board
+        required: true
+        schema:
+          $ref: '#/definitions/boards.BoardUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/boards.Board'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.APIError'
+      summary: Update a board
+      tags:
+      - boards
   /boards/{id}/board-reactions:
     post:
       consumes:
@@ -2724,54 +2771,6 @@ paths:
           schema:
             $ref: '#/definitions/common.APIError'
       summary: Join an existing board
-      tags:
-      - boards
-  /boards{id}:
-    put:
-      consumes:
-      - application/json
-      description: Update a board
-      parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to update
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: values to update the board
-        in: body
-        name: board
-        required: true
-        schema:
-          $ref: '#/definitions/boards.BoardUpdateRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/boards.Board'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.APIError'
-      summary: Update a board
       tags:
       - boards
   /boards{id}/export:

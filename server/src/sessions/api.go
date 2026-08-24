@@ -181,10 +181,10 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, session)
 }
 
-// Update a sessions for a board
+// Update all sessions for a board
 //
-//	@Summary		Update a sessions for a board
-//	@Description	Update a sessions for a board
+//	@Summary		Update all sessions for a board
+//	@Description	Update all sessions for a board
 //	@Tags			sessions
 //	@Accept			json
 //	@Param			Cookie	header	string						true	"jwt token to authenticate"
