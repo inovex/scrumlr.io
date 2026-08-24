@@ -211,7 +211,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting() {
 		{ID: suite.baseData.Notes["Update2"].ID, Author: suite.baseData.Notes["Update2"].AuthorID, Text: suite.baseData.Notes["Update2"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update2"].ColumnID}},
 		{ID: suite.baseData.Notes["Update3"].ID, Author: suite.baseData.Notes["Update3"].AuthorID, Text: suite.baseData.Notes["Update3"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Closed)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, Closed, affectedNotes)
 
 	require.NoError(t, err)
 	assert.Equal(t, votingId, voting.ID)
@@ -243,7 +243,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_AbortVoting() {
 		{ID: suite.baseData.Notes["Update2"].ID, Author: suite.baseData.Notes["Update2"].AuthorID, Text: suite.baseData.Notes["Update2"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update2"].ColumnID}},
 		{ID: suite.baseData.Notes["Update3"].ID, Author: suite.baseData.Notes["Update3"].AuthorID, Text: suite.baseData.Notes["Update3"].Text, Position: NotePosition{Column: suite.baseData.Notes["Update3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Aborted)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, Aborted, affectedNotes)
 
 	require.NoError(t, err)
 	assert.Equal(t, votingId, voting.ID)
@@ -274,7 +274,7 @@ func (suite *VotingServiceIntegrationTestSuite) Test_CloseVoting_Sorted_Cards() 
 		{ID: suite.baseData.Notes["SortedUpdate2"].ID, Author: suite.baseData.Notes["SortedUpdate2"].AuthorID, Text: suite.baseData.Notes["SortedUpdate2"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate2"].ColumnID}},
 		{ID: suite.baseData.Notes["SortedUpdate3"].ID, Author: suite.baseData.Notes["SortedUpdate3"].AuthorID, Text: suite.baseData.Notes["SortedUpdate3"].Text, Position: NotePosition{Column: suite.baseData.Notes["SortedUpdate3"].ColumnID}},
 	}
-	voting, err := suite.votingService.Update(ctx, votingId, boardId, affectedNotes, Closed)
+	voting, err := suite.votingService.Update(ctx, votingId, boardId, Closed, affectedNotes)
 
 	require.NoError(t, err)
 	expectedVoting.Status = string(Closed)

@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-// VotingStatus is the state of a voting session and can be one of open, canceled or closed.
+// VotingStatus is the state of a voting session and can be one of open, aborted or closed.
 type VotingStatus string
 
 const (

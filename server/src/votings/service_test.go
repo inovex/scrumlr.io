@@ -274,7 +274,7 @@ func TestCloseVoting(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
+	voting, err := service.Update(context.Background(), votingID, boardId, Closed, nil)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, voting)
@@ -295,7 +295,7 @@ func TestAbortVoting(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
+	voting, err := service.Update(context.Background(), votingID, boardId, Aborted, nil)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, voting)
@@ -315,7 +315,7 @@ func TestAbortVoting_NotFound(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
+	voting, err := service.Update(context.Background(), votingID, boardId, Aborted, nil)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -340,7 +340,7 @@ func TestAbortVoting_Failed(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Aborted)
+	voting, err := service.Update(context.Background(), votingID, boardId, Aborted, nil)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -360,7 +360,7 @@ func TestCloseVoting_NotFound(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
+	voting, err := service.Update(context.Background(), votingID, boardId, Closed, nil)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -385,7 +385,7 @@ func TestCloseVoting_Failed(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
+	voting, err := service.Update(context.Background(), votingID, boardId, Closed, nil)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)
@@ -409,7 +409,7 @@ func TestCloseVoting_FailedToGetVotes(t *testing.T) {
 	broker.Con = mockBroker
 
 	service := NewVotingService(mockDb, broker)
-	voting, err := service.Update(context.Background(), votingID, boardId, nil, Closed)
+	voting, err := service.Update(context.Background(), votingID, boardId, Closed, nil)
 
 	assert.Nil(t, voting)
 	assert.NotNil(t, err)

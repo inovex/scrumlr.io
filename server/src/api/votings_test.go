@@ -103,7 +103,7 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
-			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, []votings.Note(nil), votings.Closed).
+			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Closed, []votings.Note(nil)).
 				Return(&votings.Voting{Status: votings.Closed}, tt.err)
 
 			s.updateVoting(rr, req.Request())
@@ -140,7 +140,7 @@ func (suite *VotingTestSuite) TestAbortVoting() {
 
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
-			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, []votings.Note(nil), votings.Aborted).
+			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Aborted, []votings.Note(nil)).
 				Return(&votings.Voting{Status: votings.Aborted}, tt.err)
 
 			rr := httptest.NewRecorder()

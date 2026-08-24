@@ -263,29 +263,7 @@ func (service *Service) RemoveVote(ctx context.Context, body VoteRequest) error 
 	return nil
 }
 
-func (service *Service) createdVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting) {
-	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.create")
-	defer span.End()
-	log := logger.FromContext(ctx)
-
-	span.SetAttributes(
-		attribute.String("scrumlr.votings.service.create.board", board.String()),
-		attribute.String("scrumlr.votings.service.create.voting", voting.ID.String()),
-	)
-
-	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotingCreated,
-		Data: new(Voting).From(voting, nil),
-	})
-
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to send voting created")
-		span.RecordError(err)
-		log.Errorw("unable to send voting created", "err", err)
-	}
-}
-
-func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus) (*Voting, error) {
+func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.update")
 	defer span.End()
@@ -327,6 +305,28 @@ func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUI
 
 	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)
 	return new(Voting).From(voting, receivedVotes), nil
+}
+
+func (service *Service) createdVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting) {
+	ctx, span := tracer.Start(ctx, "scrumlr.votings.service.create")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	span.SetAttributes(
+		attribute.String("scrumlr.votings.service.create.board", board.String()),
+		attribute.String("scrumlr.votings.service.create.voting", voting.ID.String()),
+	)
+
+	err := service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotingCreated,
+		Data: new(Voting).From(voting, nil),
+	})
+
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to send voting created")
+		span.RecordError(err)
+		log.Errorw("unable to send voting created", "err", err)
+	}
 }
 
 func (service *Service) updatedVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting, votes []DatabaseVote, affectedNotes []Note) {

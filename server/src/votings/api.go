@@ -14,7 +14,7 @@ type VotingService interface {
 	GetVotes(ctx context.Context, board uuid.UUID, f VoteFilter) ([]*Vote, error)
 	AddVote(ctx context.Context, req VoteRequest) (*Vote, error)
 	RemoveVote(ctx context.Context, req VoteRequest) error
-	Update(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus) (*Voting, error)
+	Update(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error)
 }
 
 type VotingApi struct {

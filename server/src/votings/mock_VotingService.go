@@ -516,8 +516,8 @@ func (_c *MockVotingService_RemoveVote_Call) RunAndReturn(run func(ctx context.C
 }
 
 // Update provides a mock function for the type MockVotingService
-func (_mock *MockVotingService) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus) (*Voting, error) {
-	ret := _mock.Called(ctx, id, board, affectedNotes, votingStatus)
+func (_mock *MockVotingService) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error) {
+	ret := _mock.Called(ctx, id, board, votingStatus, affectedNotes)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -525,18 +525,18 @@ func (_mock *MockVotingService) Update(ctx context.Context, id uuid.UUID, board 
 
 	var r0 *Voting
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note, VotingStatus) (*Voting, error)); ok {
-		return returnFunc(ctx, id, board, affectedNotes, votingStatus)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) (*Voting, error)); ok {
+		return returnFunc(ctx, id, board, votingStatus, affectedNotes)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note, VotingStatus) *Voting); ok {
-		r0 = returnFunc(ctx, id, board, affectedNotes, votingStatus)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) *Voting); ok {
+		r0 = returnFunc(ctx, id, board, votingStatus, affectedNotes)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Voting)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID, []Note, VotingStatus) error); ok {
-		r1 = returnFunc(ctx, id, board, affectedNotes, votingStatus)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) error); ok {
+		r1 = returnFunc(ctx, id, board, votingStatus, affectedNotes)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -552,13 +552,13 @@ type MockVotingService_Update_Call struct {
 //   - ctx context.Context
 //   - id uuid.UUID
 //   - board uuid.UUID
-//   - affectedNotes []Note
 //   - votingStatus VotingStatus
-func (_e *MockVotingService_Expecter) Update(ctx any, id any, board any, affectedNotes any, votingStatus any) *MockVotingService_Update_Call {
-	return &MockVotingService_Update_Call{Call: _e.mock.On("Update", ctx, id, board, affectedNotes, votingStatus)}
+//   - affectedNotes []Note
+func (_e *MockVotingService_Expecter) Update(ctx any, id any, board any, votingStatus any, affectedNotes any) *MockVotingService_Update_Call {
+	return &MockVotingService_Update_Call{Call: _e.mock.On("Update", ctx, id, board, votingStatus, affectedNotes)}
 }
 
-func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note)) *MockVotingService_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -572,13 +572,13 @@ func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, id uu
 		if args[2] != nil {
 			arg2 = args[2].(uuid.UUID)
 		}
-		var arg3 []Note
+		var arg3 VotingStatus
 		if args[3] != nil {
-			arg3 = args[3].([]Note)
+			arg3 = args[3].(VotingStatus)
 		}
-		var arg4 VotingStatus
+		var arg4 []Note
 		if args[4] != nil {
-			arg4 = args[4].(VotingStatus)
+			arg4 = args[4].([]Note)
 		}
 		run(
 			arg0,
@@ -596,7 +596,7 @@ func (_c *MockVotingService_Update_Call) Return(voting *Voting, err error) *Mock
 	return _c
 }
 
-func (_c *MockVotingService_Update_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note, votingStatus VotingStatus) (*Voting, error)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error)) *MockVotingService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

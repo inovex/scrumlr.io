@@ -87,7 +87,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := ctx.Value(identifiers.VotingIdentifier).(uuid.UUID)
 
-	var body votings.VotingCloseRequest
+	var body votings.VotingUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		span.SetStatus(codes.Error, "unable to decode body")
 		span.RecordError(err)
@@ -120,7 +120,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	voting, err := s.votings.Update(ctx, id, board, affectedNotes, body.Status)
+	voting, err := s.votings.Update(ctx, id, board, body.Status, affectedNotes)
 
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to update voting")

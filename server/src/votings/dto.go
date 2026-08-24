@@ -47,8 +47,8 @@ type VotingCreateRequest struct {
 	IsAnonymous        bool      `json:"isAnonymous"`
 }
 
-// VotingCloseRequest represents the request to update a voting session.
-type VotingCloseRequest struct {
+// VotingUpdateRequest represents the request to update a voting session.
+type VotingUpdateRequest struct {
 	ID     uuid.UUID    `json:"-"`
 	Board  uuid.UUID    `json:"-"`
 	Status VotingStatus `json:"status"`
