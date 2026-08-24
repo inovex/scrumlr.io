@@ -7,8 +7,6 @@ import (
 	"scrumlr.io/server/common"
 )
 
-const decodeFailureMessage = "failed to decode body"
-
 // mapError translates domain and database errors to HTTP API Errors.
 func mapError(err error) error {
 	if err == nil {
