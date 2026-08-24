@@ -1,11 +1,11 @@
-import {Color} from "./colors.ts"
+import type { Color } from "./colors.ts";
 
 export interface ColumnTemplate {
-  id: string;
-  name: string;
-  color: Color;
-  visible: boolean;
-  index: number;
-  description?: string;
-  template: string;
+	id: string;
+	name: string;
+	color: Color;
+	visible: boolean;
+	index: number;
+	description?: string;
+	template: string;
 }
