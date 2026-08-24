@@ -1,28 +1,22 @@
 {
-  "name": "scrumlr-load-tests",
-  "description": "k6 load tests for the scrumlr backend",
-  "homepage": "https://github.com/inovex/scrumlr.io#readme",
-  "bugs": {
-    "url": "https://github.com/inovex/scrumlr.io/issues",
-    "email": "info@scrumlr.io"
-  },
-  "version": "5.3.1",
-  "private": true,
-  "license": "MIT",
-  "dependencies": {
-    "@types/k6": "^2.2.0"
-  },
-  "scripts": {
-    "test:users": "k6 run src/userRegistration.ts",
-    "test:boards": "k6 run src/boardLifecycle.ts",
-    "test:columns": "k6 run src/columns.ts",
-    "test:notes": "k6 run src/notes.ts",
-    "test:reactions": "k6 run src/reactions.ts",
-    "test:voting": "k6 run src/voting.ts",
-    "test:templates": "k6 run src/templates.ts",
-    "test:participants": "k6 run src/participants.ts",
-    "test:health": "k6 run src/healthAndInfo.ts",
-    "test:retro": "k6 run src/retroScenario.ts"
-  },
-  "packageManager": "yarn@4.14.1"
+	"name": "scrumlr-load-tests",
+	"description": "k6 load tests for the scrumlr backend",
+	"homepage": "https://github.com/inovex/scrumlr.io#readme",
+	"bugs": {
+		"url": "https://github.com/inovex/scrumlr.io/issues",
+		"email": "info@scrumlr.io"
+	},
+	"version": "5.3.1",
+	"private": true,
+	"license": "MIT",
+	"devDependencies": {
+		"@biomejs/biome": "2.5.10",
+		"@types/k6": "^2.2.0"
+	},
+	"scripts": {
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"e2e": "k6 run src/e2e.ts --no-usage-report"
+	},
+	"packageManager": "yarn@4.14.1"
 }

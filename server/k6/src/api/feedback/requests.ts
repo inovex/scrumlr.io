@@ -1,7 +1,7 @@
-import {Feedback} from "../../types/feedback.ts"
+import type { Feedback } from "../../types/feedback.ts";
 
 export interface CreateFeedbackRequest {
-  text: string;
-  type: Feedback;
-  contact?: string;
+	text: string;
+	type: Feedback;
+	contact?: string;
 }

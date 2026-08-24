@@ -1,12 +1,9 @@
-import { AccountType } from "./account.ts";
-import { Avatar } from "./avatar.ts";
+import type { AccountType } from "./account.ts";
+import type { Avatar } from "./avatar.ts";
 
 export interface User {
-  id: string;
-  name: string;
-  accountType: AccountType;
-  avatar?: Avatar;
+	id: string;
+	name: string;
+	accountType: AccountType;
+	avatar?: Avatar;
 }
-
-
-

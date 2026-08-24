@@ -1,5 +1,5 @@
-import {BoardReaction} from "../../types/boardReaction.ts"
+import type { BoardReaction } from "../../types/boardReaction.ts";
 
 export interface CreateBoardReactionRequest {
-  reactionType: BoardReaction;
+	reactionType: BoardReaction;
 }
