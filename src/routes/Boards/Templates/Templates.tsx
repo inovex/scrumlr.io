@@ -48,9 +48,11 @@ export const Templates = () => {
 
   // init templates
   useEffect(() => {
-    setIsLoading(true);
-    dispatch(getTemplates()).finally(() => setIsLoading(false));
-  }, [dispatch]);
+    if (showCustomTemplates) {
+      setIsLoading(true);
+      dispatch(getTemplates()).finally(() => setIsLoading(false));
+    }
+  }, [dispatch, showCustomTemplates]);
 
   const toggleFavourite = (templateId: string, favourite: boolean, type: "RECOMMENDED" | "CUSTOM") => {
     if (type === "RECOMMENDED") {
