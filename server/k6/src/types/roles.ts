@@ -1,4 +1,1 @@
-export type Role =
-  | "PARTICIPANT"
-  | "MODERATOR"
-  | "OWNER";
+export type Role = "PARTICIPANT" | "MODERATOR" | "OWNER";

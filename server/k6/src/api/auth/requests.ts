@@ -1,3 +1,3 @@
 export interface AnonymousSignUpRequest {
-  name: string;
+	name: string;
 }

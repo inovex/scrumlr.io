@@ -1,3 +1,3 @@
 export interface CreateVoteRequest {
-  note: string;
+	note: string;
 }

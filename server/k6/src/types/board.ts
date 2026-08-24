@@ -1,31 +1,31 @@
-import {AccessPolicy} from "./accessPolicy.ts"
-import {Column} from "./column.ts"
-import {Role} from "./roles.ts"
+import type { AccessPolicy } from "./accessPolicy.ts";
+import type { Column } from "./column.ts";
+import type { Role } from "./roles.ts";
 
 export interface Board {
-  id: string;
-  name: string;
-  description?: string;
-  accessPolicy: AccessPolicy;
-  allowStacking: boolean;
-  isLocked: boolean;
-  showAuthors: boolean;
-  showNoteReactions: boolean;
-  showNotesOfOtherUsers: boolean;
-  timerStart?: string;
-  timerEnd?: string;
-  sharedNote?: { uuid: string; valid: boolean } | null;
-  showVoting?: { uuid: string; valid: boolean } | null;
-  createdAt: string;
-  lastModifiedAt: string;
+	id: string;
+	name: string;
+	description?: string;
+	accessPolicy: AccessPolicy;
+	allowStacking: boolean;
+	isLocked: boolean;
+	showAuthors: boolean;
+	showNoteReactions: boolean;
+	showNotesOfOtherUsers: boolean;
+	timerStart?: string;
+	timerEnd?: string;
+	sharedNote?: { uuid: string; valid: boolean } | null;
+	showVoting?: { uuid: string; valid: boolean } | null;
+	createdAt: string;
+	lastModifiedAt: string;
 }
 
 export interface BoardOverview {
-  board: Board;
-  columns: Column[];
-  createdAt: string;
-  favourite: boolean;
-  noteCount: number;
-  participants: number;
-  role: Role;
+	board: Board;
+	columns: Column[];
+	createdAt: string;
+	favourite: boolean;
+	noteCount: number;
+	participants: number;
+	role: Role;
 }

@@ -1,11 +1,8 @@
-import {User} from "./users.ts"
+import type { User } from "./users.ts";
 
-export type RequestStatus =
-  | "PENDING"
-  | "ACCEPTED"
-  | "REJECTED";
+export type RequestStatus = "PENDING" | "ACCEPTED" | "REJECTED";
 
 export interface BoardSessionRequest {
-  user: User;
-  status: RequestStatus;
+	user: User;
+	status: RequestStatus;
 }
