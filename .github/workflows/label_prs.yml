@@ -1,0 +1,22 @@
+---
+name: "label prs"
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Label
+        uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0

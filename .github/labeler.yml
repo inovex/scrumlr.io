@@ -1,0 +1,47 @@
+---
+Frontend:
+  - changed-files:
+      - any-glob-to-any-file: "src/**"
+
+Backend:
+  - changed-files:
+      - any-glob-to-any-file: "server/**"
+
+feat:
+  - head-branch:
+    - "\/feat\/"
+    - "\/feature\/"
+    - "^feat\/"
+    - "^feature\/"
+
+feat(i18n):
+  - head-branch:
+    - "\/i18n\/"
+    - "^i18n\/"
+
+Bug:
+  - head-branch:
+    - "\/fix\/"
+    - "^fix\/"
+
+refactor:
+  - head-branch:
+    - "\/refactor\/"
+    - "^refactor\/"
+
+docs:
+  - head-branch:
+    - "\/docs\/"
+    - "^docs\/"
+
+ci:
+  - head-branch:
+    - "\/ci\/"
+    - "^ci\/"
+
+chore:
+  - head-branch:
+    - "\/chore\/"
+    - "^chore\/"
+
+
