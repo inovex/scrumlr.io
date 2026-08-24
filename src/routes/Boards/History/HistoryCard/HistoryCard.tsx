@@ -23,7 +23,7 @@ import {Button} from "components/Button";
 import {UserRoleChip} from "routes/Boards/History/HistoryCard/AccessPolicyChip/UserRoleChip";
 import {AccessPolicy, deleteHistoryBoard, setBoardFavourite} from "store/features";
 import {ReactElement, useState} from "react";
-import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {ConfirmationDialog} from "components/ConfirmationDialog/ConfirmationDialog";
 import {Tooltip} from "components/Tooltip";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
@@ -84,6 +84,10 @@ export const HistoryCard = (props: HistoryCardProps) => {
   // owner: edit + delete; moderator: edit only; participant: neither.
   const canEdit = isParticipantModerator(props.board.userRole);
   const canDelete = props.board.userRole === "OWNER";
+  // creating templates from boards is only allowed if templates are available to the user
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
+  const canCreateTemplate = !isAnonymous || allowAnonymousCustomTemplates;
 
   const boardName = props.board.name ? props.board.name : t("History.HistoryCard.namePlaceholder"); // in rare cases, board name is empty
 
@@ -102,44 +106,42 @@ export const HistoryCard = (props: HistoryCardProps) => {
     showMiniMenu ? (
       <MiniMenu
         className={classNames("history-card__menu", "history-card__menu--open")}
-        items={[
-          ...(canDelete
-            ? [
-                {
-                  label: t("History.HistoryCard.Menu.delete"),
-                  element: <TrashIcon />,
-                  onClick: () => {
-                    setShowMiniMenu(false);
-                    setShowDeleteConfirmation(true);
-                  },
-                },
-              ]
-            : []),
-          {
-            label: t("History.HistoryCard.Menu.copyLink"),
-            element: <LinkIcon />,
-            onClick: () => {
-              navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`).then(() => {
-                Toast.success({title: t("History.HistoryCard.linkCopied")});
-              });
+        items={
+          [
+            canDelete && {
+              label: t("History.HistoryCard.Menu.delete"),
+              element: <TrashIcon />,
+              onClick: () => {
+                setShowMiniMenu(false);
+                setShowDeleteConfirmation(true);
+              },
             },
-          },
-          {
-            label: t("History.HistoryCard.Menu.createTemplate"),
-            element: <Duplicate2Icon />,
-            onClick: () => navigate(`/boards/create-template/${props.board.id}`),
-          },
-          ...(canEdit
-            ? [
-                {
-                  label: t("History.HistoryCard.Menu.edit"),
-                  element: <EditIcon />,
-                  onClick: () => navigate(`/boards/edit-board/${props.board.id}`),
-                },
-              ]
-            : []),
-          {label: t("History.HistoryCard.Menu.close"), element: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
-        ]}
+            {
+              label: t("History.HistoryCard.Menu.copyLink"),
+              element: <LinkIcon />,
+              onClick: () => {
+                navigator.clipboard.writeText(`${window.location.origin}/board/${props.board.id}`).then(() => {
+                  Toast.success({title: t("History.HistoryCard.linkCopied")});
+                });
+              },
+            },
+            canCreateTemplate && {
+              label: t("History.HistoryCard.Menu.createTemplate"),
+              element: <Duplicate2Icon />,
+              onClick: () => navigate(`/boards/create-template/${props.board.id}`),
+            },
+            canEdit && {
+              label: t("History.HistoryCard.Menu.edit"),
+              element: <EditIcon />,
+              onClick: () => navigate(`/boards/edit-board/${props.board.id}`),
+            },
+            {
+              label: t("History.HistoryCard.Menu.close"),
+              element: <CloseIcon />,
+              onClick: () => setShowMiniMenu(false),
+            },
+          ].filter(Boolean) as MiniMenuItem[]
+        }
         focusBehaviour="trap"
         onBlur={() => setShowMiniMenu(false)}
         dataCy="template-card__menu"
