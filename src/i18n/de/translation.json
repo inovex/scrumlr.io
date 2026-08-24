@@ -112,6 +112,7 @@
     "requireRegisteredAccount": "Melde dich mit Google, Microsoft oder SSO an, um deine Boards automatisch dauerhaft zu sichern und zu verwalten. Anonyme Profile (Gast-Login) können keinen Boards zugeordnet werden, weshalb diese nicht gespeichert werden.",
     "registerNow": "Jetzt registrieren",
     "HistoryCard": {
+      "namePlaceholder": "<Leer>",
       "Info": {
         "amountColumns_one": "{{count}} Spalte",
         "amountColumns_other": "{{count}} Spalten",
