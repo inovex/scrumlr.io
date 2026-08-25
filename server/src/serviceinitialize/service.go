@@ -74,7 +74,7 @@ func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.
 
 func (init *ServiceInitializer) InitializeBoardTemplateService(columnTemplateService columntemplates.ColumnTemplateService) boardtemplates.BoardTemplateService {
 	boardTemplateDb := boardtemplates.NewBoardTemplateDatabase(init.db)
-	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb, columnTemplateService)
+	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb, columnTemplateService, init.clock)
 
 	return boardTemplateService
 }

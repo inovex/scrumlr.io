@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -14,6 +13,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/timeprovider"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boardtemplates")
@@ -30,12 +30,14 @@ type BoardTemplateDatabase interface {
 type Service struct {
 	database              BoardTemplateDatabase
 	columnTemplateService columntemplates.ColumnTemplateService
+	clock                 timeprovider.TimeProvider
 }
 
-func NewBoardTemplateService(db BoardTemplateDatabase, columnTempalteService columntemplates.ColumnTemplateService) BoardTemplateService {
+func NewBoardTemplateService(db BoardTemplateDatabase, columnTempalteService columntemplates.ColumnTemplateService, clockService timeprovider.TimeProvider) BoardTemplateService {
 	service := new(Service)
 	service.database = db
 	service.columnTemplateService = columnTempalteService
+	service.clock = clockService
 
 	return service
 }
@@ -142,7 +144,7 @@ func (service *Service) Update(ctx context.Context, body BoardTemplateUpdateRequ
 		Name:        body.Name,
 		Description: body.Description,
 		Favourite:   body.Favourite,
-		ModifiedAt:  time.Now(),
+		ModifiedAt:  service.clock.Now(),
 	}
 
 	span.SetAttributes(
