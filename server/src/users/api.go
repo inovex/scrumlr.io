@@ -16,6 +16,10 @@ import (
 	"scrumlr.io/server/sessions"
 )
 
+const parseUUIDFailureMessage = "unable to parse uuid"
+const fetchUserFailureMessage = "could not fetch user"
+const improperUserIDMessage = "invalid or missing user identifier in context"
+
 type UserService interface {
 	Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
@@ -97,8 +101,8 @@ func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "user")
 	requestedUserId, err := uuid.Parse(userParam)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
-		log.Errorw("unable to parse uuid", "err", err)
+		otel.RecordErrorSpan(span, err, new(parseUUIDFailureMessage))
+		log.Errorw(parseUUIDFailureMessage, "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -232,7 +236,7 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
+			otel.RecordErrorSpan(span, err, new(parseUUIDFailureMessage))
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
@@ -240,9 +244,9 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			err = errors.New("invalid or missing user identifier in context")
+			err = errors.New(improperUserIDMessage)
 			otel.RecordErrorSpan(span, err, nil)
-			log.Error("invalid or missing user identifier in context")
+			log.Error(improperUserIDMessage)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -254,9 +258,9 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("could not fetch user"))
-			log.Errorw("Could not fetch user", "error", err)
-			common.Throw(w, r, errors.New("could not fetch user"))
+			otel.RecordErrorSpan(span, err, new(fetchUserFailureMessage))
+			log.Errorw(fetchUserFailureMessage, "error", err)
+			common.Throw(w, r, errors.New(fetchUserFailureMessage))
 			return
 		}
 
@@ -282,9 +286,9 @@ func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			err := errors.New("invalid or missing user identifier in context")
+			err := errors.New(improperUserIDMessage)
 			otel.RecordErrorSpan(span, err, nil)
-			log.Errorw("invalid or missing user identifier in context")
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -295,8 +299,8 @@ func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("could not fetch user"))
-			log.Errorw("Could not fetch user", "error", err)
+			otel.RecordErrorSpan(span, err, new(fetchUserFailureMessage))
+			log.Errorw(fetchUserFailureMessage, "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -322,17 +326,17 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			err := errors.New("invalid or missing user identifier in context")
+			err := errors.New(improperUserIDMessage)
 			otel.RecordErrorSpan(span, err, nil)
-			log.Errorw("invalid or missing user identifier in context")
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("could not fetch user"))
-			log.Errorw("Could not fetch user", "error", err)
+			otel.RecordErrorSpan(span, err, new(fetchUserFailureMessage))
+			log.Errorw(fetchUserFailureMessage, "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -358,9 +362,9 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			err := errors.New("invalid or missing user identifier in context")
+			err := errors.New(improperUserIDMessage)
 			otel.RecordErrorSpan(span, err, nil)
-			log.Errorw("invalid or missing user identifier in context")
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -368,8 +372,8 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		requestID := chi.URLParam(r, "user")
 		requestedUserID, err := uuid.Parse(requestID)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
-			log.Errorw("unable to parse uuid", "err", err)
+			otel.RecordErrorSpan(span, err, new(parseUUIDFailureMessage))
+			log.Errorw(parseUUIDFailureMessage, "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
