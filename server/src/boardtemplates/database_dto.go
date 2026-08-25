@@ -16,6 +16,7 @@ type DatabaseBoardTemplate struct {
 	Description   *string
 	Favourite     *bool
 	CreatedAt     time.Time
+	ModifiedAt    time.Time
 }
 
 type DatabaseBoardTemplateFull struct {
@@ -38,4 +39,5 @@ type DatabaseBoardTemplateUpdate struct {
 	Name          *string
 	Description   *string
 	Favourite     *bool
+	ModifiedAt    time.Time
 }
