@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -13,11 +14,13 @@ import (
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
+	"scrumlr.io/server/timeprovider"
 )
 
 type BoardTemplateServiceIntegrationTestSuite struct {
 	suite.Suite
 	service   BoardTemplateService
+	mockClock *timeprovider.MockTimeProvider
 	users     map[string]testDbTemplates.TestUser
 	templates map[string]BoardTemplate
 }
@@ -43,7 +46,9 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) SetupTest() {
 	columnTemplateDatabase := columntemplates.NewColumnTemplateDatabase(db)
 	columnTemplateService := columntemplates.NewColumnTemplateService(columnTemplateDatabase)
 	database := NewBoardTemplateDatabase(db)
-	suite.service = NewBoardTemplateService(database, columnTemplateService)
+
+	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
+	suite.service = NewBoardTemplateService(database, columnTemplateService, suite.mockClock)
 }
 
 func (suite *BoardTemplateServiceIntegrationTestSuite) initTestData() {
@@ -89,6 +94,9 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Update() {
 	t := suite.T()
 	ctx := context.Background()
 
+	fixedTime := time.Date(2026, time.August, 25, 12, 0, 0, 0, time.UTC)
+	suite.mockClock.EXPECT().Now().Return(fixedTime)
+
 	id := suite.templates["Update"].ID
 	userId := suite.users["Santa"].ID
 	name := "Updated Template"
@@ -103,6 +111,7 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Update() {
 	assert.Equal(t, userId, boardtemplate.Creator)
 	assert.Equal(t, name, *boardtemplate.Name)
 	assert.Equal(t, description, *boardtemplate.Description)
+	assert.Equal(t, fixedTime, boardtemplate.ModifiedAt)
 }
 
 func (suite *BoardTemplateServiceIntegrationTestSuite) Test_Delete() {
