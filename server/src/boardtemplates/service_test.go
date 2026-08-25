@@ -13,7 +13,27 @@ import (
 	"scrumlr.io/server/timeprovider"
 )
 
+type ServiceMocks struct {
+	db    *MockBoardTemplateDatabase
+	cols  *columntemplates.MockColumnTemplateService
+	clock *timeprovider.MockTimeProvider
+}
+
+func SetupBoardTemplateService(t *testing.T) (BoardTemplateService, ServiceMocks) {
+	mocks := ServiceMocks{
+		db:    NewMockBoardTemplateDatabase(t),
+		cols:  columntemplates.NewMockColumnTemplateService(t),
+		clock: timeprovider.NewMockTimeProvider(t),
+	}
+
+	service := NewBoardTemplateService(mocks.db, mocks.cols, mocks.clock)
+
+	return service, mocks
+}
+
 func TestCreateBoardTemplate(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
@@ -23,8 +43,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 	firstColumnIndex := 0
 	visible := true
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
+	mocks.db.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
@@ -36,8 +55,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 			Description: &description,
 		}, nil)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-	mockColumnTemplateService.EXPECT().Create(mock.Anything,
+	mocks.cols.EXPECT().Create(mock.Anything,
 		columntemplates.ColumnTemplateRequest{
 			BoardTemplate: boardId,
 			User:          userId,
@@ -54,9 +72,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 		Index:         firstColumnIndex,
 	}, nil)
 
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	board, err := boardTemplateService.Create(context.Background(), CreateBoardTemplateRequest{
+	board, err := service.Create(context.Background(), CreateBoardTemplateRequest{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
@@ -79,6 +95,8 @@ func TestCreateBoardTemplate(t *testing.T) {
 }
 
 func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	dbError := errors.New("Database error")
 	userId := uuid.New()
 	name := "Template"
@@ -89,19 +107,14 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	secondColumnDescription := "This is Column 2"
 	visible := true
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
+	mocks.db.EXPECT().Create(mock.Anything, DatabaseBoardTemplateInsert{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
 	}).
 		Return(DatabaseBoardTemplate{}, dbError)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	board, err := boardTemplateService.Create(context.Background(), CreateBoardTemplateRequest{
+	board, err := service.Create(context.Background(), CreateBoardTemplateRequest{
 		Creator:     userId,
 		Name:        &name,
 		Description: &description,
@@ -127,13 +140,14 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 }
 
 func TestGetBoardTemplate(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Get(mock.Anything, boardId).
+	mocks.db.EXPECT().Get(mock.Anything, boardId).
 		Return(DatabaseBoardTemplate{
 			ID:          boardId,
 			Creator:     userId,
@@ -141,11 +155,7 @@ func TestGetBoardTemplate(t *testing.T) {
 			Description: &description,
 		}, nil)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	board, err := boardTemplateService.Get(context.Background(), boardId)
+	board, err := service.Get(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, board)
@@ -157,18 +167,15 @@ func TestGetBoardTemplate(t *testing.T) {
 }
 
 func TestGetBoardTemplate_DatabaseError(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	dbError := errors.New("Database error")
 	id := uuid.New()
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Get(mock.Anything, id).
+	mocks.db.EXPECT().Get(mock.Anything, id).
 		Return(DatabaseBoardTemplate{}, dbError)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	board, err := boardTemplateService.Get(context.Background(), id)
+	board, err := service.Get(context.Background(), id)
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
@@ -176,6 +183,8 @@ func TestGetBoardTemplate_DatabaseError(t *testing.T) {
 }
 
 func TestGetAllBoardTemplate(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	userId := uuid.New()
 	firstBoardId := uuid.New()
 	secondBoardId := uuid.New()
@@ -186,8 +195,7 @@ func TestGetAllBoardTemplate(t *testing.T) {
 	firstColumnName := "Column 1"
 	secondColumnName := "Column 2"
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().GetAll(mock.Anything, userId).
+	mocks.db.EXPECT().GetAll(mock.Anything, userId).
 		Return([]DatabaseBoardTemplateFull{
 			{
 				Template: DatabaseBoardTemplate{
@@ -217,11 +225,7 @@ func TestGetAllBoardTemplate(t *testing.T) {
 			},
 		}, nil)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	boards, err := boardTemplateService.GetAll(context.Background(), userId)
+	boards, err := service.GetAll(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, boards)
@@ -243,18 +247,15 @@ func TestGetAllBoardTemplate(t *testing.T) {
 }
 
 func TestGetAllBoardTemplate_DatabaseError(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	dbError := errors.New("Database error")
 	userId := uuid.New()
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().GetAll(mock.Anything, userId).
+	mocks.db.EXPECT().GetAll(mock.Anything, userId).
 		Return([]DatabaseBoardTemplateFull{}, dbError)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	board, err := boardTemplateService.GetAll(context.Background(), userId)
+	board, err := service.GetAll(context.Background(), userId)
 
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
@@ -262,17 +263,16 @@ func TestGetAllBoardTemplate_DatabaseError(t *testing.T) {
 }
 
 func TestUpdateBoardTemplate(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
 	fixedTime := time.Date(2026, time.August, 25, 12, 0, 0, 0, time.UTC)
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockClock := timeprovider.NewMockTimeProvider(t)
-
-	mockClock.EXPECT().Now().Return(fixedTime)
-	mockBoardTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
+	mocks.clock.EXPECT().Now().Return(fixedTime)
+	mocks.db.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -286,11 +286,7 @@ func TestUpdateBoardTemplate(t *testing.T) {
 			ModifiedAt:  fixedTime,
 		}, nil)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, mockClock)
-
-	board, err := boardTemplateService.Update(context.Background(), BoardTemplateUpdateRequest{
+	board, err := service.Update(context.Background(), BoardTemplateUpdateRequest{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -301,17 +297,16 @@ func TestUpdateBoardTemplate(t *testing.T) {
 }
 
 func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 	name := "Template"
 	description := "This is a description"
 	fixedTime := time.Date(2026, time.August, 25, 12, 0, 0, 0, time.UTC)
 
-	mockClock := timeprovider.NewMockTimeProvider(t)
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-
-	mockClock.EXPECT().Now().Return(fixedTime)
-	mockBoardTemplateDatabase.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
+	mocks.clock.EXPECT().Now().Return(fixedTime)
+	mocks.db.EXPECT().Update(mock.Anything, DatabaseBoardTemplateUpdate{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -319,11 +314,7 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 	}).
 		Return(DatabaseBoardTemplate{}, dbError)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, mockClock)
-
-	board, err := boardTemplateService.Update(context.Background(), BoardTemplateUpdateRequest{
+	board, err := service.Update(context.Background(), BoardTemplateUpdateRequest{
 		ID:          boardId,
 		Name:        &name,
 		Description: &description,
@@ -335,32 +326,26 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 }
 
 func TestDeleteBoardTemplate(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	id := uuid.New()
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Delete(mock.Anything, id).Return(nil)
+	mocks.db.EXPECT().Delete(mock.Anything, id).Return(nil)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	err := boardTemplateService.Delete(context.Background(), id)
+	err := service.Delete(context.Background(), id)
 
 	assert.Nil(t, err)
 }
 
 func TestDeleteBoardTemplate_DatabaseError(t *testing.T) {
+	service, mocks := SetupBoardTemplateService(t)
+
 	dbError := errors.New("Database error")
 	id := uuid.New()
 
-	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
-	mockBoardTemplateDatabase.EXPECT().Delete(mock.Anything, id).Return(dbError)
+	mocks.db.EXPECT().Delete(mock.Anything, id).Return(dbError)
 
-	mockColumnTemplateService := columntemplates.NewMockColumnTemplateService(t)
-
-	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase, mockColumnTemplateService, nil)
-
-	err := boardTemplateService.Delete(context.Background(), id)
+	err := service.Delete(context.Background(), id)
 
 	assert.NotNil(t, err)
 	assert.ErrorIs(t, err, dbError)
