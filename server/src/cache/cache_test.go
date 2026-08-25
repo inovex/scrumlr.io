@@ -2,28 +2,31 @@ package cache
 
 import (
 	"errors"
-	"flag"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"scrumlr.io/server/initialize"
 )
 
 func TestInitializeCache_Nats(t *testing.T) {
+	ctx := t.Context()
+
 	container, connection := initialize.StartTestNats()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("nats", connection)
 	assert.NoError(t, err)
 
-	cache, err := InitializeCache(init)
+	cache, err := InitializeCache(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, cache)
@@ -33,19 +36,23 @@ func TestInitializeCache_Nats(t *testing.T) {
 }
 
 func TestInitializeCache_Redis(t *testing.T) {
+	ctx := t.Context()
+
 	container, connection := initialize.StartTestRedis()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("redis-address", connection)
 	assert.NoError(t, err)
 
-	cache, err := InitializeCache(init)
+	cache, err := InitializeCache(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, cache)
@@ -55,14 +62,18 @@ func TestInitializeCache_Redis(t *testing.T) {
 }
 
 func TestInitializeCache_NotConfigured(t *testing.T) {
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	ctx := t.Context()
 
-	cache, err := InitializeCache(init)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
+
+	cache, err := InitializeCache(ctx, init)
 
 	assert.Error(t, err)
 	assert.Equal(t, errors.New("no valid cache configuration found"), err)
@@ -70,21 +81,25 @@ func TestInitializeCache_NotConfigured(t *testing.T) {
 }
 
 func TestInitializeCache_PrefereRedis(t *testing.T) {
+	ctx := t.Context()
+
 	container, connection := initialize.StartTestRedis()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("redis-address", connection)
 	assert.NoError(t, err)
 	err = init.Set("nats", "not valide connection")
 	assert.NoError(t, err)
 
-	cache, err := InitializeCache(init)
+	cache, err := InitializeCache(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, cache)

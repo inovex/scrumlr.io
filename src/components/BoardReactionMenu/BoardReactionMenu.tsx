@@ -49,9 +49,9 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
   useHotkeys(["1", "2", "3", "4", "5"], (e, k) => onClickReaction(e, boardReactions[+k.keys![0] - 1][0]));
 
   const menuTransition = useTransition(props.showMenu, {
-    from: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)", "pointer-events": "none"},
-    enter: {opacity: 1, transform: "scale(1, 1) translateY(0%)", "pointer-events": "auto"},
-    leave: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)", "pointer-events": "none"},
+    from: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)"},
+    enter: {opacity: 1, transform: "scale(1, 1) translateY(0%)"},
+    leave: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)"},
     config: {mass: 1, friction: 30, tension: 380},
   });
 

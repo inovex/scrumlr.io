@@ -2,28 +2,30 @@ package realtime
 
 import (
 	"errors"
-	"flag"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"scrumlr.io/server/initialize"
 )
 
 func TestInitializeRealtime_Nats(t *testing.T) {
+	ctx := t.Context()
 	container, connection := initialize.StartTestNats()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("nats", connection)
 	assert.NoError(t, err)
 
-	broker, err := InitializeRealtime(init)
+	broker, err := InitializeRealtime(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, broker)
@@ -33,19 +35,22 @@ func TestInitializeRealtime_Nats(t *testing.T) {
 }
 
 func TestInitializeRealtime_Redis(t *testing.T) {
+	ctx := t.Context()
 	container, connection := initialize.StartTestRedis()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("redis-address", connection)
 	assert.NoError(t, err)
 
-	broker, err := InitializeRealtime(init)
+	broker, err := InitializeRealtime(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, broker)
@@ -55,14 +60,18 @@ func TestInitializeRealtime_Redis(t *testing.T) {
 }
 
 func TestInitializeRealtime_NotConfigured(t *testing.T) {
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	ctx := t.Context()
 
-	broker, err := InitializeRealtime(init)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
+
+	broker, err := InitializeRealtime(ctx, init)
 
 	assert.Error(t, err)
 	assert.Equal(t, errors.New("no valid message broker configuration found"), err)
@@ -70,21 +79,25 @@ func TestInitializeRealtime_NotConfigured(t *testing.T) {
 }
 
 func TestInitializeRealtime_PrefereRedis(t *testing.T) {
+	ctx := t.Context()
+
 	container, connection := initialize.StartTestRedis()
 
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("redis-address", "", "")
-	flagset.String("redis-usernamet", "", "")
-	flagset.String("redis-password", "", "")
-	flagset.String("nats", "", "")
-	init := cli.NewContext(nil, flagset, nil)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "redis-address"},
+			&cli.StringFlag{Name: "redis-username"},
+			&cli.StringFlag{Name: "redis-password"},
+			&cli.StringFlag{Name: "nats"},
+		},
+	}
 
 	err := init.Set("redis-address", connection)
 	assert.NoError(t, err)
 	err = init.Set("nats", "not valide connection")
 	assert.NoError(t, err)
 
-	broker, err := InitializeRealtime(init)
+	broker, err := InitializeRealtime(ctx, init)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, broker)
