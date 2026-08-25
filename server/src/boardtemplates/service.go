@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
@@ -141,6 +142,7 @@ func (service *Service) Update(ctx context.Context, body BoardTemplateUpdateRequ
 		Name:        body.Name,
 		Description: body.Description,
 		Favourite:   body.Favourite,
+		ModifiedAt:  time.Now(),
 	}
 
 	span.SetAttributes(
