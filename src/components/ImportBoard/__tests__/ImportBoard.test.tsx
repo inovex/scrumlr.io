@@ -109,12 +109,10 @@ describe("ImportBoard", () => {
   it("shows the error container for an invalid JSON import", async () => {
     renderImportBoard();
 
-    const fileInput = screen.getByLabelText("Select JSON file");
-    const file = new File(["not valid json"], "bad.json", {type: "application/json"});
-    fireEvent.change(fileInput, {target: {files: [file]}});
+    await selectJsonFile("not valid json", "bad.json");
 
     await act(async () => {
-      fileReaderInstance.onload?.({target: {result: "{not json"}});
+      vi.runAllTimers();
     });
 
     expect(Toast.error).toHaveBeenCalled();
