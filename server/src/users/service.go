@@ -21,6 +21,8 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const userNotFoundMessage = "user not found"
+
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/users")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/users")
 
@@ -129,9 +131,9 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "user not found")
+			span.SetStatus(codes.Error, userNotFoundMessage)
 			span.RecordError(err)
-			return nil, CreateUserError(NotFound, "user not found", err)
+			return nil, CreateUserError(NotFound, userNotFoundMessage, err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get user")
@@ -202,7 +204,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 			span.SetStatus(codes.Error, "user to update not found")
 			span.RecordError(err)
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
-			return nil, CreateUserError(NotFound, "user not found", err)
+			return nil, CreateUserError(NotFound, userNotFoundMessage, err)
 		}
 
 		span.SetStatus(codes.Error, "failed to update user")

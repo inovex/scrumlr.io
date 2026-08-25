@@ -16,6 +16,10 @@ import (
 	"scrumlr.io/server/sessions"
 )
 
+const parseUUIDFailureMessage = "unable to parse uuid"
+const fetchUserFailureMessage = "could not fetch user"
+const improperUserIDMessage = "invalid or missing user identifier in context"
+
 type UserService interface {
 	Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
@@ -98,9 +102,9 @@ func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "user")
 	requestedUserId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "unable to parse uuid")
+		span.SetStatus(codes.Error, parseUUIDFailureMessage)
 		span.RecordError(err)
-		log.Errorw("unable to parse uuid", "err", err)
+		log.Errorw(parseUUIDFailureMessage, "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -238,7 +242,7 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse uuid")
+			span.SetStatus(codes.Error, parseUUIDFailureMessage)
 			span.RecordError(err)
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
@@ -262,10 +266,10 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		user, err := api.service.Get(ctx, userID)
 
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
+			span.SetStatus(codes.Error, fetchUserFailureMessage)
 			span.RecordError(err)
-			log.Errorw("Could not fetch user", "error", err)
-			common.Throw(w, r, errors.New("could not fetch user"))
+			log.Errorw(fetchUserFailureMessage, "error", err)
+			common.Throw(w, r, errors.New(fetchUserFailureMessage))
 			return
 		}
 
@@ -295,18 +299,18 @@ func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 			attribute.String("scrumlr.user.api.context.authenticated.user", userID.String()),
 		)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
-			log.Errorw("invalid or missing user identifier in context")
+			span.SetStatus(codes.Error, improperUserIDMessage)
+			span.RecordError(errors.New(improperUserIDMessage))
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
+			span.SetStatus(codes.Error, fetchUserFailureMessage)
 			span.RecordError(err)
-			log.Errorw("Could not fetch user", "error", err)
+			log.Errorw(fetchUserFailureMessage, "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -333,18 +337,18 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
-			log.Errorw("invalid or missing user identifier in context")
+			span.SetStatus(codes.Error, improperUserIDMessage)
+			span.RecordError(errors.New(improperUserIDMessage))
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
+			span.SetStatus(codes.Error, fetchUserFailureMessage)
 			span.RecordError(err)
-			log.Errorw("Could not fetch user", "error", err)
+			log.Errorw(fetchUserFailureMessage, "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -371,9 +375,9 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
-			log.Errorw("invalid or missing user identifier in context")
+			span.SetStatus(codes.Error, improperUserIDMessage)
+			span.RecordError(errors.New(improperUserIDMessage))
+			log.Errorw(improperUserIDMessage)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -381,9 +385,9 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		requestID := chi.URLParam(r, "user")
 		requestedUserID, err := uuid.Parse(requestID)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse uuid")
+			span.SetStatus(codes.Error, parseUUIDFailureMessage)
 			span.RecordError(err)
-			log.Errorw("unable to parse uuid", "err", err)
+			log.Errorw(parseUUIDFailureMessage, "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}

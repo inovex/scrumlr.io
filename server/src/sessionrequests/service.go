@@ -22,6 +22,8 @@ import (
 	"scrumlr.io/server/sessions"
 )
 
+const sessionRequestNotFoundMessage = "board session request not found"
+
 var tracer = otel.Tracer("scrumlr.io/server/sessionrequests")
 var meter = otel.Meter("scrumlr.io/server/sessionrequests")
 
@@ -97,9 +99,9 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 	request, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "board session request not found")
+			span.SetStatus(codes.Error, sessionRequestNotFoundMessage)
 			span.RecordError(err)
-			return nil, CreateSessionRequestError(NotFound, "board session request not found", err)
+			return nil, CreateSessionRequestError(NotFound, sessionRequestNotFoundMessage, err)
 		}
 
 		span.SetStatus(codes.Error, "failed to get board session request")
@@ -239,8 +241,8 @@ func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handl
 		}
 
 		if !exists {
-			err := errors.New("board session request not found")
-			span.SetStatus(codes.Error, "board session request not found")
+			err := errors.New(sessionRequestNotFoundMessage)
+			span.SetStatus(codes.Error, sessionRequestNotFoundMessage)
 			span.RecordError(err)
 			common.Throw(w, r, common.NotFoundError)
 			return
