@@ -81,8 +81,8 @@ export const Avatar = React.memo(
       return null;
     }
     if (!avatar) {
-      const avatarProps = generateRandomProps(seed);
-      return <Avataar className={classNames("avatar", className, getColorClassName(avatarProps.backgroundColor))} circle {...avatarProps} />;
+      const {backgroundColor, ...avatarProps} = generateRandomProps(seed);
+      return <Avataar className={classNames("avatar", className, getColorClassName(backgroundColor))} circle {...avatarProps} />;
     }
 
     return (
