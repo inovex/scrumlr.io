@@ -22,6 +22,8 @@ const generateRecommendedTemplates = (): Template[] => {
       description: tpl.description,
       favourite: favIds.includes(id),
       type: "RECOMMENDED",
+      createdAt: new Date().toISOString(),
+      modifiedAt: new Date().toISOString(),
     };
   });
 };
