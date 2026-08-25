@@ -157,7 +157,7 @@ func (c *Client) UpdateUser(req users.UserUpdateRequest) (*users.User, error) {
 
 func (c *Client) CreateBoard(req boards.CreateBoardRequest) (*boards.Board, error) {
 	var board boards.Board
-	_, err := c.do("POST", "/boards", req, &board)
+	_, err := c.do("POST", boardsPath, req, &board)
 	if err != nil {
 		return nil, fmt.Errorf("create board: %w", err)
 	}
@@ -175,7 +175,7 @@ func (c *Client) GetBoard(id uuid.UUID) (*boards.Board, error) {
 
 func (c *Client) GetBoards() ([]*boards.Board, error) {
 	var list []*boards.Board
-	_, err := c.do("GET", "/boards", nil, &list)
+	_, err := c.do("GET", boardsPath, nil, &list)
 	if err != nil {
 		return nil, fmt.Errorf("get boards: %w", err)
 	}
