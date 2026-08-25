@@ -87,14 +87,13 @@ export const VotingAPI = {
    *
    * @returns updated voting
    */
-  changeVotingStatus: async (board: string, voting: string, status?: VotingStatus): Promise<Voting> => {
+  changeVotingStatus: async (board: string, voting: string, status: VotingStatus): Promise<Voting> => {
     try {
-      const resolvedStatus: VotingStatus = typeof status === "undefined" || status === null ? "CLOSED" : status;
       const url = buildUrl(`./boards/${board}/votings/${voting}`);
       const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ status: resolvedStatus }),
+        body: JSON.stringify({ status }),
         headers: { "Content-Type": "application/json" },
       });
 

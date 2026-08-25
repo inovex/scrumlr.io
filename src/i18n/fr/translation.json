@@ -406,7 +406,7 @@
     "increaseVotes": "Augmenter le nombre de votes",
     "decreaseVotes": "Diminuer le nombre de votes",
     "startVoting": "Démarrer la phase de vote",
-    "cancelVoting": "Annuler la phase de vote",
+    "abortVoting": "Annuler la phase de vote",
     "stopVoting": "Terminer la phase de vote"
   },
   "VoteDisplay": {

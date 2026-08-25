@@ -402,7 +402,7 @@
     "increaseVotes": "Increase number of votes",
     "decreaseVotes": "Decrease number of votes",
     "startVoting": "Start voting phase",
-    "cancelVoting": "Cancel voting phase",
+    "abortVoting": "Abort voting phase",
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {

@@ -59,8 +59,8 @@ export const VotingDialog = () => {
             <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
 
-          <button className="voting-dialog__start-button voting-dialog__cancel-button" data-testid="voting-dialog__cancel-button" onClick={() => abort_voting()}>
-            <label>{t("VoteConfigurationButton.cancelVoting")}</label>
+          <button className="voting-dialog__start-button" data-testid="voting-dialog__abort-button" onClick={() => abort_voting()}>
+            <label>{t("VoteConfigurationButton.abortVoting")}</label>
           </button>
         </>
       ) : (
