@@ -303,17 +303,19 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, te.err)
 			}
 
-			if te.board.AccessPolicy == boards.ByInvite {
-				sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionRequestExists, te.err)
-				if !te.sessionRequestExists {
-					sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
-				}
-			} else {
-				if !te.sessionExists {
-					sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
-						Return(new(sessions.BoardSession), te.err)
-				}
+			isInvitePolicy := te.board.AccessPolicy == boards.ByInvite
+			needsSessionReqCreation := isInvitePolicy && !te.sessionRequestExists
+			needsSessionCreation := !isInvitePolicy && !te.sessionExists
 
+			if isInvitePolicy {
+				sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionRequestExists, te.err)
+			}
+			if needsSessionReqCreation {
+				sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
+			}
+			if needsSessionCreation {
+				sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
+					Return(new(sessions.BoardSession), te.err)
 			}
 
 			rr := httptest.NewRecorder()
@@ -321,13 +323,12 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			s.joinBoard(rr, req.Request())
 
 			suite.Equal(te.expectedCode, rr.Result().StatusCode)
-			if te.err == nil {
-				switch te.expectedCode {
-				case http.StatusSeeOther, http.StatusCreated:
-					location := rr.Result().Header.Get("Location")
-					suite.True(strings.HasPrefix(location, "/boards/"), "Location header should use configured baseURL, got: %s", location)
-					suite.False(strings.Contains(location, "r.Host"), "Location header must not contain r.Host")
-				}
+
+			shouldAssertLocation := te.err == nil && (te.expectedCode == http.StatusSeeOther || te.expectedCode == http.StatusCreated)
+			if shouldAssertLocation {
+				location := rr.Result().Header.Get("Location")
+				suite.True(strings.HasPrefix(location, "/boards/"), "Location header should use configured baseURL, got: %s", location)
+				suite.False(strings.Contains(location, "r.Host"), "Location header must not contain r.Host")
 			}
 			boardMock.AssertExpectations(suite.T())
 			sessionMock.AssertExpectations(suite.T())
