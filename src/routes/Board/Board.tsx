@@ -49,7 +49,7 @@ export const Board = () => {
         locked: applicationState.board.data?.isLocked,
       },
       columns: applicationState.columns,
-      requests: applicationState.requests,
+      requests: applicationState.requests ?? [],
       participants: applicationState.participants,
       auth: applicationState.auth,
       view: applicationState.view,
