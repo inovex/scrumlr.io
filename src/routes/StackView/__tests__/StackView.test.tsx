@@ -10,7 +10,7 @@ import {StackView} from "../StackView";
 import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 
-vi.mock("utils/hook/useImageChecker.ts", async () => ({
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
   useImageChecker: () => false,
 }));
 

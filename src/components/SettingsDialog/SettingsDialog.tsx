@@ -99,6 +99,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     return (
       <Link
+        key={menuEntry.key}
         to={menuEntry.value.location}
         className={classNames("navigation__item", {"navigation__item--active": menuEntry.value.location === activeMenuItem?.location}, getColorClassName(menuEntry.value.color))}
       >
