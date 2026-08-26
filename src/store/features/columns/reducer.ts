@@ -2,13 +2,13 @@ import {TEMPORARY_COLUMN_ID} from "constants/misc";
 import {createReducer} from "@reduxjs/toolkit";
 import {ColumnsState} from "./types";
 import {createColumnOptimistically, deleteColumnOptimistically, deletedColumn, editColumnOptimistically, updatedColumns} from "./actions";
-import {initializeBoard} from "../board";
+import {getAllColumns} from "./thunks";
 
 const initialState: ColumnsState = [];
 
 export const columnsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.columns)
+    .addCase(getAllColumns.fulfilled, (_state, action) => action.payload)
     .addCase(updatedColumns, (_state, action) => action.payload)
     // .toSpliced instead .splice because of Immer
     .addCase(createColumnOptimistically, (state, action) => state.toSpliced(action.payload.index, 0, action.payload))

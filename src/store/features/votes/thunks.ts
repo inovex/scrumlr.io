@@ -2,6 +2,12 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
 import {ApplicationState, retryable} from "store";
 import {createdVote, deletedVote} from "./actions";
+import {Vote} from "./types";
+
+export const getAllVotes = createAsyncThunk<Vote[], {boardId: string}, {state: ApplicationState}>("votes/getAllVotes", async (payload) => {
+  const votes = await API.getVotes(payload.boardId);
+  return votes;
+});
 
 export const addVote = createAsyncThunk<void, string, {state: ApplicationState}>("votes/addVote", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
