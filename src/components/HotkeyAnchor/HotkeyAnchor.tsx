@@ -52,20 +52,20 @@ export const HotkeyAnchor = () => {
 
   const state = useAppSelector(
     (rootState) => ({
-      currentUser: rootState.participants!.self!,
       moderation: rootState.view.moderating,
       showAuthors: rootState.board.data?.showAuthors,
       showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
-      showHiddenColumns: rootState.participants!.self!.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       hotkeyNotificationsEnabled: rootState.view.hotkeyNotificationsEnabled,
     }),
     _.isEqual
   );
 
-  const {raisedHand} = state.currentUser;
-  const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
-  const isReady = state.currentUser.ready;
+  const currentUser = useAppSelector((rootState) => rootState.participants.self, _.isEqual);
+
+  const raisedHand = currentUser?.raisedHand;
+  const isAdmin = currentUser?.role === "OWNER" || currentUser?.role === "MODERATOR";
+  const isReady = currentUser?.ready;
 
   const hotkeyOptions = {
     enabled: state.hotkeysAreActive,
@@ -99,7 +99,7 @@ export const HotkeyAnchor = () => {
       dispatch(setModerating(false));
       dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.endPresenting"));
     } else {
-      dispatch(setFocusInitiator(state.currentUser));
+      dispatch(setFocusInitiator(currentUser!));
       if (noteRef.current) dispatch(shareNote(noteRef.current));
       dispatch(setModerating(true));
       dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.startPresenting"));
@@ -108,20 +108,20 @@ export const HotkeyAnchor = () => {
 
   const toggleReadyState = () => {
     if (isReady) {
-      dispatch(setUserReadyStatus({userId: state.currentUser.user.id, ready: false}));
+      dispatch(setUserReadyStatus({userId: currentUser?.user.id!, ready: false}));
       dispatchHotkeyNotification(t("Hotkeys.toggleReadyState.notReady"));
     } else {
-      dispatch(setUserReadyStatus({userId: state.currentUser.user.id, ready: true}));
+      dispatch(setUserReadyStatus({userId: currentUser?.user.id!, ready: true}));
       dispatchHotkeyNotification(t("Hotkeys.toggleReadyState.ready"));
     }
   };
 
   const toggleRaiseHand = () => {
     if (raisedHand) {
-      dispatch(setRaisedHandStatus({userId: state.currentUser.user.id, raisedHand: false}));
+      dispatch(setRaisedHandStatus({userId: currentUser?.user.id!, raisedHand: false}));
       dispatchHotkeyNotification(t("Hotkeys.toggleRaisedHand.lower"));
     } else {
-      dispatch(setRaisedHandStatus({userId: state.currentUser.user.id, raisedHand: true}));
+      dispatch(setRaisedHandStatus({userId: currentUser?.user.id!, raisedHand: true}));
       dispatchHotkeyNotification(t("Hotkeys.toggleRaisedHand.raise"));
     }
   };
@@ -173,7 +173,7 @@ export const HotkeyAnchor = () => {
     TOGGLE_COLUMN_VISIBILITY,
     (e: KeyboardEvent) => {
       e.preventDefault();
-      if (state.showHiddenColumns) {
+      if (currentUser?.showHiddenColumns) {
         dispatch(setShowHiddenColumns({showHiddenColumns: false}));
         dispatchHotkeyNotification(t("Hotkeys.toggleColumnVisibility.hide"));
       } else {
@@ -182,7 +182,7 @@ export const HotkeyAnchor = () => {
       }
     },
     hotkeyOptionsAdmin,
-    [state.showHiddenColumns, state.hotkeyNotificationsEnabled]
+    [currentUser?.showHiddenColumns, state.hotkeyNotificationsEnabled]
   );
   const hotkeyTimerCombo = SET_TIMER_FIRST_KEY.map((firstKey) => _.range(1, 10).map((minute) => `${firstKey}+${minute}`)).join(",");
   useHotkeys(hotkeyTimerCombo, (e) => {

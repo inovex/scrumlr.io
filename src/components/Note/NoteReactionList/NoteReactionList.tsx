@@ -43,7 +43,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
 
-  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants?.self?.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 

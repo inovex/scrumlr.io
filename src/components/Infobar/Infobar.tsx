@@ -20,7 +20,7 @@ export const InfoBar = () => {
       activeVoting: Boolean(applicationState.votings.open),
       isVotingAnonymous: applicationState.votings.open?.isAnonymous,
       possibleVotes: applicationState.votings.open?.voteLimit,
-      usedVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id).length,
+      usedVotes: applicationState.votes?.filter((v) => v.voting === applicationState.votings.open?.id).length,
       sharedNote: applicationState.board.data?.sharedNote,
     }),
     _.isEqual
