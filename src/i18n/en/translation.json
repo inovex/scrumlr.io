@@ -112,6 +112,7 @@
     "requireRegisteredAccount": "Sign in with Google, Microsoft, or SSO to automatically back up and manage your boards permanently. Anonymous profiles (guest login) cannot be associated with boards, so they will not be saved.",
     "registerNow": "Register now",
     "HistoryCard": {
+      "namePlaceholder": "<Empty>",
       "Info": {
         "amountColumns_one": "{{count}} Column",
         "amountColumns_other": "{{count}} Columns",

@@ -72,7 +72,7 @@ export const Votes: FC<VotesProps> = (props) => {
       .join(", ");
 
     return {participantsNames: names, isAnonymous: false};
-  });
+  }, _.isEqual);
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants.self?.role));
 

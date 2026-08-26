@@ -1,7 +1,7 @@
 import {Color} from "constants/colors";
-import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "store/features/board/types";
+import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "store/features/board/types";
 import {BoardOverview} from "store/features/history/types";
-import {SERVER_HTTP_URL} from "../config";
+import {buildUrl} from "./index";
 
 export const BoardAPI = {
   /**
@@ -11,7 +11,8 @@ export const BoardAPI = {
    */
   getBoards: async (): Promise<BoardOverview[]> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
+      const url = buildUrl(`./boards`);
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
@@ -25,6 +26,32 @@ export const BoardAPI = {
       throw new Error(`unable to get boards`, {cause: error});
     }
   },
+
+  /**
+   * Get a board with the given id
+   *
+   * @param id the id of the board
+   *
+   * @returns the board
+   */
+  getBoard: async (id: string): Promise<Board> => {
+    try {
+      const url = buildUrl(`./boards/${id}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Board;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get board`, {cause: error});
+    }
+  },
+
   /**
    * Creates a board with the specified parameters and returns the board id.
    *
@@ -40,9 +67,10 @@ export const BoardAPI = {
     description: string | undefined,
     accessPolicy: CreateSessionAccessPolicy,
     columns: {name: string; visible: boolean; color: Color}[]
-  ) => {
+  ): Promise<string> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
+      const url = buildUrl(`./boards`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -55,8 +83,8 @@ export const BoardAPI = {
       });
 
       if (response.status === 201) {
-        const body = await response.json();
-        return body.id as string;
+        const body = (await response.json()) as Board;
+        return body.id;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);
@@ -64,9 +92,18 @@ export const BoardAPI = {
       throw new Error(`unable to create board`, {cause: error});
     }
   },
-  importBoard: async (boardJson: BoardImportData) => {
+
+  /**
+   * Import a josn board
+   *
+   * @param boardJson board to import
+   *
+   * @returns imported board
+   */
+  importBoard: async (boardJson: BoardImportData): Promise<ImportBoardResponse> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/import`, {
+      const url = buildUrl(`./import`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -93,16 +130,17 @@ export const BoardAPI = {
    *
    * @returns the updated board model
    */
-  editBoard: async (id: string, board: EditBoardRequest) => {
+  editBoard: async (id: string, board: EditBoardRequest): Promise<Board> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}`, {
+      const url = buildUrl(`./boards/${id}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(board),
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Board;
       }
 
       throw new Error(`unable to update board with response status ${response.status}`);
@@ -114,18 +152,21 @@ export const BoardAPI = {
   /**
    * Deletes the board with the specified id.
    *
-   * @param board identifies the board which will be deleted
+   * @param id identifies the board which will be deleted
    */
-  deleteBoard: async (board: string) => {
+  deleteBoard: async (id: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}`, {
+      const url = buildUrl(`./boards/${id}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
 
-      if (response.status !== 204) {
-        throw new Error(`delete board request resulted in response status ${response.status}`);
+      if (response.status === 204) {
+        return;
       }
+
+      throw new Error(`delete board request resulted in response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to create board`, {cause: error});
     }
@@ -134,14 +175,15 @@ export const BoardAPI = {
   /**
    * Exports the board by the specified id and MIME type.
    *
-   * @param board the board id
+   * @param id the board id
    * @param type the MIME type
    *
    * @returns the response of the fetch call
    */
-  exportBoard: async (board: string, type: "text/csv" | "application/json") => {
+  exportBoard: async (id: string, type: "text/csv" | "application/json"): Promise<Response> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/export`, {
+      const url = buildUrl(`./boards/${id}/export`);
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           Accept: type,
@@ -158,16 +200,26 @@ export const BoardAPI = {
       throw new Error(`unable to create board`, {cause: error});
     }
   },
-  setTimer: async (id: string, minutes: number) => {
+
+  /**
+   * Set a new timer for a board
+   *
+   * @param id id of the board
+   * @param minutes minutes for the timer to set
+   *
+   * @returns board with set timer
+   */
+  setTimer: async (id: string, minutes: number): Promise<Board> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
+      const url = buildUrl(`./boards/${id}/timer`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({minutes}),
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Board;
       }
 
       throw new Error(`unable to update board timer with response status ${response.status}`);
@@ -175,15 +227,24 @@ export const BoardAPI = {
       throw new Error(`unable to update board timer`, {cause: error});
     }
   },
-  deleteTimer: async (id: string) => {
+
+  /**
+   * Delte the timer of a board
+   *
+   * @param id id of the board
+   *
+   * @returns board with the deleted timer
+   */
+  deleteTimer: async (id: string): Promise<Board> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
+      const url = buildUrl(`./boards/${id}/timer`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Board;
       }
 
       throw new Error(`unable to delete board timer with response status ${response.status}`);
@@ -191,15 +252,24 @@ export const BoardAPI = {
       throw new Error(`unable to delete board timer`, {cause: error});
     }
   },
-  incrementTimer: async (id: string) => {
+
+  /**
+   * Increment the timer of a board by one minute
+   *
+   * @param id id of the board
+   *
+   * @returns board with the incremented timer
+   */
+  incrementTimer: async (id: string): Promise<Board> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer/increment`, {
+      const url = buildUrl(`./boards/${id}/timer/increment`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Board;
       }
 
       throw new Error(`unable to increment board timer with response status ${response.status}`);
