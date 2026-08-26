@@ -4,8 +4,15 @@ import {ApplicationState, retryable} from "store";
 import {API} from "api";
 import {SERVER_WEBSOCKET_PROTOCOL} from "config";
 import {permittedBoardAccess, bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
+import {Request} from "./types";
 
 let socket: Socket | null = null;
+
+export const getAllRequests = createAsyncThunk<Request[], {boardId: string}, {state: ApplicationState}>("requests/getAllRequests", async (payload, {dispatch, getState}) => {
+  // TODO check if user is able to fetch the requests, needs moderator or owner role
+  const requests = await API.getRequests(payload.boardId);
+  return requests;
+});
 
 export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
   "requests/pendingBardAccessConfirmation",

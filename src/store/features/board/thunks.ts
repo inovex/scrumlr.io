@@ -9,25 +9,18 @@ import i18n from "i18n";
 import {Toast} from "utils/Toast";
 import {findParticipantById, mapMultipleParticipants, mapSingleParticipant} from "utils/participant";
 import {dynamicTemplatesKey} from "utils/i18n";
-import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
-import {deletedColumn, updatedColumns} from "../columns";
-import {deletedNote, syncNotes, updatedNotes} from "../notes";
-import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
-import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
-import {createdVoting, updatedVoting} from "../votings";
-import {deletedVotes} from "../votes";
-import {createJoinRequest, updateJoinRequest} from "../requests";
+import {updatedBoard, updatedBoardTimer} from "./actions";
+import {deletedColumn, getAllColumns, updatedColumns} from "../columns";
+import {deletedNote, getAllNotes, syncNotes, updatedNotes} from "../notes";
+import {addedReaction, deletedReaction, getAllReactions, updatedReaction} from "../reactions";
+import {createdParticipant, getAllParticipants, setParticipants, updatedParticipant} from "../participants";
+import {createdVoting, getAllVotings, updatedVoting} from "../votings";
+import {deletedVotes, getAllVotes} from "../votes";
+import {createJoinRequest, getAllRequests, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {noteDragStarted, noteDragEnded} from "../dragLocks";
-import {BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "./types";
+import {Board, BoardImportData, CreateSessionAccessPolicy, EditBoardRequest, ImportBoardResponse} from "./types";
 import {TemplateWithColumns} from "../templates";
-import {Column} from "store/features/columns/types";
-import {Note} from "store/features/notes/types";
-import {Reaction} from "store/features/reactions/types";
-import {Request} from "store/features/requests/types";
-import {Vote} from "store/features/votes/types";
-import {Voting} from "store/features/votings/types";
-import {Auth} from "store/features/auth/types";
 
 // helper function to handle board deletion redirects
 const redirectToBoardDeletedPage = () => {
@@ -44,46 +37,43 @@ export const sendWebSocketMessage = (message: ClientMessage) => {
 };
 
 // creates a board from a template and returns board id if successful
-export const createBoardFromTemplate = createAsyncThunk<
-  string,
-  {
-    templateWithColumns: TemplateWithColumns;
-    accessPolicy: CreateSessionAccessPolicy;
-  }
->("board/createBoardFromTemplate", async (payload, {dispatch}) => {
-  // finally, translate names and descriptions, since only the keys were stored until this point
-  const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
-    template: {
-      ...toBeTranslated.template,
-      name: i18n.t(dynamicTemplatesKey(toBeTranslated.template.name), {ns: "templates"}),
-      description: i18n.t(dynamicTemplatesKey(toBeTranslated.template.description), {ns: "templates"}),
-    },
-    columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
-      ...toBeTranslatedColumn,
-      name: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.name), {ns: "templates"}),
-      description: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.description), {ns: "templates"}),
-    })),
-  });
-
-  const translatedTemplateWithColumns =
-    payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
-
-  try {
-    return await API.createBoard(
-      translatedTemplateWithColumns.template.name,
-      translatedTemplateWithColumns.template.description,
-      payload.accessPolicy,
-      translatedTemplateWithColumns.columns
-    );
-  } catch (error) {
-    Toast.error({
-      title: i18n.t("Error.createBoard"),
-      buttons: [i18n.t("Error.retry")],
-      firstButtonOnClick: () => dispatch(createBoardFromTemplate(payload)),
+export const createBoardFromTemplate = createAsyncThunk<string, {templateWithColumns: TemplateWithColumns; accessPolicy: CreateSessionAccessPolicy}>(
+  "board/createBoardFromTemplate",
+  async (payload, {dispatch}) => {
+    // finally, translate names and descriptions, since only the keys were stored until this point
+    const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
+      template: {
+        ...toBeTranslated.template,
+        name: i18n.t(dynamicTemplatesKey(toBeTranslated.template.name), {ns: "templates"}),
+        description: i18n.t(dynamicTemplatesKey(toBeTranslated.template.description), {ns: "templates"}),
+      },
+      columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
+        ...toBeTranslatedColumn,
+        name: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.name), {ns: "templates"}),
+        description: i18n.t(dynamicTemplatesKey(toBeTranslatedColumn.description), {ns: "templates"}),
+      })),
     });
-    throw error;
+
+    const translatedTemplateWithColumns =
+      payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
+
+    try {
+      return await API.createBoard(
+        translatedTemplateWithColumns.template.name,
+        translatedTemplateWithColumns.template.description,
+        payload.accessPolicy,
+        translatedTemplateWithColumns.columns
+      );
+    } catch (error) {
+      Toast.error({
+        title: i18n.t("Error.createBoard"),
+        buttons: [i18n.t("Error.retry")],
+        firstButtonOnClick: () => dispatch(createBoardFromTemplate(payload)),
+      });
+      throw error;
+    }
   }
-});
+);
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {
@@ -93,13 +83,7 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
 });
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
-export const permittedBoardAccess = createAsyncThunk<
-  void,
-  string,
-  {
-    state: ApplicationState;
-  }
->("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
+export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
   const {serverTimeOffset} = getState().view;
   const self = getState().auth.user!;
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
@@ -110,50 +94,16 @@ export const permittedBoardAccess = createAsyncThunk<
 
       switch (message.type) {
         case "INIT": {
-          const board = await API.getBoard(boardId);
-          const columns = await API.getColumns(boardId).catch(() => {
-            return [] as Column[];
-          });
-          const notes = await API.getNotes(boardId).catch(() => {
-            return [] as Note[];
-          });
-          const reactions = await API.getReactions(boardId).catch(() => {
-            return [] as Reaction[];
-          });
-          const votes = await API.getVotes(boardId).catch(() => {
-            return [] as Vote[];
-          });
-          const votings = await API.getVotings(boardId).catch(() => {
-            return [] as Voting[];
-          });
-          const userAuth = await API.getUsers(boardId).catch(() => {
-            return [] as Auth[];
-          });
-          const participants = await API.getParticipants(boardId);
-          const newParticipants = mapMultipleParticipants(participants, userAuth);
-          let requests: Request[] = [];
-          if (newParticipants.find((p) => p.user.id === self.id)?.role == "MODERATOR" || newParticipants.find((p) => p.user.id === self.id)?.role == "OWNER") {
-            requests = await API.getRequests(boardId).catch(() => {
-              return [] as Request[];
-            });
-          }
+          const board = dispatch(getBoard({boardId: boardId, serverTimeOffset: serverTimeOffset}));
+          const columns = dispatch(getAllColumns({boardId: boardId}));
+          const notes = dispatch(getAllNotes({boardId: boardId}));
+          const reactions = dispatch(getAllReactions({boardId: boardId}));
+          const votings = dispatch(getAllVotings({boardId: boardId}));
+          const votes = dispatch(getAllVotes({boardId: boardId}));
+          const participants = dispatch(getAllParticipants({boardId: boardId, self: self}));
+          const requests = dispatch(getAllRequests({boardId: boardId}));
 
-          dispatch(
-            initializeBoard({
-              fullBoard: {
-                board,
-                columns,
-                notes: notes ?? [],
-                participants: newParticipants,
-                reactions: reactions ?? [],
-                requests: requests ?? [],
-                votes: votes ?? [],
-                votings: votings ?? [],
-              },
-              serverTimeOffset,
-              self,
-            })
-          );
+          Promise.all([board, columns, notes, reactions, votings, votes, participants, requests]).catch(() => {});
           break;
         }
 
@@ -319,13 +269,15 @@ export const permittedBoardAccess = createAsyncThunk<
   });
 });
 
-export const editBoard = createAsyncThunk<
-  void,
-  EditBoardRequest,
-  {
-    state: ApplicationState;
+export const getBoard = createAsyncThunk<{board: Board; serverTimeOffset: number}, {boardId: string; serverTimeOffset: number}, {state: ApplicationState}>(
+  "boards/getBoard",
+  async (payload, {dispatch, getState}) => {
+    const board = await API.getBoard(payload.boardId);
+    return {board: board, serverTimeOffset: payload.serverTimeOffset};
   }
->("board/editBoard", async (payload, {dispatch, getState}) => {
+);
+
+export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: ApplicationState}>("board/editBoard", async (payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   await retryable(
@@ -350,46 +302,22 @@ export const editBoard = createAsyncThunk<
   );
 });
 
-export const setTimer = createAsyncThunk<
-  void,
-  number,
-  {
-    state: ApplicationState;
-  }
->("board/setTimer", async (payload, {getState}) => {
+export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("board/setTimer", async (payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.setTimer(id, payload);
 });
 
-export const cancelTimer = createAsyncThunk<
-  void,
-  void,
-  {
-    state: ApplicationState;
-  }
->("board/cancelTimer", async (_payload, {getState}) => {
+export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/cancelTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.deleteTimer(id);
 });
 
-export const incrementTimer = createAsyncThunk<
-  void,
-  void,
-  {
-    state: ApplicationState;
-  }
->("board/incrementTimer", async (_payload, {getState}) => {
+export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/incrementTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.incrementTimer(id);
 });
 
-export const shareNote = createAsyncThunk<
-  void,
-  string,
-  {
-    state: ApplicationState;
-  }
->("board/shareNote", async (payload, {dispatch, getState}) => {
+export const shareNote = createAsyncThunk<void, string, {state: ApplicationState}>("board/shareNote", async (payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   const note = getState().notes.find((n) => n.id === payload);
@@ -411,13 +339,7 @@ export const shareNote = createAsyncThunk<
   );
 });
 
-export const stopSharing = createAsyncThunk<
-  void,
-  void,
-  {
-    state: ApplicationState;
-  }
->("board/shareNote", async (_payload, {dispatch, getState}) => {
+export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState}>("board/shareNote", async (_payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
 
@@ -435,18 +357,13 @@ export const stopSharing = createAsyncThunk<
   );
 });
 
-export const deleteBoard = createAsyncThunk<
-  void,
-  void,
-  {
-    state: ApplicationState;
-  }
->("board/deleteBoard", async (_payload, {dispatch, getState}) => {
+export const deleteBoard = createAsyncThunk<void, void, {state: ApplicationState}>("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
     redirectToBoardDeletedPage();
   });
 });
+
 export const importBoard = createAsyncThunk<ImportBoardResponse, BoardImportData, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
   try {
     return await API.importBoard(payload);

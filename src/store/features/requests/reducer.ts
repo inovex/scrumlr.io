@@ -1,13 +1,13 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {RequestsState} from "./types";
-import {initializeBoard} from "../board";
 import {createJoinRequest, updateJoinRequest} from "./actions";
+import {getAllRequests} from "./thunks";
 
 const initialState: RequestsState = [];
 
 export const requestsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.requests)
+    .addCase(getAllRequests.fulfilled, (_state, action) => action.payload)
     .addCase(createJoinRequest, (state, action) => {
       state.push(action.payload);
     })
