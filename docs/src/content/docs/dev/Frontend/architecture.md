@@ -31,7 +31,7 @@ flowchart TB
 
 The dotted arrow is the part that matters. Components dispatch thunks, thunks call REST, and the resulting state change
 arrives back **over the WebSocket** as a separate action. State is not updated by the thunk that caused the change. See
-[State & Realtime](/dev/frontend/state-management/) for why, and what it means for the code you write.
+[State & Realtime](/docs/src/content/docs/dev/frontend/state-management.md) for why, and what it means for the code you write.
 
 ## Entry point
 
@@ -79,7 +79,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 There is no `react-router-dom` in this project. Importing from it will fail to resolve.
 
 | Path | Renders | Gate |
-|---|---|---|
+| --- | --- | --- |
 | `/` | `Homepage` | public |
 | `/login` | `LoginBoard` | public |
 | `/legal/{termsAndConditions,privacyPolicy,cookiePolicy}` | `Legal` | public |
@@ -136,7 +136,7 @@ flowchart TB
 switches on `state.board.status`:
 
 | Status | Renders |
-|---|---|
+| --- | --- |
 | `accepted`, `ready` | `<CustomDndContext><Board /></CustomDndContext>` |
 | `passphrase_required`, `incorrect_passphrase` | `PassphraseDialog` |
 | `rejected`, `too_many_join_requests`, `banned` | `RejectionPage` |
@@ -238,7 +238,7 @@ new module into `API`. Endpoint documentation lives with the backend: see [API d
 **Domain types live with the slice that owns them**, in `src/store/features/<slice>/types.ts`:
 
 | Type | Defined in |
-|---|---|
+| --- | --- |
 | `Board`, `AccessPolicy`, `BoardImportData` | `store/features/board/types.ts` |
 | `Note`, `EditNote` | `store/features/notes/types.ts` |
 | `Column` | `store/features/columns/types.ts` |
