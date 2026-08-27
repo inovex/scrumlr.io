@@ -46,7 +46,7 @@ export const VotingDialog = () => {
     navigate("..");
   };
 
-  const abort_voting = () => {
+  const abortVotingCallback = () => {
     dispatch(abortVoting(voting!));
     navigate("..");
   }
@@ -59,7 +59,7 @@ export const VotingDialog = () => {
             <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
 
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__abort-button" onClick={() => abort_voting()}>
+          <button className="voting-dialog__start-button" data-testid="voting-dialog__abort-button" onClick={() => abortVotingCallback()}>
             <label>{t("VoteConfigurationButton.abortVoting")}</label>
           </button>
         </>

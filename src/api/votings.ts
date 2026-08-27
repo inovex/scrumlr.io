@@ -94,7 +94,6 @@ export const VotingAPI = {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({ status }),
-        headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 200) {
