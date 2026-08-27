@@ -7,8 +7,8 @@ import (
 
 	"github.com/nats-io/nats.go"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 type natsClient struct {
@@ -40,8 +40,7 @@ func (n *natsClient) Publish(ctx context.Context, subject string, event any) err
 
 	data, err := json.Marshal(event)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to marshal event")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to marshal event"))
 		log.Errorw("unable to marshal event in publish", "subject", subject, "event", event, "err", err)
 	}
 
@@ -62,16 +61,15 @@ func (n *natsClient) SubscribeToBoardSessionEvents(ctx context.Context, subject 
 	_, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
 		var event BoardSessionRequestEventType
 		if err := json.Unmarshal(msg.Data, &event); err != nil {
-			span.SetStatus(codes.Error, "failed to unmarshal event")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to unmarshal event"))
 			log.Errorw("unable to unmarshal board session event in subscribeToBoardSessionEvents", "subject", subject, "err", err)
 			return
 		}
+
 		receiverChan <- &event
 	})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to subcribe to subject")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to subcribe to subject"))
 		return nil, fmt.Errorf("failed to subscribe to subject %s: %w", subject, err)
 	}
 
@@ -92,17 +90,17 @@ func (n *natsClient) SubscribeToBoardEvents(ctx context.Context, subject string)
 	_, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
 		var event BoardEvent
 		if err := json.Unmarshal(msg.Data, &event); err != nil {
-			span.SetStatus(codes.Error, "failed to unmarshal event")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to unmarshal event"))
 			log.Errorw("unable to unmarshal board event in subscribeToBoardEvents", "subject", subject, "err", err)
 			return
 		}
+
 		receiverChan <- &event
 	})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to subcribe to subject")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to subcribe to subject"))
 		return nil, fmt.Errorf("failed to subscribe to subject %s: %w", subject, err)
 	}
+
 	return receiverChan, nil
 }

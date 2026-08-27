@@ -7,23 +7,18 @@ import (
 	"errors"
 	"time"
 
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/websocket"
 )
 
 const DefaultTTL = 10 * time.Second
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 
 type Service struct {
 	database                 NotesDatabase
@@ -78,16 +73,14 @@ func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*No
 	)
 
 	if body.Text == "" {
-		err := CreateNoteError(BadRequest, "cannot create note with empty text", errors.New("cannot create note with empty text"))
-		span.SetStatus(codes.Error, "cannot create note with empty text")
-		span.RecordError(err)
-		return nil, err
+		err := errors.New("cannot create note with empty text")
+		otel.RecordErrorSpan(span, err, nil)
+		return nil, CreateNoteError(BadRequest, "cannot create note with empty text", err)
 	}
 
 	note, err := service.database.CreateNote(ctx, DatabaseNoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create note"))
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
 		return nil, CreateNoteError(Internal, "failed to create note", err)
 	}
@@ -110,10 +103,9 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 	)
 
 	if body.Text == "" {
-		err := CreateNoteError(BadRequest, "cannot import note with empty text", errors.New("cannot import note with empty text"))
-		span.SetStatus(codes.Error, "cannot import note with empty text")
-		span.RecordError(err)
-		return nil, err
+		err := errors.New("cannot import note with empty text")
+		otel.RecordErrorSpan(span, err, nil)
+		return nil, CreateNoteError(BadRequest, "cannot import note with empty text", err)
 	}
 
 	note, err := service.database.ImportNote(ctx, DatabaseNoteImport{
@@ -127,18 +119,18 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 		Text: body.Text,
 	})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to import note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to import note"))
 		log.Errorw("Could not import notes", "err", err)
 		return nil, CreateNoteError(Internal, "failed to import note", err)
 	}
 
 	notesImportCounter.Add(ctx, 1)
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board, time.Now()); err != nil {
+	err = service.boardLastModifiedUpdater.UpdateLastModified(ctx, body.Board, time.Now())
+	if err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", body.Board, "err", err)
 	}
 
-	return new(Note).From(note), err
+	return new(Note).From(note), nil
 }
 
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
@@ -153,13 +145,11 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
 	note, err := service.database.Get(ctx, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "note not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("note not found"))
 			return nil, CreateNoteError(NotFound, "note not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get note"))
 		log.Errorw("unable to get note", "note", id, "error", err)
 		return nil, CreateNoteError(Internal, "failed to get note", err)
 	}
@@ -177,8 +167,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to get notes")
+		otel.RecordErrorSpan(span, err, new("failed to get notes"))
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
 		return nil, CreateNoteError(Internal, "failed to get notes", err)
 	}
@@ -198,13 +187,11 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 	notes, err := service.database.GetByUserAndBoard(ctx, userID, boardID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "notes not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("notes not found"))
 			return nil, CreateNoteError(NotFound, "note not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get notes"))
 		log.Errorw("unable to get notes", "error", err)
 		return nil, CreateNoteError(Internal, "failed to get notes", err)
 	}
@@ -222,8 +209,7 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 
 	notes, err := service.database.GetStack(ctx, note)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get note stack")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get note stack"))
 		log.Errorw("unable to get stack", "note", note, "err", err)
 		return nil, CreateNoteError(Internal, "failed to get note stack", err)
 	}
@@ -243,50 +229,44 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 
 	precondition, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get preconditions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get preconditions"))
 		return nil, CreateNoteError(Internal, "failed to get preconditions", err)
 	}
 
 	if user != precondition.Author && !precondition.CallerRole.CanChangeNoteText() && body.Text != nil {
-		err := CreateNoteError(Forbidden, "not allowed to change note text", errors.New("not allowed to change text of note"))
-		span.SetStatus(codes.Error, "not allowed to change text of note")
-		span.RecordError(err)
-		return nil, err
+		err := errors.New("not allowed to change text of note")
+		otel.RecordErrorSpan(span, err, nil)
+		return nil, CreateNoteError(Forbidden, "not allowed to change note text", err)
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
-			span.SetStatus(codes.Error, "failed to get lock")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to get lock"))
 			return nil, CreateNoteError(Internal, "failed to get lock", err)
 		}
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil && lock.UserID != user {
-			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
-			span.SetStatus(codes.Error, "note is currently locked")
-			span.RecordError(err)
-			return nil, err
+		err := errors.New("note is currently locked")
+		otel.RecordErrorSpan(span, err, nil)
+		return nil, CreateNoteError(Conflict, "note is currently locked", err)
 	}
 
 	var positionUpdate *NoteUpdatePosition
 	edited := body.Text != nil || body.Edited
 	if body.Position != nil {
 		if !precondition.StackingAllowed && body.Position.Stack.Valid {
-			err := CreateNoteError(Forbidden, "not allowed to stack notes", errors.New("not allowed to stack notes"))
-			span.SetStatus(codes.Error, "not allowed to stack notes")
-			span.RecordError(err)
-			return nil, err
+			err := errors.New("not allowed to stack notes")
+			otel.RecordErrorSpan(span, err, nil)
+			return nil, CreateNoteError(Forbidden, "not allowed to stack notes", err)
 		}
 
 		if body.Position.Stack.Valid && body.Position.Stack.UUID == body.ID {
-			err := CreateNoteError(Forbidden, "not allowed to stack a note on self", errors.New("not allowed to stack a note on self"))
-			span.SetStatus(codes.Error, "not allowed to stack a note on self")
-			span.RecordError(err)
-			return nil, err
+			err := errors.New("not allowed to stack a note on self")
+			otel.RecordErrorSpan(span, err, nil)
+			return nil, CreateNoteError(Forbidden, "not allowed to stack a note on self", err)
 		}
 
 		if body.Position.Rank < 0 {
@@ -315,8 +295,7 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update note"))
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
 		return nil, CreateNoteError(Internal, "failed to update note", err)
 	}
@@ -339,16 +318,14 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 
 	preconditions, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get preconditions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get preconditions"))
 		return CreateNoteError(Internal, "failed to get preconditions", err)
 	}
 
 	if preconditions.Author != user && !preconditions.CallerRole.CanDeleteNote() {
-		err := CreateNoteError(Forbidden, "not allowed to delete other user's note", errors.New("not allowed to delete note from other user"))
-		span.SetStatus(codes.Error, "not allowed to delete note from other user")
-		span.RecordError(err)
-		return err
+		err := errors.New("not allowed to delete note from other user")
+		otel.RecordErrorSpan(span, err, nil)
+		return CreateNoteError(Forbidden, "not allowed to delete other user's note", err)
 	}
 
 	lock, err := service.GetLock(ctx, body.ID)
@@ -363,10 +340,9 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
-			span.SetStatus(codes.Error, "note is currently locked")
-			span.RecordError(err)
-			return err
+			err := errors.New("note is currently locked")
+			otel.RecordErrorSpan(span, err, nil)
+			return CreateNoteError(Conflict, "note is currently locked", err)
 		}
 	}
 
@@ -374,8 +350,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	if body.DeleteStack {
 		stack, err := service.GetStack(ctx, body.ID)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get note stack")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to get note stack"))
 			return err
 		}
 
@@ -389,8 +364,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 
 	err = service.database.DeleteNote(ctx, user, body.Board, body.ID, body.DeleteStack)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete note"))
 		log.Errorw("unable to delete note", "note", body, "err", err)
 		return CreateNoteError(Internal, "failed to delete note", err)
 	}
@@ -413,8 +387,7 @@ func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uui
 
 	userNotes, err := service.GetByUserAndBoard(ctx, userID, boardID)
 	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to fetch notes")
+		otel.RecordErrorSpan(span, err, new("failed to fetch notes"))
 		log.Errorw("failed to get all user notes for board during user deletion", "board", boardID, "user", userID, "err", err)
 		return err
 	}
@@ -427,8 +400,9 @@ func (service *Service) DeleteUserNotesFromBoard(ctx context.Context, userID uui
 			DeleteStack: false,
 		}
 
-		if err := service.Delete(ctx, userID, req); err != nil {
-			span.RecordError(err)
+		err := service.Delete(ctx, userID, req)
+		if err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to delete note"))
 			log.Errorw("failed to delete note during user deletion", "note", note.ID, "user", userID, "err", err)
 		}
 	}
@@ -448,8 +422,7 @@ func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get stack"))
 		log.Errorw("failed to get stack", "err", err)
 		return false
 	}
@@ -477,8 +450,7 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get stack"))
 		log.Errorw("failed to get stack", "err", err)
 		return false
 	}
@@ -486,9 +458,8 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 	for _, note := range notes {
 		err := service.cache.Con.Delete(ctx, note.ID.String())
 		if err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to release lock"))
 			log.Errorw("failed to release lock", "note", note.ID, "err", err)
-			span.SetStatus(codes.Error, "failed to release lock")
-			span.RecordError(err)
 			return false
 		}
 	}
@@ -517,8 +488,7 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLoc
 	var lock DragLock
 	err = json.Unmarshal(val, &lock)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to unmarschal lock data")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to unmarschal lock data"))
 		return nil, err
 	}
 
@@ -536,8 +506,7 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get stack"))
 		log.Errorw("failed to get stack", "err", err)
 		return false
 	}
@@ -560,18 +529,21 @@ func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, use
 
 	var message DragLockMessage
 	if err := json.Unmarshal(data, &message); err != nil {
-		span.SetStatus(codes.Error, "failed to unmarschal lock message")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to unmarschal lock message"))
 		log.Errorw("failed to unmarshal drag lock message", "error", err, "data", string(data))
+
 		response := DragLockResponse{
 			Type:    WebSocketMessageTypeDragLock,
 			Action:  "ERROR",
 			Success: false,
 			Error:   "Invalid message format",
 		}
-		if err := conn.WriteJSON(ctx, response); err != nil {
+
+		err = conn.WriteJSON(ctx, response)
+		if err != nil {
 			log.Errorw("failed to send drag lock response", "error", err, "response", response)
 		}
+
 		return
 	}
 
@@ -589,7 +561,9 @@ func (service *Service) HandleWebSocketMessage(ctx context.Context, boardID, use
 			Success: false,
 			Error:   "Unknown action",
 		}
-		if err := conn.WriteJSON(ctx, response); err != nil {
+
+		err := conn.WriteJSON(ctx, response)
+		if err != nil {
 			log.Errorw("failed to send drag lock response", "error", err, "response", response)
 		}
 	}
@@ -600,7 +574,8 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.update")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
+	err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now())
+	if err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
@@ -610,8 +585,7 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 
 	notes, err := service.database.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get all notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get all notes"))
 		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
 	}
 
@@ -631,7 +605,8 @@ func (service *Service) deletedNote(ctx context.Context, board uuid.UUID, notes 
 	ctx, span := tracer.Start(ctx, "scrumlr.notes.service.delete")
 	defer span.End()
 
-	if err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now()); err != nil {
+	err := service.boardLastModifiedUpdater.UpdateLastModified(ctx, board, time.Now())
+	if err != nil {
 		log.Warnw(errUnableToUpdateLastModified, "board", board, "err", err)
 	}
 
@@ -659,8 +634,7 @@ func (service *Service) acquireLock(ctx context.Context, boardID uuid.UUID, note
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to broadcast acquire lock")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to broadcast acquire lock"))
 		log.Errorw("failed to send note drag event", "err", err)
 	}
 }
@@ -679,8 +653,7 @@ func (service *Service) releaseLock(ctx context.Context, boardID uuid.UUID, note
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to broadcast release lock")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to broadcast release lock"))
 		log.Errorw("failed to send note drag event", "err", err)
 	}
 }
@@ -703,7 +676,8 @@ func (service *Service) handleAcquire(ctx context.Context, noteID, boardID, user
 		response.Error = "Note is currently being dragged by another user"
 	}
 
-	if err := conn.WriteJSON(ctx, response); err != nil {
+	err := conn.WriteJSON(ctx, response)
+	if err != nil {
 		log.Errorw("failed to send drag lock response", "error", err, "response", response)
 	}
 }
@@ -726,7 +700,8 @@ func (service *Service) handleRelease(ctx context.Context, noteID, boardID, user
 		response.Error = "Lock not owned by user or already released"
 	}
 
-	if err := conn.WriteJSON(ctx, response); err != nil {
+	err := conn.WriteJSON(ctx, response)
+	if err != nil {
 		log.Errorw("failed to send drag lock response", "error", err, "response", response)
 	}
 }

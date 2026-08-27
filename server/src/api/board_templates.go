@@ -5,11 +5,11 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -37,8 +37,7 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	// parse request
 	var body boardtemplates.CreateBoardTemplateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -48,8 +47,7 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boardTemplates.Create(r.Context(), body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create board template"))
 		log.Errorw("Unable to create board template", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -82,8 +80,7 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	templateId := ctx.Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	template, err := s.boardTemplates.Get(ctx, templateId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board template"))
 		log.Errorw("unable to get board template", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -114,8 +111,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 
 	templates, err := s.boardTemplates.GetAll(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board templates"))
 		log.Errorw("unable to get board templates for that user", "user", user, "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -149,8 +145,7 @@ func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	var body boardtemplates.BoardTemplateUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -158,8 +153,7 @@ func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	body.ID = templateId
 	updatedTemplate, err := s.boardTemplates.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update board template"))
 		log.Errorw("Unable to update board template", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -192,8 +186,7 @@ func (s *Server) deleteBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	err := s.boardTemplates.Delete(ctx, templateId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete board template"))
 		log.Errorw("Unable to delete board template", "err", err)
 		http.Error(w, "failed to delete board template", http.StatusInternalServerError)
 		return

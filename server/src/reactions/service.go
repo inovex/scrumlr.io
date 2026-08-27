@@ -6,17 +6,12 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/realtime"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/reactions")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/reactions")
 
 type ReactionDatabase interface {
 	Get(ctx context.Context, id uuid.UUID) (DatabaseReaction, error)
@@ -53,19 +48,17 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 
 	currentReactions, err := service.database.GetAllForNote(ctx, body.Note)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get current reactions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get current reactions"))
 		log.Errorw("Unable to get current reactions for note", body.Note, "boardId", body.Board)
 		return nil, CreateReactionError(Internal, "failed to get current reactions", err)
 	}
 
 	for _, currentReaction := range currentReactions {
 		if currentReaction.User == body.User {
-			err := CreateReactionError(Conflict, "cannot make multiple reactions on the same note by the same user", errors.New("cannot make multiple reactions on the same note by the same user"))
-			span.SetStatus(codes.Error, "multiple reactions not allowed")
-			span.RecordError(err)
+			err := errors.New("cannot make multiple reactions on the same note by the same user")
+			otel.RecordErrorSpan(span, err, new("multiple reactions not allowed"))
 			log.Errorw("Cannot make multiple reactions on the same note by the same user", "user", body.User, "note", body.Note)
-			return nil, err
+			return nil, CreateReactionError(Conflict, "cannot make multiple reactions on the same note by the same user", err)
 		}
 	}
 
@@ -76,8 +69,7 @@ func (service *Service) Create(ctx context.Context, body ReactionCreateRequest) 
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create reaction")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create reaction"))
 		log.Errorw("Unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
 		return nil, CreateReactionError(Internal, "failed to create reaction", err)
 	}
@@ -99,12 +91,11 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 	reaction, err := service.database.Get(ctx, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "reaction not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("reaction not found"))
 			return nil, CreateReactionError(NotFound, "reaction not found", err)
 		}
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
+
+		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
 		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
@@ -123,8 +114,7 @@ func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*React
 
 	reactions, err := service.database.GetAll(ctx, boardId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reactions for board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get reactions for board"))
 		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
 		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
@@ -146,23 +136,20 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 
 	currentReaction, err := service.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
 		return nil, err
 	}
 
 	if currentReaction.User != user {
-		err := CreateReactionError(Forbidden, "forbidden to update other user's reaction", errors.New("forbidden to update other user's reaction"))
-		span.SetStatus(codes.Error, "cannot update reaction from other user")
-		span.RecordError(err)
+		err := errors.New("forbidden to update other user's reaction")
+		otel.RecordErrorSpan(span, err, new("cannot update reaction from other user"))
 		log.Errorw("Unable to update reaction from other users", "reactionUserId", currentReaction.User, "user", user)
-		return nil, err
+		return nil, CreateReactionError(Forbidden, "forbidden to update other user's reaction", err)
 	}
 
 	reaction, err := service.database.Update(ctx, id, DatabaseReactionUpdate{ReactionType: body.ReactionType})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update reaction")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update reaction"))
 		log.Errorw("Unable to update reaction", "id", id, "type", body.ReactionType, "error", err)
 		return nil, CreateReactionError(Internal, "failed to update reaction", err)
 	}
@@ -185,8 +172,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 
 	reaction, err := service.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
 		return err
 	}
 
@@ -200,8 +186,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 
 	err = service.database.Delete(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete reaction")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete reaction"))
 		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
 		return CreateReactionError(Internal, "failed to delete reaction", err)
 	}
@@ -227,8 +212,7 @@ func (service *Service) addReaction(ctx context.Context, board uuid.UUID, reacti
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send add reaction message")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send add reaction message"))
 	}
 }
 
@@ -248,8 +232,7 @@ func (service *Service) updateReaction(ctx context.Context, board uuid.UUID, rea
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send update reaction message")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send update reaction message"))
 	}
 }
 
@@ -267,7 +250,6 @@ func (service *Service) deleteReaction(ctx context.Context, board, reaction uuid
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send delete reaction message")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send delete reaction message"))
 	}
 }

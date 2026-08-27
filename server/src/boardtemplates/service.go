@@ -6,18 +6,12 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/timeprovider"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boardtemplates")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/boardtemplates")
 
 type BoardTemplateDatabase interface {
 	Create(ctx context.Context, board DatabaseBoardTemplateInsert) (DatabaseBoardTemplate, error)
@@ -63,8 +57,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 	// create the board template
 	b, err := service.database.Create(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create board template"))
 		log.Errorw("unable to create board template", "creator", body.Creator, "policy", "err", err)
 		return nil, CreateBoardTemplateError(Internal, "failed to create board template", err)
 	}
@@ -73,8 +66,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 		column := columntemplates.ColumnTemplateRequest{BoardTemplate: b.ID, Name: value.Name, Description: value.Description, Color: value.Color, Visible: value.Visible, Index: &index, User: body.Creator}
 		_, err := service.columnTemplateService.Create(ctx, column)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to create column template")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to create column template"))
 			return nil, err
 		}
 	}
@@ -95,12 +87,11 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*BoardTemplate, 
 	boardTemplate, err := service.database.Get(ctx, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "no board template found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("no board template found"))
 			return nil, CreateBoardTemplateError(NotFound, "no board template found", err)
 		}
-		span.SetStatus(codes.Error, "failed to get board template")
-		span.RecordError(err)
+
+		otel.RecordErrorSpan(span, err, new("failed to get board template"))
 		log.Errorw("unable to get board template", "board", id, "err", err)
 		return nil, CreateBoardTemplateError(Internal, "failed to get board template", err)
 	}
@@ -119,8 +110,7 @@ func (service *Service) GetAll(ctx context.Context, user uuid.UUID) ([]*BoardTem
 
 	templates, err := service.database.GetAll(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board templates"))
 		log.Errorw("unable to list board templates", "user", user, "err", err)
 		return nil, CreateBoardTemplateError(Internal, "failed to get board templates", err)
 	}
@@ -153,8 +143,7 @@ func (service *Service) Update(ctx context.Context, body BoardTemplateUpdateRequ
 
 	updatedTemplate, err := service.database.Update(ctx, updateBoard)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update board template"))
 		log.Errorw("unable to update board template", "board", body.ID, "err", err)
 		return nil, CreateBoardTemplateError(Internal, "failed to update board template", err)
 	}
@@ -173,8 +162,7 @@ func (service *Service) Delete(ctx context.Context, templateId uuid.UUID) error 
 
 	err := service.database.Delete(ctx, templateId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete board template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete board template"))
 		log.Errorw("unable to delete board template", "board", templateId, "err", err)
 		return CreateBoardTemplateError(Internal, "failed to delete board template", err)
 	}

@@ -1,6 +1,13 @@
 package boards
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
 
 var boardCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.boards.created.counter",

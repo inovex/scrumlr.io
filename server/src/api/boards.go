@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
@@ -54,8 +55,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	// parse request
 	var body boards.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -65,8 +65,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create board"))
 		log.Errorw("failed to create board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -101,8 +100,7 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 
 	err := s.boards.Delete(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create board"))
 		log.Errorw("failed to delete board", "err", err)
 		http.Error(w, "failed to delete board", http.StatusInternalServerError)
 		return
@@ -133,8 +131,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 
 	boardIDs, err := s.boards.GetBoards(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get boards")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get boards"))
 		log.Errorw("failed to get boards", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -142,8 +139,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 
 	OverviewBoards, err := s.boards.BoardOverview(ctx, boardIDs, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board overview")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board overview"))
 		log.Errorw("failed to get board overview", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -223,8 +219,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	boardParam := chi.URLParam(r, "id")
 	board, err := uuid.Parse(boardParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse board id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to parse board id"))
 		log.Errorw("Wrong board id", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -234,8 +229,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	sessionExists, err := s.sessions.Exists(ctx, board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check session"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -243,16 +237,14 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if sessionExists {
 		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to check if participant is banned")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
 			common.Throw(w, r, mapError(err))
 			return
 		}
 
 		if banned {
 			err := errors.New("participant is currently banned from this session")
-			span.SetStatus(codes.Error, "participant is banned")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("participant is banned"))
 			common.Throw(w, r, common.ForbiddenError(err))
 			return
 		}
@@ -263,8 +255,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Get(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -272,8 +263,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if b.AccessPolicy == boards.Public {
 		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to create session")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to create session"))
 			common.Throw(w, r, mapError(err))
 			return
 		}
@@ -287,8 +277,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		var body boards.JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to decode body"))
 			log.Errorw("Unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
@@ -296,8 +285,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 		if body.Passphrase == "" {
 			err := errors.New("missing passphrase")
-			span.SetStatus(codes.Error, "no passphrase provided")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("no passphrase provided"))
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -306,8 +294,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 			if err != nil {
-				span.SetStatus(codes.Error, "failed to create session")
-				span.RecordError(err)
+				otel.RecordErrorSpan(span, err, new("failed to create session"))
 				common.Throw(w, r, mapError(err))
 				return
 			}
@@ -318,8 +305,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 		} else {
 			err := errors.New("wrong passphrase")
-			span.SetStatus(codes.Error, "wrong passphrase provided")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -328,8 +314,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if b.AccessPolicy == boards.ByInvite {
 		sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to check session requests")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to check session requests"))
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
 		}
@@ -342,8 +327,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 		_, err = s.sessionRequests.Create(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to create session request")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to create session request"))
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
 		}
@@ -381,8 +365,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -391,8 +374,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	body.ID = boardId
 	board, err := s.boards.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update board"))
 		log.Errorw("Unable to update board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -427,8 +409,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
 		return
@@ -436,8 +417,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.SetTimer(ctx, boardId, body.Minutes)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to set board timer")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to set board timer"))
 		log.Errorw("Unable to set board timer", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -471,8 +451,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.DeleteTimer(ctx, boardId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete board timer")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete board timer"))
 		log.Errorw("Unable to delete board timer", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -506,8 +485,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 
 	board, err := s.boards.IncrementTimer(ctx, boardId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to increment board timer")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to increment board timer"))
 		log.Errorw("Unable to increment board timer", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -542,8 +520,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	fullBoard, err := s.boards.FullBoard(ctx, boardId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get full board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get full board"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -600,8 +577,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				if session.UserID == note.Author {
 					user, err := s.users.Get(ctx, session.UserID)
 					if err != nil {
-						span.SetStatus(codes.Error, "failed to get note author user")
-						span.RecordError(err)
+						otel.RecordErrorSpan(span, err, new("failed to get note author user"))
 						common.Throw(w, r, mapError(err))
 						return
 					}
@@ -644,8 +620,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		csvWriter := csv.NewWriter(w)
 		err := csvWriter.WriteAll(records)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to respond with csv")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to respond with csv"))
 			log.Errorw("failed to respond with csv", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
@@ -680,8 +655,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	var body boards.ImportBoardRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Could not read body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -690,8 +664,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	body.Board.Owner = owner
 	b, err := s.boards.Import(ctx, owner, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to import board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to import board"))
 		log.Errorw("Could not import board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
