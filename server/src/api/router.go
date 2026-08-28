@@ -31,7 +31,6 @@ import (
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -45,6 +44,7 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
+	healthRoutes  chi.Router
 	userRoutes    chi.Router
 	sessionRoutes chi.Router
 	swaggerRoutes chi.Router
@@ -57,7 +57,6 @@ type Server struct {
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
-	health          health.HealthService
 	feedback        feedback.FeedbackService
 	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
@@ -88,6 +87,7 @@ func New(
 	wsService websocket.Upgrader,
 	auth auth.Auth,
 
+	healtRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
@@ -100,7 +100,6 @@ func New(
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
-	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
@@ -147,6 +146,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		wsService:                        wsService,
+		healthRoutes:                     healtRoutes,
 		userRoutes:                       userRoutes,
 		sessionRoutes:                    sessionRoutes,
 		swaggerRoutes:                    swaggerRoutes,
@@ -161,7 +161,6 @@ func New(
 		reactions:                        reactions,
 		sessions:                         sessions,
 		sessionRequests:                  sessionRequests,
-		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
@@ -200,7 +199,7 @@ func New(
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
-		r.Get("/health", s.healthCheck)
+		r.Mount("/health", s.healthRoutes)
 		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
