@@ -45,9 +45,10 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
-	userRoutes    chi.Router
-	sessionRoutes chi.Router
-	swaggerRoutes chi.Router
+	feedbackRoutes chi.Router
+	userRoutes     chi.Router
+	sessionRoutes  chi.Router
+	swaggerRoutes  chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -88,6 +89,7 @@ func New(
 	wsService websocket.Upgrader,
 	auth auth.Auth,
 
+	feedbackRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
@@ -144,28 +146,32 @@ func New(
 	}
 
 	s := Server{
-		basePath:                         basePath,
-		realtime:                         rt,
-		wsService:                        wsService,
-		userRoutes:                       userRoutes,
-		sessionRoutes:                    sessionRoutes,
-		swaggerRoutes:                    swaggerRoutes,
+		basePath:  basePath,
+		realtime:  rt,
+		wsService: wsService,
+
+		feedbackRoutes: feedbackRoutes,
+		userRoutes:     userRoutes,
+		sessionRoutes:  sessionRoutes,
+		swaggerRoutes:  swaggerRoutes,
+
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-		auth:                             auth,
-		boards:                           boards,
-		columns:                          columns,
-		votings:                          votings,
-		users:                            users,
-		notes:                            notes,
-		reactions:                        reactions,
-		sessions:                         sessions,
-		sessionRequests:                  sessionRequests,
-		health:                           health,
-		feedback:                         feedback,
-		boardReactions:                   boardReactions,
-		boardTemplates:                   boardTemplates,
-		columntemplates:                  columntemplates,
+
+		auth:            auth,
+		boards:          boards,
+		columns:         columns,
+		votings:         votings,
+		users:           users,
+		notes:           notes,
+		reactions:       reactions,
+		sessions:        sessions,
+		sessionRequests: sessionRequests,
+		health:          health,
+		feedback:        feedback,
+		boardReactions:  boardReactions,
+		boardTemplates:  boardTemplates,
+		columntemplates: columntemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
@@ -201,7 +207,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
-		r.Post("/feedback", s.createFeedback)
+		r.Mount("/feedback", s.feedbackRoutes)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
 			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
