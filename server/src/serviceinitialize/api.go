@@ -5,6 +5,8 @@ import (
 	"scrumlr.io/server/users"
 )
 
+const notImplemented = "Not implemented"
+
 type ApiInitializer struct {
 	basePath string
 }
@@ -17,42 +19,42 @@ func NewApiInitializer(basePath string) ApiInitializer {
 
 func (init *ApiInitializer) InitializeBoardApi() {
 	// board api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeColumnApi() {
 	// column api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeBoardReactionApi() {
 	// board reaction api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeBoardTemplateApi() {
 	// board template api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeColumnTemplateApi() {
 	// column template api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeFeedbackApi() {
 	// feedback api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeHealthApi() {
 	// health api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeReactionApi() {
 	// reaction api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeSessionApi(sessionService sessions.SessionService) sessions.SessionApi {
@@ -62,7 +64,7 @@ func (init *ApiInitializer) InitializeSessionApi(sessionService sessions.Session
 
 func (init *ApiInitializer) InitializeSessionRequestApi() {
 	// session request api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeUserApi(userService users.UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) users.UsersApi {
@@ -72,10 +74,10 @@ func (init *ApiInitializer) InitializeUserApi(userService users.UserService, ses
 
 func (init *ApiInitializer) InitializeNotesApi() {
 	// notes api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeVotingApi() {
 	// voting api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }

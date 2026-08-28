@@ -20,6 +20,11 @@ import (
 	"scrumlr.io/server/websocket"
 )
 
+const getNotesFailureMessage = "failed to get notes"
+const getNoteStackFailureMessage = "failed to get note stack"
+const getNotePreconditionFailureMessage = "failed to get preconditions"
+const getNoteLockFailureMessage = "failed to get lock"
+const noteCurrentlyLockedMessage = "note is currently locked"
 const DefaultTTL = 10 * time.Second
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
@@ -178,9 +183,9 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
 		span.RecordError(err)
-		span.SetStatus(codes.Error, "failed to get notes")
+		span.SetStatus(codes.Error, getNotesFailureMessage)
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
+		return nil, CreateNoteError(Internal, getNotesFailureMessage, err)
 	}
 	return Notes(notes), nil
 }
@@ -203,10 +208,10 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 			return nil, CreateNoteError(NotFound, "note not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get notes")
+		span.SetStatus(codes.Error, getNotesFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get notes", "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
+		return nil, CreateNoteError(Internal, getNotesFailureMessage, err)
 	}
 	return Notes(notes), nil
 }
@@ -222,10 +227,10 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 
 	notes, err := service.database.GetStack(ctx, note)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get note stack")
+		span.SetStatus(codes.Error, getNoteStackFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get stack", "note", note, "err", err)
-		return nil, CreateNoteError(Internal, "failed to get note stack", err)
+		return nil, CreateNoteError(Internal, getNoteStackFailureMessage, err)
 	}
 
 	return Notes(notes), err
@@ -243,9 +248,9 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 
 	precondition, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get preconditions")
+		span.SetStatus(codes.Error, getNotePreconditionFailureMessage)
 		span.RecordError(err)
-		return nil, CreateNoteError(Internal, "failed to get preconditions", err)
+		return nil, CreateNoteError(Internal, getNotePreconditionFailureMessage, err)
 	}
 
 	if user != precondition.Author && !precondition.CallerRole.CanChangeNoteText() && body.Text != nil {
@@ -258,17 +263,17 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
-			span.SetStatus(codes.Error, "failed to get lock")
+			span.SetStatus(codes.Error, getNoteLockFailureMessage)
 			span.RecordError(err)
-			return nil, CreateNoteError(Internal, "failed to get lock", err)
+			return nil, CreateNoteError(Internal, getNoteLockFailureMessage, err)
 		}
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
-			span.SetStatus(codes.Error, "note is currently locked")
+			err := CreateNoteError(Conflict, noteCurrentlyLockedMessage, errors.New(noteCurrentlyLockedMessage))
+			span.SetStatus(codes.Error, noteCurrentlyLockedMessage)
 			span.RecordError(err)
 			return nil, err
 		}
@@ -341,9 +346,9 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 
 	preconditions, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get preconditions")
+		span.SetStatus(codes.Error, getNotePreconditionFailureMessage)
 		span.RecordError(err)
-		return CreateNoteError(Internal, "failed to get preconditions", err)
+		return CreateNoteError(Internal, getNotePreconditionFailureMessage, err)
 	}
 
 	if preconditions.Author != user && !preconditions.CallerRole.CanDeleteNote() {
@@ -356,17 +361,17 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
-			span.SetStatus(codes.Error, "failed to get lock")
+			span.SetStatus(codes.Error, getNoteLockFailureMessage)
 			span.RecordError(err)
-			return CreateNoteError(Internal, "failed to get lock", err)
+			return CreateNoteError(Internal, getNoteLockFailureMessage, err)
 		}
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
-			span.SetStatus(codes.Error, "note is currently locked")
+			err := CreateNoteError(Conflict, noteCurrentlyLockedMessage, errors.New(noteCurrentlyLockedMessage))
+			span.SetStatus(codes.Error, noteCurrentlyLockedMessage)
 			span.RecordError(err)
 			return err
 		}
@@ -376,7 +381,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	if body.DeleteStack {
 		stack, err := service.GetStack(ctx, body.ID)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get note stack")
+			span.SetStatus(codes.Error, getNoteStackFailureMessage)
 			span.RecordError(err)
 			return err
 		}
@@ -450,9 +455,9 @@ func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
+		span.SetStatus(codes.Error, getNoteStackFailureMessage)
 		span.RecordError(err)
-		log.Errorw("failed to get stack", "err", err)
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 
@@ -479,9 +484,9 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
+		span.SetStatus(codes.Error, getNoteStackFailureMessage)
 		span.RecordError(err)
-		log.Errorw("failed to get stack", "err", err)
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 
@@ -510,9 +515,9 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLoc
 
 	val, err := service.cache.Con.Get(ctx, noteID.String())
 	if err != nil {
-		span.SetStatus(codes.Ok, "failed to get lock")
+		span.SetStatus(codes.Ok, getNoteLockFailureMessage)
 		span.RecordError(err)
-		log.Infow("failed to get lock", "err", err)
+		log.Infow(getNoteLockFailureMessage, "err", err)
 		return nil, err
 	}
 
@@ -538,9 +543,9 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get stack")
+		span.SetStatus(codes.Error, getNoteStackFailureMessage)
 		span.RecordError(err)
-		log.Errorw("failed to get stack", "err", err)
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 

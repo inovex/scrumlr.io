@@ -15,6 +15,10 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const votingNotFoundMessage = "no active voting session found"
+const getVotingFailureMessage = "failed to get voting"
+const getVotesFailureMessage = "failed to get votes"
+
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/votings")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
 
@@ -117,13 +121,13 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "voting not found")
 			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get voting")
+		span.SetStatus(codes.Error, getVotingFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, CreateVotingError(Internal, "failed to get voting", err)
+		return nil, CreateVotingError(Internal, getVotingFailureMessage, err)
 	}
 
 	if voting.Status == Open {
@@ -183,7 +187,7 @@ func (service *Service) GetOpen(ctx context.Context, boardID uuid.UUID) (*Voting
 			return nil, nil
 		}
 
-		span.SetStatus(codes.Error, "failed to get voting")
+		span.SetStatus(codes.Error, getVotingFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get open votings", "board", boardID, "error", err)
 		return nil, CreateVotingError(Internal, "unable to get open votings", err)
@@ -203,10 +207,10 @@ func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFil
 
 	votes, err := service.database.GetVotes(ctx, board, f)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
+		span.SetStatus(codes.Error, getVotesFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, "failed to get votes", err)
+		return nil, CreateVotingError(Internal, getVotesFailureMessage, err)
 	}
 
 	return Votes(votes), err
@@ -227,7 +231,7 @@ func (service *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, e
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "No rows returned")
 			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
 		span.SetStatus(codes.Error, "failed to add vote")
@@ -283,7 +287,7 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 		if errors.Is(err, sql.ErrNoRows) {
 			span.SetStatus(codes.Error, "No voting found to update")
 			span.RecordError(err)
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
 		span.SetStatus(codes.Error, "failed to close voting")
@@ -294,10 +298,10 @@ func (service *Service) Close(ctx context.Context, id uuid.UUID, board uuid.UUID
 
 	receivedVotes, err := service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
+		span.SetStatus(codes.Error, getVotesFailureMessage)
 		span.RecordError(err)
 		log.Errorw("unable to get votes", "err", err)
-		return nil, CreateVotingError(Internal, "failed to get votes", err)
+		return nil, CreateVotingError(Internal, getVotesFailureMessage, err)
 	}
 
 	service.updatedVoting(ctx, board, voting, receivedVotes, affectedNotes)

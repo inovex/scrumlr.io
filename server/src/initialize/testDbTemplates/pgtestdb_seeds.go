@@ -10,6 +10,21 @@ import (
 
 var baseSeedHash = "base_seed_hash_v1"
 
+const boardCreateUUID = "7b53c2f0-d2db-5c9d-996d-b10fd8ae7d42"
+const boardCreateEmptyUUID = "ca4b7c86-f3a4-574c-8e2a-88c382f98759"
+const boardUpdateUUID = "4887cf58-241e-57dd-b051-f6bd91b527cd"
+const boardClosedUpdateUUID = "3da52e5e-3d82-59b0-b347-4abed0ff3955"
+const boardReadUUID = "c90130b5-daaa-5d9d-98bc-b29ae22b8c7e"
+const boardSortedUpdateUUID = "b0180427-ed4b-556a-a891-242daaf35918"
+const boardWriteUUID = "da359700-922e-5873-88b0-9e5f54ae10d6"
+const boardWriteClosedUUID = "3e130131-bf55-5da3-b6db-cb83d5dec13b"
+const boardWriteLimitUUID = "ac73b2e5-079d-529b-aa11-7397b0d3ed3a"
+const boardWriteMultipleUUID = "080a67b9-c089-53eb-8746-62b827b426a1"
+const columnUpdateUUID = "a6f886da-d3bd-5ae1-8dd2-2e66acec74c4"
+const columnReadUUID = "5aef3afc-92ea-5c44-9730-c76a79b01879"
+const columnSortedUpdateUUID = "b82a4fa9-1ff4-5c89-b73e-c1aa1cc4f9a8"
+const columnWriteUUID = "15ab1fe0-8c5d-53c9-8e46-f8db2ea66a09"
+
 type TestUser struct {
 	Name        string
 	ID          uuid.UUID
@@ -64,62 +79,62 @@ var (
 	stanID = users[0].ID
 
 	boards = []TestBoard{
-		{"Create", uuid.MustParse("7b53c2f0-d2db-5c9d-996d-b10fd8ae7d42")},
-		{"CreateEmpty", uuid.MustParse("ca4b7c86-f3a4-574c-8e2a-88c382f98759")},
+		{"Create", uuid.MustParse(boardCreateUUID)},
+		{"CreateEmpty", uuid.MustParse(boardCreateEmptyUUID)},
 		{"CreateDuplicate", uuid.MustParse("7ea04db6-6328-515b-8b60-9ac4d67f49a3")},
-		{"Update", uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd")},
-		{"ClosedUpdate", uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3955")},
-		{"Read", uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e")},
-		{"SortedUpdate", uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918")},
-		{"Write", uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d6")},
-		{"WriteClosed", uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13b")},
-		{"WriteLimit", uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3a")},
-		{"WriteMultiple", uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a1")},
+		{"Update", uuid.MustParse(boardUpdateUUID)},
+		{"ClosedUpdate", uuid.MustParse(boardClosedUpdateUUID)},
+		{"Read", uuid.MustParse(boardReadUUID)},
+		{"SortedUpdate", uuid.MustParse(boardSortedUpdateUUID)},
+		{"Write", uuid.MustParse(boardWriteUUID)},
+		{"WriteClosed", uuid.MustParse(boardWriteClosedUUID)},
+		{"WriteLimit", uuid.MustParse(boardWriteLimitUUID)},
+		{"WriteMultiple", uuid.MustParse(boardWriteMultipleUUID)},
 	}
 
 	columns = []TestColumn{
-		{Name: "Create", ID: uuid.MustParse("4ac88716-a2e4-50d2-875c-12e8bee73a01"), BoardID: uuid.MustParse("7b53c2f0-d2db-5c9d-996d-b10fd8ae7d42")},
-		{Name: "CreateEmpty", ID: uuid.MustParse("40a5fae0-6db8-5f9a-8ae5-e40db0de77b5"), BoardID: uuid.MustParse("ca4b7c86-f3a4-574c-8e2a-88c382f98759")},
-		{Name: "Update", ID: uuid.MustParse("a6f886da-d3bd-5ae1-8dd2-2e66acec74c4"), BoardID: uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd")},
-		{Name: "ClosedUpdate", ID: uuid.MustParse("d3bc5cfb-24c9-581c-8f0b-cdef6aba9c34"), BoardID: uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3955")},
-		{Name: "Read", ID: uuid.MustParse("5aef3afc-92ea-5c44-9730-c76a79b01879"), BoardID: uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e")},
-		{Name: "SortedUpdate", ID: uuid.MustParse("b82a4fa9-1ff4-5c89-b73e-c1aa1cc4f9a8"), BoardID: uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918")},
-		{Name: "Write", ID: uuid.MustParse("15ab1fe0-8c5d-53c9-8e46-f8db2ea66a09"), BoardID: uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d6")},
-		{Name: "WriteClosed", ID: uuid.MustParse("e67fb8c7-0ef4-5f74-916c-d60c2e6e62f5"), BoardID: uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13b")},
-		{Name: "WriteLimit", ID: uuid.MustParse("a1cef54b-8b29-5d8c-a3df-d4f6c1e27c44"), BoardID: uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3a")},
-		{Name: "WriteMultiple", ID: uuid.MustParse("77e22ed8-7d10-5b36-98f9-bc836e7d4b3f"), BoardID: uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a1")},
+		{Name: "Create", ID: uuid.MustParse("4ac88716-a2e4-50d2-875c-12e8bee73a01"), BoardID: uuid.MustParse(boardCreateUUID)},
+		{Name: "CreateEmpty", ID: uuid.MustParse("40a5fae0-6db8-5f9a-8ae5-e40db0de77b5"), BoardID: uuid.MustParse(boardCreateEmptyUUID)},
+		{Name: "Update", ID: uuid.MustParse(columnUpdateUUID), BoardID: uuid.MustParse(boardUpdateUUID)},
+		{Name: "ClosedUpdate", ID: uuid.MustParse("d3bc5cfb-24c9-581c-8f0b-cdef6aba9c34"), BoardID: uuid.MustParse(boardClosedUpdateUUID)},
+		{Name: "Read", ID: uuid.MustParse(columnReadUUID), BoardID: uuid.MustParse(boardReadUUID)},
+		{Name: "SortedUpdate", ID: uuid.MustParse(columnSortedUpdateUUID), BoardID: uuid.MustParse(boardSortedUpdateUUID)},
+		{Name: "Write", ID: uuid.MustParse(columnWriteUUID), BoardID: uuid.MustParse(boardWriteUUID)},
+		{Name: "WriteClosed", ID: uuid.MustParse("e67fb8c7-0ef4-5f74-916c-d60c2e6e62f5"), BoardID: uuid.MustParse(boardWriteClosedUUID)},
+		{Name: "WriteLimit", ID: uuid.MustParse("a1cef54b-8b29-5d8c-a3df-d4f6c1e27c44"), BoardID: uuid.MustParse(boardWriteLimitUUID)},
+		{Name: "WriteMultiple", ID: uuid.MustParse("77e22ed8-7d10-5b36-98f9-bc836e7d4b3f"), BoardID: uuid.MustParse(boardWriteMultipleUUID)},
 	}
 
 	notes = []TestNote{
-		{"Create", uuid.MustParse("89f4ab52-7630-5daf-8e02-7a57be30c94f"), stanID, uuid.MustParse("7b53c2f0-d2db-5c9d-996d-b10fd8ae7d42"), uuid.MustParse("4ac88716-a2e4-50d2-875c-12e8bee73a01"), "Create voting note"},
-		{"CreateEmpty", uuid.MustParse("18e88382-9ce7-5a62-ada0-b6bbe06d39c3"), stanID, uuid.MustParse("ca4b7c86-f3a4-574c-8e2a-88c382f98759"), uuid.MustParse("40a5fae0-6db8-5f9a-8ae5-e40db0de77b5"), "CreateEmpty voting note"},
-		{"Update1", uuid.MustParse("f8986c64-7f14-51f6-9259-280141cecb44"), stanID, uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd"), uuid.MustParse("a6f886da-d3bd-5ae1-8dd2-2e66acec74c4"), "Update voting note one"},
-		{"Update2", uuid.MustParse("de4633cc-8dd7-5b49-821c-19aefac2a85b"), stanID, uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd"), uuid.MustParse("a6f886da-d3bd-5ae1-8dd2-2e66acec74c4"), "Update voting note two"},
-		{"Update3", uuid.MustParse("16a707e0-2251-572f-abf8-e614e4baf5ed"), stanID, uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd"), uuid.MustParse("a6f886da-d3bd-5ae1-8dd2-2e66acec74c4"), "Update voting note three"},
-		{"SortedUpdate1", uuid.MustParse("c7d5e8b4-f32b-5168-af3c-122a111990ff"), stanID, uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918"), uuid.MustParse("b82a4fa9-1ff4-5c89-b73e-c1aa1cc4f9a8"), "SortedUpdate voting note one"},
-		{"SortedUpdate2", uuid.MustParse("c37fc562-c9f5-5f60-9f47-1868db1b2fcf"), stanID, uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918"), uuid.MustParse("b82a4fa9-1ff4-5c89-b73e-c1aa1cc4f9a8"), "SortedUpdate voting note two"},
-		{"SortedUpdate3", uuid.MustParse("501945c5-2c31-597a-b474-252c8f9d0c49"), stanID, uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918"), uuid.MustParse("b82a4fa9-1ff4-5c89-b73e-c1aa1cc4f9a8"), "SortedUpdate voting note three"},
-		{"ClosedUpdate", uuid.MustParse("dfc9b07f-6fc2-58ac-8c98-6c5f0c9e57a3"), stanID, uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3955"), uuid.MustParse("d3bc5cfb-24c9-581c-8f0b-cdef6aba9c34"), "ClosedUpdate voting note"},
-		{"Read1", uuid.MustParse("387f1959-8af7-5203-8395-f87a9f0c0208"), stanID, uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e"), uuid.MustParse("5aef3afc-92ea-5c44-9730-c76a79b01879"), "Read note 1"},
-		{"Read2", uuid.MustParse("d6dd038a-d06c-5d36-a97f-293fe2caddcf"), stanID, uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e"), uuid.MustParse("5aef3afc-92ea-5c44-9730-c76a79b01879"), "Read note 2"},
-		{"WriteAdd", uuid.MustParse("d016e6cf-b2d5-5b15-b44e-9ae43c8dd726"), stanID, uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d6"), uuid.MustParse("15ab1fe0-8c5d-53c9-8e46-f8db2ea66a09"), "Write add note"},
-		{"WriteRemove", uuid.MustParse("d7053980-883e-543d-a7fa-a0745452fe1b"), stanID, uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d6"), uuid.MustParse("15ab1fe0-8c5d-53c9-8e46-f8db2ea66a09"), "Write remove note"},
-		{"WriteClosed", uuid.MustParse("18c888ae-a270-5014-9262-bcae09ad28d5"), stanID, uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13b"), uuid.MustParse("e67fb8c7-0ef4-5f74-916c-d60c2e6e62f5"), "WriteClosed note"},
-		{"WriteLimit", uuid.MustParse("c330b3e9-c5dc-5eae-9d64-58d154968dcf"), stanID, uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3a"), uuid.MustParse("a1cef54b-8b29-5d8c-a3df-d4f6c1e27c44"), "WriteLimit note"},
-		{"WriteMultiple", uuid.MustParse("4f7a0be8-576e-5e65-afe5-4946ac260db0"), stanID, uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a1"), uuid.MustParse("77e22ed8-7d10-5b36-98f9-bc836e7d4b3f"), "WriteMultiple note"},
+		{"Create", uuid.MustParse("89f4ab52-7630-5daf-8e02-7a57be30c94f"), stanID, uuid.MustParse(boardCreateUUID), uuid.MustParse("4ac88716-a2e4-50d2-875c-12e8bee73a01"), "Create voting note"},
+		{"CreateEmpty", uuid.MustParse("18e88382-9ce7-5a62-ada0-b6bbe06d39c3"), stanID, uuid.MustParse(boardCreateEmptyUUID), uuid.MustParse("40a5fae0-6db8-5f9a-8ae5-e40db0de77b5"), "CreateEmpty voting note"},
+		{"Update1", uuid.MustParse("f8986c64-7f14-51f6-9259-280141cecb44"), stanID, uuid.MustParse(boardUpdateUUID), uuid.MustParse(columnUpdateUUID), "Update voting note one"},
+		{"Update2", uuid.MustParse("de4633cc-8dd7-5b49-821c-19aefac2a85b"), stanID, uuid.MustParse(boardUpdateUUID), uuid.MustParse(columnUpdateUUID), "Update voting note two"},
+		{"Update3", uuid.MustParse("16a707e0-2251-572f-abf8-e614e4baf5ed"), stanID, uuid.MustParse(boardUpdateUUID), uuid.MustParse(columnUpdateUUID), "Update voting note three"},
+		{"SortedUpdate1", uuid.MustParse("c7d5e8b4-f32b-5168-af3c-122a111990ff"), stanID, uuid.MustParse(boardSortedUpdateUUID), uuid.MustParse(columnSortedUpdateUUID), "SortedUpdate voting note one"},
+		{"SortedUpdate2", uuid.MustParse("c37fc562-c9f5-5f60-9f47-1868db1b2fcf"), stanID, uuid.MustParse(boardSortedUpdateUUID), uuid.MustParse(columnSortedUpdateUUID), "SortedUpdate voting note two"},
+		{"SortedUpdate3", uuid.MustParse("501945c5-2c31-597a-b474-252c8f9d0c49"), stanID, uuid.MustParse(boardSortedUpdateUUID), uuid.MustParse(columnSortedUpdateUUID), "SortedUpdate voting note three"},
+		{"ClosedUpdate", uuid.MustParse("dfc9b07f-6fc2-58ac-8c98-6c5f0c9e57a3"), stanID, uuid.MustParse(boardClosedUpdateUUID), uuid.MustParse("d3bc5cfb-24c9-581c-8f0b-cdef6aba9c34"), "ClosedUpdate voting note"},
+		{"Read1", uuid.MustParse("387f1959-8af7-5203-8395-f87a9f0c0208"), stanID, uuid.MustParse(boardReadUUID), uuid.MustParse(columnReadUUID), "Read note 1"},
+		{"Read2", uuid.MustParse("d6dd038a-d06c-5d36-a97f-293fe2caddcf"), stanID, uuid.MustParse(boardReadUUID), uuid.MustParse(columnReadUUID), "Read note 2"},
+		{"WriteAdd", uuid.MustParse("d016e6cf-b2d5-5b15-b44e-9ae43c8dd726"), stanID, uuid.MustParse(boardWriteUUID), uuid.MustParse(columnWriteUUID), "Write add note"},
+		{"WriteRemove", uuid.MustParse("d7053980-883e-543d-a7fa-a0745452fe1b"), stanID, uuid.MustParse(boardWriteUUID), uuid.MustParse(columnWriteUUID), "Write remove note"},
+		{"WriteClosed", uuid.MustParse("18c888ae-a270-5014-9262-bcae09ad28d5"), stanID, uuid.MustParse(boardWriteClosedUUID), uuid.MustParse("e67fb8c7-0ef4-5f74-916c-d60c2e6e62f5"), "WriteClosed note"},
+		{"WriteLimit", uuid.MustParse("c330b3e9-c5dc-5eae-9d64-58d154968dcf"), stanID, uuid.MustParse(boardWriteLimitUUID), uuid.MustParse("a1cef54b-8b29-5d8c-a3df-d4f6c1e27c44"), "WriteLimit note"},
+		{"WriteMultiple", uuid.MustParse("4f7a0be8-576e-5e65-afe5-4946ac260db0"), stanID, uuid.MustParse(boardWriteMultipleUUID), uuid.MustParse("77e22ed8-7d10-5b36-98f9-bc836e7d4b3f"), "WriteMultiple note"},
 	}
 
 	votings = []TestVoting{
 		{"CreateDuplicate", uuid.MustParse("7ea04db6-6328-515b-8b60-9ac4d67f49a4"), uuid.MustParse("7ea04db6-6328-515b-8b60-9ac4d67f49a3"), 7, true, false, "OPEN", false},
-		{"Update", uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527ce"), uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527cd"), 7, true, false, "OPEN", false},
-		{"ClosedUpdate", uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3956"), uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3955"), 7, true, false, "CLOSED", false},
-		{"ReadOpen", uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7f"), uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e"), 5, true, false, "OPEN", false},
-		{"ReadClosed", uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c80"), uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7e"), 5, true, false, "CLOSED", false},
-		{"Write", uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d7"), uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d6"), 5, true, false, "OPEN", false},
-		{"WriteClosed", uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13c"), uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13b"), 5, true, false, "CLOSED", false},
-		{"WriteLimit", uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3b"), uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3a"), 1, true, false, "OPEN", false},
-		{"WriteMultiple", uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a2"), uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a1"), 5, false, false, "OPEN", false},
-		{"SortedUpdate", uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35919"), uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35918"), 7, true, false, "OPEN", false},
+		{"Update", uuid.MustParse("4887cf58-241e-57dd-b051-f6bd91b527ce"), uuid.MustParse(boardUpdateUUID), 7, true, false, "OPEN", false},
+		{"ClosedUpdate", uuid.MustParse("3da52e5e-3d82-59b0-b347-4abed0ff3956"), uuid.MustParse(boardClosedUpdateUUID), 7, true, false, "CLOSED", false},
+		{"ReadOpen", uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c7f"), uuid.MustParse(boardReadUUID), 5, true, false, "OPEN", false},
+		{"ReadClosed", uuid.MustParse("c90130b5-daaa-5d9d-98bc-b29ae22b8c80"), uuid.MustParse(boardReadUUID), 5, true, false, "CLOSED", false},
+		{"Write", uuid.MustParse("da359700-922e-5873-88b0-9e5f54ae10d7"), uuid.MustParse(boardWriteUUID), 5, true, false, "OPEN", false},
+		{"WriteClosed", uuid.MustParse("3e130131-bf55-5da3-b6db-cb83d5dec13c"), uuid.MustParse(boardWriteClosedUUID), 5, true, false, "CLOSED", false},
+		{"WriteLimit", uuid.MustParse("ac73b2e5-079d-529b-aa11-7397b0d3ed3b"), uuid.MustParse(boardWriteLimitUUID), 1, true, false, "OPEN", false},
+		{"WriteMultiple", uuid.MustParse("080a67b9-c089-53eb-8746-62b827b426a2"), uuid.MustParse(boardWriteMultipleUUID), 5, false, false, "OPEN", false},
+		{"SortedUpdate", uuid.MustParse("b0180427-ed4b-556a-a891-242daaf35919"), uuid.MustParse(boardSortedUpdateUUID), 7, true, false, "OPEN", false},
 	}
 )
 

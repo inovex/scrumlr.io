@@ -16,6 +16,9 @@ import (
 	"scrumlr.io/server/logger"
 )
 
+const failurePassingUserIdMessage = "failed to parse user id"
+const checkBoardSessionFailureMessage = "unable to check board session"
+
 type SessionService interface {
 	Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)
 	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
@@ -104,7 +107,7 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
+		span.SetStatus(codes.Error, failurePassingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user id", "err", err)
 		common.Throw(w, r, err)
@@ -149,7 +152,7 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
+		span.SetStatus(codes.Error, failurePassingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
@@ -252,7 +255,7 @@ func (api *API) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
+		span.SetStatus(codes.Error, failurePassingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
@@ -294,9 +297,9 @@ func (api *API) BoardParticipantContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.Exists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
+			span.SetStatus(codes.Error, checkBoardSessionFailureMessage)
 			span.RecordError(err)
-			log.Errorw("unable to check board session", "err", err)
+			log.Errorw(checkBoardSessionFailureMessage, "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -352,7 +355,7 @@ func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.ModeratorSessionExists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
+			span.SetStatus(codes.Error, checkBoardSessionFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -394,7 +397,7 @@ func (api *API) BoardOwnerContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.OwnerSessionExists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
+			span.SetStatus(codes.Error, checkBoardSessionFailureMessage)
 			span.RecordError(err)
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)

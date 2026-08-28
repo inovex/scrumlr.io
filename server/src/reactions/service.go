@@ -15,6 +15,8 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const getReactionFailureMessage = "failed to get reaction"
+
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/reactions")
 var meter metric.Meter = otel.Meter("scrumlr.io/server/reactions")
 
@@ -103,7 +105,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 			span.RecordError(err)
 			return nil, CreateReactionError(NotFound, "reaction not found", err)
 		}
-		span.SetStatus(codes.Error, "failed to get reaction")
+		span.SetStatus(codes.Error, getReactionFailureMessage)
 		span.RecordError(err)
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
 		return nil, CreateReactionError(Internal, "unable to get reaction", err)
@@ -146,7 +148,7 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 
 	currentReaction, err := service.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
+		span.SetStatus(codes.Error, getReactionFailureMessage)
 		span.RecordError(err)
 		return nil, err
 	}
@@ -185,7 +187,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 
 	reaction, err := service.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
+		span.SetStatus(codes.Error, getReactionFailureMessage)
 		span.RecordError(err)
 		return err
 	}

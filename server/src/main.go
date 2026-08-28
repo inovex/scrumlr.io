@@ -25,6 +25,26 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const basePathFlag = "base-path"
+const allowAnonymousCustomTemplatesFlag = "allow-anonymous-custom-templates"
+const allowAnonymousBoardCreationFlag = "allow-anonymous-board-creation"
+const authGoogleClientIDFlag = "auth-google-client-id"
+const authGoogleClientSecretFlag = "auth-google-client-secret"
+const authGithubClientIDFlag = "auth-github-client-id"
+const authGithubClientSecretFlag = "auth-github-client-secret"
+const authMicrosoftClientIDFlag = "auth-microsoft-client-id"
+const authMicrosoftClientSecretFlag = "auth-microsoft-client-secret"
+const authAzureADTenantIDFlag = "auth-azure-ad-tenant-id"
+const authAzureADClientIDFlag = "auth-azure-ad-client-id"
+const authAzureADClientSecretFlag = "auth-azure-ad-client-secret"
+const authAppleClientIDFlag = "auth-apple-client-id"
+const authAppleClientSecretFlag = "auth-apple-client-secret"
+const authOIDCClientIDFlag = "auth-oidc-client-id"
+const authOIDCClientSecretFlag = "auth-oidc-client-secret"
+const authOIDCDiscoveryURLFlag = "auth-oidc-discovery-url"
+const authOIDCUserIdentScopeFlag = "auth-oidc-user-ident-scope"
+const authOIDCUserNameScopeFlag = "auth-oidc-user-name-scope"
+
 // @title			Scrumlr backend
 // @version		5.3.1
 // @description	This is the scrumlr backend server.
@@ -162,11 +182,11 @@ func main() {
 				Value: "",
 			},
 			&cli.StringFlag{
-				Name:    "base-path",
+				Name:    basePathFlag,
 				Aliases: []string{"b"},
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_BASE_PATH"),
-					toml.TOML("base-path", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(basePathFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the base `path` of the application (e.g. '/api'); must start with '/'",
 				Required: false,
@@ -183,20 +203,20 @@ func main() {
 				Value:    false,
 			},
 			&cli.BoolFlag{
-				Name: "allow-anonymous-custom-templates",
+				Name: allowAnonymousCustomTemplatesFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"),
-					toml.TOML("allow-anonymous-custom-templates", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(allowAnonymousCustomTemplatesFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "allows custom templates to be used for anonymous clients",
 				Required: false,
 				Value:    false,
 			},
 			&cli.BoolFlag{
-				Name: "allow-anonymous-board-creation",
+				Name: allowAnonymousBoardCreationFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"),
-					toml.TOML("allow-anonymous-board-creation", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(allowAnonymousBoardCreationFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "allows anonymous clients to create new boards",
 				Required: false,
@@ -233,145 +253,145 @@ func main() {
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-google-client-id",
+				Name: authGoogleClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_GOOGLE_CLIENT_ID"),
-					toml.TOML("auth-google-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authGoogleClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for Google",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-google-client-secret",
+				Name: authGoogleClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET"),
-					toml.TOML("auth-google-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authGoogleClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for Google",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-github-client-id",
+				Name: authGithubClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_GITHUB_CLIENT_ID"),
-					toml.TOML("auth-github-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authGithubClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for GitHub",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-github-client-secret",
+				Name: authGithubClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_GITHUB_CLIENT_SECRET"),
-					toml.TOML("auth-github-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authGithubClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for GitHub",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-microsoft-client-id",
+				Name: authMicrosoftClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_MICROSOFT_CLIENT_ID"),
-					toml.TOML("auth-microsoft-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authMicrosoftClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for Microsoft",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-microsoft-client-secret",
+				Name: authMicrosoftClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET"),
-					toml.TOML("auth-microsoft-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authMicrosoftClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for Microsoft",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-azure-ad-tenant-id",
+				Name: authAzureADTenantIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_AZURE_AD_TENANT_ID"),
-					toml.TOML("auth-azure-ad-tenant-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authAzureADTenantIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the tenant `id` for Azure AD",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-azure-ad-client-id",
+				Name: authAzureADClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"),
-					toml.TOML("auth-azure-ad-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authAzureADClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for Azure AD",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-azure-ad-client-secret",
+				Name: authAzureADClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"),
-					toml.TOML("auth-azure-ad-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authAzureADClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for Azure AD",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-apple-client-id",
+				Name: authAppleClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_APPLE_CLIENT_ID"),
-					toml.TOML("auth-apple-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authAppleClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for Apple",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-apple-client-secret",
+				Name: authAppleClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_APPLE_CLIENT_SECRET"),
-					toml.TOML("auth-apple-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authAppleClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for Apple",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-oidc-client-id",
+				Name: authOIDCClientIDFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_OIDC_CLIENT_ID"),
-					toml.TOML("auth-oidc-client-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authOIDCClientIDFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `id` for OpenID Connect",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-oidc-client-secret",
+				Name: authOIDCClientSecretFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_OIDC_CLIENT_SECRET"),
-					toml.TOML("auth-oidc-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authOIDCClientSecretFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "the client `secret` for OpenID Connect",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-oidc-discovery-url",
+				Name: authOIDCDiscoveryURLFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_OIDC_DISCOVERY_URL"),
-					toml.TOML("auth-oidc-discovery-url", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authOIDCDiscoveryURLFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage:    "URL hosting the OIDC discovery document",
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-oidc-user-ident-scope",
+				Name: authOIDCUserIdentScopeFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE"),
-					toml.TOML("auth-oidc-user-ident-scope", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authOIDCUserIdentScopeFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage: "JWT claim to request for the user identifier",
 				Value: "openid",
 			},
 			&cli.StringFlag{
-				Name: "auth-oidc-user-name-scope",
+				Name: authOIDCUserNameScopeFlag,
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE"),
-					toml.TOML("auth-oidc-user-name-scope", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					toml.TOML(authOIDCUserNameScopeFlag, altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
 				Usage: "JWT claim to request for the user name",
 				Value: "profile",
@@ -492,8 +512,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 	}
 
 	basePath := "/"
-	if cli.IsSet("base-path") {
-		basePath = cli.String("base-path")
+	if cli.IsSet(basePathFlag) {
+		basePath = cli.String(basePathFlag)
 		if !strings.HasPrefix(basePath, "/") {
 			return errors.New("base path must start with '/'")
 		}
@@ -542,7 +562,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
-	userApi := apiInitializer.InitializeUserApi(userService, sessionService, cli.Bool("allow-anonymous-board-creation"), cli.Bool("allow-anonymous-custom-templates"))
+	userApi := apiInitializer.InitializeUserApi(userService, sessionService, cli.Bool(allowAnonymousBoardCreationFlag), cli.Bool(allowAnonymousCustomTemplatesFlag))
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
@@ -576,15 +596,15 @@ func run(ctx context.Context, cli *cli.Command) error {
 		logger.GetLogLevel() == zap.DebugLevel,
 		!cli.Bool("disable-check-origin"),
 		cli.Bool("disable-anonymous-login"),
-		cli.Bool("allow-anonymous-custom-templates"),
-		cli.Bool("allow-anonymous-board-creation"),
+		cli.Bool(allowAnonymousCustomTemplatesFlag),
+		cli.Bool(allowAnonymousBoardCreationFlag),
 		cli.Bool("allow-anonymous-history"),
 		cli.Bool("auth-enable-experimental-file-system-store"),
 		cli.Bool("enable-swagger"),
 	)
 
 	listen := fmt.Sprintf("%s:%d", cli.String("address"), cli.Int("port"))
-	logger.Get().Infow("starting server", "base-path", basePath, "listen", listen)
+	logger.Get().Infow("starting server", basePathFlag, basePath, "listen", listen)
 	return http.ListenAndServe(listen, s)
 }
 
@@ -600,61 +620,61 @@ func configureAuthProvider(ctx context.Context, cli *cli.Command, basePath strin
 		return providersMap, nil
 	}
 
-	if cli.String("auth-google-client-id") != "" && cli.String("auth-google-client-secret") != "" {
+	if cli.String(authGoogleClientIDFlag) != "" && cli.String(authGoogleClientSecretFlag) != "" {
 		log.Info("Using google authentication")
 		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-google-client-id"),
-			ClientSecret: cli.String("auth-google-client-secret"),
+			ClientId:     cli.String(authGoogleClientIDFlag),
+			ClientSecret: cli.String(authGoogleClientSecretFlag),
 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 
-	if cli.String("auth-github-client-id") != "" && cli.String("auth-github-client-secret") != "" {
+	if cli.String(authGithubClientIDFlag) != "" && cli.String(authGithubClientSecretFlag) != "" {
 		log.Info("Using github authentication")
 		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-github-client-id"),
-			ClientSecret: cli.String("auth-github-client-secret"),
+			ClientId:     cli.String(authGithubClientIDFlag),
+			ClientSecret: cli.String(authGithubClientSecretFlag),
 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 
-	if cli.String("auth-microsoft-client-id") != "" && cli.String("auth-microsoft-client-secret") != "" {
+	if cli.String(authMicrosoftClientIDFlag) != "" && cli.String(authMicrosoftClientSecretFlag) != "" {
 		log.Info("Using microsoft authentication")
 		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-microsoft-client-id"),
-			ClientSecret: cli.String("auth-microsoft-client-secret"),
+			ClientId:     cli.String(authMicrosoftClientIDFlag),
+			ClientSecret: cli.String(authMicrosoftClientSecretFlag),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 
-	if cli.String("auth-azure-ad-tenant-id") != "" && cli.String("auth-azure-ad-client-id") != "" && cli.String("auth-azure-ad-client-secret") != "" {
+	if cli.String(authAzureADTenantIDFlag) != "" && cli.String(authAzureADClientIDFlag) != "" && cli.String(authAzureADClientSecretFlag) != "" {
 		log.Info("Using azure authentication")
 		providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
-			TenantId:     cli.String("auth-azure-ad-tenant-id"),
-			ClientId:     cli.String("auth-azure-ad-client-id"),
-			ClientSecret: cli.String("auth-azure-ad-client-secret"),
+			TenantId:     cli.String(authAzureADTenantIDFlag),
+			ClientId:     cli.String(authAzureADClientIDFlag),
+			ClientSecret: cli.String(authAzureADClientSecretFlag),
 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 
-	if cli.String("auth-apple-client-id") != "" && cli.String("auth-apple-client-secret") != "" {
+	if cli.String(authAppleClientIDFlag) != "" && cli.String(authAppleClientSecretFlag) != "" {
 		log.Info("Using apple authentication.")
 		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-apple-client-id"),
-			ClientSecret: cli.String("auth-apple-client-secret"),
+			ClientId:     cli.String(authAppleClientIDFlag),
+			ClientSecret: cli.String(authAppleClientSecretFlag),
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 
-	if cli.String("auth-oidc-discovery-url") != "" && cli.String("auth-oidc-client-id") != "" && cli.String("auth-oidc-client-secret") != "" {
+	if cli.String(authOIDCDiscoveryURLFlag) != "" && cli.String(authOIDCClientIDFlag) != "" && cli.String(authOIDCClientSecretFlag) != "" {
 		log.Info("Using oidc authentication.")
 		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
-			ClientId:       cli.String("auth-oidc-client-id"),
-			ClientSecret:   cli.String("auth-oidc-client-secret"),
+			ClientId:       cli.String(authOIDCClientIDFlag),
+			ClientSecret:   cli.String(authOIDCClientSecretFlag),
 			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-			DiscoveryUri:   cli.String("auth-oidc-discovery-url"),
-			UserIdentScope: cli.String("auth-oidc-user-ident-scope"),
-			UserNameScope:  cli.String("auth-oidc-user-name-scope"),
+			DiscoveryUri:   cli.String(authOIDCDiscoveryURLFlag),
+			UserIdentScope: cli.String(authOIDCUserIdentScopeFlag),
+			UserNameScope:  cli.String(authOIDCUserNameScopeFlag),
 		}
 	}
 
