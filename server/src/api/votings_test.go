@@ -104,12 +104,10 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
 			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Closed, []votings.Note(nil)).
-				Return(&votings.Voting{Status: votings.Closed}, tt.err)
+				Return(&votings.Voting{Status: votings.Closed}, tt.err).Once()
 
 			s.updateVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			votingMock.AssertExpectations(suite.T())
-			votingMock.AssertNumberOfCalls(suite.T(), "Update", 1)
 		})
 	}
 
@@ -141,13 +139,11 @@ func (suite *VotingTestSuite) TestAbortVoting() {
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
 			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Aborted, []votings.Note(nil)).
-				Return(&votings.Voting{Status: votings.Aborted}, tt.err)
+				Return(&votings.Voting{Status: votings.Aborted}, tt.err).Once()
 
 			rr := httptest.NewRecorder()
 			s.updateVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			votingMock.AssertExpectations(suite.T())
-			votingMock.AssertNumberOfCalls(suite.T(), "Update", 1)
 		})
 	}
 }
