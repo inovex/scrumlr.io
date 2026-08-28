@@ -265,13 +265,11 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
-	if lock != nil {
-		if lock.UserID != user {
+	if lock != nil && lock.UserID != user {
 			err := CreateNoteError(Conflict, "note is currently locked", errors.New("note is currently locked"))
 			span.SetStatus(codes.Error, "note is currently locked")
 			span.RecordError(err)
 			return nil, err
-		}
 	}
 
 	var positionUpdate *NoteUpdatePosition
