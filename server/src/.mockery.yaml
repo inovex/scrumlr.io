@@ -51,6 +51,13 @@ packages:
       HealthService:
       HealthDatabaseChecker:
 
+  scrumlr.io/server/feedback:
+    config:
+      dir: feedback
+    interfaces:
+      FeedbackService:
+      FeedbackApi:
+
   scrumlr.io/server/sessions:
     config:
       dir: sessions
