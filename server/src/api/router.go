@@ -31,7 +31,6 @@ import (
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -45,6 +44,7 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
+	healthRoutes   chi.Router
 	feedbackRoutes chi.Router
 	userRoutes     chi.Router
 	sessionRoutes  chi.Router
@@ -58,7 +58,6 @@ type Server struct {
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
-	health          health.HealthService
 	feedback        feedback.FeedbackService
 	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
@@ -89,6 +88,7 @@ func New(
 	wsService websocket.Upgrader,
 	auth auth.Auth,
 
+	healtRoutes chi.Router,
 	feedbackRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
@@ -102,7 +102,6 @@ func New(
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
-	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
@@ -150,6 +149,7 @@ func New(
 		realtime:  rt,
 		wsService: wsService,
 
+		healthRoutes:   healtRoutes,
 		feedbackRoutes: feedbackRoutes,
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
@@ -157,21 +157,19 @@ func New(
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-
-		auth:            auth,
-		boards:          boards,
-		columns:         columns,
-		votings:         votings,
-		users:           users,
-		notes:           notes,
-		reactions:       reactions,
-		sessions:        sessions,
-		sessionRequests: sessionRequests,
-		health:          health,
-		feedback:        feedback,
-		boardReactions:  boardReactions,
-		boardTemplates:  boardTemplates,
-		columntemplates: columntemplates,
+		auth:                             auth,
+		boards:                           boards,
+		columns:                          columns,
+		votings:                          votings,
+		users:                            users,
+		notes:                            notes,
+		reactions:                        reactions,
+		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
+		feedback:                         feedback,
+		boardReactions:                   boardReactions,
+		boardTemplates:                   boardTemplates,
+		columntemplates:                  columntemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
@@ -206,7 +204,7 @@ func New(
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
-		r.Get("/health", s.healthCheck)
+		r.Mount("/health", s.healthRoutes)
 		r.Mount("/feedback", s.feedbackRoutes)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
