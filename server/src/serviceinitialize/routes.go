@@ -4,6 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/swagger"
 	"scrumlr.io/server/users"
@@ -50,6 +51,11 @@ func (init *RoutesInitializer) InitializeFeedbackRoutes(feedbackApi feedback.Fee
 
 func (init *RoutesInitializer) InitializeHealthRoutes(healthApi health.HealthApi) chi.Router {
 	router := health.NewHealthRouter(healthApi).RegisterRoutes()
+	return router
+}
+
+func (init *RoutesInitializer) InitializeInfoRoutes(infoApi info.InfoApi) chi.Router {
+	router := info.NewInfoRouter(infoApi).RegisterRoutes()
 	return router
 }
 

@@ -3,6 +3,7 @@ package serviceinitialize
 import (
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -45,6 +46,11 @@ func (init *ApiInitializer) InitializeColumnTemplateApi() {
 func (init *ApiInitializer) InitializeFeedbackApi(feedbackService feedback.FeedbackService) feedback.FeedbackApi {
 	feedbackApi := feedback.NewFeedbackApi(feedbackService)
 	return feedbackApi
+}
+
+func (init *ApiInitializer) InitializeInfoApi(infoService info.InfoService) info.InfoApi {
+	infoApi := info.NewInfoApi(infoService)
+	return infoApi
 }
 
 func (init *ApiInitializer) InitializeHealthApi(healthService health.HealthService) health.HealthApi {
