@@ -303,17 +303,13 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, te.err)
 			}
 
-			isInvitePolicy := te.board.AccessPolicy == boards.ByInvite
-			needsSessionReqCreation := isInvitePolicy && !te.sessionRequestExists
-			needsSessionCreation := !isInvitePolicy && !te.sessionExists
-
-			if isInvitePolicy {
+			if te.board.AccessPolicy == boards.ByInvite {
 				sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionRequestExists, te.err)
 			}
-			if needsSessionReqCreation {
+			if (te.board.AccessPolicy == boards.ByInvite) && !te.sessionRequestExists {
 				sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
 			}
-			if needsSessionCreation {
+			if !(te.board.AccessPolicy == boards.ByInvite) && !te.sessionExists {
 				sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
 					Return(new(sessions.BoardSession), te.err)
 			}
