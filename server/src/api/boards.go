@@ -571,7 +571,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if accept == "text/csv" {
-		records, err := s.buildCSVRecords(fullBoard, visibleColumns, visibleNotes)
+		records, err := s.buildCSVRecords(ctx, fullBoard, visibleColumns, visibleNotes)
 		if err != nil {
 			span.SetStatus(codes.Error, "failed to build csv records")
 			span.RecordError(err)
@@ -615,9 +615,7 @@ func getVisibleData(board *boards.FullBoard) ([]*columns.Column, []*notes.Note) 
 	return visibleColumns, visibleNotes
 }
 
-func (s *Server) buildCSVRecords(board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
-	ctx := context.Background()
-
+func (s *Server) buildCSVRecords(ctx context.Context, board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
 	for index, voting := range board.Votings {
 		if voting.Status == votings.Closed {
