@@ -9,8 +9,6 @@ import (
 	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/role"
@@ -244,7 +242,23 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sessionExists {
-		s.handleExistingSession(w, r, ctx, span, board, user)
+		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to check if participant is banned")
+			span.RecordError(err)
+			common.Throw(w, r, mapError(err))
+			return
+		}
+
+		if banned {
+			err := errors.New("participant is currently banned from this session")
+			span.SetStatus(codes.Error, "participant is banned")
+			span.RecordError(err)
+			common.Throw(w, r, common.ForbiddenError(err))
+			return
+		}
+
+		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
 		return
 	}
 
@@ -255,68 +269,59 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, mapError(err))
 		return
 	}
-
+	var location string
+	var statusCode int
 	switch b.AccessPolicy {
 	case boards.Public:
-		s.joinPublicBoard(w, r, ctx, span, board, user)
+		location, statusCode, err = s.joinPublicBoard(ctx, board, user)
 	case boards.ByPassphrase:
-		s.joinBoardByPassphrase(w, r, ctx, span, log, board, user, b)
+		location, statusCode, err = s.joinBoardByPassphrase(ctx, r, board, user, b)
 	case boards.ByInvite:
-		s.joinBoardByInvite(w, ctx, span, board, user)
+		location, statusCode, err = s.joinBoardByInvite(ctx, board, user)
 	default:
-		w.WriteHeader(http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(errors.New("invalid access policy")))
+		return
 	}
-}
 
-func (s *Server) handleExistingSession(w http.ResponseWriter, r *http.Request, ctx context.Context, span trace.Span, board, user uuid.UUID) {
-	banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check if participant is banned")
-		span.RecordError(err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
-	if banned {
-		err := errors.New("participant is currently banned from this session")
-		span.SetStatus(codes.Error, "participant is banned")
-		span.RecordError(err)
-		common.Throw(w, r, common.ForbiddenError(err))
-		return
-	}
-
-	http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
+	w.Header().Set("Location", location)
+	w.WriteHeader(statusCode)
 }
 
-func (s *Server) joinPublicBoard(w http.ResponseWriter, r *http.Request, ctx context.Context, span trace.Span, board, user uuid.UUID) {
+func (s *Server) joinPublicBoard(ctx context.Context, board, user uuid.UUID) (string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_public")
+	defer span.End()
+
 	_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create session")
 		span.RecordError(err)
-		common.Throw(w, r, mapError(err))
-		return
+		return "", 0, mapError(err)
 	}
-
-	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
-	w.WriteHeader(http.StatusCreated)
+	return s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusCreated, nil
 }
 
-func (s *Server) joinBoardByPassphrase(w http.ResponseWriter, r *http.Request, ctx context.Context, span trace.Span, log *zap.SugaredLogger, board, user uuid.UUID, b *boards.Board) {
+func (s *Server) joinBoardByPassphrase(ctx context.Context, r *http.Request, board, user uuid.UUID, b *boards.Board) (string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_byPassphrase")
+	defer span.End()
+
 	var body boards.JoinBoardRequest
 	if err := render.Decode(r, &body); err != nil {
 		span.SetStatus(codes.Error, "failed to decode body")
 		span.RecordError(err)
-		log.Errorw("Unable to decode body", "err", err)
-		common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
-		return
+		logger.FromContext(ctx).Errorw("Unable to decode body", "err", err)
+		return "", 0, common.BadRequestError(errors.New("unable to parse request body"))
 	}
 
 	if body.Passphrase == "" {
 		err := errors.New("missing passphrase")
 		span.SetStatus(codes.Error, "no passphrase provided")
 		span.RecordError(err)
-		common.Throw(w, r, common.BadRequestError(err))
-		return
+		return "", 0, common.BadRequestError(err)
 	}
 
 	encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
@@ -324,33 +329,31 @@ func (s *Server) joinBoardByPassphrase(w http.ResponseWriter, r *http.Request, c
 		err := errors.New("wrong passphrase")
 		span.SetStatus(codes.Error, "wrong passphrase provided")
 		span.RecordError(err)
-		common.Throw(w, r, common.BadRequestError(err))
-		return
+		return "", 0, common.BadRequestError(err)
 	}
 
-	s.joinPublicBoard(w, r, ctx, span, board, user)
+	return s.joinPublicBoard(ctx, board, user)
 }
 
-func (s *Server) joinBoardByInvite(w http.ResponseWriter, ctx context.Context, span trace.Span, board, user uuid.UUID) {
+func (s *Server) joinBoardByInvite(ctx context.Context, board, user uuid.UUID) (string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_byInvite")
+	defer span.End()
+
 	sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session requests")
 		span.RecordError(err)
-		http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
-		return
+		return "", 0, mapError(err)
 	}
 
 	if !sessionRequestExists {
 		if _, err = s.sessionRequests.Create(ctx, board, user); err != nil {
 			span.SetStatus(codes.Error, "failed to create session request")
 			span.RecordError(err)
-			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
-			return
+			return "", 0, mapError(err)
 		}
 	}
-
-	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
-	w.WriteHeader(http.StatusSeeOther)
+	return s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)), http.StatusSeeOther, nil
 }
 
 // Update a board
