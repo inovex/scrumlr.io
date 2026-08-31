@@ -152,25 +152,24 @@ export const Templates = () => {
       return showLoading ? <LoadingIndicator /> : null;
     }
 
-    return sortBy(
-      templates
-        .filter((template) => template.type === "CUSTOM")
-        .filter(matchSearchInput)
-        .filter(excludeDefaultTemplate),
-      (template: Template) => !template.favourite
-    ).map((template: Template) => (
-      <TemplateCard
-        templateType="CUSTOM"
-        template={mergeTemplateWithColumns(template)}
-        onSelectTemplate={onSelectTemplateWithColumns}
-        onDeleteTemplate={deleteTemplateAndColumns}
-        onNavigateToEdit={navigateToEdit}
-        onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
-        disabled={!canCreateBoard}
-        disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
-        key={template.id}
-      />
-    ));
+    return templates
+      .filter((template) => template.type === "CUSTOM")
+      .filter(matchSearchInput)
+      .filter(excludeDefaultTemplate)
+      .toSorted((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime())
+      .map((template: Template) => (
+        <TemplateCard
+          templateType="CUSTOM"
+          template={mergeTemplateWithColumns(template)}
+          onSelectTemplate={onSelectTemplateWithColumns}
+          onDeleteTemplate={deleteTemplateAndColumns}
+          onNavigateToEdit={navigateToEdit}
+          onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+          disabled={!canCreateBoard}
+          disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
+          key={template.id}
+        />
+      ));
   };
 
   return (
