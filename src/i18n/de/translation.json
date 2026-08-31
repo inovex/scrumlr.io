@@ -406,7 +406,7 @@
     "increaseVotes": "Anzahl Stimmen erhöhen",
     "decreaseVotes": "Anzahl Stimmen verringern",
     "startVoting": "Abstimmung starten",
-    "cancelVoting": "Abstimmung abbrechen",
+    "abortVoting": "Abstimmung abbrechen",
     "stopVoting": "Abstimmung abschließen"
   },
   "VoteDisplay": {
