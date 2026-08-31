@@ -8,7 +8,7 @@ import (
 )
 
 func TestVotingStatusEnum(t *testing.T) {
-	values := []VotingStatus{Open, Closed}
+	values := []VotingStatus{Open, Closed, Aborted}
 	for _, value := range values {
 		var votingStatus VotingStatus
 		err := votingStatus.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))

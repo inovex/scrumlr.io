@@ -335,7 +335,9 @@ func (c *Client) GetVoting(boardID, votingID uuid.UUID) (*votings.Voting, error)
 
 func (c *Client) CloseVoting(boardID, votingID uuid.UUID) (*votings.Voting, error) {
 	var voting votings.Voting
-	_, err := c.do("PUT", fmt.Sprintf("/boards/%s/votings/%s", boardID, votingID), nil, &voting)
+	_, err := c.do("PUT", fmt.Sprintf("/boards/%s/votings/%s", boardID, votingID), votings.VotingUpdateRequest{
+		Status: votings.Closed,
+	}, &voting)
 	if err != nil {
 		return nil, fmt.Errorf("close voting: %w", err)
 	}
