@@ -9,8 +9,6 @@ import (
 	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/role"
@@ -555,12 +553,40 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	accept := r.Header.Get("Accept")
 	if accept == "" || accept == "*/*" || accept == "application/json" {
-		s.respondJSON(w, r, fullBoard, visibleColumns, visibleNotes)
+		render.Status(r, http.StatusOK)
+		render.Respond(w, r, struct {
+			Board        *boards.Board            `json:"board"`
+			Participants []*sessions.BoardSession `json:"participants"`
+			Columns      []*columns.Column        `json:"columns"`
+			Notes        []*notes.Note            `json:"notes"`
+			Votings      []*votings.Voting        `json:"votings"`
+		}{
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
+			Columns:      visibleColumns,
+			Notes:        visibleNotes,
+			Votings:      fullBoard.Votings,
+		})
 		return
 	}
 
 	if accept == "text/csv" {
-		s.respondCSV(w, r, ctx, span, log, fullBoard, visibleColumns, visibleNotes)
+		records, err := s.buildCSVRecords(fullBoard, visibleColumns, visibleNotes)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to build csv records")
+			span.RecordError(err)
+			common.Throw(w, r, mapError(err))
+			return
+		}
+
+		render.Status(r, http.StatusOK)
+		csvWriter := csv.NewWriter(w)
+		if err := csvWriter.WriteAll(records); err != nil {
+			span.SetStatus(codes.Error, "failed to respond with csv")
+			span.RecordError(err)
+			log.Errorw("failed to respond with csv", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+		}
 		return
 	}
 
@@ -589,43 +615,9 @@ func getVisibleData(board *boards.FullBoard) ([]*columns.Column, []*notes.Note) 
 	return visibleColumns, visibleNotes
 }
 
-func (s *Server) respondJSON(w http.ResponseWriter, r *http.Request, board *boards.FullBoard, cols []*columns.Column, visibleNotes []*notes.Note) {
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, struct {
-		Board        *boards.Board            `json:"board"`
-		Participants []*sessions.BoardSession `json:"participants"`
-		Columns      []*columns.Column        `json:"columns"`
-		Notes        []*notes.Note            `json:"notes"`
-		Votings      []*votings.Voting        `json:"votings"`
-	}{
-		Board:        board.Board,
-		Participants: board.BoardSessions,
-		Columns:      cols,
-		Notes:        visibleNotes,
-		Votings:      board.Votings,
-	})
-}
+func (s *Server) buildCSVRecords(board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
+	ctx := context.Background()
 
-func (s *Server) respondCSV(w http.ResponseWriter, r *http.Request, ctx context.Context, span trace.Span, log *zap.SugaredLogger, board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) {
-	records, err := s.buildCSVRecords(ctx, board, cols, notes)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to build csv records")
-		span.RecordError(err)
-		common.Throw(w, r, mapError(err))
-		return
-	}
-
-	render.Status(r, http.StatusOK)
-	csvWriter := csv.NewWriter(w)
-	if err := csvWriter.WriteAll(records); err != nil {
-		span.SetStatus(codes.Error, "failed to respond with csv")
-		span.RecordError(err)
-		log.Errorw("failed to respond with csv", "err", err)
-		common.Throw(w, r, common.InternalServerError)
-	}
-}
-
-func (s *Server) buildCSVRecords(ctx context.Context, board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
 	for index, voting := range board.Votings {
 		if voting.Status == votings.Closed {
