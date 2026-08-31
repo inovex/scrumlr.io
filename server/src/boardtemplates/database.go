@@ -94,6 +94,10 @@ func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (Da
 		querySettings.Column("favourite")
 	}
 
+	if !board.ModifiedAt.IsZero() {
+		querySettings.Column("modified_at")
+	}
+
 	var boardTemplate DatabaseBoardTemplate
 	_, err := querySettings.
 		Where("id = ?", board.ID).
