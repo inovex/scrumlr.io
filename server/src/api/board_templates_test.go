@@ -421,6 +421,8 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				true,                             // allowAnonymousHistory
 				false,                            // experimentalFileSystemStore
 				false,                            // deactivate swagger page
+				3,                                // join board rate limit
+				5,                                // template rate limit
 			)
 
 			// Create request with body if needed
