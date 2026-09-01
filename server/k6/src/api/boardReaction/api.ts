@@ -8,7 +8,7 @@ export class BoardReactionClient extends BaseClient {
 		reactReq: CreateBoardReactionRequest,
 		cookieJar?: http.CookieJar,
 	): http.Response {
-		const response = this.post(`/boards/${boardId}/board-reactions`, reactReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/board-reactions`, reactReq, [], cookieJar);
 		return response;
 	}
 }

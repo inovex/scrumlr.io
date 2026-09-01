@@ -9,7 +9,7 @@ export class ReactionClient extends BaseClient {
 		reactReq: CreateReactionRequest,
 		cookieJar?: http.CookieJar,
 	): [Reaction | null, http.Response] {
-		const response = this.post(`/boards/${boardId}/reactions`, reactReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/reactions`, reactReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -19,7 +19,7 @@ export class ReactionClient extends BaseClient {
 	}
 
 	getReactions(boardId: string, cookieJar?: http.CookieJar): [Reaction[] | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/reactions`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/reactions`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -29,7 +29,7 @@ export class ReactionClient extends BaseClient {
 	}
 
 	getReaction(boardId: string, reactionId: string, cookieJar?: http.CookieJar): [Reaction | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/reactions/${reactionId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/reactions/${reactionId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -44,7 +44,7 @@ export class ReactionClient extends BaseClient {
 		updateReq: UpdateReactionRequest,
 		cookieJar?: http.CookieJar,
 	): [Reaction | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/reactions/${reactionId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/reactions/${reactionId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -54,7 +54,7 @@ export class ReactionClient extends BaseClient {
 	}
 
 	deleteReaction(boardId: string, reactionId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/boards/${boardId}/reactions/${reactionId}`, null, [], cookieJar);
+		const response = this.del(`./boards/${boardId}/reactions/${reactionId}`, null, [], cookieJar);
 		return response;
 	}
 }

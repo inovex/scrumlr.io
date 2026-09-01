@@ -9,7 +9,7 @@ export class ColumnTemplateClient extends BaseClient {
 		colReq: ColumnTemplateRequest,
 		cookieJar?: http.CookieJar,
 	): [ColumnTemplate | null, http.Response] {
-		const response = this.post(`/templates/${templateId}/columns`, colReq, [], cookieJar);
+		const response = this.post(`./templates/${templateId}/columns`, colReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -19,7 +19,7 @@ export class ColumnTemplateClient extends BaseClient {
 	}
 
 	getColumnTemplates(templateId: string, cookieJar?: http.CookieJar): [ColumnTemplate[] | null, http.Response] {
-		const response = this.get(`/templates/${templateId}/columns`, [], cookieJar);
+		const response = this.get(`./templates/${templateId}/columns`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -33,7 +33,7 @@ export class ColumnTemplateClient extends BaseClient {
 		columnId: string,
 		cookieJar?: http.CookieJar,
 	): [ColumnTemplate | null, http.Response] {
-		const response = this.get(`/templates/${templateId}/columns/${columnId}`, [], cookieJar);
+		const response = this.get(`./templates/${templateId}/columns/${columnId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -48,7 +48,7 @@ export class ColumnTemplateClient extends BaseClient {
 		updateReq: ColumnTemplateRequest,
 		cookieJar?: http.CookieJar,
 	): [ColumnTemplate | null, http.Response] {
-		const response = this.put(`/templates/${templateId}/columns/${columnId}`, updateReq, [], cookieJar);
+		const response = this.put(`./templates/${templateId}/columns/${columnId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -58,7 +58,7 @@ export class ColumnTemplateClient extends BaseClient {
 	}
 
 	deleteColumnTemplate(templateId: string, columnId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/templates/${templateId}/columns/${columnId}`, null, [], cookieJar);
+		const response = this.del(`./templates/${templateId}/columns/${columnId}`, null, [], cookieJar);
 		return response;
 	}
 }

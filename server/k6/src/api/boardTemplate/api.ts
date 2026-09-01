@@ -8,7 +8,7 @@ export class BoardTemplateClient extends BaseClient {
 		templateReq: CreateBoardTemplateRequest,
 		cookieJar?: http.CookieJar,
 	): [BoardTemplate | null, http.Response] {
-		const response = this.post("/templates", templateReq, [], cookieJar);
+		const response = this.post("./templates", templateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -18,7 +18,7 @@ export class BoardTemplateClient extends BaseClient {
 	}
 
 	getBoardTemplates(cookieJar?: http.CookieJar): [BoardTemplateFull[] | null, http.Response] {
-		const response = this.get("/templates", [], cookieJar);
+		const response = this.get("./templates", [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -28,7 +28,7 @@ export class BoardTemplateClient extends BaseClient {
 	}
 
 	getBoardTemplate(templateId: string, cookieJar?: http.CookieJar): [BoardTemplate | null, http.Response] {
-		const response = this.get(`/templates/${templateId}`, [], cookieJar);
+		const response = this.get(`./templates/${templateId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -42,7 +42,7 @@ export class BoardTemplateClient extends BaseClient {
 		updateReq: UpdateBoardTemplateRequest,
 		cookieJar?: http.CookieJar,
 	): [BoardTemplate | null, http.Response] {
-		const response = this.put(`/templates/${templateId}`, updateReq, [], cookieJar);
+		const response = this.put(`./templates/${templateId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -52,7 +52,7 @@ export class BoardTemplateClient extends BaseClient {
 	}
 
 	deleteBoardTemplate(templateId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/templates/${templateId}`, null, [], cookieJar);
+		const response = this.del(`./templates/${templateId}`, null, [], cookieJar);
 		return response;
 	}
 }

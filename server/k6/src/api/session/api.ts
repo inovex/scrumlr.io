@@ -20,7 +20,7 @@ export class SessionClient extends BaseClient {
 			{ key: "role", value: role },
 		];
 
-		const response = this.get(`/boards/${boardId}/participants`, queryparams, cookieJar);
+		const response = this.get(`./boards/${boardId}/participants`, queryparams, cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -30,7 +30,7 @@ export class SessionClient extends BaseClient {
 	}
 
 	getParticipant(boardId: string, sessionId: string, cookieJar?: http.CookieJar): [BoardSession | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/participants/${sessionId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/participants/${sessionId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -44,7 +44,7 @@ export class SessionClient extends BaseClient {
 		updateReq: BoardSessionsUpdateRequest,
 		cookieJar?: http.CookieJar,
 	): [BoardSession[] | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/participants`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/participants`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -59,7 +59,7 @@ export class SessionClient extends BaseClient {
 		updateReq: BoardSessionUpdateRequest,
 		cookieJar?: http.CookieJar,
 	): [BoardSession | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/participants/${sessionId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/participants/${sessionId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -69,7 +69,7 @@ export class SessionClient extends BaseClient {
 	}
 
 	deleteParticipant(boardId: string, sessionId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/boards/${boardId}/participants/${sessionId}`, null, [], cookieJar);
+		const response = this.del(`./boards/${boardId}/participants/${sessionId}`, null, [], cookieJar);
 		return response;
 	}
 }
