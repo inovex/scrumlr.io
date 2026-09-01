@@ -1,4 +1,4 @@
-import { VotingStatus } from "../../types/voting";
+import type { VotingStatus } from "../../types/voting";
 
 export interface CreateVotingRequest {
 	voteLimit: number;
@@ -8,5 +8,5 @@ export interface CreateVotingRequest {
 }
 
 export interface UpdateVotingRequest {
-  status: VotingStatus
+	status: VotingStatus;
 }
