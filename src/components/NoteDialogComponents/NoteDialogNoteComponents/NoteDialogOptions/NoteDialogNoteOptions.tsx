@@ -61,7 +61,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <button
               id={`note-option-unstack-button-${props.noteId}`}
               aria-label={t("NoteDialogUnstackNoteButton.title")}
-              className="note-option__button"
+              className="note-option__button note-option__button--unstack"
               onClick={() => {
                 onUnstack(props.noteId);
                 props.onClose();
@@ -76,7 +76,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <button
               id={`note-option-delete-button-${props.noteId}`}
               aria-label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
-              className="note-option__button"
+              className="note-option__button note-option__button--delete"
               onClick={() => {
                 onDelete(props.noteId);
               }}

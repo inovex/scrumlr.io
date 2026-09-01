@@ -102,3 +102,16 @@ Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
     .get(`[data-cy='${cyData}-item-${itemLabel}']`)
     .click()
 })
+
+// create a note and return the subject
+Cypress.Commands.add("createNote", (text: string)=>{
+  cy
+    .get<HTMLInputElement>(".note-input__input")
+    .first()
+    .type(text)
+    .press("Enter")
+
+  // note: since notes pop up on top, we assume the first note we grab is the one we just created
+  // this strategy will probably fall short if a columnId parameter is added
+  return cy.get<HTMLDivElement>(".note").first()
+})

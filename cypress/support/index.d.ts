@@ -22,6 +22,8 @@ declare namespace Cypress {
       // opens mini menu and clicks an item from it
       // make sure to append --closed to the mini menu icon so cyData matches
       selectMiniMenu(cyData: string, itemLabel: string): Chainable<void>
+
+      createNote(text: string): Chainable<JQuery<HTMLDivElement>>
     }
 
   }
