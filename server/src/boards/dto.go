@@ -9,7 +9,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/role"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 )
@@ -179,24 +178,11 @@ type ImportBoardResponse struct {
 }
 
 type FullBoard struct {
-	Board                *Board                                 `json:"board"`
-	BoardSessionRequests []*sessionrequests.BoardSessionRequest `json:"requests"`
-	BoardSessions        []*sessions.BoardSession               `json:"participants"`
-	Columns              []*columns.Column                      `json:"columns"`
-	Notes                []*notes.Note                          `json:"notes"`
-	Reactions            []*reactions.Reaction                  `json:"reactions"`
-	Votings              []*votings.Voting                      `json:"votings"`
-	Votes                []*votings.Vote                        `json:"votes"`
-}
-
-func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
-	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
-	dtoFullBoard.BoardSessionRequests = sessionrequests.BoardSessionRequests(dbFullBoard.BoardSessionRequests)
-	dtoFullBoard.BoardSessions = sessions.BoardSessions(dbFullBoard.BoardSessions)
-	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
-	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
-	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = votings.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
-	dtoFullBoard.Votes = votings.Votes(dbFullBoard.Votes)
-	return dtoFullBoard
+	Board         *Board                   `json:"board"`
+	BoardSessions []*sessions.BoardSession `json:"participants"`
+	Columns       []*columns.Column        `json:"columns"`
+	Notes         []*notes.Note            `json:"notes"`
+	Reactions     []*reactions.Reaction    `json:"reactions"`
+	Votings       []*votings.Voting        `json:"votings"`
+	Votes         []*votings.Vote          `json:"votes"`
 }
