@@ -11,7 +11,7 @@ export class SessionRequestClient extends BaseClient {
 	): [BoardSessionRequest[] | null, http.Response] {
 		const queryparams: QueryParameter[] = [{ key: "status", value: status }];
 
-		const response = this.get(`/boards/${boardId}/requests`, queryparams, cookieJar);
+		const response = this.get(`./boards/${boardId}/requests`, queryparams, cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -25,7 +25,7 @@ export class SessionRequestClient extends BaseClient {
 		userId: string,
 		cookieJar?: http.CookieJar,
 	): [BoardSessionRequest | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/requests/${userId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/requests/${userId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -40,7 +40,7 @@ export class SessionRequestClient extends BaseClient {
 		updateReq: BoardSessionRequestUpdate,
 		cookieJar?: http.CookieJar,
 	): [BoardSessionRequest | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/requests/${userId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/requests/${userId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
