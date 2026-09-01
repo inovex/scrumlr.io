@@ -1,15 +1,15 @@
 import type http from "k6/http";
 import type { Voting } from "../../types/voting.ts";
 import { BaseClient } from "../baseClient.ts";
-import type { CreateVotingRequest } from "./requests.ts";
+import type { CreateVotingRequest, UpdateVotingRequest } from "./requests.ts";
 
 export class VotingClient extends BaseClient {
 	createVoting(
 		boardId: string,
-		votingReq: CreateVotingRequest,
+		request: CreateVotingRequest,
 		cookieJar?: http.CookieJar,
 	): [Voting | null, http.Response] {
-		const response = this.post(`./boards/${boardId}/votings`, votingReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/votings`, request, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -38,8 +38,8 @@ export class VotingClient extends BaseClient {
 		return [voting, response];
 	}
 
-	closeVoting(boardId: string, votingId: string, cookieJar?: http.CookieJar): [Voting | null, http.Response] {
-		const response = this.put(`./boards/${boardId}/votings/${votingId}`, null, [], cookieJar);
+	updateVoting(boardId: string, votingId: string, request: UpdateVotingRequest, cookieJar?: http.CookieJar): [Voting | null, http.Response] {
+		const response = this.put(`./boards/${boardId}/votings/${votingId}`, request, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
