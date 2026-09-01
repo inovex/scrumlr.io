@@ -89,8 +89,8 @@ export class BoardClient extends BaseClient {
 		return [board, response];
 	}
 
-	joinBoard(boardId: string, joinReq: JoinBoardRequest = {}, cookieJar?: http.CookieJar): http.Response {
-		const response = this.post(`./boards/${boardId}/participants`, joinReq, [], cookieJar);
+	joinBoard(boardId: string, joinReq: JoinBoardRequest = {}, cookieJar?: http.CookieJar, extraHeaders?: Record<string, string>): http.Response {
+		const response = this.post(`./boards/${boardId}/participants`, joinReq, [], cookieJar, extraHeaders);
 		return response;
 	}
 
