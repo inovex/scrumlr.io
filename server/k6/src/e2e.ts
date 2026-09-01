@@ -1127,44 +1127,62 @@ export default function () {
 			"verify owner voting status is OPEN": () => ownerVoting?.status === "OPEN",
 		});
 
-		const unauthenticatedVoteResponse = voteClient.createVote(board.id, { note: note1.id }, new http.CookieJar());
+		const [,unauthenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, new http.CookieJar());
 		check(unauthenticatedVoteResponse, {
 			"verify unauthenticated create vote status is 401": (r) => r.status === 401,
 		});
 
-		const authenticatedVoteResponse = voteClient.createVote(board.id, { note: note1.id }, authenticatedContext);
+		const [,authenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, authenticatedContext);
 		check(authenticatedVoteResponse, {
 			"verify authenticated user create vote status is 403": (r) => r.status === 403,
 		});
 
-		const participantVote1Response = voteClient.createVote(board.id, { note: note1.id }, participantContext);
+		const [firstParticipantVote, participantVote1Response] = voteClient.createVote(board.id, { note: note1.id }, participantContext);
 		check(participantVote1Response, {
 			"verify participant vote 1 status is 201": (r) => r.status === 201,
+      "verify vote user": () => firstParticipantVote?.user === participant.id,
+      "verify vote note": () => firstParticipantVote?.note === note1.id,
+      "verify vote voting": () => firstParticipantVote?.voting === voting.id,
 		});
 
-		const participantVote2Response = voteClient.createVote(board.id, { note: note3.id }, participantContext);
+		const [secondParticipantVote, participantVote2Response] = voteClient.createVote(board.id, { note: note3.id }, participantContext);
 		check(participantVote2Response, {
 			"verify participant vote 2 status is 201": (r) => r.status === 201,
+      "verify vote user": () => secondParticipantVote?.user === participant.id,
+      "verify vote note": () => secondParticipantVote?.note === note3.id,
+      "verify vote voting": () => secondParticipantVote?.voting === voting.id,
 		});
 
-		const participantVote3Response = voteClient.createVote(board.id, { note: note5.id }, participantContext);
+		const [thirdParticipantVote, participantVote3Response] = voteClient.createVote(board.id, { note: note5.id }, participantContext);
 		check(participantVote3Response, {
 			"verify participant vote 3 status is 201": (r) => r.status === 201,
+      "verify vote user": () => thirdParticipantVote?.user === participant.id,
+      "verify vote note": () => thirdParticipantVote?.note === note5.id,
+      "verify vote voting": () => thirdParticipantVote?.voting === voting.id,
 		});
 
-		const ownerVote1Response = voteClient.createVote(board.id, { note: note2.id }, ownerContext);
+		const [firstOwnerVote, ownerVote1Response] = voteClient.createVote(board.id, { note: note2.id }, ownerContext);
 		check(ownerVote1Response, {
 			"verify owner vote 1 status is 201": (r) => r.status === 201,
+      "verify vote user": () => firstOwnerVote?.user === owner.id,
+      "verify vote note": () => firstOwnerVote?.note === note2.id,
+      "verify vote voting": () => firstOwnerVote?.voting === voting.id,
 		});
 
-		const ownerVote2Response = voteClient.createVote(board.id, { note: note4.id }, ownerContext);
+		const [secondOwnerVote, ownerVote2Response] = voteClient.createVote(board.id, { note: note4.id }, ownerContext);
 		check(ownerVote2Response, {
 			"verify owner vote 2 status is 201": (r) => r.status === 201,
+      "verify vote user": () => secondOwnerVote?.user === owner.id,
+      "verify vote note": () => secondOwnerVote?.note === note4.id,
+      "verify vote voting": () => secondOwnerVote?.voting === voting.id,
 		});
 
-		const ownerVote3Response = voteClient.createVote(board.id, { note: note6.id }, ownerContext);
+		const [thirdOwnerVote, ownerVote3Response] = voteClient.createVote(board.id, { note: note6.id }, ownerContext);
 		check(ownerVote3Response, {
 			"verify owner vote 3 status is 201": (r) => r.status === 201,
+      "verify vote user": () => thirdOwnerVote?.user === owner.id,
+      "verify vote note": () => thirdOwnerVote?.note === note6.id,
+      "verify vote voting": () => thirdOwnerVote?.voting === voting.id,
 		});
 
 		const [, unauthenticatedGetVotesResponse] = voteClient.getVotes(board.id, voting.id, null, new http.CookieJar());
