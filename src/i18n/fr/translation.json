@@ -470,7 +470,8 @@
   "Language": {
     "german": "Allemand",
     "english": "Anglais",
-    "french": "Français"
+    "french": "Français",
+    "spanish": "Espagnol"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, fourni par <inovex>inovex</inovex> avec ❤️",
