@@ -189,6 +189,15 @@ type FullBoard struct {
 	Votes                []*votings.Vote                        `json:"votes"`
 }
 
+type ExportBoardResponse struct {
+	Board        *Board
+	Participants []*sessions.BoardSession
+	Columns      []*columns.Column
+	Notes        []*notes.Note
+	Votings      []*votings.Voting
+	CSVRecords   [][]string
+}
+
 func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
 	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
 	dtoFullBoard.BoardSessionRequests = sessionrequests.BoardSessionRequests(dbFullBoard.BoardSessionRequests)
