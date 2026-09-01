@@ -348,7 +348,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 
 func (s *Server) JoinBoardRateLimiter(next http.Handler) http.Handler {
 	limiter := httprate.LimitBy(
-		3,
+		s.joinBoardRateLimit,
 		5*time.Second,
 		func(r *http.Request) (string, error) {
 			return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
@@ -373,7 +373,7 @@ func (s *Server) JoinBoardRateLimiter(next http.Handler) http.Handler {
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.LimitBy(
-		20,
+		s.templateRateLimit,
 		1*time.Second,
 		func(r *http.Request) (string, error) {
 			return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil

@@ -441,6 +441,24 @@ func main() {
 				Value:    false,
 				Required: false,
 			},
+			&cli.IntFlag{
+				Name: "join-rate-limit",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_JOIN_RATE_LIMIT"),
+				),
+				Usage:    "set the rate limit for joining a board. The limit is set for 5 seconds. The default is 3 requests per 5 second.",
+				Value:    3,
+				Required: false,
+			},
+			&cli.IntFlag{
+				Name: "template-rate-limit",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_TEMPLATE_RATE_LIMIT"),
+				),
+				Usage:    "set the rate limit for the templates. The limit is set for 1 second. The default is 20 requests per second.",
+				Value:    20,
+				Required: false,
+			},
 			&cli.StringFlag{
 				Name:        "config",
 				Sources:     cli.EnvVars("SCRUMLR_CONFIG_PATH"),
@@ -581,6 +599,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 		cli.Bool("allow-anonymous-history"),
 		cli.Bool("auth-enable-experimental-file-system-store"),
 		cli.Bool("enable-swagger"),
+		cli.Int("join-rate-limit"),
+		cli.Int("template-rate-limit"),
 	)
 
 	listen := fmt.Sprintf("%s:%d", cli.String("address"), cli.Int("port"))

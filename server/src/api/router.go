@@ -76,6 +76,9 @@ type Server struct {
 	allowAnonymousHistory         bool
 	experimentalFileSystemStore   bool
 	enableSwagger                 bool
+
+	joinBoardRateLimit int
+	templateRateLimit  int
 }
 
 func New(
@@ -111,6 +114,9 @@ func New(
 	allowAnonymousHistory bool,
 	experimentalFileSystemStore bool,
 	enableSwagger bool,
+
+	joinBoardRateLimit int,
+	templateRateLimit int,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -168,6 +174,9 @@ func New(
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
 		enableSwagger:                 enableSwagger,
+
+		joinBoardRateLimit: joinBoardRateLimit,
+		templateRateLimit:  templateRateLimit,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
