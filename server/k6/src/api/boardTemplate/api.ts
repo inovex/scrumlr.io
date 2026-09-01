@@ -17,10 +17,10 @@ export class BoardTemplateClient extends BaseClient {
 		return [templates, response];
 	}
 
-	getBoardTemplates(cookieJar?: http.CookieJar): [BoardTemplateFull[] | null, http.Response] {
+	getBoardTemplates(cookieJar?: http.CookieJar): [BoardTemplateFull[], http.Response] {
 		const response = this.get("./templates", [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const templates: BoardTemplateFull[] = response.json() as unknown as BoardTemplateFull[];
