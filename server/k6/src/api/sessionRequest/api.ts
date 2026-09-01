@@ -8,12 +8,12 @@ export class SessionRequestClient extends BaseClient {
 		boardId: string,
 		status: RequestStatus | null = null,
 		cookieJar?: http.CookieJar,
-	): [BoardSessionRequest[] | null, http.Response] {
+	): [BoardSessionRequest[], http.Response] {
 		const queryparams: QueryParameter[] = [{ key: "status", value: status }];
 
 		const response = this.get(`./boards/${boardId}/requests`, queryparams, cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const sessionRequest: BoardSessionRequest[] = response.json() as unknown as BoardSessionRequest[];

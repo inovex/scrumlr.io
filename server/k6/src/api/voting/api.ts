@@ -18,10 +18,10 @@ export class VotingClient extends BaseClient {
 		return [voting, response];
 	}
 
-	getVotings(boardId: string, cookieJar?: http.CookieJar): [Voting[] | null, http.Response] {
+	getVotings(boardId: string, cookieJar?: http.CookieJar): [Voting[], http.Response] {
 		const response = this.get(`./boards/${boardId}/votings`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const voting: Voting[] = response.json() as unknown as Voting[];
