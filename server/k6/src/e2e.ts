@@ -34,17 +34,7 @@ import { VotingClient } from "./api/voting/api.ts";
 import type { CreateVotingRequest } from "./api/voting/requests.ts";
 import { options } from "./options.ts";
 
-options.vus = 1;
-options.iterations = 1;
-options.thresholds = {
-  checks: ["rate==1.0"],
-};
-
 export { options };
-
-function getFakeIpAddress(id: number): string {
-  return `10.0.${(id + Math.floor(Math.random() * 1000)) % 250}.${(id + Math.floor(Math.random() * 1000)) % 250}`
-}
 
 export default function () {
   const authClient = new AuthClient();
@@ -955,9 +945,6 @@ export default function () {
       "verify owner note deletion status is 204": (r) => r.status === 204,
     });
   });
-
-  // sleep for joinBoard rate limit
-  sleep(5);
 
   group("Check votings and votes", () => {
     const ownerContext = new http.CookieJar();
