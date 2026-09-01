@@ -16,7 +16,7 @@
     },
     "quick_review": {
       "name": "Quick Review",
-      "description": "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
+      "description": "Participants highlight positive and negative incidents to quickly identify successes and issues.",
       "column": {
         "positive": {
           "name": "Positive",
@@ -116,7 +116,7 @@
         },
         "lacked": {
           "name": "Lacked",
-          "description": "What could have been improved?"
+          "description": "What was missing?"
         },
         "longed_for": {
           "name": "Longed for",
@@ -138,7 +138,7 @@
         },
         "weaknesses": {
           "name": "Weaknesses",
-          "description": "What weaknesses should be adressed?"
+          "description": "What weaknesses should be addressed?"
         },
         "opportunities": {
           "name": "Opportunities",

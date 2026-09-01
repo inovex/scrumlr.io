@@ -395,7 +395,7 @@ exports[`SettingsDialog > should render correctly 1`] = `
                       <p
                         class="navigation-item__description"
                       >
-                        Share the board
+                        Download or share
                       </p>
                     </div>
                   </a>
