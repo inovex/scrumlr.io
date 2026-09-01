@@ -20,8 +20,8 @@ export const Votes: FC<VotesProps> = (props) => {
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
     (state) => ({
-      note: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length,
-      total: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).length,
+      note: state.votes?.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length,
+      total: state.votes?.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).length,
     }),
     _.isEqual
   );

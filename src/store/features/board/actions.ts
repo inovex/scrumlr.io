@@ -1,8 +1,5 @@
 import {createAction} from "@reduxjs/toolkit";
-import {BoardActionType, BoardWithServerTimeOffset} from "./types";
-import {Auth} from "../auth";
-
-export const initializeBoard = createAction<{fullBoard: BoardActionType; serverTimeOffset: number; self: Auth}>("board/initializeBoard");
+import {BoardWithServerTimeOffset} from "./types";
 
 export const updatedBoard = createAction<BoardWithServerTimeOffset>("board/updatedBoard");
 export const updatedBoardTimer = createAction<BoardWithServerTimeOffset>("board/updatedBoardTimer");

@@ -3,7 +3,12 @@ import {API} from "api";
 import {ApplicationState, retryable} from "store";
 import {Toast} from "utils/Toast";
 import i18n from "i18n";
-import {EditNote} from "./types";
+import {EditNote, Note} from "./types";
+
+export const getAllNotes = createAsyncThunk<Note[], {boardId: string}, {state: ApplicationState}>("notes/getAllNotes", async (payload, {dispatch, getState}) => {
+  const notes = await API.getNotes(payload.boardId);
+  return notes;
+});
 
 export const addNote = createAsyncThunk<void, {columnId: string; text: string}, {state: ApplicationState}>("notes/addNote", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;

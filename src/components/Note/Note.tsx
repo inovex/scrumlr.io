@@ -31,14 +31,14 @@ export const Note = (props: NoteProps) => {
   const navigate = useNavigate();
   const noteRef = useRef<HTMLDivElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId));
-  const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
+  const note = useAppSelector((state) => state.notes?.find((n) => n.id === props.noteId));
+  const isStack = useAppSelector((state) => state.notes?.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const boardIsLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
-  const me = useAppSelector((state) => state.participants?.self)!;
+  const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const moderating = useAppSelector((state) => state.view.moderating);
   const isModerator = props.viewer?.role === "MODERATOR" || props.viewer?.role === "OWNER";
@@ -46,12 +46,13 @@ export const Note = (props: NoteProps) => {
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
     const allUsers = [me, ...others];
-    const noteAuthor = allUsers.find((p) => p.user.id === note?.author);
-    const childrenNoteAuthors = state.notes
-      // get all notes which are in the same stack as the main note
-      .filter((n) => n.position.stack === props.noteId)
-      // find the corresponding author for the respective note in the list of other participants.
-      .map((c) => allUsers?.find((p) => p.user.id === c.author));
+    const noteAuthor = allUsers.find((p) => p?.user.id === note?.author);
+    const childrenNoteAuthors =
+      state.notes
+        // get all notes which are in the same stack as the main note
+        ?.filter((n) => n.position.stack === props.noteId)
+        // find the corresponding author for the respective note in the list of other participants.
+        .map((c) => allUsers?.find((p) => p?.user.id === c.author)) ?? [];
 
     // remove undefined values (could exist if a author is not in the list of participants or hidden)
     return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as ParticipantWithUser[];
