@@ -82,7 +82,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "cross-env": "^10.1.0",
     "cypress": "^15.21.0",
-    "eslint": "10.8.1",
+    "eslint": "10.9.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^10.1.8",
