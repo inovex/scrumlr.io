@@ -5,7 +5,7 @@ import type { CreateNoteRequest, DeleteNoteRequest, UpdateNoteRequest } from "./
 
 export class NoteClient extends BaseClient {
 	createNote(boardId: string, noteReq: CreateNoteRequest, cookieJar?: http.CookieJar): [Note | null, http.Response] {
-		const response = this.post(`/boards/${boardId}/notes`, noteReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/notes`, noteReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -15,7 +15,7 @@ export class NoteClient extends BaseClient {
 	}
 
 	getNotes(boardId: string, cookieJar?: http.CookieJar): [Note[] | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/notes`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/notes`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -25,7 +25,7 @@ export class NoteClient extends BaseClient {
 	}
 
 	getNote(boardId: string, noteId: string, cookieJar?: http.CookieJar): [Note | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/notes/${noteId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/notes/${noteId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -40,7 +40,7 @@ export class NoteClient extends BaseClient {
 		updateReq: UpdateNoteRequest,
 		cookieJar?: http.CookieJar,
 	): [Note | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/notes/${noteId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/notes/${noteId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -50,7 +50,7 @@ export class NoteClient extends BaseClient {
 	}
 
 	deleteNote(boardId: string, noteId: string, deleteReq: DeleteNoteRequest, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/boards/${boardId}/notes/${noteId}`, deleteReq, [], cookieJar);
+		const response = this.del(`./boards/${boardId}/notes/${noteId}`, deleteReq, [], cookieJar);
 		return response;
 	}
 }

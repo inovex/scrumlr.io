@@ -4,7 +4,7 @@ import { BaseClient } from "../baseClient.ts";
 
 export class InfoClient extends BaseClient {
 	getInfo(cookieJar?: http.CookieJar): [Info | null, http.Response] {
-		const response = this.get("/info", [], cookieJar);
+		const response = this.get("./info", [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}

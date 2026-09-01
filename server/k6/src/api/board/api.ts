@@ -6,7 +6,7 @@ import type { CreateBoardRequest, JoinBoardRequest, SetTimerRequest, UpdateBoard
 
 export class BoardClient extends BaseClient {
 	createBoard(boardReq: CreateBoardRequest, cookieJar?: http.CookieJar): [Board | null, http.Response] {
-		const response = this.post("/boards", boardReq, [], cookieJar);
+		const response = this.post("./boards", boardReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -16,7 +16,7 @@ export class BoardClient extends BaseClient {
 	}
 
 	getBoards(cookieJar?: http.CookieJar): [BoardOverview[] | null, http.Response] {
-		const response = this.get("/boards", [], cookieJar);
+		const response = this.get("./boards", [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -26,7 +26,7 @@ export class BoardClient extends BaseClient {
 	}
 
 	getBoard(boardId: string, cookieJar?: http.CookieJar): [Board | null, http.Response] {
-		const response = this.get(`/boards/${boardId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -40,7 +40,7 @@ export class BoardClient extends BaseClient {
 		updateReq: UpdateBoardRequest,
 		cookieJar?: http.CookieJar,
 	): [Board | null, http.Response] {
-		const response = this.put(`/boards/${boardId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -50,17 +50,17 @@ export class BoardClient extends BaseClient {
 	}
 
 	deleteBoard(boardId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/boards/${boardId}`, null, [], cookieJar);
+		const response = this.del(`./boards/${boardId}`, null, [], cookieJar);
 		return response;
 	}
 
 	exportBoard(boardId: string, cookieJar?: http.CookieJar, extraHeaders?: Record<string, string>): http.Response {
-		const response = this.get(`/boards/${boardId}/export`, [], cookieJar, extraHeaders);
+		const response = this.get(`./boards/${boardId}/export`, [], cookieJar, extraHeaders);
 		return response;
 	}
 
 	setTimer(boardId: string, timerReq: SetTimerRequest, cookieJar?: http.CookieJar): [Board | null, http.Response] {
-		const response = this.post(`/boards/${boardId}/timer`, timerReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/timer`, timerReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -70,7 +70,7 @@ export class BoardClient extends BaseClient {
 	}
 
 	incrementTimer(boardId: string, cookieJar?: http.CookieJar): [Board | null, http.Response] {
-		const response = this.post(`/boards/${boardId}/timer/increment`, null, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/timer/increment`, null, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -80,7 +80,7 @@ export class BoardClient extends BaseClient {
 	}
 
 	deleteTimer(boardId: string, cookieJar?: http.CookieJar): [Board | null, http.Response] {
-		const response = this.del(`/boards/${boardId}/timer`, null, [], cookieJar);
+		const response = this.del(`./boards/${boardId}/timer`, null, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -90,12 +90,12 @@ export class BoardClient extends BaseClient {
 	}
 
 	joinBoard(boardId: string, joinReq: JoinBoardRequest = {}, cookieJar?: http.CookieJar): http.Response {
-		const response = this.post(`/boards/${boardId}/participants`, joinReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/participants`, joinReq, [], cookieJar);
 		return response;
 	}
 
 	getBoardUsers(boardId: string, cookieJar?: http.CookieJar): [User[] | null, http.Response] {
-		const response = this.get(`/users/board/${boardId}`, [], cookieJar);
+		const response = this.get(`./users/board/${boardId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}

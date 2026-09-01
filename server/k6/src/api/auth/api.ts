@@ -5,7 +5,7 @@ import type { AnonymousSignUpRequest } from "./requests.ts";
 
 export class AuthClient extends BaseClient {
 	loginAnonymous(request: AnonymousSignUpRequest, cookieJar?: http.CookieJar): [User | null, http.Response] {
-		const response: http.Response = this.post("/login/anonymous", request, [], cookieJar);
+		const response: http.Response = this.post("./login/anonymous", request, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -15,7 +15,7 @@ export class AuthClient extends BaseClient {
 	}
 
 	logout(cookieJar?: http.CookieJar): http.Response {
-		const response: http.Response = this.del("/login", null, [], cookieJar);
+		const response: http.Response = this.del("./login", null, [], cookieJar);
 		return response;
 	}
 }
