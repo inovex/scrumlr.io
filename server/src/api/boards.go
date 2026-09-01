@@ -1,12 +1,10 @@
 package api
 
 import (
-	"context"
 	"encoding/csv"
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
@@ -540,8 +538,47 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	accept := r.Header.Get("Accept")
 
-	fullBoard, err := s.boards.FullBoard(ctx, boardId)
+	export, err := s.boards.Export(ctx, boardId, accept)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to export board")
+		span.RecordError(err)
+		log.Errorw("Unable to export board", "err", err)
+		common.Throw(w, r, mapError(err))
+		return
+	}
+
+	if accept == "text/csv" {
+		render.Status(r, http.StatusOK)
+		csvWriter := csv.NewWriter(w)
+		if err := csvWriter.WriteAll(export.CSVRecords); err != nil {
+			span.SetStatus(codes.Error, "failed to respond with csv")
+			span.RecordError(err)
+			log.Errorw("failed to respond with csv", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+		}
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, struct {
+		Board        *boards.Board            `json:"board"`
+		Participants []*sessions.BoardSession `json:"participants"`
+		Columns      []*columns.Column        `json:"columns"`
+		Notes        []*notes.Note            `json:"notes"`
+		Votings      []*votings.Voting        `json:"votings"`
+	}{
+		Board:        export.Board,
+		Participants: export.Participants,
+		Columns:      export.Columns,
+		Notes:        export.Notes,
+		Votings:      export.Votings,
+	})
+}
+
+/*
+fullBoard, err := s.boards.FullBoard(ctx, boardId)
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to get full board")
 		span.RecordError(err)
@@ -552,7 +589,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	visibleColumns, visibleNotes := getVisibleData(fullBoard)
 
 	accept := r.Header.Get("Accept")
-	if accept == "" || accept == "*/*" || accept == "application/json" {
+	if accept == "" || accept == "" || accept == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
 			Board        *boards.Board            `json:"board"`
@@ -592,29 +629,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNotAcceptable)
 	render.Respond(w, r, nil)
-}
+*/
 
-func getVisibleData(board *boards.FullBoard) ([]*columns.Column, []*notes.Note) {
-	visibleColumns := make([]*columns.Column, 0, len(board.Columns))
-	visibleColIDs := make(map[uuid.UUID]bool)
-
-	for _, column := range board.Columns {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-			visibleColIDs[column.ID] = true
-		}
-	}
-
-	visibleNotes := make([]*notes.Note, 0, len(board.Notes))
-	for _, note := range board.Notes {
-		if visibleColIDs[note.Position.Column] {
-			visibleNotes = append(visibleNotes, note)
-		}
-	}
-
-	return visibleColumns, visibleNotes
-}
-
+/*
 func (s *Server) buildCSVRecords(ctx context.Context, board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
 	for index, voting := range board.Votings {
@@ -688,6 +705,7 @@ func (s *Server) buildCSVRecords(ctx context.Context, board *boards.FullBoard, c
 
 	return records, nil
 }
+*/
 
 // Import a board
 //
