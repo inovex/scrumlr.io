@@ -80,6 +80,19 @@ Cypress.Commands.add("createCustomTemplate", (templateName: string)=>{
     .click()
 })
 
+Cypress.Commands.add("createBoard", ()=>{
+  cy
+    // select template
+    .get<HTMLDivElement>("[data-cy='template-card--RECOMMENDED']")
+    .first()
+    .find<HTMLButtonElement>("[data-cy='template-card__start-button']")
+    .first()
+    .click()
+    // select access setting (default public) and click button to start session
+    .get("[data-testid='simple-modal__primary-button']")
+    .click()
+})
+
 Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
   cy
     .get(`[data-cy='${cyData}']`)
