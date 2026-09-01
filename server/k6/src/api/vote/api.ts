@@ -6,12 +6,12 @@ import type { CreateVoteRequest } from "./requests.ts";
 export class VoteClient extends BaseClient {
 	createVote(boardId: string, voteReq: CreateVoteRequest, cookieJar?: http.CookieJar): [Vote | null, http.Response] {
 		const response = this.post(`./boards/${boardId}/votes`, voteReq, [], cookieJar);
-    if (response.error_code) {
-      return [null, response]
-    }
+		if (response.error_code) {
+			return [null, response];
+		}
 
-    const vote: Vote = response.json() as unknown as Vote
-    return [vote, response]
+		const vote: Vote = response.json() as unknown as Vote;
+		return [vote, response];
 	}
 
 	getVotes(
@@ -19,7 +19,7 @@ export class VoteClient extends BaseClient {
 		votingId: string | null = null,
 		noteId: string | null = null,
 		cookieJar?: http.CookieJar,
-	): [Vote[] | null, http.Response] {
+	): [Vote[], http.Response] {
 		const queryParameter: QueryParameter[] = [
 			{ key: "voting", value: votingId },
 			{ key: "note", value: noteId },
@@ -27,7 +27,7 @@ export class VoteClient extends BaseClient {
 
 		const response = this.get(`./boards/${boardId}/votes`, queryParameter, cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const votes: Vote[] = response.json() as unknown as Vote[];
