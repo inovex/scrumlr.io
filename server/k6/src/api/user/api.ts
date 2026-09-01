@@ -5,7 +5,7 @@ import type { UpdateUserRequest } from "./requests.ts";
 
 export class UserClient extends BaseClient {
 	getCurrentUser(cookieJar?: http.CookieJar): [User | null, http.Response] {
-		const response = this.get("/users", [], cookieJar);
+		const response = this.get("./users", [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -15,7 +15,7 @@ export class UserClient extends BaseClient {
 	}
 
 	updateUser(update: UpdateUserRequest, cookieJar?: http.CookieJar): [User | null, http.Response] {
-		const response = this.put("/users", update, [], cookieJar);
+		const response = this.put("./users", update, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -25,7 +25,7 @@ export class UserClient extends BaseClient {
 	}
 
 	getUserById(userId: string, cookieJar?: http.CookieJar): [User | null, http.Response] {
-		const response = this.get(`/users/${userId}`, [], cookieJar);
+		const response = this.get(`./users/${userId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -35,7 +35,7 @@ export class UserClient extends BaseClient {
 	}
 
 	deleteUser(userId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/users/${userId}`, null, [], cookieJar);
+		const response = this.del(`./users/${userId}`, null, [], cookieJar);
 		return response;
 	}
 }

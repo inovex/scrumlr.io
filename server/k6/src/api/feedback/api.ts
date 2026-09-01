@@ -4,7 +4,7 @@ import type { CreateFeedbackRequest } from "./requests.ts";
 
 export class FeedbackClient extends BaseClient {
 	sendFeedback(feedbackReq: CreateFeedbackRequest, cookieJar?: http.CookieJar): http.Response {
-		const response = this.post("/feedback", feedbackReq, [], cookieJar);
+		const response = this.post("./feedback", feedbackReq, [], cookieJar);
 		return response;
 	}
 }

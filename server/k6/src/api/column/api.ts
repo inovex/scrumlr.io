@@ -9,7 +9,7 @@ export class ColumnClient extends BaseClient {
 		colReq: CreateColumnRequest,
 		cookieJar?: http.CookieJar,
 	): [Column | null, http.Response] {
-		const response = this.post(`/boards/${boardId}/columns`, colReq, [], cookieJar);
+		const response = this.post(`./boards/${boardId}/columns`, colReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -19,7 +19,7 @@ export class ColumnClient extends BaseClient {
 	}
 
 	getColumns(boardId: string, cookieJar?: http.CookieJar): [Column[] | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/columns`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/columns`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -29,7 +29,7 @@ export class ColumnClient extends BaseClient {
 	}
 
 	getColumn(boardId: string, columnId: string, cookieJar?: http.CookieJar): [Column | null, http.Response] {
-		const response = this.get(`/boards/${boardId}/columns/${columnId}`, [], cookieJar);
+		const response = this.get(`./boards/${boardId}/columns/${columnId}`, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -44,7 +44,7 @@ export class ColumnClient extends BaseClient {
 		updateReq: UpdateColumnRequest,
 		cookieJar?: http.CookieJar,
 	): [Column | null, http.Response] {
-		const response = this.put(`/boards/${boardId}/columns/${columnId}`, updateReq, [], cookieJar);
+		const response = this.put(`./boards/${boardId}/columns/${columnId}`, updateReq, [], cookieJar);
 		if (response.error_code) {
 			return [null, response];
 		}
@@ -54,7 +54,7 @@ export class ColumnClient extends BaseClient {
 	}
 
 	deleteColumn(boardId: string, columnId: string, cookieJar?: http.CookieJar): http.Response {
-		const response = this.del(`/boards/${boardId}/columns/${columnId}`, null, [], cookieJar);
+		const response = this.del(`./boards/${boardId}/columns/${columnId}`, null, [], cookieJar);
 		return response;
 	}
 }
