@@ -1,4 +1,4 @@
-export type VotingStatus = "OPEN" | "CLOSED";
+export type VotingStatus = "OPEN" | "ABORTED" | "CLOSED";
 
 export interface VotingResultsPerUser {
 	id: string;

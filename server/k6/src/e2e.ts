@@ -1238,23 +1238,23 @@ export default function () {
 			"verify owner delete vote status is 204": (r) => r.status === 204,
 		});
 
-		const [, unauthenticatedCloseVotingResponse] = votingClient.closeVoting(board.id, voting.id, new http.CookieJar());
+		const [, unauthenticatedCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"},  new http.CookieJar());
 		check(unauthenticatedCloseVotingResponse, {
 			"verify unauthenticated close voting status is 401": (r) => r.status === 401,
 		});
 
-		const [, authenticatedCloseVotingResponse] = votingClient.closeVoting(board.id, voting.id, authenticatedContext);
+		const [, authenticatedCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, authenticatedContext);
 		check(authenticatedCloseVotingResponse, {
 			"verify authenticated user close voting status is 403": (r) => r.status === 403,
 		});
 
-		const [, participantCloseVotingResponse] = votingClient.closeVoting(board.id, voting.id, participantContext);
+		const [, participantCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, participantContext);
 		check(participantCloseVotingResponse, {
 			"verify participant close voting status is 403": (r) => r.status === 403,
 		});
 
-		const [closedVoting, ownerCloseVotingRes] = votingClient.closeVoting(board.id, voting.id, ownerContext);
-		check(ownerCloseVotingRes, {
+		const [closedVoting, ownerCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, ownerContext);
+		check(ownerCloseVotingResponse, {
 			"verify owner close voting status is 200": (r) => r.status === 200,
 			"verify closed voting status is CLOSED": () => closedVoting?.status === "CLOSED",
 		});
