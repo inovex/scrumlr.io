@@ -3014,6 +3014,12 @@ const docTemplate = `{
                 "summary": "Verify the auth provider call and create or update a user",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "jwt token to for upgrading an existing user",
+                        "name": "Cookie",
+                        "in": "header"
+                    },
+                    {
                         "description": "user to create",
                         "name": "user",
                         "in": "body",
