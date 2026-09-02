@@ -168,136 +168,6 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, request Imp
 	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
-func (service *Service) Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error) {
-	fullBoard, err := service.FullBoard(ctx, boardID)
-	if err != nil {
-		return nil, err
-	}
-
-	visibleColumns, visibleNotes := getVisibleData(fullBoard)
-
-	switch accept {
-	case "", "*/*", "application/json":
-		return &ExportBoardResponse{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
-		}, nil
-	case "text/csv":
-		records, err := service.buildCSVRecords(ctx, fullBoard, visibleColumns, visibleNotes)
-		if err != nil {
-			return nil, err
-		}
-		return &ExportBoardResponse{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
-			CSVRecords:   records,
-		}, nil
-	default:
-		return nil, fmt.Errorf("accept header '%s' is not supported", accept)
-	}
-}
-
-func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
-	visibleColumns := make([]*columns.Column, 0, len(board.Columns))
-	visibleColIDs := make(map[uuid.UUID]bool)
-
-	for _, column := range board.Columns {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-			visibleColIDs[column.ID] = true
-		}
-	}
-
-	visibleNotes := make([]*notes.Note, 0, len(board.Notes))
-	for _, note := range board.Notes {
-		if visibleColIDs[note.Position.Column] {
-			visibleNotes = append(visibleNotes, note)
-		}
-	}
-
-	return visibleColumns, visibleNotes
-}
-
-func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
-	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-	for index, voting := range board.Votings {
-		if voting.Status == votings.Closed {
-			header = append(header, fmt.Sprintf("voting_%d", index))
-		}
-	}
-
-	colNames := make(map[uuid.UUID]string)
-	for _, c := range cols {
-		colNames[c.ID] = c.Name
-	}
-
-	validSessionUsers := make(map[uuid.UUID]bool)
-	for _, session := range board.BoardSessions {
-		validSessionUsers[session.UserID] = true
-	}
-
-	//cache users to avoid querying the DB for the same author repeatedly
-	userCache := make(map[uuid.UUID]string)
-
-	records := [][]string{header}
-	for _, note := range notes {
-		stack := "null"
-		if note.Position.Stack.Valid {
-			stack = note.Position.Stack.UUID.String()
-		}
-
-		colName := note.Position.Column.String()
-		if name, ok := colNames[note.Position.Column]; ok {
-			colName = name
-		}
-
-		authorName := note.Author.String()
-		if validSessionUsers[note.Author] {
-			if cachedName, exists := userCache[note.Author]; exists {
-				authorName = cachedName
-			} else {
-				user, err := service.userService.Get(ctx, note.Author)
-				if err != nil {
-					return nil, err
-				}
-				authorName = user.Name
-				userCache[note.Author] = user.Name
-			}
-		}
-
-		row := []string{
-			note.ID.String(),
-			note.Author.String(),
-			authorName,
-			note.Text,
-			note.Position.Column.String(),
-			colName,
-			strconv.Itoa(note.Position.Rank),
-			stack,
-		}
-
-		for _, voting := range board.Votings {
-			if voting.Status == votings.Closed {
-				votes := "0"
-				if voting.VotingResults != nil {
-					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
-				}
-				row = append(row, votes)
-			}
-		}
-
-		records = append(records, row)
-	}
-
-	return records, nil
-}
-
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
@@ -502,6 +372,41 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		Votings:              boardVotings,
 		Votes:                boardVotes,
 	}, nil
+}
+
+func (service *Service) Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error) {
+	fullBoard, err := service.FullBoard(ctx, boardID)
+	if err != nil {
+		return nil, err
+	}
+
+	visibleColumns, visibleNotes := getVisibleData(fullBoard)
+
+	switch accept {
+	case "", "*/*", "application/json":
+		return &ExportBoardResponse{
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
+			Columns:      visibleColumns,
+			Notes:        visibleNotes,
+			Votings:      fullBoard.Votings,
+		}, nil
+	case "text/csv":
+		records, err := service.buildCSVRecords(ctx, fullBoard, visibleColumns, visibleNotes)
+		if err != nil {
+			return nil, err
+		}
+		return &ExportBoardResponse{
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
+			Columns:      visibleColumns,
+			Notes:        visibleNotes,
+			Votings:      fullBoard.Votings,
+			CSVRecords:   records,
+		}, nil
+	default:
+		return nil, CreateBoardError(BadRequest, fmt.Sprintf("unsupported accept type: %s", accept), nil)
+	}
 }
 
 func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
@@ -761,6 +666,101 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 		boardEditable := context.WithValue(ctx, identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
+}
+
+func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
+	visibleColumns := make([]*columns.Column, 0, len(board.Columns))
+	visibleColIDs := make(map[uuid.UUID]bool)
+
+	for _, column := range board.Columns {
+		if column.Visible {
+			visibleColumns = append(visibleColumns, column)
+			visibleColIDs[column.ID] = true
+		}
+	}
+
+	visibleNotes := make([]*notes.Note, 0, len(board.Notes))
+	for _, note := range board.Notes {
+		if visibleColIDs[note.Position.Column] {
+			visibleNotes = append(visibleNotes, note)
+		}
+	}
+
+	return visibleColumns, visibleNotes
+}
+
+func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
+	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+	for index, voting := range board.Votings {
+		if voting.Status == votings.Closed {
+			header = append(header, fmt.Sprintf("voting_%d", index))
+		}
+	}
+
+	colNames := make(map[uuid.UUID]string)
+	for _, c := range cols {
+		colNames[c.ID] = c.Name
+	}
+
+	validSessionUsers := make(map[uuid.UUID]bool)
+	for _, session := range board.BoardSessions {
+		validSessionUsers[session.UserID] = true
+	}
+
+	//cache users to avoid querying the DB for the same author repeatedly
+	userCache := make(map[uuid.UUID]string)
+
+	records := [][]string{header}
+	for _, note := range notes {
+		stack := "null"
+		if note.Position.Stack.Valid {
+			stack = note.Position.Stack.UUID.String()
+		}
+
+		colName := note.Position.Column.String()
+		if name, ok := colNames[note.Position.Column]; ok {
+			colName = name
+		}
+
+		authorName := note.Author.String()
+		if validSessionUsers[note.Author] {
+			if cachedName, exists := userCache[note.Author]; exists {
+				authorName = cachedName
+			} else {
+				user, err := service.userService.Get(ctx, note.Author)
+				if err != nil {
+					return nil, err
+				}
+				authorName = user.Name
+				userCache[note.Author] = user.Name
+			}
+		}
+
+		row := []string{
+			note.ID.String(),
+			note.Author.String(),
+			authorName,
+			note.Text,
+			note.Position.Column.String(),
+			colName,
+			strconv.Itoa(note.Position.Rank),
+			stack,
+		}
+
+		for _, voting := range board.Votings {
+			if voting.Status == votings.Closed {
+				votes := "0"
+				if voting.VotingResults != nil {
+					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
+				}
+				row = append(row, votes)
+			}
+		}
+
+		records = append(records, row)
+	}
+
+	return records, nil
 }
 
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {

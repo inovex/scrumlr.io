@@ -549,6 +549,23 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if accept == "" || accept == "*/*" || accept == "application/json" {
+		render.Status(r, http.StatusOK)
+		render.Respond(w, r, struct {
+			Board        *boards.Board            `json:"board"`
+			Participants []*sessions.BoardSession `json:"participants"`
+			Columns      []*columns.Column        `json:"columns"`
+			Notes        []*notes.Note            `json:"notes"`
+			Votings      []*votings.Voting        `json:"votings"`
+		}{
+			Board:        export.Board,
+			Participants: export.Participants,
+			Columns:      export.Columns,
+			Notes:        export.Notes,
+			Votings:      export.Votings,
+		})
+	}
+
 	if accept == "text/csv" {
 		render.Status(r, http.StatusOK)
 		csvWriter := csv.NewWriter(w)
@@ -561,151 +578,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, struct {
-		Board        *boards.Board            `json:"board"`
-		Participants []*sessions.BoardSession `json:"participants"`
-		Columns      []*columns.Column        `json:"columns"`
-		Notes        []*notes.Note            `json:"notes"`
-		Votings      []*votings.Voting        `json:"votings"`
-	}{
-		Board:        export.Board,
-		Participants: export.Participants,
-		Columns:      export.Columns,
-		Notes:        export.Notes,
-		Votings:      export.Votings,
-	})
-}
-
-/*
-fullBoard, err := s.boards.FullBoard(ctx, boardId)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to get full board")
-		span.RecordError(err)
-		common.Throw(w, r, mapError(err))
-		return
-	}
-
-	visibleColumns, visibleNotes := getVisibleData(fullBoard)
-
-	accept := r.Header.Get("Accept")
-	if accept == "" || accept == "" || accept == "application/json" {
-		render.Status(r, http.StatusOK)
-		render.Respond(w, r, struct {
-			Board        *boards.Board            `json:"board"`
-			Participants []*sessions.BoardSession `json:"participants"`
-			Columns      []*columns.Column        `json:"columns"`
-			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votings.Voting        `json:"votings"`
-		}{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
-		})
-		return
-	}
-
-	if accept == "text/csv" {
-		records, err := s.buildCSVRecords(ctx, fullBoard, visibleColumns, visibleNotes)
-		if err != nil {
-			span.SetStatus(codes.Error, "failed to build csv records")
-			span.RecordError(err)
-			common.Throw(w, r, mapError(err))
-			return
-		}
-
-		render.Status(r, http.StatusOK)
-		csvWriter := csv.NewWriter(w)
-		if err := csvWriter.WriteAll(records); err != nil {
-			span.SetStatus(codes.Error, "failed to respond with csv")
-			span.RecordError(err)
-			log.Errorw("failed to respond with csv", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-		}
-		return
-	}
-
 	render.Status(r, http.StatusNotAcceptable)
 	render.Respond(w, r, nil)
-*/
-
-/*
-func (s *Server) buildCSVRecords(ctx context.Context, board *boards.FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
-	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-	for index, voting := range board.Votings {
-		if voting.Status == votings.Closed {
-			header = append(header, fmt.Sprintf("voting_%d", index))
-		}
-	}
-
-	colNames := make(map[uuid.UUID]string)
-	for _, c := range cols {
-		colNames[c.ID] = c.Name
-	}
-
-	validSessionUsers := make(map[uuid.UUID]bool)
-	for _, session := range board.BoardSessions {
-		validSessionUsers[session.UserID] = true
-	}
-
-	//cache users to avoid querying the DB for the same author repeatedly
-	userCache := make(map[uuid.UUID]string)
-
-	records := [][]string{header}
-	for _, note := range notes {
-		stack := "null"
-		if note.Position.Stack.Valid {
-			stack = note.Position.Stack.UUID.String()
-		}
-
-		colName := note.Position.Column.String()
-		if name, ok := colNames[note.Position.Column]; ok {
-			colName = name
-		}
-
-		authorName := note.Author.String()
-		if validSessionUsers[note.Author] {
-			if cachedName, exists := userCache[note.Author]; exists {
-				authorName = cachedName
-			} else {
-				user, err := s.users.Get(ctx, note.Author)
-				if err != nil {
-					return nil, err
-				}
-				authorName = user.Name
-				userCache[note.Author] = user.Name
-			}
-		}
-
-		row := []string{
-			note.ID.String(),
-			note.Author.String(),
-			authorName,
-			note.Text,
-			note.Position.Column.String(),
-			colName,
-			strconv.Itoa(note.Position.Rank),
-			stack,
-		}
-
-		for _, voting := range board.Votings {
-			if voting.Status == votings.Closed {
-				votes := "0"
-				if voting.VotingResults != nil {
-					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
-				}
-				row = append(row, votes)
-			}
-		}
-
-		records = append(records, row)
-	}
-
-	return records, nil
 }
-*/
 
 // Import a board
 //
