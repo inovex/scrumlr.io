@@ -36,7 +36,7 @@ import (
 const getBoardFailureMessage = "failed to get board"
 const getColumnsFailureMessage = "failed to get columns"
 const getNotesFailureMessage = "failed to get notes"
-const passphraseByPassphraseMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
+const byPassphrasePolicyMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
 const boardTimerUpdateFailureMessage = "failed to update board timer"
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
@@ -414,10 +414,10 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		switch *body.AccessPolicy {
 		case ByInvite, Public:
 			if body.Passphrase != nil {
-				err := errors.New(passphraseByPassphraseMessage)
-				span.SetStatus(codes.Error, passphraseByPassphraseMessage)
+				err := errors.New(byPassphrasePolicyMessage)
+				span.SetStatus(codes.Error, byPassphrasePolicyMessage)
 				span.RecordError(err)
-				return nil, CreateBoardError(BadRequest, passphraseByPassphraseMessage, err)
+				return nil, CreateBoardError(BadRequest, byPassphrasePolicyMessage, err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
@@ -644,7 +644,7 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := CreateBoardError(BadRequest, passphraseByPassphraseMessage, errors.New(passphraseByPassphraseMessage))
+			err := CreateBoardError(BadRequest, byPassphrasePolicyMessage, errors.New(byPassphrasePolicyMessage))
 			return board, err
 		}
 

@@ -16,7 +16,7 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-const failurePassingUserIdMessage = "failed to parse user id"
+const failureParsingUserIdMessage = "failed to parse user id"
 const checkBoardSessionFailureMessage = "unable to check board session"
 
 type SessionService interface {
@@ -107,7 +107,7 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, failurePassingUserIdMessage)
+		span.SetStatus(codes.Error, failureParsingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user id", "err", err)
 		common.Throw(w, r, err)
@@ -152,7 +152,7 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, failurePassingUserIdMessage)
+		span.SetStatus(codes.Error, failureParsingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
@@ -255,7 +255,7 @@ func (api *API) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, failurePassingUserIdMessage)
+		span.SetStatus(codes.Error, failureParsingUserIdMessage)
 		span.RecordError(err)
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
