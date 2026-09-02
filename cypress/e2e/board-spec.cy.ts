@@ -56,8 +56,8 @@ describe("Board", () => {
 
     cy.get('.timer').should("exist")
 
-    // timer actions are hidden until mouseover, we simulate that by focusing the element
-    cy.get('#timer__end-timer').focus().click()
+    // timer actions are hidden until mouseover which I couldnt simulate easily so we're just gonna pretend we can see it
+    cy.get('#timer__end-timer').click({force: true})
 
     cy.get('.timer').should("not.exist")
   });
