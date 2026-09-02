@@ -6,11 +6,11 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/otel"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -42,8 +42,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -54,8 +53,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	note, err := s.notes.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create note")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create note"))
 		log.Warnw("unable to create note", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -90,8 +88,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 
 	note, err := s.notes.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get node")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get note"))
 		log.Warnw("unable to get note", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -125,9 +122,8 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 	notes, err := s.notes.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get all notes")
-		span.RecordError(err)
-		log.Warnw("unable to get nodes for board", "board", board, "err", err)
+		otel.RecordErrorSpan(span, err, new("failed to get all notes"))
+		log.Warnw("unable to get notes for board", "board", board, "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -164,8 +160,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -175,9 +170,8 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	body.Board = boardID
 	note, err := s.notes.Update(ctx, userId, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update note")
-		span.RecordError(err)
-		log.Warnw("unable to update node", "note", note, "err", err)
+		otel.RecordErrorSpan(span, err, new("failed to update note"))
+		log.Warnw("unable to update note", "note", note, "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -213,8 +207,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -223,10 +216,10 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	body.ID = note
 	body.Board = board
 
-	if err := s.notes.Delete(ctx, user, body); err != nil {
-		span.SetStatus(codes.Error, "failed to delete note")
-		span.RecordError(err)
-		log.Warnw("unable to delete node", "note", note, "err", err)
+	err := s.notes.Delete(ctx, user, body)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to delete note"))
+		log.Warnw("unable to delete note", "note", note, "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}

@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
 
 	"scrumlr.io/server/auth"
@@ -478,7 +479,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 	logger.SetLogLevel(cli.String("log-level"))
 	log := logger.FromContext(ctx)
 
-	otelShutdown, err := initialize.SetupOTelSDK(ctx, cli.String("otel-grpc"), cli.String("otel-http"))
+	otelShutdown, err := otel.SetupOpenTelemetry(ctx, otel.WithGrpcEndpoint(cli.String("otel-grpc")), otel.WithHttpEndpoint(cli.String("otel-http")))
 	if err != nil {
 		log.Errorf("failed to setup OpenTelemetry: %w", err)
 		return err

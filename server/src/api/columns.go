@@ -6,11 +6,11 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -42,8 +42,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	var body columns.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -51,14 +50,15 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.User = user
+
 	column, err := s.columns.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create column"))
 		log.Errorw("Unable to create column", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}
+
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/columns/%s", board, column.ID)))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, column)
@@ -88,9 +88,9 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 	column := ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	if err := s.columns.Delete(ctx, board, column, user); err != nil {
-		span.SetStatus(codes.Error, "failed to delete column")
-		span.RecordError(err)
+	err := s.columns.Delete(ctx, board, column, user)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to delete column"))
 		log.Errorw("Unable to delete column", "err", err)
 		http.Error(w, "unable to delete column", http.StatusInternalServerError)
 		return
@@ -127,8 +127,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 	var body columns.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -139,8 +138,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 	column, err := s.columns.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update column"))
 		log.Errorw("Unable to update column", "err", err)
 		http.Error(w, "unable to update column", http.StatusInternalServerError)
 		return
@@ -176,8 +174,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 
 	column, err := s.columns.Get(ctx, board, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column"))
 		log.Errorw("Unable to get column", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -211,8 +208,7 @@ func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 
 	columns, err := s.columns.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get columns"))
 		log.Errorw("Unable to create columns", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
