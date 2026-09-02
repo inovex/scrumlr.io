@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"scrumlr.io/server/hash"
-	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 
@@ -301,17 +300,12 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, te.err)
 			} else {
 				boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, te.err)
-			}
-
-			if te.board.AccessPolicy == boards.ByInvite {
-				sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionRequestExists, te.err)
-			}
-			if te.board.AccessPolicy == boards.ByInvite && !te.sessionRequestExists {
-				sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
-			}
-			if te.board.AccessPolicy != boards.ByInvite && !te.sessionExists {
-				sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
-					Return(new(sessions.BoardSession), te.err)
+				location := fmt.Sprintf("/boards/%s/participants/%s", boardID, userID)
+				if te.board.AccessPolicy == boards.ByInvite {
+					location = fmt.Sprintf("/boards/%s/requests/%s", boardID, userID)
+				}
+				boardMock.EXPECT().Join(mock.Anything, te.board, userID, mock.Anything).
+					Return(location, te.expectedCode, te.err)
 			}
 
 			rr := httptest.NewRecorder()
@@ -377,8 +371,8 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreateSessionError() {
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
-		Return(nil, errors.New("failed to create session"))
+	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
+		Return("", 0, errors.New("failed to create session"))
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -395,8 +389,8 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreatesParticipantLocation() {
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: boardID, User: userID, Role: role.ParticipantRole}).
-		Return(new(sessions.BoardSession), nil)
+	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
+		Return(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), http.StatusCreated, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -414,7 +408,8 @@ func (suite *BoardTestSuite) TestJoinBoard_ByInviteExistingRequestLocation() {
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
+	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
+		Return(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -432,8 +427,8 @@ func (suite *BoardTestSuite) TestJoinBoard_ByInviteCreatesRequestLocation() {
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
 	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
-	sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
-	sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), nil)
+	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
+		Return(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
