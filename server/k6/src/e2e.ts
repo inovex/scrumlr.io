@@ -952,8 +952,6 @@ export default function () {
 		});
 	});
 
-	// sleep for joinBoard rate limit
-	sleep(5);
 
 	group("Check votings and votes", () => {
 		const ownerContext = new http.CookieJar();
