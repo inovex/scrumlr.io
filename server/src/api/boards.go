@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -10,8 +9,6 @@ import (
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/hash"
-	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
@@ -29,7 +26,6 @@ import (
 )
 
 const boardParticipantsPath = "/boards/%s/participants/%s"
-const boardsRequestsPath = "/boards/%s/requests/%s"
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
@@ -269,91 +265,25 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, mapError(err))
 		return
 	}
-	var location string
-	var statusCode int
-	switch b.AccessPolicy {
-	case boards.Public:
-		location, statusCode, err = s.joinPublicBoard(ctx, board, user)
-	case boards.ByPassphrase:
-		location, statusCode, err = s.joinBoardByPassphrase(ctx, r, board, user, b)
-	case boards.ByInvite:
-		location, statusCode, err = s.joinBoardByInvite(ctx, board, user)
-	default:
-		common.Throw(w, r, common.BadRequestError(errors.New("invalid access policy")))
-		return
-	}
-
-	if err != nil {
-		common.Throw(w, r, err)
-		return
-	}
-
-	w.Header().Set("Location", location)
-	w.WriteHeader(statusCode)
-}
-
-func (s *Server) joinPublicBoard(ctx context.Context, board, user uuid.UUID) (string, int, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_public")
-	defer span.End()
-
-	_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to create session")
-		span.RecordError(err)
-		return "", 0, mapError(err)
-	}
-	return s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusCreated, nil
-}
-
-func (s *Server) joinBoardByPassphrase(ctx context.Context, r *http.Request, board, user uuid.UUID, b *boards.Board) (string, int, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_byPassphrase")
-	defer span.End()
-
-	var body boards.JoinBoardRequest
-	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
-		logger.FromContext(ctx).Errorw("Unable to decode body", "err", err)
-		return "", 0, common.BadRequestError(errors.New("unable to parse request body"))
-	}
-
-	if body.Passphrase == "" {
-		err := errors.New("missing passphrase")
-		span.SetStatus(codes.Error, "no passphrase provided")
-		span.RecordError(err)
-		return "", 0, common.BadRequestError(err)
-	}
-
-	encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
-	if encodedPassphrase != *b.Passphrase {
-		err := errors.New("wrong passphrase")
-		span.SetStatus(codes.Error, "wrong passphrase provided")
-		span.RecordError(err)
-		return "", 0, common.BadRequestError(err)
-	}
-
-	return s.joinPublicBoard(ctx, board, user)
-}
-
-func (s *Server) joinBoardByInvite(ctx context.Context, board, user uuid.UUID) (string, int, error) {
-	ctx, span := tracer.Start(ctx, "scrumlr.boards.api.join_byInvite")
-	defer span.End()
-
-	sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
-	if err != nil {
-		span.SetStatus(codes.Error, "failed to check session requests")
-		span.RecordError(err)
-		return "", 0, mapError(err)
-	}
-
-	if !sessionRequestExists {
-		if _, err = s.sessionRequests.Create(ctx, board, user); err != nil {
-			span.SetStatus(codes.Error, "failed to create session request")
+	var joinRequest boards.JoinBoardRequest
+	if b.AccessPolicy == boards.ByPassphrase {
+		if err := render.Decode(r, &joinRequest); err != nil {
+			span.SetStatus(codes.Error, "failed to decode body")
 			span.RecordError(err)
-			return "", 0, mapError(err)
+			logger.FromContext(ctx).Errorw("Unable to decode body", "err", err)
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
+			return
 		}
 	}
-	return s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)), http.StatusSeeOther, nil
+
+	location, statusCode, err := s.boards.Join(ctx, b, user, joinRequest)
+	if err != nil {
+		common.Throw(w, r, mapError(err))
+		return
+	}
+
+	w.Header().Set("Location", s.buildRelativeURL(location))
+	w.WriteHeader(statusCode)
 }
 
 // Update a board
