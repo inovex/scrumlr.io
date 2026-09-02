@@ -13,8 +13,6 @@ import (
 	"github.com/google/uuid"
 )
 
-const decodeFailureMessageVotes = "failed to decode body"
-
 // Add a new vote to a board
 //
 //	@Summary		Add a new vote to a board

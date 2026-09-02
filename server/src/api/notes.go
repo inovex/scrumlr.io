@@ -13,8 +13,6 @@ import (
 	"scrumlr.io/server/otel"
 )
 
-const decodeFailureMessageNotes = "failed to decode body"
-
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // Create a new note on a board
