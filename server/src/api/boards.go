@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
@@ -539,32 +538,18 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	accept := r.Header.Get("Accept")
 
-	fullBoard, err := s.boards.FullBoard(ctx, boardId)
+	export, err := s.boards.Export(ctx, boardId, accept)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get full board")
+		span.SetStatus(codes.Error, "failed to export board")
 		span.RecordError(err)
+		log.Errorw("Unable to export board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
-	for _, column := range fullBoard.Columns {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-		}
-	}
-
-	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
-	for _, note := range fullBoard.Notes {
-		for _, column := range visibleColumns {
-			if note.Position.Column == column.ID {
-				visibleNotes = append(visibleNotes, note)
-			}
-		}
-	}
-
-	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
+	if accept == "" || accept == "*/*" || accept == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
 			Board        *boards.Board            `json:"board"`
@@ -573,82 +558,22 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			Notes        []*notes.Note            `json:"notes"`
 			Votings      []*votings.Voting        `json:"votings"`
 		}{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
+			Board:        export.Board,
+			Participants: export.Participants,
+			Columns:      export.Columns,
+			Notes:        export.Notes,
+			Votings:      export.Votings,
 		})
-		return
-	} else if r.Header.Get("Accept") == "text/csv" {
-		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, closedVoting := range fullBoard.Votings {
-			if closedVoting.Status == votings.Closed {
-				header = append(header, fmt.Sprintf("voting_%d", index))
-			}
-		}
-		records := [][]string{header}
+	}
 
-		for _, note := range visibleNotes {
-			stack := "null"
-			if note.Position.Stack.Valid {
-				stack = note.Position.Stack.UUID.String()
-			}
-
-			author := note.Author.String()
-			for _, session := range fullBoard.BoardSessions {
-				if session.UserID == note.Author {
-					user, err := s.users.Get(ctx, session.UserID)
-					if err != nil {
-						span.SetStatus(codes.Error, "failed to get note author user")
-						span.RecordError(err)
-						common.Throw(w, r, mapError(err))
-						return
-					}
-					author = user.Name
-				}
-			}
-
-			column := note.Position.Column.String()
-			for _, c := range visibleColumns {
-				if c.ID == note.Position.Column {
-					column = c.Name
-				}
-			}
-
-			resultOnNote := []string{
-				note.ID.String(),
-				note.Author.String(),
-				author,
-				note.Text,
-				note.Position.Column.String(),
-				column,
-				strconv.Itoa(note.Position.Rank),
-				stack,
-			}
-
-			for _, closedVoting := range fullBoard.Votings {
-				if closedVoting.Status == votings.Closed {
-					if closedVoting.VotingResults != nil {
-						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
-					} else {
-						resultOnNote = append(resultOnNote, "0")
-					}
-				}
-			}
-
-			records = append(records, resultOnNote)
-		}
-
+	if accept == "text/csv" {
 		render.Status(r, http.StatusOK)
 		csvWriter := csv.NewWriter(w)
-		err := csvWriter.WriteAll(records)
-		if err != nil {
+		if err := csvWriter.WriteAll(export.CSVRecords); err != nil {
 			span.SetStatus(codes.Error, "failed to respond with csv")
 			span.RecordError(err)
 			log.Errorw("failed to respond with csv", "err", err)
 			common.Throw(w, r, common.InternalServerError)
-			return
 		}
 		return
 	}

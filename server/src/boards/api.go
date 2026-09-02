@@ -14,6 +14,7 @@ type BoardService interface {
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error)
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error)
+	Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error)
 	Update(ctx context.Context, body BoardUpdateRequest) (*Board, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*Board, error)
