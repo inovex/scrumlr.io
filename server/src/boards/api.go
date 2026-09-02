@@ -10,6 +10,7 @@ import (
 type BoardService interface {
 	Create(ctx context.Context, body CreateBoardRequest) (*Board, error)
 	Import(ctx context.Context, owner uuid.UUID, body ImportBoardRequest) (*ImportBoardResponse, error)
+	Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (string, int, error)
 	Get(ctx context.Context, id uuid.UUID) (*Board, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error)
