@@ -59,8 +59,8 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             key={item.label}
             onClick={(e) => onClickItem(e, item)}
             disabled={item.disabled}
-            data-cy={`${dataCy}-item-${item.label}`}
-            data-testid={`${dataCy}-item-${item.label}`}
+            data-cy={`${dataCy}-item-${item.label.replaceAll(" ", "-")}`}
+            data-testid={`${dataCy}-item-${item.label.replaceAll(" ", "-")}`}
             data-autofocus={isLastItem}
           >
             {item.element}
