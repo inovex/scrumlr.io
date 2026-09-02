@@ -68,9 +68,10 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 //	@Description	Update a voting on a board to closed
 //	@Tags			votings
 //	@Accept			json
-//	@Param			Cookie	header	string	true	"jwt token to authenticate"
-//	@Param			boardId	path	string	true	"id of the board"
-//	@Param			id		path	string	true	"id of the voting"
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			id		path	string						true	"id of the voting"
+//	@Param			voting	body	votings.VotingUpdateRequest	true	"voting to update"
 //	@Produce		json
 //	@Success		200	{object}	votings.Voting
 //	@Failure		400	{object}	common.APIError
