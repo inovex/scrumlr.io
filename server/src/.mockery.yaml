@@ -44,6 +44,12 @@ packages:
     interfaces:
       Hash:
 
+  scrumlr.io/server/encoder:
+    config:
+      dir: encoder
+    interfaces:
+      PasswordEncoder:
+
   scrumlr.io/server/health:
     config:
       dir: health
