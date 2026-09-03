@@ -23,5 +23,5 @@ type NotesService interface {
 	GetLock(ctx context.Context, noteID uuid.UUID) (*DragLock, error)
 	IsLocked(ctx context.Context, noteID uuid.UUID) bool
 
-	HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage)
+	HandleWebSocketMessage(ctx context.Context, boardID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) error
 }

@@ -920,8 +920,9 @@ func (suite *NotesServiceTestSuite) Test_handleAcquire_Success() {
 		Return(nil)
 	suite.expectPublish()
 
-	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -948,8 +949,9 @@ func (suite *NotesServiceTestSuite) Test_handleAcquire_Failure() {
 	suite.mockCache.EXPECT().Create(mock.Anything, suite.noteID.String(), suite.authorID.String(), DefaultTTL).
 		Return(errors.New("lock exists"))
 
-	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -972,8 +974,9 @@ func (suite *NotesServiceTestSuite) Test_handleAcquire_WriteJSONError() {
 		Return(nil)
 	suite.expectPublish()
 
-	service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleAcquire(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.Error(err)
 	suite.Len(writes, 0)
 }
 
@@ -994,8 +997,9 @@ func (suite *NotesServiceTestSuite) Test_handleRelease_Success() {
 		Return(nil)
 	suite.expectPublish()
 
-	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -1022,8 +1026,9 @@ func (suite *NotesServiceTestSuite) Test_handleRelease_Failure() {
 	suite.mockCache.EXPECT().Delete(mock.Anything, suite.noteID.String()).
 		Return(errors.New("release failed"))
 
-	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -1046,8 +1051,9 @@ func (suite *NotesServiceTestSuite) Test_handleRelease_WriteJSONError() {
 		Return(nil)
 	suite.expectPublish()
 
-	service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
+	err := service.handleRelease(suite.ctx, suite.noteID, suite.boardID, suite.authorID, conn)
 
+	suite.Error(err)
 	suite.Len(writes, 0)
 }
 
@@ -1062,8 +1068,9 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_InvalidJSON() {
 			return nil
 		})
 
-	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, json.RawMessage("{invalid"))
+	err := service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, json.RawMessage("{invalid"))
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -1089,8 +1096,9 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_UnknownAction() 
 	payload, err := json.Marshal(DragLockMessage{Action: unknownAction, NoteID: suite.noteID})
 	suite.NoError(err)
 
-	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
+	err = service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -1120,8 +1128,9 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Acquire() {
 	payload, err := json.Marshal(DragLockMessage{Action: DragLockActionAcquire, NoteID: suite.noteID})
 	suite.NoError(err)
 
-	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
+	err = service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)
@@ -1149,8 +1158,9 @@ func (suite *NotesServiceTestSuite) Test_HandleWebSocketMessage_Release() {
 	payload, err := json.Marshal(DragLockMessage{Action: DragLockActionRelease, NoteID: suite.noteID})
 	suite.NoError(err)
 
-	service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
+	err = service.HandleWebSocketMessage(suite.ctx, suite.boardID, suite.authorID, conn, payload)
 
+	suite.NoError(err)
 	suite.Len(writes, 1)
 	response, ok := writes[0].(DragLockResponse)
 	suite.True(ok)

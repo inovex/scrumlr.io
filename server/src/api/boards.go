@@ -171,7 +171,7 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
-		s.openBoardSocket(w, r)
+		s.eventListener.OpenBoardSocket(w, r)
 		return
 	}
 
