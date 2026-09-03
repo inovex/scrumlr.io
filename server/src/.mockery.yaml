@@ -38,12 +38,6 @@ packages:
       ReactionService:
       ReactionDatabase:
 
-  scrumlr.io/server/hash:
-    config:
-      dir: hash
-    interfaces:
-      Hash:
-
   scrumlr.io/server/encoder:
     config:
       dir: encoder
