@@ -118,7 +118,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_Create_ByInvite() {
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	t := suite.T()
 
-	boardId := suite.boards["UpdatePassphrase"].ID
+	boardId := suite.boards["UpdateToPassphrase"].ID
 	name := "New Name"
 	description := "This is a new description"
 	passphrase := "SuperSecret"
@@ -153,7 +153,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePublicToPassphrase() {
 	suite.True(dbBoard.IsLocked)
 }
 
-func (suite *DatabaseBoardTestSuite) Test_Database_UpdatePassphraseToPublic() {
+func (suite *DatabaseBoardTestSuite) Test_Database_UpdateToPassphraseToPublic() {
 	t := suite.T()
 
 	boardId := suite.boards["UpdatePublic"].ID
@@ -255,6 +255,33 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateInviteToPassphrase() {
 	suite.False(dbBoard.ShowNoteReactions)
 	suite.False(dbBoard.ShowNotesOfOtherUsers)
 	suite.True(dbBoard.IsLocked)
+}
+
+func (suite *DatabaseBoardTestSuite) TestDatabaseUpdateToPassphrase() {
+	t := suite.T()
+
+	board := suite.boards["UpdatePassphrase"]
+	passphrase := "SuperStrongPassowrd"
+	salt := "PePPer"
+
+	dbBoard, err := suite.database.UpdateBoardPassphrase(suite.T().Context(), DatabaseBoardPassphraseUpdate{
+		ID:         board.ID,
+		Passphrase: passphrase,
+		Salt:       salt,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, board.ID, dbBoard.ID)
+	assert.Equal(t, board.Name, dbBoard.Name)
+	assert.Equal(t, board.Description, dbBoard.Description)
+	assert.Equal(t, board.AccessPolicy, dbBoard.AccessPolicy)
+	assert.Equal(t, passphrase, *dbBoard.Passphrase)
+	assert.Equal(t, salt, *dbBoard.Salt)
+	suite.True(dbBoard.AllowStacking)
+	suite.True(dbBoard.ShowAuthors)
+	suite.True(dbBoard.ShowNoteReactions)
+	suite.True(dbBoard.ShowNotesOfOtherUsers)
+	suite.False(dbBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateTimer() {
@@ -370,7 +397,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteR
 func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UsesProvidedLastModifiedAt() {
 	t := suite.T()
 
-	boardId := suite.boards["UpdatePassphrase"].ID
+	boardId := suite.boards["UpdateToPassphrase"].ID
 
 	newName := "Updated Name"
 	newLastModifiedAt := nowDate.Add(5 * time.Minute)
@@ -496,36 +523,16 @@ func (suite *DatabaseBoardTestSuite) seedData(db *bun.DB) {
 
 	// tests boards
 	suite.boards = make(map[string]DatabaseBoard, 10)
-	firstReadName := "Read1"
-	firstReadDescription := "This is a board"
-	suite.boards["Read1"] = DatabaseBoard{ID: uuid.New(), Name: &firstReadName, Description: &firstReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	secondReadName := "Read2"
-	secondReadDescription := "This is also a board"
-	suite.boards["Read2"] = DatabaseBoard{ID: uuid.New(), Name: &secondReadName, Description: &secondReadDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	timerName := "TimerUpdate"
-	timerDescription := "This is a board to update the timer"
-	suite.boards["Timer"] = DatabaseBoard{ID: uuid.New(), Name: &timerName, Description: &timerDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNamePassphrase := "UpdatePassphrase"
-	updateDescriptionPassphrase := "This is a board to update"
-	suite.boards["UpdatePassphrase"] = DatabaseBoard{ID: uuid.New(), Name: &updateNamePassphrase, Description: &updateDescriptionPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailPassphrase := "Update"
-	updateDescriptionFailPassphrase := "This is a board to update"
-	suite.boards["UpdateFailPassphrase"] = DatabaseBoard{ID: uuid.New(), Name: &updateNameFailPassphrase, Description: &updateDescriptionFailPassphrase, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNamePublic := "Update"
-	updateDescriptionPublic := "This is a board to update"
-	suite.boards["UpdatePublic"] = DatabaseBoard{ID: uuid.New(), Name: &updateNamePublic, Description: &updateDescriptionPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailPublic := "Update"
-	updateDescriptionFailPublic := "This is a board to update"
-	suite.boards["UpdateFailPublic"] = DatabaseBoard{ID: uuid.New(), Name: &updateNameFailPublic, Description: &updateDescriptionFailPublic, Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameInvite := "Update"
-	updateDescriptionInvite := "This is a board to update"
-	suite.boards["UpdateInvite"] = DatabaseBoard{ID: uuid.New(), Name: &updateNameInvite, Description: &updateDescriptionInvite, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	updateNameFailInvite := "Update"
-	updateDescriptionFailInvite := "This is a board to update"
-	suite.boards["UpdateFailInvite"] = DatabaseBoard{ID: uuid.New(), Name: &updateNameFailInvite, Description: &updateDescriptionFailInvite, Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
-	deleteName := "DeleteBoard"
-	deleteDescription := "This is a board to delete"
-	suite.boards["Delete"] = DatabaseBoard{ID: uuid.New(), Name: &deleteName, Description: &deleteDescription, Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["Read1"] = DatabaseBoard{ID: uuid.New(), Name: new("Read1"), Description: new("This is a board"), Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["Read2"] = DatabaseBoard{ID: uuid.New(), Name: new("Read2"), Description: new("This is also a board"), Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["Timer"] = DatabaseBoard{ID: uuid.New(), Name: new("TimerUpdate"), Description: new("This is a board to update the timer"), Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdateToPassphrase"] = DatabaseBoard{ID: uuid.New(), Name: new("UpdateToPassphrase"), Description: new("This is a board to update"), Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdatePassphrase"] = DatabaseBoard{ID: uuid.New(), Name: new("Update"), Description: new("This is a board to update"), Passphrase: new("Password"), Salt: new("Salt"), AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdatePublic"] = DatabaseBoard{ID: uuid.New(), Name: new("Update"), Description: new("This is a board to update"), Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdateFailPublic"] = DatabaseBoard{ID: uuid.New(), Name: new("Update"), Description: new("This is a board to update"), Passphrase: nil, Salt: nil, AccessPolicy: ByPassphrase, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdateInvite"] = DatabaseBoard{ID: uuid.New(), Name: new("Update"), Description: new("This is a board to update"), Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["UpdateFailInvite"] = DatabaseBoard{ID: uuid.New(), Name: new("Update"), Description: new("This is a board to update"), Passphrase: nil, Salt: nil, AccessPolicy: ByInvite, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
+	suite.boards["Delete"] = DatabaseBoard{ID: uuid.New(), Name: new("DeleteBoard"), Description: new("This is a board to delete"), Passphrase: nil, Salt: nil, AccessPolicy: Public, ShowAuthors: true, ShowNotesOfOtherUsers: true, ShowNoteReactions: true, AllowStacking: true, IsLocked: false}
 
 	// test sessions
 	suite.sessions = make(map[string]TestSession, 2)

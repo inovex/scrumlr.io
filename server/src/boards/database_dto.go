@@ -71,6 +71,13 @@ type DatabaseBoardUpdate struct {
 	LastModifiedAt        time.Time
 }
 
+type DatabaseBoardPassphraseUpdate struct {
+	bun.BaseModel `bun:"table:boards"`
+	ID            uuid.UUID
+	Passphrase    string
+	Salt          string
+}
+
 type DatabaseFullBoard struct {
 	Board                DatabaseBoard
 	BoardSessions        []sessions.DatabaseBoardSession
