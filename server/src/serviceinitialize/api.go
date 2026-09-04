@@ -1,6 +1,7 @@
 package serviceinitialize
 
 import (
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -45,9 +46,9 @@ func (init *ApiInitializer) InitializeFeedbackApi() {
 	panic("Not implemented")
 }
 
-func (init *ApiInitializer) InitializeHealthApi() {
-	// health api is currently not initialized through the api initializer
-	panic("Not implemented")
+func (init *ApiInitializer) InitializeHealthApi(healthService health.HealthService) health.HealthApi {
+	healthApi := health.NewHealthApi(healthService)
+	return healthApi
 }
 
 func (init *ApiInitializer) InitializeReactionApi() {

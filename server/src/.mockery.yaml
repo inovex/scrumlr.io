@@ -48,6 +48,7 @@ packages:
     config:
       dir: health
     interfaces:
+      HealthApi:
       HealthService:
       HealthDatabaseChecker:
 

@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/serviceinitialize"
 	"scrumlr.io/server/sessions"
@@ -387,7 +388,10 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
+			healthApi := health.NewMockHealthApi(t)
+
 			routesInitializer := serviceinitialize.NewRoutesInitializer()
+			healthRoutes := routesInitializer.InitializeHealthRoutes(healthApi)
 			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
 
@@ -397,6 +401,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,      // realtime (not needed for templates)
 				nil,      // wsService (not needed for templates)
 				mockAuth, // auth
+				healthRoutes,
 				userRoutes,
 				sessionRoutes,
 				nil,                              // swaggerRoutes
@@ -408,7 +413,6 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,                              // reactions
 				nil,                              // sessions
 				nil,                              // sessionRequests
-				nil,                              // health
 				nil,                              // feedback
 				nil,                              // boardReactions
 				mockBoardTemplates,               // boardTemplates
