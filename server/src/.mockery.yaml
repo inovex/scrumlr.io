@@ -8,6 +8,12 @@ packages:
     interfaces:
       TimeProvider:
 
+  scrumlr.io/server/auth:
+    config:
+      dir: auth
+    interfaces:
+      Auth:
+
   scrumlr.io/server/boards:
     config:
       dir: boards
@@ -57,6 +63,13 @@ packages:
     interfaces:
       FeedbackService:
       FeedbackApi:
+
+  scrumlr.io/server/info:
+    config:
+      dir: info
+    interfaces:
+      InfoApi:
+      InfoService:
 
   scrumlr.io/server/sessions:
     config:

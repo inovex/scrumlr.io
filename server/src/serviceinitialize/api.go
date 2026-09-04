@@ -2,6 +2,7 @@ package serviceinitialize
 
 import (
 	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -49,6 +50,11 @@ func (init *ApiInitializer) InitializeFeedbackApi(feedbackService feedback.Feedb
 func (init *ApiInitializer) InitializeHealthApi() {
 	// health api is currently not initialized through the api initializer
 	panic("Not implemented")
+}
+
+func (init *ApiInitializer) InitializeInfoApi(infoService info.InfoService) info.InfoApi {
+	infoApi := info.NewInfoApi(infoService)
+	return infoApi
 }
 
 func (init *ApiInitializer) InitializeReactionApi() {

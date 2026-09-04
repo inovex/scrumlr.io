@@ -46,6 +46,7 @@ type Server struct {
 	auth      auth.Auth
 
 	feedbackRoutes chi.Router
+	infoRoutes     chi.Router
 	userRoutes     chi.Router
 	sessionRoutes  chi.Router
 	swaggerRoutes  chi.Router
@@ -90,6 +91,7 @@ func New(
 	auth auth.Auth,
 
 	feedbackRoutes chi.Router,
+	infoRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
@@ -151,6 +153,7 @@ func New(
 		wsService: wsService,
 
 		feedbackRoutes: feedbackRoutes,
+		infoRoutes:     infoRoutes,
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
 		swaggerRoutes:  swaggerRoutes,
@@ -205,7 +208,7 @@ func New(
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
-		r.Get("/info", s.getServerInfo)
+		r.Mount("/info", s.infoRoutes)
 		r.Get("/health", s.healthCheck)
 		r.Mount("/feedback", s.feedbackRoutes)
 		r.Route("/login", func(r chi.Router) {
