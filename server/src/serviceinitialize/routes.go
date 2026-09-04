@@ -2,6 +2,7 @@ package serviceinitialize
 
 import (
 	"github.com/go-chi/chi/v5"
+	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/swagger"
 	"scrumlr.io/server/users"
@@ -41,9 +42,9 @@ func (init *RoutesInitializer) InitializeColumnTemplateRoutes() {
 	panic("Not implemented")
 }
 
-func (init *RoutesInitializer) InitializeFeedbackRoutes() {
-	// feedback routes are currently not initialized through the route initializer
-	panic("Not implemented")
+func (init *RoutesInitializer) InitializeFeedbackRoutes(feedbackApi feedback.FeedbackApi) chi.Router {
+	router := feedback.NewFeedbackRouter(feedbackApi).RegisterRoutes()
+	return router
 }
 
 func (init *RoutesInitializer) InitializeHealthRoutes() {

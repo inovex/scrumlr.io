@@ -1,6 +1,7 @@
 package serviceinitialize
 
 import (
+	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
@@ -40,9 +41,9 @@ func (init *ApiInitializer) InitializeColumnTemplateApi() {
 	panic("Not implemented")
 }
 
-func (init *ApiInitializer) InitializeFeedbackApi() {
-	// feedback api is currently not initialized through the api initializer
-	panic("Not implemented")
+func (init *ApiInitializer) InitializeFeedbackApi(feedbackService feedback.FeedbackService) feedback.FeedbackApi {
+	feedbackApi := feedback.NewFeedbackApi(feedbackService)
+	return feedbackApi
 }
 
 func (init *ApiInitializer) InitializeHealthApi() {

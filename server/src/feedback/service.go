@@ -24,7 +24,7 @@ func NewFeedbackService(client *http.Client, webhookUrl string) FeedbackService 
 	return service
 }
 
-func (service *Service) Create(ctx context.Context, feedbackType string, contact string, text string) error {
+func (service *Service) Create(ctx context.Context, feedbackType FeedbackType, contact string, text string) error {
 	log := logger.FromContext(ctx)
 	_, span := tracer.Start(ctx, "scrumlr.feedback.service.create")
 	defer span.End()
