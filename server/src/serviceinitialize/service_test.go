@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/eventfilter"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/info"
@@ -26,20 +27,21 @@ import (
 func TestNewServiceInitializer(t *testing.T) {
 	b := &realtime.Broker{}
 	c := &cache.Cache{}
+	passwordEncoder := encoder.NewMockPasswordEncoder(t)
 
-	initializer := NewServiceInitializer(nil, b, c)
+	initializer := NewServiceInitializer(nil, b, c, passwordEncoder)
 
 	assert.Nil(t, initializer.db)
 	assert.Equal(t, b, initializer.broker)
 	assert.Equal(t, c, initializer.cache)
 	assert.NotNil(t, initializer.clock)
-	assert.NotNil(t, initializer.hash)
+	assert.NotNil(t, initializer.passwordEncoder)
 	assert.NotNil(t, initializer.client)
 	assert.False(t, initializer.checkOrigin)
 }
 
 func TestInitializeBoardService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	columnService := columns.NewMockColumnService(t)
 	sessionService := sessions.NewMockSessionService(t)
@@ -55,7 +57,7 @@ func TestInitializeBoardService(t *testing.T) {
 }
 
 func TestInitializeColumnService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	noteService := notes.NewMockNotesService(t)
 
@@ -65,7 +67,7 @@ func TestInitializeColumnService(t *testing.T) {
 }
 
 func TestInitializeSessionService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	columnService := columns.NewMockColumnService(t)
 	noteService := notes.NewMockNotesService(t)
@@ -76,7 +78,7 @@ func TestInitializeSessionService(t *testing.T) {
 }
 
 func TestInitializeSessionRequestService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	sessionService := sessions.NewMockSessionService(t)
 
@@ -86,7 +88,7 @@ func TestInitializeSessionRequestService(t *testing.T) {
 }
 
 func TestInitializeNoteService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	noteService := initializer.InitializeNotesService()
 
@@ -94,7 +96,7 @@ func TestInitializeNoteService(t *testing.T) {
 }
 
 func TestInitializeUserService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	sessionService := sessions.NewMockSessionService(t)
 	noteService := notes.NewMockNotesService(t)
@@ -105,7 +107,7 @@ func TestInitializeUserService(t *testing.T) {
 }
 
 func TestInitializeVotingService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	votingService := initializer.InitializeVotingService()
 
@@ -113,7 +115,7 @@ func TestInitializeVotingService(t *testing.T) {
 }
 
 func TestInitializeReactionService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	reactionService := initializer.InitializeReactionService()
 
@@ -121,7 +123,7 @@ func TestInitializeReactionService(t *testing.T) {
 }
 
 func TestInitializeBoardReactionService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	boardReactionService := initializer.InitializeBoardReactionService()
 
@@ -129,7 +131,7 @@ func TestInitializeBoardReactionService(t *testing.T) {
 }
 
 func TestInitializeBoardTemplateService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
 
@@ -139,7 +141,7 @@ func TestInitializeBoardTemplateService(t *testing.T) {
 }
 
 func TestInitializeColumnTemplateService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	columnTemplateService := initializer.InitializeColumnTemplateService()
 
@@ -147,7 +149,7 @@ func TestInitializeColumnTemplateService(t *testing.T) {
 }
 
 func TestInitializeFeedbackService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	feedbackService := initializer.InitializeFeedbackService("https://example.com/webhook")
 
@@ -155,7 +157,7 @@ func TestInitializeFeedbackService(t *testing.T) {
 }
 
 func TestInitializeHealthService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	healthService := initializer.InitializeHealthService()
 
@@ -163,7 +165,7 @@ func TestInitializeHealthService(t *testing.T) {
 }
 
 func TestInitializeInfoService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	auth := auth.NewMockAuth(t)
 	feedbackService := feedback.NewMockFeedbackService(t)
@@ -174,7 +176,7 @@ func TestInitializeInfoService(t *testing.T) {
 }
 
 func TestInitializeWebsocketService(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	webSocketService := initializer.InitializeWebSocketService()
 
@@ -182,7 +184,7 @@ func TestInitializeWebsocketService(t *testing.T) {
 }
 
 func TestInitializeEventFilter(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	boardService := boards.NewMockBoardService(t)
 	columnService := columns.NewMockColumnService(t)
@@ -194,7 +196,7 @@ func TestInitializeEventFilter(t *testing.T) {
 }
 
 func TestInitializeEventListener(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	webSocket := websocket.NewMockUpgrader(t)
 	eventFilter := eventfilter.NewMockEventFilter(t)
