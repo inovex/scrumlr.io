@@ -380,6 +380,7 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		)
 
 		if userID != requestedUserID {
+			err := errors.New("requested user does not match authenticated user")
 			otel.RecordErrorSpan(span, err, new("requested user does not match authenticated user"))
 			log.Errorw("requested user does not match authenticated user", "requestedUserId", requestedUserID.String(), "userId", userID.String())
 			common.Throw(w, r, common.BadRequestError(err))

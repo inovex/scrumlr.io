@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -253,6 +254,54 @@ func Test_UpdateUserBoards_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
+func TestApiDeleteUser(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockUserService.EXPECT().Delete(mock.Anything, userId).
+		Return(nil)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	userApi.Delete(rr, req.Request())
+
+	assert.Equal(t, http.StatusNoContent, rr.Result().StatusCode)
+}
+
+func TestApiDeleteUserServiceError(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockUserService.EXPECT().Delete(mock.Anything, userId).
+		Return(errors.New("failed to delete user"))
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	userApi.Delete(rr, req.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
+}
+
 func Test_BoardAuthenticatedContext(t *testing.T) {
 	userId := uuid.New()
 	boardId := uuid.New()
@@ -425,4 +474,53 @@ func Test_AnonymousCustomTemplateCreationContext_NotAllowed(t *testing.T) {
 
 	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 	assert.Error(t, common.ForbiddenError(errors.New("not authorized to create custom templates anonymous")))
+}
+
+func Test_isAccountOwner(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
+}
+
+func Test_isAccountOwner_differentIds(t *testing.T) {
+	userId := uuid.New()
+	requestId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", requestId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", requestId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }
