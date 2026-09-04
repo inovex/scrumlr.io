@@ -9,7 +9,7 @@ import (
 
 	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
@@ -290,8 +290,13 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
-		if encodedPassphrase == *b.Passphrase {
+		passwordEncoder, err := encoder.NewDelegatingPasswordEncoder("", encoder.WithPasswordEncoder("", nil))
+		if err != nil {
+
+		}
+
+		passwordMatches, err := passwordEncoder.Matches(body.Passphrase, *b.Passphrase, *b.Salt)
+		if passwordMatches {
 			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
 			if err != nil {
 				otel.RecordErrorSpan(span, err, new("failed to create session"))

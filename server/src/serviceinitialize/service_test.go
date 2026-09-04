@@ -6,6 +6,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -20,20 +21,21 @@ import (
 func TestNewServiceInitializer(t *testing.T) {
 	b := &realtime.Broker{}
 	c := &cache.Cache{}
+	passwordEncoder := encoder.NewMockPasswordEncoder(t)
 
-	initializer := NewServiceInitializer(nil, b, c)
+	initializer := NewServiceInitializer(nil, b, c, passwordEncoder)
 
 	assert.Nil(t, initializer.db)
 	assert.Equal(t, b, initializer.broker)
 	assert.Equal(t, c, initializer.cache)
 	assert.NotNil(t, initializer.clock)
-	assert.NotNil(t, initializer.hash)
+	assert.NotNil(t, initializer.passwordEncoder)
 	assert.NotNil(t, initializer.client)
 	assert.False(t, initializer.checkOrigin)
 }
 
 func TestServiceInitializer_InitializeServices(t *testing.T) {
-	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{}, encoder.NewMockPasswordEncoder(t))
 
 	noteService := notes.NewMockNotesService(t)
 	columnService := columns.NewMockColumnService(t)
