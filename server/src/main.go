@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
@@ -528,7 +529,13 @@ func run(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
+	passwordEncoder, err := encoder.InitializePasswordEncoder()
+	if err != nil {
+		log.Fatalf("failed to configure password encoder: %v", err)
+		return err
+	}
+
+	initializer := serviceinitialize.NewServiceInitializer(db, rt, c, passwordEncoder)
 
 	wsService := initializer.InitializeWebSocketService()
 	websocket := initializer.InitializeSessionRequestWebsocket(wsService)

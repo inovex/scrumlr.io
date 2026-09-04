@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -39,10 +39,10 @@ type BoardServiceTestSuite struct {
 	votingMock         *votings.MockVotingService
 	userService        *users.MockUserService
 
-	broker     *realtime.Broker
-	mockBroker *realtime.MockClient
-	mockClock  *timeprovider.MockTimeProvider
-	mockHash   *hash.MockHash
+	broker              *realtime.Broker
+	mockBroker          *realtime.MockClient
+	mockClock           *timeprovider.MockTimeProvider
+	mockPasswordEncoder *encoder.MockPasswordEncoder
 
 	boardID   uuid.UUID
 	userID    uuid.UUID
@@ -73,9 +73,9 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.broker.Con = suite.mockBroker
 
 	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
-	suite.mockHash = hash.NewMockHash(suite.T())
+	suite.mockPasswordEncoder = encoder.NewMockPasswordEncoder(suite.T())
 
-	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockPasswordEncoder)
 
 	suite.boardID = uuid.New()
 	suite.userID = uuid.New()
@@ -189,7 +189,7 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: role.OwnerRole}).
 		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: role.OwnerRole}, nil)
 
-	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
+	suite.mockPasswordEncoder.EXPECT().Encode(passPhrase).Return(&passPhrase, &salt, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
@@ -452,7 +452,7 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
-	suite.mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
+	suite.mockPasswordEncoder.EXPECT().Encode(passphrase).Return(&passphrase, &salt, nil)
 
 	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
 

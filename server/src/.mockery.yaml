@@ -38,11 +38,11 @@ packages:
       ReactionService:
       ReactionDatabase:
 
-  scrumlr.io/server/hash:
+  scrumlr.io/server/encoder:
     config:
-      dir: hash
+      dir: encoder
     interfaces:
-      Hash:
+      PasswordEncoder:
 
   scrumlr.io/server/health:
     config:

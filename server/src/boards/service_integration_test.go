@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/websocket"
@@ -20,7 +21,6 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/hash"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
@@ -91,7 +91,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	suite.broker = broker
 
 	clock := timeprovider.NewClock()
-	generatedHash := hash.NewHashSha512()
+	passwordEncoder, err := encoder.NewDelegatingPasswordEncoder("sha512", encoder.WithPasswordEncoder("sha512", encoder.NewSha512Encoder()))
 	reactionDatabase := reactions.NewReactionsDatabase(db)
 	reactionService := reactions.NewReactionService(reactionDatabase, broker)
 	votingDatabase := votings.NewVotingDatabase(db)
@@ -114,7 +114,7 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
 	userDatabase := users.NewUserDatabase(db)
 	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
-	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
+	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, passwordEncoder)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
