@@ -18,6 +18,21 @@ type RejectionPageProps = {
 
 // retry interval for banned users in milliseconds
 const BANNED_RETRY_INTERVAL_MS = 30_000;
+const SECOND_IN_MS = 1_000;
+const MINUTE_IN_MS = 60_000;
+const HOUR_IN_MS = 3_600_000;
+
+const getRetryInterval = (intervalMs: number) => {
+  if (intervalMs % HOUR_IN_MS === 0) {
+    return {count: intervalMs / HOUR_IN_MS, unit: "hours" as const};
+  }
+
+  if (intervalMs % MINUTE_IN_MS === 0) {
+    return {count: intervalMs / MINUTE_IN_MS, unit: "minutes" as const};
+  }
+
+  return {count: Math.max(1, Math.round(intervalMs / SECOND_IN_MS)), unit: "seconds" as const};
+};
 
 export const RejectionPage = ({status}: RejectionPageProps) => {
   const {t} = useTranslation();
@@ -27,6 +42,8 @@ export const RejectionPage = ({status}: RejectionPageProps) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const isBanned = status === "banned";
+  const retryInterval = getRetryInterval(BANNED_RETRY_INTERVAL_MS);
+  const retryIntervalLabel = t(`RejectionPage.retryInterval.${retryInterval.unit}`, {count: retryInterval.count});
 
   // probes the join endpoint without putting the redux store into "pending"
   // so the rejection page (and its retry button) stays mounted when the attempt fails.
@@ -81,14 +98,15 @@ export const RejectionPage = ({status}: RejectionPageProps) => {
         <div className="rejection-page__content">
           <div className="rejection-page__title">{t("RejectionPage.title")}</div>
           <div className="rejection-page__description">{isBanned ? t("RejectionPage.banned") : t("RejectionPage.description")}</div>
-          {isBanned && <div className="rejection-page__hint">{t("RejectionPage.bannedRetryHint")}</div>}
+          {isBanned && <div className="rejection-page__hint">{t("RejectionPage.bannedRetryHint", {interval: retryIntervalLabel})}</div>}
           <div className="rejection-page__button-group">
             {isBanned && (
-              <button className="rejection-page__return-button rejection-page__return-button--retry" onClick={tryRejoin} disabled={isRetrying}>
+              <button type="button" className="rejection-page__return-button rejection-page__return-button--retry" onClick={tryRejoin} disabled={isRetrying}>
                 {isRetrying ? t("RejectionPage.retrying") : t("RejectionPage.retry")}
               </button>
             )}
             <button
+              type="button"
               className="rejection-page__return-button"
               onClick={() => {
                 window.location.pathname = "/";
