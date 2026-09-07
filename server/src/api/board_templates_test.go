@@ -422,7 +422,6 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,                              // reactions
 				nil,                              // sessions
 				nil,                              // sessionRequests
-				nil,                              // feedback
 				nil,                              // boardReactions
 				mockBoardTemplates,               // boardTemplates
 				mockColumnTemplates,              // columntemplates
