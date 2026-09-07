@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/serviceinitialize"
 	"scrumlr.io/server/sessions"
@@ -385,9 +386,12 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
 			sessionServiceMock := sessions.NewMockSessionService(t)
 
+			feedbackApiMock := feedback.NewMockFeedbackApi(t)
+
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
 			routesInitializer := serviceinitialize.NewRoutesInitializer()
+			feedbackRoutes := routesInitializer.InitializeFeedbackRoutes(feedbackApiMock)
 			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
 
@@ -397,6 +401,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,      // realtime (not needed for templates)
 				nil,      // wsService (not needed for templates)
 				mockAuth, // auth
+				feedbackRoutes,
 				userRoutes,
 				sessionRoutes,
 				nil,                              // swaggerRoutes

@@ -560,10 +560,12 @@ func run(ctx context.Context, cli *cli.Command) error {
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
+	feedbackApi := apiInitializer.InitializeFeedbackApi(feedbackService)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, cli.Bool("allow-anonymous-board-creation"), cli.Bool("allow-anonymous-custom-templates"))
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
+	feedbackRoutes := routesInitializer.InitializeFeedbackRoutes(feedbackApi)
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
@@ -574,6 +576,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		wsService,
 		authConfig,
 
+		feedbackRoutes,
 		userRoutes,
 		sessionRoutes,
 		swaggerRoutes,
