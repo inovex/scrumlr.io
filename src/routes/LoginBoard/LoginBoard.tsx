@@ -27,6 +27,8 @@ interface LocationState {
   from: {pathname: string};
 }
 
+const DEFAULT_REDIRECT_PATH = "/boards/templates";
+
 const TERMS_LINKS = {
   terms: <Link to="/legal/termsAndConditions" target="_blank" />,
   privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
@@ -45,12 +47,12 @@ export const LoginBoard = () => {
   const [displayName, setDisplayName] = useState(getRandomName());
   const [showAnonymousContent, setShowAnonymousContent] = useState(false);
 
-  const redirectPath = (location.state as LocationState)?.from?.pathname || "/";
+  const redirectPath = (location.state as LocationState)?.from?.pathname || DEFAULT_REDIRECT_PATH;
 
   async function handleAnonymousLogin() {
     if (!displayName) return; // Basic safety check
     await Auth.signInAnonymously(displayName);
-    navigate(redirectPath);
+    navigate(redirectPath, {replace: true});
   }
 
   /**

@@ -171,57 +171,58 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 			Where("id = ?", id).
 			Scan(ctx, &extUser)
 
-		if err == nil { // external user exists
-			err = tx.NewSelect().
-				Model((*DatabaseUser)(nil)).
-				Where("id = ?", extUser.UserID).
-				Scan(ctx, &user)
+		if errors.Is(err, sql.ErrNoRows) {
+			// add new external user to the database
+			insert := DatabaseUserInsert{Name: name, AccountType: accountType}
+			_, err = tx.NewInsert().
+				Model(&insert).
+				Returning("*").
+				Exec(ctx, &user)
 
 			if err != nil {
 				return err
 			}
 
-			if extUser.Name == user.Name && user.Name != name {
-				_, err = tx.NewUpdate().
-					Table("users").
-					Set("name = ?", name).
-					Where("id = ?", extUser.UserID).
-					Returning("*").
-					Exec(common.ContextWithValues(ctx, "Database", db), &user)
-				if err != nil {
-					return err
-				}
-			}
-
-			_, err = tx.NewUpdate().
-				Table(table).
-				Set("name = ?", name).
-				Set("avatar_url = ?", avatarUrl).
-				Where("id = ?", id).
-				Exec(ctx)
+			_, err = tx.NewRaw(
+				fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
+				user.ID, id, name, avatarUrl,
+			).Exec(ctx)
 
 			return err
 		}
-
-		if !errors.Is(err, sql.ErrNoRows) {
-			return err
-		}
-
-		// add new external user to the database
-		insert := DatabaseUserInsert{Name: name, AccountType: accountType}
-		_, err = tx.NewInsert().
-			Model(&insert).
-			Returning("*").
-			Exec(ctx, &user)
 
 		if err != nil {
 			return err
 		}
 
-		_, err = tx.NewRaw(
-			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
-			user.ID, id, name, avatarUrl,
-		).Exec(ctx)
+		//external user exists
+		err = tx.NewSelect().
+			Model((*DatabaseUser)(nil)).
+			Where("id = ?", extUser.UserID).
+			Scan(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		if extUser.Name == user.Name && user.Name != name {
+			_, err = tx.NewUpdate().
+				Table("users").
+				Set("name = ?", name).
+				Where("id = ?", extUser.UserID).
+				Returning("*").
+				Exec(common.ContextWithValues(ctx, "Database", db), &user)
+			if err != nil {
+				return err
+			}
+		}
+
+		_, err = tx.NewUpdate().
+			Table(table).
+			Set("name = ?", name).
+			Set("avatar_url = ?", avatarUrl).
+			Where("id = ?", id).
+			Exec(ctx)
 
 		return err
 	})

@@ -2159,6 +2159,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "voting to update",
+                        "name": "voting",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VotingUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -4591,6 +4600,9 @@ const docTemplate = `{
         "boardtemplates.BoardTemplate": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
                 "creator": {
                     "description": "The board template creator id",
                     "type": "string"
@@ -4605,6 +4617,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "The board template id",
+                    "type": "string"
+                },
+                "modifiedAt": {
                     "type": "string"
                 },
                 "name": {
@@ -5375,12 +5390,22 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "OPEN",
+                "ABORTED",
                 "CLOSED"
             ],
             "x-enum-varnames": [
                 "Open",
+                "Aborted",
                 "Closed"
             ]
+        },
+        "votings.VotingUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/votings.VotingStatus"
+                }
+            }
         }
     }
 }`

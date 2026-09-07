@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-chi/render"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -30,8 +30,7 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 
 	var body feedback.FeedbackRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return

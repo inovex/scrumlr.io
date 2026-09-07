@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
 
 	"scrumlr.io/server/auth"
@@ -441,6 +442,24 @@ func main() {
 				Value:    false,
 				Required: false,
 			},
+			&cli.IntFlag{
+				Name: "join-rate-limit",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_JOIN_RATE_LIMIT"),
+				),
+				Usage:    "set the rate limit for joining a board. The limit is set for 5 seconds. The default is 3 requests per 5 second.",
+				Value:    3,
+				Required: false,
+			},
+			&cli.IntFlag{
+				Name: "template-rate-limit",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_TEMPLATE_RATE_LIMIT"),
+				),
+				Usage:    "set the rate limit for the templates. The limit is set for 1 second. The default is 20 requests per second.",
+				Value:    20,
+				Required: false,
+			},
 			&cli.StringFlag{
 				Name:        "config",
 				Sources:     cli.EnvVars("SCRUMLR_CONFIG_PATH"),
@@ -460,7 +479,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 	logger.SetLogLevel(cli.String("log-level"))
 	log := logger.FromContext(ctx)
 
-	otelShutdown, err := initialize.SetupOTelSDK(ctx, cli.String("otel-grpc"), cli.String("otel-http"))
+	otelShutdown, err := otel.SetupOpenTelemetry(ctx, otel.WithGrpcEndpoint(cli.String("otel-grpc")), otel.WithHttpEndpoint(cli.String("otel-http")))
 	if err != nil {
 		log.Errorf("failed to setup OpenTelemetry: %w", err)
 		return err
@@ -581,6 +600,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 		cli.Bool("allow-anonymous-history"),
 		cli.Bool("auth-enable-experimental-file-system-store"),
 		cli.Bool("enable-swagger"),
+		cli.Int("join-rate-limit"),
+		cli.Int("template-rate-limit"),
 	)
 
 	listen := fmt.Sprintf("%s:%d", cli.String("address"), cli.Int("port"))

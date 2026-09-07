@@ -9,10 +9,10 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/sessions"
 )
 
@@ -65,8 +65,7 @@ func (api *API) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := api.service.Get(ctx, userId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -98,16 +97,15 @@ func (api *API) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "user")
 	requestedUserId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "unable to parse uuid")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
 		log.Errorw("unable to parse uuid", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
+
 	user, err := api.service.Get(ctx, requestedUserId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user by id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user by id"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -139,8 +137,7 @@ func (api *API) GetUsersFromBoard(w http.ResponseWriter, r *http.Request) {
 
 	users, err := api.service.GetBoardUsers(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get users")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get users"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -173,8 +170,7 @@ func (api *API) Update(w http.ResponseWriter, r *http.Request) {
 
 	var body UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -184,8 +180,7 @@ func (api *API) Update(w http.ResponseWriter, r *http.Request) {
 
 	updatedUser, err := api.service.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update user"))
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -218,8 +213,7 @@ func (api *API) Delete(w http.ResponseWriter, r *http.Request) {
 
 	err := api.service.Delete(ctx, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete user"))
 		log.Errorw("failed to delete user", "user", user, "err", err)
 		http.Error(w, "unable to delete user", http.StatusInternalServerError)
 		return
@@ -238,41 +232,37 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse uuid")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
 
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
-		span.SetAttributes(
-			attribute.String("scrumlr.user.api.context.authenticated.board", board.String()),
-			attribute.String("scrumlr.user.api.context.authenticated.user", userID.String()),
-		)
 		if !ok {
-			span.SetStatus(codes.Error, "unable to authenticate user")
-			err = errors.New("invalid user id")
-			span.RecordError(err)
-			log.Errorw("Invalid user id", "error", err)
+			err = errors.New("invalid or missing user identifier in context")
+			otel.RecordErrorSpan(span, err, nil)
+			log.Error("invalid or missing user identifier in context")
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 
-		user, err := api.service.Get(ctx, userID)
+		span.SetAttributes(
+			attribute.String("scrumlr.user.api.context.authenticated.board", board.String()),
+			attribute.String("scrumlr.user.api.context.authenticated.user", userID.String()),
+		)
 
+		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("could not fetch user"))
 			log.Errorw("Could not fetch user", "error", err)
 			common.Throw(w, r, errors.New("could not fetch user"))
 			return
 		}
 
 		if user.AccountType == common.Anonymous {
-			span.SetStatus(codes.Error, "not authorized to perform this action")
-			err = errors.New("not authorized")
-			span.RecordError(err)
+			err = errors.New("not authorized to perform this action")
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
 			common.Throw(w, r, common.ForbiddenError(err))
 			return
@@ -291,30 +281,29 @@ func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
-		span.SetAttributes(
-			attribute.String("scrumlr.user.api.context.authenticated.user", userID.String()),
-		)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
+			err := errors.New("invalid or missing user identifier in context")
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("invalid or missing user identifier in context")
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 
+		span.SetAttributes(
+			attribute.String("scrumlr.user.api.context.authenticated.user", userID.String()),
+		)
+
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("could not fetch user"))
 			log.Errorw("Could not fetch user", "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if user.AccountType == common.Anonymous && !api.allowAnonymousBoardCreation {
-			span.SetStatus(codes.Error, "not authorized to create boards anonymously")
 			err := errors.New("not authorized to create boards anonymously")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("anonymous board creation not allowed")
 			common.Throw(w, r, common.ForbiddenError(err))
 			return
@@ -333,26 +322,24 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
+			err := errors.New("invalid or missing user identifier in context")
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("invalid or missing user identifier in context")
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 
 		user, err := api.service.Get(ctx, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "could not fetch user")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("could not fetch user"))
 			log.Errorw("Could not fetch user", "error", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if user.AccountType == common.Anonymous && !api.allowAnonymousCustomTemplates {
-			span.SetStatus(codes.Error, "not authorized to create custom templates")
 			err := errors.New("not authorized to create custom templates anonymously")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("anonymous custom template creation not allowed")
 			common.Throw(w, r, common.ForbiddenError(err))
 			return
@@ -371,18 +358,17 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 		userIDValue := ctx.Value(identifiers.UserIdentifier)
 		userID, ok := userIDValue.(uuid.UUID)
 		if !ok {
-			span.SetStatus(codes.Error, "invalid or missing user identifier in context")
-			span.RecordError(errors.New("invalid or missing user identifier in context"))
+			err := errors.New("invalid or missing user identifier in context")
+			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("invalid or missing user identifier in context")
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
 
 		requestID := chi.URLParam(r, "user")
 		requestedUserID, err := uuid.Parse(requestID)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse uuid")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("unable to parse uuid"))
 			log.Errorw("unable to parse uuid", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -392,13 +378,14 @@ func (api *API) isAccountOwner(next http.Handler) http.Handler {
 			attribute.String("scrumlr.user.api.context.is_account_owner.userId", userID.String()),
 			attribute.String("scrumlr.user.api.context.is_account_owner.requestedUserId", requestedUserID.String()),
 		)
+
 		if userID != requestedUserID {
-			span.SetStatus(codes.Error, "requested user does not match authenticated user")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("requested user does not match authenticated user"))
 			log.Errorw("requested user does not match authenticated user", "requestedUserId", requestedUserID.String(), "userId", userID.String())
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
+
 		next.ServeHTTP(w, r)
 	})
 }

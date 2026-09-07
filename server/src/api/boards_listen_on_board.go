@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/identifiers"
@@ -49,16 +49,14 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := s.wsService.Accept(w, r, s.checkOrigin)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to upgrade websocket")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to upgrade websocket"))
 		log.Errorw("unable to upgrade websocket", "err", err, "board", id, "user", userID)
 		return
 	}
 
 	err = s.sessions.Connect(ctx, id, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to connect session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to connect session"))
 		log.Warnw("failed to connect session", "board", id, "user", userID, "err", err)
 	}
 	defer s.closeBoardSocket(context.Background(), id, userID, conn, "normal closure")
@@ -66,8 +64,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	fullBoard, err := s.boards.FullBoard(ctx, id)
 	if err != nil {
 		message := "failed to get full board"
-		span.SetStatus(codes.Error, message)
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, &message)
 		s.closeBoardSocket(ctx, id, userID, conn, message)
 		return
 	}
@@ -82,8 +79,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	err = conn.WriteJSON(ctx, initEvent)
 	if err != nil {
 		message := "failed to send init message"
-		span.SetStatus(codes.Error, message)
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, &message)
 		log.Errorw(message, "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(ctx, id, userID, conn, message)
 		return
@@ -99,8 +95,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 				delete(s.boardSubscriptions[id].clients, userID)
 				err := s.sessions.Disconnect(ctx, id, userID)
 				if err != nil {
-					span.SetStatus(codes.Error, "failed to disconnect session")
-					span.RecordError(err)
+					otel.RecordErrorSpan(span, err, new("failed to disconnect session"))
 					log.Warnw("failed to disconnected session", "board", id, "user", userID, "err", err)
 				}
 			}
@@ -190,8 +185,7 @@ func (s *Server) closeBoardSocket(ctx context.Context, board, user uuid.UUID, co
 	_ = conn.Close(reason)
 	err := s.sessions.Disconnect(ctx, board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to disconnect session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to disconnect session"))
 		log.Warnw("failed to disconnected session", "board", board, "user", user, "err", err)
 	}
 }

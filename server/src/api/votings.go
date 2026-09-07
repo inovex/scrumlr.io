@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
@@ -42,8 +42,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VotingCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -53,8 +52,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 	voting, err := s.votings.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create voting")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create voting"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -70,9 +68,10 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 //	@Description	Update a voting on a board to closed
 //	@Tags			votings
 //	@Accept			json
-//	@Param			Cookie	header	string	true	"jwt token to authenticate"
-//	@Param			boardId	path	string	true	"id of the board"
-//	@Param			id		path	string	true	"id of the voting"
+//	@Param			Cookie	header	string						true	"jwt token to authenticate"
+//	@Param			boardId	path	string						true	"id of the board"
+//	@Param			id		path	string						true	"id of the voting"
+//	@Param			voting	body	votings.VotingUpdateRequest	true	"voting to update"
 //	@Produce		json
 //	@Success		200	{object}	votings.Voting
 //	@Failure		400	{object}	common.APIError
@@ -87,10 +86,18 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := ctx.Value(identifiers.VotingIdentifier).(uuid.UUID)
 
+	var body votings.VotingUpdateRequest
+	if err := render.Decode(r, &body); err != nil {
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+	body.ID = id
+	body.Board = board
+
 	notes, err := s.notes.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get notes"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -110,10 +117,10 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	voting, err := s.votings.Close(ctx, id, board, affectedNotes)
+	voting, err := s.votings.Update(ctx, id, board, body.Status, affectedNotes)
+
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update voting")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update voting"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -147,8 +154,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 
 	voting, err := s.votings.Get(ctx, board, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get voting")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get voting"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -180,8 +186,7 @@ func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 
 	votings, err := s.votings.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votings")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get votings"))
 		common.Throw(w, r, mapError(err))
 		return
 	}

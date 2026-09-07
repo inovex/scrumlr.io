@@ -5,11 +5,11 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
@@ -35,8 +35,7 @@ func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {
 
 	var body boardreactions.BoardReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("unable to create board reaction", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return

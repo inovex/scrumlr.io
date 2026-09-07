@@ -1,4 +1,4 @@
-import {TemplateColumn} from "../templateColumns/types";
+import {TemplateColumn} from "store/features";
 
 // getTemplates returns all templates with columns, but is the only endpoint to do so.
 // All other template / column endpoints are handled separately, i.e. getting/updating a template
@@ -14,6 +14,8 @@ export type Template = {
   description: string;
   favourite: boolean;
   type: TemplateType;
+  createdAt: string;
+  modifiedAt: string;
 };
 
 export type TemplateWithColumns = {template: Template; columns: TemplateColumn[]};

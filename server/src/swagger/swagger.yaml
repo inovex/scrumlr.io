@@ -551,6 +551,8 @@ definitions:
     type: object
   boardtemplates.BoardTemplate:
     properties:
+      createdAt:
+        type: string
       creator:
         description: The board template creator id
         type: string
@@ -562,6 +564,8 @@ definitions:
         type: boolean
       id:
         description: The board template id
+        type: string
+      modifiedAt:
         type: string
       name:
         description: The board template name
@@ -1100,11 +1104,18 @@ definitions:
   votings.VotingStatus:
     enum:
     - OPEN
+    - ABORTED
     - CLOSED
     type: string
     x-enum-varnames:
     - Open
+    - Aborted
     - Closed
+  votings.VotingUpdateRequest:
+    properties:
+      status:
+        $ref: '#/definitions/votings.VotingStatus'
+    type: object
 info:
   contact:
     email: info@scrumlr.io
@@ -2551,6 +2562,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: voting to update
+        in: body
+        name: voting
+        required: true
+        schema:
+          $ref: '#/definitions/votings.VotingUpdateRequest'
       produces:
       - application/json
       responses:

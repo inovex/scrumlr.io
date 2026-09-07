@@ -10,8 +10,8 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 type natsClient struct {
@@ -34,6 +34,7 @@ func NewNats(url, bucket string) (*Cache, error) {
 		TTL:     time.Second * 10,
 		Storage: jetstream.MemoryStorage,
 	}
+
 	kv, err := js.CreateOrUpdateKeyValue(context.Background(), config)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create key value store on nats server %s: %w", url, err)
@@ -55,8 +56,7 @@ func (n *natsClient) Create(ctx context.Context, key string, value any, ttl time
 
 	data, err := json.Marshal(value)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to marshal value")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to marshal value"))
 		log.Errorw("unable to marshal value in create", "key", key, "value", value, "err", err)
 		return err
 	}
@@ -82,8 +82,7 @@ func (n *natsClient) Put(ctx context.Context, key string, value any) error {
 
 	data, err := json.Marshal(value)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to marshal value")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to marshal value"))
 		log.Errorw("unable to marshal value in put", "key", key, "value", value, "err", err)
 		return err
 	}
@@ -104,13 +103,11 @@ func (n *natsClient) Get(ctx context.Context, key string) ([]byte, error) {
 	val, err := n.store.Get(ctx, key)
 	if err != nil {
 		if errors.As(err, &jetstream.ErrKeyNotFound) {
-			span.SetStatus(codes.Ok, "key does not exists")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("key does not exists"))
 			return nil, &KeyNotFound{err}
 		}
 
-		span.SetStatus(codes.Error, "failed to get value for key")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get value for key"))
 		log.Errorw("unable to get value for key", "key", key, "error", err)
 		return nil, err
 	}

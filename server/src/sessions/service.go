@@ -8,22 +8,16 @@ import (
 	"slices"
 	"strconv"
 
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/sessions")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/sessions")
 
 type SessionDatabase interface {
 	Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)
@@ -74,8 +68,7 @@ func (service *BoardSessionService) Create(ctx context.Context, body BoardSessio
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create board session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create board session"))
 		log.Errorw("unable to create board session", "board", body.Board, "user", body.User, "error", err)
 		return nil, CreateSessionError(Internal, "unable to create board session", err)
 	}
@@ -99,13 +92,11 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 	session, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "session not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("session not found"))
 			return nil, CreateSessionError(NotFound, "session not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get session"))
 		log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
 		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
@@ -123,8 +114,7 @@ func (service *BoardSessionService) GetAll(ctx context.Context, boardID uuid.UUI
 
 	sessions, err := service.database.GetAll(ctx, boardID, filter)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get all session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get all session"))
 		return nil, CreateSessionError(Internal, "unable to get all sessions for board", err)
 	}
 
@@ -141,8 +131,7 @@ func (service *BoardSessionService) GetUserBoardSessions(ctx context.Context, us
 
 	sessions, err := service.database.GetUserBoardSessions(ctx, user, connectedOnly)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user boards")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user boards"))
 		return nil, CreateSessionError(Internal, "failed to get user boards", err)
 	}
 
@@ -160,8 +149,7 @@ func (service *BoardSessionService) Exists(ctx context.Context, boardID, userID 
 
 	exists, err := service.database.Exists(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check board session existence")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check board session existence"))
 		return false, CreateSessionError(Internal, "failed to check board session existence", err)
 	}
 
@@ -179,8 +167,7 @@ func (service *BoardSessionService) ModeratorSessionExists(ctx context.Context, 
 
 	moderatorExists, err := service.database.ModeratorExists(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check moderator session existence")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check moderator session existence"))
 		return false, CreateSessionError(Internal, "failed to check moderator session existence", err)
 	}
 
@@ -198,8 +185,7 @@ func (service *BoardSessionService) OwnerSessionExists(ctx context.Context, boar
 
 	ownerExists, err := service.database.OwnerExists(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check owner session existence")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check owner session existence"))
 		return false, CreateSessionError(Internal, "failed to check owner session existence", err)
 	}
 
@@ -217,8 +203,7 @@ func (service *BoardSessionService) IsParticipantBanned(ctx context.Context, boa
 
 	isBanned, err := service.database.IsParticipantBanned(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check participant ban status")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check participant ban status"))
 		return false, CreateSessionError(Internal, "failed to check participant ban status", err)
 	}
 
@@ -266,43 +251,37 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 
 	sessionOfCaller, err := service.database.Get(ctx, body.Board, body.Caller)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get board session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get board session"))
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
 		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	if sessionOfCaller.Role == role.ParticipantRole && body.User != body.Caller {
-		err := CreateSessionError(Forbidden, "not allowed to change other user's session", errors.New("not allowed to change other user's session"))
-		span.SetStatus(codes.Error, "not allowed to change user session")
-		span.RecordError(err)
-		return nil, err
+		err := errors.New("not allowed to change other user's session")
+		otel.RecordErrorSpan(span, err, nil)
+		return nil, CreateSessionError(Forbidden, "not allowed to change other user's session", err)
 	}
 
 	sessionOfUserToModify, err := service.database.Get(ctx, body.Board, body.User)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get session"))
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
 		return nil, CreateSessionError(Internal, "unable to get session for board", err)
 	}
 
 	if body.Role != nil {
 		if sessionOfCaller.Role == role.ParticipantRole && *body.Role != role.ParticipantRole {
-			err := CreateSessionError(Forbidden, "cannot promote role", errors.New("cannot promote role"))
-			span.SetStatus(codes.Error, "cannot promote role")
-			span.RecordError(err)
-			return nil, err
+			err := errors.New("cannot promote role")
+			otel.RecordErrorSpan(span, err, nil)
+			return nil, CreateSessionError(Forbidden, "cannot promote role", err)
 		} else if sessionOfUserToModify.Role == role.OwnerRole && *body.Role != role.OwnerRole {
-			err := CreateSessionError(Forbidden, "not allowed to change owner role", errors.New("not allowed to change owner role"))
-			span.SetStatus(codes.Error, "not allowed to change owner role")
-			span.RecordError(err)
-			return nil, err
+			err := errors.New("not allowed to change owner role")
+			otel.RecordErrorSpan(span, err, nil)
+			return nil, CreateSessionError(Forbidden, "not allowed to change owner role", err)
 		} else if sessionOfUserToModify.Role != role.OwnerRole && *body.Role == role.OwnerRole {
-			err := CreateSessionError(Forbidden, "not allowed to promote to owner role", errors.New("not allowed to promote to owner role"))
-			span.SetStatus(codes.Error, "not allowed to promote to owner role")
-			span.RecordError(err)
-			return nil, err
+			err := errors.New("not allowed to promote to owner role")
+			otel.RecordErrorSpan(span, err, nil)
+			return nil, CreateSessionError(Forbidden, "not allowed to promote to owner role", err)
 		}
 	}
 
@@ -318,8 +297,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update board session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update board session"))
 		log.Errorw("unable to update board session", "board", body.Board, "error", err)
 		return nil, CreateSessionError(Internal, "unable to update board session", err)
 	}
@@ -342,6 +320,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 	span.SetAttributes(
 		attribute.String("scrumlr.sessions.service.update.all.board", body.Board.String()),
 	)
+
 	sessions, err := service.database.UpdateAll(ctx, DatabaseBoardSessionUpdate{
 		Board:      body.Board,
 		Ready:      body.Ready,
@@ -349,8 +328,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update all sessions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update all sessions"))
 		log.Errorw("unable to update all sessions for a board", "board", body.Board, "error", err)
 		return nil, CreateSessionError(Internal, "unable to update all sessions for a board", err)
 	}
@@ -377,8 +355,7 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to connect to board session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to connect to board session"))
 		log.Errorw("unable to connect to board session", "board", boardID, "user", userID, "error", err)
 		return CreateSessionError(Internal, "unable to connect to board session", err)
 	}
@@ -406,8 +383,7 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to disconnect from board session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to disconnect from board session"))
 		log.Errorw("unable to disconnect from board session", "board", boardID, "user", userID, "error", err)
 		return CreateSessionError(Internal, "unable to disconnect from board session", err)
 	}
@@ -429,39 +405,34 @@ func (service *BoardSessionService) Delete(ctx context.Context, callerID, boardI
 	)
 
 	if callerID != userID {
-		err := CreateSessionError(Forbidden, "cannot delete session of another user", errors.New("cannot delete a session of another user"))
-		span.SetStatus(codes.Error, "cannot delete a session of another user")
-		span.RecordError(err)
-		return err
+		err := errors.New("cannot delete a session of another user")
+		otel.RecordErrorSpan(span, err, nil)
+		return CreateSessionError(Forbidden, "cannot delete session of another user", err)
 	}
 
 	session, err := service.Get(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to retrieve session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to retrieve session"))
 		return err
 	}
 
 	if session.Role == role.OwnerRole {
-		err = CreateSessionError(Forbidden, "cannot delete the owner session of a board", errors.New("cannot delete the owner session of a board"))
-		span.SetStatus(codes.Error, "cannot delete owner session of a board")
-		span.RecordError(err)
-		return err
+		err = errors.New("cannot delete the owner session of a board")
+		otel.RecordErrorSpan(span, err, nil)
+		return CreateSessionError(Forbidden, "cannot delete the owner session of a board", err)
 	}
 
 	if session.Connected {
 		err := service.Disconnect(ctx, boardID, userID)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to disconnect session")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to disconnect session"))
 			return err
 		}
 	}
 
 	err = service.database.Delete(ctx, boardID, userID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete session"))
 		return CreateSessionError(Internal, "unable to delete session", err)
 	}
 
@@ -486,8 +457,7 @@ func (service *BoardSessionService) createdSession(ctx context.Context, board uu
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send participant update")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send participant update"))
 		log.Errorw("unable to send participant update", "session", session, "error", err)
 	}
 }
@@ -504,8 +474,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 
 	connectedBoards, err := service.database.GetUserBoardSessions(ctx, userId, true)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user connections")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user connections"))
 		log.Errorw("unable to get user connections", "userId", userId, "error", err)
 		return
 	}
@@ -513,8 +482,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	for _, s := range connectedBoards {
 		userSession, err := service.database.Get(ctx, s.Board, s.User)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to get board sessions of user")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to get board sessions of user"))
 			log.Errorw("unable to get board session of user", "board", s.Board, "user", s.User, "err", err)
 			continue
 		}
@@ -525,8 +493,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 		})
 
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to send participant update")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to send participant update"))
 			log.Errorw("unable to send participant update", "board", board, "user", userId, "err", err)
 		}
 	}
@@ -534,8 +501,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	// Sync columns
 	columns, err := service.columnService.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get columns"))
 		log.Errorw("unable to get columns", "boardID", board, "err", err)
 	}
 
@@ -545,8 +511,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send columns update")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send columns update"))
 		log.Errorw("unable to send columns update", "board", board, "user", userId, "err", err)
 	}
 
@@ -557,8 +522,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	// Sync notes
 	notes, err := service.noteService.GetAll(ctx, board, columnIds...)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get notes"))
 		log.Errorw("unable to get notes on a updatedsession call", "err", err)
 	}
 
@@ -568,8 +532,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send note sync")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send note sync"))
 		log.Errorw("unable to send note sync", "board", board, "user", userId, "err", err)
 	}
 }
@@ -590,8 +553,7 @@ func (service *BoardSessionService) updatedSessions(ctx context.Context, board u
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send participant update")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send participant update"))
 		log.Errorw("unable to send participant update", "board", board, "err", err)
 	}
 }
@@ -607,8 +569,7 @@ func (service *BoardSessionService) deleteSession(ctx context.Context, board, us
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to send session delete event")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to send session delete event"))
 		log.Errorw("unable to send session delete event", "board", board, "err", err)
 	}
 }

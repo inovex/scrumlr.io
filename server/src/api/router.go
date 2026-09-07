@@ -1,9 +1,7 @@
 package api
 
 import (
-	"net/http"
 	"os"
-	"time"
 
 	"scrumlr.io/server/websocket"
 
@@ -25,7 +23,6 @@ import (
 	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
-	"github.com/go-chi/httprate"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
@@ -79,6 +76,9 @@ type Server struct {
 	allowAnonymousHistory         bool
 	experimentalFileSystemStore   bool
 	enableSwagger                 bool
+
+	joinBoardRateLimit int
+	templateRateLimit  int
 }
 
 func New(
@@ -114,6 +114,9 @@ func New(
 	allowAnonymousHistory bool,
 	experimentalFileSystemStore bool,
 	enableSwagger bool,
+
+	joinBoardRateLimit int,
+	templateRateLimit int,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -171,6 +174,9 @@ func New(
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
 		enableSwagger:                 enableSwagger,
+
+		joinBoardRateLimit: joinBoardRateLimit,
+		templateRateLimit:  templateRateLimit,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -303,24 +309,7 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(httprate.LimitBy(
-				3,
-				5*time.Second,
-				func(r *http.Request) (string, error) {
-					return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
-				},
-				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
-					w.Header().Set("Content-Type", "application/json")
-					w.WriteHeader(http.StatusTooManyRequests)
-					_, err := w.Write([]byte(`{"error": "Too many requests"}`))
-					if err != nil {
-						log := logger.FromRequest(r)
-						log.Errorw("Could not write error", "error", err)
-						return
-					}
-				}),
-			))
-
+			r.Use(s.JoinBoardRateLimiter)
 			r.Post("/", s.joinBoard) //board
 		})
 		r.Mount("/", s.sessionRoutes)
