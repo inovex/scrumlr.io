@@ -604,7 +604,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 		reactionService,
 		sessionService,
 		sessionRequestService,
-		feedbackService,
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,

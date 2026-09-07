@@ -30,7 +30,6 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -59,7 +58,6 @@ type Server struct {
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
-	feedback        feedback.FeedbackService
 	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
@@ -104,7 +102,6 @@ func New(
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
-	feedback feedback.FeedbackService,
 	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
@@ -169,7 +166,6 @@ func New(
 		reactions:                        reactions,
 		sessions:                         sessions,
 		sessionRequests:                  sessionRequests,
-		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 		columntemplates:                  columntemplates,
