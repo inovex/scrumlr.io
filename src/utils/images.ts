@@ -9,25 +9,32 @@ export const addProtocol = (url: string): string => {
 // takes a string and returns true if it is a valid image url
 export const isImageUrl = async (url: string): Promise<boolean> => {
   // check if given text could be a url, if not return false
-  const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
-  if (!urlRegex.test(url)) {
+  const normalizedUrl = addProtocol(url.trim());
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(normalizedUrl);
+  } catch {
     return false;
   }
 
-  // check if the url ends with an image extension, if so return true
-  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|bmp ico|png ico|ico|webp)$/;
-  if (imageExtensionRegex.test(url)) {
-    // pre-fetch image for faster load times once note is added
-    fetch(addProtocol(url));
+  // Only allow web URLs
+  if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+    return false;
+  }
+
+  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|ico|webp)$/i;
+  if (imageExtensionRegex.test(parsedUrl.pathname)) {
+    void fetch(parsedUrl.href);
     return true;
   }
 
   // check if the url returns an image content type, if so return true
   try {
-    const response = await fetch(addProtocol(url));
+    const response = await fetch(parsedUrl.href);
     const contentType = response.headers.get("Content-Type");
-    return contentType !== null && contentType.startsWith("image/");
-  } catch (_error) {
+    return contentType?.startsWith("image/") ?? false;
+  } catch {
     return false;
   }
 };

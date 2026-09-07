@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "i18nTest";
 import {API} from "api";
-import {HistoryBoard, ParticipantRole, ParticipantWithUser} from "store/features";
+import {HistoryBoard, ParticipantRole, ParticipantWithUserId} from "store/features";
 import {HistoryCard} from "../HistoryCard";
 
 afterEach(() => {
@@ -64,13 +64,13 @@ describe("HistoryCard menu role gating", () => {
 describe("HistoryCard favourite", () => {
   it("persists the favourite via the participant API and updates the store", async () => {
     const participant = {
-      user: {id: "u", name: "n", isAnonymous: true},
+      id: "u",
       connected: true,
       ready: false,
       raisedHand: false,
       showHiddenColumns: false,
       role: "OWNER",
-    } as ParticipantWithUser;
+    } as ParticipantWithUserId;
     const editParticipant = vi.spyOn(API, "editParticipant").mockResolvedValue(participant);
 
     const board = makeBoard("OWNER"); // favourite: false

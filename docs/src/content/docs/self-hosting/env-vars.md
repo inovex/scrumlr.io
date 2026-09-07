@@ -330,6 +330,20 @@ SCRUMLR_OTEL_HTTP=''
 
 Note: If both variables are set, the grpc endpoint is used.
 
+### Rate limits
+
+The scrumlr backend has two rate limiter built in. One for joining a board and one for the templates.
+These can be configured through the following variables
+
+```ini
+SCRUMLR_JOIN_RATE_LIMIT=
+SCRUMLR_TEMPLATE_RATE_LIMIT=
+```
+
+The variable `SCRUMLR_JOIN_RATE_LIMIT` sets the number of join requests per 5 seconds. It defaults to 3 requests.
+The variable `SCRUMLR_TEMPLATE_RATE_LIMIT` sets the number of requests for the templates per second. It defaults to 20
+requests.
+
 ### Scrumlr Config Path
 
 The path to the Scrumlr configuration file.

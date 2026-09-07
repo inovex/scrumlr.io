@@ -1,20 +1,22 @@
 package main
 
 import (
-	"flag"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"scrumlr.io/server/common"
 )
 
 func TestConfigureAuthProviderNone(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{},
+	}
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -22,30 +24,56 @@ func TestConfigureAuthProviderNone(t *testing.T) {
 }
 
 func TestConfigureAuthProviderNoSessionSecret(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration", "")
-	flagset.String("auth-oidc-client-id", "oidcClientID", "")
-	flagset.String("auth-oidc-client-secret", "oidcClientSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-oidc-discovery-url"},
+			&cli.StringFlag{Name: "auth-oidc-client-id"},
+			&cli.StringFlag{Name: "auth-oidc-client-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-id", "oidcClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-secret", "oidcClientSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Error(t, err)
 	assert.Nil(t, providerMap)
 }
 
 func TestConfigureAuthProviderGoogle(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-google-client-id", "googleClientID", "")
-	flagset.String("auth-google-client-secret", "googleClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-google-client-id"},
+			&cli.StringFlag{Name: "auth-google-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-google-client-id", "googleClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-google-client-secret", "googleClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -59,15 +87,28 @@ func TestConfigureAuthProviderGoogle(t *testing.T) {
 }
 
 func TestConfigureAuthProviderGitHub(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-github-client-id", "githubClientID", "")
-	flagset.String("auth-github-client-secret", "githubClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-github-client-id"},
+			&cli.StringFlag{Name: "auth-github-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-github-client-id", "githubClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-github-client-secret", "githubClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -81,15 +122,28 @@ func TestConfigureAuthProviderGitHub(t *testing.T) {
 }
 
 func TestConfigureAuthProviderMicrosoft(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-microsoft-client-id", "microsoftClientID", "")
-	flagset.String("auth-microsoft-client-secret", "microsoftClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-microsoft-client-id"},
+			&cli.StringFlag{Name: "auth-microsoft-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-microsoft-client-id", "microsoftClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-microsoft-client-secret", "microsoftClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -103,16 +157,31 @@ func TestConfigureAuthProviderMicrosoft(t *testing.T) {
 }
 
 func TestConfigureAuthProviderAzure(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-azure-ad-tenant-id", "azureTenantID", "")
-	flagset.String("auth-azure-ad-client-id", "azureClientID", "")
-	flagset.String("auth-azure-ad-client-secret", "azureClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-azure-ad-tenant-id"},
+			&cli.StringFlag{Name: "auth-azure-ad-client-id"},
+			&cli.StringFlag{Name: "auth-azure-ad-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-tenant-id", "azureTenantID")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-client-id", "azureClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-client-secret", "azureClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -127,15 +196,28 @@ func TestConfigureAuthProviderAzure(t *testing.T) {
 }
 
 func TestConfigureAuthProviderApple(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-apple-client-id", "appleClientID", "")
-	flagset.String("auth-apple-client-secret", "appleClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-apple-client-id"},
+			&cli.StringFlag{Name: "auth-apple-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-apple-client-id", "appleClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-apple-client-secret", "appleClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -149,16 +231,31 @@ func TestConfigureAuthProviderApple(t *testing.T) {
 }
 
 func TestConfigureAuthProviderOIDC(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration", "")
-	flagset.String("auth-oidc-client-id", "oidcClientID", "")
-	flagset.String("auth-oidc-client-secret", "oidcClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-oidc-discovery-url"},
+			&cli.StringFlag{Name: "auth-oidc-client-id"},
+			&cli.StringFlag{Name: "auth-oidc-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-id", "oidcClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-secret", "oidcClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)
@@ -175,27 +272,64 @@ func TestConfigureAuthProviderOIDC(t *testing.T) {
 }
 
 func TestConfigureAuthProvider(t *testing.T) {
+	ctx := t.Context()
 	basePath := "/"
-	flagset := flag.NewFlagSet("scrumlr-tests", flag.ExitOnError)
-	flagset.String("auth-callback-host", "http://localhost:8080/callback", "")
-	flagset.String("auth-google-client-id", "googleClientID", "")
-	flagset.String("auth-google-client-secret", "googleClientSecret", "")
-	flagset.String("auth-github-client-id", "githubClientID", "")
-	flagset.String("auth-github-client-secret", "githubClientSecret", "")
-	flagset.String("auth-microsoft-client-id", "microsoftClientID", "")
-	flagset.String("auth-microsoft-client-secret", "microsoftClientSecret", "")
-	flagset.String("auth-azure-ad-tenant-id", "azureTenantID", "")
-	flagset.String("auth-azure-ad-client-id", "azureClientID", "")
-	flagset.String("auth-azure-ad-client-secret", "azureClientSecret", "")
-	flagset.String("auth-apple-client-id", "appleClientID", "")
-	flagset.String("auth-apple-client-secret", "appleClientSecret", "")
-	flagset.String("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration", "")
-	flagset.String("auth-oidc-client-id", "oidcClientID", "")
-	flagset.String("auth-oidc-client-secret", "oidcClientSecret", "")
-	flagset.String("session-secret", "ThisIsNotASecureSessessionSecret", "")
-	init := cli.NewContext(nil, flagset, nil)
 
-	providerMap, err := configureAuthProvider(init, basePath)
+	init := &cli.Command{
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "auth-callback-host"},
+			&cli.StringFlag{Name: "auth-google-client-id"},
+			&cli.StringFlag{Name: "auth-google-client-secret"},
+			&cli.StringFlag{Name: "auth-github-client-id"},
+			&cli.StringFlag{Name: "auth-github-client-secret"},
+			&cli.StringFlag{Name: "auth-microsoft-client-id"},
+			&cli.StringFlag{Name: "auth-microsoft-client-secret"},
+			&cli.StringFlag{Name: "auth-azure-ad-tenant-id"},
+			&cli.StringFlag{Name: "auth-azure-ad-client-id"},
+			&cli.StringFlag{Name: "auth-azure-ad-client-secret"},
+			&cli.StringFlag{Name: "auth-apple-client-id"},
+			&cli.StringFlag{Name: "auth-apple-client-secret"},
+			&cli.StringFlag{Name: "auth-oidc-discovery-url"},
+			&cli.StringFlag{Name: "auth-oidc-client-id"},
+			&cli.StringFlag{Name: "auth-oidc-client-secret"},
+			&cli.StringFlag{Name: "session-secret"},
+		},
+	}
+
+	err := init.Set("auth-callback-host", "http://localhost:8080/callback")
+	assert.NoError(t, err)
+	err = init.Set("auth-google-client-id", "googleClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-google-client-secret", "googleClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("auth-github-client-id", "githubClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-github-client-secret", "githubClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("auth-microsoft-client-id", "microsoftClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-microsoft-client-secret", "microsoftClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-tenant-id", "azureTenantID")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-client-id", "azureClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-azure-ad-client-secret", "azureClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("auth-apple-client-id", "appleClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-apple-client-secret", "appleClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-discovery-url", "http://localhost:8070/.well-known/openid-configuration")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-id", "oidcClientID")
+	assert.NoError(t, err)
+	err = init.Set("auth-oidc-client-secret", "oidcClientSecret")
+	assert.NoError(t, err)
+	err = init.Set("session-secret", "ThisIsNotASecureSessessionSecret")
+	assert.NoError(t, err)
+
+	providerMap, err := configureAuthProvider(ctx, init, basePath)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, providerMap)

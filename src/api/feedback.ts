@@ -1,11 +1,19 @@
 import i18n from "i18n";
-import {SERVER_HTTP_URL} from "../config";
 import {Toast} from "../utils/Toast";
+import {buildUrl} from "./index";
 
 export const FeedbackAPI = {
+  /**
+   * Send feedback to the scrumlr team
+   *
+   * @param type feedback type
+   * @param text feedback text
+   * @param contact contact of the user
+   */
   sendFeedback: async (type: string, text: string, contact?: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/feedback`, {
+      const url = buildUrl(`./feedback`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -14,6 +22,7 @@ export const FeedbackAPI = {
           contact,
         }),
       });
+
       if (response.ok) {
         Toast.success({title: i18n.t("Feedback.SubmitNotification")});
       }

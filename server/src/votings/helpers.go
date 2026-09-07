@@ -54,22 +54,19 @@ func getVotingWithResults(voting DatabaseVoting, votes []DatabaseVote) *VotingRe
 		return vote.Voting == voting.ID
 	})
 
-	if len(relevantVoting) <= 0 {
+	if len(relevantVoting) == 0 {
 		return nil
 	}
 
-	votingResult := VotingResults{Total: len(relevantVoting), Votes: map[uuid.UUID]VotingResultsPerNote{}}
-	totalVotePerNote := map[uuid.UUID]int{}
-	votesPerUser := map[uuid.UUID][]uuid.UUID{}
+	totalVotePerNote := make(map[uuid.UUID]int)
+	votesPerUser := make(map[uuid.UUID][]uuid.UUID)
+
 	for _, vote := range relevantVoting {
-		if _, ok := totalVotePerNote[vote.Note]; ok {
-			totalVotePerNote[vote.Note] = totalVotePerNote[vote.Note] + 1
-			votesPerUser[vote.Note] = append(votesPerUser[vote.Note], vote.User)
-		} else {
-			totalVotePerNote[vote.Note] = 1
-			votesPerUser[vote.Note] = []uuid.UUID{vote.User}
-		}
+		totalVotePerNote[vote.Note]++
+		votesPerUser[vote.Note] = append(votesPerUser[vote.Note], vote.User)
 	}
+
+	votingResult := VotingResults{Total: len(relevantVoting), Votes: make(map[uuid.UUID]VotingResultsPerNote, len(totalVotePerNote))}
 
 	for note, total := range totalVotePerNote {
 		result := VotingResultsPerNote{
@@ -77,16 +74,12 @@ func getVotingWithResults(voting DatabaseVoting, votes []DatabaseVote) *VotingRe
 		}
 
 		if !voting.IsAnonymous {
-			userVotes := map[uuid.UUID]int{}
+			userVotes := make(map[uuid.UUID]int)
 			for _, user := range votesPerUser[note] {
-				if _, ok := userVotes[user]; ok {
-					userVotes[user] = userVotes[user] + 1
-				} else {
-					userVotes[user] = 1
-				}
+				userVotes[user]++
 			}
 
-			var votingResultsPerUser []VotingResultsPerUser
+			votingResultsPerUser := make([]VotingResultsPerUser, 0, len(userVotes))
 			for user, total := range userVotes {
 				votingResultsPerUser = append(votingResultsPerUser, VotingResultsPerUser{
 					ID:    user,

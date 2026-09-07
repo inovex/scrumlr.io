@@ -3,9 +3,11 @@ package serviceinitialize
 import (
 	"net/http"
 
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/hash"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/users"
@@ -74,7 +76,7 @@ func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.
 
 func (init *ServiceInitializer) InitializeBoardTemplateService(columnTemplateService columntemplates.ColumnTemplateService) boardtemplates.BoardTemplateService {
 	boardTemplateDb := boardtemplates.NewBoardTemplateDatabase(init.db)
-	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb, columnTemplateService)
+	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb, columnTemplateService, init.clock)
 
 	return boardTemplateService
 }
@@ -97,6 +99,11 @@ func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
 	healthService := health.NewHealthService(healthDb, init.broker)
 
 	return healthService
+}
+
+func (init *ServiceInitializer) InitializeInfoService(authService auth.Auth, feedbackService feedback.FeedbackService, serverConfig info.ServerConfig) info.InfoService {
+	infoService := info.NewInfoService(authService, feedbackService, init.clock, serverConfig)
+	return infoService
 }
 
 func (init *ServiceInitializer) InitializeReactionService() reactions.ReactionService {

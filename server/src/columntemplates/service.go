@@ -6,16 +6,10 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/columntemplates")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/columntemplates")
 
 type ColumnTemplateDatabase interface {
 	Create(ctx context.Context, column DatabaseColumnTemplateInsert) (DatabaseColumnTemplate, error)
@@ -50,8 +44,7 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 
 	index, err := service.database.GetIndex(ctx, body.BoardTemplate)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get index")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get index"))
 		return nil, CreateColumnTemplateError(Internal, "failed to get index", err)
 	}
 
@@ -73,8 +66,7 @@ func (service *Service) Create(ctx context.Context, body ColumnTemplateRequest) 
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create column template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create column template"))
 		log.Errorw("unable to create column template", "user", body.User, "err", err)
 		return nil, CreateColumnTemplateError(Internal, "failed to create column template", err)
 	}
@@ -96,12 +88,11 @@ func (service *Service) Get(ctx context.Context, boardTemplate, columnTemplate u
 	column, err := service.database.Get(ctx, boardTemplate, columnTemplate)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "no column template found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("no column template found"))
 			return nil, CreateColumnTemplateError(NotFound, "no column template found", err)
 		}
-		span.SetStatus(codes.Error, "failed to get column template")
-		span.RecordError(err)
+
+		otel.RecordErrorSpan(span, err, new("failed to get column template"))
 		log.Errorw("unable to get template column", "board", boardTemplate, "err", err)
 		return nil, CreateColumnTemplateError(Internal, "unable to get template column", err)
 	}
@@ -120,8 +111,7 @@ func (service *Service) GetAll(ctx context.Context, boardTemplate uuid.UUID) ([]
 
 	columns, err := service.database.GetAll(ctx, boardTemplate)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get column templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column templates"))
 		log.Errorw("unable to get template columns", "board", boardTemplate, "err", err)
 		return nil, CreateColumnTemplateError(Internal, "unable to get template columns", err)
 	}
@@ -156,8 +146,7 @@ func (service *Service) Update(ctx context.Context, body ColumnTemplateUpdateReq
 		},
 	)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update column templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update column templates"))
 		log.Errorw("unable to update column template", "board", body.BoardTemplate, "column", body.ID, "err", err)
 		return nil, CreateColumnTemplateError(Internal, "failed to update column templates", err)
 	}
@@ -177,8 +166,7 @@ func (service *Service) Delete(ctx context.Context, board, column uuid.UUID) err
 
 	err := service.database.Delete(ctx, board, column)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete column templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete column templates"))
 		log.Errorw("unable to delete column template", "board", board, "column", column, "err", err)
 		return CreateColumnTemplateError(Internal, "failed to delete column templates", err)
 	}

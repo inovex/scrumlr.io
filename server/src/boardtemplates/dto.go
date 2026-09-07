@@ -1,6 +1,8 @@
 package boardtemplates
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/columntemplates"
 )
@@ -20,6 +22,10 @@ type BoardTemplate struct {
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	ModifiedAt time.Time `json:"modifiedAt"`
 }
 
 func (bt *BoardTemplate) From(board DatabaseBoardTemplate) *BoardTemplate {
@@ -28,6 +34,8 @@ func (bt *BoardTemplate) From(board DatabaseBoardTemplate) *BoardTemplate {
 	bt.Name = board.Name
 	bt.Description = board.Description
 	bt.Favourite = board.Favourite
+	bt.CreatedAt = board.CreatedAt
+	bt.ModifiedAt = board.ModifiedAt
 
 	return bt
 }

@@ -1,16 +1,90 @@
 import {Auth} from "store/features/auth/types";
-import {SERVER_HTTP_URL} from "../config";
+import {buildUrl} from "./index";
 
 export const UserAPI = {
+  /**
+   * Get the logged in user
+   *
+   * @returns logged in user
+   */
+  getUser: async (): Promise<Auth> => {
+    try {
+      const url = buildUrl(`./users`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Auth;
+      }
+
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user`, {cause: error});
+    }
+  },
+
+  /**
+   * Get a user
+   *
+   * @param userId user id
+   *
+   * @returns requested user
+   */
+  getUserById: async (userId: string): Promise<Auth> => {
+    try {
+      const url = buildUrl(`./users/${userId}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Auth;
+      }
+
+      throw new Error(`unable to fetch user with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch user`, {cause: error});
+    }
+  },
+
+  /**
+   * Get users on a board
+   *
+   * @param boardID board id
+   *
+   * @returns users on the board
+   */
+  getUsers: async (boardID: string): Promise<Auth[]> => {
+    try {
+      const url = buildUrl(`./users/board/${boardID}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Auth[];
+      }
+      throw new Error(`unable to fetch all users with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to fetch all users`, {cause: error});
+    }
+  },
+
   /**
    * Edits a user.
    *
    * @param user the updated user object
-   * @returns a {status, description} object
+   *
+   * @returns update user
    */
-  editUser: async (user: Auth) => {
+  editUser: async (user: Auth): Promise<Auth> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users/`, {
+      const url = buildUrl(`./users`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(user),
@@ -29,12 +103,12 @@ export const UserAPI = {
   /**
    * Deletes a user.
    *
-   * @param userId the ID of the user to delete
-   * @returns void
+   * @param userId the id of the user to delete
    */
   deleteUser: async (userId: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
+      const url = buildUrl(`./users/${userId}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
@@ -46,37 +120,6 @@ export const UserAPI = {
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to delete user`, {cause: error});
-    }
-  },
-
-  getUserById: async (userId: string) => {
-    try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users/${userId}`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (response.status === 200) {
-        return (await response.json()) as Auth;
-      }
-      throw new Error(`unable to fetch user with response status ${response.status}`);
-    } catch (error) {
-      throw new Error(`unable to fetch user`, {cause: error});
-    }
-  },
-
-  getUsers: async (boardID: string) => {
-    try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users/board/${boardID}`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (response.status === 200) {
-        return (await response.json()) as Auth[];
-      }
-      throw new Error(`unable to fetch all users with response status ${response.status}`);
-    } catch (error) {
-      throw new Error(`unable to fetch all users`, {cause: error});
     }
   },
 };

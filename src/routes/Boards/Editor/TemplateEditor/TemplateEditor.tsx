@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {isEqual} from "underscore";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {
@@ -37,7 +38,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   // template which serves as basis, either from given id or default fallback.
   const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
   // template columns are displayed in order of their index.
-  const basisColumns = useAppSelector((state) => state.templateColumns.filter((tmplCol) => tmplCol.template === templateId)).sort((a, b) => a.index - b.index);
+  const basisColumns = useAppSelector((state) => state.templateColumns.filter((tmplCol) => tmplCol.template === templateId).toSorted((a, b) => a.index - b.index), isEqual);
 
   // when creating from an existing board, its name/description/columns seed the editor.
   const historyLoaded = useAppSelector((state) => state.history.length > 0);

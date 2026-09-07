@@ -1,5 +1,5 @@
-import {SERVER_HTTP_URL} from "../config";
 import {AuthDto} from "../store/features/auth/types";
+import {buildUrl} from "./index";
 
 export const AuthAPI = {
   /**
@@ -10,7 +10,8 @@ export const AuthAPI = {
    */
   signOut: async () => {
     try {
-      await fetch(`${SERVER_HTTP_URL}/login`, {
+      const url = buildUrl(`./login`);
+      await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
@@ -26,7 +27,8 @@ export const AuthAPI = {
    */
   signInAnonymously: async (name: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/login/anonymous`, {
+      const url = buildUrl(`./login/anonymous`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({name}),
@@ -53,7 +55,8 @@ export const AuthAPI = {
    */
   getCurrentUser: async () => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/users`, {
+      const url = buildUrl(`./users`);
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });

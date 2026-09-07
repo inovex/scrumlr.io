@@ -3,8 +3,12 @@ package health
 import (
 	"context"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/realtime"
 )
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/health")
 
 type HealthDatabaseChecker interface {
 	IsHealthy(ctx context.Context) bool

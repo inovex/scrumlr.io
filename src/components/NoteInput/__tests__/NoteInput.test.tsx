@@ -12,6 +12,17 @@ vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
 }));
 
+// submitting a note would otherwise dispatch the real thunk and fire an HTTP request at the dev server.
+// usually this isn't an issue since we often use callback functions which are easily interceptable using spies.
+// but this isn't the case here, and the component does the dispatching itself, and the thunk is explicitly triggered; so we mock it like this
+vi.mock("store/features/notes/thunks", async () => {
+  const actual = await vi.importActual<typeof import("store/features/notes/thunks")>("store/features/notes/thunks");
+  return {
+    ...actual,
+    addNote: vi.fn(() => ({type: "notes/addNote"})),
+  };
+});
+
 const createNoteInput = (columnId: string) => {
   const store = getTestStore();
   const column = store.getState().columns.find((c) => c.id === columnId)!;

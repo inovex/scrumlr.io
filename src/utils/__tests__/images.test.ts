@@ -32,6 +32,8 @@ describe("Images", () => {
     });
 
     it("should return false it the string is not a URL", async () => {
+      // the string parses as a URL, so isImageUrl probes it; stub the request so the test doesn't depend on DNS
+      vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("unreachable host"));
       const isImage = await isImageUrl(notURL);
       expect(isImage).toBe(false);
     });

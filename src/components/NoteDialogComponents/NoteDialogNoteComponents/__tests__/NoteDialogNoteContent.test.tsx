@@ -4,6 +4,10 @@ import getTestStore from "utils/test/getTestStore";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {NoteDialogNoteContent} from "components/NoteDialogComponents/NoteDialogNoteComponents/NoteDialogNoteContent";
 
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
+  useImageChecker: () => false,
+}));
+
 describe("NoteDialogNoteContent", () => {
   it("should render the character count in the same row as the edited marker", () => {
     const longText = "a".repeat(1536);

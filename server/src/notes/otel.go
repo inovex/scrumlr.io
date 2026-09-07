@@ -1,6 +1,13 @@
 package notes
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/notes")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/notes")
 
 var notesCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.notes.created.counter",

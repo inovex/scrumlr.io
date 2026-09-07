@@ -1,11 +1,10 @@
 import {useTranslation} from "react-i18next";
 import {Outlet, useLocation, useNavigate} from "react-router";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Input} from "components/Input/Input";
 import {HeaderBar} from "components/HeaderBar";
 import classNames from "classnames";
-import {getTemplates} from "store/features";
-import {useAppDispatch, useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {ImportBoard, ImportBoardButton} from "components/ImportBoard";
 import {Switch} from "components/Switch/Switch";
 import {SearchIcon} from "components/Icon";
@@ -18,7 +17,6 @@ export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   // path segments after "/boards", e.g. ["edit-board", "<uuid>", "settings"].
   const subPaths = location.pathname.split("/").filter(Boolean).slice(1);
@@ -35,11 +33,6 @@ export const Boards = () => {
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
   const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
-
-  // init templates
-  useEffect(() => {
-    dispatch(getTemplates());
-  }, [dispatch]);
 
   const renderTitle = () => {
     switch (boardView) {

@@ -24,7 +24,7 @@ const docTemplate = `{
     "paths": {
         "/boards": {
             "get": {
-                "description": "Delete a board",
+                "description": "Get all board",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,7 +34,7 @@ const docTemplate = `{
                 "tags": [
                     "boards"
                 ],
-                "summary": "Delete a board",
+                "summary": "Get all board",
                 "parameters": [
                     {
                         "type": "string",
@@ -902,7 +902,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update a sessions for a board",
+                "description": "Update all sessions for a board",
                 "consumes": [
                     "application/json"
                 ],
@@ -912,7 +912,7 @@ const docTemplate = `{
                 "tags": [
                     "sessions"
                 ],
-                "summary": "Update a sessions for a board",
+                "summary": "Update all sessions for a board",
                 "parameters": [
                     {
                         "type": "string",
@@ -2159,6 +2159,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "voting to update",
+                        "name": "voting",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VotingUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -2222,6 +2231,76 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a board",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Update a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "values to update the board",
+                        "name": "board",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/boards.BoardUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -2409,78 +2488,6 @@ const docTemplate = `{
                     },
                     "429": {
                         "description": "Too Many Requests"
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    }
-                }
-            }
-        },
-        "/boards{id}": {
-            "put": {
-                "description": "Update a board",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "boards"
-                ],
-                "summary": "Update a board",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "jwt token to authenticate",
-                        "name": "Cookie",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "id of the board to update",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "values to update the board",
-                        "name": "board",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/boards.BoardUpdateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/boards.Board"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -4593,6 +4600,9 @@ const docTemplate = `{
         "boardtemplates.BoardTemplate": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
                 "creator": {
                     "description": "The board template creator id",
                     "type": "string"
@@ -4607,6 +4617,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "The board template id",
+                    "type": "string"
+                },
+                "modifiedAt": {
                     "type": "string"
                 },
                 "name": {
@@ -5377,12 +5390,22 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "OPEN",
+                "ABORTED",
                 "CLOSED"
             ],
             "x-enum-varnames": [
                 "Open",
+                "Aborted",
                 "Closed"
             ]
+        },
+        "votings.VotingUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/votings.VotingStatus"
+                }
+            }
         }
     }
 }`

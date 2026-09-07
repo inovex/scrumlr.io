@@ -1,6 +1,13 @@
 package reactions
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/reactions")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/reactions")
 
 var reactionCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.reactions.created.counter",

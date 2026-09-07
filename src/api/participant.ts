@@ -1,7 +1,70 @@
-import {ParticipantWithUser, ParticipantWithUserId} from "store/features/participants/types";
-import {SERVER_HTTP_URL} from "../config";
+import {ParticipantWithUserId, ParticipantRole} from "store/features/participants/types";
+import {buildUrl} from "./index";
 
 export const ParticipantsAPI = {
+  /**
+   * Get all sessions for a board
+   *
+   * @param boardId board id
+   *
+   * @return all sessions for a board
+   */
+  getParticipants: async (
+    boardId: string,
+    connected: boolean | null = null,
+    ready: boolean | null = null,
+    raisedHand: boolean | null = null,
+    role: ParticipantRole | null = null
+  ): Promise<ParticipantWithUserId[]> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/participants`, [
+        {key: "connected", value: connected},
+        {key: "ready", value: ready},
+        {key: "raisedHand", value: raisedHand},
+        {key: "role", value: role},
+      ]);
+
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as ParticipantWithUserId[];
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get participants`, {cause: error});
+    }
+  },
+
+  /**
+   * Get a session for a board
+   *
+   * @param boardId
+   * @param userId
+   *
+   * @return a session for a board
+   */
+  getParticipant: async (boardId: string, userId: string): Promise<ParticipantWithUserId> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/participants/${userId}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as ParticipantWithUserId;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get participant`, {cause: error});
+    }
+  },
+
   /**
    * Create join request for a board session.
    * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join
@@ -11,10 +74,11 @@ export const ParticipantsAPI = {
    * @param boardId the board id
    * @param passphrase optional passphrase for the join request
    *
-   * @returns `true` if the operation succeeded or throws an error otherwise
+   * @returns status of the join request
    */
   joinBoard: async (boardId: string, passphrase?: string) => {
-    const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
+    const url = buildUrl(`./boards/${boardId}/participants`);
+    const response = await fetch(url, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({passphrase}),
@@ -79,18 +143,20 @@ export const ParticipantsAPI = {
    * @param userId the identifier of the user whose permissions are being changed
    * @param boardId the identifier of the board
    * @param moderator the flag whether the user receives or loses moderator permissions
-   * @returns a {status, description} object
+   *
+   * @returns updated session
    */
-  editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<ParticipantWithUserId, "user" | "connected">>) => {
+  editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<ParticipantWithUserId, "user" | "connected">>): Promise<ParticipantWithUserId> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants/${userId}`, {
+      const url = buildUrl(`./boards/${boardId}/participants/${userId}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(participant),
       });
 
       if (response.status === 200) {
-        return (await response.json()) as ParticipantWithUser;
+        return (await response.json()) as ParticipantWithUserId;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);
@@ -98,22 +164,26 @@ export const ParticipantsAPI = {
       throw new Error(`unable to update participant`, {cause: error});
     }
   },
+
   /**
    * Updates the ready states of all participants.
    *
    * @param boardId the identifier of the board
    * @param desiredReadyStates the value for the ready states
+   *
+   * @return all updated sessions
    */
-  updateReadyStates: async (boardId: string, desiredReadyStates: boolean) => {
+  updateReadyStates: async (boardId: string, desiredReadyStates: boolean): Promise<ParticipantWithUserId> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
+      const url = buildUrl(`./boards/${boardId}/participants`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({ready: desiredReadyStates}),
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as ParticipantWithUserId;
       }
 
       throw new Error(`unable to update ready states with response status ${response.status}`);
