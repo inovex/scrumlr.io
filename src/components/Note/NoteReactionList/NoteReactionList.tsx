@@ -12,6 +12,7 @@ import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
+import {isParticipantModerator} from "utils/participant";
 import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
@@ -42,7 +43,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
 
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 

@@ -8,8 +8,8 @@ import {PERMANENT_EMOJIS, EmojiData} from "store/features/reactions/types";
 import {addRecentEmoji} from "store/features/recentEmojis/thunks";
 import {PlusIcon} from "components/Icon";
 import {ReactionModeled} from "../NoteReactionList";
-import "./NoteReactionPicker.scss";
 import EmojiPicker from "../EmojiPicker/EmojiPicker";
+import "./NoteReactionPicker.scss";
 
 interface NoteReactionPickerProps {
   closeReactionBar: () => void;
