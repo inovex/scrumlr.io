@@ -6,9 +6,26 @@ export const addProtocol = (url: string): string => {
   return url;
 };
 
-// takes a string and returns true if it is a valid image url
-export const isImageUrl = async (url: string): Promise<boolean> => {
-  // check if given text could be a url, if not return false
+// helper to verify string looks like a domain or IP before adding protocol
+const isValidWebUrl = (input: string): boolean => {
+  const trimmed = input.trim();
+  if (!trimmed) return false;
+
+  // regex to require at least domain.tld or localhost/IP address
+  // ensures single letters like "a" or incomplete words fail early
+  // TODO: use established package for url checking instead of unmaintainable regex
+  const domainPattern = /^(https?:\/\/)?(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:\d+)?(\/.*)?$/i;
+
+  return domainPattern.test(trimmed);
+};
+
+// handles domain syntax validation + image checks
+export const isImageUrl = async (url: string, signal: AbortSignal): Promise<boolean> => {
+  // 1. fail early if the raw input doesn't resemble a domain structure
+  if (!isValidWebUrl(url)) {
+    return false;
+  }
+
   const normalizedUrl = addProtocol(url.trim());
 
   let parsedUrl: URL;
@@ -18,22 +35,25 @@ export const isImageUrl = async (url: string): Promise<boolean> => {
     return false;
   }
 
-  // Only allow web URLs
-  if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-    return false;
-  }
-
+  // 2. image extension check
   const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|ico|webp)$/i;
   if (imageExtensionRegex.test(parsedUrl.pathname)) {
-    void fetch(parsedUrl.href);
     return true;
   }
 
-  // check if the url returns an image content type, if so return true
+  // 3. Fallback HEAD request for dynamic image URLs without extensions
   try {
-    const response = await fetch(parsedUrl.href);
+    const response = await fetch(parsedUrl.href, {
+      method: "HEAD",
+      signal,
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
     const contentType = response.headers.get("Content-Type");
-    return contentType?.startsWith("image/") ?? false;
+    return contentType?.toLowerCase().startsWith("image/") ?? false;
   } catch {
     return false;
   }
