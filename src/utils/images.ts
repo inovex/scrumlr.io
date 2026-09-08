@@ -6,32 +6,43 @@ export const addProtocol = (url: string): string => {
   return url;
 };
 
-// helper to verify string looks like a domain or IP before adding protocol
-const isValidWebUrl = (input: string): boolean => {
+export const normalizeAndParseUrl = (input: string): URL | null => {
   const trimmed = input.trim();
-  if (!trimmed) return false;
+  if (!trimmed) return null;
 
-  // regex to require at least domain.tld or localhost/IP address
-  // ensures single letters like "a" or incomplete words fail early
-  // TODO: use established package for url checking instead of unmaintainable regex
-  const domainPattern = /^(https?:\/\/)?(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})(:\d+)?(\/.*)?$/i;
+  try {
+    return new URL(trimmed);
+  } catch {
+    try {
+      return new URL(`https://${trimmed}`);
+    } catch {
+      return null;
+    }
+  }
+};
 
-  return domainPattern.test(trimmed);
+// for example, "a" get converted to https://a which is technically a valid Url but realistically not a valid web url
+// which is why we do some custom checking to minimize false positives and therefore fetches
+export const isValidWebUrl = (url: URL): boolean => {
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return false;
+  }
+
+  const hostname = url.hostname;
+
+  // require at least one dot for domain.tld (or localhost/IP)
+  const isLocalhostOrIp = hostname === "localhost" || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+  const hasValidTld = hostname.includes(".") && !hostname.startsWith(".") && !hostname.endsWith(".");
+
+  return isLocalhostOrIp || hasValidTld;
 };
 
 // handles domain syntax validation + image checks
 export const isImageUrl = async (url: string, signal: AbortSignal): Promise<boolean> => {
   // 1. fail early if the raw input doesn't resemble a domain structure
-  if (!isValidWebUrl(url)) {
-    return false;
-  }
-
-  const normalizedUrl = addProtocol(url.trim());
-
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(normalizedUrl);
-  } catch {
+  const parsedUrl = normalizeAndParseUrl(url);
+  if (!parsedUrl) return false;
+  if (!isValidWebUrl(parsedUrl)) {
     return false;
   }
 
