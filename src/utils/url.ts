@@ -21,19 +21,16 @@ export const normalizeAndParseUrl = (input: string): URL | null => {
 };
 
 // https://a is technically a valid Url but realistically not a valid web Url,
-// which is why we do some custom checking to minimize false positives and therefore fetches
+// which is why we do some custom checking to minimize false positives and therefore fetches.
+// does not support ipv4/ipv6.
 export const isValidWebUrl = (url: URL): boolean => {
   if (url.protocol !== "http:" && url.protocol !== "https:") {
     return false;
   }
 
-  const hostname = url.hostname;
+  const webUrlPattern = /^(?=.{1,253}$)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/; // taken from https://zod.dev/api#urls
 
-  // require at least one dot for domain.tld (or localhost/IP)
-  const isLocalhostOrIp = hostname === "localhost" || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
-  const hasValidTld = hostname.includes(".") && !hostname.startsWith(".") && !hostname.endsWith(".");
-
-  return isLocalhostOrIp || hasValidTld;
+  return webUrlPattern.test(url.hostname);
 };
 
 /**

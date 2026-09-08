@@ -21,12 +21,8 @@ describe("isValidWebUrl", () => {
       expect(isValidWebUrl(new URL("https://http.cat"))).toBe(true);
     });
 
-    it("ipv4", () => {
-      expect(isValidWebUrl(new URL("http://127.0.0.1"))).toBe(true);
-    });
-
-    it("localhost", () => {
-      expect(isValidWebUrl(new URL("http://localhost"))).toBe(true);
+    it("normal url 2", () => {
+      expect(isValidWebUrl(new URL("https://wow.http.cat/a/b/c.jpg?key=value#fragment"))).toBe(true);
     });
   });
 
@@ -41,6 +37,14 @@ describe("isValidWebUrl", () => {
 
     it("malformed TLD", () => {
       expect(isValidWebUrl(new URL("https://http.cat."))).toBe(false);
+    });
+
+    it("ipv4", () => {
+      expect(isValidWebUrl(new URL("http://127.0.0.1"))).toBe(false);
+    });
+
+    it("localhost", () => {
+      expect(isValidWebUrl(new URL("http://localhost"))).toBe(false);
     });
   });
 });
