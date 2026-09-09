@@ -4210,9 +4210,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^20.11.15":
-  version: 20.11.15
-  resolution: "happy-dom@npm:20.11.15"
+"happy-dom@npm:^20.12.0":
+  version: 20.12.0
+  resolution: "happy-dom@npm:20.12.0"
   dependencies:
     "@types/node": "npm:>=20.0.0"
     "@types/whatwg-mimetype": "npm:^3.0.2"
@@ -4221,7 +4221,7 @@ __metadata:
     entities: "npm:^7.0.1"
     whatwg-mimetype: "npm:^3.0.0"
     ws: "npm:^8.21.0"
-  checksum: 10c0/590d9d0b6e95d51f1506da4e2bf7a7d2271626b91638ecd59884bd4b94c89f03b5fcfd90add9a4a818c64eb6adf08444b5576b5ae2ea6e199a3c8207842e3db7
+  checksum: 10c0/5937db4ba0b4897743f995565980a4444d6dd8445abf31228b0dd2658819fca1e09ae8da36ba4abf69c38248a3de82c9597d17ed0c5b2083c2de9cdfc4f8056e
   languageName: node
   linkType: hard
 
@@ -6746,7 +6746,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:7.1.1"
     file-saver: "npm:^2.0.5"
     globals: "npm:^17.11.0"
-    happy-dom: "npm:^20.11.15"
+    happy-dom: "npm:^20.12.0"
     husky: "npm:^9.1.7"
     i18next: "npm:^26.4.0"
     i18next-browser-languagedetector: "npm:^8.2.1"
