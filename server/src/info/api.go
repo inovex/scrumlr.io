@@ -28,7 +28,7 @@ func NewInfoApi(infoService InfoService) InfoApi {
 //	@Description	Get the server info with the configured options
 //	@Tags			info
 //	@Produce		json
-//	@Success		200	{object}	api.Info
+//	@Success		200	{object}	Info
 //	@Router			/info [get]
 func (api *Api) GetInfo(w http.ResponseWriter, r *http.Request) {
 	info := api.service.Get(r.Context())

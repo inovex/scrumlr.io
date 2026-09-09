@@ -28,7 +28,7 @@ import (
 )
 
 // @title			Scrumlr backend
-// @version		5.3.1
+// @version		5.4.0
 // @description	This is the scrumlr backend server.
 // @termsOfService	https://scrumlr.io/terms
 // @contact.email	info@scrumlr.io

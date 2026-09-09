@@ -11,7 +11,7 @@
             "name": "MIT",
             "url": "https://github.com/inovex/scrumlr.io/blob/main/LICENSE"
         },
-        "version": "5.3.1"
+        "version": "5.4.0"
     },
     "paths": {
         "/boards": {
@@ -2879,7 +2879,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Info"
+                            "$ref": "#/definitions/info.Info"
                         }
                     }
                 }
@@ -3913,35 +3913,6 @@
                 }
             }
         },
-        "api.Info": {
-            "type": "object",
-            "properties": {
-                "allowAnonymousBoardCreation": {
-                    "type": "boolean"
-                },
-                "allowAnonymousCustomTemplates": {
-                    "type": "boolean"
-                },
-                "allowAnonymousHistory": {
-                    "type": "boolean"
-                },
-                "anonymousLoginDisabled": {
-                    "type": "boolean"
-                },
-                "authProvider": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/common.AccountType"
-                    }
-                },
-                "feedbackEnabled": {
-                    "type": "boolean"
-                },
-                "serverTime": {
-                    "type": "string"
-                }
-            }
-        },
         "avatar.AccessoriesType": {
             "type": "string",
             "enum": [
@@ -4964,6 +4935,35 @@
                 "FeatureRequest",
                 "Praise"
             ]
+        },
+        "info.Info": {
+            "type": "object",
+            "properties": {
+                "allowAnonymousBoardCreation": {
+                    "type": "boolean"
+                },
+                "allowAnonymousCustomTemplates": {
+                    "type": "boolean"
+                },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
+                "anonymousLoginDisabled": {
+                    "type": "boolean"
+                },
+                "authProvider": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.AccountType"
+                    }
+                },
+                "feedbackEnabled": {
+                    "type": "boolean"
+                },
+                "serverTime": {
+                    "type": "string"
+                }
+            }
         },
         "notes.Note": {
             "type": "object",
