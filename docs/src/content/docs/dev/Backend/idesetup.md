@@ -13,8 +13,12 @@ Here are some example configurations for
 
 ## VS Code
 
-For VS Code, we recommend installing the [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.go) for
-language support.
+For VS Code, we recommend installing the following extensions
+
+- [Go extension](https://marketplace.visualstudio.com/items?itemName=golang.go) for language support
+- [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) for using the settings
+in the `.editorconfig` file
+
 To run the Scrumlr backend from VS Code, copy the following configuration and paste it into the `.vscode/launch.json` file.
 
 ```json
@@ -39,7 +43,7 @@ To run the Scrumlr backend from VS Code, copy the following configuration and pa
 ```
 
 This will start the Scrumlr backend with the configured postgres database and will disable the origin check.
-It also starts Scrumlr in an insecure way with the `-insecure` flag. This will use the dev keys provided with the Scrumlr
+It also starts Scrumlr in an insecure way with the `--insecure` flag. This will use the dev keys provided with the Scrumlr
 repository. **Do not use this flag in production**.
 
 This configuration also reads environment variables from a `.env` file from `scrumlr.io/server/.env`.
