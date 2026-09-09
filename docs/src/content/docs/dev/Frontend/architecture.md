@@ -29,9 +29,8 @@ flowchart TB
     config --> socket
 ```
 
-The dotted arrow is the part that matters. Components dispatch thunks, thunks call REST, and the resulting state change
-arrives back **over the WebSocket** as a separate action. State is not updated by the thunk that caused the change. See
-[State & Realtime](/docs/src/content/docs/dev/frontend/state-management.md) for why, and what it means for the code you write.
+Pay special attention to the dotted arrow. Components dispatch thunks, thunks call REST, and the resulting state change
+arrives back **over the WebSocket** as a separate action. State is not updated by the thunk that caused the change, a thunk that writes to a board does not touch the store. An action is dispatched and a reducer is run only after the server pushes the state change to every connected client over the WebSocket. The reason for this architecture is that by forcing state updates to happen exclusively via WebSocket events, the app treats local edits and remote edits identically (broadcasting them to everyone rather than applying them locally first). This ensures the seamless, real-time collaboration the application is built to deliver.
 
 ## Entry point
 
@@ -40,33 +39,14 @@ arrives back **over the WebSocket** as a separate action. State is not updated b
 1. Stores the app version from `import.meta.env.VITE_VERSION` in `localStorage`.
 2. Initialises [Plausible](https://plausible.io) analytics if `ANALYTICS_DATA_DOMAIN` and `ANALYTICS_SRC` are set.
    Board URLs are SHA-256-hashed before being reported, so board ids never leave the browser in plain text.
-3. Renders the provider stack into `#root`:
+3. Renders the provider stack (Redux state management provider "store", translation provider "i18n",...) into `#root`
+4. Checks if you are already logged in and populates `state.auth` with user information
 
-   ```tsx
-   <React.StrictMode>
-     <I18nextProvider i18n={i18n}>
-       <Provider store={store}>
-         <HelmetProvider>
-           <Html />
-           <Suspense fallback={<LoadingScreen />}>
-             <ToastContainer limit={2} />
-             <Router />
-             {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
-           </Suspense>
-         </HelmetProvider>
-       </Provider>
-     </I18nextProvider>
-   </React.StrictMode>
-   ```
+Be aware that `<Html />` is not markup. It uses `react-helmet-async` to set the `lang` and `data-theme` attributes on the `<html>`
+element. That single attribute drives the entire dark mode implementation (see
+[Styling & Theming](/docs/src/content/docs/dev/Frontend/styling.md)).
 
-4. Dispatches `initAuth()` **after** the render call, which is what populates `state.auth`.
-
-`<Html />` is not markup — it uses `react-helmet-async` to set the `lang` and `data-theme` attributes on the `<html>`
-element. That single attribute drives the entire dark mode implementation; see
-[Styling & Theming](/dev/frontend/styling/).
-
-Microsoft Clarity is imported and gated behind a `CLARITY_ID`, but **the actual `Clarity.init` call is commented out** —
-tracking needs explicit opt-in first. Setting `SCRUMLR_CLARITY_ID` currently has no effect.
+<!---TO DO: Microsoft Clarity-->
 
 ## Routing
 
@@ -78,37 +58,16 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 
 There is no `react-router-dom` in this project. Importing from it will fail to resolve.
 
-| Path | Renders | Gate |
-| --- | --- | --- |
-| `/` | `Homepage` | public |
-| `/login` | `LoginBoard` | public |
-| `/legal/{termsAndConditions,privacyPolicy,cookiePolicy}` | `Legal` | public |
-| `/new` | `LegacyNewBoard`, or a redirect to `/boards` | `view.legacyCreateBoard` |
-| `/boards` | `Boards` shell, redirects to `templates` | `RequireAuthentication` |
-| `/boards/templates` | `Templates` | `RequireAuthentication` |
-| `/boards/create`, `/boards/edit/:id` | `TemplateEditor` | `VerifiedAccountGuard` |
-| `/boards/history` | `History` | `RequireAuthentication` |
-| `/board/:boardId` | `BoardGuard` → `Board` | `RequireAuthentication` |
-| `/board/:boardId/print` | `BoardGuard printViewEnabled` | `RequireAuthentication` |
-| `*` | `NotFound` | — |
-
 **Dialogs are routes, not local state.** `/board/:boardId/settings/appearance`, `/board/:boardId/voting`,
 `/board/:boardId/timer` and `/board/:boardId/note/:noteId/stack` are all nested routes rendered into the parent's
-`<Outlet />`. The same is true of the settings dialog on the `/boards/*` pages. If you are adding a dialog, add a route —
-do not reach for `useState`.
+`<Outlet />`. The same is true of the settings dialog on the `/boards/*` pages. If you are adding a dialog, you need to add a route. This ensures that when the URL is shared to another participant, important popups do not disappear when the URL is opened.
 
 `RouteChangeObserver` sits inside the router and mirrors the current path into `state.view.route`, which the hotkey and
 analytics code reads.
 
-## Route guards
+### Route Guards
 
-**`RequireAuthentication`** (`src/routes/RequireAuthentication.tsx`) reads `state.auth` and branches in this order:
-
-1. `initializationSucceeded === null` → `LoadingScreen` (auth init still running).
-2. `initializationSucceeded === false` → `ErrorPage` with a connection error.
-3. `user` present → render the children.
-4. Otherwise → `<Navigate to="/login" state={{from: normalizedLocation}} />`, so the login flow can send the user back
-   where they came from. `normalizeRedirectPathname` strips any trailing settings segment first.
+**`RequireAuthentication`** (`src/routes/RequireAuthentication.tsx`) evaluates `state.auth` to either display a loading screen (while auth initializes), show an error page (if initialization fails), render the page (if logged in), or redirect unauthenticated users to /login (saving their original route so they can be sent back after logging in).
 
 **`VerifiedAccountGuard`** (`src/routes/Guards/VerifiedAccountGuard.tsx`) blocks anonymous users from creating or editing
 templates, unless the server allows it. The route passes `override={allowAnonymousCustomTemplates}`.
