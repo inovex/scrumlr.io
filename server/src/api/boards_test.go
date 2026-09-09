@@ -320,8 +320,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 
 			suite.Equal(te.expectedCode, rr.Result().StatusCode)
 
-			shouldAssertLocation := te.err == nil && (te.expectedCode == http.StatusSeeOther || te.expectedCode == http.StatusCreated)
-			if shouldAssertLocation {
+			if te.err == nil && (te.expectedCode == http.StatusSeeOther || te.expectedCode == http.StatusCreated) {
 				location := rr.Result().Header.Get("Location")
 				suite.True(strings.HasPrefix(location, "/boards/"), "Location header should use configured baseURL, got: %s", location)
 				suite.False(strings.Contains(location, "r.Host"), "Location header must not contain r.Host")
