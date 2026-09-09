@@ -5,25 +5,6 @@ definitions:
         description: The display name of the user.
         type: string
     type: object
-  api.Info:
-    properties:
-      allowAnonymousBoardCreation:
-        type: boolean
-      allowAnonymousCustomTemplates:
-        type: boolean
-      allowAnonymousHistory:
-        type: boolean
-      anonymousLoginDisabled:
-        type: boolean
-      authProvider:
-        items:
-          $ref: '#/definitions/common.AccountType'
-        type: array
-      feedbackEnabled:
-        type: boolean
-      serverTime:
-        type: string
-    type: object
   avatar.AccessoriesType:
     enum:
     - Blank
@@ -816,6 +797,25 @@ definitions:
     - BugReport
     - FeatureRequest
     - Praise
+  info.Info:
+    properties:
+      allowAnonymousBoardCreation:
+        type: boolean
+      allowAnonymousCustomTemplates:
+        type: boolean
+      allowAnonymousHistory:
+        type: boolean
+      anonymousLoginDisabled:
+        type: boolean
+      authProvider:
+        items:
+          $ref: '#/definitions/common.AccountType'
+        type: array
+      feedbackEnabled:
+        type: boolean
+      serverTime:
+        type: string
+    type: object
   notes.Note:
     properties:
       author:
@@ -1125,7 +1125,7 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.3.1
+  version: 5.4.0
 paths:
   /boards:
     get:
@@ -3048,7 +3048,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Info'
+            $ref: '#/definitions/info.Info'
       summary: Show server info
       tags:
       - info
