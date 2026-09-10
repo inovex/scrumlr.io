@@ -32,6 +32,8 @@ flowchart TB
 Pay special attention to the dotted arrow. Components dispatch thunks, thunks call REST, and the resulting state change
 arrives back **over the WebSocket** as a separate action. State is not updated by the thunk that caused the change, a thunk that writes to a board does not touch the store. An action is dispatched and a reducer is run only after the server pushes the state change to every connected client over the WebSocket. The reason for this architecture is that by forcing state updates to happen exclusively via WebSocket events, the app treats local edits and remote edits identically (broadcasting them to everyone rather than applying them locally first). This ensures the seamless, real-time collaboration the application is built to deliver.
 
+For more information on how state is managed in this application see [State Management Docs](/docs/src/content/docs/dev/Frontend/state-management.md)
+
 ## Entry point
 
 `src/index.tsx` is short and worth reading in full. It:
@@ -74,12 +76,12 @@ templates, unless the server allows it. The route passes `override={allowAnonymo
 
 ## How a board renders
 
-This is the least obvious part of the codebase. Four components share the name "board" in some form, and they have very
+Four components share the name "board" in some form, and they have very
 different jobs.
 
 ```mermaid
 flowchart TB
-    guard["routes/Board/BoardGuard.tsx<br/>joins the board, switches on status"]
+    guard["routes/Board/BoardGuard.tsx<br/>asks the server if a user can join, switches on status"]
     route["routes/Board/Board.tsx<br/>container: selects state, maps columns"]
     presentational["components/Board/Board.tsx (BoardComponent)<br/>presentational: layout, header, menus"]
     column["components/Column/Column.tsx<br/>selects its own notes"]
@@ -91,126 +93,34 @@ flowchart TB
     column --> note
 ```
 
-**1. `routes/Board/BoardGuard.tsx`** dispatches `joinBoard({boardId})` on mount and `leaveBoard()` on unmount, then
-switches on `state.board.status`:
+`components/Column/Column.tsx` selects its own data, meaning each column subscribes to the store, filters out stacked notes, applies the "show notes of other users" setting, and renders only note **ids** into `Note` components. This approach prevents performance drag since data is not passed down to every column so updating a note does not cause every column to redraw itself.
 
-| Status | Renders |
-| --- | --- |
-| `accepted`, `ready` | `<CustomDndContext><Board /></CustomDndContext>` |
-| `passphrase_required`, `incorrect_passphrase` | `PassphraseDialog` |
-| `rejected`, `too_many_join_requests`, `banned` | `RejectionPage` |
-| anything else | a loading indicator with "waiting for approval" |
-
-With `printViewEnabled` it short-circuits all of that and renders `PrintView` directly.
-
-Note that `CustomDndContext` is mounted *here*, above everything else on the board. Every `Note` and `Column` depends on
-it — which is also why tests that render either of them have to provide it themselves.
-
-**2. `routes/Board/Board.tsx`** is the container. It registers `beforeunload` handlers that dispatch `leaveBoard`,
-selects the state it needs in one selector with `_.isEqual` as the equality function, and renders the moderator
-`Requests` panel, the nested-dialog `<Outlet />`, `SnowfallWrapper`, `BoardReactionContainer`, and — as **children** of
-`BoardComponent` — one `<Column>` per visible column.
-
-**3. `components/Board/Board.tsx`** exports `BoardComponent`, the presentational shell. Its props are unusual:
-
-```tsx
-export interface BoardProps {
-  children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
-  userRole: ParticipantRole;
-  moderating: boolean;
-  locked: boolean;
-}
-```
-
-It takes the columns as typed children and inspects them with `React.Children` — counting them to emit
-`<style>{".board { --board__columns: N }"}</style>`, and reading their colors for the edge spacers. It also renders
-`BoardHeader`, `InfoBar`, `MenuBars` and `HotkeyAnchor`, and watches drag state through `useDndMonitor`.
-
-**4. `components/Column/Column.tsx` selects its own data.** This is the important part:
-
-```tsx
-const notes = useAppSelector(
-  (state) =>
-    state.notes
-      .filter((note) => !note.position.stack)
-      .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
-      .map((note) => note.id),
-  _.isEqual
-);
-```
-
-So `BoardComponent` is presentational but the columns inside it are not dumb — each subscribes to the store, filters out
-stacked notes, applies the "show notes of other users" setting, and renders only note **ids** into `Note` components.
-Nothing is prop-drilled from the board down.
-
-The practical consequence: if you need more note data in a column or a note, add a selector there. Do not thread it
-through `BoardComponent` — its props are deliberately about layout only.
+The practical consequence: if you need more note data in a column or a note, add a selector there. Do not thread it through `BoardComponent`.
 
 ## The API client
 
-`src/api/index.ts` spreads one module per resource into a single object:
+`src/api/index.ts` spreads one module per resource into a single object, where every resource module contains functions that write out their own backend `fetch` requests, status check, and JSON parsing to execute backend tasks (like creating a board, editing a column,...)
 
-```ts
-export const API = {
-  ...InfoAPI, ...AuthAPI, ...BoardAPI, ...ParticipantsAPI, ...RequestAPI,
-  ...ColumnAPI, ...NoteAPI, ...ReactionAPI, ...VoteAPI, ...VotingAPI,
-  ...UserAPI, ...BoardReactionAPI, ...TemplatesAPI, ...TemplateColumnsAPI,
-};
-```
+(Note: `src/api/request.ts` handles board join requests from users, not HTTP request utilities.)
 
-Every resource module calls `fetch` directly against `SERVER_HTTP_URL` with `credentials: "include"` (the session is a
-cookie), checks the exact expected status code, and parses typed JSON:
-
-```ts
-const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
-  method: "POST",
-  credentials: "include",
-  body: JSON.stringify({name, accessPolicy: accessPolicy.policy, columns}),
-});
-
-if (response.status === 201) {
-  const body = await response.json();
-  return body.id as string;
-}
-throw new Error(`request resulted in response status ${response.status}`);
-```
-
-**There is no shared request wrapper.** Each function repeats the `fetch`/status/parse shape. Don't be misled by
-`src/api/request.ts` — that is the *join request* resource, not a helper.
-
-Two things to watch for:
-
-- `src/api/feedback.ts` exists but is **not** spread into `API`. If you are looking for `API.sendFeedback`, that is why
-  it isn't there.
-- Retry and error toasts are not the API layer's job. They live in `retryable`, on the store side.
-
-Adding an endpoint means adding a function to the matching resource module — and, if it is a new resource, spreading the
-new module into `API`. Endpoint documentation lives with the backend: see [API docs](/dev/backend/api_docs/).
+Adding an endpoint means adding a function to the matching resource module and also, if it is a new resource, spreading the
+new module into `API`. Endpoint documentation lives with the backend: see [API docs](/docs/src/content/docs/dev/backend/api_docs.md).
 
 ## Where types live
 
-`src/types/` holds only cross-cutting types:
+`src/types/` holds only general types:
 
-- `websocket.ts` — the `ServerEvent` and `ClientMessage` unions. The most consulted file in the directory.
+- `websocket.ts` — the `ServerEvent` and `ClientMessage` unions.
 - `avatar.ts`, `i18next.d.ts`, `emoji-picker.d.ts`.
 
-**Domain types live with the slice that owns them**, in `src/store/features/<slice>/types.ts`:
-
-| Type | Defined in |
-| --- | --- |
-| `Board`, `AccessPolicy`, `BoardImportData` | `store/features/board/types.ts` |
-| `Note`, `EditNote` | `store/features/notes/types.ts` |
-| `Column` | `store/features/columns/types.ts` |
-| `Participant`, `ParticipantRole` | `store/features/participants/types.ts` |
-| `Voting`, `Vote` | `store/features/votings/`, `votes/` |
-| `Theme`, `ServerInfo`, `View` | `store/features/view/types.ts` |
+**Domain types live with the slice that owns them**, in `src/store/features/<slice>/types.ts`.
 
 When you are looking for a domain type, check the slice first. They are re-exported through `store/features`, so
 `import {Note, ParticipantRole} from "store/features"` works from anywhere.
 
 ## Export, import and print
 
-Three related paths that are easy to break without noticing, because none of them is exercised by the normal board UI:
+Three related paths that are easy to break without noticing:
 
 - **Export** — `src/utils/export.ts` calls `API.exportBoard(id, "application/json")`, joins the participant list with
   user data via `mapMultipleParticipants`, **strips participant ids** from the result, and saves the file with
