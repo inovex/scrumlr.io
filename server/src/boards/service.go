@@ -373,12 +373,7 @@ func (service *Service) Export(ctx context.Context, boardID uuid.UUID, accept st
 			return nil, err
 		}
 		return &ExportBoardResponse{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
-			CSVRecords:   records,
+			CSVRecords: records,
 		}, nil
 	default:
 		return nil, CreateBoardError(BadRequest, fmt.Sprintf("unsupported accept type: %s", accept), nil)
@@ -633,18 +628,18 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 
 func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 	visibleColumns := make([]*columns.Column, 0, len(board.Columns))
-	visibleColIDs := make(map[uuid.UUID]bool)
+	visibleColIDs := make(map[uuid.UUID]struct{})
 
 	for _, column := range board.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
-			visibleColIDs[column.ID] = true
+			visibleColIDs[column.ID] = struct{}{}
 		}
 	}
 
 	visibleNotes := make([]*notes.Note, 0, len(board.Notes))
 	for _, note := range board.Notes {
-		if visibleColIDs[note.Position.Column] {
+		if _, ok := visibleColIDs[note.Position.Column]; ok {
 			visibleNotes = append(visibleNotes, note)
 		}
 	}
@@ -660,14 +655,14 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 		}
 	}
 
-	colNames := make(map[uuid.UUID]string)
+	colNames := make(map[uuid.UUID]string, len(cols))
 	for _, c := range cols {
 		colNames[c.ID] = c.Name
 	}
 
-	validSessionUsers := make(map[uuid.UUID]bool)
+	validSessionUsers := make(map[uuid.UUID]struct{}, len(board.BoardSessions))
 	for _, session := range board.BoardSessions {
-		validSessionUsers[session.UserID] = true
+		validSessionUsers[session.UserID] = struct{}{}
 	}
 
 	//cache users to avoid querying the DB for the same author repeatedly
@@ -686,7 +681,7 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 		}
 
 		authorName := note.Author.String()
-		if validSessionUsers[note.Author] {
+		if _, ok := validSessionUsers[note.Author]; ok {
 			if cachedName, exists := userCache[note.Author]; exists {
 				authorName = cachedName
 			} else {

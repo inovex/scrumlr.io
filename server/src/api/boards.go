@@ -7,16 +7,12 @@ import (
 	"net/http"
 
 	"go.opentelemetry.io/otel/codes"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/votings"
-
-	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/identifiers"
 
@@ -509,7 +505,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 //	@Failure		404	{object}	common.APIError
 //	@Failure		406
 //	@Failure		500	{object}	common.APIError
-//	@Router			/boards{id}/export [get]
+//	@Router			/boards/{id}/export [get]
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
 	defer span.End()
@@ -529,19 +525,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	if accept == "" || accept == "*/*" || accept == "application/json" {
 		render.Status(r, http.StatusOK)
-		render.Respond(w, r, struct {
-			Board        *boards.Board            `json:"board"`
-			Participants []*sessions.BoardSession `json:"participants"`
-			Columns      []*columns.Column        `json:"columns"`
-			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votings.Voting        `json:"votings"`
-		}{
-			Board:        export.Board,
-			Participants: export.Participants,
-			Columns:      export.Columns,
-			Notes:        export.Notes,
-			Votings:      export.Votings,
-		})
+		render.Respond(w, r, export)
+		return
 	}
 
 	if accept == "text/csv" {

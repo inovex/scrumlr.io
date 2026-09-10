@@ -190,12 +190,12 @@ type FullBoard struct {
 }
 
 type ExportBoardResponse struct {
-	Board        *Board
-	Participants []*sessions.BoardSession
-	Columns      []*columns.Column
-	Notes        []*notes.Note
-	Votings      []*votings.Voting
-	CSVRecords   [][]string
+	Board        *Board                   `json:"board,omitempty"`
+	Participants []*sessions.BoardSession `json:"participants,omitempty"`
+	Columns      []*columns.Column        `json:"columns,omitempty"`
+	Notes        []*notes.Note            `json:"notes,omitempty"`
+	Votings      []*votings.Voting        `json:"votings,omitempty"`
+	CSVRecords   [][]string               `json:"-"`
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
