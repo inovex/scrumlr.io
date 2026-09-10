@@ -164,9 +164,34 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, request Imp
 	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
-func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (string, int, error) {
+func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join")
 	defer span.End()
+
+	sessionExists, err := service.sessionService.Exists(ctx, board.ID, user)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to check session")
+		span.RecordError(err)
+		return false, "", 0, err
+	}
+
+	if sessionExists {
+		banned, err := service.sessionService.IsParticipantBanned(ctx, board.ID, user)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to check if participant is banned")
+			span.RecordError(err)
+			return false, "", 0, err
+		}
+
+		if banned {
+			err := errors.New("participant is currently banned from this session")
+			span.SetStatus(codes.Error, "participant is banned")
+			span.RecordError(err)
+			return false, "", 0, CreateBoardError(Forbidden, err.Error(), err)
+		}
+
+		return true, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusSeeOther, nil
+	}
 
 	switch board.AccessPolicy {
 	case Public:
@@ -179,7 +204,7 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 		err := errors.New("invalid access policy")
 		span.SetStatus(codes.Error, "invalid access policy")
 		span.RecordError(err)
-		return "", 0, CreateBoardError(BadRequest, err.Error(), err)
+		return false, "", 0, CreateBoardError(BadRequest, err.Error(), err)
 	}
 }
 
@@ -747,7 +772,7 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 	return records, nil
 }
 
-func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (string, int, error) {
+func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_public")
 	defer span.End()
 	_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{
@@ -758,12 +783,12 @@ func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to create session")
 		span.RecordError(err)
-		return "", 0, err
+		return false, "", 0, err
 	}
-	return fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusCreated, nil
+	return false, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusCreated, nil
 }
 
-func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (string, int, error) {
+func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_passphrase")
 	defer span.End()
 
@@ -771,25 +796,25 @@ func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user
 		err := errors.New("missing passphrase")
 		span.SetStatus(codes.Error, "no passphrase provided")
 		span.RecordError(err)
-		return "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
+		return false, "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
 	}
 	if board.Passphrase == nil || board.Salt == nil {
 		err := errors.New("board passphrase is not configured")
 		span.SetStatus(codes.Error, "board passphrase is not configured")
 		span.RecordError(err)
-		return "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
+		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
 	}
 	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
 	if encodedPassphrase != *board.Passphrase {
 		err := errors.New("wrong passphrase")
 		span.SetStatus(codes.Error, "wrong passphrase provided")
 		span.RecordError(err)
-		return "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
+		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
 	}
 	return service.joinPublic(ctx, board, user)
 }
 
-func (service *Service) joinByInvite(ctx context.Context, board *Board, user uuid.UUID) (string, int, error) {
+func (service *Service) joinByInvite(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_invite")
 	defer span.End()
 
@@ -797,16 +822,16 @@ func (service *Service) joinByInvite(ctx context.Context, board *Board, user uui
 	if err != nil {
 		span.SetStatus(codes.Error, "failed to check session requests")
 		span.RecordError(err)
-		return "", 0, err
+		return false, "", 0, err
 	}
 	if !sessionRequestExists {
 		if _, err = service.sessionRequestService.Create(ctx, board.ID, user); err != nil {
 			span.SetStatus(codes.Error, "failed to create session request")
 			span.RecordError(err)
-			return "", 0, err
+			return false, "", 0, err
 		}
 	}
-	return fmt.Sprintf("/boards/%s/requests/%s", board.ID, user), http.StatusSeeOther, nil
+	return false, fmt.Sprintf("/boards/%s/requests/%s", board.ID, user), http.StatusSeeOther, nil
 }
 
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {

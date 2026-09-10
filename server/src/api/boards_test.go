@@ -294,19 +294,13 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
 
-			sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionExists, nil)
-
-			if te.sessionExists {
-				sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, te.err)
-			} else {
-				boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, te.err)
-				location := fmt.Sprintf("/boards/%s/participants/%s", boardID, userID)
-				if te.board.AccessPolicy == boards.ByInvite {
-					location = fmt.Sprintf("/boards/%s/requests/%s", boardID, userID)
-				}
-				boardMock.EXPECT().Join(mock.Anything, te.board, userID, mock.Anything).
-					Return(location, te.expectedCode, te.err)
+			boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, nil)
+			location := fmt.Sprintf("/boards/%s/participants/%s", boardID, userID)
+			if te.board.AccessPolicy == boards.ByInvite {
+				location = fmt.Sprintf("/boards/%s/requests/%s", boardID, userID)
 			}
+			boardMock.EXPECT().Join(mock.Anything, te.board, userID, mock.Anything).
+				Return(te.sessionExists, location, te.expectedCode, te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -352,8 +346,10 @@ func (suite *BoardTestSuite) setupRootJoinBoardRequest() (*Server, *boards.MockB
 func (suite *BoardTestSuite) TestJoinBoard_ExistingSessionRedirectsToParticipant() {
 	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
-	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(true, nil)
-	sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, nil)
+	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
+	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
+	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
+		Return(true, fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), http.StatusSeeOther, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -369,10 +365,9 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreateSessionError() {
 	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
-	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
 	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
-		Return("", 0, errors.New("failed to create session"))
+		Return(false, "", 0, errors.New("failed to create session"))
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -387,10 +382,9 @@ func (suite *BoardTestSuite) TestJoinBoard_PublicCreatesParticipantLocation() {
 	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.Public, nil, nil)
-	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
 	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
-		Return(fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), http.StatusCreated, nil)
+		Return(false, fmt.Sprintf("/boards/%s/participants/%s", boardID, userID), http.StatusCreated, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -406,10 +400,9 @@ func (suite *BoardTestSuite) TestJoinBoard_ByInviteExistingRequestLocation() {
 	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
-	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
 	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
-		Return(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
+		Return(false, fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)
@@ -425,10 +418,9 @@ func (suite *BoardTestSuite) TestJoinBoard_ByInviteCreatesRequestLocation() {
 	s, boardMock, sessionMock, sessionRequestMock, boardID, userID, req := suite.setupRootJoinBoardRequest()
 
 	board := suite.createBoard(nil, nil, boards.ByInvite, nil, nil)
-	sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(false, nil)
 	boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, nil)
 	boardMock.EXPECT().Join(mock.Anything, board, userID, mock.Anything).
-		Return(fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
+		Return(false, fmt.Sprintf("/boards/%s/requests/%s", boardID, userID), http.StatusSeeOther, nil)
 
 	rr := httptest.NewRecorder()
 	s.joinBoard(rr, req)

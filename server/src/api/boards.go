@@ -218,32 +218,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	sessionExists, err := s.sessions.Exists(ctx, board, user)
-	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to check session"))
-		common.Throw(w, r, mapError(err))
-		return
-	}
-
-	if sessionExists {
-		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
-			common.Throw(w, r, mapError(err))
-			return
-		}
-
-		if banned {
-			err := errors.New("participant is currently banned from this session")
-			otel.RecordErrorSpan(span, err, new("participant is banned"))
-			common.Throw(w, r, common.ForbiddenError(err))
-			return
-		}
-
-		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
-		return
-	}
-
 	b, err := s.boards.Get(ctx, board)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board"))
@@ -261,9 +235,14 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	location, statusCode, err := s.boards.Join(ctx, b, user, joinRequest)
+	shouldRedirect, location, statusCode, err := s.boards.Join(ctx, b, user, joinRequest)
 	if err != nil {
 		common.Throw(w, r, mapError(err))
+		return
+	}
+
+	if shouldRedirect {
+		http.Redirect(w, r, s.buildRelativeURL(location), statusCode)
 		return
 	}
 
