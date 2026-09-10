@@ -9,15 +9,9 @@ import (
 	"scrumlr.io/server/initialize"
 
 	"github.com/peterldowns/pgtestdb"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"go.uber.org/zap/zapcore"
 )
-
-const POSTGRES_IMAGE = "postgres:18.1-alpine"
-const DATABASE_NAME = "scrumlr_test"
-const DATABASE_USERNAME = "stan"
-const DATABASE_PASSWORD = "scrumlr"
 
 var (
 	testDBConfig  pgtestdb.Config
@@ -32,14 +26,7 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
 
 	once.Do(func() {
 		ctx := context.Background()
-		container, err := postgres.Run(
-			ctx,
-			POSTGRES_IMAGE,
-			postgres.WithDatabase(DATABASE_NAME),
-			postgres.WithUsername(DATABASE_USERNAME),
-			postgres.WithPassword(DATABASE_PASSWORD),
-			postgres.BasicWaitStrategies(),
-		)
+		container, err := initialize.StartTestDatabase(ctx)
 		if err != nil {
 			initErr = err
 			return
@@ -59,11 +46,11 @@ func InitPgTestDB(t *testing.T) pgtestdb.Config {
 
 		testDBConfig = pgtestdb.Config{
 			DriverName: "postgres",
-			User:       DATABASE_USERNAME,
-			Password:   DATABASE_PASSWORD,
+			User:       initialize.DATABASE_USERNAME,
+			Password:   initialize.DATABASE_PASSWORD,
 			Host:       host,
 			Port:       mappedPort.Port(),
-			Database:   DATABASE_NAME,
+			Database:   initialize.DATABASE_NAME,
 			Options:    "sslmode=disable",
 		}
 	})
