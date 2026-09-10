@@ -183,11 +183,15 @@ exports[`RejectionPage > should match snapshot 1`] = `
       >
         It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.
       </div>
-      <button
-        class="rejection-page__return-button"
+      <div
+        class="rejection-page__button-group"
       >
-        Back to Homepage
-      </button>
+        <button
+          class="rejection-page__return-button"
+        >
+          Back to Homepage
+        </button>
+      </div>
     </div>
     <div
       class="rejection-page__image-wrapper"
