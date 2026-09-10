@@ -516,8 +516,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	export, err := s.boards.Export(ctx, boardId, accept)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to export board")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to export board"))
 		log.Errorw("Unable to export board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -533,8 +532,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusOK)
 		csvWriter := csv.NewWriter(w)
 		if err := csvWriter.WriteAll(export.CSVRecords); err != nil {
-			span.SetStatus(codes.Error, "failed to respond with csv")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to respond with csv"))
 			log.Errorw("failed to respond with csv", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 		}
