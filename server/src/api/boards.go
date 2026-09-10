@@ -20,8 +20,6 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-const boardParticipantsPath = "/boards/%s/participants/%s"
-
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // Create a new board
@@ -208,7 +206,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	boardParam := chi.URLParam(r, "id")
-	board, err := uuid.Parse(boardParam)
+	boardID, err := uuid.Parse(boardParam)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to parse board id"))
 		log.Errorw("Wrong board id", "err", err)
@@ -218,24 +216,23 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	b, err := s.boards.Get(ctx, board)
+	board, err := s.boards.Get(ctx, boardID)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
 	var joinRequest boards.JoinBoardRequest
-	if b.AccessPolicy == boards.ByPassphrase {
+	if board.AccessPolicy == boards.ByPassphrase {
 		if err := render.Decode(r, &joinRequest); err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to decode body"))
 			logger.FromContext(ctx).Errorw("Unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
 	}
 
-	shouldRedirect, location, statusCode, err := s.boards.Join(ctx, b, user, joinRequest)
+	shouldRedirect, location, statusCode, err := s.boards.Join(ctx, board, user, joinRequest)
 	if err != nil {
 		common.Throw(w, r, mapError(err))
 		return
