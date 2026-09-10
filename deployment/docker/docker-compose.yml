@@ -45,7 +45,7 @@ services:
       nats:
         condition: service_started
     healthcheck:
-      test: ["CMD", "/healthcheck"]
+      test: ["CMD", "/main", "healthcheck"]
       start_period: 10s
       interval: 10s
       timeout: 5s
