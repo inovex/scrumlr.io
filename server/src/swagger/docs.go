@@ -2159,6 +2159,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "voting to update",
+                        "name": "voting",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VotingUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -2878,7 +2887,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Info"
+                            "$ref": "#/definitions/info.Info"
                         }
                     }
                 }
@@ -3912,35 +3921,6 @@ const docTemplate = `{
                 }
             }
         },
-        "api.Info": {
-            "type": "object",
-            "properties": {
-                "allowAnonymousBoardCreation": {
-                    "type": "boolean"
-                },
-                "allowAnonymousCustomTemplates": {
-                    "type": "boolean"
-                },
-                "allowAnonymousHistory": {
-                    "type": "boolean"
-                },
-                "anonymousLoginDisabled": {
-                    "type": "boolean"
-                },
-                "authProvider": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/common.AccountType"
-                    }
-                },
-                "feedbackEnabled": {
-                    "type": "boolean"
-                },
-                "serverTime": {
-                    "type": "string"
-                }
-            }
-        },
         "avatar.AccessoriesType": {
             "type": "string",
             "enum": [
@@ -4591,6 +4571,9 @@ const docTemplate = `{
         "boardtemplates.BoardTemplate": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
                 "creator": {
                     "description": "The board template creator id",
                     "type": "string"
@@ -4605,6 +4588,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "The board template id",
+                    "type": "string"
+                },
+                "modifiedAt": {
                     "type": "string"
                 },
                 "name": {
@@ -4957,6 +4943,35 @@ const docTemplate = `{
                 "FeatureRequest",
                 "Praise"
             ]
+        },
+        "info.Info": {
+            "type": "object",
+            "properties": {
+                "allowAnonymousBoardCreation": {
+                    "type": "boolean"
+                },
+                "allowAnonymousCustomTemplates": {
+                    "type": "boolean"
+                },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
+                "anonymousLoginDisabled": {
+                    "type": "boolean"
+                },
+                "authProvider": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.AccountType"
+                    }
+                },
+                "feedbackEnabled": {
+                    "type": "boolean"
+                },
+                "serverTime": {
+                    "type": "string"
+                }
+            }
         },
         "notes.Note": {
             "type": "object",
@@ -5375,19 +5390,29 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "OPEN",
+                "ABORTED",
                 "CLOSED"
             ],
             "x-enum-varnames": [
                 "Open",
+                "Aborted",
                 "Closed"
             ]
+        },
+        "votings.VotingUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/votings.VotingStatus"
+                }
+            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "5.3.1",
+	Version:          "5.4.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

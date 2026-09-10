@@ -3,10 +3,10 @@ package api
 import (
 	"net/http"
 
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
@@ -39,8 +39,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -51,8 +50,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	vote, err := s.votings.AddVote(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to add vote")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to add vote"))
 		log.Warnw("unable to add vote", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -88,8 +86,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -100,8 +97,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	err := s.votings.RemoveVote(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to remove vote")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to remove vote"))
 		log.Warnw("unable to remove vote", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -144,8 +140,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if votingQuery != "" {
 		voting, err := uuid.Parse(votingQuery)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to decode body"))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -157,8 +152,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if noteQuery != "" {
 		note, err := uuid.Parse(noteQuery)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to decode body")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to decode body"))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -168,8 +162,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 
 	votes, err := s.votings.GetVotes(ctx, board, requestFilter)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get votes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get votes"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
