@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"go.opentelemetry.io/otel/codes"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/users"
 
 	"github.com/go-chi/render"
@@ -44,8 +44,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	var body AnonymousSignUpRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -53,16 +52,14 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create anonyoums user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create anonyoums user"))
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
 	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to generate token string")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to generate token string"))
 		log.Errorw("unable to generate token string", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -142,8 +139,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	externalUser, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to complete user auth")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to complete user auth"))
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("could not complete user auth", "err", err)
 		return
@@ -151,8 +147,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	provider, err := common.NewAccountType(externalUser.Provider)
 	if err != nil {
-		span.SetStatus(codes.Error, "user provider not supported")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("user provider not supported"))
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("unsupported user provider", "err", err)
 		return
@@ -160,8 +155,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
 	if err != nil {
-		span.SetStatus(codes.Error, "insufficient user information from external auth source")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("insufficient user information from external auth source"))
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("insufficient user information from external auth source", "err", err)
 		return
@@ -170,8 +164,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	var internalUser *users.User
 	internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create user"))
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("could not create user", "err", err)
 		return

@@ -1,5 +1,53 @@
-import {setQueryParam, withLanguageQuery} from "../url";
+import {isValidWebUrl, normalizeAndParseUrl, setQueryParam, withLanguageQuery} from "utils/url";
 import {LANGUAGE_QUERY_PARAM} from "constants/i18n";
+
+describe("normalizeAndParseUrl", () => {
+  it("should parse a url", () => {
+    expect(normalizeAndParseUrl("https://http.cat")).toBeInstanceOf(URL);
+  });
+
+  it("should default protocol", () => {
+    expect(normalizeAndParseUrl("http.cat")?.protocol).toBe("https:");
+  });
+
+  it("should not be well-formed", () => {
+    expect(normalizeAndParseUrl("http cat")).toBeNull();
+  });
+});
+
+describe("isValidWebUrl", () => {
+  describe("valid urls", () => {
+    it("normal url", () => {
+      expect(isValidWebUrl(new URL("https://http.cat"))).toBe(true);
+    });
+
+    it("normal url 2", () => {
+      expect(isValidWebUrl(new URL("https://wow.http.cat/a/b/c.jpg?key=value#fragment"))).toBe(true);
+    });
+  });
+
+  describe("invalid urls", () => {
+    it("wrong protocol", () => {
+      expect(isValidWebUrl(new URL("ftp://http.cat"))).toBe(false);
+    });
+
+    it("no TLD", () => {
+      expect(isValidWebUrl(new URL("https://http"))).toBe(false);
+    });
+
+    it("malformed TLD", () => {
+      expect(isValidWebUrl(new URL("https://http.cat."))).toBe(false);
+    });
+
+    it("ipv4", () => {
+      expect(isValidWebUrl(new URL("http://127.0.0.1"))).toBe(false);
+    });
+
+    it("localhost", () => {
+      expect(isValidWebUrl(new URL("http://localhost"))).toBe(false);
+    });
+  });
+});
 
 describe(`setQueryParam`, () => {
   it(`sets a generic query parameter on relative paths`, () => {

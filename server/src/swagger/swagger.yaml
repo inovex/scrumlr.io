@@ -5,25 +5,6 @@ definitions:
         description: The display name of the user.
         type: string
     type: object
-  api.Info:
-    properties:
-      allowAnonymousBoardCreation:
-        type: boolean
-      allowAnonymousCustomTemplates:
-        type: boolean
-      allowAnonymousHistory:
-        type: boolean
-      anonymousLoginDisabled:
-        type: boolean
-      authProvider:
-        items:
-          $ref: '#/definitions/common.AccountType'
-        type: array
-      feedbackEnabled:
-        type: boolean
-      serverTime:
-        type: string
-    type: object
   avatar.AccessoriesType:
     enum:
     - Blank
@@ -551,6 +532,8 @@ definitions:
     type: object
   boardtemplates.BoardTemplate:
     properties:
+      createdAt:
+        type: string
       creator:
         description: The board template creator id
         type: string
@@ -562,6 +545,8 @@ definitions:
         type: boolean
       id:
         description: The board template id
+        type: string
+      modifiedAt:
         type: string
       name:
         description: The board template name
@@ -812,6 +797,25 @@ definitions:
     - BugReport
     - FeatureRequest
     - Praise
+  info.Info:
+    properties:
+      allowAnonymousBoardCreation:
+        type: boolean
+      allowAnonymousCustomTemplates:
+        type: boolean
+      allowAnonymousHistory:
+        type: boolean
+      anonymousLoginDisabled:
+        type: boolean
+      authProvider:
+        items:
+          $ref: '#/definitions/common.AccountType'
+        type: array
+      feedbackEnabled:
+        type: boolean
+      serverTime:
+        type: string
+    type: object
   notes.Note:
     properties:
       author:
@@ -1100,11 +1104,18 @@ definitions:
   votings.VotingStatus:
     enum:
     - OPEN
+    - ABORTED
     - CLOSED
     type: string
     x-enum-varnames:
     - Open
+    - Aborted
     - Closed
+  votings.VotingUpdateRequest:
+    properties:
+      status:
+        $ref: '#/definitions/votings.VotingStatus'
+    type: object
 info:
   contact:
     email: info@scrumlr.io
@@ -1114,7 +1125,7 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.3.1
+  version: 5.4.0
 paths:
   /boards:
     get:
@@ -2551,6 +2562,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: voting to update
+        in: body
+        name: voting
+        required: true
+        schema:
+          $ref: '#/definitions/votings.VotingUpdateRequest'
       produces:
       - application/json
       responses:
@@ -3031,7 +3048,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Info'
+            $ref: '#/definitions/info.Info'
       summary: Show server info
       tags:
       - info

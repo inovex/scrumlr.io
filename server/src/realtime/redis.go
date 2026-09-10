@@ -9,8 +9,8 @@ import (
 	"github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 type redisClient struct {
@@ -76,19 +76,18 @@ func (r *redisClient) Publish(ctx context.Context, subject string, event any) er
 
 	payload, err := encodeEvent(event)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to encode event")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to encode event"))
 		log.Errorw("failed to encode event", "err", err)
 		return fmt.Errorf("failed to encode event: %w", err)
 	}
 
 	_, err = r.con.Publish(ctx, subject, payload).Result()
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to encode event")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to encode event"))
 		log.Errorw("failed to encode event", "err", err)
 		return fmt.Errorf("failed to publish event: %w", err)
 	}
+
 	return nil
 }
 
@@ -101,15 +100,16 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 		attribute.String("scrumlr.realtime.redis.subscribe.session.subject", subject),
 	)
 
-	pubsub := r.con.Subscribe(ctx, subject)
 	retChannel := make(chan *BoardSessionRequestEventType)
+	pubsub := r.con.Subscribe(ctx, subject)
+
 	event, err := pubsub.Receive(ctx)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to subscribe")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to subscribe"))
 		log.Errorw("failed to subscribe", "err", err)
 		return nil, fmt.Errorf("failed to subscribe: %w", err)
 	}
+
 	switch event := event.(type) {
 	case *redis.Message:
 		var boardEvent BoardSessionRequestEventType
@@ -120,6 +120,7 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 	default:
 		// do nothing
 	}
+
 	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
 
 	go func() {
@@ -137,6 +138,7 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 			}
 		}
 	}()
+
 	return retChannel, nil
 }
 
@@ -151,13 +153,14 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 
 	retChannel := make(chan *BoardEvent)
 	pubsub := r.con.Subscribe(ctx, subject)
+
 	event, err := pubsub.Receive(ctx)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to subscribe")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to subscribe"))
 		log.Errorw("failed to subscribe", "err", err)
 		return nil, fmt.Errorf("failed to subscribe: %w", err)
 	}
+
 	switch event := event.(type) {
 	case *redis.Message:
 		var boardEvent BoardEvent
@@ -168,6 +171,7 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 	default:
 		// do nothing
 	}
+
 	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
 	go func() {
 		for {
@@ -184,5 +188,6 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 			}
 		}
 	}()
+
 	return retChannel, nil
 }

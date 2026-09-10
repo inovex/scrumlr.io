@@ -1,6 +1,13 @@
 package columntemplates
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/columntemplates")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/columntemplates")
 
 var columnTemplatesCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.column_templates.created.counter",

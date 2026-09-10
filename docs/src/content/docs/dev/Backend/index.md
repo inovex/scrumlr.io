@@ -12,6 +12,10 @@ Before contributing to the project, please make sure you have read the [contribu
 
 - [Docker](https://www.docker.com/)
 - [Docker compose](https://docs.docker.com/compose/)
+- `make` in version >= 3.81
+
+**Note**: `make` is already installed on MacOS but the version is smaller than the required version. Run
+`brew install make` to update `make` version to newest version
 
 ## Quick start
 

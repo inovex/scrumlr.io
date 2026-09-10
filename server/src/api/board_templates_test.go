@@ -17,7 +17,10 @@ import (
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/serviceinitialize"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -385,9 +388,17 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			sessionApiMock.EXPECT().BoardModeratorContext(mock.Anything).Return(next)
 			sessionServiceMock := sessions.NewMockSessionService(t)
 
+			feedbackApiMock := feedback.NewMockFeedbackApi(t)
+			infoApiMock := info.NewMockInfoApi(t)
+
 			apiInitializer := serviceinitialize.NewApiInitializer("/")
 			userApi := apiInitializer.InitializeUserApi(mockUsers, sessionServiceMock, false, false)
+			healthApi := health.NewMockHealthApi(t)
+
 			routesInitializer := serviceinitialize.NewRoutesInitializer()
+			healthRoutes := routesInitializer.InitializeHealthRoutes(healthApi)
+			feedbackRoutes := routesInitializer.InitializeFeedbackRoutes(feedbackApiMock)
+			infoRoutes := routesInitializer.InitializeInfoRoutes(infoApiMock)
 			userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApiMock)
 			sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApiMock)
 
@@ -397,6 +408,9 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,      // realtime (not needed for templates)
 				nil,      // wsService (not needed for templates)
 				mockAuth, // auth
+				healthRoutes,
+				feedbackRoutes,
+				infoRoutes,
 				userRoutes,
 				sessionRoutes,
 				nil,                              // swaggerRoutes
@@ -408,8 +422,6 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,                              // reactions
 				nil,                              // sessions
 				nil,                              // sessionRequests
-				nil,                              // health
-				nil,                              // feedback
 				nil,                              // boardReactions
 				mockBoardTemplates,               // boardTemplates
 				mockColumnTemplates,              // columntemplates

@@ -7,12 +7,11 @@ import (
 
 	"strings"
 
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -20,9 +19,6 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/users")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/users")
 
 type UserDatabase interface {
 	CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error)
@@ -64,9 +60,9 @@ func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, 
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create")
 	defer span.End()
 
-	if err := validateUsername(name); err != nil {
-		span.SetStatus(codes.Error, "failed to validate user name")
-		span.RecordError(err)
+	err := validateUsername(name)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to validate user name"))
 		return nil, err
 	}
 
@@ -76,7 +72,6 @@ func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, 
 	)
 
 	var user DatabaseUser
-	var err error
 	var specificCounter metric.Int64Counter
 
 	switch accountType {
@@ -106,8 +101,7 @@ func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, 
 	}
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create user"))
 		return nil, CreateUserError(Internal, "failed to create user", err)
 	}
 
@@ -129,13 +123,11 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "user not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("user not found"))
 			return nil, CreateUserError(NotFound, "user not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user"))
 		log.Errorw("unable to get user", "user", userID, "err", err)
 		return nil, CreateUserError(Internal, "failed to get user", err)
 	}
@@ -150,9 +142,8 @@ func (service *Service) GetExistingUserIDs(ctx context.Context, userIDs []uuid.U
 
 	retrievedIDs, err := service.database.GetExistingUserIDs(ctx, userIDs)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get userIDs")
-		span.RecordError(err)
-		log.Errorw("unable to get retrievedIDs", "userIDs", userIDs, "error", err)
+		otel.RecordErrorSpan(span, err, new("failed to get user ids"))
+		log.Errorw("unable to get retrieved ids", "userIDs", userIDs, "error", err)
 		return nil, common.InternalServerError
 	}
 	return retrievedIDs, nil
@@ -165,8 +156,7 @@ func (service *Service) GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([
 
 	users, err := service.database.GetUsersByBoardID(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get users")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get users"))
 		log.Errorw("unable to get users", "board", boardID, "err", err)
 		return nil, CreateUserError(Internal, "failed to get users", err)
 	}
@@ -199,14 +189,12 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "user to update not found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("user to update not found"))
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
 			return nil, CreateUserError(NotFound, "user not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to update user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update user"))
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
 		return nil, CreateUserError(Internal, "failed to update user", err)
 	}
@@ -226,24 +214,21 @@ func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	)
 	userBoards, err := service.sessionService.GetUserBoardSessions(ctx, id, false)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get user boards")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get user boards"))
 		return err
 	}
 
 	for _, board := range userBoards {
-		if err := service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board); err != nil {
-			span.SetStatus(codes.Error, "failed to delete user notes")
-			span.RecordError(err)
+		err = service.notesService.DeleteUserNotesFromBoard(ctx, id, board.Board)
+		if err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to delete user notes"))
 			log.Errorw("failed to delete user notes from board", "board", board.Board, "user", id, "err", err)
 		}
-
 	}
 
 	err = service.database.DeleteUser(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete user")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete user"))
 		log.Errorw("failed to delete user", "user", id, "err", err)
 		return CreateUserError(Internal, "failed to delete user", err)
 	}
@@ -262,8 +247,7 @@ func (service *Service) IsUserAvailableForKeyMigration(ctx context.Context, id u
 
 	isUserAvailable, err := service.database.IsUserAvailableForKeyMigration(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check user availability for key migration")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check user availability for key migration"))
 		return false, CreateUserError(Internal, "failed to check user availability for key migration", err)
 	}
 
@@ -280,8 +264,7 @@ func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*Use
 
 	user, err := service.database.SetKeyMigration(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to set key migration")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to set key migration"))
 		return nil, CreateUserError(Internal, "failed to set key migration", err)
 	}
 
@@ -300,8 +283,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 
 	connectedBoards, err := service.sessionService.GetUserBoardSessions(ctx, user.ID, true)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get connected boards")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get connected boards"))
 		return
 	}
 

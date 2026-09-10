@@ -11,7 +11,7 @@
             "name": "MIT",
             "url": "https://github.com/inovex/scrumlr.io/blob/main/LICENSE"
         },
-        "version": "5.3.1"
+        "version": "5.4.0"
     },
     "paths": {
         "/boards": {
@@ -2151,6 +2151,15 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "voting to update",
+                        "name": "voting",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/votings.VotingUpdateRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -2870,7 +2879,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Info"
+                            "$ref": "#/definitions/info.Info"
                         }
                     }
                 }
@@ -3904,35 +3913,6 @@
                 }
             }
         },
-        "api.Info": {
-            "type": "object",
-            "properties": {
-                "allowAnonymousBoardCreation": {
-                    "type": "boolean"
-                },
-                "allowAnonymousCustomTemplates": {
-                    "type": "boolean"
-                },
-                "allowAnonymousHistory": {
-                    "type": "boolean"
-                },
-                "anonymousLoginDisabled": {
-                    "type": "boolean"
-                },
-                "authProvider": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/common.AccountType"
-                    }
-                },
-                "feedbackEnabled": {
-                    "type": "boolean"
-                },
-                "serverTime": {
-                    "type": "string"
-                }
-            }
-        },
         "avatar.AccessoriesType": {
             "type": "string",
             "enum": [
@@ -4583,6 +4563,9 @@
         "boardtemplates.BoardTemplate": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
                 "creator": {
                     "description": "The board template creator id",
                     "type": "string"
@@ -4597,6 +4580,9 @@
                 },
                 "id": {
                     "description": "The board template id",
+                    "type": "string"
+                },
+                "modifiedAt": {
                     "type": "string"
                 },
                 "name": {
@@ -4949,6 +4935,35 @@
                 "FeatureRequest",
                 "Praise"
             ]
+        },
+        "info.Info": {
+            "type": "object",
+            "properties": {
+                "allowAnonymousBoardCreation": {
+                    "type": "boolean"
+                },
+                "allowAnonymousCustomTemplates": {
+                    "type": "boolean"
+                },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
+                "anonymousLoginDisabled": {
+                    "type": "boolean"
+                },
+                "authProvider": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.AccountType"
+                    }
+                },
+                "feedbackEnabled": {
+                    "type": "boolean"
+                },
+                "serverTime": {
+                    "type": "string"
+                }
+            }
         },
         "notes.Note": {
             "type": "object",
@@ -5367,12 +5382,22 @@
             "type": "string",
             "enum": [
                 "OPEN",
+                "ABORTED",
                 "CLOSED"
             ],
             "x-enum-varnames": [
                 "Open",
+                "Aborted",
                 "Closed"
             ]
+        },
+        "votings.VotingUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/votings.VotingStatus"
+                }
+            }
         }
     }
 }

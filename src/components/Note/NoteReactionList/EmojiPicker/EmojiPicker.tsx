@@ -82,7 +82,7 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
   // Manually overriding the emoji-picker base styles (via shadow dom)
   useEffect(() => {
     const picker = ref.current;
-    if (!picker || !picker?.shadowRoot) return;
+    if (!picker?.shadowRoot) return;
 
     // Remove the favorites bar at the bottom
     const menuElement = picker.shadowRoot.querySelector('div[role="menu"]');
