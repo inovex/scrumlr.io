@@ -4,6 +4,7 @@ import {initReactI18next} from "react-i18next";
 import translationDe from "./i18n/de/translation.json";
 import translationEn from "./i18n/en/translation.json";
 import translationFr from "./i18n/fr/translation.json";
+import translationEs from "./i18n/es/translation.json";
 
 export const resources = {
   en: {
@@ -14,6 +15,15 @@ export const resources = {
   },
   fr: {
     translation: translationFr,
+  },
+  es: {
+    translation: {
+      ...translationEs,
+      CookiePolicy: {
+        ...translationEs.CookiePolicy,
+        body: translationEn.CookiePolicy.body,
+      },
+    },
   },
 };
 
