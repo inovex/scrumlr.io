@@ -12,7 +12,6 @@ import (
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
@@ -170,23 +169,20 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 
 	sessionExists, err := service.sessionService.Exists(ctx, board.ID, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check session"))
 		return false, "", 0, err
 	}
 
 	if sessionExists {
 		banned, err := service.sessionService.IsParticipantBanned(ctx, board.ID, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to check if participant is banned")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
 			return false, "", 0, err
 		}
 
 		if banned {
 			err := errors.New("participant is currently banned from this session")
-			span.SetStatus(codes.Error, "participant is banned")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("participant is banned"))
 			return false, "", 0, CreateBoardError(Forbidden, err.Error(), err)
 		}
 
@@ -202,8 +198,7 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 		return service.joinByInvite(ctx, board, user)
 	default:
 		err := errors.New("invalid access policy")
-		span.SetStatus(codes.Error, "invalid access policy")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("invalid access policy"))
 		return false, "", 0, CreateBoardError(BadRequest, err.Error(), err)
 	}
 }
@@ -781,8 +776,7 @@ func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.
 		Role:  role.ParticipantRole,
 	})
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create session"))
 		return false, "", 0, err
 	}
 	return false, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusCreated, nil
@@ -794,21 +788,18 @@ func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user
 
 	if request.Passphrase == "" {
 		err := errors.New("missing passphrase")
-		span.SetStatus(codes.Error, "no passphrase provided")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("missing passphrase"))
 		return false, "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
 	}
 	if board.Passphrase == nil || board.Salt == nil {
 		err := errors.New("board passphrase is not configured")
-		span.SetStatus(codes.Error, "board passphrase is not configured")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("board passphrase is not configured"))
 		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
 	}
 	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
 	if encodedPassphrase != *board.Passphrase {
 		err := errors.New("wrong passphrase")
-		span.SetStatus(codes.Error, "wrong passphrase provided")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
 		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
 	}
 	return service.joinPublic(ctx, board, user)
@@ -820,14 +811,12 @@ func (service *Service) joinByInvite(ctx context.Context, board *Board, user uui
 
 	sessionRequestExists, err := service.sessionRequestService.Exists(ctx, board.ID, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to check session requests")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to check session requests"))
 		return false, "", 0, err
 	}
 	if !sessionRequestExists {
 		if _, err = service.sessionRequestService.Create(ctx, board.ID, user); err != nil {
-			span.SetStatus(codes.Error, "failed to create session request")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to create session request"))
 			return false, "", 0, err
 		}
 	}
