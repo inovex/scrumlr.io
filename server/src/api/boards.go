@@ -7,10 +7,7 @@ import (
 	"net/http"
 
 	"go.opentelemetry.io/otel/codes"
-	"scrumlr.io/server/hash"
 	"scrumlr.io/server/otel"
-	"scrumlr.io/server/role"
-	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -22,9 +19,6 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 )
-
-const boardParticipantsPath = "/boards/%s/participants/%s"
-const boardsRequestsPath = "/boards/%s/requests/%s"
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
@@ -212,7 +206,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromContext(ctx)
 
 	boardParam := chi.URLParam(r, "id")
-	board, err := uuid.Parse(boardParam)
+	boardID, err := uuid.Parse(boardParam)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to parse board id"))
 		log.Errorw("Wrong board id", "err", err)
@@ -222,117 +216,35 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	sessionExists, err := s.sessions.Exists(ctx, board, user)
-	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to check session"))
-		common.Throw(w, r, mapError(err))
-		return
-	}
-
-	if sessionExists {
-		banned, err := s.sessions.IsParticipantBanned(ctx, board, user)
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
-			common.Throw(w, r, mapError(err))
-			return
-		}
-
-		if banned {
-			err := errors.New("participant is currently banned from this session")
-			otel.RecordErrorSpan(span, err, new("participant is banned"))
-			common.Throw(w, r, common.ForbiddenError(err))
-			return
-		}
-
-		http.Redirect(w, r, s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)), http.StatusSeeOther)
-		return
-	}
-
-	b, err := s.boards.Get(ctx, board)
+	board, err := s.boards.Get(ctx, boardID)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
-
-	if b.AccessPolicy == boards.Public {
-		_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to create session"))
-			common.Throw(w, r, mapError(err))
-			return
-		}
-
-		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
-		w.WriteHeader(http.StatusCreated)
-		return
-	}
-
-	if b.AccessPolicy == boards.ByPassphrase {
-		var body boards.JoinBoardRequest
-		err := render.Decode(r, &body)
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
-			log.Errorw("Unable to decode body", "err", err)
+	var joinRequest boards.JoinBoardRequest
+	if board.AccessPolicy == boards.ByPassphrase {
+		if err := render.Decode(r, &joinRequest); err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to decode body"))
+			logger.FromContext(ctx).Errorw("Unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
-
-		if body.Passphrase == "" {
-			err := errors.New("missing passphrase")
-			otel.RecordErrorSpan(span, err, new("no passphrase provided"))
-			common.Throw(w, r, common.BadRequestError(err))
-			return
-		}
-
-		encodedPassphrase := hash.NewHashSha512().HashBySalt(body.Passphrase, *b.Salt)
-		if encodedPassphrase == *b.Passphrase {
-			_, err := s.sessions.Create(ctx, sessions.BoardSessionCreateRequest{Board: board, User: user, Role: role.ParticipantRole})
-			if err != nil {
-				otel.RecordErrorSpan(span, err, new("failed to create session"))
-				common.Throw(w, r, mapError(err))
-				return
-			}
-
-			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardParticipantsPath, board, user)))
-			w.WriteHeader(http.StatusCreated)
-			return
-
-		} else {
-			err := errors.New("wrong passphrase")
-			otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
-			common.Throw(w, r, common.BadRequestError(err))
-			return
-		}
 	}
 
-	if b.AccessPolicy == boards.ByInvite {
-		sessionRequestExists, err := s.sessionRequests.Exists(ctx, board, user)
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to check session requests"))
-			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
-			return
-		}
-
-		if sessionRequestExists {
-			w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
-			w.WriteHeader(http.StatusSeeOther)
-			return
-		}
-
-		_, err = s.sessionRequests.Create(ctx, board, user)
-		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to create session request"))
-			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf(boardsRequestsPath, board, user)))
-		w.WriteHeader(http.StatusSeeOther)
+	shouldRedirect, location, statusCode, err := s.boards.Join(ctx, board, user, joinRequest)
+	if err != nil {
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
-	w.WriteHeader(http.StatusBadRequest)
+	if shouldRedirect {
+		http.Redirect(w, r, s.buildRelativeURL(location), statusCode)
+		return
+	}
+
+	w.Header().Set("Location", s.buildRelativeURL(location))
+	w.WriteHeader(statusCode)
 }
 
 // Update a board

@@ -163,6 +163,50 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, request Imp
 	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
+func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join")
+	defer span.End()
+
+	sessionExists, err := service.sessionService.Exists(ctx, board.ID, user)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to check session"))
+		return false, "", 0, err
+	}
+
+	if sessionExists {
+		banned, err := service.sessionService.IsParticipantBanned(ctx, board.ID, user)
+		if err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
+			return false, "", 0, err
+		}
+
+		if banned {
+			err := errors.New("participant is currently banned from this session")
+			otel.RecordErrorSpan(span, err, new("participant is banned"))
+			return false, "", 0, CreateBoardError(Forbidden, err.Error(), err)
+		}
+
+		return true, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusSeeOther, nil
+	}
+
+	switch board.AccessPolicy {
+
+	case Public:
+		return service.joinPublic(ctx, board, user)
+
+	case ByPassphrase:
+		return service.joinByPassphrase(ctx, board, user, request)
+
+	case ByInvite:
+		return service.joinByInvite(ctx, board, user)
+
+	default:
+		err := errors.New("invalid access policy")
+		otel.RecordErrorSpan(span, err, new("invalid access policy"))
+		return false, "", 0, CreateBoardError(BadRequest, err.Error(), err)
+	}
+}
+
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
@@ -725,6 +769,69 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 	}
 
 	return records, nil
+}
+
+func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_public")
+	defer span.End()
+
+	_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{
+		Board: board.ID,
+		User:  user,
+		Role:  role.ParticipantRole,
+	})
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to create session"))
+		return false, "", 0, err
+	}
+
+	return false, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusCreated, nil
+}
+
+func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_passphrase")
+	defer span.End()
+
+	if request.Passphrase == "" {
+		err := errors.New("missing passphrase")
+		otel.RecordErrorSpan(span, err, new("missing passphrase"))
+		return false, "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
+	}
+
+	if board.Passphrase == nil || board.Salt == nil {
+		err := errors.New("board passphrase is not configured")
+		otel.RecordErrorSpan(span, err, new("board passphrase is not configured"))
+		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
+	}
+
+	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
+	if encodedPassphrase != *board.Passphrase {
+		err := errors.New("wrong passphrase")
+		otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
+		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
+	}
+
+	return service.joinPublic(ctx, board, user)
+}
+
+func (service *Service) joinByInvite(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_invite")
+	defer span.End()
+
+	sessionRequestExists, err := service.sessionRequestService.Exists(ctx, board.ID, user)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to check session requests"))
+		return false, "", 0, err
+	}
+
+	if !sessionRequestExists {
+		if _, err = service.sessionRequestService.Create(ctx, board.ID, user); err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to create session request"))
+			return false, "", 0, err
+		}
+	}
+
+	return false, fmt.Sprintf("/boards/%s/requests/%s", board.ID, user), http.StatusSeeOther, nil
 }
 
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
