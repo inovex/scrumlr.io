@@ -77,7 +77,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
           data-autofocus="false"
           data-cy="undefined-item-Cancel"
           data-testid="undefined-item-Cancel"
-          id="mini-menu-Cancel-_r_0_-0"
+          id="mini-menu-Cancel-_r_j_-0"
         >
           <svg
             class="icon"
@@ -105,7 +105,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
           data-autofocus="true"
           data-cy="undefined-item-Save"
           data-testid="undefined-item-Save"
-          id="mini-menu-Save-_r_0_-1"
+          id="mini-menu-Save-_r_j_-1"
         >
           <svg
             class="icon"
