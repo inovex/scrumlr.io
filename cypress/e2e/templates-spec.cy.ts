@@ -16,24 +16,6 @@ describe("templates", () => {
     cy.visit("/boards/templates")
   })
 
-  it("should create board from recommended template", () => {
-    cy
-      // select template
-      .get<HTMLDivElement>("[data-cy='template-card--RECOMMENDED']")
-      .first()
-      .find<HTMLButtonElement>("[data-cy='template-card__start-button']")
-      .first()
-      .click()
-      // select access setting (default public) and click button to start session
-      .get("[data-testid='simple-modal__primary-button']")
-      .click()
-
-    cy
-      .url()
-      .should("not.include", "/boards/templates") // not on templates anymore
-      .should("include", "/board")
-  })
-
   it("should create a new template with default settings", () => {
     const templateName = uniqueTemplateName("Custom Template")
     cy

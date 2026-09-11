@@ -317,6 +317,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       <button
         className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
         onClick={() => setOpenSettings(true)}
+        data-cy={"column-settings-mini-menu"}
       >
         <SettingsIcon className="column-details__settings-icon" />
       </button>

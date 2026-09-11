@@ -18,6 +18,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
             <button
               aria-label="Mark me as done"
               class="tooltip-button tooltip-button--right"
+              data-cy="mark-as-done"
             >
               <div
                 aria-hidden="true"
@@ -87,6 +88,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
             <button
               aria-label="Raise your hand"
               class="tooltip-button tooltip-button--right"
+              data-cy="raise-hand"
             >
               <div
                 aria-hidden="true"
@@ -165,6 +167,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
             <button
               aria-label="React"
               class="tooltip-button tooltip-button--right"
+              data-cy="board-reactions"
             >
               <div
                 aria-hidden="true"
@@ -253,6 +256,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
             <button
               aria-label="Settings"
               class="tooltip-button tooltip-button--right"
+              data-cy="settings"
             >
               <div
                 aria-hidden="true"
@@ -402,6 +406,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         <button
           aria-label="Settings"
           class="tooltip-button tooltip-button--left"
+          data-cy="settings"
           disabled=""
         >
           <div
@@ -474,6 +479,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         <button
           aria-label="React"
           class="tooltip-button tooltip-button--left"
+          data-cy="board-reactions"
           disabled=""
         >
           <div
@@ -561,6 +567,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         <button
           aria-label="Raise your hand"
           class="tooltip-button tooltip-button--left"
+          data-cy="raise-hand"
           disabled=""
         >
           <div
@@ -638,6 +645,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         <button
           aria-label="Mark me as done"
           class="tooltip-button tooltip-button--left"
+          data-cy="mark-as-done"
           disabled=""
         >
           <div
@@ -722,6 +730,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
             <button
               aria-label="Mark me as done"
               class="tooltip-button tooltip-button--right"
+              data-cy="mark-as-done"
             >
               <div
                 aria-hidden="true"
@@ -791,6 +800,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
             <button
               aria-label="Raise your hand"
               class="tooltip-button tooltip-button--right"
+              data-cy="raise-hand"
             >
               <div
                 aria-hidden="true"
@@ -869,6 +879,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
             <button
               aria-label="React"
               class="tooltip-button tooltip-button--right"
+              data-cy="board-reactions"
             >
               <div
                 aria-hidden="true"
@@ -957,6 +968,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
             <button
               aria-label="Settings"
               class="tooltip-button tooltip-button--right"
+              data-cy="settings"
             >
               <div
                 aria-hidden="true"
@@ -1106,6 +1118,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         <button
           aria-label="Settings"
           class="tooltip-button tooltip-button--left"
+          data-cy="settings"
           disabled=""
         >
           <div
@@ -1178,6 +1191,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         <button
           aria-label="React"
           class="tooltip-button tooltip-button--left"
+          data-cy="board-reactions"
           disabled=""
         >
           <div
@@ -1265,6 +1279,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         <button
           aria-label="Raise your hand"
           class="tooltip-button tooltip-button--left"
+          data-cy="raise-hand"
           disabled=""
         >
           <div
@@ -1342,6 +1357,7 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         <button
           aria-label="Mark me as done"
           class="tooltip-button tooltip-button--left"
+          data-cy="mark-as-done"
           disabled=""
         >
           <div
@@ -1426,6 +1442,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
             <button
               aria-label="Mark me as done"
               class="tooltip-button tooltip-button--right"
+              data-cy="mark-as-done"
             >
               <div
                 aria-hidden="true"
@@ -1495,6 +1512,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
             <button
               aria-label="Raise your hand"
               class="tooltip-button tooltip-button--right"
+              data-cy="raise-hand"
             >
               <div
                 aria-hidden="true"
@@ -1573,6 +1591,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
             <button
               aria-label="React"
               class="tooltip-button tooltip-button--right"
+              data-cy="board-reactions"
             >
               <div
                 aria-hidden="true"
@@ -1661,6 +1680,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
             <button
               aria-label="Settings"
               class="tooltip-button tooltip-button--right"
+              data-cy="settings"
             >
               <div
                 aria-hidden="true"
@@ -1810,6 +1830,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         <button
           aria-label="Settings"
           class="tooltip-button tooltip-button--left"
+          data-cy="settings"
           disabled=""
         >
           <div
@@ -1882,6 +1903,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         <button
           aria-label="React"
           class="tooltip-button tooltip-button--left"
+          data-cy="board-reactions"
           disabled=""
         >
           <div
@@ -1969,6 +1991,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         <button
           aria-label="Raise your hand"
           class="tooltip-button tooltip-button--left"
+          data-cy="raise-hand"
           disabled=""
         >
           <div
@@ -2046,6 +2069,7 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         <button
           aria-label="Mark me as done"
           class="tooltip-button tooltip-button--left"
+          data-cy="mark-as-done"
           disabled=""
         >
           <div
@@ -2129,6 +2153,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Mark me as done"
             class="tooltip-button tooltip-button--right"
+            data-cy="mark-as-done"
           >
             <div
               aria-hidden="true"
@@ -2198,6 +2223,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Raise your hand"
             class="tooltip-button tooltip-button--right"
+            data-cy="raise-hand"
           >
             <div
               aria-hidden="true"
@@ -2276,6 +2302,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="React"
             class="tooltip-button tooltip-button--right"
+            data-cy="board-reactions"
           >
             <div
               aria-hidden="true"
@@ -2364,6 +2391,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Settings"
             class="tooltip-button tooltip-button--right"
+            data-cy="settings"
           >
             <div
               aria-hidden="true"
@@ -2468,6 +2496,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Timer"
             class="tooltip-button tooltip-button--left"
+            data-cy="timer"
           >
             <div
               aria-hidden="true"
@@ -2550,6 +2579,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Voting"
             class="tooltip-button tooltip-button--left tooltip-button--active"
+            data-cy="voting"
           >
             <div
               aria-hidden="true"
@@ -2635,6 +2665,7 @@ exports[`MenuBars > should match snapshot 1`] = `
           <button
             aria-label="Start presenter mode"
             class="tooltip-button tooltip-button--left"
+            data-cy="presenter-mode"
           >
             <div
               aria-hidden="true"

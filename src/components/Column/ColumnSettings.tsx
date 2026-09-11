@@ -81,6 +81,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
           allowVertical={ENABLE_VERTICAL}
+          dataCy={"column-color-picker"}
         />
       ),
       onClick: () => setOpenedColorPicker((o) => !o),
@@ -134,7 +135,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
 
   return (
     <div ref={columnSettingsRef} className={classNames(props.className, "column-settings")}>
-      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn={ENABLE_VERTICAL} />
+      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn={ENABLE_VERTICAL} dataCy={"column-settings-mini-menu"} />
     </div>
   );
 };
