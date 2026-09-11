@@ -605,6 +605,24 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	assert.ErrorIs(t, err, sql.ErrNoRows)
 }
 
+func (suite *BoardServiceIntegrationTestSuite) Test_Export() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+
+	export, err := suite.service.Export(ctx, board.ID, "application/json")
+
+	require.NoError(t, err)
+	require.NotNil(t, export)
+	assert.Equal(t, board.ID, export.Board.ID)
+	assert.Equal(t, board.Name, export.Board.Name)
+	require.Len(t, export.Participants, 1)
+	assert.Equal(t, suite.users["Stan"].ID, export.Participants[0].UserID)
+	assert.Empty(t, export.Columns)
+	assert.Empty(t, export.Notes)
+	assert.Empty(t, export.Votings)
+}
+
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {
 	t := suite.T()
 	ctx := context.Background()

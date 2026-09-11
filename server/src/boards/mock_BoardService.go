@@ -359,6 +359,80 @@ func (_c *MockBoardService_DeleteTimer_Call) RunAndReturn(run func(ctx context.C
 	return _c
 }
 
+// Export provides a mock function for the type MockBoardService
+func (_mock *MockBoardService) Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error) {
+	ret := _mock.Called(ctx, boardID, accept)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Export")
+	}
+
+	var r0 *ExportBoardResponse
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) (*ExportBoardResponse, error)); ok {
+		return returnFunc(ctx, boardID, accept)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) *ExportBoardResponse); ok {
+		r0 = returnFunc(ctx, boardID, accept)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ExportBoardResponse)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string) error); ok {
+		r1 = returnFunc(ctx, boardID, accept)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockBoardService_Export_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Export'
+type MockBoardService_Export_Call struct {
+	*mock.Call
+}
+
+// Export is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - accept string
+func (_e *MockBoardService_Expecter) Export(ctx any, boardID any, accept any) *MockBoardService_Export_Call {
+	return &MockBoardService_Export_Call{Call: _e.mock.On("Export", ctx, boardID, accept)}
+}
+
+func (_c *MockBoardService_Export_Call) Run(run func(ctx context.Context, boardID uuid.UUID, accept string)) *MockBoardService_Export_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardService_Export_Call) Return(exportBoardResponse *ExportBoardResponse, err error) *MockBoardService_Export_Call {
+	_c.Call.Return(exportBoardResponse, err)
+	return _c
+}
+
+func (_c *MockBoardService_Export_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error)) *MockBoardService_Export_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FullBoard provides a mock function for the type MockBoardService
 func (_mock *MockBoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
 	ret := _mock.Called(ctx, boardID)

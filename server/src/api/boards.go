@@ -5,19 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"go.opentelemetry.io/otel/codes"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/votings"
-
-	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/identifiers"
 
@@ -510,120 +505,36 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 //	@Failure		404	{object}	common.APIError
 //	@Failure		406
 //	@Failure		500	{object}	common.APIError
-//	@Router			/boards{id}/export [get]
+//	@Router			/boards/{id}/export [get]
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.boards.api.export")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
 	boardId := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	accept := r.Header.Get("Accept")
 
-	fullBoard, err := s.boards.FullBoard(ctx, boardId)
+	export, err := s.boards.Export(ctx, boardId, accept)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get full board"))
+		otel.RecordErrorSpan(span, err, new("failed to export board"))
+		log.Errorw("Unable to export board", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
-	for _, column := range fullBoard.Columns {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-		}
-	}
-
-	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
-	for _, note := range fullBoard.Notes {
-		for _, column := range visibleColumns {
-			if note.Position.Column == column.ID {
-				visibleNotes = append(visibleNotes, note)
-			}
-		}
-	}
-
-	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
+	if accept == "" || accept == "*/*" || accept == "application/json" {
 		render.Status(r, http.StatusOK)
-		render.Respond(w, r, struct {
-			Board        *boards.Board            `json:"board"`
-			Participants []*sessions.BoardSession `json:"participants"`
-			Columns      []*columns.Column        `json:"columns"`
-			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votings.Voting        `json:"votings"`
-		}{
-			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
-			Columns:      visibleColumns,
-			Notes:        visibleNotes,
-			Votings:      fullBoard.Votings,
-		})
+		render.Respond(w, r, export)
 		return
-	} else if r.Header.Get("Accept") == "text/csv" {
-		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, closedVoting := range fullBoard.Votings {
-			if closedVoting.Status == votings.Closed {
-				header = append(header, fmt.Sprintf("voting_%d", index))
-			}
-		}
-		records := [][]string{header}
+	}
 
-		for _, note := range visibleNotes {
-			stack := "null"
-			if note.Position.Stack.Valid {
-				stack = note.Position.Stack.UUID.String()
-			}
-
-			author := note.Author.String()
-			for _, session := range fullBoard.BoardSessions {
-				if session.UserID == note.Author {
-					user, err := s.users.Get(ctx, session.UserID)
-					if err != nil {
-						otel.RecordErrorSpan(span, err, new("failed to get note author user"))
-						common.Throw(w, r, mapError(err))
-						return
-					}
-					author = user.Name
-				}
-			}
-
-			column := note.Position.Column.String()
-			for _, c := range visibleColumns {
-				if c.ID == note.Position.Column {
-					column = c.Name
-				}
-			}
-
-			resultOnNote := []string{
-				note.ID.String(),
-				note.Author.String(),
-				author,
-				note.Text,
-				note.Position.Column.String(),
-				column,
-				strconv.Itoa(note.Position.Rank),
-				stack,
-			}
-
-			for _, closedVoting := range fullBoard.Votings {
-				if closedVoting.Status == votings.Closed {
-					if closedVoting.VotingResults != nil {
-						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
-					} else {
-						resultOnNote = append(resultOnNote, "0")
-					}
-				}
-			}
-
-			records = append(records, resultOnNote)
-		}
-
+	if accept == "text/csv" {
 		render.Status(r, http.StatusOK)
 		csvWriter := csv.NewWriter(w)
-		err := csvWriter.WriteAll(records)
-		if err != nil {
+		if err := csvWriter.WriteAll(export.CSVRecords); err != nil {
 			otel.RecordErrorSpan(span, err, new("failed to respond with csv"))
 			log.Errorw("failed to respond with csv", "err", err)
 			common.Throw(w, r, common.InternalServerError)
-			return
 		}
 		return
 	}
