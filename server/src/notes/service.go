@@ -18,6 +18,11 @@ import (
 	"scrumlr.io/server/websocket"
 )
 
+const getNotesFailureMessage = "failed to get notes"
+const getNoteStackFailureMessage = "failed to get note stack"
+const getNotePreconditionFailureMessage = "failed to get preconditions"
+const getNoteLockFailureMessage = "failed to get lock"
+const noteCurrentlyLockedMessage = "note is currently locked"
 const DefaultTTL = 10 * time.Second
 
 type Service struct {
@@ -167,9 +172,9 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 
 	notes, err := service.database.GetAll(ctx, boardID, columnID...)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get notes"))
+		otel.RecordErrorSpan(span, err, new(getNotesFailureMessage))
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
+		return nil, CreateNoteError(Internal, getNotesFailureMessage, err)
 	}
 	return Notes(notes), nil
 }
@@ -191,9 +196,9 @@ func (service *Service) GetByUserAndBoard(ctx context.Context, userID uuid.UUID,
 			return nil, CreateNoteError(NotFound, "note not found", err)
 		}
 
-		otel.RecordErrorSpan(span, err, new("failed to get notes"))
+		otel.RecordErrorSpan(span, err, new(getNotesFailureMessage))
 		log.Errorw("unable to get notes", "error", err)
-		return nil, CreateNoteError(Internal, "failed to get notes", err)
+		return nil, CreateNoteError(Internal, getNotesFailureMessage, err)
 	}
 	return Notes(notes), nil
 }
@@ -209,9 +214,9 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 
 	notes, err := service.database.GetStack(ctx, note)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get note stack"))
+		otel.RecordErrorSpan(span, err, new(getNoteStackFailureMessage))
 		log.Errorw("unable to get stack", "note", note, "err", err)
-		return nil, CreateNoteError(Internal, "failed to get note stack", err)
+		return nil, CreateNoteError(Internal, getNoteStackFailureMessage, err)
 	}
 
 	return Notes(notes), err
@@ -229,8 +234,8 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 
 	precondition, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get preconditions"))
-		return nil, CreateNoteError(Internal, "failed to get preconditions", err)
+		otel.RecordErrorSpan(span, err, new(getNotePreconditionFailureMessage))
+		return nil, CreateNoteError(Internal, getNotePreconditionFailureMessage, err)
 	}
 
 	if user != precondition.Author && !precondition.CallerRole.CanChangeNoteText() && body.Text != nil {
@@ -242,16 +247,16 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
-			otel.RecordErrorSpan(span, err, new("failed to get lock"))
-			return nil, CreateNoteError(Internal, "failed to get lock", err)
+			otel.RecordErrorSpan(span, err, new(getNoteLockFailureMessage))
+			return nil, CreateNoteError(Internal, getNoteLockFailureMessage, err)
 		}
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil && lock.UserID != user {
-		err := errors.New("note is currently locked")
+		err := errors.New(noteCurrentlyLockedMessage)
 		otel.RecordErrorSpan(span, err, nil)
-		return nil, CreateNoteError(Conflict, "note is currently locked", err)
+		return nil, CreateNoteError(Conflict, noteCurrentlyLockedMessage, err)
 	}
 
 	var positionUpdate *NoteUpdatePosition
@@ -318,8 +323,8 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 
 	preconditions, err := service.database.GetPrecondition(ctx, body.ID, body.Board, user)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get preconditions"))
-		return CreateNoteError(Internal, "failed to get preconditions", err)
+		otel.RecordErrorSpan(span, err, new(getNotePreconditionFailureMessage))
+		return CreateNoteError(Internal, getNotePreconditionFailureMessage, err)
 	}
 
 	if preconditions.Author != user && !preconditions.CallerRole.CanDeleteNote() {
@@ -331,18 +336,18 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	lock, err := service.GetLock(ctx, body.ID)
 	if err != nil {
 		if _, ok := errors.AsType[*cache.KeyNotFound](err); !ok {
-			span.SetStatus(codes.Error, "failed to get lock")
+			span.SetStatus(codes.Error, getNoteLockFailureMessage)
 			span.RecordError(err)
-			return CreateNoteError(Internal, "failed to get lock", err)
+			return CreateNoteError(Internal, getNoteLockFailureMessage, err)
 		}
 	}
 
 	// lock can be nil, if no lock exists and a KeyNotFound error was returned
 	if lock != nil {
 		if lock.UserID != user {
-			err := errors.New("note is currently locked")
+			err := errors.New(noteCurrentlyLockedMessage)
 			otel.RecordErrorSpan(span, err, nil)
-			return CreateNoteError(Conflict, "note is currently locked", err)
+			return CreateNoteError(Conflict, noteCurrentlyLockedMessage, err)
 		}
 	}
 
@@ -350,7 +355,7 @@ func (service *Service) Delete(ctx context.Context, user uuid.UUID, body NoteDel
 	if body.DeleteStack {
 		stack, err := service.GetStack(ctx, body.ID)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to get note stack"))
+			otel.RecordErrorSpan(span, err, new(getNoteStackFailureMessage))
 			return err
 		}
 
@@ -422,8 +427,8 @@ func (service *Service) AcquireLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get stack"))
-		log.Errorw("failed to get stack", "err", err)
+		otel.RecordErrorSpan(span, err, new(getNoteStackFailureMessage))
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 
@@ -450,8 +455,8 @@ func (service *Service) ReleaseLock(ctx context.Context, noteID uuid.UUID, userI
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get stack"))
-		log.Errorw("failed to get stack", "err", err)
+		otel.RecordErrorSpan(span, err, new(getNoteStackFailureMessage))
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 
@@ -479,9 +484,9 @@ func (service *Service) GetLock(ctx context.Context, noteID uuid.UUID) (*DragLoc
 
 	val, err := service.cache.Con.Get(ctx, noteID.String())
 	if err != nil {
-		span.SetStatus(codes.Ok, "failed to get lock")
+		span.SetStatus(codes.Ok, getNoteLockFailureMessage)
 		span.RecordError(err)
-		log.Infow("failed to get lock", "err", err)
+		log.Infow(getNoteLockFailureMessage, "err", err)
 		return nil, err
 	}
 
@@ -506,8 +511,8 @@ func (service *Service) IsLocked(ctx context.Context, noteID uuid.UUID) bool {
 
 	notes, err := service.GetStack(ctx, noteID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get stack"))
-		log.Errorw("failed to get stack", "err", err)
+		otel.RecordErrorSpan(span, err, new(getNoteStackFailureMessage))
+		log.Errorw(getNoteStackFailureMessage, "err", err)
 		return false
 	}
 

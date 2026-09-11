@@ -16,6 +16,9 @@ import (
 	"scrumlr.io/server/otel"
 )
 
+const failureParsingUserIdMessage = "failed to parse user id"
+const checkBoardSessionFailureMessage = "unable to check board session"
+
 type SessionService interface {
 	Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)
 	Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error)
@@ -104,7 +107,7 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to parse user id"))
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user id", "err", err)
 		common.Throw(w, r, err)
 		return
@@ -148,7 +151,7 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to parse user id"))
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
 		return
@@ -246,7 +249,7 @@ func (api *API) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to parse user id"))
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
 		return
@@ -285,8 +288,8 @@ func (api *API) BoardParticipantContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.Exists(ctx, board, user)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("unable to check board session"))
-			log.Errorw("unable to check board session", "err", err)
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
+			log.Errorw(checkBoardSessionFailureMessage, "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -340,7 +343,7 @@ func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.ModeratorSessionExists(ctx, board, user)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("unable to check board session"))
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
@@ -379,7 +382,7 @@ func (api *API) BoardOwnerContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.OwnerSessionExists(ctx, board, user)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("unable to check board session"))
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return

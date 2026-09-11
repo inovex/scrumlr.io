@@ -19,6 +19,9 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const getBoardSessionFailureMessage = "unable to get session for board"
+const participantUpdateFailureMessage = "failed to send participant update"
+
 type SessionDatabase interface {
 	Create(ctx context.Context, boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)
 	Update(ctx context.Context, update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)
@@ -97,8 +100,8 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to get session"))
-		log.Errorw("unable to get session for board", "board", boardID, "session", userID, "error", err)
-		return nil, CreateSessionError(Internal, "unable to get session for board", err)
+		log.Errorw(getBoardSessionFailureMessage, "board", boardID, "session", userID, "error", err)
+		return nil, CreateSessionError(Internal, getBoardSessionFailureMessage, err)
 	}
 
 	return new(BoardSession).From(session), err
@@ -253,7 +256,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board session"))
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
-		return nil, CreateSessionError(Internal, "unable to get session for board", err)
+		return nil, CreateSessionError(Internal, getBoardSessionFailureMessage, err)
 	}
 
 	if sessionOfCaller.Role == role.ParticipantRole && body.User != body.Caller {
@@ -266,7 +269,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get session"))
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
-		return nil, CreateSessionError(Internal, "unable to get session for board", err)
+		return nil, CreateSessionError(Internal, getBoardSessionFailureMessage, err)
 	}
 
 	if body.Role != nil {
@@ -457,7 +460,7 @@ func (service *BoardSessionService) createdSession(ctx context.Context, board uu
 	})
 
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to send participant update"))
+		otel.RecordErrorSpan(span, err, new(participantUpdateFailureMessage))
 		log.Errorw("unable to send participant update", "session", session, "error", err)
 	}
 }
@@ -493,7 +496,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 		})
 
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to send participant update"))
+			otel.RecordErrorSpan(span, err, new(participantUpdateFailureMessage))
 			log.Errorw("unable to send participant update", "board", board, "user", userId, "err", err)
 		}
 	}
@@ -553,7 +556,7 @@ func (service *BoardSessionService) updatedSessions(ctx context.Context, board u
 	})
 
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to send participant update"))
+		otel.RecordErrorSpan(span, err, new(participantUpdateFailureMessage))
 		log.Errorw("unable to send participant update", "board", board, "err", err)
 	}
 }
