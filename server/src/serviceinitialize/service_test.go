@@ -3,13 +3,13 @@ package serviceinitialize
 import (
 	"testing"
 
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
@@ -41,11 +41,19 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	votingService := votings.NewMockVotingService(t)
 	sessionService := sessions.NewMockSessionService(t)
 	userSession := users.NewMockUserService(t)
-	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
-	sessionRequestWebsocket := sessionrequests.NewMockSessionRequestWebsocket(t)
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
+	boardService := boards.NewMockBoardService(t)
 
-	assert.NotNil(t, initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession))
+	websocket := initializer.InitializeWebSocketService()
+	assert.NotNil(t, websocket)
+
+	eventFilter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
+	assert.NotNil(t, eventFilter)
+
+	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
+	assert.NotNil(t, eventListener)
+
+	assert.NotNil(t, initializer.InitializeBoardService(sessionService, columnService, noteService, reactionService, votingService, userSession))
 	assert.NotNil(t, initializer.InitializeColumnService(noteService))
 	assert.NotNil(t, initializer.InitializeBoardReactionService())
 	assert.NotNil(t, initializer.InitializeBoardTemplateService(columnTemplateService))
@@ -54,11 +62,7 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	assert.NotNil(t, initializer.InitializeHealthService())
 	assert.NotNil(t, initializer.InitializeReactionService())
 	assert.NotNil(t, initializer.InitializeSessionService(columnService, noteService))
-	assert.NotNil(t, initializer.InitializeSessionRequestService(sessionRequestWebsocket, sessionService))
-
-	wsService := initializer.InitializeWebSocketService()
-	assert.NotNil(t, wsService)
-	assert.NotNil(t, initializer.InitializeSessionRequestWebsocket(wsService))
+	assert.NotNil(t, initializer.InitializeSessionRequestService(eventListener, sessionService))
 
 	assert.NotNil(t, initializer.InitializeUserService(sessionService, noteService))
 	assert.NotNil(t, initializer.InitializeNotesService())

@@ -13,6 +13,7 @@ The following diagram shows the packages of the backend and how they interact wi
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TB
     api[API]
+    auth[Auth]
     boards[Boards]
     boardTemplates[Board Templates]
     boardReactions[Board Reactions]
@@ -26,10 +27,13 @@ flowchart TB
     reactions[Reactions]
     health[Health]
     feedback[Feedback]
+    events[Events]
 
     database@{ shape: cyl, label: "Database" }
     nats@{ shape: das, label: "Nats" }
+    cache@{ shape: cyl, label: "Cache" }
 
+    api --> auth
     api --> boards
     api --> boardTemplates
     api --> boardReactions
@@ -43,16 +47,34 @@ flowchart TB
     api --> reactions
     api --> health
     api --> feedback
+    api --> events
+
+    auth --> users
 
     boards --> columns
     boards --> notes
     boards --> sessions
+    boards --> reactions
+    boards --> votings
+    boards --> users
+
+    boardTemplates --> columnTemplates
 
     columns --> notes
-    columns --> votings
+
+    sessions --> columns
+    sessions --> notes
 
     sessionRequests --> sessions
+    sessionRequests --> events
 
+    users --> sessions
+    users --> notes
+
+    events --> sessions
+    events --> notes
+
+    auth --> database
     boards --> database
     boardTemplates --> database
     columns --> database
@@ -75,6 +97,9 @@ flowchart TB
     users --> nats
     reactions --> nats
     health --> nats
+    events --> nats
+
+    notes --> cache
 ```
 
 ## Package structure
