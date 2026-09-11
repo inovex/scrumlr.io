@@ -92,26 +92,48 @@ func (suite *BoardServiceTestSuite) TestExport_JSON() {
 	hiddenColumnID := uuid.New()
 	visibleNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: visibleColumnID}}
 	hiddenNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: hiddenColumnID}}
-	board := &Board{ID: suite.boardID, Name: &suite.boardName}
-	participants := []*sessions.BoardSession{{UserID: suite.userID}}
-	voting := &votings.Voting{ID: uuid.New()}
 	fullBoard := &FullBoard{
-		Board:         board,
-		BoardSessions: participants,
+		Board:         &Board{ID: suite.boardID, Name: &suite.boardName},
+		BoardSessions: []*sessions.BoardSession{{UserID: suite.userID}},
 		Columns: []*columns.Column{
 			{ID: visibleColumnID, Name: "Visible", Visible: true},
 			{ID: hiddenColumnID, Name: "Hidden", Visible: false},
 		},
 		Notes:   []*notes.Note{visibleNote, hiddenNote},
-		Votings: []*votings.Voting{voting},
+		Votings: []*votings.Voting{{ID: uuid.New()}},
 	}
-	suite.expectFullBoard(fullBoard)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
 
 	result, err := suite.service.Export(context.Background(), suite.boardID, "application/json")
 
 	suite.NoError(err)
-	suite.Equal(board, result.Board)
-	suite.Equal(participants, result.Participants)
+	suite.Equal(fullBoard.Board, result.Board)
+	suite.Equal(fullBoard.BoardSessions, result.Participants)
 	suite.Equal([]*columns.Column{fullBoard.Columns[0]}, result.Columns)
 	suite.Equal([]*notes.Note{visibleNote}, result.Notes)
 	suite.Equal(fullBoard.Votings, result.Votings)
@@ -136,7 +158,32 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 		}},
 		Votings: []*votings.Voting{{Status: votings.Closed}},
 	}
-	suite.expectFullBoard(fullBoard)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
 	suite.userService.EXPECT().Get(mock.Anything, authorID).
 		Return(&users.User{ID: authorID, Name: "Alex"}, nil)
 
@@ -152,7 +199,32 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 
 func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
 	fullBoard := &FullBoard{Board: &Board{ID: suite.boardID}}
-	suite.expectFullBoard(fullBoard)
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
 
 	result, err := suite.service.Export(context.Background(), suite.boardID, "application/xml")
 
@@ -1823,33 +1895,4 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
 	suite.Nil(stackNotes)
 	suite.Equal(importErr, err)
 	notesMock.AssertExpectations(suite.T())
-}
-
-func (suite *BoardServiceTestSuite) expectFullBoard(fullBoard *FullBoard) {
-	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
-		Return(DatabaseBoard{
-			ID:                    fullBoard.Board.ID,
-			Name:                  fullBoard.Board.Name,
-			Description:           fullBoard.Board.Description,
-			AccessPolicy:          fullBoard.Board.AccessPolicy,
-			ShowAuthors:           fullBoard.Board.ShowAuthors,
-			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
-			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
-			AllowStacking:         fullBoard.Board.AllowStacking,
-			IsLocked:              fullBoard.Board.IsLocked,
-		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
-	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
-		Return(fullBoard.BoardSessions, nil)
-	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
-		Return(fullBoard.Columns, nil)
-	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
-		Return(fullBoard.Notes, nil)
-	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
-		Return(fullBoard.Reactions, nil)
-	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
-		Return(fullBoard.Votings, nil)
-	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
-		Return(fullBoard.Votes, nil)
 }
