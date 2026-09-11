@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"testing"
 	"time"
 
@@ -244,6 +245,138 @@ func (suite *BoardServiceTestSuite) TestGet() {
 	suite.NoError(err)
 	suite.NotNil(result)
 	suite.Equal(suite.boardID, result.ID)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ExistingParticipant() {
+	board := &Board{ID: suite.boardID}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.sessionsMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ExistingParticipantBanned() {
+	board := &Board{ID: suite.boardID}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.sessionsMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(Forbidden, boardErr.Category)
+	suite.Equal("participant is currently banned from this session", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_Public() {
+	board := &Board{ID: suite.boardID, AccessPolicy: Public}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  suite.userID,
+		Role:  role.ParticipantRole,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusCreated, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase() {
+	passphrase := "correct"
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	board := &Board{
+		ID:           suite.boardID,
+		AccessPolicy: ByPassphrase,
+		Passphrase:   &encodedPassphrase,
+		Salt:         &salt,
+	}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.mockHash.EXPECT().HashBySalt(passphrase, salt).Return("encoded")
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  suite.userID,
+		Role:  role.ParticipantRole,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: passphrase})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusCreated, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest() {
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	board := &Board{
+		ID:           suite.boardID,
+		AccessPolicy: ByPassphrase,
+		Passphrase:   &encodedPassphrase,
+		Salt:         &salt,
+	}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.mockHash.EXPECT().HashBySalt("wrong", salt).Return("different")
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: "wrong"})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("wrong passphrase", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByInvite() {
+	board := &Board{ID: suite.boardID, AccessPolicy: ByInvite}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Create(mock.Anything, suite.boardID, suite.userID).
+		Return(&sessionrequests.BoardSessionRequest{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_InvalidAccessPolicy() {
+	board := &Board{ID: suite.boardID, AccessPolicy: AccessPolicy("INVALID")}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("invalid access policy", boardErr.Message)
 }
 
 func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {

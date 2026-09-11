@@ -3,7 +3,9 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"net/http"
 	"testing"
 	"time"
 
@@ -231,6 +233,29 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	assert.True(t, board.ShowAuthors)
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Join_PublicBoard() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+	userID := suite.users["Santa"].ID
+
+	// non existing session
+	shouldRedirect, location, status, err := suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.False(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusCreated, status)
+
+	// existing session
+	shouldRedirect, location, status, err = suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.True(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusSeeOther, status)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
