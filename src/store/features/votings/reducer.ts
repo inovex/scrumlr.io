@@ -1,14 +1,15 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { VotingsState } from "./types";
-import { initializeBoard } from "../board";
-import { createdVoting, updatedVoting } from "./actions";
+import { createdVoting, updatedVoting} from "./actions";
+import {getAllVotings} from "./thunks";
 
 const initialState: VotingsState = { open: undefined, past: [] };
 
 export const votingsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) =>
-      action.payload.fullBoard.votings.reduce<VotingsState>(
+    .addCase(getAllVotings.fulfilled, (_state, action) =>
+      //TODO
+      action.payload.reduce<VotingsState>(
         (acc, voting) => {
           if (voting.status === "OPEN") {
             acc.open = voting;

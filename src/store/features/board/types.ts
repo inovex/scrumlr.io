@@ -1,9 +1,6 @@
 import {ParticipantWithUser} from "../participants";
-import {Request} from "../requests";
 import {Column} from "../columns";
 import {Note} from "../notes";
-import {Reaction} from "../reactions";
-import {Vote} from "../votes";
 import {Voting} from "../votings";
 
 export type AccessPolicy = "PUBLIC" | "BY_PASSPHRASE" | "BY_INVITE";
@@ -52,16 +49,6 @@ export interface ImportBoardResponse extends Board {
   importWarnings?: ImportWarnings;
 }
 
-export type BoardActionType = {
-  board: Board;
-  participants: ParticipantWithUser[];
-  requests: Request[];
-  columns: Column[];
-  notes: Note[];
-  reactions: Reaction[];
-  votes: Vote[];
-  votings: Voting[];
-};
 export type BoardWithServerTimeOffset = {board: Board; serverTimeOffset: number};
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase" | "too_many_join_requests" | "banned";

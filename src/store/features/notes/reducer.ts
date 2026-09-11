@@ -1,15 +1,15 @@
 import {createReducer, isAnyOf} from "@reduxjs/toolkit";
 import {deletedColumn} from "store/features/columns";
 import {NotesState} from "./types";
-import {initializeBoard} from "../board";
 import {deletedNote, syncNotes, updatedNotes} from "./actions";
 import {updatedVoting} from "../votings";
+import {getAllNotes} from "./thunks";
 
 const initialState: NotesState = [];
 
 export const notesReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.notes)
+    .addCase(getAllNotes.fulfilled, (_state, action) => action.payload)
     .addCase(updatedNotes, (_state, action) => action.payload)
     .addCase(deletedNote, (state, action) => {
       const note = state.find((n) => n.id === action.payload);

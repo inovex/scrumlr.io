@@ -1,13 +1,13 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {ReactionState} from "./types";
-import {initializeBoard} from "../board";
 import {addedReaction, deletedReaction, updatedReaction} from "./actions";
+import {getAllReactions} from "./thunks";
 
 const initialState: ReactionState = [];
 
 export const reactionsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.reactions)
+    .addCase(getAllReactions.fulfilled, (_state, action) => action.payload)
     .addCase(addedReaction, (state, action) => {
       state.push(action.payload);
     })

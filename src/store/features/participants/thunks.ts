@@ -3,16 +3,20 @@ import {API} from "api";
 import {ApplicationState, retryable} from "store";
 import {Toast} from "utils/Toast";
 import i18n from "i18next";
-import {Auth, editUserOptimistically} from "store/features";
+import {Auth, editUserOptimistically, ParticipantWithUser} from "store/features";
+import {mapMultipleParticipants} from "utils/participant";
 
-export const editSelf = createAsyncThunk<
-  Auth,
-  {
-    auth: Auth;
-    applyOptimistically?: boolean;
-  },
-  {state: ApplicationState}
->("participants/editSelf", async (payload, {dispatch}) => {
+export const getAllParticipants = createAsyncThunk<{participants: ParticipantWithUser[]; self: Auth}, {boardId: string; self: Auth}, {state: ApplicationState}>(
+  "participants/getAllParticipants",
+  async (payload, {dispatch, getState}) => {
+    const users = await API.getUsers(payload.boardId);
+    const participants = await API.getParticipants(payload.boardId);
+
+    return {participants: mapMultipleParticipants(participants, users), self: payload.self};
+  }
+);
+
+export const editSelf = createAsyncThunk<Auth, {auth: Auth; applyOptimistically?: boolean}, {state: ApplicationState}>("participants/editSelf", async (payload, {dispatch}) => {
   if (payload.applyOptimistically) {
     // instantly apply changes (required when not in a board, since no event is retrieved)
     dispatch(editUserOptimistically(payload.auth));

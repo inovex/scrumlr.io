@@ -1,15 +1,15 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {deletedNote} from "store/features/notes";
 import {VotesState} from "./types";
-import {initializeBoard} from "../board";
 import {createdVote, deletedVote, deletedVotes, updatedVotes} from "./actions";
 import {createdVoting} from "../votings";
+import {getAllVotes} from "./thunks";
 
 const initialState: VotesState = [];
 
 export const votesReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.votes)
+    .addCase(getAllVotes.fulfilled, (_state, action) => action.payload)
     .addCase(createdVote, (state, action) => {
       state.push(action.payload);
     })

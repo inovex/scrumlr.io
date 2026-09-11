@@ -87,28 +87,29 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   // State & Functions
   const state = useAppSelector(
     (rootState) => ({
-      currentUser: rootState.participants!.self!,
       moderation: rootState.view.moderating,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
-      usedVotes: rootState.votes.filter((v) => v.voting === rootState.votings.open?.id).length,
+      usedVotes: rootState.votes?.filter((v) => v.voting === rootState.votings.open?.id).length,
       possibleVotes: rootState.votings.open?.voteLimit,
       timerEnd: rootState.board.data?.timerEnd,
     }),
     _.isEqual
   );
 
-  const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
-  const isReady = state.currentUser.ready;
-  const {raisedHand} = state.currentUser;
+  const currentUser = useAppSelector((rootState) => rootState.participants.self, _.isEqual);
+
+  const isAdmin = currentUser?.role === "OWNER" || currentUser?.role === "MODERATOR";
+  const isReady = currentUser?.ready;
+  const raisedHand = currentUser?.raisedHand;
 
   const toggleReadyState = () => {
-    dispatch(setUserReadyStatus({userId: state.currentUser.user.id, ready: !isReady}));
+    dispatch(setUserReadyStatus({userId: currentUser?.user.id!, ready: !isReady}));
   };
 
   const toggleRaiseHand = () => {
-    dispatch(setRaisedHandStatus({userId: state.currentUser.user.id, raisedHand: !raisedHand}));
+    dispatch(setRaisedHandStatus({userId: currentUser?.user.id!, raisedHand: !raisedHand}));
   };
 
   const toggleBoardReactionsMenu = () => {
@@ -119,7 +120,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     if (state.moderation) {
       dispatch(stopSharing());
       dispatch(clearFocusInitiator());
-    } else dispatch(setFocusInitiator(state.currentUser));
+    } else dispatch(setFocusInitiator(currentUser!));
 
     dispatch(setModerating(!state.moderation));
   };
@@ -214,7 +215,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
    * and the "Mark me as Done" tooltip is not open.
    */
   const USED_VOTES = state.usedVotes === state.possibleVotes;
-  const USER_NOT_READY = !state.currentUser.ready;
+  const USER_NOT_READY = !currentUser?.ready;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;

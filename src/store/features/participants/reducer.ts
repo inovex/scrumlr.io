@@ -1,10 +1,9 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {ParticipantWithUser, ParticipantsState} from "./types";
-import {initializeBoard} from "../board";
 import {clearFocusInitiator, createdParticipant, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
-import {editSelf} from "./thunks";
+import {editSelf, getAllParticipants} from "./thunks";
 
-const initialState: ParticipantsState = {focusInitiator: null};
+const initialState: ParticipantsState = {others: [], focusInitiator: null};
 
 const mapParticipantsToState = (participants: ParticipantWithUser[], ownUserId: string): ParticipantsState => {
   const self = participants.find((p) => p.user.id === ownUserId)!;
@@ -16,7 +15,7 @@ const mapParticipantsToState = (participants: ParticipantWithUser[], ownUserId: 
 
 export const participantsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => mapParticipantsToState(action.payload.fullBoard.participants, action.payload.self.id))
+    .addCase(getAllParticipants.fulfilled, (_state, action) => mapParticipantsToState(action.payload.participants, action.payload.self.id))
     .addCase(setParticipants, (_state, action) => mapParticipantsToState(action.payload.participants, action.payload.self.id))
     .addCase(createdParticipant, (state, action) => {
       state.others?.push(action.payload);

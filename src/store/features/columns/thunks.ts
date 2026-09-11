@@ -1,7 +1,12 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
 import {ApplicationState, retryable} from "store";
-import {ColumnWithoutId} from "./types";
+import {Column, ColumnWithoutId} from "./types";
+
+export const getAllColumns = createAsyncThunk<Column[], {boardId: string}, {state: ApplicationState}>("columns/getAllColumns", async (payload, {dispatch, getState}) => {
+  const columns = await API.getColumns(payload.boardId);
+  return columns;
+});
 
 export const editColumn = createAsyncThunk<void, {id: string; column: ColumnWithoutId}, {state: ApplicationState}>("columns/editColumn", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
