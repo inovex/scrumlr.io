@@ -5,11 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"time"
 
+	"scrumlr.io/server/events"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
-	"scrumlr.io/server/websocket"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -29,24 +28,18 @@ type SessionRequestDatabase interface {
 	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 }
 
-type SessionRequestWebsocket interface {
-	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)
-	closeSocket(conn websocket.Connection)
-}
-
 type BoardSessionRequestService struct {
 	database       SessionRequestDatabase
 	broker         *realtime.Broker
-	websocket      SessionRequestWebsocket
+	eventListener  events.EventListener
 	sessionService sessions.SessionService
 }
 
-func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket SessionRequestWebsocket, sessionService sessions.SessionService) SessionRequestService {
+func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, eventListener events.EventListener, sessionService sessions.SessionService) SessionRequestService {
 	service := new(BoardSessionRequestService)
 	service.database = db
 	service.broker = rt
-	service.websocket = websocket
+	service.eventListener = eventListener
 	service.sessionService = sessionService
 
 	return service
@@ -194,7 +187,7 @@ func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w htt
 	_, span := tracer.Start(ctx, "scrumlr.session_requests.service.open_socket")
 	defer span.End()
 
-	service.websocket.OpenSocket(w, r)
+	service.eventListener.OpenSessionRequestSocket(w, r)
 }
 
 // this needs to be moved to the middleware later
