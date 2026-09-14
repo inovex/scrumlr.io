@@ -8,6 +8,12 @@ packages:
     interfaces:
       TimeProvider:
 
+  scrumlr.io/server/auth:
+    config:
+      dir: auth
+    interfaces:
+      Auth:
+
   scrumlr.io/server/boards:
     config:
       dir: boards
@@ -48,8 +54,23 @@ packages:
     config:
       dir: health
     interfaces:
+      HealthApi:
       HealthService:
       HealthDatabaseChecker:
+
+  scrumlr.io/server/feedback:
+    config:
+      dir: feedback
+    interfaces:
+      FeedbackService:
+      FeedbackApi:
+
+  scrumlr.io/server/info:
+    config:
+      dir: info
+    interfaces:
+      InfoApi:
+      InfoService:
 
   scrumlr.io/server/sessions:
     config:

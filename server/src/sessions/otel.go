@@ -1,6 +1,13 @@
 package sessions
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/sessions")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/sessions")
 
 var sessionCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.sessions.created.counter",

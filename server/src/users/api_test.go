@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -19,7 +20,7 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-func TestGetUser_api(t *testing.T) {
+func TestApiGetUser(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserService := NewMockUserService(t)
@@ -45,7 +46,7 @@ func TestGetUser_api(t *testing.T) {
 	assert.Equal(t, userId, user.ID)
 }
 
-func TestGetUser_api_InvalidUUID(t *testing.T) {
+func TestApiGetUserInvalidUUID(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -64,7 +65,7 @@ func TestGetUser_api_InvalidUUID(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_GetUserByID(t *testing.T) {
+func TestApiGetUserById(t *testing.T) {
 	user := User{
 		ID:          uuid.New(),
 		Name:        "Joseph",
@@ -98,7 +99,7 @@ func Test_GetUserByID(t *testing.T) {
 
 }
 
-func Test_GetUserByID_api_InvalidUUID(t *testing.T) {
+func TestApiGetUserByIdInvalidUUID(t *testing.T) {
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 
@@ -114,7 +115,7 @@ func Test_GetUserByID_api_InvalidUUID(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_GetUserByID_ServiceError(t *testing.T) {
+func TestApiGetUserByIdServiceError(t *testing.T) {
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
 	userId := uuid.New()
@@ -135,7 +136,7 @@ func Test_GetUserByID_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_GetBoardUsers_api(t *testing.T) {
+func TestApiGetBoardUsers(t *testing.T) {
 	boardID := uuid.New()
 	mockUsers := []*User{
 		{ID: uuid.New(), Name: "User A", AccountType: common.Anonymous},
@@ -162,7 +163,7 @@ func Test_GetBoardUsers_api(t *testing.T) {
 	assert.Equal(t, "User A", users[0].Name)
 }
 
-func Test_GetBoardUsers_ServiceError(t *testing.T) {
+func TestApiGetBoardUsersServiceError(t *testing.T) {
 	boardID := uuid.New()
 
 	mockUserService := NewMockUserService(t)
@@ -181,7 +182,7 @@ func Test_GetBoardUsers_ServiceError(t *testing.T) {
 
 }
 
-func Test_UpdateUser_api(t *testing.T) {
+func TestApiUpdateUser(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
@@ -208,7 +209,7 @@ func Test_UpdateUser_api(t *testing.T) {
 	assert.Equal(t, mockUpdatedUser.Name, user.Name)
 }
 
-func Test_UpdateUser_ServiceError(t *testing.T) {
+func TestApiUpdateUserServiceError(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
@@ -230,7 +231,7 @@ func Test_UpdateUser_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_UpdateUserBoards_ServiceError(t *testing.T) {
+func TestApiUpdateUserBoardsServiceError(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
@@ -253,7 +254,55 @@ func Test_UpdateUserBoards_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_BoardAuthenticatedContext(t *testing.T) {
+func TestApiDeleteUser(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockUserService.EXPECT().Delete(mock.Anything, userId).
+		Return(nil)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	userApi.Delete(rr, req.Request())
+
+	assert.Equal(t, http.StatusNoContent, rr.Result().StatusCode)
+}
+
+func TestApiDeleteUserServiceError(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockUserService.EXPECT().Delete(mock.Anything, userId).
+		Return(errors.New("failed to delete user"))
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	userApi.Delete(rr, req.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
+}
+
+func TestApiBoardAuthenticatedContext(t *testing.T) {
 	userId := uuid.New()
 	boardId := uuid.New()
 
@@ -279,7 +328,7 @@ func Test_BoardAuthenticatedContext(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_BoardAuthenticatedContext_NotAuthenticated(t *testing.T) {
+func TestApiBoardAuthenticatedContextNotAuthenticated(t *testing.T) {
 	userId := uuid.New()
 	boardId := uuid.New()
 
@@ -306,7 +355,7 @@ func Test_BoardAuthenticatedContext_NotAuthenticated(t *testing.T) {
 	assert.Error(t, common.ForbiddenError(errors.New("not authorized")))
 }
 
-func Test_BoardAuthenticatedContext_InvalidBoardID(t *testing.T) {
+func TestApiBoardAuthenticatedContextInvalidBoardID(t *testing.T) {
 	userId := uuid.New()
 	boardId := "abc"
 
@@ -331,7 +380,7 @@ func Test_BoardAuthenticatedContext_InvalidBoardID(t *testing.T) {
 	assert.Error(t, common.BadRequestError(errors.New("invalid board id")))
 }
 
-func Test_BoardAuthenticatedContext_InvalidUserID(t *testing.T) {
+func TestApiBoardAuthenticatedContextInvalidUserID(t *testing.T) {
 	userId := "abc"
 	boardId := uuid.New()
 
@@ -355,7 +404,7 @@ func Test_BoardAuthenticatedContext_InvalidUserID(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }
 
-func Test_AnonymousBoardCreationContext(t *testing.T) {
+func TestApiAnonymousBoardCreationContext(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserService := NewMockUserService(t)
@@ -380,7 +429,7 @@ func Test_AnonymousBoardCreationContext(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_AnonymousBoardCreationContext_NotAllowed(t *testing.T) {
+func TestApiAnonymousBoardCreationContextNotAllowed(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserService := NewMockUserService(t)
@@ -405,7 +454,7 @@ func Test_AnonymousBoardCreationContext_NotAllowed(t *testing.T) {
 	assert.Error(t, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
 }
 
-func Test_AnonymousCustomTemplateCreationContext_NotAllowed(t *testing.T) {
+func TestApiAnonymousCustomTemplateCreationContextNotAllowed(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserService := NewMockUserService(t)
@@ -425,4 +474,53 @@ func Test_AnonymousCustomTemplateCreationContext_NotAllowed(t *testing.T) {
 
 	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 	assert.Error(t, common.ForbiddenError(errors.New("not authorized to create custom templates anonymous")))
+}
+
+func TestApiIsAccountOwner(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", userId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", userId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
+}
+
+func TestApiIsAccountOwner_differentIds(t *testing.T) {
+	userId := uuid.New()
+	requestId := uuid.New()
+
+	mockUserService := NewMockUserService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
+	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
+
+	rr := httptest.NewRecorder()
+	req := technical_helper.NewTestRequestBuilder(http.MethodDelete, fmt.Sprintf("/%s", requestId), nil).
+		AddToContext(identifiers.UserIdentifier, userId)
+
+	rctx := chi.NewRouteContext()
+	rctx.URLParams.Add("user", requestId.String())
+	req.AddToContext(chi.RouteCtxKey, rctx)
+
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+
+	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }

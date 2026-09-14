@@ -1,9 +1,7 @@
 package api
 
 import (
-	"net/http"
 	"os"
-	"time"
 
 	"scrumlr.io/server/websocket"
 
@@ -25,7 +23,6 @@ import (
 	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
-	"github.com/go-chi/httprate"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
@@ -33,8 +30,6 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -48,9 +43,12 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
-	userRoutes    chi.Router
-	sessionRoutes chi.Router
-	swaggerRoutes chi.Router
+	healthRoutes   chi.Router
+	feedbackRoutes chi.Router
+	infoRoutes     chi.Router
+	userRoutes     chi.Router
+	sessionRoutes  chi.Router
+	swaggerRoutes  chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -60,8 +58,6 @@ type Server struct {
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
-	health          health.HealthService
-	feedback        feedback.FeedbackService
 	boardReactions  boardreactions.BoardReactionCreater
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
@@ -79,6 +75,9 @@ type Server struct {
 	allowAnonymousHistory         bool
 	experimentalFileSystemStore   bool
 	enableSwagger                 bool
+
+	joinBoardRateLimit int
+	templateRateLimit  int
 }
 
 func New(
@@ -88,6 +87,9 @@ func New(
 	wsService websocket.Upgrader,
 	auth auth.Auth,
 
+	healtRoutes chi.Router,
+	feedbackRoutes chi.Router,
+	infoRoutes chi.Router,
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
@@ -100,8 +102,6 @@ func New(
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
-	health health.HealthService,
-	feedback feedback.FeedbackService,
 	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
@@ -114,6 +114,9 @@ func New(
 	allowAnonymousHistory bool,
 	experimentalFileSystemStore bool,
 	enableSwagger bool,
+
+	joinBoardRateLimit int,
+	templateRateLimit int,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -141,12 +144,17 @@ func New(
 	}
 
 	s := Server{
-		basePath:                         basePath,
-		realtime:                         rt,
-		wsService:                        wsService,
-		userRoutes:                       userRoutes,
-		sessionRoutes:                    sessionRoutes,
-		swaggerRoutes:                    swaggerRoutes,
+		basePath:  basePath,
+		realtime:  rt,
+		wsService: wsService,
+
+		healthRoutes:   healtRoutes,
+		feedbackRoutes: feedbackRoutes,
+		infoRoutes:     infoRoutes,
+		userRoutes:     userRoutes,
+		sessionRoutes:  sessionRoutes,
+		swaggerRoutes:  swaggerRoutes,
+
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
@@ -158,8 +166,6 @@ func New(
 		reactions:                        reactions,
 		sessions:                         sessions,
 		sessionRequests:                  sessionRequests,
-		health:                           health,
-		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 		columntemplates:                  columntemplates,
@@ -171,6 +177,9 @@ func New(
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
 		enableSwagger:                 enableSwagger,
+
+		joinBoardRateLimit: joinBoardRateLimit,
+		templateRateLimit:  templateRateLimit,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
@@ -193,9 +202,9 @@ func New(
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
-		r.Get("/info", s.getServerInfo)
-		r.Get("/health", s.healthCheck)
-		r.Post("/feedback", s.createFeedback)
+		r.Mount("/info", s.infoRoutes)
+		r.Mount("/health", s.healthRoutes)
+		r.Mount("/feedback", s.feedbackRoutes)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
 			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
@@ -303,24 +312,7 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(httprate.LimitBy(
-				3,
-				5*time.Second,
-				func(r *http.Request) (string, error) {
-					return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
-				},
-				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
-					w.Header().Set("Content-Type", "application/json")
-					w.WriteHeader(http.StatusTooManyRequests)
-					_, err := w.Write([]byte(`{"error": "Too many requests"}`))
-					if err != nil {
-						log := logger.FromRequest(r)
-						log.Errorw("Could not write error", "error", err)
-						return
-					}
-				}),
-			))
-
+			r.Use(s.JoinBoardRateLimiter)
 			r.Post("/", s.joinBoard) //board
 		})
 		r.Mount("/", s.sessionRoutes)

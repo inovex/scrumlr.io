@@ -10,11 +10,14 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
+
+const failureParsingUserIdMessage = "failed to parse user id"
+const checkBoardSessionFailureMessage = "unable to check board session"
 
 type SessionService interface {
 	Create(ctx context.Context, body BoardSessionCreateRequest) (*BoardSession, error)
@@ -70,8 +73,7 @@ func (api *API) GetBoardSessions(w http.ResponseWriter, r *http.Request) {
 	filter := api.service.BoardSessionFilterTypeFromQueryString(r.URL.Query())
 	sessions, err := api.service.GetAll(ctx, board, filter)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get sessions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get sessions"))
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -102,10 +104,10 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "session")
+
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user id", "err", err)
 		common.Throw(w, r, err)
 		return
@@ -113,8 +115,7 @@ func (api *API) GetBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	session, err := api.service.Get(ctx, board, userId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get session"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -147,10 +148,10 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	caller := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "session")
+
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
 		return
@@ -158,8 +159,7 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	var body BoardSessionUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -171,8 +171,7 @@ func (api *API) UpdateBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	session, err := api.service.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update session"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -205,8 +204,7 @@ func (api *API) UpdateBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 	var body BoardSessionsUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -215,8 +213,7 @@ func (api *API) UpdateBoardSessions(w http.ResponseWriter, r *http.Request) {
 	body.Board = board
 	updatedSessions, err := api.service.UpdateAll(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update all sessions")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update all sessions"))
 		http.Error(w, "unable to update board sessions", http.StatusInternalServerError)
 		return
 	}
@@ -252,8 +249,7 @@ func (api *API) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	userId, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new(failureParsingUserIdMessage))
 		log.Errorw("Invalid user session id", "err", err)
 		http.Error(w, "invalid user session id", http.StatusBadRequest)
 		return
@@ -261,8 +257,7 @@ func (api *API) DeleteBoardSession(w http.ResponseWriter, r *http.Request) {
 
 	err = api.service.Delete(ctx, caller, board, userId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete session")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete session"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -280,8 +275,7 @@ func (api *API) BoardParticipantContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			span.SetStatus(codes.Error, "failed to parse board id")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("failed to parse board id"))
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
@@ -294,33 +288,31 @@ func (api *API) BoardParticipantContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.Exists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
-			span.RecordError(err)
-			log.Errorw("unable to check board session", "err", err)
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
+			log.Errorw(checkBoardSessionFailureMessage, "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
-			span.SetStatus(codes.Error, "user board session not found")
-			span.RecordError(err)
-			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
+			err := errors.New("user board session not found")
+			otel.RecordErrorSpan(span, err, nil)
+			common.Throw(w, r, common.ForbiddenError(err))
 			return
 		}
 
 		banned, err := api.service.IsParticipantBanned(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check if participant is banned")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("unable to check if participant is banned"))
 			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if banned {
-			span.SetStatus(codes.Error, "participant is currently banned from this session")
-			span.RecordError(err)
-			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
+			err := errors.New("participant is currently banned from this session")
+			otel.RecordErrorSpan(span, err, nil)
+			common.Throw(w, r, common.ForbiddenError(err))
 			return
 		}
 
@@ -338,8 +330,7 @@ func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse board id")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("unable to parse board id"))
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
@@ -352,16 +343,14 @@ func (api *API) BoardModeratorContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.ModeratorSessionExists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
-			span.SetStatus(codes.Error, "moderator session does not exist")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("moderator session does not exist"))
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
@@ -380,8 +369,7 @@ func (api *API) BoardOwnerContext(next http.Handler) http.Handler {
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to parse board id")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("unable to parse board id"))
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
@@ -394,16 +382,14 @@ func (api *API) BoardOwnerContext(next http.Handler) http.Handler {
 
 		exists, err := api.service.OwnerSessionExists(ctx, board, user)
 		if err != nil {
-			span.SetStatus(codes.Error, "unable to check board session")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new(checkBoardSessionFailureMessage))
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
 		if !exists {
-			span.SetStatus(codes.Error, "owner session does not exist")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("owner session does not exist"))
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}

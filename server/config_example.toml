@@ -126,3 +126,9 @@ feedback-webhook-url = ""
 
 # Enable/Disable the swagger page
 enable-swagger = false
+
+# Set the rate limit for the requests to join a board per 5 seconds.
+join-rate-limit = 3
+
+# Set the rate limit for the requests for templates per second.
+template-rate-limit = 20

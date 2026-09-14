@@ -3,9 +3,9 @@ package api
 import (
 	"net/http"
 
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -39,8 +39,7 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 
 	var body columntemplates.ColumnTemplateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -51,8 +50,7 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 
 	tColumn, err := s.columntemplates.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create column template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create column template"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -86,8 +84,7 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 
 	columTemplate, err := s.columntemplates.Get(ctx, boardTemplateId, columnTemplateId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get column template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column template"))
 		log.Errorw("Unable to get column template", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -120,8 +117,7 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 
 	columTemplates, err := s.columntemplates.GetAll(ctx, boardTemplateId)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get column templates")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column templates"))
 		log.Errorw("Unable to get column templates", "err", err)
 		common.Throw(w, r, mapError(err))
 		return
@@ -156,8 +152,7 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 
 	var body columntemplates.ColumnTemplateUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -168,8 +163,7 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 
 	tColumn, err := s.columntemplates.Update(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update column template")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update column template"))
 		log.Errorw("Unable to update column template", "err", err)
 		http.Error(w, "unable to update template column", http.StatusInternalServerError)
 		return
@@ -202,9 +196,9 @@ func (s *Server) deleteColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	boardTemplateId := ctx.Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	columnTemplateId := ctx.Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
 
-	if err := s.columntemplates.Delete(ctx, boardTemplateId, columnTemplateId); err != nil {
-		span.SetStatus(codes.Error, "failed to delete column template")
-		span.RecordError(err)
+	err := s.columntemplates.Delete(ctx, boardTemplateId, columnTemplateId)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to delete column template"))
 		log.Errorw("Unable to delete column template", "err", err)
 		http.Error(w, "unable to delete column template", http.StatusInternalServerError)
 		return

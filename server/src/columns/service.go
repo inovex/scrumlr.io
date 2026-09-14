@@ -6,21 +6,15 @@ import (
 	"errors"
 	"time"
 
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/otel"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/logger"
 
 	"scrumlr.io/server/realtime"
 )
-
-var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/columns")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/columns")
 
 type ColumnDatabase interface {
 	Create(ctx context.Context, column DatabaseColumnInsert) (DatabaseColumn, error)
@@ -71,8 +65,7 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 
 	index, err := service.database.GetIndex(ctx, body.Board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get index")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get index"))
 		return nil, CreateColumnError(Internal, "failed to get index", err)
 	}
 
@@ -96,8 +89,7 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create column"))
 		log.Errorw("unable to create column", "err", err)
 		return nil, CreateColumnError(Internal, "unable to create column", err)
 	}
@@ -117,19 +109,19 @@ func (service *Service) Get(ctx context.Context, boardID, columnID uuid.UUID) (*
 		attribute.String("scrumlr.columns.service.get.board", boardID.String()),
 		attribute.String("scrumlr.columns.service.get.column", columnID.String()),
 	)
+
 	column, err := service.database.Get(ctx, boardID, columnID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			span.SetStatus(codes.Error, "no column found")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("no column found"))
 			return nil, CreateColumnError(NotFound, "column not found", err)
 		}
 
-		span.SetStatus(codes.Error, "failed to get column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column"))
 		log.Errorw("unable to get column", "board", boardID, "column", columnID, "error", err)
 		return nil, CreateColumnError(Internal, "unable to get column", err)
 	}
+
 	return new(Column).From(column), err
 }
 
@@ -144,8 +136,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Colum
 
 	columns, err := service.database.GetAll(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get columns"))
 		log.Errorw("unable to get columns", "board", boardID, "error", err)
 		return nil, CreateColumnError(Internal, "unable to get columns", err)
 	}
@@ -164,8 +155,7 @@ func (service *Service) GetCount(ctx context.Context, boardID uuid.UUID) (int, e
 
 	count, err := service.database.Count(ctx, boardID)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get column count")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get column count"))
 		log.Errorw("failed to get column count", "board", boardID, "error", err)
 		return count, CreateColumnError(Internal, "failed to get column count", err)
 	}
@@ -202,8 +192,7 @@ func (service *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*
 	)
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update column"))
 		log.Errorw("unable to update column", "err", err)
 		return nil, CreateColumnError(Internal, "failed to update column", err)
 	}
@@ -223,12 +212,12 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 		attribute.String("scrumlr.columns.service.delete.column", column.String()),
 		attribute.String("scrumlr.columns.service.delete.user", user.String()),
 	)
+
 	// notes and votes are deleted cascading from the database
 	// get all notes that are effected to send the delete event
 	notes, err := service.noteService.GetAll(ctx, board, column)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create columnget notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to create columnget notes"))
 		log.Errorw("Unable to get notes", "board", board, "column", column)
 		return err
 	}
@@ -240,8 +229,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 
 	err = service.database.Delete(ctx, board, column)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to delete column")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to delete column"))
 		log.Errorw("unable to delete column", "err", err)
 		return CreateColumnError(Internal, "failed to delete column", err)
 	}
@@ -262,8 +250,7 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 
 	columns, err := service.database.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get columns")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get columns"))
 		log.Errorw("unable to retrieve columns in updated notes", "err", err)
 		return
 	}
@@ -280,8 +267,7 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 
 	err = service.syncNotesOnColumnChange(ctx, board, columnIds)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to sync columns")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to sync columns"))
 		log.Errorw("unable to sync notes on column change", "err", err)
 	}
 }
@@ -292,8 +278,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 
 	notes, err := service.noteService.GetAll(ctx, boardID, columnIds...)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get notes"))
 		return CreateColumnError(Internal, "unable to retrieve notes, following an updated columns call", err)
 	}
 
@@ -303,8 +288,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	})
 
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to broadcast notes")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to broadcast notes"))
 		return CreateColumnError(Internal, "unable to broadcast notes, following an updated columns call", err)
 	}
 

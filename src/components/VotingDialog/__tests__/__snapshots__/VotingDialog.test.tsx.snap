@@ -43,6 +43,14 @@ exports[`VotingDialog > should match the snapshot with active voting 1`] = `
                   End voting phase
                 </label>
               </button>
+              <button
+                class="voting-dialog__start-button"
+                data-testid="voting-dialog__abort-button"
+              >
+                <label>
+                  Abort voting phase
+                </label>
+              </button>
             </article>
             <button
               aria-label="Close"

@@ -12,6 +12,7 @@ import {CharacterCountIndicator} from "components/CharacterCountIndicator/Charac
 import {MAX_NOTE_LENGTH} from "constants/misc";
 import {useAppDispatch, useAppSelector} from "store";
 import {addNote, Column, editColumn} from "store/features";
+import {isParticipantModerator} from "utils/participant";
 import "./NoteInput.scss";
 
 export interface NoteInputProps {
@@ -26,7 +27,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
 
   const [toastDisplayed, setToastDisplayed] = useState(false);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self?.role === role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
 
   const toggleColumnVisibility = () => {
     dispatch(

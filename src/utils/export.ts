@@ -128,7 +128,7 @@ const mdNotesPerColumn = (columnId: string, boardData: ExportBoardDataType) =>
 
 const mdColumns = (boardData: ExportBoardDataType) => {
   const columnList = boardData.columns
-    .filter((c) => boardData.notes.filter((n) => n.position.column === c.id).length > 0)
+    .filter((c) => boardData.notes.some((n) => n.position.column === c.id))
     .map((c) => `## ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`)
     .join("\n\n");
   return `${columnList}\n\n`;

@@ -24,7 +24,10 @@ The following steps should be followed when creating a new release
     - `deployment/helm/scrumlr/Chart.yaml`
     - `deployment/helm/scrumlr/tests/backend/deployment_test.yaml`
     - `deployment/helm/scrumlr/tests/frontend/deployment_test.yaml`
-    - `server/src/initialize/otel.go`
+    - `server/src/otel/otel.go`
+    - `server/main.go`
+    - `server/swagger/*` **Note**: Do not manually edit the swagger files. Regenerate them by using `make swagger` in the `server` directory
+
 3. Go to the [release page](https://github.com/inovex/scrumlr.io/releases) to draft a new release
 4. Create a new tag by entering the tag. Make sure the tag has the form `v1.2.3` to follow the semver versioning
 5. Add the release name. The name is the same as the tag from step 4

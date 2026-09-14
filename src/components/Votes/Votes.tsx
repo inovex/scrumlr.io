@@ -4,6 +4,7 @@ import classNames from "classnames";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
+import {isParticipantModerator} from "utils/participant";
 import "./Votes.scss";
 
 type VotesProps = {
@@ -74,7 +75,7 @@ export const Votes: FC<VotesProps> = (props) => {
     return {participantsNames: names, isAnonymous: false};
   }, _.isEqual);
 
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants.self?.role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants.self!.role));
 
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 

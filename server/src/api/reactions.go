@@ -6,11 +6,11 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	scrumlrOtel "scrumlr.io/server/otel"
 	"scrumlr.io/server/reactions"
 )
 
@@ -40,8 +40,7 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 
 	reaction, err := s.reactions.Get(ctx, id)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reaction")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to get reaction"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -73,8 +72,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 
 	reactions, err := s.reactions.GetAll(ctx, board)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get reactions for board")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to get reactions for board"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -109,8 +107,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 
 	var body reactions.ReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -122,8 +119,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 
 	reaction, err := s.reactions.Create(ctx, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to create reaction")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to create reaction"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -157,8 +153,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	id := ctx.Value(identifiers.ReactionIdentifier).(uuid.UUID)
 
 	if err := s.reactions.Delete(ctx, board, user, id); err != nil {
-		span.SetStatus(codes.Error, "failed to remove reaction")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to remove reaction"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -195,8 +190,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 
 	var body reactions.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "failed to decode body")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to decode body"))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -204,8 +198,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 
 	reaction, err := s.reactions.Update(ctx, board, user, id, body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update reaction")
-		span.RecordError(err)
+		scrumlrOtel.RecordErrorSpan(span, err, new("failed to update reaction"))
 		common.Throw(w, r, mapError(err))
 		return
 	}

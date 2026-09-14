@@ -3,9 +3,13 @@ import {ADJECTIVES, ANIMAL_NAMES, MYTHICAL_CREATURES} from "../constants/nameLis
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 export const generateRandomString = (length = 8) => {
+  const crypto = window.crypto;
+  const randomNumbers = new Uint32Array(length);
+  crypto.getRandomValues(randomNumbers);
+
   let result = "";
-  for (let i = 0; i < length; i++) {
-    result += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+  for (let num of randomNumbers) {
+    result += ALPHABET.charAt(num % ALPHABET.length);
   }
   return result;
 };

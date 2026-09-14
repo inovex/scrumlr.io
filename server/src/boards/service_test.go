@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"testing"
 	"time"
 
@@ -87,6 +88,154 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.columnColor = common.ColorGoalGreen
 }
 
+func (suite *BoardServiceTestSuite) TestExport_JSON() {
+	visibleColumnID := uuid.New()
+	hiddenColumnID := uuid.New()
+	visibleNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: visibleColumnID}}
+	hiddenNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: hiddenColumnID}}
+	fullBoard := &FullBoard{
+		Board:         &Board{ID: suite.boardID, Name: &suite.boardName},
+		BoardSessions: []*sessions.BoardSession{{UserID: suite.userID}},
+		Columns: []*columns.Column{
+			{ID: visibleColumnID, Name: "Visible", Visible: true},
+			{ID: hiddenColumnID, Name: "Hidden", Visible: false},
+		},
+		Notes:   []*notes.Note{visibleNote, hiddenNote},
+		Votings: []*votings.Voting{{ID: uuid.New()}},
+	}
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
+
+	result, err := suite.service.Export(context.Background(), suite.boardID, "application/json")
+
+	suite.NoError(err)
+	suite.Equal(fullBoard.Board, result.Board)
+	suite.Equal(fullBoard.BoardSessions, result.Participants)
+	suite.Equal([]*columns.Column{fullBoard.Columns[0]}, result.Columns)
+	suite.Equal([]*notes.Note{visibleNote}, result.Notes)
+	suite.Equal(fullBoard.Votings, result.Votings)
+}
+
+func (suite *BoardServiceTestSuite) TestExport_CSV() {
+	columnID := uuid.New()
+	authorID := suite.userID
+	noteID := uuid.New()
+	fullBoard := &FullBoard{
+		Board:         &Board{ID: suite.boardID},
+		BoardSessions: []*sessions.BoardSession{{UserID: authorID}},
+		Columns:       []*columns.Column{{ID: columnID, Name: "Ideas", Visible: true}},
+		Notes: []*notes.Note{{
+			ID:     noteID,
+			Author: authorID,
+			Text:   "A note",
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   2,
+			},
+		}},
+		Votings: []*votings.Voting{{Status: votings.Closed}},
+	}
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
+	suite.userService.EXPECT().Get(mock.Anything, authorID).
+		Return(&users.User{ID: authorID, Name: "Alex"}, nil)
+
+	result, err := suite.service.Export(context.Background(), suite.boardID, "text/csv")
+
+	suite.NoError(err)
+	suite.Equal([][]string{
+		{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack", "voting_0"},
+		{noteID.String(), authorID.String(), "Alex", "A note", columnID.String(), "Ideas", "2", "null", "0"},
+	}, result.CSVRecords)
+	suite.Nil(result.Board)
+}
+
+func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
+	fullBoard := &FullBoard{Board: &Board{ID: suite.boardID}}
+	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
+		Return(DatabaseBoard{
+			ID:                    fullBoard.Board.ID,
+			Name:                  fullBoard.Board.Name,
+			Description:           fullBoard.Board.Description,
+			AccessPolicy:          fullBoard.Board.AccessPolicy,
+			ShowAuthors:           fullBoard.Board.ShowAuthors,
+			ShowNotesOfOtherUsers: fullBoard.Board.ShowNotesOfOtherUsers,
+			ShowNoteReactions:     fullBoard.Board.ShowNoteReactions,
+			AllowStacking:         fullBoard.Board.AllowStacking,
+			IsLocked:              fullBoard.Board.IsLocked,
+		}, nil)
+	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
+		Return(fullBoard.BoardSessionRequests, nil)
+	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
+		Return(fullBoard.BoardSessions, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Columns, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Notes, nil)
+	suite.reactionMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Reactions, nil)
+	suite.votingMock.EXPECT().GetAll(mock.Anything, suite.boardID).
+		Return(fullBoard.Votings, nil)
+	suite.votingMock.EXPECT().GetVotes(mock.Anything, suite.boardID, votings.VoteFilter{}).
+		Return(fullBoard.Votes, nil)
+
+	result, err := suite.service.Export(context.Background(), suite.boardID, "application/xml")
+
+	suite.Nil(result)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("unsupported accept type: application/xml", boardErr.Message)
+}
+
 func (suite *BoardServiceTestSuite) TestGet() {
 
 	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).Return(DatabaseBoard{ID: suite.boardID}, nil)
@@ -96,6 +245,138 @@ func (suite *BoardServiceTestSuite) TestGet() {
 	suite.NoError(err)
 	suite.NotNil(result)
 	suite.Equal(suite.boardID, result.ID)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ExistingParticipant() {
+	board := &Board{ID: suite.boardID}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.sessionsMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ExistingParticipantBanned() {
+	board := &Board{ID: suite.boardID}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.sessionsMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(Forbidden, boardErr.Category)
+	suite.Equal("participant is currently banned from this session", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_Public() {
+	board := &Board{ID: suite.boardID, AccessPolicy: Public}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  suite.userID,
+		Role:  role.ParticipantRole,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusCreated, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase() {
+	passphrase := "correct"
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	board := &Board{
+		ID:           suite.boardID,
+		AccessPolicy: ByPassphrase,
+		Passphrase:   &encodedPassphrase,
+		Salt:         &salt,
+	}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.mockHash.EXPECT().HashBySalt(passphrase, salt).Return("encoded")
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board: suite.boardID,
+		User:  suite.userID,
+		Role:  role.ParticipantRole,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: passphrase})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusCreated, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest() {
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	board := &Board{
+		ID:           suite.boardID,
+		AccessPolicy: ByPassphrase,
+		Passphrase:   &encodedPassphrase,
+		Salt:         &salt,
+	}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.mockHash.EXPECT().HashBySalt("wrong", salt).Return("different")
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: "wrong"})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("wrong passphrase", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByInvite() {
+	board := &Board{ID: suite.boardID, AccessPolicy: ByInvite}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Create(mock.Anything, suite.boardID, suite.userID).
+		Return(&sessionrequests.BoardSessionRequest{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/requests/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_InvalidAccessPolicy() {
+	board := &Board{ID: suite.boardID, AccessPolicy: AccessPolicy("INVALID")}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{})
+
+	suite.False(shouldRedirect)
+	suite.Empty(location)
+	suite.Zero(status)
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("invalid access policy", boardErr.Message)
 }
 
 func (suite *BoardServiceTestSuite) TestGet_DatabaseError() {

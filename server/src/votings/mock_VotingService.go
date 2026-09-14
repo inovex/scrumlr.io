@@ -106,86 +106,6 @@ func (_c *MockVotingService_AddVote_Call) RunAndReturn(run func(ctx context.Cont
 	return _c
 }
 
-// Close provides a mock function for the type MockVotingService
-func (_mock *MockVotingService) Close(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error) {
-	ret := _mock.Called(ctx, id, board, affectedNotes)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Close")
-	}
-
-	var r0 *Voting
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note) (*Voting, error)); ok {
-		return returnFunc(ctx, id, board, affectedNotes)
-	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, []Note) *Voting); ok {
-		r0 = returnFunc(ctx, id, board, affectedNotes)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*Voting)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID, []Note) error); ok {
-		r1 = returnFunc(ctx, id, board, affectedNotes)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockVotingService_Close_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Close'
-type MockVotingService_Close_Call struct {
-	*mock.Call
-}
-
-// Close is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id uuid.UUID
-//   - board uuid.UUID
-//   - affectedNotes []Note
-func (_e *MockVotingService_Expecter) Close(ctx any, id any, board any, affectedNotes any) *MockVotingService_Close_Call {
-	return &MockVotingService_Close_Call{Call: _e.mock.On("Close", ctx, id, board, affectedNotes)}
-}
-
-func (_c *MockVotingService_Close_Call) Run(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note)) *MockVotingService_Close_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 context.Context
-		if args[0] != nil {
-			arg0 = args[0].(context.Context)
-		}
-		var arg1 uuid.UUID
-		if args[1] != nil {
-			arg1 = args[1].(uuid.UUID)
-		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
-		var arg3 []Note
-		if args[3] != nil {
-			arg3 = args[3].([]Note)
-		}
-		run(
-			arg0,
-			arg1,
-			arg2,
-			arg3,
-		)
-	})
-	return _c
-}
-
-func (_c *MockVotingService_Close_Call) Return(voting *Voting, err error) *MockVotingService_Close_Call {
-	_c.Call.Return(voting, err)
-	return _c
-}
-
-func (_c *MockVotingService_Close_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, affectedNotes []Note) (*Voting, error)) *MockVotingService_Close_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // Create provides a mock function for the type MockVotingService
 func (_mock *MockVotingService) Create(ctx context.Context, body VotingCreateRequest) (*Voting, error) {
 	ret := _mock.Called(ctx, body)
@@ -591,6 +511,92 @@ func (_c *MockVotingService_RemoveVote_Call) Return(err error) *MockVotingServic
 }
 
 func (_c *MockVotingService_RemoveVote_Call) RunAndReturn(run func(ctx context.Context, req VoteRequest) error) *MockVotingService_RemoveVote_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Update provides a mock function for the type MockVotingService
+func (_mock *MockVotingService) Update(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error) {
+	ret := _mock.Called(ctx, id, board, votingStatus, affectedNotes)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Update")
+	}
+
+	var r0 *Voting
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) (*Voting, error)); ok {
+		return returnFunc(ctx, id, board, votingStatus, affectedNotes)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) *Voting); ok {
+		r0 = returnFunc(ctx, id, board, votingStatus, affectedNotes)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Voting)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID, VotingStatus, []Note) error); ok {
+		r1 = returnFunc(ctx, id, board, votingStatus, affectedNotes)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockVotingService_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockVotingService_Update_Call struct {
+	*mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+//   - board uuid.UUID
+//   - votingStatus VotingStatus
+//   - affectedNotes []Note
+func (_e *MockVotingService_Expecter) Update(ctx any, id any, board any, votingStatus any, affectedNotes any) *MockVotingService_Update_Call {
+	return &MockVotingService_Update_Call{Call: _e.mock.On("Update", ctx, id, board, votingStatus, affectedNotes)}
+}
+
+func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note)) *MockVotingService_Update_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 VotingStatus
+		if args[3] != nil {
+			arg3 = args[3].(VotingStatus)
+		}
+		var arg4 []Note
+		if args[4] != nil {
+			arg4 = args[4].([]Note)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+		)
+	})
+	return _c
+}
+
+func (_c *MockVotingService_Update_Call) Return(voting *Voting, err error) *MockVotingService_Update_Call {
+	_c.Call.Return(voting, err)
+	return _c
+}
+
+func (_c *MockVotingService_Update_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID, board uuid.UUID, votingStatus VotingStatus, affectedNotes []Note) (*Voting, error)) *MockVotingService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
