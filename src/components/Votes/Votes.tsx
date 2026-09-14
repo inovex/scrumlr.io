@@ -75,7 +75,7 @@ export const Votes: FC<VotesProps> = (props) => {
     return {participantsNames: names, isAnonymous: false};
   }, _.isEqual);
 
-  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants.self!.role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants.self?.role));
 
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 

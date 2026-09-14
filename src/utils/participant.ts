@@ -22,4 +22,4 @@ export const mapSingleParticipant = (participant: ParticipantWithUserId, userDat
   user: {...userData},
 });
 
-export const isParticipantModerator = (role: ParticipantRole) => role === "OWNER" || role === "MODERATOR";
+export const isParticipantModerator = (role?: ParticipantRole) => role === "OWNER" || role === "MODERATOR";

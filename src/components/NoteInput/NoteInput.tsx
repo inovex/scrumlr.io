@@ -27,7 +27,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
 
   const [toastDisplayed, setToastDisplayed] = useState(false);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants.self?.role));
 
   const toggleColumnVisibility = () => {
     dispatch(
