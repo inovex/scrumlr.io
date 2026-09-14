@@ -71,6 +71,130 @@ func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (Databa
 	return user, err
 }
 
+func (db *DB) UpgradeUser(ctx context.Context, userId uuid.UUID, id, name, avatarUrl string, accountType common.AccountType) (DatabaseUser, error) {
+	table := db.mapAccountToTable(accountType)
+	name = strings.TrimSpace(name)
+
+	var user DatabaseUser
+
+	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
+		var extUser struct {
+			UserID uuid.UUID `bun:"user"`
+			Name   string    `bun:"name"`
+		}
+
+		err := tx.NewSelect().
+			Table(table).
+			Column("user", "name").
+			Where("\"user\" = ?", userId).
+			Scan(ctx, &extUser)
+
+		if err == nil {
+			return errors.New("user is already connected")
+		}
+
+		err = tx.NewSelect().
+			Model((*DatabaseUser)(nil)).
+			Where("id = ?", userId).
+			Where("account_type = ?", common.Anonymous).
+			Scan(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		user.AccountType = accountType
+		user.Name = name
+		_, err = tx.NewUpdate().
+			Model(&user).
+			Where("id = ?", userId).
+			Returning("*").
+			Exec(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewRaw(
+			fmt.Sprintf("INSERT INTO %s (\"user\", id, name, avatar_url) VALUES (?, ?, ?, ?)", table),
+			user.ID, id, name, avatarUrl,
+		).Exec(ctx)
+
+		return err
+	})
+
+	return user, err
+}
+
+func (db *DB) MergeUser(ctx context.Context, mergeInto uuid.UUID, merge uuid.UUID) (DatabaseUser, error) {
+	var user DatabaseUser
+	err := db.db.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
+
+		err := tx.NewSelect().
+			Model((*DatabaseUser)(nil)).
+			Where("id = ?", mergeInto).
+			Scan(ctx, &user)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewUpdate().
+			Table("notes").
+			Set("author = ?", mergeInto).
+			Where("author = ?", merge).
+			Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewUpdate().
+			Table("reactions").
+			Set("\"user\" = ?", mergeInto).
+			Where("\"user\" = ?", merge).
+			Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewUpdate().
+			Table("votes").
+			Set("\"user\" = ?", mergeInto).
+			Where("\"user\" = ?", merge).
+			Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewUpdate().
+			Table("board_templates").
+			Set("creator = ?", mergeInto).
+			Where("creator = ?", merge).
+			Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.NewUpdate().
+			Table("board_sessions").
+			Set("\"user\" = ?", mergeInto).
+			Where("\"user\" = ?", merge).
+			Where("board NOT IN (?)",
+				tx.NewSelect().
+					Table("board_sessions").
+					Column("board").
+					Where("\"user\" = ?", mergeInto),
+			).Exec(ctx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return user, err
+}
+
 func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	err := db.db.NewSelect().
@@ -114,6 +238,22 @@ func (db *DB) GetExistingUserIDs(ctx context.Context, ids []uuid.UUID) ([]uuid.U
 	return existingIDs, err
 }
 
+func (db *DB) GetUserIdByExternalId(ctx context.Context, id string, accountType common.AccountType) (uuid.UUID, error) {
+	var externalUser struct {
+		UserId uuid.UUID `bun:"user"`
+	}
+
+	table := db.mapAccountToTable(accountType)
+
+	err := db.db.NewSelect().
+		Table(table).
+		Column("user").
+		Where("id = ?", id).
+		Scan(ctx, &externalUser)
+
+	return externalUser.UserId, err
+}
+
 func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
 	count, err := db.db.NewSelect().
 		Table("users").
@@ -155,6 +295,15 @@ func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, 
 		Exec(common.ContextWithValues(ctx, "Database", db), &user)
 
 	return user, err
+}
+
+func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	_, err := db.db.NewDelete().
+		Model((*DatabaseUser)(nil)).
+		Where("id = ?", id).
+		Exec(ctx)
+
+	return err
 }
 
 func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
@@ -230,11 +379,21 @@ func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string
 	return user, err
 }
 
-func (db *DB) DeleteUser(ctx context.Context, id uuid.UUID) error {
-	_, err := db.db.NewDelete().
-		Model((*DatabaseUser)(nil)).
-		Where("id = ?", id).
-		Exec(ctx)
-
-	return err
+func (db *DB) mapAccountToTable(accountType common.AccountType) string {
+	switch accountType {
+	case common.Apple:
+		return "apple_users"
+	case common.AzureAd:
+		return "azure_ad_users"
+	case common.GitHub:
+		return "github_users"
+	case common.Google:
+		return "google_users"
+	case common.Microsoft:
+		return "microsoft_users"
+	case common.TypeOIDC:
+		return "oidc_users"
+	default:
+		return ""
+	}
 }
