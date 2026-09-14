@@ -29,6 +29,16 @@ the official installation instructions for your operating system. Having these p
 seamlessly set up and contribute to our web application. If you have any questions or need assistance with the setup,
 feel free to reach out for support.
 
+Concrete versions used by CI and the production images:
+
+- **Node.js 26** — note that Node 26 no longer bundles Corepack, which Yarn 4 needs. On a fresh install run
+  `npm install -g corepack@0.35.0 --ignore-scripts && corepack enable && corepack install` before your first `yarn`.
+- **Yarn 4.14.1**, pinned by the `packageManager` field in `package.json` and activated through Corepack.
+- **Go 1.26** for the back-end.
+
+There is no `.nvmrc` and no `engines` field, so your version manager will not warn you if you are on a different Node
+version.
+
 ## Development
 
 1. Fork and clone the repository
@@ -39,8 +49,10 @@ letters of your first and last name as prefix. For example, John Doe would creat
 
 1. Run `yarn` to install the Front-end dependencies
 2. Run `yarn start` to start the Front-end in development mode.
-3. Open http://localhost:3000 to view it in the browser. The page will automatically reload if you make changes to the
-code. You will see the build errors and lint warnings in the console.
+3. Open http://localhost:5173 to view it in the browser. The page updates automatically when you change the code.
+
+A deeper introduction to the frontend — architecture, state management, styling and testing — is in the
+[frontend documentation](https://docs.scrumlr.io/dev/frontend/).
 
 ### Server
 
@@ -76,8 +88,10 @@ These tests help validate the behavior and correctness of the code, making it ea
 To run the tests locally, you can use the following command in your terminal:
 
 ```bash
-yarn test
+yarn test --run
 ```
+
+Without `--run`, Vitest starts in watch mode.
 
 ### Server
 
@@ -90,10 +104,10 @@ make test
 
 ## Translating
 
-If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json`
-into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values
-of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a
-few samples.
+Scrumlr currently ships English, German and French. Adding a language means creating translation files under
+`src/i18n/<language code>/` and registering them in a few other places — the full walkthrough is in the
+[translation guide](https://docs.scrumlr.io/dev/frontend/translating/). Once you're done you can open a pull request,
+and we will try to review your translation by a few samples.
 
 ## Definition of Done
 
