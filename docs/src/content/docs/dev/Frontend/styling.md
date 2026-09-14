@@ -68,7 +68,7 @@ color up automatically. The chain spans four files, which is why it is hard to r
 
 **4. The component** puts the class on its root element and everything below reads the variables.
 
-The `-rgb` variants exist purely so you can use a color with alpha — `rgba()` cannot take a hex custom property and add
+The `-rgb` variants exist purely so you can use a color with alpha since `rgba()` cannot take a hex custom property and add
 transparency, so the palette also emits comma-separated channel triplets. `src/index.scss` emits the same `-rgb` pairs for
 the base `--navy--*` and `--gray--*` scales at `:root`.
 
@@ -77,19 +77,8 @@ Adding a color means touching two files: the map in `_colors.scss` and the `Colo
 
 ## Stylelint rules
 
-`.stylelintrc.json` is short:
-
-```json
-{
-  "rules": {
-    "color-no-hex": true,
-    "color-named": "never"
-  }
-}
-```
-
-**Nothing currently runs stylelint** — it is not a package script, not in `lint-staged` and not in CI (see
-[Setup](/dev/frontend/setup/#what-ci-enforces)). The rules still describe how the codebase is written, and they exist for
+**Nothing currently runs stylelint `.stylelintrc.json`** — it is not a package script, not in `lint-staged` and not in CI (see
+[Setup](/docs/src/content/docs/dev/frontend/setup.md#what-ci-enforces)). The rules still describe how the codebase is written, and they exist for
 a concrete reason: a hex value in a component stylesheet cannot participate in theming or in the accent color system. Use
 a token (`styles.$navy--400`) or a custom property (`var(--accent-color--light)`).
 
@@ -105,27 +94,17 @@ Breakpoints are stored as media query *strings* in `_styles.scss` and interpolat
 }
 ```
 
-| Token | Query |
-| --- | --- |
-| `$mini-smartphone` | `max-width: 480px` |
-| `$smartphone` | `max-width: 767px` |
-| `$tablet` | `min-width: 768px` |
-| `$desktop` | `min-width: 1280px` |
-| `$menu-mobile` / `$menu-desktop` | `max-width: 1343px` / `min-width: 1344px` — the menu bar has its own breakpoint |
-
 There is also a container query token, `$container__note`, for note-internal layout.
 
-On small screens the board menus collapse into `MiniMenu`; `MenuBars` handles the switch. Responsiveness across screen
+On small screens the board menus collapse into `MiniMenu`. `MenuBars` handles the switch. Responsiveness across screen
 sizes is a Definition of Done item, so check a narrow viewport before opening a pull request.
 
 ## Z-index
 
-Don't invent z-index values. `_styles.scss` defines a scale built from `$base-z-index` and `$base-z-index-step`
-(`$note-z-index`, `$column-header-z-index`, `$menu-z-index`, `$backdrop-z-index`, `$tooltip-z-index`, …). Add to that
+Don't invent z-index values. `_styles.scss` defines a scale built from `$base-z-index` and `$base-z-index-step`. Add to that
 scale rather than writing a number, so the stacking order stays readable in one place.
 
 ## Print styles
 
-The print view (`components/SettingsDialog/ExportBoard/PrintView`) is a separate render path with its own styles — board
-layout, menus and interactive affordances all have to go away. If you add something structural to the board, check the
-print output too. See [Architecture](/dev/frontend/architecture/#export-import-and-print).
+The print view (`components/SettingsDialog/ExportBoard/PrintView`) is a separate render path with its own styles. If you add something structural to the board, check the
+print output too. See [Architecture](/docs/src/content/docs/dev/frontend/architecture.md#export-import-and-print).
