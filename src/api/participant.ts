@@ -106,8 +106,9 @@ export const ParticipantsAPI = {
     // - user tried to join a board where they are currently banned
     // TODO: doing this with proper error codes would be better, especially the check for the banned status
     if (response.status === 403 || response.status === 400) {
-      const body = (await response.json()) as {status: string; error: string};
-      if (body.error === "participant is currently banned from this session") {
+      const body = (await response.json()) as {status?: string; error?: string};
+      const errorMessage = body.error?.toLowerCase() ?? "";
+      if (errorMessage.includes("participant is currently banned from this session") || errorMessage.includes("banned from this session")) {
         return {
           status: "BANNED",
         };
