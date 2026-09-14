@@ -49,6 +49,7 @@ services:
       SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES: true
       SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION: true
       SCRUMLR_ALLOW_ANONYMOUS_HISTORY: true
+      SCRUMLR_JOIN_RATE_LIMIT: 10
     depends_on:
       database:
         condition: service_healthy
