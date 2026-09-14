@@ -5,8 +5,7 @@ sidebar:
     order: 18
 ---
 
-The conventions below are what reviewers look for. The general contribution rules — branch naming, pull request format,
-semantic commit prefixes, the AI tooling policy — are in the [contributing guideline](/dev/contributing/) and are not
+The conventions below are what reviewers look for. The general contribution rules are in the [contributing guideline](/docs/src/content/docs/dev/contributing.md) and are not
 repeated here.
 
 ## Imports
@@ -15,33 +14,19 @@ repeated here.
   `import {Note} from "../../components/Note"`. Relative imports inside a single component directory are fine.
 - **Import from `react-router`, not `react-router-dom`.** The project is on React Router 8; `react-router-dom` is not a
   dependency.
-- **Import store helpers from `"store"`** (`useAppSelector`, `useAppDispatch`, `ApplicationState`, `retryable`) and slices
-  from `"store/features"`. Never `useSelector` / `useDispatch` from `react-redux` directly — you lose the typing.
+- **Import store helpers from `"store"`** and slices
+  from `"store/features"`. Never `useSelector` / `useDispatch` from `react-redux` directly.
 - **The `.scss` import goes last**, after all module imports.
 
 ## TypeScript
 
-- Strict mode is on. Don't work around it with `any`; if a type is genuinely unknown, use `unknown` and narrow.
+- Strict mode is on. Don't work around it with `any`. If a type is genuinely unknown, use `unknown` and narrow.
 - Name the props type `<ComponentName>Props`, and export it if anything else needs it.
-- **Domain types come from the slice**, not from a local redeclaration — `import {Note, ParticipantRole} from "store/features"`.
-  See [Architecture](/dev/frontend/architecture/#where-types-live).
+- **Domain types come from the slice**, not from a local redeclaration (see [Architecture](/docs/src/content/docs/dev/frontend/architecture.md#where-types-live)).
 - Intentionally unused bindings get an underscore prefix: `(_state, action) => …`, `catch (_error)`. That is what the
   ESLint config allows.
 - Remember that `yarn build` is the only thing that typechecks. The dev server will happily run code that does not
   compile.
-
-## Naming in the store
-
-The single convention most worth getting right, because breaking it produces code that silently does nothing:
-
-- **Imperative** (`addNote`) = a thunk you dispatch. Calls the API, returns nothing, does not change state.
-- **Past tense** (`updatedNotes`) = an action dispatched from the socket handler. This is what reducers handle.
-- **`…Optimistically`** = local-only, never persisted.
-- **`broadcast…`** = fire-and-forget over the socket.
-
-Full explanation in [State & Realtime](/dev/frontend/state-management/#the-naming-convention).
-
-Also: any selector returning an object or an array needs `_.isEqual` as its second argument.
 
 ## Accessibility
 
@@ -59,7 +44,7 @@ In practice:
 
 - Images need meaningful `alt` text; decorative elements get `aria-hidden="true"`.
 - Icon-only buttons need an accessible name. `Button` derives `aria-label` from its `title` prop when there is no visible
-  label — use it.
+  label, so make sure to use it.
 - Dialogs use `react-focus-lock` so focus cannot escape while they are open.
 
 ## Internationalization
@@ -106,5 +91,5 @@ Then check by hand:
 - [ ] No new hardcoded user-facing strings; new keys added to all three locales.
 - [ ] New behaviour has a test.
 
-The project's full [Definition of Done](/dev/contributing/#definition-of-done) covers the non-frontend-specific
+The project's full [Definition of Done](/docs/src/content/docs/dev/contributing.md#definition-of-done) covers the non-frontend-specific
 expectations as well.

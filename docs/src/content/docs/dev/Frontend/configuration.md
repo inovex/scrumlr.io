@@ -77,9 +77,8 @@ tools by setting `scrumlr__server-url` and `scrumlr__websocket-url` by hand. Tha
 Feature flags reach the store from two directions, and both end up in `state.view`:
 
 - **From the server.** The `setServerInfo` thunk calls `GET /info` and the `view` reducer copies the response into
-  `state.view`: `anonymousLoginDisabled`, `enabledAuthProvider`, `allowAnonymousCustomTemplates`,
-  `allowAnonymousBoardCreation` and `feedbackEnabled`. The same response carries `serverTime`, which the reducer turns
-  into `serverTimeOffset` — the clock skew the timer uses so every participant sees the same countdown.
+  `state.view`. The same response carries `serverTime`, which the reducer turns
+  into `serverTimeOffset` - the clock skew the timer uses so every participant sees the same countdown
 - **From the build.** `legacyCreateBoard` is derived from `import.meta.env.VITE_LEGACY_CREATE_BOARD === "true"` in the
   slice's initial state.
 
@@ -94,5 +93,5 @@ through the helpers in `src/utils/storage.ts`, keyed by the constants in `src/co
 
 ## See also
 
-- [Environment Variables](/self-hosting/env-vars/#frontend) — the deployment-side `SCRUMLR_*` names.
-- [Architecture](/dev/frontend/architecture/) — where `config.ts` is consumed.
+- [Environment Variables](/docs/src/content/docs/self-hosting/env-vars.md#frontend) — the deployment-side `SCRUMLR_*` names.
+- [Architecture](/docs/src/content/docs/dev/frontend/architecture.md) — where `config.ts` is consumed.
