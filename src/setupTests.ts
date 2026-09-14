@@ -1,9 +1,7 @@
-import {vi, expect} from "vitest";
-import * as matchers from "@testing-library/jest-dom/matchers";
+import {vi} from "vitest";
+import "@testing-library/jest-dom/vitest"; // implicitly invokes expect.extend for DOM matchers
 import {LocalStorage} from "node-localstorage";
 import path from "path";
-
-expect.extend(matchers);
 
 // local storage
 const LOCALE_STORAGE_PATH = path.resolve(__dirname, "utils/test/localstorage");
