@@ -7,7 +7,7 @@ expect.extend(matchers);
 
 // local storage
 const LOCALE_STORAGE_PATH = path.resolve(__dirname, "utils/test/localstorage");
-global.localStorage = new LocalStorage(LOCALE_STORAGE_PATH);
+vi.stubGlobal("localStorage", new LocalStorage(LOCALE_STORAGE_PATH));
 
 // mock resize observer
 class ResizeObserverMock {
