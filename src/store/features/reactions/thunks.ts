@@ -3,8 +3,8 @@ import {ApplicationState} from "store";
 import {API} from "../../../api";
 import {Reaction} from "./types";
 
-export const getAllReactions = createAsyncThunk<Reaction[], {boardId: string}, {state: ApplicationState}>("notes/getAllNotes", async (payload, {dispatch, getState}) => {
-  const reactions = await API.getReactions(payload.boardId);
+export const getAllReactions = createAsyncThunk<Reaction[], {boardId: string}, {state: ApplicationState}>("reactions/getAllReactions", async (payload, {dispatch, getState}) => {
+  const reactions = (await API.getReactions(payload.boardId)) ?? [];
   return reactions;
 });
 
