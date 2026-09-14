@@ -187,7 +187,9 @@ exports[`RejectionPage > should match snapshot 1`] = `
         class="rejection-page__button-group"
       >
         <button
-          class="rejection-page__return-button"
+          class="rejection-board__to-homepage button button--primary accent-color__planning-pink"
+          data-cy="rejection-board__to-homepage"
+          data-testid="rejection-board__to-homepage"
         >
           Back to Homepage
         </button>

@@ -66,42 +66,15 @@
   line-height: styles.$line-height--large;
 }
 
-.rejection-page__return-button {
-  margin-top: styles.$spacing--base;
-
-  padding: styles.$spacing--base styles.$spacing--xl;
-  color: styles.$gray--000;
-  background: #ff0069;
-
-  font-weight: 700;
-  font-size: styles.$text--base;
-  letter-spacing: styles.$letter-spacing--medium;
-
-  border: none;
-  border-radius: styles.$rounded--full;
-  box-shadow: 0 5px 4px color.change(styles.$pink--500, $alpha: 0.25);
-
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: progress;
-  }
-}
-
-.rejection-page__return-button--retry {
-  background: styles.$blue--500;
-  box-shadow: 0 5px 4px color.change(styles.$blue--500, $alpha: 0.25);
-}
-
 .rejection-page__hint {
-  margin-top: styles.$spacing--xs;
+  margin-top: styles.$spacing--base;
   font-style: italic;
   font-size: styles.$text--sm;
   opacity: 0.75;
 }
 
 .rejection-page__button-group {
+  margin-top: styles.$spacing--base;
   display: flex;
   flex-direction: column;
   gap: styles.$spacing--xs;
@@ -112,10 +85,6 @@
 @media screen and (min-height: 600px) {
   .rejection-page__description {
     margin-top: styles.$spacing--base;
-  }
-
-  .rejection-page__return-button {
-    margin-top: styles.$spacing--xl + styles.$spacing--xs; // 40px
   }
 }
 

@@ -5,6 +5,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {API} from "api";
 import {useAppDispatch} from "store";
 import {permittedBoardAccess} from "store/features/board";
+import {Button} from "components/Button";
 import StanLight from "assets/stan/Stan_Toilette_Light.svg?react";
 import StanDark from "assets/stan/Stan_Toilette_Dark.svg?react";
 import BackgroundFreeFormLight from "assets/pages/404/404_Background_light.svg?react";
@@ -101,19 +102,19 @@ export const RejectionPage = ({status}: RejectionPageProps) => {
           {isBanned && <div className="rejection-page__hint">{t("RejectionPage.bannedRetryHint", {interval: retryIntervalLabel})}</div>}
           <div className="rejection-page__button-group">
             {isBanned && (
-              <button type="button" className="rejection-page__return-button rejection-page__return-button--retry" onClick={tryRejoin} disabled={isRetrying}>
+              <Button className="rejection-board__retry" onClick={tryRejoin} disabled={isRetrying} testId="rejection-board__retry" color="backlog-blue">
                 {isRetrying ? t("RejectionPage.retrying") : t("RejectionPage.retry")}
-              </button>
+              </Button>
             )}
-            <button
-              type="button"
-              className="rejection-page__return-button"
+            <Button
+              className="rejection-board__to-homepage"
               onClick={() => {
                 window.location.pathname = "/";
               }}
+              testId="rejection-board__to-homepage"
             >
               {t("RejectionPage.button")}
-            </button>
+            </Button>
           </div>
         </div>
         <div className="rejection-page__image-wrapper">
