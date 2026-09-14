@@ -13,7 +13,8 @@ Scrumlr is composed of 4 main services:
 - **frontend**: Our React frontend that is served statically.
 - **backend**: Our Go backend that serves the API and WebSocket.
 - **database**: A PostgreSQL database that stores all data.
-- **nats**: A NATS server which is used to send events asynchronously and keep our backend services in sync.
+- **message broker**: A NATS or redis server which is used to send, receive and then process the events asynchronously.
+For multi note deployments this keeps our backends in sync.
 
 ### Getting started
 

@@ -13,6 +13,8 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const getReactionFailureMessage = "failed to get reaction"
+
 type ReactionDatabase interface {
 	Get(ctx context.Context, id uuid.UUID) (DatabaseReaction, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseReaction, error)
@@ -95,7 +97,7 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 			return nil, CreateReactionError(NotFound, "reaction not found", err)
 		}
 
-		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
+		otel.RecordErrorSpan(span, err, new(getReactionFailureMessage))
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
 		return nil, CreateReactionError(Internal, "unable to get reaction", err)
 	}
@@ -136,7 +138,7 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 
 	currentReaction, err := service.Get(ctx, id)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
+		otel.RecordErrorSpan(span, err, new(getReactionFailureMessage))
 		return nil, err
 	}
 
@@ -172,7 +174,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 
 	reaction, err := service.Get(ctx, id)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get reaction"))
+		otel.RecordErrorSpan(span, err, new(getReactionFailureMessage))
 		return err
 	}
 

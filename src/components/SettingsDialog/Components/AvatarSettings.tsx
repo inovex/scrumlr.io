@@ -63,9 +63,9 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         .map(([key, value]) => {
           const typedKey = key as keyof AvataaarProps;
           const typedValue = value as AvataaarProps[keyof AvataaarProps][];
-          return Object.hasOwnProperty.call(properties, typedKey) && typedValue.some((val) => properties[typedKey] === val);
+          return Object.hasOwn(properties, typedKey) && typedValue.includes(properties[typedKey]);
         })
-        .some((val) => val)) ??
+        .some(Boolean)) ??
     false;
 
   const renderAvatarGroup = (group: AvatarGroup) => {

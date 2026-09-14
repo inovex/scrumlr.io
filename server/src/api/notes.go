@@ -42,7 +42,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -160,7 +160,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -207,7 +207,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return

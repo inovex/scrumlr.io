@@ -3,7 +3,9 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"net/http"
 	"testing"
 	"time"
 
@@ -231,6 +233,29 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	assert.True(t, board.ShowAuthors)
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Join_PublicBoard() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+	userID := suite.users["Santa"].ID
+
+	// non existing session
+	shouldRedirect, location, status, err := suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.False(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusCreated, status)
+
+	// existing session
+	shouldRedirect, location, status, err = suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.True(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusSeeOther, status)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
@@ -603,6 +628,24 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
 	assert.ErrorIs(t, err, sql.ErrNoRows)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Export() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+
+	export, err := suite.service.Export(ctx, board.ID, "application/json")
+
+	require.NoError(t, err)
+	require.NotNil(t, export)
+	assert.Equal(t, board.ID, export.Board.ID)
+	assert.Equal(t, board.Name, export.Board.Name)
+	require.Len(t, export.Participants, 1)
+	assert.Equal(t, suite.users["Stan"].ID, export.Participants[0].UserID)
+	assert.Empty(t, export.Columns)
+	assert.Empty(t, export.Notes)
+	assert.Empty(t, export.Votings)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {

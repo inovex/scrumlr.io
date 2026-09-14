@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,6 +30,12 @@ import (
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
+
+const getBoardFailureMessage = "failed to get board"
+const getColumnsFailureMessage = "failed to get columns"
+const getNotesFailureMessage = "failed to get notes"
+const byPassphrasePolicyMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
+const boardTimerUpdateFailureMessage = "failed to update board timer"
 
 type Service struct {
 	clock                    timeprovider.TimeProvider
@@ -156,6 +163,50 @@ func (service *Service) Import(ctx context.Context, owner uuid.UUID, request Imp
 	return &ImportBoardResponse{Board: board, ImportWarnings: warnings}, nil
 }
 
+func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join")
+	defer span.End()
+
+	sessionExists, err := service.sessionService.Exists(ctx, board.ID, user)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to check session"))
+		return false, "", 0, err
+	}
+
+	if sessionExists {
+		banned, err := service.sessionService.IsParticipantBanned(ctx, board.ID, user)
+		if err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to check if participant is banned"))
+			return false, "", 0, err
+		}
+
+		if banned {
+			err := errors.New("participant is currently banned from this session")
+			otel.RecordErrorSpan(span, err, new("participant is banned"))
+			return false, "", 0, CreateBoardError(Forbidden, err.Error(), err)
+		}
+
+		return true, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusSeeOther, nil
+	}
+
+	switch board.AccessPolicy {
+
+	case Public:
+		return service.joinPublic(ctx, board, user)
+
+	case ByPassphrase:
+		return service.joinByPassphrase(ctx, board, user, request)
+
+	case ByInvite:
+		return service.joinByInvite(ctx, board, user)
+
+	default:
+		err := errors.New("invalid access policy")
+		otel.RecordErrorSpan(span, err, new("invalid access policy"))
+		return false, "", 0, CreateBoardError(BadRequest, err.Error(), err)
+	}
+}
+
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
@@ -172,9 +223,9 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 			return nil, CreateBoardError(NotFound, "no board found", err)
 		}
 
-		otel.RecordErrorSpan(span, err, new("failed to get board"))
+		otel.RecordErrorSpan(span, err, new(getBoardFailureMessage))
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, CreateBoardError(Internal, "failed to get board", err)
+		return nil, CreateBoardError(Internal, getBoardFailureMessage, err)
 	}
 
 	return new(Board).From(board), err
@@ -218,7 +269,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 	for _, id := range boardIDs {
 		board, err := service.Get(ctx, id)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to get board"))
+			otel.RecordErrorSpan(span, err, new(getBoardFailureMessage))
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
@@ -232,14 +283,14 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to get columns"))
+			otel.RecordErrorSpan(span, err, new(getColumnsFailureMessage))
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 
 		boardNotes, err := service.notesService.GetAll(ctx, id)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to get notes"))
+			otel.RecordErrorSpan(span, err, new(getNotesFailureMessage))
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
@@ -283,7 +334,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 	board, err := service.Get(ctx, boardID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get board"))
+		otel.RecordErrorSpan(span, err, new(getBoardFailureMessage))
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
@@ -304,14 +355,14 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 	boardColumns, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get columns"))
+		otel.RecordErrorSpan(span, err, new(getColumnsFailureMessage))
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardNotes, err := service.notesService.GetAll(ctx, boardID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get notes"))
+		otel.RecordErrorSpan(span, err, new(getNotesFailureMessage))
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
@@ -349,6 +400,36 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 	}, nil
 }
 
+func (service *Service) Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error) {
+	fullBoard, err := service.FullBoard(ctx, boardID)
+	if err != nil {
+		return nil, err
+	}
+
+	visibleColumns, visibleNotes := getVisibleData(fullBoard)
+
+	switch accept {
+	case "", "*/*", "application/json":
+		return &ExportBoardResponse{
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
+			Columns:      visibleColumns,
+			Notes:        visibleNotes,
+			Votings:      fullBoard.Votings,
+		}, nil
+	case "text/csv":
+		records, err := service.buildCSVRecords(ctx, fullBoard, visibleColumns, visibleNotes)
+		if err != nil {
+			return nil, err
+		}
+		return &ExportBoardResponse{
+			CSVRecords: records,
+		}, nil
+	default:
+		return nil, CreateBoardError(BadRequest, fmt.Sprintf("unsupported accept type: %s", accept), nil)
+	}
+}
+
 func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.update")
@@ -383,9 +464,9 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		switch *body.AccessPolicy {
 		case ByInvite, Public:
 			if body.Passphrase != nil {
-				err := errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'")
+				err := errors.New(byPassphrasePolicyMessage)
 				otel.RecordErrorSpan(span, err, nil)
-				return nil, CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", err)
+				return nil, CreateBoardError(BadRequest, byPassphrasePolicyMessage, err)
 			}
 		case ByPassphrase:
 			if body.Passphrase == nil || len(*body.Passphrase) == 0 {
@@ -464,9 +545,9 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 
 	board, err := service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to update board timer"))
+		otel.RecordErrorSpan(span, err, new(boardTimerUpdateFailureMessage))
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, "failed to update board timer", err)
+		return nil, CreateBoardError(Internal, boardTimerUpdateFailureMessage, err)
 	}
 
 	service.updatedBoardTimer(ctx, board)
@@ -486,9 +567,9 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 
 	board, err := service.database.GetBoard(ctx, id)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get board"))
+		otel.RecordErrorSpan(span, err, new(getBoardFailureMessage))
 		log.Errorw("unable to get board", "boardID", id, "err", err)
-		return nil, CreateBoardError(Internal, "failed to get board", err)
+		return nil, CreateBoardError(Internal, getBoardFailureMessage, err)
 	}
 
 	var timerStart time.Time
@@ -512,9 +593,9 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 
 	board, err = service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to update board timer"))
+		otel.RecordErrorSpan(span, err, new(boardTimerUpdateFailureMessage))
 		log.Errorw("unable to update board timer", "err", err)
-		return nil, CreateBoardError(Internal, "failed to update board timer", err)
+		return nil, CreateBoardError(Internal, boardTimerUpdateFailureMessage, err)
 	}
 
 	service.updatedBoardTimer(ctx, board)
@@ -595,13 +676,171 @@ func (service *Service) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
+func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
+	visibleColumns := make([]*columns.Column, 0, len(board.Columns))
+	visibleColIDs := make(map[uuid.UUID]struct{})
+
+	for _, column := range board.Columns {
+		if column.Visible {
+			visibleColumns = append(visibleColumns, column)
+			visibleColIDs[column.ID] = struct{}{}
+		}
+	}
+
+	visibleNotes := make([]*notes.Note, 0, len(board.Notes))
+	for _, note := range board.Notes {
+		if _, ok := visibleColIDs[note.Position.Column]; ok {
+			visibleNotes = append(visibleNotes, note)
+		}
+	}
+
+	return visibleColumns, visibleNotes
+}
+
+func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
+	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+	for index, voting := range board.Votings {
+		if voting.Status == votings.Closed {
+			header = append(header, fmt.Sprintf("voting_%d", index))
+		}
+	}
+
+	colNames := make(map[uuid.UUID]string, len(cols))
+	for _, c := range cols {
+		colNames[c.ID] = c.Name
+	}
+
+	validSessionUsers := make(map[uuid.UUID]struct{}, len(board.BoardSessions))
+	for _, session := range board.BoardSessions {
+		validSessionUsers[session.UserID] = struct{}{}
+	}
+
+	//cache users to avoid querying the DB for the same author repeatedly
+	userCache := make(map[uuid.UUID]string)
+
+	records := [][]string{header}
+	for _, note := range notes {
+		stack := "null"
+		if note.Position.Stack.Valid {
+			stack = note.Position.Stack.UUID.String()
+		}
+
+		colName := note.Position.Column.String()
+		if name, ok := colNames[note.Position.Column]; ok {
+			colName = name
+		}
+
+		authorName := note.Author.String()
+		if _, ok := validSessionUsers[note.Author]; ok {
+			if cachedName, exists := userCache[note.Author]; exists {
+				authorName = cachedName
+			} else {
+				user, err := service.userService.Get(ctx, note.Author)
+				if err != nil {
+					return nil, err
+				}
+				authorName = user.Name
+				userCache[note.Author] = user.Name
+			}
+		}
+
+		row := []string{
+			note.ID.String(),
+			note.Author.String(),
+			authorName,
+			note.Text,
+			note.Position.Column.String(),
+			colName,
+			strconv.Itoa(note.Position.Rank),
+			stack,
+		}
+
+		for _, voting := range board.Votings {
+			if voting.Status == votings.Closed {
+				votes := "0"
+				if voting.VotingResults != nil {
+					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
+				}
+				row = append(row, votes)
+			}
+		}
+
+		records = append(records, row)
+	}
+
+	return records, nil
+}
+
+func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_public")
+	defer span.End()
+
+	_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{
+		Board: board.ID,
+		User:  user,
+		Role:  role.ParticipantRole,
+	})
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to create session"))
+		return false, "", 0, err
+	}
+
+	return false, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusCreated, nil
+}
+
+func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_passphrase")
+	defer span.End()
+
+	if request.Passphrase == "" {
+		err := errors.New("missing passphrase")
+		otel.RecordErrorSpan(span, err, new("missing passphrase"))
+		return false, "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
+	}
+
+	if board.Passphrase == nil || board.Salt == nil {
+		err := errors.New("board passphrase is not configured")
+		otel.RecordErrorSpan(span, err, new("board passphrase is not configured"))
+		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
+	}
+
+	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
+	if encodedPassphrase != *board.Passphrase {
+		err := errors.New("wrong passphrase")
+		otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
+		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
+	}
+
+	return service.joinPublic(ctx, board, user)
+}
+
+func (service *Service) joinByInvite(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_invite")
+	defer span.End()
+
+	sessionRequestExists, err := service.sessionRequestService.Exists(ctx, board.ID, user)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to check session requests"))
+		return false, "", 0, err
+	}
+
+	if !sessionRequestExists {
+		if _, err = service.sessionRequestService.Create(ctx, board.ID, user); err != nil {
+			otel.RecordErrorSpan(span, err, new("failed to create session request"))
+			return false, "", 0, err
+		}
+	}
+
+	return false, fmt.Sprintf("/boards/%s/requests/%s", board.ID, user), http.StatusSeeOther, nil
+}
+
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
 	var board DatabaseBoardInsert
 
 	switch body.AccessPolicy {
 	case Public, ByInvite:
 		if body.Passphrase != nil {
-			err := CreateBoardError(BadRequest, "passphrase should not be set for policies except 'BY_PASSPHRASE'", errors.New("passphrase should not be set for policies except 'BY_PASSPHRASE'"))
+			err := CreateBoardError(BadRequest, byPassphrasePolicyMessage, errors.New(byPassphrasePolicyMessage))
 			return board, err
 		}
 
@@ -717,7 +956,7 @@ func (service *Service) syncBoardSettingChange(ctx context.Context, boardID uuid
 
 	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get columns"))
+		otel.RecordErrorSpan(span, err, new(getColumnsFailureMessage))
 		return CreateBoardError(Internal, "unable to retrieve columns, following a updated board call", err)
 	}
 
@@ -728,7 +967,7 @@ func (service *Service) syncBoardSettingChange(ctx context.Context, boardID uuid
 
 	notesOnBoard, err := service.notesService.GetAll(ctx, boardID, columnsID...)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get notes"))
+		otel.RecordErrorSpan(span, err, new(getNotesFailureMessage))
 		return CreateBoardError(Internal, "unable to retrieve notes, following a updated board call", err)
 	}
 

@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
@@ -27,7 +28,7 @@ import (
 )
 
 // @title			Scrumlr backend
-// @version		5.3.1
+// @version		5.4.0
 // @description	This is the scrumlr backend server.
 // @termsOfService	https://scrumlr.io/terms
 // @contact.email	info@scrumlr.io
@@ -557,13 +558,27 @@ func run(ctx context.Context, cli *cli.Command) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
+	serverconfig := info.ServerConfig{
+		AnonymousLoginDisabled:        cli.Bool("disable-anonymous-login"),
+		AllowAnonymousCustomTemplates: cli.Bool("allow-anonymous-custom-templates"),
+		AllowAnonymousBoardCreation:   cli.Bool("allow-anonymous-board-creation"),
+		AllowAnonymousHistory:         cli.Bool("allow-anonymous-history"),
+	}
+
+	infoService := initializer.InitializeInfoService(authConfig, feedbackService, serverconfig)
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
+	healthApi := apiInitializer.InitializeHealthApi(healthService)
+	feedbackApi := apiInitializer.InitializeFeedbackApi(feedbackService)
+	infoApi := apiInitializer.InitializeInfoApi(infoService)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
-	userApi := apiInitializer.InitializeUserApi(userService, sessionService, cli.Bool("allow-anonymous-board-creation"), cli.Bool("allow-anonymous-custom-templates"))
+	userApi := apiInitializer.InitializeUserApi(userService, sessionService, serverconfig.AllowAnonymousBoardCreation, serverconfig.AllowAnonymousCustomTemplates)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
+	infoRoutes := routesInitializer.InitializeInfoRoutes(infoApi)
+	healthRoutes := routesInitializer.InitializeHealthRoutes(healthApi)
+	feedbackRoutes := routesInitializer.InitializeFeedbackRoutes(feedbackApi)
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
@@ -574,6 +589,9 @@ func run(ctx context.Context, cli *cli.Command) error {
 		wsService,
 		authConfig,
 
+		healthRoutes,
+		feedbackRoutes,
+		infoRoutes,
 		userRoutes,
 		sessionRoutes,
 		swaggerRoutes,
@@ -586,18 +604,16 @@ func run(ctx context.Context, cli *cli.Command) error {
 		reactionService,
 		sessionService,
 		sessionRequestService,
-		healthService,
-		feedbackService,
 		boardReactionService,
 		boardTemplateService,
 		columnTemplateService,
 
 		logger.GetLogLevel() == zap.DebugLevel,
 		!cli.Bool("disable-check-origin"),
-		cli.Bool("disable-anonymous-login"),
-		cli.Bool("allow-anonymous-custom-templates"),
-		cli.Bool("allow-anonymous-board-creation"),
-		cli.Bool("allow-anonymous-history"),
+		serverconfig.AnonymousLoginDisabled,
+		serverconfig.AllowAnonymousCustomTemplates,
+		serverconfig.AllowAnonymousBoardCreation,
+		serverconfig.AllowAnonymousHistory,
 		cli.Bool("auth-enable-experimental-file-system-store"),
 		cli.Bool("enable-swagger"),
 		cli.Int("join-rate-limit"),

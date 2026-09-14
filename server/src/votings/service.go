@@ -12,6 +12,10 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const votingNotFoundMessage = "no active voting session found"
+const getVotingFailureMessage = "failed to get voting"
+const getVotesFailureMessage = "failed to get votes"
+
 type VotingDatabase interface {
 	Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error)
 	Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
@@ -105,12 +109,12 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			otel.RecordErrorSpan(span, err, new("voting not found"))
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
-		otel.RecordErrorSpan(span, err, new("failed to get voting"))
+		otel.RecordErrorSpan(span, err, new(getVotingFailureMessage))
 		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, CreateVotingError(Internal, "failed to get voting", err)
+		return nil, CreateVotingError(Internal, getVotingFailureMessage, err)
 	}
 
 	if voting.Status == Open {
@@ -119,7 +123,7 @@ func (service *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting
 
 	receivedVotes, err := service.database.GetVotes(ctx, boardID, VoteFilter{Voting: &id})
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get votes"))
+		otel.RecordErrorSpan(span, err, new(getVotesFailureMessage))
 		log.Errorw("unable to get votes", "voting", id, "error", err)
 		return nil, CreateVotingError(Internal, "unable to get votes", err)
 	}
@@ -146,7 +150,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Votin
 
 	votes, err := service.database.GetVotes(ctx, boardID, VoteFilter{})
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get votes"))
+		otel.RecordErrorSpan(span, err, new(getVotesFailureMessage))
 		log.Errorw("unable to get votes", "board", boardID, "error", err)
 		return nil, CreateVotingError(Internal, "unable to get votes", err)
 	}
@@ -169,7 +173,7 @@ func (service *Service) GetOpen(ctx context.Context, boardID uuid.UUID) (*Voting
 			return nil, nil
 		}
 
-		otel.RecordErrorSpan(span, err, new("failed to get voting"))
+		otel.RecordErrorSpan(span, err, new(getVotingFailureMessage))
 		log.Errorw("unable to get open votings", "board", boardID, "error", err)
 		return nil, CreateVotingError(Internal, "unable to get open votings", err)
 	}
@@ -188,7 +192,7 @@ func (service *Service) GetVotes(ctx context.Context, board uuid.UUID, f VoteFil
 
 	votes, err := service.database.GetVotes(ctx, board, f)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get votes"))
+		otel.RecordErrorSpan(span, err, new(getVotesFailureMessage))
 		log.Errorw("unable to get votes", "err", err)
 		return nil, CreateVotingError(Internal, "unable to get votes", err)
 	}
@@ -210,7 +214,7 @@ func (service *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, e
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			otel.RecordErrorSpan(span, err, new("no active voting session"))
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to add vote"))
@@ -263,7 +267,7 @@ func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUI
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			otel.RecordErrorSpan(span, err, new("no voting found to update"))
-			return nil, CreateVotingError(NotFound, "no active voting session found", err)
+			return nil, CreateVotingError(NotFound, votingNotFoundMessage, err)
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to update voting"))
@@ -275,9 +279,9 @@ func (service *Service) Update(ctx context.Context, id uuid.UUID, board uuid.UUI
 	if votingStatus == Closed {
 		receivedVotes, err = service.database.GetVotes(ctx, board, VoteFilter{Voting: &id})
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to get votes"))
-			log.Errorw("unable to get votes", "err", err)
-			return nil, CreateVotingError(Internal, "unable to get votes", err)
+			otel.RecordErrorSpan(span, err, new(getVotesFailureMessage))
+			log.Errorw(getVotesFailureMessage, "err", err)
+			return nil, CreateVotingError(Internal, getVotesFailureMessage, err)
 		}
 	}
 

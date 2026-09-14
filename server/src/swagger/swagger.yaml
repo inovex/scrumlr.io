@@ -5,25 +5,6 @@ definitions:
         description: The display name of the user.
         type: string
     type: object
-  api.Info:
-    properties:
-      allowAnonymousBoardCreation:
-        type: boolean
-      allowAnonymousCustomTemplates:
-        type: boolean
-      allowAnonymousHistory:
-        type: boolean
-      anonymousLoginDisabled:
-        type: boolean
-      authProvider:
-        items:
-          $ref: '#/definitions/common.AccountType'
-        type: array
-      feedbackEnabled:
-        type: boolean
-      serverTime:
-        type: string
-    type: object
   avatar.AccessoriesType:
     enum:
     - Blank
@@ -816,6 +797,25 @@ definitions:
     - BugReport
     - FeatureRequest
     - Praise
+  info.Info:
+    properties:
+      allowAnonymousBoardCreation:
+        type: boolean
+      allowAnonymousCustomTemplates:
+        type: boolean
+      allowAnonymousHistory:
+        type: boolean
+      anonymousLoginDisabled:
+        type: boolean
+      authProvider:
+        items:
+          $ref: '#/definitions/common.AccountType'
+        type: array
+      feedbackEnabled:
+        type: boolean
+      serverTime:
+        type: string
+    type: object
   notes.Note:
     properties:
       author:
@@ -1125,7 +1125,7 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.3.1
+  version: 5.4.0
 paths:
   /boards:
     get:
@@ -2743,6 +2743,50 @@ paths:
       summary: Create a board reaction
       tags:
       - board reactions
+  /boards/{id}/export:
+    get:
+      consumes:
+      - json text/csv
+      description: Export a board
+      parameters:
+      - description: jwt token to authenticate
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      - description: id of the board to export
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - json text/csv
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/boards.Board'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "406":
+          description: Not Acceptable
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.APIError'
+      summary: Export a board
+      tags:
+      - boards
   /boards/{id}/participants:
     post:
       consumes:
@@ -2788,50 +2832,6 @@ paths:
           schema:
             $ref: '#/definitions/common.APIError'
       summary: Join an existing board
-      tags:
-      - boards
-  /boards{id}/export:
-    get:
-      consumes:
-      - json text/csv
-      description: Export a board
-      parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to export
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - json text/csv
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/boards.Board'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "406":
-          description: Not Acceptable
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.APIError'
-      summary: Export a board
       tags:
       - boards
   /boards{id}/timer:
@@ -3048,7 +3048,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Info'
+            $ref: '#/definitions/info.Info'
       summary: Show server info
       tags:
       - info

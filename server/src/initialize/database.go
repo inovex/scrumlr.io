@@ -68,12 +68,26 @@ func InitializeDatabase(ctx context.Context, cli *cli.Command) (*bun.DB, error) 
 		return nil, err
 	}
 
+	version, _, err := m.Version()
+	if errors.Is(err, migrate.ErrNilVersion) {
+		log.Infow("no database migrations yet applied")
+	} else if err != nil {
+		return nil, err
+	} else {
+		log.Infow("current active migration", "version", version)
+	}
+
 	err = m.Up()
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return nil, err
 	}
 
-	log.Infow("successfully migrated database")
+	version, _, err = m.Version()
+	if err != nil {
+		log.Error("failed to get migration version")
+	}
+
+	log.Infow("successfully migrated database", "version", version)
 
 	return InitializeBun(db, logger.GetLogLevel()), nil
 }

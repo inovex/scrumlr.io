@@ -2427,6 +2427,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/boards/{id}/export": {
+            "get": {
+                "description": "Export a board",
+                "consumes": [
+                    "json text/csv"
+                ],
+                "produces": [
+                    "json text/csv"
+                ],
+                "tags": [
+                    "boards"
+                ],
+                "summary": "Export a board",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "jwt token to authenticate",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "id of the board to export",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/boards.Board"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.APIError"
+                        }
+                    }
+                }
+            }
+        },
         "/boards/{id}/participants": {
             "post": {
                 "description": "Join an existing board",
@@ -2488,72 +2554,6 @@ const docTemplate = `{
                     },
                     "429": {
                         "description": "Too Many Requests"
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    }
-                }
-            }
-        },
-        "/boards{id}/export": {
-            "get": {
-                "description": "Export a board",
-                "consumes": [
-                    "json text/csv"
-                ],
-                "produces": [
-                    "json text/csv"
-                ],
-                "tags": [
-                    "boards"
-                ],
-                "summary": "Export a board",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "jwt token to authenticate",
-                        "name": "Cookie",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "id of the board to export",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/boards.Board"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/common.APIError"
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable"
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -2887,7 +2887,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.Info"
+                            "$ref": "#/definitions/info.Info"
                         }
                     }
                 }
@@ -3921,35 +3921,6 @@ const docTemplate = `{
                 }
             }
         },
-        "api.Info": {
-            "type": "object",
-            "properties": {
-                "allowAnonymousBoardCreation": {
-                    "type": "boolean"
-                },
-                "allowAnonymousCustomTemplates": {
-                    "type": "boolean"
-                },
-                "allowAnonymousHistory": {
-                    "type": "boolean"
-                },
-                "anonymousLoginDisabled": {
-                    "type": "boolean"
-                },
-                "authProvider": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/common.AccountType"
-                    }
-                },
-                "feedbackEnabled": {
-                    "type": "boolean"
-                },
-                "serverTime": {
-                    "type": "string"
-                }
-            }
-        },
         "avatar.AccessoriesType": {
             "type": "string",
             "enum": [
@@ -4973,6 +4944,35 @@ const docTemplate = `{
                 "Praise"
             ]
         },
+        "info.Info": {
+            "type": "object",
+            "properties": {
+                "allowAnonymousBoardCreation": {
+                    "type": "boolean"
+                },
+                "allowAnonymousCustomTemplates": {
+                    "type": "boolean"
+                },
+                "allowAnonymousHistory": {
+                    "type": "boolean"
+                },
+                "anonymousLoginDisabled": {
+                    "type": "boolean"
+                },
+                "authProvider": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.AccountType"
+                    }
+                },
+                "feedbackEnabled": {
+                    "type": "boolean"
+                },
+                "serverTime": {
+                    "type": "string"
+                }
+            }
+        },
         "notes.Note": {
             "type": "object",
             "properties": {
@@ -5412,7 +5412,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "5.3.1",
+	Version:          "5.4.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
