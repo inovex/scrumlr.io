@@ -56,15 +56,6 @@ In practice:
 - New `retryable` error keys must exist under `Error` in `src/i18n/en/translation.json` before the thunk will compile.
 - Full guide: [Contributing Translations](/dev/frontend/translating/).
 
-## Styling
-
-- BEM class names, one `.scss` file per component.
-- No hex or named colors in component stylesheets — use the tokens or the accent-color custom properties.
-- Dark theme rules go in a `[data-theme="dark"]` block at the bottom of the same file.
-- Don't invent z-index values; extend the scale in `constants/_styles.scss`.
-
-Details in [Styling & Theming](/dev/frontend/styling/).
-
 ## Rendering user content
 
 Note text goes through `components/Note/NoteTextContent`, which handles markdown (`marked`) and link detection

@@ -13,7 +13,7 @@ Before starting your translation contribution:
 
 1. **Check existing languages**: Review `src/i18n/` to see currently supported languages
 2. **Language code**: Identify the appropriate ISO 639-1 language code for your language (e.g., `fr` for French, `es` for Spanish)
-3. **Development setup**: Ensure you have the development environment set up (see [Setup](/dev/frontend/setup/) and the [Contributing Guide](/dev/contributing/))
+3. **Development setup**: Ensure you have the development environment set up (see [Setup](/docs/src/content/docs/dev/frontend/setup.md) and the [Contributing Guide](/docs/src/content/docs/dev/contributing.md))
 
 ## Translation Files Structure
 
@@ -23,7 +23,7 @@ Scrumlr uses two main translation files per language:
 - `src/i18n/{language_code}/templates.json` - Board template translations
 
 Adding a language touches more than these two files. There are **four separate hardcoded language lists** plus two
-directories of static assets — the steps below cover all of them, and skipping any one leaves a partly broken language.
+directories of static assets.
 
 ## Step-by-Step Process
 
@@ -41,46 +41,7 @@ cp src/i18n/en/templates.json src/i18n/es/templates.json
 
 ### 2. Translate Content
 
-#### Main Translation File (`translation.json`)
-
-Open `src/i18n/es/translation.json` and translate all JSON values while keeping the keys unchanged:
-
-```json
-{
-  "InfoBar": {
-    "ReturnToPresentedNote": "Your translation here",
-    "VotingIsAnonymous": "Your translation here",
-    "VotingIsNotAnonymous": "Your translation here"
-  },
-  "LegacyNewBoard": {
-    "boardName": "Your translation here",
-    "createNewBoard": "Your translation here"
-    // ... continue translating all values
-  }
-}
-```
-
-#### Template Translations (`templates.json`)
-
-Similarly, translate the template file:
-
-```json
-{
-  "template": {
-    "lean_coffee": {
-      "name": "Your translation here",
-      "description": "Your translation here",
-      "column": {
-        "lean_coffee": {
-          "name": "Your translation here",
-          "description": "Your translation here"
-        }
-        // ... continue translating
-      }
-    }
-  }
-}
-```
+Open `src/i18n/es/translation.json` and `src/i18n/es/templates.json` and translate all JSON values while keeping the keys unchanged.
 
 ### 3. Update the i18n Configuration
 
@@ -104,9 +65,6 @@ export const resources = {
   },
 };
 ```
-
-The `AppLanguage` type is derived from `resources`, so adding an entry here is what makes the language known to the rest
-of the codebase.
 
 ### 4. Add Flag Icon
 
@@ -136,12 +94,6 @@ const languages = [
   {icon: Spanish, text: t("Language.spanish"), callback: () => changeLanguage("es"), code: "es"},
 ];
 ```
-
-:::caution
-The `?react` query is required. `vite-plugin-svgr` is configured with `include: '**/*.svg?react'`, so only that form
-produces a React component — a plain `.svg` import gives you a URL string. The old Create React App syntax
-`import {ReactComponent as Spanish} from "assets/flags/ES.svg"` **no longer compiles** and appears nowhere in `src/`.
-:::
 
 ### 6. Add the Language to the Homepage Picker
 
@@ -185,6 +137,7 @@ Skip this and tests that assert on translated text will render raw keys, with no
 Add the language name to the `Language` key of **every** translation file, including the new one:
 
 e.g. `src/i18n/en/translation.json`:
+
 ```json
 {
   "Language": {
@@ -222,20 +175,23 @@ public/locales/es/cookiePolicy.md
 
 These are **optional** — they are legal text, and a machine translation is worse than none. If you skip them, the legal
 pages will simply be empty in your language, as is currently the case for French. Note that the pages are only shown at
-all when the `scrumlr__show-legal-documents` cookie is not `false`; see
-[Configuration](/dev/frontend/configuration/#runtime-configuration-cookies).
+all when the `scrumlr__show-legal-documents` cookie is not `false` (see
+[Configuration](/docs/src/content/docs/dev/frontend/configuration.md#runtime-configuration-cookies)).
 
 ### 11. Testing Your Translation
 
 1. **Run the key parity test**:
+
    ```bash
    yarn test --run src/__tests__/locales.test.ts
    ```
+
    This compares your `translation.json` against the English one. Be aware of its limits: it only checks the **top two
    levels** of keys, and it does not look at `templates.json` at all. A green run means you have not missed a whole
    section — not that the file is complete.
 
 2. **Start the development server**:
+
    ```bash
    yarn start
    ```
@@ -343,9 +299,11 @@ If you need assistance during the translation process:
 We want to give a huge shoutout to all the incredible people who have made Scrumlr accessible to users around the world! 🙌
 
 ### 🇩🇪 German (Deutsch)
+
 - Core team contributors 💪
 
 ### 🇫🇷 French (Français)
+
 - **Loule95450** - Thank you for adding French support! 🥐✨
 
 ### 🚀 Want to see your name here?
@@ -354,7 +312,7 @@ Join our community and help make Scrumlr available in your language! Every contr
 
 ---
 
-## 💝 Thank You!
+## 💝 Thank You
 
 Thank you for contributing to make Scrumlr accessible to more users worldwide! Your efforts help break down language barriers and bring the power of collaborative retrospectives to teams everywhere.
 
