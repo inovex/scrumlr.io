@@ -1469,12 +1469,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=20.0.0, @types/node@npm:^26.4.0":
+"@types/node@npm:*, @types/node@npm:>=20.0.0":
   version: 26.4.0
   resolution: "@types/node@npm:26.4.0"
   dependencies:
     undici-types: "npm:~8.3.0"
   checksum: 10c0/e6fc94ea3b58fb8040b38c465dec1c53c1fd9d2c092c81f699d28799726baf59f12e1600318e79e8e6f985bb919dab6ae820180b942b8e38c51acaad63e8aada
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^26.4.1":
+  version: 26.4.1
+  resolution: "@types/node@npm:26.4.1"
+  dependencies:
+    undici-types: "npm:~8.3.0"
+  checksum: 10c0/29568336db8bc67740744782492af0e81ab1f88d86eaa07e38cf0a4c8bae7250a7b4b85c80ac1014fc98b2bc6d4bcac872b2c494ee0671b3880eada7c1fdbc94
   languageName: node
   linkType: hard
 
@@ -6714,7 +6723,7 @@ __metadata:
     "@types/i18next-fs-backend": "npm:^1.2.0"
     "@types/js-cookie": "npm:^3.0.6"
     "@types/lodash": "npm:^4.17.25"
-    "@types/node": "npm:^26.4.0"
+    "@types/node": "npm:^26.4.1"
     "@types/node-localstorage": "npm:^1.3.3"
     "@types/qrcode.react": "npm:^3.0.0"
     "@types/react": "npm:^19.2.18"
