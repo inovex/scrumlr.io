@@ -19,7 +19,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
@@ -30,15 +29,14 @@ import (
 type BoardServiceTestSuite struct {
 	suite.Suite
 
-	service            BoardService
-	mockBoardDatabase  *MockBoardDatabase
-	sessionsMock       *sessions.MockSessionService
-	sessionRequestMock *sessionrequests.MockSessionRequestService
-	columnMock         *columns.MockColumnService
-	noteMock           *notes.MockNotesService
-	reactionMock       *reactions.MockReactionService
-	votingMock         *votings.MockVotingService
-	userService        *users.MockUserService
+	service           BoardService
+	mockBoardDatabase *MockBoardDatabase
+	sessionsMock      *sessions.MockSessionService
+	columnMock        *columns.MockColumnService
+	noteMock          *notes.MockNotesService
+	reactionMock      *reactions.MockReactionService
+	votingMock        *votings.MockVotingService
+	userService       *users.MockUserService
 
 	broker     *realtime.Broker
 	mockBroker *realtime.MockClient
@@ -62,7 +60,6 @@ func TestNotesServiceTestSuite(t *testing.T) {
 func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockBoardDatabase = NewMockBoardDatabase(suite.T())
 	suite.sessionsMock = sessions.NewMockSessionService(suite.T())
-	suite.sessionRequestMock = sessionrequests.NewMockSessionRequestService(suite.T())
 	suite.columnMock = columns.NewMockColumnService(suite.T())
 	suite.noteMock = notes.NewMockNotesService(suite.T())
 	suite.reactionMock = reactions.NewMockReactionService(suite.T())
@@ -76,7 +73,7 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
 	suite.mockHash = hash.NewMockHash(suite.T())
 
-	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
 
 	suite.boardID = uuid.New()
 	suite.userID = uuid.New()
@@ -115,8 +112,6 @@ func (suite *BoardServiceTestSuite) TestExport_JSON() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -171,8 +166,6 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -212,8 +205,6 @@ func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
