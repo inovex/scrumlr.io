@@ -698,13 +698,18 @@ func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 }
 
 func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
+
+	//adds headers
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+
+	// adds voting column if ther was a voting
 	for index, voting := range board.Votings {
 		if voting.Status == votings.Closed {
 			header = append(header, fmt.Sprintf("voting_%d", index))
 		}
 	}
 
+	// names of columns
 	colNames := make(map[uuid.UUID]string, len(cols))
 	for _, c := range cols {
 		colNames[c.ID] = c.Name
