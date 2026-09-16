@@ -860,6 +860,17 @@
     "title": "Ups!",
     "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
     "banned": "Es tut uns Leid, aber es sieht so aus, als ob du von dieser Sitzung ausgeschlossen wurdest.",
+    "bannedRetryHint": "Falls du wieder zugelassen wurdest, kannst du erneut beitreten. Wir prüfen das auch automatisch alle {{interval}}.",
+    "retryInterval": {
+      "seconds_one": "{{count}} Sekunde",
+      "seconds_other": "{{count}} Sekunden",
+      "minutes_one": "{{count}} Minute",
+      "minutes_other": "{{count}} Minuten",
+      "hours_one": "{{count}} Stunde",
+      "hours_other": "{{count}} Stunden"
+    },
+    "retry": "Erneut beitreten",
+    "retrying": "Wird versucht...",
     "button": "Zurück zur Startseite"
   },
   "Votes": {
