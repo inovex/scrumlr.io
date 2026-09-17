@@ -32,13 +32,13 @@ jobs:
           cache: "yarn"
           cache-dependency-path: "yarn.lock"
 
-      - name: Deduplicate dependencies
-        run: yarn dedupe
-
       - name: Setup git
         run: |
           git config user.name "Scrumlr Dedup Bot[bot]"
           git config user.email \<\>
+
+      - name: Deduplicate dependencies
+        run: yarn dedupe
 
       - name: Commit and push changes
         run: |
