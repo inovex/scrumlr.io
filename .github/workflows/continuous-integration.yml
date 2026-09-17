@@ -238,6 +238,26 @@ jobs:
           E2E_INSECURE_SKIP_VERIFY: "true"
         run: go test ./...
 
+  k6_e2e_tests:
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.2.1
+
+      - name: Run k6 e2e tests
+        uses: grafana/run-k6-action@de51a7390bdf0ac85a3bef493691bd71d4c7c158 # v1.4.0
+        env:
+          BASEURL: ${{ env.BASE_URL }}/api
+        with:
+          disable-analytics: true
+          path: |
+            ./server/k6/src/e2e.ts
+
   cypress_end_to_end_test:
     name: Cypress End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
