@@ -31,7 +31,7 @@ Global styles, font loading (`@fontsource/raleway`) and the accent-color class g
 To prevent name collisions between stylesheets, local SCSS variables must be prefixed with the component's BEM block name.
 
 On the TypeScript side, `classNames` composes them (see
-[Components](/docs/src/content/docs/dev/frontend/components.md#directory-anatomy) for the argument order)
+[Components](/docs/src/content/docs/dev/Frontend/components.md#directory-anatomy) for the argument order)
 
 BEM is part of the project's [Definition of Done](/docs/src/content/docs/dev/contributing.md#definition-of-done), not just a preference.
 
@@ -78,7 +78,7 @@ Adding a color means touching two files: the map in `_colors.scss` and the `Colo
 ## Stylelint rules
 
 **Nothing currently runs stylelint `.stylelintrc.json`** — it is not a package script, not in `lint-staged` and not in CI (see
-[Setup](/docs/src/content/docs/dev/frontend/setup.md#what-ci-enforces)). The rules still describe how the codebase is written, and they exist for
+[Setup](/docs/src/content/docs/dev/Frontend/setup.md#what-ci-enforces)). The rules still describe how the codebase is written, and they exist for
 a concrete reason: a hex value in a component stylesheet cannot participate in theming or in the accent color system. Use
 a token (`styles.$navy--400`) or a custom property (`var(--accent-color--light)`).
 
@@ -107,4 +107,4 @@ scale rather than writing a number, so the stacking order stays readable in one 
 ## Print styles
 
 The print view (`components/SettingsDialog/ExportBoard/PrintView`) is a separate render path with its own styles. If you add something structural to the board, check the
-print output too. See [Architecture](/docs/src/content/docs/dev/frontend/architecture.md#export-import-and-print).
+print output too. See [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md#export-import-and-print).

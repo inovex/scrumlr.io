@@ -94,4 +94,4 @@ through the helpers in `src/utils/storage.ts`, keyed by the constants in `src/co
 ## See also
 
 - [Environment Variables](/docs/src/content/docs/self-hosting/env-vars.md#frontend) — the deployment-side `SCRUMLR_*` names.
-- [Architecture](/docs/src/content/docs/dev/frontend/architecture.md) — where `config.ts` is consumed.
+- [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md) — where `config.ts` is consumed.
