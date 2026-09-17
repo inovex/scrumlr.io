@@ -188,7 +188,7 @@ all when the `scrumlr__show-legal-documents` cookie is not `false` (see
 
    This compares your `translation.json` against the English one. Be aware of its limits: it only checks the **top two
    levels** of keys, and it does not look at `templates.json` at all. A green run means you have not missed a whole
-   section — not that the file is complete.
+   section and not that the file is complete.
 
 2. **Start the development server**:
 
@@ -234,7 +234,7 @@ Two special cases:
 - **Board templates** live in the `templates` namespace: `useTranslation(["translation", "templates"])`.
 - **`retryable` error keys** must go under the `Error` object in `src/i18n/en/translation.json`. The key is typed, so a
   thunk using a missing one will not compile — see
-  [State & Realtime](/dev/frontend/state-management/#error-handling-retryable).
+  [State & Realtime](/docs/src/content/docs/dev/frontend/state-management.md#error-handling-retryable).
 
 ## Translation Guidelines
 

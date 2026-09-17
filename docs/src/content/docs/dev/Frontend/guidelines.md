@@ -47,15 +47,6 @@ In practice:
   label, so make sure to use it.
 - Dialogs use `react-focus-lock` so focus cannot escape while they are open.
 
-## Internationalization
-
-- **No hardcoded user-facing strings.** Use `useTranslation()` and a key namespaced by component:
-  `t("Note.showMore")`.
-- Add every new key to **all three** locales (`en`, `de`, `fr`) or `src/__tests__/locales.test.ts` fails. English is the
-  source of truth; a machine translation for the others with a note in the pull request is acceptable.
-- New `retryable` error keys must exist under `Error` in `src/i18n/en/translation.json` before the thunk will compile.
-- Full guide: [Contributing Translations](/dev/frontend/translating/).
-
 ## Rendering user content
 
 Note text goes through `components/Note/NoteTextContent`, which handles markdown (`marked`) and link detection

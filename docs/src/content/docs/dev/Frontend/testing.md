@@ -6,8 +6,8 @@ sidebar:
 ---
 
 Unit and component tests run on [Vitest](https://vitest.dev/) with `happy-dom` and Testing Library. End-to-end tests run
-on [Cypress](https://www.cypress.io/). New features are expected to come with tests — it is part of the
-[Definition of Done](/dev/contributing/#definition-of-done).
+on [Cypress](https://www.cypress.io/). New features are expected to come with tests (see
+[Definition of Done](/docs/src/content/docs/dev/contributing/#definition-of-done)).
 
 ## Running tests
 
@@ -37,25 +37,14 @@ Use the wrappers in `src/testUtils.tsx`, not Testing Library's `render` directly
 i18n:
 
 | Export | Wraps in |
-|---|---|
+| --- | --- |
 | `render` | `MemoryRouter` → `I18nextProvider` → `Provider` with a default test store |
 | `renderWithoutRouter` | the same, minus the router |
-| `renderWithContext(ui, {context, initialRouteEntries, currentPath})` | builds a `Routes`/`Route`/`Outlet context={…}` tree so `useOutletContext`, `useLocation` and `useParams` work |
-
-```tsx
-import {render} from "testUtils";
-import {Badge} from "components/Badge";
-
-test("renders the label", () => {
-  const {container} = render(<Badge text="3" />);
-  expect(container.firstChild).toMatchSnapshot();
-});
-```
+| `renderWithContext(ui, {context, initialRouteEntries, currentPath})` | configures route context so components relying on `useOutletContext`, `useLocation` and `useParams` work properly |
 
 ## Preloading state
 
-`render` supplies its **own** default store, so passing a store to it is not an option. To seed state, wrap the element in
-a *second* `<Provider>` — the inner one wins:
+`render` supplies its **own** default store, so passing a store to it is not an option. Pass custom state by wrapping your test element in an inner `<Provider>` using `getTestStore()`. Redux uses the innermost provider
 
 ```tsx
 import {Provider} from "react-redux";
@@ -79,40 +68,21 @@ test("column has the correct accent color", () => {
 });
 ```
 
-It looks redundant and it is, slightly — but it is the established pattern and every existing test does it this way.
-
 ## Fixtures
 
-`src/utils/test/` holds the builders. All are **default** exports and all take an optional partial that is spread last, so
-you override only what your test cares about:
-
-| Fixture | Returns |
-|---|---|
-| `getTestStore(overwrite?)` | A real store — `configureStore` with the real `rootReducer` and a preloaded state |
-| `getTestApplicationState(overwrite?)` | A complete `ApplicationState` |
-| `getTestNote(overwrite?)` | A single `Note` |
-| `getTestParticipant(overwrite?)` | A single participant |
-| `getTestVoting(overwrite?)` | A single voting |
-| `dummy-board-data.json` | A full board payload, used by the export tests |
+Fixture helpers (which can be found in `src/utils/test/`) build standard mock objects for tests. All are **default** exports and all take an optional partial that is spread last, so
+you override only what your test cares about
 
 `getTestStore` uses the **real reducers**, so a test can dispatch and assert on the result. `redux-mock-store` is a
 dependency but is barely used; prefer the real store.
 
-The ids in `getTestApplicationState` are stable and meaningful — `test-board-id`, `test-columns-id-1`,
-`test-notes-id-1`, a self participant with the `OWNER` role. Reuse them rather than inventing new ones: snapshots stay
+The ids in `getTestApplicationState` are stable and meaningful (`test-board-id`, `test-columns-id-1`, ...). Reuse them rather than inventing new ones: snapshots stay
 diffable, and the fixture already wires the relationships between board, columns, notes and participants correctly.
-
-```tsx
-const store = getTestStore({
-  notes: [getTestNote({id: "test-notes-id-1", text: "hello"})],
-});
-```
 
 ## Drag and drop in tests
 
 **Anything that renders a `Note` or a `Column` must be wrapped in `CustomDndContext`.** Both use `useSortable`, which
-throws outside a `DndContext`. In the running app the context is mounted by `BoardGuard`, far above the component, so it
-is easy to forget in a test — and the resulting error does not obviously point at drag and drop.
+throws outside a `DndContext`.
 
 ```tsx
 <CustomDndContext>
@@ -133,18 +103,11 @@ That last one matters: happy-dom reports every dimension as 0, and `useSize`, `u
 depend on real geometry. **If a test fails on a zero width, height or offset, this file is where to look.**
 
 `src/__mocks__/emoji-picker-element.ts` stubs the emoji picker, which is a web component happy-dom cannot run. Everything
-else is mocked per-test:
-
-```tsx
-vi.mock("utils/hooks/useImageChecker.ts", async () => ({
-  useImageChecker: () => false,
-}));
-```
+else is mocked per-test.
 
 ## i18n in tests
 
-`src/i18nTest.ts` is a **second, separate** i18next instance — `translation` namespace only, `lng: "en"`,
-`useSuspense: false`. It has its own hardcoded language list. Adding a language or a namespace means updating this file
+`src/i18nTest.ts` is a **second, separate** i18next instance. It has its own hardcoded language list. Adding a language or a namespace means updating this file
 too, or tests will render raw keys.
 
 Prefer queries that go through the real translations, which is what newer tests do:
@@ -159,13 +122,11 @@ getByLabelText(container, t("Appearance.showHotkeyNotifications"));
 
 Two attributes are in use, for historical reasons:
 
-- **`data-cy`** is prop-driven. `Button` maps its `testId` prop to it, `Input` maps `dataCy`, `MiniMenu` derives one per
-  item. Cypress uses it, and some unit tests query it with `container.querySelector("[data-cy=…]")`.
+- **`data-cy`** is derived from component props. Cypress uses it, and some unit tests query it with `container.querySelector("[data-cy=…]")`.
 - **`data-testid`** is hardcoded in JSX where a component needs a stable handle.
 
-For new code, prefer role- and label-based queries. Reach for a test id only when there is no accessible handle — and if
-there isn't one, that is usually an accessibility problem worth fixing instead (see
-[Guidelines](/dev/frontend/guidelines/#accessibility)).
+For new code, prefer role- and label-based queries. Reach for a test id only when there is no accessible handle. If a component cannot be queried by role or label, fix its accessibility first rather than adding a new test ID. (see
+[Guidelines](/docs/src/content/docs/dev/frontend/guidelines.md#accessibility)).
 
 ## Snapshots
 
@@ -176,35 +137,21 @@ Snapshots are used heavily — around 64 `toMatchSnapshot()` calls, usually
 yarn test --run -u
 ```
 
-Read the diff before you do. A snapshot change is only noise if you *meant* to change the markup; otherwise it is the test
-telling you something. Use snapshots for structure and explicit assertions for behaviour — a snapshot will happily record
-a broken button.
-
 ## The locale parity test
 
-`src/__tests__/locales.test.ts` reads `src/i18n/en/translation.json` as the source of truth and, for every other locale
-directory that has a `translation.json`, asserts that each top-level key exists and that its immediate children match.
+`src/__tests__/locales.test.ts` compares non-English translation files against `src/i18n/en/translation.json` to ensure key parity.
 
 Its limits are worth knowing, because a green run is easy to over-trust:
 
 - It only checks **two levels**. A key missing three levels deep is not caught.
 - It does not look at `templates.json` at all.
 
-So it catches whole missing sections, not incomplete ones. Manual verification is still needed — see
-[Contributing Translations](/dev/frontend/translating/).
-
-## What is worth testing
-
-- **Reducers and pure functions** in `src/store/features/*/reducer.ts` and `src/utils/*` are cheap to test and catch real
-  bugs. `notesReducer`'s stack re-parenting logic is a good example of why.
-- **Components**: render them, interact with them, assert on what the user sees. Don't assert on internal state.
-- **Thunks** need the API and the socket mocked and are usually not worth the setup. Test the reducer that handles the
-  resulting action instead.
+So it catches whole missing sections, not incomplete ones. Manual verification is still needed (see
+[Contributing Translations](/docs/src/content/docs/dev/frontend/translating.md)).
 
 ## End-to-end tests (Cypress)
 
-Specs live in `cypress/e2e/` — currently `login-spec.cy.ts` and `templates-spec.cy.ts`. `cypress.config.ts` sets
-`baseUrl: 'http://localhost:5173'` and `testIsolation: true`.
+E2E test suites live in `cypress/e2e/` and run against `http://localhost:5173`.
 
 **There is no `cypress` package script.** To run them locally, start the backend and the dev server, then open Cypress:
 
