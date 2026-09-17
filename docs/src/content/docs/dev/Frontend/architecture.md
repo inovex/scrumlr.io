@@ -104,7 +104,7 @@ The practical consequence: if you need more note data in a column or a note, add
 (Note: `src/api/request.ts` handles board join requests from users, not HTTP request utilities.)
 
 Adding an endpoint means adding a function to the matching resource module and also, if it is a new resource, spreading the
-new module into `API`. Endpoint documentation lives with the backend: see [API docs](/docs/src/content/docs/dev/backend/api_docs.md).
+new module into `API`. Endpoint documentation lives with the backend: see [API docs](/docs/src/content/docs/dev/Backend/api_docs.md).
 
 ## Where types live
 
