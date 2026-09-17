@@ -14,9 +14,8 @@ translates each `SCRUMLR_*` variable below into a `scrumlr__*` cookie on `/index
 client reads those cookies on startup. The one exception is `SCRUMLR_LISTEN_PORT`, which configures nginx itself.
 
 A consequence worth knowing: a cookie value takes precedence over anything baked in at build time, and when a cookie is
-absent the client falls back to its own default — `SCRUMLR_SHOW_LEGAL_DOCUMENTS`, for instance, defaults to *enabled*, so
-leaving it empty does not hide the legal pages. See
-[Frontend configuration](/dev/frontend/configuration/#runtime-configuration-cookies) for the full resolution order.
+absent the client falls back to its own default. See
+[Frontend configuration](/docs/src/content/docs/dev/frontend/configuration.md#runtime-configuration-cookies) for the full resolution order.
 
 ### Show legal documents
 
@@ -179,7 +178,6 @@ From these variables the database url is created. All three variables must be se
 If you haven't configured postgres for TLS, you can use the `?sslmode=disable` parameter for the database host.
 
 **Note:** If both options are configured, the database url takes precedence and will be used.
-
 
 ### Base Path
 
