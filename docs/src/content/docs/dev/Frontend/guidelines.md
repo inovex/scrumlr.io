@@ -22,7 +22,7 @@ repeated here.
 
 - Strict mode is on. Don't work around it with `any`. If a type is genuinely unknown, use `unknown` and narrow.
 - Name the props type `<ComponentName>Props`, and export it if anything else needs it.
-- **Domain types come from the slice**, not from a local redeclaration (see [Architecture](/docs/src/content/docs/dev/frontend/architecture.md#where-types-live)).
+- **Domain types come from the slice**, not from a local redeclaration (see [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md#where-types-live)).
 - Intentionally unused bindings get an underscore prefix: `(_state, action) => …`, `catch (_error)`. That is what the
   ESLint config allows.
 - Remember that `yarn build` is the only thing that typechecks. The dev server will happily run code that does not

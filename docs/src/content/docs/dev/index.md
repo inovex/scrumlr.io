@@ -7,6 +7,6 @@ sidebar:
 
 The following should give a short introduction for the Scrumlr development.
 
-For the frontend — the React client in `/src` — start [here](/dev/frontend/). It covers local setup, the architecture,
-the Redux store and the realtime layer, and the project's frontend conventions.
-For developing the backend, start [here](/dev/backend).
+For developing the frontend, start [here](/docs/src/content/docs/dev/frontend/).
+
+For developing the backend, start [here](/docs/src/content/docs/dev/backend).
