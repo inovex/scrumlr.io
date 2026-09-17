@@ -13,7 +13,7 @@ Before starting your translation contribution:
 
 1. **Check existing languages**: Review `src/i18n/` to see currently supported languages
 2. **Language code**: Identify the appropriate ISO 639-1 language code for your language (e.g., `fr` for French, `es` for Spanish)
-3. **Development setup**: Ensure you have the development environment set up (see [Setup](/docs/src/content/docs/dev/frontend/setup.md) and the [Contributing Guide](/docs/src/content/docs/dev/contributing.md))
+3. **Development setup**: Ensure you have the development environment set up (see [Setup](/docs/src/content/docs/dev/Frontend/setup.md) and the [Contributing Guide](/docs/src/content/docs/dev/contributing.md))
 
 ## Translation Files Structure
 
@@ -176,7 +176,7 @@ public/locales/es/cookiePolicy.md
 These are **optional** — they are legal text, and a machine translation is worse than none. If you skip them, the legal
 pages will simply be empty in your language, as is currently the case for French. Note that the pages are only shown at
 all when the `scrumlr__show-legal-documents` cookie is not `false` (see
-[Configuration](/docs/src/content/docs/dev/frontend/configuration.md#runtime-configuration-cookies)).
+[Configuration](/docs/src/content/docs/dev/Frontend/configuration.md#runtime-configuration-cookies)).
 
 ### 11. Testing Your Translation
 
@@ -234,7 +234,7 @@ Two special cases:
 - **Board templates** live in the `templates` namespace: `useTranslation(["translation", "templates"])`.
 - **`retryable` error keys** must go under the `Error` object in `src/i18n/en/translation.json`. The key is typed, so a
   thunk using a missing one will not compile — see
-  [State & Realtime](/docs/src/content/docs/dev/frontend/state-management.md#error-handling-retryable).
+  [State & Realtime](/docs/src/content/docs/dev/Frontend/state-management.md#error-handling-retryable).
 
 ## Translation Guidelines
 

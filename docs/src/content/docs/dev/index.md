@@ -7,6 +7,6 @@ sidebar:
 
 The following should give a short introduction for the Scrumlr development.
 
-For developing the frontend, start [here](/docs/src/content/docs/dev/frontend/).
+For developing the frontend, start [here](/docs/src/content/docs/dev/Frontend/).
 
-For developing the backend, start [here](/docs/src/content/docs/dev/backend).
+For developing the backend, start [here](/docs/src/content/docs/dev/Backend).
