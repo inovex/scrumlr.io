@@ -697,28 +697,51 @@ func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 	return visibleColumns, visibleNotes
 }
 
-func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUID, validSessionUsers map[uuid.UUID]struct{}, userCache map[uuid.UUID]string) (string, error) {
-	if _, ok := validSessionUsers[authorID]; ok {
-		if cachedName, exists := userCache[authorID]; exists {
-			return cachedName, nil
-		} else {
-			user, err := service.userService.Get(ctx, authorID)
-			if err != nil {
-				return "", err
-			}
-			userCache[authorID] = user.Name
-			return user.Name, nil
-		}
-	} else {
-		return "unknown user", nil
-	}
-}
-
 type csvBuildContext struct {
 	board             *FullBoard
 	colNames          map[uuid.UUID]string
 	validSessionUsers map[uuid.UUID]struct{}
 	userCache         map[uuid.UUID]string
+}
+
+func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
+	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+
+	for index, voting := range board.Votings {
+		if voting.Status == votings.Closed {
+			header = append(header, fmt.Sprintf("voting_%d", index))
+		}
+	}
+
+	colNames := make(map[uuid.UUID]string, len(cols))
+	for _, c := range cols {
+		colNames[c.ID] = c.Name
+	}
+
+	validSessionUsers := make(map[uuid.UUID]struct{}, len(board.BoardSessions))
+	for _, session := range board.BoardSessions {
+		validSessionUsers[session.UserID] = struct{}{}
+	}
+
+	userCache := make(map[uuid.UUID]string)
+	csvCtx := &csvBuildContext{
+		board:             board,
+		colNames:          colNames,
+		validSessionUsers: validSessionUsers,
+		userCache:         userCache,
+	}
+
+	records := [][]string{header}
+
+	for _, note := range notes {
+		row, err := service.noteToRow(ctx, note, csvCtx)
+		if err != nil {
+			return nil, err
+		}
+		records = append(records, row)
+	}
+
+	return records, nil
 }
 
 func (service *Service) noteToRow(ctx context.Context, note *notes.Note, csvCtx *csvBuildContext) ([]string, error) {
@@ -761,44 +784,21 @@ func (service *Service) noteToRow(ctx context.Context, note *notes.Note, csvCtx 
 	return row, nil
 }
 
-func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
-	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-
-	for index, voting := range board.Votings {
-		if voting.Status == votings.Closed {
-			header = append(header, fmt.Sprintf("voting_%d", index))
+func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUID, validSessionUsers map[uuid.UUID]struct{}, userCache map[uuid.UUID]string) (string, error) {
+	if _, ok := validSessionUsers[authorID]; ok {
+		if cachedName, exists := userCache[authorID]; exists {
+			return cachedName, nil
+		} else {
+			user, err := service.userService.Get(ctx, authorID)
+			if err != nil {
+				return "", err
+			}
+			userCache[authorID] = user.Name
+			return user.Name, nil
 		}
+	} else {
+		return "unknown user", nil
 	}
-
-	colNames := make(map[uuid.UUID]string, len(cols))
-	for _, c := range cols {
-		colNames[c.ID] = c.Name
-	}
-
-	validSessionUsers := make(map[uuid.UUID]struct{}, len(board.BoardSessions))
-	for _, session := range board.BoardSessions {
-		validSessionUsers[session.UserID] = struct{}{}
-	}
-
-	userCache := make(map[uuid.UUID]string)
-	csvCtx := &csvBuildContext{
-		board:             board,
-		colNames:          colNames,
-		validSessionUsers: validSessionUsers,
-		userCache:         userCache,
-	}
-
-	records := [][]string{header}
-
-	for _, note := range notes {
-		row, err := service.noteToRow(ctx, note, csvCtx)
-		if err != nil {
-			return nil, err
-		}
-		records = append(records, row)
-	}
-
-	return records, nil
 }
 
 func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
