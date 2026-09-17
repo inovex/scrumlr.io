@@ -46,8 +46,8 @@ letters of your first and last name as prefix. For example, John Doe would creat
 2. Run `yarn start` to start the Front-end in development mode.
 3. Open http://localhost:5173 to view it in the browser. The page updates automatically when you change the code.
 
-Note that Node 26 no longer ships Corepack, which Yarn 4 needs — see [Setup](/dev/frontend/setup/) if `yarn` fails right
-away. For a deeper introduction to the frontend, start with the [frontend documentation](/dev/frontend/).
+Note that Node 26 no longer ships Corepack, which Yarn 4 needs (see [Setup](/docs/src/content/docs/dev/frontend/setup.md)) if `yarn` fails right
+away. For a deeper introduction to the frontend, start with the [frontend documentation](/docs/src/content/docs/dev/frontend/index.md).
 
 ### Server
 
@@ -88,7 +88,7 @@ yarn test --run
 ```
 
 `yarn test` without `--run` starts Vitest in watch mode, which is what you want while working on a test. See
-[Testing](/dev/frontend/testing/) for the render helpers and fixtures.
+[Testing](/docs/src/content/docs/dev/frontend/testing.md) for the render helpers and fixtures.
 
 ### Server
 
@@ -102,8 +102,8 @@ make test
 ## Translating
 
 Scrumlr currently ships English, German and French. Adding a language means creating translation files under
-`src/i18n/<language code>/` and registering them in a few other places — the full walkthrough is in
-[Contributing Translations](/dev/frontend/translating/). Once you're done you can open a pull request, and we will try
+`src/i18n/<language code>/` and registering them in a few other places. You can find the full walkthrough in
+[Contributing Translations](/docs/src/content/docs/dev/frontend/translating.md). Once you're done you can open a pull request, and we will try
 to review your translation by a few samples.
 
 ## Definition of Done
