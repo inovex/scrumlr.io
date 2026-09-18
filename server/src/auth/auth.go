@@ -39,6 +39,7 @@ type Auth interface {
 	Authenticator() func(http.Handler) http.Handler
 	Exists(accountType common.AccountType) bool
 	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
+	ExtractUserId(r *http.Request) (uuid.UUID, error)
 }
 
 type AuthProviderConfiguration struct {
@@ -268,6 +269,35 @@ func (a *AuthConfiguration) ExtractUserInformation(accountType common.AccountTyp
 	}
 
 	return result, nil
+}
+
+func (a *AuthConfiguration) ExtractUserId(r *http.Request) (uuid.UUID, error) {
+	var token jwt.Token
+	var err error
+	if a.unsafeAuth != nil {
+		token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie)
+		if err != nil {
+			return uuid.UUID{}, err
+		}
+	} else {
+		token, err = jwtauth.VerifyRequest(a.auth, r, jwtauth.TokenFromCookie)
+		if err != nil {
+			return uuid.UUID{}, err
+		}
+	}
+
+	var userId string
+	err = token.Get("id", &userId)
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	id, err := uuid.Parse(userId)
+	if err != nil {
+		return uuid.UUID{}, err
+	}
+
+	return id, nil
 }
 
 func (a *AuthConfiguration) initializeJWTAuth() error {
