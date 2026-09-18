@@ -21,7 +21,7 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -39,7 +39,7 @@ const boardTimerUpdateFailureMessage = "failed to update board timer"
 
 type Service struct {
 	clock                    timeprovider.TimeProvider
-	hash                     hash.Hash
+	passwordEncoder          encoder.PasswordEncoder
 	database                 BoardDatabase
 	realtime                 *realtime.Broker
 	boardLastModifiedUpdater BoardLastModifiedUpdater
@@ -82,11 +82,11 @@ func NewBoardService(
 	votingService votings.VotingService,
 	userService users.UserService,
 	clock timeprovider.TimeProvider,
-	hash hash.Hash,
+	passwordEncoder encoder.PasswordEncoder,
 ) BoardService {
 	b := new(Service)
 	b.clock = clock
-	b.hash = hash
+	b.passwordEncoder = passwordEncoder
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
@@ -475,7 +475,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				return nil, CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", err)
 			}
 
-			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
+			passphrase, salt, err := service.passwordEncoder.Encode(*body.Passphrase)
 			if err != nil {
 				otel.RecordErrorSpan(span, err, new("failed to encode passphrase"))
 				log.Error("failed to encode passphrase")
@@ -852,7 +852,7 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 			return board, err
 		}
 
-		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
+		encodedPassphrase, salt, _ := service.passwordEncoder.Encode(*body.Passphrase)
 		board = DatabaseBoardInsert{
 			Name:         body.Name,
 			Description:  body.Description,
