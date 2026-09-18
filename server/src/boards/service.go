@@ -697,8 +697,16 @@ func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 	return visibleColumns, visibleNotes
 }
 
+type csvBuildContext struct {
+	board             *FullBoard
+	colNames          map[uuid.UUID]string
+	validSessionUsers map[uuid.UUID]struct{}
+	userCache         map[uuid.UUID]string
+}
+
 func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+
 	for index, voting := range board.Votings {
 		if voting.Status == votings.Closed {
 			header = append(header, fmt.Sprintf("voting_%d", index))
@@ -715,60 +723,82 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 		validSessionUsers[session.UserID] = struct{}{}
 	}
 
-	//cache users to avoid querying the DB for the same author repeatedly
 	userCache := make(map[uuid.UUID]string)
+	csvCtx := &csvBuildContext{
+		board:             board,
+		colNames:          colNames,
+		validSessionUsers: validSessionUsers,
+		userCache:         userCache,
+	}
 
 	records := [][]string{header}
+
 	for _, note := range notes {
-		stack := "null"
-		if note.Position.Stack.Valid {
-			stack = note.Position.Stack.UUID.String()
+		row, err := service.noteToRow(ctx, note, csvCtx)
+		if err != nil {
+			return nil, err
 		}
-
-		colName := note.Position.Column.String()
-		if name, ok := colNames[note.Position.Column]; ok {
-			colName = name
-		}
-
-		authorName := note.Author.String()
-		if _, ok := validSessionUsers[note.Author]; ok {
-			if cachedName, exists := userCache[note.Author]; exists {
-				authorName = cachedName
-			} else {
-				user, err := service.userService.Get(ctx, note.Author)
-				if err != nil {
-					return nil, err
-				}
-				authorName = user.Name
-				userCache[note.Author] = user.Name
-			}
-		}
-
-		row := []string{
-			note.ID.String(),
-			note.Author.String(),
-			authorName,
-			note.Text,
-			note.Position.Column.String(),
-			colName,
-			strconv.Itoa(note.Position.Rank),
-			stack,
-		}
-
-		for _, voting := range board.Votings {
-			if voting.Status == votings.Closed {
-				votes := "0"
-				if voting.VotingResults != nil {
-					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
-				}
-				row = append(row, votes)
-			}
-		}
-
 		records = append(records, row)
 	}
 
 	return records, nil
+}
+
+func (service *Service) noteToRow(ctx context.Context, note *notes.Note, csvCtx *csvBuildContext) ([]string, error) {
+	stack := "null"
+	if note.Position.Stack.Valid {
+		stack = note.Position.Stack.UUID.String()
+	}
+
+	colName := note.Position.Column.String()
+	if name, ok := csvCtx.colNames[note.Position.Column]; ok {
+		colName = name
+	}
+
+	authorID := note.Author
+	authorName, err := service.resolveAuthorName(ctx, authorID, csvCtx.validSessionUsers, csvCtx.userCache)
+	if err != nil {
+		return nil, err
+	}
+
+	row := []string{
+		note.ID.String(),
+		authorID.String(),
+		authorName,
+		note.Text,
+		note.Position.Column.String(),
+		colName,
+		strconv.Itoa(note.Position.Rank),
+		stack,
+	}
+
+	for _, voting := range csvCtx.board.Votings {
+		if voting.Status == votings.Closed {
+			votes := "0"
+			if voting.VotingResults != nil {
+				votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
+			}
+			row = append(row, votes)
+		}
+	}
+	return row, nil
+}
+
+func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUID, validSessionUsers map[uuid.UUID]struct{}, userCache map[uuid.UUID]string) (string, error) {
+	if _, ok := validSessionUsers[authorID]; ok {
+		if cachedName, exists := userCache[authorID]; exists {
+			return cachedName, nil
+		} else {
+			user, err := service.userService.Get(ctx, authorID)
+			if err != nil {
+				return "", err
+			}
+			userCache[authorID] = user.Name
+			return user.Name, nil
+		}
+	} else {
+		return "unknown user", nil
+	}
 }
 
 func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
