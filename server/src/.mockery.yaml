@@ -121,6 +121,7 @@ packages:
     config:
       dir: boardtemplates
     interfaces:
+      BoardTemplateApi:
       BoardTemplateService:
       BoardTemplateDatabase:
 
