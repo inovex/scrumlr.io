@@ -49,7 +49,7 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create board template"))
 		log.Errorw("Unable to create board template", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -82,7 +82,7 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board template"))
 		log.Errorw("unable to get board template", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -113,7 +113,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get board templates"))
 		log.Errorw("unable to get board templates for that user", "user", user, "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -155,7 +155,7 @@ func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to update board template"))
 		log.Errorw("Unable to update board template", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
