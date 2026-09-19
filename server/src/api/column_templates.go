@@ -51,7 +51,7 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	tColumn, err := s.columntemplates.Create(ctx, body)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create column template"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -86,7 +86,7 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get column template"))
 		log.Errorw("Unable to get column template", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -119,7 +119,7 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get column templates"))
 		log.Errorw("Unable to get column templates", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 

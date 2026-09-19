@@ -39,7 +39,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+		otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -52,7 +52,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to add vote"))
 		log.Warnw("unable to add vote", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -86,7 +86,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+		otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -99,7 +99,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to remove vote"))
 		log.Warnw("unable to remove vote", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -140,7 +140,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if votingQuery != "" {
 		voting, err := uuid.Parse(votingQuery)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+			otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -152,7 +152,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if noteQuery != "" {
 		note, err := uuid.Parse(noteQuery)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+			otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -163,7 +163,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	votes, err := s.votings.GetVotes(ctx, board, requestFilter)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get votes"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
