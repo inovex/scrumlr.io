@@ -39,9 +39,9 @@ func NewBoardTemplateApi(service BoardTemplateService) BoardTemplateApi {
 //	@Tags			board templates
 //	@Accept			json
 //	@Param			Cookie			header	string										true	"jwt token to authenticate"
-//	@Param			boardtemplate	body	boardtemplates.CreateBoardTemplateRequest	true	"Board template to create"
+//	@Param			boardtemplate	body	CreateBoardTemplateRequest	true	"Board template to create"
 //	@Produce		json
-//	@Success		201	{object}	boardtemplates.BoardTemplate
+//	@Success		201	{object}	BoardTemplate
 //	@Failure		400	{object}	common.APIError
 //	@Failure		429
 //	@Router			/templates [post]
@@ -84,7 +84,7 @@ func (api *API) CreateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 //	@Param			Cookie	header	string	true	"jwt token to authenticate"
 //	@Param			id		path	string	true	"Id of the template to get"
 //	@Produce		json
-//	@Success		200	{object}	boardtemplates.BoardTemplate
+//	@Success		200	{object}	BoardTemplate
 //	@Failure		400
 //	@Failure		404	{object}	common.APIError
 //	@Failure		429
@@ -116,7 +116,7 @@ func (api *API) GetBoardTemplate(w http.ResponseWriter, r *http.Request) {
 //	@Accept			json
 //	@Param			Cookie	header	string	true	"jwt token to authenticate"
 //	@Produce		json
-//	@Success		200	{object}	[]boardtemplates.BoardTemplateFull
+//	@Success		200	{object}	[]BoardTemplateFull
 //	@Failure		400	{object}	common.APIError
 //	@Failure		429
 //	@Router			/templates [get]
@@ -147,9 +147,9 @@ func (api *API) GetBoardTemplates(w http.ResponseWriter, r *http.Request) {
 //	@Accept			json
 //	@Param			Cookie			header	string										true	"jwt token to authenticate"
 //	@Param			id				path	string										true	"Id of the template to update"
-//	@Param			boardtemplate	body	boardtemplates.BoardTemplateUpdateRequest	true	"Board template to update"
+//	@Param			boardtemplate	body	BoardTemplateUpdateRequest	true	"Board template to update"
 //	@Produce		json
-//	@Success		200	{object}	boardtemplates.BoardTemplate
+//	@Success		200	{object}	BoardTemplate
 //	@Failure		400	{object}	common.APIError
 //	@Failure		404	{object}	common.APIError
 //	@Failure		429
