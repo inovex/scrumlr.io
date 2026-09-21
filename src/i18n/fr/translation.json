@@ -18,7 +18,7 @@
     "extendedConfigurationTitle": "Configuration avancée",
     "basicConfigurationTitle": "Choisir un modèle",
     "importBoard": "Importer JSON",
-    "uploadFile": "Télécharger un fichier ou glisser ici",
+    "uploadFile": "Importe un fichier ou dépose-le ici",
     "importNewBoard": "Importer maintenant"
   },
   "ImportBoard": {
@@ -37,8 +37,8 @@
       "description": "Déposer le fichier ici ou cliquer (1 fichier max.)"
     },
     "FilePreview": {
-      "loadingState": "Téléchargement en cours...",
-      "uploadedState": "Téléchargé",
+      "loadingState": "Importation en cours...",
+      "uploadedState": "Importé",
       "removeFile": "Supprimer le fichier"
     }
   },
@@ -105,7 +105,7 @@
     }
   },
   "History": {
-    "switchTitle": "Histoire",
+    "switchTitle": "Historique",
     "title": "Gérer tes tableaux",
     "savedBoards": "Dernièrement utilisés",
     "empty": "Ton historique de session est vide — rejoins ou crée un tableau et il apparaîtra ici !",
@@ -118,9 +118,9 @@
         "amountColumns_other": "{{count}} colonnes",
         "amountParticipants_one": "{{count}} participant",
         "amountParticipants_other": "{{count}} participants",
-        "amountNotes_one": "{{count}} notes",
+        "amountNotes_one": "{{count}} note",
         "amountNotes_other": "{{count}} notes",
-        "lastUpdated": "Modifié: {{date}}"
+        "lastUpdated": "Modifié : {{date}}"
       },
       "Menu": {
         "delete": "Supprimer",
@@ -129,7 +129,7 @@
         "edit": "Modifier",
         "close": "Fermer"
       },
-      "readOnly": "Verrouillé",
+      "readOnly": "Lecture seule",
       "openBoardButton": "Ouvrir la session",
       "linkCopied": "Lien du tableau copié !",
       "deleteConfirmationTitle": "Supprimer le tableau ?",
@@ -352,7 +352,7 @@
   },
   "MenuBars": {
     "markAsDone": "Me marquer comme terminé",
-    "unmarkAsDone": "Me démarquer comme terminé",
+    "unmarkAsDone": "Me marquer comme non terminé",
     "addImage": "Ajouter une image ou un giphy",
     "addSticker": "Ajouter un autocollant",
     "themeToggle": "Changer le schéma de couleurs",
@@ -835,7 +835,7 @@
       "Diamond": "Diamant",
       "Hola": "Hola !",
       "Pizza": "Pizza",
-      "Resist": "Résister !",
+      "Resist": "Résiste !",
       "Selena": "Selena",
       "Bear": "Ours",
       "SkullOutline": "Crâne contour",
