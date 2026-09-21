@@ -697,13 +697,6 @@ func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 	return visibleColumns, visibleNotes
 }
 
-type csvBuildContext struct {
-	board             *FullBoard
-	colNames          map[uuid.UUID]string
-	validSessionUsers map[uuid.UUID]struct{}
-	userCache         map[uuid.UUID]string
-}
-
 func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
 
@@ -724,64 +717,50 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 	}
 
 	userCache := make(map[uuid.UUID]string)
-	csvCtx := &csvBuildContext{
-		board:             board,
-		colNames:          colNames,
-		validSessionUsers: validSessionUsers,
-		userCache:         userCache,
-	}
-
 	records := [][]string{header}
 
 	for _, note := range notes {
-		row, err := service.noteToRow(ctx, note, csvCtx)
+		stack := "null"
+		if note.Position.Stack.Valid {
+			stack = note.Position.Stack.UUID.String()
+		}
+
+		colName := note.Position.Column.String()
+		if name, ok := colNames[note.Position.Column]; ok {
+			colName = name
+		}
+
+		authorID := note.Author
+		authorName, err := service.resolveAuthorName(ctx, authorID, validSessionUsers, userCache)
 		if err != nil {
 			return nil, err
 		}
+
+		row := []string{
+			note.ID.String(),
+			authorID.String(),
+			authorName,
+			note.Text,
+			note.Position.Column.String(),
+			colName,
+			strconv.Itoa(note.Position.Rank),
+			stack,
+		}
+
+		for _, voting := range board.Votings {
+			if voting.Status == votings.Closed {
+				votes := "0"
+				if voting.VotingResults != nil {
+					votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
+				}
+				row = append(row, votes)
+			}
+		}
+
 		records = append(records, row)
 	}
 
 	return records, nil
-}
-
-func (service *Service) noteToRow(ctx context.Context, note *notes.Note, csvCtx *csvBuildContext) ([]string, error) {
-	stack := "null"
-	if note.Position.Stack.Valid {
-		stack = note.Position.Stack.UUID.String()
-	}
-
-	colName := note.Position.Column.String()
-	if name, ok := csvCtx.colNames[note.Position.Column]; ok {
-		colName = name
-	}
-
-	authorID := note.Author
-	authorName, err := service.resolveAuthorName(ctx, authorID, csvCtx.validSessionUsers, csvCtx.userCache)
-	if err != nil {
-		return nil, err
-	}
-
-	row := []string{
-		note.ID.String(),
-		authorID.String(),
-		authorName,
-		note.Text,
-		note.Position.Column.String(),
-		colName,
-		strconv.Itoa(note.Position.Rank),
-		stack,
-	}
-
-	for _, voting := range csvCtx.board.Votings {
-		if voting.Status == votings.Closed {
-			votes := "0"
-			if voting.VotingResults != nil {
-				votes = strconv.Itoa(voting.VotingResults.Votes[note.ID].Total)
-			}
-			row = append(row, votes)
-		}
-	}
-	return row, nil
 }
 
 func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUID, validSessionUsers map[uuid.UUID]struct{}, userCache map[uuid.UUID]string) (string, error) {

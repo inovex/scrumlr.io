@@ -243,52 +243,20 @@ func (suite *BoardServiceTestSuite) TestResolveAuthorName_UsesCacheAfterFirstLoo
 	suite.Equal("Alex", userCache[authorID])
 }
 
-func (suite *BoardServiceTestSuite) TestNoteToRow_ReturnsErrorWhenAuthorLookupFails() {
-	service := &Service{userService: suite.userService}
-	authorID := uuid.New()
-	noteID := uuid.New()
-	columnID := uuid.New()
-
-	suite.userService.EXPECT().Get(mock.Anything, authorID).Return(nil, errors.New("lookup failed")).Once()
-
-	csvCtx := &csvBuildContext{
-		board:             &FullBoard{Votings: []*votings.Voting{}},
-		colNames:          map[uuid.UUID]string{columnID: "Ideas"},
-		validSessionUsers: map[uuid.UUID]struct{}{authorID: {}},
-		userCache:         map[uuid.UUID]string{},
-	}
-
-	row, err := service.noteToRow(context.Background(), &notes.Note{
-		ID:     noteID,
-		Author: authorID,
-		Text:   "A note",
-		Position: notes.NotePosition{
-			Column: columnID,
-			Rank:   1,
-		},
-	}, csvCtx)
-
-	suite.Nil(row)
-	suite.EqualError(err, "lookup failed")
-}
-
-func (suite *BoardServiceTestSuite) TestNoteToRow_UnknownAuthorAndClosedVotingWithoutResults() {
+func (suite *BoardServiceTestSuite) TestBuildCSVRecords_UnknownAuthorAndClosedVotingWithoutResults() {
 	service := &Service{userService: suite.userService}
 	noteID := uuid.New()
 	columnID := uuid.New()
 	authorID := uuid.New()
 
-	csvCtx := &csvBuildContext{
-		board: &FullBoard{Votings: []*votings.Voting{
+	board := &FullBoard{
+		Votings: []*votings.Voting{
 			{Status: votings.Closed, VotingResults: nil},
 			{Status: votings.Open},
-		}},
-		colNames:          map[uuid.UUID]string{columnID: "Ideas"},
-		validSessionUsers: map[uuid.UUID]struct{}{},
-		userCache:         map[uuid.UUID]string{},
+		},
 	}
-
-	row, err := service.noteToRow(context.Background(), &notes.Note{
+	cols := []*columns.Column{{ID: columnID, Name: "Ideas", Visible: true}}
+	notesOnBoard := []*notes.Note{{
 		ID:     noteID,
 		Author: authorID,
 		Text:   "A note",
@@ -296,9 +264,13 @@ func (suite *BoardServiceTestSuite) TestNoteToRow_UnknownAuthorAndClosedVotingWi
 			Column: columnID,
 			Rank:   2,
 		},
-	}, csvCtx)
+	}}
+
+	records, err := service.buildCSVRecords(context.Background(), board, cols, notesOnBoard)
 
 	suite.NoError(err)
+	suite.Len(records, 2)
+	row := records[1]
 	suite.Equal([]string{
 		noteID.String(),
 		authorID.String(),
