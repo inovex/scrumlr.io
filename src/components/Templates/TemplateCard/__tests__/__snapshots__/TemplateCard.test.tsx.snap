@@ -125,62 +125,50 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
       data-testid="template-card__start-button"
       id="template-card__start-button--test-templates-id-1"
     >
-      <div
-        class="button__content-wrapper"
-        data-align="compact"
-        data-pos="right"
-        data-size="small"
+      Start
+      <svg
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        Start
-        <div
-          class="button__icon-background button__icon-background--default"
-          data-size="small"
+        <rect
+          fill="none"
+          height="32"
+          width="32"
+        />
+        <g
+          id="Icons"
         >
-          <svg
-            fill="none"
-            height="32"
-            viewBox="0 0 32 32"
-            width="32"
-            xmlns="http://www.w3.org/2000/svg"
+          <g
+            id="icon/icon-32-next"
           >
-            <rect
-              fill="none"
-              height="32"
-              width="32"
-            />
             <g
-              id="Icons"
+              id="Variant=ic-32-next-dark4light"
             >
-              <g
-                id="icon/icon-32-next"
-              >
-                <g
-                  id="Variant=ic-32-next-dark4light"
-                >
-                  <path
-                    d="M19.2188 11L24.0004 16.0002"
-                    stroke="currentColor"
-                    stroke-linecap="square"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M24 16L19.2185 21.0002"
-                    stroke="currentColor"
-                    stroke-linecap="square"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M7 16.0781H21.6419"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-width="2"
-                  />
-                </g>
-              </g>
+              <path
+                d="M19.2188 11L24.0004 16.0002"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="2"
+              />
+              <path
+                d="M24 16L19.2185 21.0002"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="2"
+              />
+              <path
+                d="M7 16.0781H21.6419"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+              />
             </g>
-          </svg>
-        </div>
-      </div>
+          </g>
+        </g>
+      </svg>
     </button>
   </div>
 </div>
@@ -279,62 +267,50 @@ exports[`TemplateCard > should render correctly (recommended) 1`] = `
       data-testid="template-card__start-button"
       id="template-card__start-button--test-templates-id-1"
     >
-      <div
-        class="button__content-wrapper"
-        data-align="compact"
-        data-pos="right"
-        data-size="small"
+      Start
+      <svg
+        fill="none"
+        height="32"
+        viewBox="0 0 32 32"
+        width="32"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        Start
-        <div
-          class="button__icon-background button__icon-background--default"
-          data-size="small"
+        <rect
+          fill="none"
+          height="32"
+          width="32"
+        />
+        <g
+          id="Icons"
         >
-          <svg
-            fill="none"
-            height="32"
-            viewBox="0 0 32 32"
-            width="32"
-            xmlns="http://www.w3.org/2000/svg"
+          <g
+            id="icon/icon-32-next"
           >
-            <rect
-              fill="none"
-              height="32"
-              width="32"
-            />
             <g
-              id="Icons"
+              id="Variant=ic-32-next-dark4light"
             >
-              <g
-                id="icon/icon-32-next"
-              >
-                <g
-                  id="Variant=ic-32-next-dark4light"
-                >
-                  <path
-                    d="M19.2188 11L24.0004 16.0002"
-                    stroke="currentColor"
-                    stroke-linecap="square"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M24 16L19.2185 21.0002"
-                    stroke="currentColor"
-                    stroke-linecap="square"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M7 16.0781H21.6419"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-width="2"
-                  />
-                </g>
-              </g>
+              <path
+                d="M19.2188 11L24.0004 16.0002"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="2"
+              />
+              <path
+                d="M24 16L19.2185 21.0002"
+                stroke="currentColor"
+                stroke-linecap="square"
+                stroke-width="2"
+              />
+              <path
+                d="M7 16.0781H21.6419"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+              />
             </g>
-          </svg>
-        </div>
-      </div>
+          </g>
+        </g>
+      </svg>
     </button>
   </div>
 </div>
