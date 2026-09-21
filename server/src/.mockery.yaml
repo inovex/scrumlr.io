@@ -114,6 +114,7 @@ packages:
     config:
       dir: columntemplates
     interfaces:
+      ColumnTemplateApi:
       ColumnTemplateService:
       ColumnTemplateDatabase:
 
