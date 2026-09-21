@@ -46,14 +46,14 @@ func TestCreateBoardTemplate(t *testing.T) {
 	creator := uuid.New()
 	body := CreateBoardTemplateRequest{
 		Name:        new("Test template"),
-		Creator:     creator,
 		Description: new("A template for testing"),
 		Favourite:   new(false),
 		Columns: []*columntemplates.ColumnTemplateRequest{
 			{Name: "To do", Description: "Tasks to do", Color: common.ColorGoalGreen},
 		},
 	}
-	expectedBody := body
+  expectedBody := body
+  expectedBody.Creator = creator
 	template := testBoardTemplate()
 
 	service := NewMockBoardTemplateService(t)
