@@ -340,6 +340,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 		boardTemplate, err := uuid.Parse(boardTemplateParam)
 		if err != nil {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
+			return
 		}
 		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
 		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
@@ -398,6 +399,9 @@ func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 func (s *Server) ColumnTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnTemplateParam := chi.URLParam(r, "columnTemplate")
+		if columnTemplateParam == "" {
+			columnTemplateParam = chi.URLParam(r, "id")
+		}
 		columnTemplate, err := uuid.Parse(columnTemplateParam)
 		if err != nil {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
