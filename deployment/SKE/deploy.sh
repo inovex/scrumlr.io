@@ -4,13 +4,14 @@ set -e
 
 # Function to check if a command exists
 command_exists() {
-  command -v "$1" >/dev/null 2>&1
+  local cmd_name="$1"
+  command -v "$cmd_name" >/dev/null 2>&1
 }
 
 # Function to check if a Kubernetes cluster is connected
 check_k8s_connection() {
   if ! kubectl cluster-info >/dev/null 2>&1; then
-    echo "Error: No Kubernetes cluster connection found."
+    echo "Error: No Kubernetes cluster connection found." >&2
     exit 1
   fi
 }
@@ -35,13 +36,13 @@ helm_release_exists() {
 
 # Check if helm is installed
 if ! command_exists helm; then
-  echo "Error: Helm is not installed."
+  echo "Error: Helm is not installed." >&2
   exit 1
 fi
 
 # Check if kubectl is installed
 if ! command_exists kubectl; then
-  echo "Error: kubectl is not installed."
+  echo "Error: kubectl is not installed." >&2
   exit 1
 fi
 
@@ -51,7 +52,7 @@ check_k8s_connection
 # Input parameters
 DB_URL=$1
 
-if [ -z "$DB_URL" ]; then
+if [[ -z "$DB_URL" ]]; then
   echo "Usage: $0 <DB_URL>"
   exit 1
 fi
@@ -73,7 +74,7 @@ fi
 echo "Waiting for Traefik load balancer to get a public IP..."
 while true; do
   LB_IP=$(kubectl get svc -n scrumlr traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  if [ -n "$LB_IP" ]; then
+  if [[ -n "$LB_IP" ]]; then
     echo "Traefik load balancer IP: $LB_IP"
     break
   fi
@@ -85,8 +86,8 @@ done
 echo "Please set up your DNS records to point to the Traefik load balancer IP: $LB_IP"
 read -rp "Enter your deployment domain (e.g., scrumlr.stackit.rocks): " DEPLOYMENT_DOMAIN
 
-if [ -z "$DEPLOYMENT_DOMAIN" ]; then
-  echo "Error: Deployment domain is required."
+if [[ -z "$DEPLOYMENT_DOMAIN" ]]; then
+  echo "Error: Deployment domain is required." >&2
   exit 1
 fi
 
