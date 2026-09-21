@@ -10,7 +10,7 @@ require (
 	github.com/go-chi/httprate v0.16.0
 	github.com/go-chi/jwtauth/v5 v5.4.0
 	github.com/go-chi/render v1.0.3
-	github.com/golang-migrate/migrate/v4 v4.19.1
+	github.com/golang-migrate/migrate/v4 v4.20.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
 	github.com/lestrrat-go/jwx/v3 v3.3.0
