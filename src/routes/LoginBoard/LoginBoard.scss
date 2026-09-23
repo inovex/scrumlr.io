@@ -160,6 +160,17 @@ $space--between-parts: styles.$spacing--xl;
   font-weight: bold;
   color: styles.$navy--700;
   margin: 0;
+  display: inline-block;
+
+  &::after {
+    content: attr(data-label);
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    font-weight: bold;
+  }
 
   &--active {
     cursor: default;

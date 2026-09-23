@@ -121,6 +121,7 @@ export const LoginBoard = () => {
             "login-board__anonymous-toggle--active": showAnonymousContent,
           })}
           data-cy="login-board__anonymous-toggle"
+          data-label={t("LoginBoard.anonymousLogin")}
           onClick={() => !showAnonymousContent && setShowAnonymousContent(true)}
           onKeyDown={(e) => {
             if ((e.key === "Enter" || e.key === " ") && !showAnonymousContent) {
