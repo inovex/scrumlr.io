@@ -2,12 +2,14 @@ package columntemplates
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -15,6 +17,38 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/technical_helper"
 )
+
+func TestColumnTemplateContext(t *testing.T) {
+	templateID := uuid.New()
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("columnTemplate", templateID.String())
+	request := httptest.NewRequest(http.MethodGet, "/"+templateID.String(), nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	api.ColumnTemplateContext(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, templateID, r.Context().Value(identifiers.ColumnTemplateIdentifier))
+		w.WriteHeader(http.StatusNoContent)
+	})).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusNoContent, response.Code)
+}
+
+func TestColumnTemplateContext_BadRequest(t *testing.T) {
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("columnTemplate", "invalid")
+	request := httptest.NewRequest(http.MethodGet, "/invalid", nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	api.ColumnTemplateContext(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		t.Fatal("next handler should not be called")
+	})).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+}
 
 func testColumnTemplate() *ColumnTemplate {
 	return &ColumnTemplate{
@@ -26,21 +60,6 @@ func testColumnTemplate() *ColumnTemplate {
 		Visible:       true,
 		Index:         0,
 	}
-}
-
-func columnTemplateRequest(method, path string, body any) (*httptest.ResponseRecorder, *technical_helper.TestRequestBuilder) {
-	var bodyReader *bytes.Reader
-	if body == nil {
-		bodyReader = bytes.NewReader(nil)
-	} else {
-		bodyBytes, err := json.Marshal(body)
-		if err != nil {
-			panic(err)
-		}
-		bodyReader = bytes.NewReader(bodyBytes)
-	}
-
-	return httptest.NewRecorder(), technical_helper.NewTestRequestBuilder(method, path, bodyReader)
 }
 
 func TestCreateColumnTemplate(t *testing.T) {
@@ -60,7 +79,10 @@ func TestCreateColumnTemplate(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Create(mock.Anything, expectedBody).Return(template, nil)
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodPost, "/", body)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.UserIdentifier, userID)
 
@@ -91,9 +113,13 @@ func TestCreateColumnTemplate_ServiceError(t *testing.T) {
 		return body.BoardTemplate == boardID && body.User == userID
 	})).Return(nil, errors.New("service failure"))
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodPost, "/", ColumnTemplateRequest{
+	body := ColumnTemplateRequest{
 		Color: common.ColorGoalGreen,
-	})
+	}
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.UserIdentifier, userID)
 
@@ -107,7 +133,8 @@ func TestGetColumnTemplate(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Get(mock.Anything, template.BoardTemplate, template.ID).Return(template, nil)
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, template.BoardTemplate)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, template.ID)
 
@@ -124,7 +151,8 @@ func TestGetColumnTemplate_ServiceError(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Get(mock.Anything, boardID, columnID).Return(nil, errors.New("service failure"))
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
 
@@ -140,7 +168,8 @@ func TestGetColumnTemplates(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().GetAll(mock.Anything, boardID).Return(templates, nil)
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 
 	api.GetColumnTemplates(response, request.Request())
@@ -157,7 +186,8 @@ func TestGetColumnTemplates_ServiceError(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().GetAll(mock.Anything, boardID).Return(nil, errors.New("service failure"))
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 
 	api.GetColumnTemplates(response, request.Request())
@@ -176,7 +206,10 @@ func TestUpdateColumnTemplate(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Update(mock.Anything, expectedBody).Return(template, nil)
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodPut, "/", body)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, template.BoardTemplate)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, template.ID)
 
@@ -207,9 +240,13 @@ func TestUpdateColumnTemplate_ServiceError(t *testing.T) {
 		return body.ID == columnID && body.BoardTemplate == boardID
 	})).Return(nil, errors.New("service failure"))
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodPut, "/", ColumnTemplateUpdateRequest{
+	body := ColumnTemplateUpdateRequest{
 		Color: common.ColorGoalGreen,
-	})
+	}
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
 
@@ -223,7 +260,8 @@ func TestDeleteColumnTemplate(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Delete(mock.Anything, boardID, columnID).Return(nil)
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodDelete, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
 
@@ -237,7 +275,8 @@ func TestDeleteColumnTemplate_ServiceError(t *testing.T) {
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Delete(mock.Anything, boardID, columnID).Return(errors.New("service failure"))
 	api := NewColumnTemplateApi(service)
-	response, request := columnTemplateRequest(http.MethodDelete, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/", nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
 	request.AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
 

@@ -11,6 +11,8 @@ import (
 
 func TestColumnTemplateRouterRegistersRoutes(t *testing.T) {
 	api := NewMockColumnTemplateApi(t)
+	api.EXPECT().ColumnTemplateContext(mock.Anything).
+		RunAndReturn(func(next http.Handler) http.Handler { return next })
 
 	routes := NewColumnTemplateRouter(api).RegisterRoutes().Routes()
 
@@ -81,6 +83,8 @@ func TestBoardTemplateRouterDispatchesRoutes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			api := NewMockColumnTemplateApi(t)
+			api.EXPECT().ColumnTemplateContext(mock.Anything).
+				RunAndReturn(func(next http.Handler) http.Handler { return next })
 			tt.setExpectation(api)
 			router := NewColumnTemplateRouter(api).RegisterRoutes()
 

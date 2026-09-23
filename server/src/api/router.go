@@ -239,8 +239,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.Get("/", boardTemplateAPI.GetBoardTemplates)
 
 			r.Route("/{id}", func(r chi.Router) {
-				r.Use(s.BoardTemplateContext)
-
+				r.Use(boardTemplateAPI.BoardTemplateContext)
 				r.Get("/", boardTemplateAPI.GetBoardTemplate)
 				r.Put("/", boardTemplateAPI.UpdateBoardTemplate)
 				r.Delete("/", boardTemplateAPI.DeleteBoardTemplate)

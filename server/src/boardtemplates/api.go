@@ -2,8 +2,10 @@ package boardtemplates
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -29,8 +31,6 @@ func NewBoardTemplateApi(service BoardTemplateService) BoardTemplateApi {
 	api.service = service
 	return api
 }
-
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
 // Create a new board template
 //
@@ -212,4 +212,17 @@ func (api *API) DeleteBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
+}
+
+func (api *API) BoardTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		boardTemplateParam := chi.URLParam(r, "id")
+		boardTemplate, err := uuid.Parse(boardTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
+			return
+		}
+		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
+		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
+	})
 }
