@@ -198,6 +198,177 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 	suite.Nil(result.Board)
 }
 
+func (suite *BoardServiceTestSuite) TestResolveAuthorName_ReturnsUnknownForNonSessionUser() {
+	service := &Service{userService: suite.userService}
+	authorID := uuid.New()
+
+	name, err := service.resolveAuthorName(context.Background(), authorID, map[uuid.UUID]struct{}{}, map[uuid.UUID]string{})
+
+	suite.NoError(err)
+	suite.Equal("unknown user", name)
+}
+
+func (suite *BoardServiceTestSuite) TestResolveAuthorName_ReturnsErrorWhenLookupFails() {
+	service := &Service{userService: suite.userService}
+	authorID := uuid.New()
+
+	suite.userService.EXPECT().Get(mock.Anything, authorID).Return(nil, errors.New("lookup failed")).Once()
+
+	name, err := service.resolveAuthorName(
+		context.Background(),
+		authorID,
+		map[uuid.UUID]struct{}{authorID: {}},
+		map[uuid.UUID]string{},
+	)
+
+	suite.Empty(name)
+	suite.EqualError(err, "lookup failed")
+}
+
+func (suite *BoardServiceTestSuite) TestResolveAuthorName_UsesCacheAfterFirstLookup() {
+	service := &Service{userService: suite.userService}
+	authorID := uuid.New()
+	userCache := make(map[uuid.UUID]string)
+	validSessionUsers := map[uuid.UUID]struct{}{authorID: {}}
+
+	suite.userService.EXPECT().Get(mock.Anything, authorID).Return(&users.User{ID: authorID, Name: "Alex"}, nil).Once()
+
+	firstName, firstErr := service.resolveAuthorName(context.Background(), authorID, validSessionUsers, userCache)
+	secondName, secondErr := service.resolveAuthorName(context.Background(), authorID, validSessionUsers, userCache)
+
+	suite.NoError(firstErr)
+	suite.NoError(secondErr)
+	suite.Equal("Alex", firstName)
+	suite.Equal("Alex", secondName)
+	suite.Equal("Alex", userCache[authorID])
+}
+
+func (suite *BoardServiceTestSuite) TestBuildCSVRecords_UnknownAuthorAndClosedVotingWithoutResults() {
+	service := &Service{userService: suite.userService}
+	noteID := uuid.New()
+	columnID := uuid.New()
+	authorID := uuid.New()
+
+	board := &FullBoard{
+		Votings: []*votings.Voting{
+			{Status: votings.Closed, VotingResults: nil},
+			{Status: votings.Open},
+		},
+	}
+	cols := []*columns.Column{{ID: columnID, Name: "Ideas", Visible: true}}
+	notesOnBoard := []*notes.Note{{
+		ID:     noteID,
+		Author: authorID,
+		Text:   "A note",
+		Position: notes.NotePosition{
+			Column: columnID,
+			Rank:   2,
+		},
+	}}
+
+	records, err := service.buildCSVRecords(context.Background(), board, cols, notesOnBoard)
+
+	suite.NoError(err)
+	suite.Len(records, 2)
+	row := records[1]
+	suite.Equal([]string{
+		noteID.String(),
+		authorID.String(),
+		"unknown user",
+		"A note",
+		columnID.String(),
+		"Ideas",
+		"2",
+		"null",
+		"0",
+	}, row)
+}
+
+func (suite *BoardServiceTestSuite) TestBuildCSVRecords_CachesAuthorLookupAndSkipsOpenVotingColumn() {
+	service := &Service{userService: suite.userService}
+	authorID := uuid.New()
+	columnID := uuid.New()
+	noteOneID := uuid.New()
+	noteTwoID := uuid.New()
+
+	suite.userService.EXPECT().Get(mock.Anything, authorID).Return(&users.User{ID: authorID, Name: "Alex"}, nil).Once()
+
+	board := &FullBoard{
+		BoardSessions: []*sessions.BoardSession{{UserID: authorID}},
+		Votings: []*votings.Voting{
+			{
+				Status: votings.Closed,
+				VotingResults: &votings.VotingResults{
+					Votes: map[uuid.UUID]votings.VotingResultsPerNote{
+						noteOneID: {Total: 3},
+					},
+				},
+			},
+			{Status: votings.Open},
+		},
+	}
+
+	cols := []*columns.Column{{ID: columnID, Name: "Ideas", Visible: true}}
+	notesOnBoard := []*notes.Note{
+		{
+			ID:     noteOneID,
+			Author: authorID,
+			Text:   "First",
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   0,
+			},
+		},
+		{
+			ID:     noteTwoID,
+			Author: authorID,
+			Text:   "Second",
+			Position: notes.NotePosition{
+				Column: columnID,
+				Rank:   1,
+			},
+		},
+	}
+
+	records, err := service.buildCSVRecords(context.Background(), board, cols, notesOnBoard)
+
+	suite.NoError(err)
+	suite.Equal([]string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack", "voting_0"}, records[0])
+	suite.Equal("Alex", records[1][2])
+	suite.Equal("3", records[1][8])
+	suite.Equal("Alex", records[2][2])
+	suite.Equal("0", records[2][8])
+}
+
+func (suite *BoardServiceTestSuite) TestBuildCSVRecords_ReturnsErrorWhenAuthorLookupFails() {
+	service := &Service{userService: suite.userService}
+	authorID := uuid.New()
+	columnID := uuid.New()
+
+	suite.userService.EXPECT().Get(mock.Anything, authorID).Return(nil, errors.New("lookup failed")).Once()
+
+	board := &FullBoard{
+		BoardSessions: []*sessions.BoardSession{{UserID: authorID}},
+		Votings:       []*votings.Voting{},
+	}
+
+	cols := []*columns.Column{{ID: columnID, Name: "Ideas", Visible: true}}
+	notesOnBoard := []*notes.Note{{
+		ID:     uuid.New(),
+		Author: authorID,
+		Text:   "A note",
+		Position: notes.NotePosition{
+			Column: columnID,
+			Rank:   0,
+		},
+	}}
+
+	records, err := service.buildCSVRecords(context.Background(), board, cols, notesOnBoard)
+
+	suite.Nil(records)
+	suite.EqualError(err, "lookup failed")
+}
+
 func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
 	fullBoard := &FullBoard{Board: &Board{ID: suite.boardID}}
 	suite.mockBoardDatabase.EXPECT().GetBoard(mock.Anything, suite.boardID).
