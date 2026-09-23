@@ -26,24 +26,23 @@ jobs:
 
           echo "Bumping version from $OLD_VERSION to $NEW_VERSION"
 
+          yarn version "$NEW_VERSION"
+
           files=(
-            "package.json"
             "deployment/docker/.env.example"
             "deployment/docker/docker-compose.yml"
             "deployment/helm/scrumlr/Chart.yaml"
             "deployment/helm/scrumlr/tests/backend/deployment_test.yaml"
             "deployment/helm/scrumlr/tests/frontend/deployment_test.yaml"
-            "docs/yarn.lock"
             "server/src/main.go"
             "server/src/otel/otel.go"
-            "server/src/swagger/docs.go"
-            "server/src/swagger/swagger.json"
-            "server/src/swagger/swagger.yaml"
           )
 
           for file in "${files[@]}"; do
             sed -i "s/$OLD_VERSION/$NEW_VERSION/g" "$file"
           done
+
+          cd server && make swagger
 
       - name: Commit and Push Changes
         env:
