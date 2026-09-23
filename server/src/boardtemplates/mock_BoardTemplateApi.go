@@ -37,6 +37,59 @@ func (_m *MockBoardTemplateApi) EXPECT() *MockBoardTemplateApi_Expecter {
 	return &MockBoardTemplateApi_Expecter{mock: &_m.Mock}
 }
 
+// BoardTemplateContext provides a mock function for the type MockBoardTemplateApi
+func (_mock *MockBoardTemplateApi) BoardTemplateContext(next http.Handler) http.Handler {
+	ret := _mock.Called(next)
+
+	if len(ret) == 0 {
+		panic("no return value specified for BoardTemplateContext")
+	}
+
+	var r0 http.Handler
+	if returnFunc, ok := ret.Get(0).(func(http.Handler) http.Handler); ok {
+		r0 = returnFunc(next)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(http.Handler)
+		}
+	}
+	return r0
+}
+
+// MockBoardTemplateApi_BoardTemplateContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BoardTemplateContext'
+type MockBoardTemplateApi_BoardTemplateContext_Call struct {
+	*mock.Call
+}
+
+// BoardTemplateContext is a helper method to define mock.On call
+//   - next http.Handler
+func (_e *MockBoardTemplateApi_Expecter) BoardTemplateContext(next any) *MockBoardTemplateApi_BoardTemplateContext_Call {
+	return &MockBoardTemplateApi_BoardTemplateContext_Call{Call: _e.mock.On("BoardTemplateContext", next)}
+}
+
+func (_c *MockBoardTemplateApi_BoardTemplateContext_Call) Run(run func(next http.Handler)) *MockBoardTemplateApi_BoardTemplateContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.Handler
+		if args[0] != nil {
+			arg0 = args[0].(http.Handler)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardTemplateApi_BoardTemplateContext_Call) Return(handler http.Handler) *MockBoardTemplateApi_BoardTemplateContext_Call {
+	_c.Call.Return(handler)
+	return _c
+}
+
+func (_c *MockBoardTemplateApi_BoardTemplateContext_Call) RunAndReturn(run func(next http.Handler) http.Handler) *MockBoardTemplateApi_BoardTemplateContext_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateBoardTemplate provides a mock function for the type MockBoardTemplateApi
 func (_mock *MockBoardTemplateApi) CreateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)

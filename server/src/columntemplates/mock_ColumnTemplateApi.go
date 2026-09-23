@@ -37,6 +37,59 @@ func (_m *MockColumnTemplateApi) EXPECT() *MockColumnTemplateApi_Expecter {
 	return &MockColumnTemplateApi_Expecter{mock: &_m.Mock}
 }
 
+// ColumnTemplateContext provides a mock function for the type MockColumnTemplateApi
+func (_mock *MockColumnTemplateApi) ColumnTemplateContext(next http.Handler) http.Handler {
+	ret := _mock.Called(next)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ColumnTemplateContext")
+	}
+
+	var r0 http.Handler
+	if returnFunc, ok := ret.Get(0).(func(http.Handler) http.Handler); ok {
+		r0 = returnFunc(next)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(http.Handler)
+		}
+	}
+	return r0
+}
+
+// MockColumnTemplateApi_ColumnTemplateContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ColumnTemplateContext'
+type MockColumnTemplateApi_ColumnTemplateContext_Call struct {
+	*mock.Call
+}
+
+// ColumnTemplateContext is a helper method to define mock.On call
+//   - next http.Handler
+func (_e *MockColumnTemplateApi_Expecter) ColumnTemplateContext(next any) *MockColumnTemplateApi_ColumnTemplateContext_Call {
+	return &MockColumnTemplateApi_ColumnTemplateContext_Call{Call: _e.mock.On("ColumnTemplateContext", next)}
+}
+
+func (_c *MockColumnTemplateApi_ColumnTemplateContext_Call) Run(run func(next http.Handler)) *MockColumnTemplateApi_ColumnTemplateContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.Handler
+		if args[0] != nil {
+			arg0 = args[0].(http.Handler)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockColumnTemplateApi_ColumnTemplateContext_Call) Return(handler http.Handler) *MockColumnTemplateApi_ColumnTemplateContext_Call {
+	_c.Call.Return(handler)
+	return _c
+}
+
+func (_c *MockColumnTemplateApi_ColumnTemplateContext_Call) RunAndReturn(run func(next http.Handler) http.Handler) *MockColumnTemplateApi_ColumnTemplateContext_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateColumnTemplate provides a mock function for the type MockColumnTemplateApi
 func (_mock *MockColumnTemplateApi) CreateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)

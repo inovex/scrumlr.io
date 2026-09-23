@@ -2,12 +2,14 @@ package boardtemplates
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -17,6 +19,38 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
+func TestBoardTemplateContext(t *testing.T) {
+	templateID := uuid.New()
+	api := NewBoardTemplateApi(NewMockBoardTemplateService(t))
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("id", templateID.String())
+	request := httptest.NewRequest(http.MethodGet, "/"+templateID.String(), nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	api.BoardTemplateContext(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, templateID, r.Context().Value(identifiers.BoardTemplateIdentifier))
+		w.WriteHeader(http.StatusNoContent)
+	})).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusNoContent, response.Code)
+}
+
+func TestBoardTemplateContext_BadRequest(t *testing.T) {
+	api := NewBoardTemplateApi(NewMockBoardTemplateService(t))
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("id", "invalid")
+	request := httptest.NewRequest(http.MethodGet, "/invalid", nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	api.BoardTemplateContext(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		t.Fatal("next handler should not be called")
+	})).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+}
+
 func testBoardTemplate() *BoardTemplate {
 	return &BoardTemplate{
 		ID:          uuid.New(),
@@ -25,21 +59,6 @@ func testBoardTemplate() *BoardTemplate {
 		Description: new("A template for testing"),
 		Favourite:   new(false),
 	}
-}
-
-func requestWithContext(method, path string, body any) (*httptest.ResponseRecorder, *technical_helper.TestRequestBuilder) {
-	var bodyReader *bytes.Reader
-	if body == nil {
-		bodyReader = bytes.NewReader(nil)
-	} else {
-		bodyBytes, err := json.Marshal(body)
-		if err != nil {
-			panic(err)
-		}
-		bodyReader = bytes.NewReader(bodyBytes)
-	}
-
-	return httptest.NewRecorder(), technical_helper.NewTestRequestBuilder(method, path, bodyReader)
 }
 
 func TestCreateBoardTemplate(t *testing.T) {
@@ -52,15 +71,18 @@ func TestCreateBoardTemplate(t *testing.T) {
 			{Name: "To do", Description: "Tasks to do", Color: common.ColorGoalGreen},
 		},
 	}
-  expectedBody := body
-  expectedBody.Creator = creator
+	expectedBody := body
+	expectedBody.Creator = creator
 	template := testBoardTemplate()
 
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Create(mock.Anything, expectedBody).Return(template, nil)
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodPost, "/", body)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.UserIdentifier, creator)
 
 	api.CreateBoardTemplate(response, request.Request())
@@ -94,7 +116,10 @@ func TestCreateBoardTemplate_ServiceError(t *testing.T) {
 	})).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodPost, "/", body)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.UserIdentifier, creator)
 
 	api.CreateBoardTemplate(response, request.Request())
@@ -108,7 +133,8 @@ func TestGetBoardTemplate(t *testing.T) {
 	service.EXPECT().Get(mock.Anything, template.ID).Return(template, nil)
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodGet, "/"+template.ID.String(), nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/"+template.ID.String(), nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, template.ID)
 
 	api.GetBoardTemplate(response, request.Request())
@@ -125,7 +151,8 @@ func TestGetBoardTemplate_ServiceError(t *testing.T) {
 	service.EXPECT().Get(mock.Anything, templateID).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodGet, "/"+templateID.String(), nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/"+templateID.String(), nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, templateID)
 
 	api.GetBoardTemplate(response, request.Request())
@@ -140,7 +167,8 @@ func TestGetBoardTemplates(t *testing.T) {
 	service.EXPECT().GetAll(mock.Anything, userID).Return(templates, nil)
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.UserIdentifier, userID)
 
 	api.GetBoardTemplates(response, request.Request())
@@ -158,7 +186,8 @@ func TestGetBoardTemplates_ServiceError(t *testing.T) {
 	service.EXPECT().GetAll(mock.Anything, userID).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
 	request.AddToContext(identifiers.UserIdentifier, userID)
 
 	api.GetBoardTemplates(response, request.Request())
@@ -180,7 +209,10 @@ func TestUpdateBoardTemplate(t *testing.T) {
 	service.EXPECT().Update(mock.Anything, expectedBody).Return(template, nil)
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodPut, "/"+template.ID.String(), body)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/"+template.ID.String(), bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, template.ID)
 
 	api.UpdateBoardTemplate(response, request.Request())
@@ -213,7 +245,10 @@ func TestUpdateBoardTemplate_ServiceError(t *testing.T) {
 	})).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodPut, "/"+templateID.String(), BoardTemplateUpdateRequest{})
+	bodyBytes, err := json.Marshal(BoardTemplateUpdateRequest{})
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/"+templateID.String(), bytes.NewReader(bodyBytes))
 	request.AddToContext(identifiers.BoardTemplateIdentifier, templateID)
 
 	api.UpdateBoardTemplate(response, request.Request())
@@ -227,7 +262,8 @@ func TestDeleteBoardTemplate(t *testing.T) {
 	service.EXPECT().Delete(mock.Anything, templateID).Return(nil)
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodDelete, "/"+templateID.String(), nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/"+templateID.String(), nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, templateID)
 
 	api.DeleteBoardTemplate(response, request.Request())
@@ -241,7 +277,8 @@ func TestDeleteBoardTemplate_ServiceError(t *testing.T) {
 	service.EXPECT().Delete(mock.Anything, templateID).Return(errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
-	response, request := requestWithContext(http.MethodDelete, "/"+templateID.String(), nil)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/"+templateID.String(), nil)
 	request.AddToContext(identifiers.BoardTemplateIdentifier, templateID)
 
 	api.DeleteBoardTemplate(response, request.Request())

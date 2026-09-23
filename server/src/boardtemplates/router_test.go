@@ -11,6 +11,8 @@ import (
 
 func TestBoardTemplateRouterRegistersRoutes(t *testing.T) {
 	api := NewMockBoardTemplateApi(t)
+	api.EXPECT().BoardTemplateContext(mock.Anything).
+		RunAndReturn(func(next http.Handler) http.Handler { return next })
 
 	routes := NewBoardTemplateRouter(api).RegisterRoutes().Routes()
 
@@ -81,6 +83,8 @@ func TestBoardTemplateRouterDispatchesRoutes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			api := NewMockBoardTemplateApi(t)
+			api.EXPECT().BoardTemplateContext(mock.Anything).
+				RunAndReturn(func(next http.Handler) http.Handler { return next })
 			tt.setExpectation(api)
 			router := NewBoardTemplateRouter(api).RegisterRoutes()
 
