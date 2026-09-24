@@ -3,7 +3,7 @@ package boardreactions
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type BoardReactionCreater interface {
