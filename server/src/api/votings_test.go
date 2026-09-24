@@ -15,7 +15,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/votings"
 
-	"github.com/google/uuid"
+	"uuid"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -88,8 +88,8 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 			s := new(Server)
 			votingMock := votings.NewMockVotingService(suite.T())
 			notesMock := notes.NewMockNotesService(suite.T())
-			boardId, _ := uuid.NewRandom()
-			votingId, _ := uuid.NewRandom()
+			boardId := uuid.NewV4()
+			votingId := uuid.NewV4()
 
 			s.votings = votingMock
 			s.notes = notesMock
@@ -125,8 +125,8 @@ func (suite *VotingTestSuite) TestAbortVoting() {
 			votingMock := votings.NewMockVotingService(suite.T())
 			notesMock := notes.NewMockNotesService(suite.T())
 
-			boardId, _ := uuid.NewRandom()
-			votingId, _ := uuid.NewRandom()
+			boardId := uuid.NewV4()
+			votingId := uuid.NewV4()
 			s.votings = votingMock
 			s.notes = notesMock
 
@@ -152,8 +152,8 @@ func (suite *VotingTestSuite) TestGetVoting() {
 	s := new(Server)
 	votingMock := votings.NewMockVotingService(suite.T())
 	s.votings = votingMock
-	boardId, _ := uuid.NewRandom()
-	votingId, _ := uuid.NewRandom()
+	boardId := uuid.NewV4()
+	votingId := uuid.NewV4()
 
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.BoardIdentifier, boardId).

@@ -10,7 +10,8 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/realtime"

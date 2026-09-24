@@ -5,7 +5,7 @@ import (
 
 	"scrumlr.io/server/users"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type BoardSessionRequest struct {

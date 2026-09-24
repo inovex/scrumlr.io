@@ -13,7 +13,8 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/votings"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
@@ -70,7 +71,7 @@ var (
 		Text:   "Moderator Text",
 		Position: notes.NotePosition{
 			Column: aSeeableColumn.ID,
-			Stack:  uuid.NullUUID{},
+			Stack:  common.NullUUID{},
 			Rank:   1,
 		},
 	}
@@ -80,7 +81,7 @@ var (
 		Text:   "User Text",
 		Position: notes.NotePosition{
 			Column: aSeeableColumn.ID,
-			Stack:  uuid.NullUUID{},
+			Stack:  common.NullUUID{},
 			Rank:   0,
 		},
 	}
@@ -98,7 +99,7 @@ var (
 		Position: notes.NotePosition{
 			Column: aHiddenColumn.ID,
 			Rank:   1,
-			Stack:  uuid.NullUUID{},
+			Stack:  common.NullUUID{},
 		},
 	}
 	boardSub = &BoardSubscription{
@@ -713,7 +714,7 @@ func buildNote(id uuid.UUID, columnId uuid.UUID) *notes.Note {
 		Edited: false,
 		Position: notes.NotePosition{
 			Column: columnId,
-			Stack: uuid.NullUUID{
+			Stack: common.NullUUID{
 				UUID:  uuid.New(),
 				Valid: true,
 			},
@@ -776,8 +777,8 @@ func buildBoardDto(name *string, description *string, accessPolicy boards.Access
 		IsLocked:              false,
 		TimerStart:            nil,
 		TimerEnd:              nil,
-		SharedNote:            uuid.NullUUID{},
-		ShowVoting:            uuid.NullUUID{},
+		SharedNote:            common.NullUUID{},
+		ShowVoting:            common.NullUUID{},
 		Passphrase:            nil,
 		Salt:                  nil,
 	}

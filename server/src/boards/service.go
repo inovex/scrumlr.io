@@ -10,7 +10,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"go.opentelemetry.io/otel/attribute"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/otel"
@@ -1214,11 +1215,11 @@ func reorderAndRepairStacks(stackChildrenByRoot map[uuid.UUID][]*notes.Note, not
 		}
 
 		replacementStackRoot := stackChildren[len(stackChildren)-1]
-		replacementStackRoot.Position.Stack = uuid.NullUUID{}
+		replacementStackRoot.Position.Stack = common.NullUUID{}
 		replacementStackRoot.Position.Rank = removedStackRoot.Position.Rank
 
 		for i := 0; i < len(stackChildren)-1; i++ {
-			stackChildren[i].Position.Stack = uuid.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
+			stackChildren[i].Position.Stack = common.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
 		}
 	}
 }
@@ -1280,7 +1281,7 @@ func (service *Service) importStackRoots(ctx context.Context, boardID uuid.UUID,
 			Text: stackRootNote.Text,
 			Position: notes.NotePosition{
 				Column: newColumnID,
-				Stack:  uuid.NullUUID{},
+				Stack:  common.NullUUID{},
 				Rank:   stackRootNote.Position.Rank,
 			},
 			Board: boardID,
@@ -1309,7 +1310,7 @@ func (service *Service) importStackChildren(ctx context.Context, boardID uuid.UU
 				Position: notes.NotePosition{
 					Column: stackGroup.StackRoot.Position.Column,
 					Rank:   note.Position.Rank,
-					Stack: uuid.NullUUID{
+					Stack: common.NullUUID{
 						UUID:  stackGroup.StackRoot.ID,
 						Valid: true,
 					},

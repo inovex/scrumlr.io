@@ -8,7 +8,8 @@ import (
 
 	"scrumlr.io/server/websocket"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"

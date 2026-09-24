@@ -1,9 +1,8 @@
 module scrumlr.io/server/e2e-tests
 
-go 1.26.1
+go 1.27.1
 
 require (
-	github.com/google/uuid v1.6.0
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
 	scrumlr.io/server v0.0.0-00010101000000-000000000000
@@ -22,6 +21,7 @@ require (
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/klauspost/compress v1.20.0 // indirect

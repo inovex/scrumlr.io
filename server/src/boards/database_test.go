@@ -10,7 +10,8 @@ import (
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/timeprovider"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
@@ -286,7 +287,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesTimerAndSh
 	err := testDbTemplates.InsertColumn(suite.db, columnID, boardId, "Column", "Description", "backlog-blue", true, 0)
 	assert.Nil(t, err)
 
-	err = testDbTemplates.InsertNote(suite.db, noteID, authorID, boardId, columnID, "Shared note", uuid.NullUUID{}, 0)
+	err = testDbTemplates.InsertNote(suite.db, noteID, authorID, boardId, columnID, "Shared note", common.NullUUID{}, 0)
 	assert.Nil(t, err)
 
 	startTime := nowDate.Add(time.Minute)
@@ -296,7 +297,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesTimerAndSh
 		ID:         boardId,
 		TimerStart: &startTime,
 		TimerEnd:   &endTime,
-		SharedNote: uuid.NullUUID{UUID: noteID, Valid: true},
+		SharedNote: common.NullUUID{UUID: noteID, Valid: true},
 	})
 
 	assert.Nil(t, err)
@@ -318,7 +319,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_UpdatesVotingWhen
 
 	dbBoard, err := suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:         boardID,
-		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+		ShowVoting: common.NullUUID{UUID: votingID, Valid: true},
 	})
 
 	assert.Nil(t, err)
@@ -339,9 +340,9 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteR
 	err := testDbTemplates.InsertColumn(suite.db, columnID, boardID, "Column", "Description", "backlog-blue", true, 0)
 	assert.Nil(t, err)
 
-	err = testDbTemplates.InsertNote(suite.db, noteAID, suite.users["Stan"].id, boardID, columnID, "A", uuid.NullUUID{}, 0)
+	err = testDbTemplates.InsertNote(suite.db, noteAID, suite.users["Stan"].id, boardID, columnID, "A", common.NullUUID{}, 0)
 	assert.Nil(t, err)
-	err = testDbTemplates.InsertNote(suite.db, noteBID, suite.users["Santa"].id, boardID, columnID, "B", uuid.NullUUID{}, 1)
+	err = testDbTemplates.InsertNote(suite.db, noteBID, suite.users["Santa"].id, boardID, columnID, "B", common.NullUUID{}, 1)
 	assert.Nil(t, err)
 
 	err = testDbTemplates.InsertVoting(suite.db, votingID, boardID, 1, false, false, string(votings.Closed), false)
@@ -351,7 +352,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_UpdateBoard_RecalculatesNoteR
 
 	_, err = suite.database.UpdateBoard(context.Background(), DatabaseBoardUpdate{
 		ID:         boardID,
-		ShowVoting: uuid.NullUUID{UUID: votingID, Valid: true},
+		ShowVoting: common.NullUUID{UUID: votingID, Valid: true},
 	})
 	assert.Nil(t, err)
 

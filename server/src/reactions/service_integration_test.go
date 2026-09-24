@@ -5,7 +5,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -364,7 +365,7 @@ func (suite *ReactionServiceIntegrationTestSuite) seedReactionsTestData(db *bun.
 	}
 
 	for _, note := range suite.notes {
-		if err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+		if err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, common.NullUUID{UUID: uuid.UUID{}, Valid: false}, 0); err != nil {
 			log.Fatalf("Failed to insert note: %s", err)
 		}
 	}
