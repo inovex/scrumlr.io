@@ -83,7 +83,7 @@ New icons come out of Figma via `scripts/convertFigmaIconExportToReact.mjs`. The
 yes/no variant, and `react-focus-lock` traps focus while a dialog is open.
 
 **Dialogs are routes.** The settings dialog, the voting dialog, the timer dialog and the note stack view are all nested
-routes rendered into a parent `<Outlet />` (see [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md#routing)). If you are adding a
+routes rendered into a parent `<Outlet />` (see [Architecture](/dev/frontend/architecture#routing)). If you are adding a
 dialog, add a route for it. Do not use `useState` to toggle dialogs on or off.
 
 ## Drag and drop
@@ -94,7 +94,7 @@ Built on `@dnd-kit/core`, in three files under `src/components/DragAndDrop/`: **
 `type` in its `data`, or it will be treated as a note, which will break collision checks.
 
 Anything that renders a `Note` or a `Column` must be inside a `CustomDndContext`, including in tests (see
-[Testing](/docs/src/content/docs/dev/Frontend/testing.md#drag-and-drop-in-tests)).
+[Testing](/dev/frontend/testing#drag-and-drop-in-tests)).
 
 ## Hotkeys
 
@@ -119,7 +119,7 @@ switch the system back on.
 Check `src/utils/hooks/` before writing a new hook to see if an existing utility already covers your use case.
 
 Several of these custom hooks depend on real element dimensions, which matters when testing (see
-[Testing](/docs/src/content/docs/dev/Frontend/testing.md#the-setup-file)).
+[Testing](/dev/frontend/testing#the-setup-file)).
 
 ## Avatars
 

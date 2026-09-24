@@ -5,9 +5,10 @@ sidebar:
     order: 12
 ---
 
-The frontend is configured **twice**:
+The frontend is configured **thrice**:
 
 - At **build time** by Vite environment variables (`VITE_*`), which are baked into the bundle.
+- At build time by scrumlr variables at info endpoint
 - At **runtime** by nginx and cookies, which the nginx container sets from `SCRUMLR_*` environment variables.
 
 Knowing which one applies where saves a lot of confusion. During local development you only care about the first. In a
@@ -53,7 +54,7 @@ environments, the frontend container translates its `SCRUMLR_*` variables into c
 3. `src/config.ts` reads those cookies with `js-cookie`.
 
 So the bundle never reads a `SCRUMLR_*` variable directly. The full list of deployment-side names is in
-[Environment Variables](/docs/src/content/docs/self-hosting/env-vars.md#frontend).
+[Environment Variables](/self-hosting/env-vars#frontend).
 
 `SHOW_LEGAL_DOCUMENTS` **defaults to `true`** when the cookie is absent, so an
 empty value does not hide the legal pages.
@@ -82,5 +83,5 @@ through the helpers in `src/utils/storage.ts`, keyed by the constants in `src/co
 
 ## See also
 
-- [Environment Variables](/docs/src/content/docs/self-hosting/env-vars.md#frontend) — the deployment-side `SCRUMLR_*` names.
-- [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md) — where `config.ts` is consumed.
+- [Environment Variables](/self-hosting/env-vars#frontend) — the deployment-side `SCRUMLR_*` names.
+- [Architecture](/dev/frontend/architecture/) — where `config.ts` is consumed.

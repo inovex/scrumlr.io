@@ -32,7 +32,7 @@ flowchart TB
 Pay special attention to the dotted arrow. Components dispatch thunks, thunks call REST, and the resulting state change
 arrives back **over the WebSocket** as a separate action. State is not updated by the thunk that caused the change, a thunk that writes to a board does not touch the store. An action is dispatched and a reducer is run only after the server pushes the state change to every connected client over the WebSocket. The reason for this architecture is that by forcing state updates to happen exclusively via WebSocket events, the app treats local edits and remote edits identically (broadcasting them to everyone rather than applying them locally first). This ensures the seamless, real-time collaboration the application is built to deliver.
 
-For more information on how state is managed in this application see [State Management Docs](/docs/src/content/docs/dev/Frontend/state-management.md)
+For more information on how state is managed in this application see [State Management Docs](/dev/frontend/state-management/)
 
 ## Entry point
 
@@ -46,7 +46,7 @@ For more information on how state is managed in this application see [State Mana
 
 Be aware that `<Html />` is not markup. It uses `react-helmet-async` to set the `lang` and `data-theme` attributes on the `<html>`
 element. That single attribute drives the entire dark mode implementation (see
-[Styling & Theming](/docs/src/content/docs/dev/Frontend/styling.md)).
+[Styling & Theming](/dev/frontend/styling/)).
 
 ## Routing
 
@@ -102,7 +102,7 @@ The practical consequence: if you need more note data in a column or a note, add
 (Note: `src/api/request.ts` handles board join requests from users, not HTTP request utilities.)
 
 Adding an endpoint means adding a function to the matching resource module and also, if it is a new resource, spreading the
-new module into `API`. Endpoint documentation lives with the backend: see [API docs](/docs/src/content/docs/dev/Backend/api_docs.md).
+new module into `API`. Endpoint documentation lives with the backend: see [API docs](/dev/backend/api_docs/).
 
 ## Where types live
 

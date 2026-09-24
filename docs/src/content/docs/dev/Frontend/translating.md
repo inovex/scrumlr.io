@@ -13,7 +13,7 @@ Before starting your translation contribution:
 
 1. **Check existing languages**: Review `src/i18n/` to see currently supported languages
 2. **Language code**: Identify the appropriate ISO 639-1 language code for your language (e.g., `fr` for French, `es` for Spanish)
-3. **Development setup**: Ensure you have the development environment set up (see [Setup](/docs/src/content/docs/dev/Frontend/setup.md) and the [Contributing Guide](/docs/src/content/docs/dev/contributing.md))
+3. **Development setup**: Ensure you have the development environment set up (see [Setup](/dev/frontend/setup/) and the [Contributing Guide](/dev/contributing/))
 
 ## Translation Files Structure
 
@@ -218,7 +218,7 @@ Two special cases:
 - **Board templates** live in the `templates` namespace: `useTranslation(["translation", "templates"])`.
 - **`retryable` error keys** must go under the `Error` object in `src/i18n/en/translation.json`. The key is typed, so a
   thunk using a missing one will not compile — see
-  [State & Realtime](/docs/src/content/docs/dev/Frontend/state-management.md#error-handling-retryable).
+  [State & Realtime](/dev/frontend/state-management#error-handling-retryable).
 
 ## Translation Guidelines
 

@@ -15,7 +15,7 @@ client reads those cookies on startup. The one exception is `SCRUMLR_LISTEN_PORT
 
 A consequence worth knowing: a cookie value takes precedence over anything baked in at build time, and when a cookie is
 absent the client falls back to its own default. See
-[Frontend configuration](/docs/src/content/docs/dev/frontend/configuration.md#runtime-configuration-cookies) for the full resolution order.
+[Frontend configuration](/dev/frontend/configuration#runtime-configuration-cookies) for the full resolution order.
 
 ### Show legal documents
 

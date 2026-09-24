@@ -19,7 +19,7 @@ More features of scrumlr can be found at [Features](/features/)
 
 ## Contributing
 
-Read our [Contributing Guidelines](/docs/src/content/docs/dev/contributing.md) to learn how you can contribute to Scrumlr. We welcome all contributions, big or small!
+Read our [Contributing Guidelines](/dev/contributing/) to learn how you can contribute to Scrumlr. We welcome all contributions, big or small!
 
 ## Self-hosting
 Since Scrumlr is completely free and open-source, you can self-host it on your own server for yourself, your team or even as an organization. Check out our [self-hosting guide](/self-hosting/intro/) to get started.
