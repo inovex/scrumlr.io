@@ -78,7 +78,9 @@ $space--between-parts: styles.$spacing--xl;
   flex-direction: column;
   align-items: center;
   height: 100%;
-  width: fit-content;
+  width: 100%;
+  max-width: calc(500px + 2 * styles.$spacing--xl);
+  padding: 0 styles.$spacing--xl;
   flex: 1;
 }
 
@@ -160,17 +162,6 @@ $space--between-parts: styles.$spacing--xl;
   font-weight: bold;
   color: styles.$navy--700;
   margin: 0;
-  display: inline-block;
-
-  &::after {
-    content: attr(data-label);
-    display: block;
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-    pointer-events: none;
-    font-weight: bold;
-  }
 
   &--active {
     cursor: default;
@@ -274,10 +265,6 @@ $space--between-parts: styles.$spacing--xl;
   // the 1px is needed here so that the hiding of stand and the adjustment of headder bar is in sync with the size adjustment
   .login-board__card {
     padding-bottom: styles.$spacing--base;
-  }
-
-  .login-board__form-wrapper {
-    width: 500px;
   }
 
   .login-board__providers-section {
