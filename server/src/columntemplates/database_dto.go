@@ -1,7 +1,8 @@
 package columntemplates
 
 import (
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 )

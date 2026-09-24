@@ -4378,7 +4378,7 @@ const docTemplate = `{
                     "description": "The id of a note to share with other users.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/uuid.NullUUID"
+                            "$ref": "#/definitions/common.NullUUID"
                         }
                     ]
                 },
@@ -4395,7 +4395,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "showVoting": {
-                    "$ref": "#/definitions/uuid.NullUUID"
+                    "$ref": "#/definitions/common.NullUUID"
                 },
                 "timerEnd": {
                     "type": "string"
@@ -4469,7 +4469,7 @@ const docTemplate = `{
                     "description": "Set the note id of the note to share with other users.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/uuid.NullUUID"
+                            "$ref": "#/definitions/common.NullUUID"
                         }
                     ]
                 },
@@ -4486,7 +4486,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "showVoting": {
-                    "$ref": "#/definitions/uuid.NullUUID"
+                    "$ref": "#/definitions/common.NullUUID"
                 },
                 "timerEnd": {
                     "description": "Set the timer end.",
@@ -5029,7 +5029,7 @@ const docTemplate = `{
                     "description": "The parent note for this note in a stack.",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/uuid.NullUUID"
+                            "$ref": "#/definitions/common.NullUUID"
                         }
                     ]
                 }
@@ -5270,7 +5270,7 @@ const docTemplate = `{
                 }
             }
         },
-        "uuid.NullUUID": {
+        "common.NullUUID": {
             "type": "object",
             "properties": {
                 "uuid": {
