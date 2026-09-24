@@ -74,10 +74,6 @@ string. Both forms are typed in `vite-env-override.d.ts`.
 
 **Do not use old Create React App syntax**: Syntax like `import {ReactComponent as X} from "…svg"` will break the build. Always use default imports combined with `?react`.
 
-Icons inherit their color and are sized by the consumer. The SVG files carry `class="icon"` and
-`stroke="currentColor"`, and `Icon.scss` only sets `aspect-ratio: 1/1` and `color: inherit`. Use the size tokens from
-`constants/styles` (`$icon--small`, `$icon--medium`, `$icon--large`, `$icon--huge`) rather than raw pixel values.
-
 New icons come out of Figma via `scripts/convertFigmaIconExportToReact.mjs`. There is no npm script for it — run it with
 `node scripts/convertFigmaIconExportToReact.mjs`.
 
@@ -92,31 +88,10 @@ dialog, add a route for it. Do not use `useState` to toggle dialogs on or off.
 
 ## Drag and drop
 
-Built on `@dnd-kit/core`, in three files under `src/components/DragAndDrop/`:
+Built on `@dnd-kit/core`, in three files under `src/components/DragAndDrop/`: **`CustomDndContext.tsx`**, **`Droppable.tsx`**, and **`Sortable.tsx`**.
 
-- **`CustomDndContext.tsx`**: the single `<DndContext>`, mounted at the board level by `BoardGuard`. It configures a `MouseSensor` with a
-  2px activation distance and a `TouchSensor` with a 200ms delay, owns the `<DragOverlay>` that renders the floating note
-  clone, and wraps `rectIntersection` with custom collision detection that remembers the previous best collision to stop
-  stack targets from flickering.
-- **`Droppable.tsx`** (Column Wrapper): Marks every column as a valid drop zone and updating the local column layout during operation.
-- **`Sortable.tsx`** (Note Wrapper): Wraps every note to attach drag listeners and make it movable.
-
-4 Rules to Remember before editing:
-
-**1. Always set a `type` discriminator:** If you add a droppable, you must give it a
+**Always set a `type` discriminator:** If you add a droppable, you must give it a
 `type` in its `data`, or it will be treated as a note, which will break collision checks.
-
-**2. How Stacking vs Reordering is determined:** `COMBINE_THRESHOLD` and `MOVE_THRESHOLD` in `src/constants/misc.ts`
-bracket the overlap ratio, which decides if the notes will be reordered or stacked. (Note: Collision checks evaluate the *second* item hit because the first collision target is always the card currently being dragged)
-
-**3. Order is optimistic and local until `onDragEnd`:** `Column` mirrors the selected note ids into a `localNotes`
-state and passes `setItems` down through `Droppable` and `Sortable`; the drag handlers reorder that local array so the UI
-follows the cursor. Only `onDragEnd` dispatches the real `editNote({noteId, request: {position: {column, stack, rank}}})`,
-and the authoritative order comes back over the socket. The rank is computed from a **reversed** copy of the array (a usual source of off-by-one bugs here).
-
-**4. Notes can be locked by other participants:** `state.dragLocks.lockedNotes[noteId]` disables `useSortable` and
-renders a `DragIndicatorPill`. Dragging is also disabled by board state: a non-moderator cannot drag when stacking is
-off or the board is locked.
 
 Anything that renders a `Note` or a `Column` must be inside a `CustomDndContext`, including in tests (see
 [Testing](/docs/src/content/docs/dev/Frontend/testing.md#drag-and-drop-in-tests)).
@@ -153,21 +128,3 @@ Avatars use `@gamepark/avataaars` and are **deterministic**: `Avatar.tsx` derive
 around an avatar comes from `getColorClassName(getColorForIndex(...))`.
 
 Because it is deterministic, the same fixture user always produces the same avatar, which is what keeps snapshots stable.
-
-## Rendering user content
-
-Note text is rendered through `NoteTextContent`, which runs it through `marked` for markdown and `linkify-react` for bare
-URLs. **This is a security-sensitive path.** Do not add new `marked` call sites or `dangerouslySetInnerHTML` anywhere
-else; route user content through the existing component.
-
-## Odds and ends
-
-A few dependencies that look like dead weight but are not:
-
-- **`@react-spring/web`** — animations, with shared presets in `src/utils/transitionConfig.ts`.
-- **`use-sound`** — the timer's completion sound (`public/timer_finished.mp3`).
-- **`react-snowfall`** — a seasonal easter egg, wrapped in `SnowfallWrapper` and toggleable in the appearance settings.
-- **`emoji-picker-element`** — a web component, not a React component. Hence `src/types/emoji-picker.d.ts` and the test
-  mock in `src/__mocks__/`.
-- **`qrcode.react`** — the board join QR code in `ShareSession`.
-- **`react-to-print`** — the print view.

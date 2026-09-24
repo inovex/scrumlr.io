@@ -48,8 +48,6 @@ Be aware that `<Html />` is not markup. It uses `react-helmet-async` to set the 
 element. That single attribute drives the entire dark mode implementation (see
 [Styling & Theming](/docs/src/content/docs/dev/Frontend/styling.md)).
 
-<!---TO DO: Microsoft Clarity-->
-
 ## Routing
 
 `src/routes/Router.tsx` sets up a `BrowserRouter`. Note the import path — this is React Router **v8**:

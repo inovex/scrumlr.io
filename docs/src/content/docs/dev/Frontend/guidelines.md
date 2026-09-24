@@ -12,7 +12,6 @@ repeated here.
 
 - **Use the path aliases, not relative parent paths.** `import {Note} from "components/Note"`, never
   `import {Note} from "../../components/Note"`. Relative imports inside a single component directory are fine.
-- **Import from `react-router`, not `react-router-dom`.** The project is on React Router 8; `react-router-dom` is not a
   dependency.
 - **Import store helpers from `"store"`** and slices
   from `"store/features"`. Never `useSelector` / `useDispatch` from `react-redux` directly.
