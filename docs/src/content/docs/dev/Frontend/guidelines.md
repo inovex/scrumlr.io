@@ -5,7 +5,7 @@ sidebar:
     order: 18
 ---
 
-The conventions below are what reviewers look for. The general contribution rules are in the [contributing guideline](/docs/src/content/docs/dev/contributing.md) and are not
+The conventions below are what reviewers look for. The general contribution rules are in the [contributing guideline](/dev/contributing/) and are not
 repeated here.
 
 ## Imports
@@ -21,7 +21,7 @@ repeated here.
 
 - Strict mode is on. Don't work around it with `any`. If a type is genuinely unknown, use `unknown` and narrow.
 - Name the props type `<ComponentName>Props`, and export it if anything else needs it.
-- **Domain types come from the slice**, not from a local redeclaration (see [Architecture](/docs/src/content/docs/dev/Frontend/architecture.md#where-types-live)).
+- **Domain types come from the slice**, not from a local redeclaration (see [Architecture](/dev/frontend/architecture#where-types-live)).
 - Intentionally unused bindings get an underscore prefix: `(_state, action) => …`, `catch (_error)`. That is what the
   ESLint config allows.
 - Remember that `yarn build` is the only thing that typechecks. The dev server will happily run code that does not
@@ -72,5 +72,5 @@ Then check by hand:
 - [ ] No new hardcoded user-facing strings; new keys added to all three locales.
 - [ ] New behaviour has a test.
 
-The project's full [Definition of Done](/docs/src/content/docs/dev/contributing.md#definition-of-done) covers the non-frontend-specific
+The project's full [Definition of Done](/dev/contributing#definition-of-done) covers the non-frontend-specific
 expectations as well.

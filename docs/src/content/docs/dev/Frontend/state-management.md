@@ -156,7 +156,7 @@ type ErrorKey = keyof (typeof resources.en.translation)["Error"];
 ```
 
 So **a new error key has to exist in `src/i18n/en/translation.json` under `Error` before your thunk will compile.** If
-you get an unexpected type error on that argument, that is why. Add the key to all three locales (see [Contributing Translations](/docs/src/content/docs/dev/Frontend/translating.md).)
+you get an unexpected type error on that argument, that is why. Add the key to all three locales (see [Contributing Translations](/dev/frontend/translating/).)
 
 ## Realtime: the two WebSockets
 
@@ -211,7 +211,7 @@ closed.
 2. Add a **past-tense** action to the owning slice's `actions.ts`.
 3. Handle that action in the slice's `reducer.ts`.
 4. Add an `if (message.type === "YOUR_EVENT")` branch to the handler in `store/features/board/thunks.ts`.
-5. Make sure the backend actually emits it — see [Backend architecture](/docs/src/content/docs/dev/Backend/architecture.md).
+5. Make sure the backend actually emits it — see [Backend architecture](/dev/backend/architecture/).
 
 Skipping step 4 is the usual mistake: the type exists, the reducer exists, and nothing happens.
 
@@ -222,4 +222,4 @@ When someone starts dragging a note, `broadcastNoteDragStart` sends a `DRAG_LOCK
 which participant holds the lock. That value disables dragging for everyone else and shows a `DragIndicatorPill` on the
 note.
 
-The send is deliberately fire-and-forget and `updateNoteDragState` swallows errors so a drag is never interrupted. Implementation details are in [Components](/docs/src/content/docs/dev/Frontend/components.md#drag-and-drop).
+The send is deliberately fire-and-forget and `updateNoteDragState` swallows errors so a drag is never interrupted. Implementation details are in [Components](/dev/frontend/components#drag-and-drop).

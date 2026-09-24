@@ -48,7 +48,7 @@ Runs Vitest in **watch mode**. For a single run:
 yarn test --run
 ```
 
-See [Testing](/docs/src/content/docs/dev/frontend/testing.md) for fixtures, render helpers and the Cypress setup.
+See [Testing](/dev/frontend/testing/) for fixtures, render helpers and the Cypress setup.
 
 ### `yarn lint` / `yarn lint:fix`
 

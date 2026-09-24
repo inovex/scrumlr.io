@@ -7,7 +7,7 @@ sidebar:
 
 Unit and component tests run on [Vitest](https://vitest.dev/) with `happy-dom` and Testing Library. End-to-end tests run
 on [Cypress](https://www.cypress.io/). New features are expected to come with tests (see
-[Definition of Done](/docs/src/content/docs/dev/contributing/#definition-of-done)).
+[Definition of Done](/dev/contributing#definition-of-done)).
 
 ## Running tests
 
@@ -126,7 +126,7 @@ Two attributes are in use, for historical reasons:
 - **`data-testid`** is hardcoded in JSX where a component needs a stable handle.
 
 For new code, prefer role- and label-based queries. Reach for a test id only when there is no accessible handle. If a component cannot be queried by role or label, fix its accessibility first rather than adding a new test ID. (see
-[Guidelines](/docs/src/content/docs/dev/frontend/guidelines.md#accessibility)).
+[Guidelines](/dev/frontend/guidelines#accessibility)).
 
 ## Snapshots
 
@@ -147,7 +147,7 @@ Its limits are worth knowing, because a green run is easy to over-trust:
 - It does not look at `templates.json` at all.
 
 So it catches whole missing sections, not incomplete ones. Manual verification is still needed (see
-[Contributing Translations](/docs/src/content/docs/dev/frontend/translating.md)).
+[Contributing Translations](/dev/frontend/translating/)).
 
 ## End-to-end tests (Cypress)
 
