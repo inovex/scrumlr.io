@@ -587,38 +587,26 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
           data-testid="editor-shell__button--create"
           disabled=""
         >
-          <div
-            class="button__content-wrapper"
-            data-align="compact"
-            data-pos="right"
-            data-size="default"
+          Create template
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Create template
-            <div
-              class="button__icon-background button__icon-background--default"
-              data-size="default"
-            >
-              <svg
-                class="icon"
-                fill="none"
-                height="32"
-                viewBox="0 0 32 32"
-                width="32"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M24 16L8 16"
-                  stroke="currentColor"
-                  stroke-width="1.75"
-                />
-                <path
-                  d="M16 8L16 24"
-                  stroke="currentColor"
-                  stroke-width="1.75"
-                />
-              </svg>
-            </div>
-          </div>
+            <path
+              d="M24 16L8 16"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M16 8L16 24"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
         </button>
       </div>
     </section>
@@ -1547,38 +1535,26 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
           data-cy="editor-shell__button--create"
           data-testid="editor-shell__button--create"
         >
-          <div
-            class="button__content-wrapper"
-            data-align="compact"
-            data-pos="right"
-            data-size="default"
+          Save
+          <svg
+            class="icon"
+            fill="none"
+            height="32"
+            viewBox="0 0 32 32"
+            width="32"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Save
-            <div
-              class="button__icon-background button__icon-background--default"
-              data-size="default"
-            >
-              <svg
-                class="icon"
-                fill="none"
-                height="32"
-                viewBox="0 0 32 32"
-                width="32"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M24 16L8 16"
-                  stroke="currentColor"
-                  stroke-width="1.75"
-                />
-                <path
-                  d="M16 8L16 24"
-                  stroke="currentColor"
-                  stroke-width="1.75"
-                />
-              </svg>
-            </div>
-          </div>
+            <path
+              d="M24 16L8 16"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+            <path
+              d="M16 8L16 24"
+              stroke="currentColor"
+              stroke-width="1.75"
+            />
+          </svg>
         </button>
       </div>
     </section>
