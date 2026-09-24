@@ -7,7 +7,8 @@ import (
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
