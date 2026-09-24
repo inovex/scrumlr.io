@@ -108,7 +108,7 @@ export const ParticipantsAPI = {
     if (response.status === 403 || response.status === 400) {
       const body = (await response.json()) as {status?: string; error?: string};
       const errorMessage = body.error?.toLowerCase() ?? "";
-      if (errorMessage.includes("participant is currently banned from this session") || errorMessage.includes("banned from this session")) {
+      if (errorMessage.includes("banned from this session")) {
         return {
           status: "BANNED",
         };

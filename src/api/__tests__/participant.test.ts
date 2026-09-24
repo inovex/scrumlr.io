@@ -1,12 +1,7 @@
 import {vi} from "vitest";
-import * as config from "config";
 import {ParticipantsAPI} from "../participant";
 
 describe("ParticipantsAPI", () => {
-  beforeEach(() => {
-    vi.spyOn(config, "SERVER_HTTP_URL", "get").mockReturnValue("http://localhost:8080");
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.clearAllMocks();
