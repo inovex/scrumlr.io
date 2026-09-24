@@ -9,7 +9,8 @@ import (
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/role"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"

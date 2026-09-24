@@ -5,7 +5,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -111,22 +112,22 @@ func (suite *NoteServiceIntegrationTestSuite) initTestData() {
 	suite.notes[6] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560206"), Author: stanID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateDown"].ID, Text: "This is a note", Rank: 2}
 	suite.notes[7] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560207"), Author: stanID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateDown"].ID, Text: "This is a note", Rank: 3}
 	suite.notes[8] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560208"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Update stack base"}
-	suite.notes[9] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560209"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Update stack rank 0", Stack: uuid.NullUUID{UUID: suite.notes[8].ID, Valid: true}}
+	suite.notes[9] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560209"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Update stack rank 0", Stack: common.NullUUID{UUID: suite.notes[8].ID, Valid: true}}
 	suite.notes[10] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020a"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Will become stack base"}
 	suite.notes[11] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020b"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Move into stack"}
 	suite.notes[12] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020c"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Base stack"}
-	suite.notes[13] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020d"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "First note of stack", Stack: uuid.NullUUID{UUID: suite.notes[12].ID, Valid: true}, Rank: 0}
-	suite.notes[14] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020e"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Second note of stack", Stack: uuid.NullUUID{UUID: suite.notes[13].ID, Valid: true}, Rank: 1}
+	suite.notes[13] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020d"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "First note of stack", Stack: common.NullUUID{UUID: suite.notes[12].ID, Valid: true}, Rank: 0}
+	suite.notes[14] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020e"), Author: santaID, Board: suite.boards["Update"].ID, Column: suite.columns["UpdateStack1"].ID, Text: "Second note of stack", Stack: common.NullUUID{UUID: suite.notes[13].ID, Valid: true}, Rank: 1}
 	// Delete board notes
 	suite.notes[15] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef123456020f"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["Delete"].ID, Text: "Also a note"}
 	suite.notes[16] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560210"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack base"}
-	suite.notes[17] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560211"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack rank 0", Stack: uuid.NullUUID{UUID: suite.notes[16].ID, Valid: true}}
+	suite.notes[17] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560211"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack rank 0", Stack: common.NullUUID{UUID: suite.notes[16].ID, Valid: true}}
 	suite.notes[18] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560212"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack base"}
-	suite.notes[19] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560213"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack rank 0", Stack: uuid.NullUUID{UUID: suite.notes[18].ID, Valid: true}}
+	suite.notes[19] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560213"), Author: santaID, Board: suite.boards["Delete"].ID, Column: suite.columns["DeleteStack"].ID, Text: "Delete stack rank 0", Stack: common.NullUUID{UUID: suite.notes[18].ID, Valid: true}}
 	// Stack board notes
 	suite.notes[20] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560214"), Author: stanID, Board: suite.boards["Stack"].ID, Column: suite.columns["Stack"].ID, Text: "This the base of a stack"}
-	suite.notes[21] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560215"), Author: santaID, Board: suite.boards["Stack"].ID, Column: suite.columns["Stack"].ID, Text: "Stack note rank 0", Stack: uuid.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 0}
-	suite.notes[22] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560216"), Author: santaID, Board: suite.boards["Stack"].ID, Column: suite.columns["Stack"].ID, Text: "Stack note rank 1", Stack: uuid.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 1}
+	suite.notes[21] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560215"), Author: santaID, Board: suite.boards["Stack"].ID, Column: suite.columns["Stack"].ID, Text: "Stack note rank 0", Stack: common.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 0}
+	suite.notes[22] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560216"), Author: santaID, Board: suite.boards["Stack"].ID, Column: suite.columns["Stack"].ID, Text: "Stack note rank 1", Stack: common.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 1}
 	// Read board notes
 	suite.notes[23] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560217"), Author: stanID, Board: suite.boards["Read"].ID, Column: suite.columns["Read1"].ID, Text: "This is a note", Rank: 0}
 	suite.notes[24] = DatabaseNote{ID: uuid.MustParse("f1a2b3c4-d5e6-7890-abcd-ef1234560218"), Author: santaID, Board: suite.boards["Read"].ID, Column: suite.columns["Read1"].ID, Text: "Also a note", Rank: 1}
@@ -152,7 +153,7 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Create() {
 	assert.Equal(t, authorId, note.Author)
 	assert.Equal(t, columnId, note.Position.Column)
 	assert.Equal(t, 0, note.Position.Rank)
-	assert.Equal(t, uuid.NullUUID{}, note.Position.Stack)
+	assert.Equal(t, common.NullUUID{}, note.Position.Stack)
 	assert.Equal(t, text, note.Text)
 
 	msg := <-events
@@ -210,7 +211,7 @@ func (suite *NoteServiceIntegrationTestSuite) Test_Update() {
 	assert.Equal(t, text, note.Text)
 	assert.Equal(t, columnId, note.Position.Column)
 	assert.Equal(t, rank, note.Position.Rank)
-	assert.Equal(t, uuid.NullUUID{}, note.Position.Stack)
+	assert.Equal(t, common.NullUUID{}, note.Position.Stack)
 
 	msg := <-events
 	assert.Equal(t, realtime.BoardEventNotesUpdated, msg.Type)

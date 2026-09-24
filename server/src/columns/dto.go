@@ -3,7 +3,8 @@ package columns
 import (
 	"net/http"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"

@@ -10,7 +10,8 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/otel"

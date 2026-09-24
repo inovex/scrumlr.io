@@ -8,7 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
@@ -105,9 +106,9 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 
 			s.columns = columnMock
 
-			boardID, _ := uuid.NewRandom()
-			columnID, _ := uuid.NewRandom()
-			userID, _ := uuid.NewRandom()
+			boardID := uuid.NewV4()
+			columnID := uuid.NewV4()
+			userID := uuid.NewV4()
 
 			req := technical_helper.NewTestRequestBuilder("DEL", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID).
@@ -146,8 +147,8 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 
 			s.columns = columnMock
 
-			boardID, _ := uuid.NewRandom()
-			columnID, _ := uuid.NewRandom()
+			boardID := uuid.NewV4()
+			columnID := uuid.NewV4()
 
 			colName := "TestColumn"
 			color := common.Color("online-orange")
@@ -201,8 +202,8 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
-			boardID, _ := uuid.NewRandom()
-			columnID, _ := uuid.NewRandom()
+			boardID := uuid.NewV4()
+			columnID := uuid.NewV4()
 
 			colName := "Updated Column Name"
 			color := common.Color("online-orange")
@@ -252,8 +253,8 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			// given
 			s := new(Server)
 			columnsMock := columns.NewMockColumnService(suite.T())
-			boardID, _ := uuid.NewRandom()
-			columnID, _ := uuid.NewRandom()
+			boardID := uuid.NewV4()
+			columnID := uuid.NewV4()
 
 			colName := "TestColumn"
 			color := common.Color("online-orange")
