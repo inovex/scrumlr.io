@@ -7,8 +7,8 @@ package sessions
 import (
 	"context"
 	"net/url"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 

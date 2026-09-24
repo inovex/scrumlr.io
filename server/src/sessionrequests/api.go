@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type SessionRequestService interface {

@@ -3,7 +3,8 @@ package votings
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 )
 
