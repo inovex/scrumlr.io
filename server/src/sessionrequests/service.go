@@ -10,8 +10,9 @@ import (
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 
+	"uuid"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"

@@ -3,7 +3,8 @@ package votings
 import (
 	"sort"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/technical_helper"
 )
 

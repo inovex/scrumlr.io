@@ -7,7 +7,8 @@ import (
 
 	"scrumlr.io/server/initialize/testDbTemplates"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
@@ -273,7 +274,7 @@ func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	}
 
 	for _, note := range suite.notes {
-		err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
+		err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, common.NullUUID{UUID: uuid.UUID{}, Valid: false}, 0)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}

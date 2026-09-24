@@ -3,8 +3,10 @@ package notes
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/role"
 )
 
@@ -16,7 +18,7 @@ type DatabaseNote struct {
 	Board         uuid.UUID
 	Column        uuid.UUID
 	Text          string
-	Stack         uuid.NullUUID
+	Stack         common.NullUUID
 	Rank          int
 	Edited        bool
 }

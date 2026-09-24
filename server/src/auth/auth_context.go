@@ -7,7 +7,7 @@ import (
 	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/jwtauth/v5"
-	"github.com/google/uuid"
+	"uuid"
 	"scrumlr.io/server/logger"
 )
 
