@@ -6,8 +6,8 @@ package columntemplates
 
 import (
 	"context"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -17,10 +17,19 @@ func NewMockColumnTemplateService(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockColumnTemplateService {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockColumnTemplateService{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }

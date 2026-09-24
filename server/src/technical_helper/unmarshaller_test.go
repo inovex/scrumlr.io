@@ -4,7 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,7 +38,7 @@ func TestCorrectEmptySlice(t *testing.T) {
 }
 
 func TestCorrectUUID(t *testing.T) {
-	given, _ := uuid.NewRandom()
+	given := uuid.NewV4()
 	actual, err := Unmarshal[uuid.UUID](given)
 
 	assert.NoError(t, err)

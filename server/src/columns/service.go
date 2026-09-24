@@ -10,7 +10,8 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/otel"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/logger"
 
 	"scrumlr.io/server/realtime"

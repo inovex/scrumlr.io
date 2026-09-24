@@ -3,7 +3,8 @@ package columntemplates
 import (
 	"net/http"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/common"
 )
 

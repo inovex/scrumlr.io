@@ -1,5 +1,5 @@
 # Build application
-FROM golang:1.26-alpine AS build
+FROM golang:1.27-alpine AS build
 
 ARG TARGETARCH
 ARG TARGETOS
@@ -7,7 +7,7 @@ ARG TARGETOS
 WORKDIR /go/src/github.com/inovex/scrumlr.io/
 COPY ./ .
 RUN GOOS="$TARGETOS" GOARCH="$TARGETARCH" CGO_ENABLED=0 go build -a -o main \
-    && GOOS="$TARGETOS" GOARCH="$TARGETARCH" CGO_ENABLED=0 go build -a -o healthcheck ./cmd/healthcheck
+  && GOOS="$TARGETOS" GOARCH="$TARGETARCH" CGO_ENABLED=0 go build -a -o healthcheck ./cmd/healthcheck
 
 # Start application
 FROM gcr.io/distroless/static:nonroot

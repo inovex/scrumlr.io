@@ -1,7 +1,7 @@
 package reactions
 
 import (
-	"github.com/google/uuid"
+	"uuid"
 )
 
 // Reaction is the response for all reaction requests

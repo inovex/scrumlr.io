@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"uuid"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"

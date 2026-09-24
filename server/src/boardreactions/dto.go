@@ -1,7 +1,7 @@
 package boardreactions
 
 import (
-	"github.com/google/uuid"
+	"uuid"
 )
 
 // BoardReaction is the response for all board reaction requests

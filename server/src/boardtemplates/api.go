@@ -3,7 +3,7 @@ package boardtemplates
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type BoardTemplateService interface {

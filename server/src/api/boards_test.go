@@ -16,8 +16,9 @@ import (
 
 	"scrumlr.io/server/boards"
 
+	"uuid"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
@@ -63,8 +64,8 @@ func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *st
 		IsLocked:              true,
 		TimerStart:            nil,
 		TimerEnd:              nil,
-		SharedNote:            uuid.NullUUID{},
-		ShowVoting:            uuid.NullUUID{},
+		SharedNote:            common.NullUUID{},
+		ShowVoting:            common.NullUUID{},
 		Passphrase:            passphrase,
 		Salt:                  salt,
 	}
@@ -118,8 +119,8 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 						Color:   color,
 						Visible: &visible,
 						Index:   nil,
-						Board:   uuid.Nil,
-						User:    uuid.Nil,
+						Board:   uuid.UUID{},
+						User:    uuid.UUID{},
 					},
 				},
 				Owner: ownerID,

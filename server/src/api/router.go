@@ -24,7 +24,7 @@ import (
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"uuid"
 	gorillaSessions "github.com/gorilla/sessions"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"

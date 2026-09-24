@@ -8,7 +8,7 @@ import (
 	"scrumlr.io/server/otel"
 
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 )

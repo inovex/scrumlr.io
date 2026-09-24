@@ -3,7 +3,8 @@ package notes
 import (
 	"net/http"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -47,7 +48,7 @@ func (*Note) Render(_ http.ResponseWriter, _ *http.Request) error {
 func (n NoteSlice) hideOtherAuthors(userID uuid.UUID, showAuthors bool, visibleNotes []*Note) {
 	for _, note := range visibleNotes {
 		if !showAuthors && note.Author != userID {
-			note.Author = uuid.Nil
+			note.Author = uuid.UUID{}
 		}
 	}
 }

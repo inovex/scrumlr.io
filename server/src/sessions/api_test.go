@@ -9,8 +9,9 @@ import (
 	"strings"
 	"testing"
 
+	"uuid"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
@@ -169,7 +170,7 @@ func Test_UpdateBoardSession_NoUUID(t *testing.T) {
 	api := NewSessionApi(mockService)
 
 	rr := httptest.NewRecorder()
-	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).
+	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.New().String(), strings.NewReader("{invalid")).
 		AddToContext(identifiers.BoardIdentifier, uuid.New()).
 		AddToContext(identifiers.UserIdentifier, uuid.New())
 
@@ -182,12 +183,12 @@ func Test_UpdateBoardSession_BadBody(t *testing.T) {
 	api := NewSessionApi(mockService)
 
 	rr := httptest.NewRecorder()
-	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.NewString(), strings.NewReader("{invalid")).
+	req := technical_helper.NewTestRequestBuilder("PUT", "/sessions/"+uuid.New().String(), strings.NewReader("{invalid")).
 		AddToContext(identifiers.BoardIdentifier, uuid.New()).
 		AddToContext(identifiers.UserIdentifier, uuid.New())
 
 	rctx := chi.NewRouteContext()
-	rctx.URLParams.Add("session", uuid.NewString())
+	rctx.URLParams.Add("session", uuid.New().String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
 
 	api.UpdateBoardSession(rr, req.Request())

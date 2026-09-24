@@ -1,6 +1,6 @@
 module scrumlr.io/server
 
-go 1.26.1
+go 1.27.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
@@ -11,7 +11,6 @@ require (
 	github.com/go-chi/jwtauth/v5 v5.4.0
 	github.com/go-chi/render v1.0.3
 	github.com/golang-migrate/migrate/v4 v4.20.1
-	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
 	github.com/lestrrat-go/jwx/v3 v3.3.0
 	github.com/markbates/goth v1.82.0
@@ -91,6 +90,7 @@ require (
 	github.com/go-openapi/swag/yamlutils v0.28.0 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0 // indirect
