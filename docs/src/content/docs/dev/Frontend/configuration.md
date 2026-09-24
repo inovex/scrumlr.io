@@ -5,11 +5,10 @@ sidebar:
     order: 12
 ---
 
-The frontend is configured **thrice**:
+The frontend is configured in multiple ways:
 
-- At **build time** by Vite environment variables (`VITE_*`), which are baked into the bundle.
-- At build time by scrumlr variables at info endpoint
-- At **runtime** by nginx and cookies, which the nginx container sets from `SCRUMLR_*` environment variables.
+- By Vite environment variables (`VITE_*`) set at  **build time**, which are baked into the bundle.
+- Through `SCRUMLR_*` environment variables, which are configured in two ways depending on their scope. Variables responsible for analytics options, WebSocket/server URLs, and legal document visibility are configured at **runtime** by cookies, which the nginx container sets. using cookies set by the NGINX container. Conversely, variables for database and Redis setups, server port, and anonymous user permissions are configured at **build time** using flags in `main.go` and read by the info endpoint in `info.go`.
 
 Knowing which one applies where saves a lot of confusion. During local development you only care about the first. In a
 self-hosted deployment you only care about the second.
