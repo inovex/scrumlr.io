@@ -162,23 +162,7 @@ node scripts/generateEmojiData.mjs
 
 The script writes to `scripts/out/` (gitignored); copy the result into `public/emoji-data/`.
 
-### 10. Add Legal Documents (optional)
-
-The legal pages (`/legal/termsAndConditions`, `/legal/privacyPolicy`, `/legal/cookiePolicy`) are markdown files fetched
-at runtime from `public/locales/<language_code>/`:
-
-```
-public/locales/es/termsAndConditions.md
-public/locales/es/privacyPolicy.md
-public/locales/es/cookiePolicy.md
-```
-
-These are **optional** — they are legal text, and a machine translation is worse than none. If you skip them, the legal
-pages will simply be empty in your language, as is currently the case for French. Note that the pages are only shown at
-all when the `scrumlr__show-legal-documents` cookie is not `false` (see
-[Configuration](/docs/src/content/docs/dev/Frontend/configuration.md#runtime-configuration-cookies)).
-
-### 11. Testing Your Translation
+### 10. Testing Your Translation
 
 1. **Run the key parity test**:
 

@@ -18,7 +18,7 @@ back to every connected client over the WebSocket.
 ## Requirements
 
 - **Node.js 26** — the version CI and the production image use.
-- **Yarn 4.14.1**, activated through Corepack. The version is pinned by the `packageManager` field in `package.json`.
+- **Yarn Berry**, activated through Corepack. The version is pinned by the `packageManager` field in `package.json`.
 - **Docker** and Docker Compose, to run the backend and its database locally.
 
 There is no `.nvmrc` and no `engines` field in `package.json`, so your version manager will not warn you if you are on
@@ -40,8 +40,7 @@ yarn
 yarn start
 ```
 
-Open **<http://localhost:5173>**. Anonymous login is enabled by
-default.
+Open **<http://localhost:5173>**.
 
 You do not need to configure anything for this to work. `.env.development` is checked into the repository and already
 points the client at `http://localhost:8080`, where the Docker backend listens. See

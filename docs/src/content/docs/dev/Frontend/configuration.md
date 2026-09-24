@@ -5,10 +5,10 @@ sidebar:
     order: 12
 ---
 
-The frontend is configured **twice**, through two unrelated mechanisms:
+The frontend is configured **twice**:
 
 - At **build time** by Vite environment variables (`VITE_*`), which are baked into the bundle.
-- At **runtime** by cookies, which the nginx container sets from `SCRUMLR_*` environment variables.
+- At **runtime** by nginx and cookies, which the nginx container sets from `SCRUMLR_*` environment variables.
 
 Knowing which one applies where saves a lot of confusion. During local development you only care about the first. In a
 self-hosted deployment you only care about the second.
@@ -55,18 +55,7 @@ environments, the frontend container translates its `SCRUMLR_*` variables into c
 So the bundle never reads a `SCRUMLR_*` variable directly. The full list of deployment-side names is in
 [Environment Variables](/docs/src/content/docs/self-hosting/env-vars.md#frontend).
 
-### Resolution order
-
-`src/config.ts` resolves the backend URLs in this order, taking the first value that is set:
-
-1. The cookie (`scrumlr__server-url` / `scrumlr__websocket-url`) set by nginx in a deployed environment.
-2. The build-time variable (`VITE_SERVER_HTTP_URL` / `VITE_SERVER_WEBSOCKET_URL`).
-3. `window.location.origin + "/api"` (same-origin fallback), with the protocol switched to `ws:`/`wss:` for the WebSocket.
-
-The third case is the normal production path: the frontend and backend are served from the same origin, with the API
-behind `/api`.
-
-`SHOW_LEGAL_DOCUMENTS` follows the same cookie-first pattern but **defaults to `true`** when the cookie is absent, so an
+`SHOW_LEGAL_DOCUMENTS` **defaults to `true`** when the cookie is absent, so an
 empty value does not hide the legal pages.
 
 Because these are ordinary cookies, you can point a deployed frontend at a different backend from your browser's dev

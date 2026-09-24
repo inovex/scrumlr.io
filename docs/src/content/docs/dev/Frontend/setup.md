@@ -9,13 +9,10 @@ Everything on this page runs from the **repository root**. The frontend is not i
 
 ## Node and Yarn
 
-The project uses **Node 26** and **Yarn 4.14.1**. The Yarn version is pinned in `package.json`.
-
-Yarn 4 is activated through [Corepack](https://nodejs.org/api/corepack.html). **Node 26 no longer ships Corepack**, so
-on a fresh Node 26 installation you have to install it yourself before `yarn` will work:
+Yarn 4 is activated through [Corepack](https://nodejs.org/api/corepack.html), so make sure to install it or `yarn` will not work:
 
 ```bash
-npm install -g corepack@0.35.0 --ignore-scripts
+npm install -g corepack --ignore-scripts
 corepack enable
 corepack install
 ```
@@ -28,9 +25,6 @@ yarn
 
 CI uses `yarn install --immutable --mode=skip-build`, which fails rather than updating `yarn.lock`. If your local install
 modifies the lockfile, commit that change deliberately, otherwise CI will reject it.
-
-Yarn is configured through `.yarnrc.yml` with `nodeLinker: node-modules` (a plain `node_modules` directory, not Plug'n'Play)
-and `enableScripts: false`.
 
 ## Scripts
 
@@ -117,25 +111,3 @@ Pointing at the workspace TypeScript matters: the project is on TypeScript 6, an
 - **Prettier**: enable *On save*, with the file pattern `{**/*,*}.{ts,tsx,json,css,scss,md}`.
 - **Project Structure**: mark `src` as a *Resources root*, otherwise the IDE will not resolve the bare imports described
   below even though the build does.
-
-## Path aliases
-
-`tsconfig.json` defines path aliases and Vite applies them via `resolve.tsconfigPaths`.
-
-The final catch-all is why `import {render} from "testUtils"` and `import i18n from "i18nTest"` resolve.
-
-**Always import through the alias, never with relative parent paths:**
-
-```tsx
-// yes
-import {Note} from "components/Note";
-import {useAppSelector} from "store";
-
-// no
-import {Note} from "../../components/Note";
-```
-
-Relative imports within a single component directory (`import "./Note.scss"`, `import {NoteReactionList} from "./NoteReactionList"`)
-are fine and expected. It is climbing out of the directory with `../..` that the codebase avoids.
-
-SCSS has its own, separate resolution mechanism — see [Styling & Theming](/docs/src/content/docs/dev/frontend/styling.md).
