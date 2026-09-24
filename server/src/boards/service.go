@@ -699,6 +699,7 @@ func getVisibleData(board *FullBoard) ([]*columns.Column, []*notes.Note) {
 
 func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, cols []*columns.Column, notes []*notes.Note) ([][]string, error) {
 	header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
+
 	for index, voting := range board.Votings {
 		if voting.Status == votings.Closed {
 			header = append(header, fmt.Sprintf("voting_%d", index))
@@ -715,10 +716,9 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 		validSessionUsers[session.UserID] = struct{}{}
 	}
 
-	//cache users to avoid querying the DB for the same author repeatedly
 	userCache := make(map[uuid.UUID]string)
-
 	records := [][]string{header}
+
 	for _, note := range notes {
 		stack := "null"
 		if note.Position.Stack.Valid {
@@ -730,23 +730,15 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 			colName = name
 		}
 
-		authorName := note.Author.String()
-		if _, ok := validSessionUsers[note.Author]; ok {
-			if cachedName, exists := userCache[note.Author]; exists {
-				authorName = cachedName
-			} else {
-				user, err := service.userService.Get(ctx, note.Author)
-				if err != nil {
-					return nil, err
-				}
-				authorName = user.Name
-				userCache[note.Author] = user.Name
-			}
+		authorID := note.Author
+		authorName, err := service.resolveAuthorName(ctx, authorID, validSessionUsers, userCache)
+		if err != nil {
+			return nil, err
 		}
 
 		row := []string{
 			note.ID.String(),
-			note.Author.String(),
+			authorID.String(),
 			authorName,
 			note.Text,
 			note.Position.Column.String(),
@@ -769,6 +761,23 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 	}
 
 	return records, nil
+}
+
+func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUID, validSessionUsers map[uuid.UUID]struct{}, userCache map[uuid.UUID]string) (string, error) {
+	if _, ok := validSessionUsers[authorID]; ok {
+		if cachedName, exists := userCache[authorID]; exists {
+			return cachedName, nil
+		} else {
+			user, err := service.userService.Get(ctx, authorID)
+			if err != nil {
+				return "", err
+			}
+			userCache[authorID] = user.Name
+			return user.Name, nil
+		}
+	} else {
+		return "unknown user", nil
+	}
 }
 
 func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
