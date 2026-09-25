@@ -298,7 +298,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderDescription = () => (props.mode === "edit" ? editableDescription() : viewableDescription());
 
   const renderSettings = () => {
-    if (!isModerator) return null;
+    if (!isModerator || props.isTemporary) return null;
 
     if (openSettings) {
       return (
