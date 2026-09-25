@@ -7,6 +7,7 @@ package auth
 import (
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/markbates/goth"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
@@ -132,6 +133,68 @@ func (_c *MockAuth_Exists_Call) Return(b bool) *MockAuth_Exists_Call {
 }
 
 func (_c *MockAuth_Exists_Call) RunAndReturn(run func(accountType common.AccountType) bool) *MockAuth_Exists_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ExtractUserId provides a mock function for the type MockAuth
+func (_mock *MockAuth) ExtractUserId(r *http.Request) (uuid.UUID, error) {
+	ret := _mock.Called(r)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ExtractUserId")
+	}
+
+	var r0 uuid.UUID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(*http.Request) (uuid.UUID, error)); ok {
+		return returnFunc(r)
+	}
+	if returnFunc, ok := ret.Get(0).(func(*http.Request) uuid.UUID); ok {
+		r0 = returnFunc(r)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(uuid.UUID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(*http.Request) error); ok {
+		r1 = returnFunc(r)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockAuth_ExtractUserId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExtractUserId'
+type MockAuth_ExtractUserId_Call struct {
+	*mock.Call
+}
+
+// ExtractUserId is a helper method to define mock.On call
+//   - r *http.Request
+func (_e *MockAuth_Expecter) ExtractUserId(r any) *MockAuth_ExtractUserId_Call {
+	return &MockAuth_ExtractUserId_Call{Call: _e.mock.On("ExtractUserId", r)}
+}
+
+func (_c *MockAuth_ExtractUserId_Call) Run(run func(r *http.Request)) *MockAuth_ExtractUserId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 *http.Request
+		if args[0] != nil {
+			arg0 = args[0].(*http.Request)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockAuth_ExtractUserId_Call) Return(uUID uuid.UUID, err error) *MockAuth_ExtractUserId_Call {
+	_c.Call.Return(uUID, err)
+	return _c
+}
+
+func (_c *MockAuth_ExtractUserId_Call) RunAndReturn(run func(r *http.Request) (uuid.UUID, error)) *MockAuth_ExtractUserId_Call {
 	_c.Call.Return(run)
 	return _c
 }
