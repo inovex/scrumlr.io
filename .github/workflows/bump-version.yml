@@ -1,0 +1,60 @@
+name: Update Hardcoded Versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: "New Version (e.g. 5.2.0)"
+        required: true
+        type: string
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Find and replace version strings
+        env:
+          NEW_VERSION: ${{ inputs.new_version }}
+        run: |
+          OLD_VERSION=$(jq -r '.version' package.json)
+
+          echo "Bumping version from $OLD_VERSION to $NEW_VERSION"
+
+          yarn version "$NEW_VERSION"
+
+          files=(
+            "deployment/docker/.env.example"
+            "deployment/docker/docker-compose.yml"
+            "deployment/helm/scrumlr/Chart.yaml"
+            "deployment/helm/scrumlr/tests/backend/deployment_test.yaml"
+            "deployment/helm/scrumlr/tests/frontend/deployment_test.yaml"
+            "server/src/main.go"
+            "server/src/otel/otel.go"
+          )
+
+          for file in "${files[@]}"; do
+            sed -i "s/$OLD_VERSION/$NEW_VERSION/g" "$file"
+          done
+
+          cd server && make swagger
+
+      - name: Commit and Push Changes
+        env:
+          NEW_VERSION: ${{ inputs.new_version }}
+        run: |
+          git config user.name "Scrumlr Upgrade Version Bot[bot]"
+          git config user.email \<\>
+
+          if git diff --quiet; then
+            echo "No changes detected."
+          else
+            git commit -am "chore: bump version to $NEW_VERSION"
+            git tag "v$NEW_VERSION"
+            git push origin main --tags
+          fi
