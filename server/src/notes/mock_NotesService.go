@@ -665,9 +665,20 @@ func (_c *MockNotesService_GetStack_Call) RunAndReturn(run func(ctx context.Cont
 }
 
 // HandleWebSocketMessage provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) {
-	_mock.Called(ctx, boardID, userID, conn, data)
-	return
+func (_mock *MockNotesService) HandleWebSocketMessage(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) error {
+	ret := _mock.Called(ctx, boardID, userID, conn, data)
+
+	if len(ret) == 0 {
+		panic("no return value specified for HandleWebSocketMessage")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, websocket.Connection, json.RawMessage) error); ok {
+		r0 = returnFunc(ctx, boardID, userID, conn, data)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
 }
 
 // MockNotesService_HandleWebSocketMessage_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'HandleWebSocketMessage'
@@ -718,13 +729,13 @@ func (_c *MockNotesService_HandleWebSocketMessage_Call) Run(run func(ctx context
 	return _c
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) Return() *MockNotesService_HandleWebSocketMessage_Call {
-	_c.Call.Return()
+func (_c *MockNotesService_HandleWebSocketMessage_Call) Return(err error) *MockNotesService_HandleWebSocketMessage_Call {
+	_c.Call.Return(err)
 	return _c
 }
 
-func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage)) *MockNotesService_HandleWebSocketMessage_Call {
-	_c.Run(run)
+func (_c *MockNotesService_HandleWebSocketMessage_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID, conn websocket.Connection, data json.RawMessage) error) *MockNotesService_HandleWebSocketMessage_Call {
+	_c.Call.Return(run)
 	return _c
 }
 
