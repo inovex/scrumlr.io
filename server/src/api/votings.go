@@ -53,7 +53,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	voting, err := s.votings.Create(ctx, body)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create voting"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/votings/%s", board, voting.ID)))
@@ -98,7 +98,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	notes, err := s.notes.GetAll(ctx, board)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get notes"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 	var affectedNotes []votings.Note
@@ -121,7 +121,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to update voting"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -155,7 +155,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 	voting, err := s.votings.Get(ctx, board, id)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get voting"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -187,7 +187,7 @@ func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 	votings, err := s.votings.GetAll(ctx, board)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get votings"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 

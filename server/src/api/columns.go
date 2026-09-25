@@ -55,7 +55,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create column"))
 		log.Errorw("Unable to create column", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -176,7 +176,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get column"))
 		log.Errorw("Unable to get column", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -210,7 +210,7 @@ func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get columns"))
 		log.Errorw("Unable to create columns", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 

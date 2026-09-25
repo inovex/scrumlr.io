@@ -1,11 +1,14 @@
 package common
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
 )
+
+const DecodeFailureMessage = "failed to decode body"
 
 type APIError struct {
 	Err        error  `json:"-"`
@@ -59,4 +62,32 @@ func Throw(w http.ResponseWriter, r *http.Request, err error) {
 		return
 	}
 	_ = render.Render(w, r, InternalServerError)
+}
+
+// mapError translates domain and database errors to HTTP API Errors.
+func MapError(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	// DB "no rows" error is a common case for "not found"
+	if errors.Is(err, sql.ErrNoRows) {
+		return NotFoundError
+	}
+
+	var s interface{ Status() string }
+	if errors.As(err, &s) {
+		switch s.Status() {
+		case "BAD_REQUEST":
+			return BadRequestError(err)
+		case "FORBIDDEN":
+			return ForbiddenError(err)
+		case "NOT_FOUND":
+			return NotFoundError
+		case "CONFLICT":
+			return ConflictError(err)
+		}
+	}
+
+	return InternalServerError
 }
