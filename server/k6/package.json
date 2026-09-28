@@ -16,7 +16,9 @@
 	"scripts": {
 		"lint": "biome check",
 		"lint:fix": "biome check --write",
-		"e2e": "k6 run src/e2e.ts --no-usage-report"
+		"test:e2e": "TEST_TYPE='e2e' k6 run src/e2e.ts --no-usage-report",
+		"test:load": "TEST_TYPE='load' k6 run src/load.ts --no-usage-report",
+		"test:stress": "TEST_TYPE='stress' k6 run src/load.ts --no-usage-report"
 	},
 	"packageManager": "yarn@4.14.1"
 }

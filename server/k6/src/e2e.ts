@@ -1,4 +1,4 @@
-import { check, group, sleep } from "k6";
+import { check, group } from "k6";
 import http from "k6/http";
 import { AuthClient } from "./api/auth/api.ts";
 import type { AnonymousSignUpRequest } from "./api/auth/requests.ts";
@@ -34,13 +34,11 @@ import { VotingClient } from "./api/voting/api.ts";
 import type { CreateVotingRequest } from "./api/voting/requests.ts";
 import { options } from "./options.ts";
 
-options.vus = 1;
-options.iterations = 1;
-options.thresholds = {
-	checks: ["rate==1.0"],
-};
-
 export { options };
+
+function getFakeIpAddress(id: number): string {
+	return `10.0.${(id + Math.floor(Math.random() * 1000)) % 250}.${(id + Math.floor(Math.random() * 1000)) % 250}`;
+}
 
 export default function () {
 	const authClient = new AuthClient();
@@ -321,7 +319,12 @@ export default function () {
 		});
 
 		const joinRequest: JoinBoardRequest = {};
-		const unauthenticatedJoinResponse = boardClient.joinBoard(createdPublicBoard.id, joinRequest, new http.CookieJar());
+		const unauthenticatedJoinResponse = boardClient.joinBoard(
+			createdPublicBoard.id,
+			joinRequest,
+			new http.CookieJar(),
+			{ "X-Real-IP": getFakeIpAddress(__VU) },
+		);
 		check(unauthenticatedJoinResponse, {
 			"verify unauthenticated join board status is 401": (r) => r.status === 401,
 		});
@@ -335,7 +338,9 @@ export default function () {
 			"verify board users count is 1": () => unauthenticatedBoardUsers?.length === 1,
 		});
 
-		const boardJoinResponse = boardClient.joinBoard(createdPublicBoard.id, joinRequest, participantContext);
+		const boardJoinResponse = boardClient.joinBoard(createdPublicBoard.id, joinRequest, participantContext, {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(boardJoinResponse, {
 			"verify participant join board status is 201": (r) => r.status === 201,
 		});
@@ -487,7 +492,9 @@ export default function () {
 			return;
 		}
 
-		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext);
+		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext, {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(joinResponse, {
 			"verify joinBoard status is 201": (r) => r.status === 201,
 		});
@@ -734,7 +741,9 @@ export default function () {
 			return;
 		}
 
-		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext);
+		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext, {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(joinResponse, {
 			"verify board join status is 201": (r) => r.status === 201,
 		});
@@ -952,9 +961,6 @@ export default function () {
 		});
 	});
 
-	// sleep for joinBoard rate limit
-	sleep(5);
-
 	group("Check votings and votes", () => {
 		const ownerContext = new http.CookieJar();
 		const ownerRequest: AnonymousSignUpRequest = {
@@ -1012,7 +1018,9 @@ export default function () {
 			return;
 		}
 
-		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext);
+		const joinResponse = boardClient.joinBoard(board.id, {}, participantContext, {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(joinResponse, {
 			"verify joinBoard status is 201": (r) => r.status === 201,
 		});
@@ -1127,62 +1135,74 @@ export default function () {
 			"verify owner voting status is OPEN": () => ownerVoting?.status === "OPEN",
 		});
 
-		const [,unauthenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, new http.CookieJar());
+		const [, unauthenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, new http.CookieJar());
 		check(unauthenticatedVoteResponse, {
 			"verify unauthenticated create vote status is 401": (r) => r.status === 401,
 		});
 
-		const [,authenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, authenticatedContext);
+		const [, authenticatedVoteResponse] = voteClient.createVote(board.id, { note: note1.id }, authenticatedContext);
 		check(authenticatedVoteResponse, {
 			"verify authenticated user create vote status is 403": (r) => r.status === 403,
 		});
 
-		const [firstParticipantVote, participantVote1Response] = voteClient.createVote(board.id, { note: note1.id }, participantContext);
+		const [firstParticipantVote, participantVote1Response] = voteClient.createVote(
+			board.id,
+			{ note: note1.id },
+			participantContext,
+		);
 		check(participantVote1Response, {
 			"verify participant vote 1 status is 201": (r) => r.status === 201,
-      "verify vote user": () => firstParticipantVote?.user === participant.id,
-      "verify vote note": () => firstParticipantVote?.note === note1.id,
-      "verify vote voting": () => firstParticipantVote?.voting === voting.id,
+			"verify vote user": () => firstParticipantVote?.user === participant.id,
+			"verify vote note": () => firstParticipantVote?.note === note1.id,
+			"verify vote voting": () => firstParticipantVote?.voting === voting.id,
 		});
 
-		const [secondParticipantVote, participantVote2Response] = voteClient.createVote(board.id, { note: note3.id }, participantContext);
+		const [secondParticipantVote, participantVote2Response] = voteClient.createVote(
+			board.id,
+			{ note: note3.id },
+			participantContext,
+		);
 		check(participantVote2Response, {
 			"verify participant vote 2 status is 201": (r) => r.status === 201,
-      "verify vote user": () => secondParticipantVote?.user === participant.id,
-      "verify vote note": () => secondParticipantVote?.note === note3.id,
-      "verify vote voting": () => secondParticipantVote?.voting === voting.id,
+			"verify vote user": () => secondParticipantVote?.user === participant.id,
+			"verify vote note": () => secondParticipantVote?.note === note3.id,
+			"verify vote voting": () => secondParticipantVote?.voting === voting.id,
 		});
 
-		const [thirdParticipantVote, participantVote3Response] = voteClient.createVote(board.id, { note: note5.id }, participantContext);
+		const [thirdParticipantVote, participantVote3Response] = voteClient.createVote(
+			board.id,
+			{ note: note5.id },
+			participantContext,
+		);
 		check(participantVote3Response, {
 			"verify participant vote 3 status is 201": (r) => r.status === 201,
-      "verify vote user": () => thirdParticipantVote?.user === participant.id,
-      "verify vote note": () => thirdParticipantVote?.note === note5.id,
-      "verify vote voting": () => thirdParticipantVote?.voting === voting.id,
+			"verify vote user": () => thirdParticipantVote?.user === participant.id,
+			"verify vote note": () => thirdParticipantVote?.note === note5.id,
+			"verify vote voting": () => thirdParticipantVote?.voting === voting.id,
 		});
 
 		const [firstOwnerVote, ownerVote1Response] = voteClient.createVote(board.id, { note: note2.id }, ownerContext);
 		check(ownerVote1Response, {
 			"verify owner vote 1 status is 201": (r) => r.status === 201,
-      "verify vote user": () => firstOwnerVote?.user === owner.id,
-      "verify vote note": () => firstOwnerVote?.note === note2.id,
-      "verify vote voting": () => firstOwnerVote?.voting === voting.id,
+			"verify vote user": () => firstOwnerVote?.user === owner.id,
+			"verify vote note": () => firstOwnerVote?.note === note2.id,
+			"verify vote voting": () => firstOwnerVote?.voting === voting.id,
 		});
 
 		const [secondOwnerVote, ownerVote2Response] = voteClient.createVote(board.id, { note: note4.id }, ownerContext);
 		check(ownerVote2Response, {
 			"verify owner vote 2 status is 201": (r) => r.status === 201,
-      "verify vote user": () => secondOwnerVote?.user === owner.id,
-      "verify vote note": () => secondOwnerVote?.note === note4.id,
-      "verify vote voting": () => secondOwnerVote?.voting === voting.id,
+			"verify vote user": () => secondOwnerVote?.user === owner.id,
+			"verify vote note": () => secondOwnerVote?.note === note4.id,
+			"verify vote voting": () => secondOwnerVote?.voting === voting.id,
 		});
 
 		const [thirdOwnerVote, ownerVote3Response] = voteClient.createVote(board.id, { note: note6.id }, ownerContext);
 		check(ownerVote3Response, {
 			"verify owner vote 3 status is 201": (r) => r.status === 201,
-      "verify vote user": () => thirdOwnerVote?.user === owner.id,
-      "verify vote note": () => thirdOwnerVote?.note === note6.id,
-      "verify vote voting": () => thirdOwnerVote?.voting === voting.id,
+			"verify vote user": () => thirdOwnerVote?.user === owner.id,
+			"verify vote note": () => thirdOwnerVote?.note === note6.id,
+			"verify vote voting": () => thirdOwnerVote?.voting === voting.id,
 		});
 
 		const [, unauthenticatedGetVotesResponse] = voteClient.getVotes(board.id, voting.id, null, new http.CookieJar());
@@ -1238,22 +1258,42 @@ export default function () {
 			"verify owner delete vote status is 204": (r) => r.status === 204,
 		});
 
-		const [, unauthenticatedCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"},  new http.CookieJar());
+		const [, unauthenticatedCloseVotingResponse] = votingClient.updateVoting(
+			board.id,
+			voting.id,
+			{ status: "CLOSED" },
+			new http.CookieJar(),
+		);
 		check(unauthenticatedCloseVotingResponse, {
 			"verify unauthenticated close voting status is 401": (r) => r.status === 401,
 		});
 
-		const [, authenticatedCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, authenticatedContext);
+		const [, authenticatedCloseVotingResponse] = votingClient.updateVoting(
+			board.id,
+			voting.id,
+			{ status: "CLOSED" },
+			authenticatedContext,
+		);
 		check(authenticatedCloseVotingResponse, {
 			"verify authenticated user close voting status is 403": (r) => r.status === 403,
 		});
 
-		const [, participantCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, participantContext);
+		const [, participantCloseVotingResponse] = votingClient.updateVoting(
+			board.id,
+			voting.id,
+			{ status: "CLOSED" },
+			participantContext,
+		);
 		check(participantCloseVotingResponse, {
 			"verify participant close voting status is 403": (r) => r.status === 403,
 		});
 
-		const [closedVoting, ownerCloseVotingResponse] = votingClient.updateVoting(board.id, voting.id, {status: "CLOSED"}, ownerContext);
+		const [closedVoting, ownerCloseVotingResponse] = votingClient.updateVoting(
+			board.id,
+			voting.id,
+			{ status: "CLOSED" },
+			ownerContext,
+		);
 		check(ownerCloseVotingResponse, {
 			"verify owner close voting status is 200": (r) => r.status === 200,
 			"verify closed voting status is CLOSED": () => closedVoting?.status === "CLOSED",
@@ -1286,12 +1326,16 @@ export default function () {
 			return;
 		}
 
-		const unauthenticatedJoinResponse = boardClient.joinBoard(board.id, {}, new http.CookieJar());
+		const unauthenticatedJoinResponse = boardClient.joinBoard(board.id, {}, new http.CookieJar(), {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(unauthenticatedJoinResponse, {
 			"verify unauthenticated join board with invite status is 401": (r) => r.status === 401,
 		});
 
-		const candidateJoinResponse = boardClient.joinBoard(board.id, {}, candidateContext);
+		const candidateJoinResponse = boardClient.joinBoard(board.id, {}, candidateContext, {
+			"X-Real-IP": getFakeIpAddress(__VU),
+		});
 		check(candidateJoinResponse, {
 			"verify candidate join board status is 200 or 201 or 303": (r) =>
 				r.status === 200 || r.status === 201 || r.status === 303,
