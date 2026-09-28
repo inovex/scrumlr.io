@@ -54,9 +54,9 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 	return *initializer
 }
 
-func (init *ServiceInitializer) InitializeBoardService(sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
+func (init *ServiceInitializer) InitializeBoardService(sessionService sessions.SessionService, sessionRequestService sessionrequests.SessionRequestService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardService := boards.NewBoardService(boardDB, init.broker, sessionService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
+	boardService := boards.NewBoardService(boardDB, init.broker, sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
 
 	return boardService
 }
@@ -122,9 +122,9 @@ func (init *ServiceInitializer) InitializeSessionService(columnService columns.C
 	return sessionService
 }
 
-func (init *ServiceInitializer) InitializeSessionRequestService(eventListener events.EventListener, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+func (init *ServiceInitializer) InitializeSessionRequestService(sessionService sessions.SessionService) sessionrequests.SessionRequestService {
 	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(init.db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, eventListener, sessionService)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.broker, sessionService)
 
 	return sessionRequestService
 }

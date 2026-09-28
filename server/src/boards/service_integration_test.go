@@ -11,6 +11,7 @@ import (
 
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
@@ -108,9 +109,11 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
+	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, sessionService)
 	userDatabase := users.NewUserDatabase(db)
 	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
-	suite.service = NewBoardService(database, broker, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
+	suite.service = NewBoardService(database, broker, sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {

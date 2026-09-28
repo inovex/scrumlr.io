@@ -10,6 +10,7 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
@@ -40,6 +41,7 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	reactionService := reactions.NewMockReactionService(t)
 	votingService := votings.NewMockVotingService(t)
 	sessionService := sessions.NewMockSessionService(t)
+	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
 	userSession := users.NewMockUserService(t)
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
 	boardService := boards.NewMockBoardService(t)
@@ -53,7 +55,7 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
 	assert.NotNil(t, eventListener)
 
-	assert.NotNil(t, initializer.InitializeBoardService(sessionService, columnService, noteService, reactionService, votingService, userSession))
+	assert.NotNil(t, initializer.InitializeBoardService(sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userSession))
 	assert.NotNil(t, initializer.InitializeColumnService(noteService))
 	assert.NotNil(t, initializer.InitializeBoardReactionService())
 	assert.NotNil(t, initializer.InitializeBoardTemplateService(columnTemplateService))
@@ -62,7 +64,7 @@ func TestServiceInitializer_InitializeServices(t *testing.T) {
 	assert.NotNil(t, initializer.InitializeHealthService())
 	assert.NotNil(t, initializer.InitializeReactionService())
 	assert.NotNil(t, initializer.InitializeSessionService(columnService, noteService))
-	assert.NotNil(t, initializer.InitializeSessionRequestService(eventListener, sessionService))
+	assert.NotNil(t, initializer.InitializeSessionRequestService(sessionService))
 
 	assert.NotNil(t, initializer.InitializeUserService(sessionService, noteService))
 	assert.NotNil(t, initializer.InitializeNotesService())

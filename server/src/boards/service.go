@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
@@ -43,12 +44,13 @@ type Service struct {
 	realtime                 *realtime.Broker
 	boardLastModifiedUpdater BoardLastModifiedUpdater
 
-	columnService   columns.ColumnService
-	notesService    notes.NotesService
-	sessionService  sessions.SessionService
-	reactionService reactions.ReactionService
-	votingService   votings.VotingService
-	userService     users.UserService
+	columnService         columns.ColumnService
+	notesService          notes.NotesService
+	sessionService        sessions.SessionService
+	sessionRequestService sessionrequests.SessionRequestService
+	reactionService       reactions.ReactionService
+	votingService         votings.VotingService
+	userService           users.UserService
 }
 
 type LastModifiedUpdater struct {
@@ -73,6 +75,7 @@ func NewBoardService(
 	db BoardDatabase,
 	rt *realtime.Broker,
 	sessionService sessions.SessionService,
+	sessionRequestService sessionrequests.SessionRequestService,
 	columnService columns.ColumnService,
 	noteService notes.NotesService,
 	reactionService reactions.ReactionService,
@@ -87,6 +90,7 @@ func NewBoardService(
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
+	b.sessionRequestService = sessionRequestService
 	b.columnService = columnService
 	b.notesService = noteService
 	b.reactionService = reactionService
@@ -186,7 +190,6 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 	}
 
 	switch board.AccessPolicy {
-
 	case Public:
 		return service.joinPublic(ctx, board, user)
 
