@@ -547,12 +547,12 @@ func run(ctx context.Context, cli *cli.Command) error {
 	columnService := initializer.InitializeColumnService(noteService)
 
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
+	sessionRequestService := initializer.InitializeSessionRequestService(sessionService)
 	userService := initializer.InitializeUserService(sessionService, noteService)
-	boardService := initializer.InitializeBoardService(sessionService, columnService, noteService, reactionService, votingService, userService)
+	boardService := initializer.InitializeBoardService(sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService)
 
 	eventFilter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
 	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(eventListener, sessionService)
 
 	keyWithNewlines := strings.ReplaceAll(cli.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(cli.String("unsafe-key"), "\\n", "\n")

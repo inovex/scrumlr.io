@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -29,14 +30,15 @@ import (
 type BoardServiceTestSuite struct {
 	suite.Suite
 
-	service           BoardService
-	mockBoardDatabase *MockBoardDatabase
-	sessionsMock      *sessions.MockSessionService
-	columnMock        *columns.MockColumnService
-	noteMock          *notes.MockNotesService
-	reactionMock      *reactions.MockReactionService
-	votingMock        *votings.MockVotingService
-	userService       *users.MockUserService
+	service            BoardService
+	mockBoardDatabase  *MockBoardDatabase
+	sessionsMock       *sessions.MockSessionService
+	sessionRequestMock *sessionrequests.MockSessionRequestService
+	columnMock         *columns.MockColumnService
+	noteMock           *notes.MockNotesService
+	reactionMock       *reactions.MockReactionService
+	votingMock         *votings.MockVotingService
+	userService        *users.MockUserService
 
 	broker     *realtime.Broker
 	mockBroker *realtime.MockClient
@@ -60,6 +62,7 @@ func TestNotesServiceTestSuite(t *testing.T) {
 func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockBoardDatabase = NewMockBoardDatabase(suite.T())
 	suite.sessionsMock = sessions.NewMockSessionService(suite.T())
+	suite.sessionRequestMock = sessionrequests.NewMockSessionRequestService(suite.T())
 	suite.columnMock = columns.NewMockColumnService(suite.T())
 	suite.noteMock = notes.NewMockNotesService(suite.T())
 	suite.reactionMock = reactions.NewMockReactionService(suite.T())
@@ -73,7 +76,7 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
 	suite.mockHash = hash.NewMockHash(suite.T())
 
-	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionsMock, suite.sessionRequestMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
 
 	suite.boardID = uuid.New()
 	suite.userID = uuid.New()
@@ -512,8 +515,10 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest()
 func (suite *BoardServiceTestSuite) TestJoin_ByInvite() {
 	board := &Board{ID: suite.boardID, AccessPolicy: ByInvite}
 
-	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
-	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
 	suite.sessionRequestMock.EXPECT().Create(mock.Anything, suite.boardID, suite.userID).
 		Return(&sessionrequests.BoardSessionRequest{}, nil)
 

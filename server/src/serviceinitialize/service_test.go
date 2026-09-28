@@ -49,7 +49,7 @@ func TestInitializeBoardService(t *testing.T) {
 	votingService := votings.NewMockVotingService(t)
 	reactionService := reactions.NewMockReactionService(t)
 
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession)
+	boardService := initializer.InitializeBoardService(sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userSession)
 
 	assert.NotNil(t, boardService)
 }

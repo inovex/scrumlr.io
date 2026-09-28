@@ -3,12 +3,9 @@ package sessionrequests
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
-	"scrumlr.io/server/events"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -33,9 +30,7 @@ func TestGetSessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 
 	sessionRequest, err := service.Get(context.Background(), boardId, userId)
 
@@ -59,9 +54,7 @@ func TestGetSessionRequest_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 
 	sessionRequest, err := service.Get(context.Background(), boardId, userId)
 
@@ -89,9 +82,7 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
 
 	assert.Nil(t, err)
@@ -120,9 +111,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	sessionRequest, err := service.GetAll(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequest)
@@ -149,9 +138,7 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
 
 	assert.Nil(t, err)
@@ -180,9 +167,7 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequests)
@@ -201,9 +186,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	sessionRequests, err := service.GetAll(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequests)
@@ -231,9 +214,7 @@ func TestCreateSessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	request, err := service.Create(context.Background(), boardId, userId)
 
 	assert.NotNil(t, request)
@@ -256,9 +237,7 @@ func TestCreateSessionRequest_DBError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	request, err := service.Create(context.Background(), boardId, userId)
 
 	assert.Nil(t, request)
@@ -291,9 +270,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 
 	assert.NotNil(t, request)
@@ -316,9 +293,7 @@ func TestUpdatesessionRequest_DBError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 
 	assert.Nil(t, request)
@@ -342,9 +317,7 @@ func TestSessionRequestExists(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
@@ -364,9 +337,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	eventListener := events.NewMockEventListener(t)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockSessionService)
 	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
@@ -376,22 +347,4 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	assert.Equal(t, sessionRequestErr.Category, Internal)
 	assert.Equal(t, sessionRequestErr.Message, "failed to check board session request existence")
 	assert.False(t, exists)
-}
-
-func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
-	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionService := sessions.NewMockSessionService(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	eventListener := events.NewMockEventListener(t)
-
-	recorder := httptest.NewRecorder()
-	mockRequest := httptest.NewRequest(http.MethodGet, "/test", nil)
-	eventListener.EXPECT().OpenSessionRequestSocket(mock.Anything, mock.Anything)
-
-	service := NewSessionRequestService(mockSessionRequestDb, broker, eventListener, mockSessionService)
-	service.OpenSocket(context.Background(), recorder, mockRequest)
 }
