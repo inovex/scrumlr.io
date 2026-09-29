@@ -495,7 +495,7 @@ func TestApiIsAccountOwner(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+	userApi.IsAccountOwner(next).ServeHTTP(rr, req.Request())
 
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
@@ -520,7 +520,7 @@ func TestApiIsAccountOwner_differentIds(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	userApi.isAccountOwner(next).ServeHTTP(rr, req.Request())
+	userApi.IsAccountOwner(next).ServeHTTP(rr, req.Request())
 
 	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }
