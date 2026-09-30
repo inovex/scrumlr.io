@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli/v3"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/auth"
 )
 
 func TestConfigureAuthProviderNone(t *testing.T) {
@@ -79,7 +79,7 @@ func TestConfigureAuthProviderGoogle(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	google, ok := providerMap[string(common.Google)]
+	google, ok := providerMap[string(auth.Google)]
 	assert.True(t, ok)
 	assert.Equal(t, "googleClientID", google.ClientId)
 	assert.Equal(t, "googleClientSecret", google.ClientSecret)
@@ -114,7 +114,7 @@ func TestConfigureAuthProviderGitHub(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	github, ok := providerMap[string(common.GitHub)]
+	github, ok := providerMap[string(auth.GitHub)]
 	assert.True(t, ok)
 	assert.Equal(t, "githubClientID", github.ClientId)
 	assert.Equal(t, "githubClientSecret", github.ClientSecret)
@@ -149,7 +149,7 @@ func TestConfigureAuthProviderMicrosoft(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	microsoft, ok := providerMap[string(common.Microsoft)]
+	microsoft, ok := providerMap[string(auth.Microsoft)]
 	assert.True(t, ok)
 	assert.Equal(t, "microsoftClientID", microsoft.ClientId)
 	assert.Equal(t, "microsoftClientSecret", microsoft.ClientSecret)
@@ -187,7 +187,7 @@ func TestConfigureAuthProviderAzure(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	azure, ok := providerMap[string(common.AzureAd)]
+	azure, ok := providerMap[string(auth.AzureAd)]
 	assert.True(t, ok)
 	assert.Equal(t, "azureTenantID", azure.TenantId)
 	assert.Equal(t, "azureClientID", azure.ClientId)
@@ -223,7 +223,7 @@ func TestConfigureAuthProviderApple(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	apple, ok := providerMap[string(common.Apple)]
+	apple, ok := providerMap[string(auth.Apple)]
 	assert.True(t, ok)
 	assert.Equal(t, "appleClientID", apple.ClientId)
 	assert.Equal(t, "appleClientSecret", apple.ClientSecret)
@@ -261,7 +261,7 @@ func TestConfigureAuthProviderOIDC(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 1)
 
-	oidc, ok := providerMap[string(common.TypeOIDC)]
+	oidc, ok := providerMap[string(auth.TypeOIDC)]
 	assert.True(t, ok)
 	assert.Equal(t, "http://localhost:8070/.well-known/openid-configuration", oidc.DiscoveryUri)
 	assert.Equal(t, "oidcClientID", oidc.ClientId)
@@ -335,16 +335,16 @@ func TestConfigureAuthProvider(t *testing.T) {
 	assert.NotNil(t, providerMap)
 	assert.Len(t, providerMap, 6)
 
-	_, ok := providerMap[string(common.Google)]
+	_, ok := providerMap[string(auth.Google)]
 	assert.True(t, ok)
-	_, ok = providerMap[string(common.GitHub)]
+	_, ok = providerMap[string(auth.GitHub)]
 	assert.True(t, ok)
-	_, ok = providerMap[string(common.Microsoft)]
+	_, ok = providerMap[string(auth.Microsoft)]
 	assert.True(t, ok)
-	_, ok = providerMap[string(common.AzureAd)]
+	_, ok = providerMap[string(auth.AzureAd)]
 	assert.True(t, ok)
-	_, ok = providerMap[string(common.Apple)]
+	_, ok = providerMap[string(auth.Apple)]
 	assert.True(t, ok)
-	_, ok = providerMap[string(common.TypeOIDC)]
+	_, ok = providerMap[string(auth.TypeOIDC)]
 	assert.True(t, ok)
 }

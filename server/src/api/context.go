@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -196,7 +197,7 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == common.Anonymous {
+		if user.AccountType == account.Anonymous {
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
 			return
@@ -240,7 +241,7 @@ func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == common.Anonymous && !s.allowAnonymousBoardCreation {
+		if user.AccountType == account.Anonymous && !s.allowAnonymousBoardCreation {
 			log.Errorw("anonymous board creation not allowed")
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
 			return
@@ -269,7 +270,7 @@ func (s *Server) AnonymousCustomTemplateCreationContext(next http.Handler) http.
 			return
 		}
 
-		if user.AccountType == common.Anonymous && !s.allowAnonymousCustomTemplates {
+		if user.AccountType == account.Anonymous && !s.allowAnonymousCustomTemplates {
 			log.Errorw("anonymous custom template creation not allowed")
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create custom templates anonymously")))
 			return

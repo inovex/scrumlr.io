@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/sessionrequests"
@@ -118,8 +119,8 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
 	suite.users = map[string]testDbTemplates.TestUser{
-		"Stan":  {Name: "Stan", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567001"), AccountType: common.Google},
-		"Santa": {Name: "Santa", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567001"), AccountType: account.Google},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("b1c2d3e4-f5a6-7890-abcd-ef1234567002"), AccountType: account.Anonymous},
 	}
 
 	suite.boards = map[string]Board{

@@ -1,4 +1,4 @@
-package common
+package account
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 func TestNewAccountType(t *testing.T) {
 	tests := map[string]struct {
 		have      string
-		want      AccountType
+		want      Type
 		wantError bool
 	}{
 		"ANONYMOUS": {
@@ -39,7 +39,7 @@ func TestNewAccountType(t *testing.T) {
 		},
 		"OIDC": {
 			have: "OIDC",
-			want: TypeOIDC,
+			want: OIDC,
 		},
 		"ANONYMOUS (lowercase)": {
 			have: "anonymous",
@@ -67,7 +67,7 @@ func TestNewAccountType(t *testing.T) {
 		},
 		"OIDC (lowercase)": {
 			have: "oidc",
-			want: TypeOIDC,
+			want: OIDC,
 		},
 		"invalid enum value": {
 			have:      "FACEBOOK",
@@ -93,9 +93,9 @@ func TestNewAccountType(t *testing.T) {
 }
 
 func TestAccountTypeEnum(t *testing.T) {
-	values := []AccountType{Anonymous, Google, GitHub, Microsoft, Apple, TypeOIDC}
+	values := []Type{Anonymous, Google, GitHub, Microsoft, Apple, OIDC}
 	for _, value := range values {
-		var accountType AccountType
+		var accountType Type
 		err := accountType.UnmarshalJSON(fmt.Appendf(nil, "\"%s\"", value))
 		assert.Nil(t, err)
 		assert.Equal(t, value, accountType)
@@ -103,25 +103,25 @@ func TestAccountTypeEnum(t *testing.T) {
 }
 
 func TestUnmarshalAccountTypeNil(t *testing.T) {
-	var accountType AccountType
+	var accountType Type
 	err := accountType.UnmarshalJSON(nil)
 	assert.NotNil(t, err)
 }
 
 func TestUnmarshalAccountTypeEmptyString(t *testing.T) {
-	var accountType AccountType
+	var accountType Type
 	err := accountType.UnmarshalJSON([]byte(""))
 	assert.NotNil(t, err)
 }
 
 func TestUnmarshalAccountTypeEmptyStringWithQuotation(t *testing.T) {
-	var accountType AccountType
+	var accountType Type
 	err := accountType.UnmarshalJSON([]byte("\"\""))
 	assert.NotNil(t, err)
 }
 
 func TestUnmarshalAccountTypeRandomValue(t *testing.T) {
-	var accountType AccountType
+	var accountType Type
 	err := accountType.UnmarshalJSON([]byte("\"SOME_RANDOM_VALUE\""))
 	assert.NotNil(t, err)
 }

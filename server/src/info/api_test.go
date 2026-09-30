@@ -9,13 +9,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/technical_helper"
 )
 
 func TestApiGetInfo(t *testing.T) {
 	expectedInfo := &Info{
-		AuthProvider:                  []common.AccountType{common.Google, common.GitHub, common.TypeOIDC},
+		AuthProvider:                  []account.Type{account.Google, account.GitHub, account.OIDC},
 		AnonymousLoginDisabled:        false,
 		AllowAnonymousCustomTemplates: false,
 		AllowAnonymousBoardCreation:   true,

@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
@@ -53,8 +54,8 @@ func (suite *ColumnTemplateServiceIntegrationTestSuite) SetupTest() {
 
 func (suite *ColumnTemplateServiceIntegrationTestSuite) initTestData() {
 	suite.users = map[string]testDbTemplates.TestUser{
-		"Stan":  {Name: "Stan", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: common.Google},
-		"Santa": {Name: "Santa", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: account.Google},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("c1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: account.Anonymous},
 	}
 
 	suite.boardTemplates = map[string]testBoardTemplate{

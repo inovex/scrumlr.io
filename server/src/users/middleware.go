@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -50,7 +51,7 @@ func (api *API) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == common.Anonymous {
+		if user.AccountType == account.Anonymous {
 			err = errors.New("not authorized to perform this action")
 			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
@@ -90,7 +91,7 @@ func (api *API) AnonymousBoardCreationContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == common.Anonymous && !api.allowAnonymousBoardCreation {
+		if user.AccountType == account.Anonymous && !api.allowAnonymousBoardCreation {
 			err := errors.New("not authorized to create boards anonymously")
 			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("anonymous board creation not allowed")
@@ -125,7 +126,7 @@ func (api *API) AnonymousCustomTemplateCreationContext(next http.Handler) http.H
 			return
 		}
 
-		if user.AccountType == common.Anonymous && !api.allowAnonymousCustomTemplates {
+		if user.AccountType == account.Anonymous && !api.allowAnonymousCustomTemplates {
 			err := errors.New("not authorized to create custom templates anonymously")
 			otel.RecordErrorSpan(span, err, nil)
 			log.Errorw("anonymous custom template creation not allowed")

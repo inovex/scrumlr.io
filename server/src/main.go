@@ -11,8 +11,8 @@ import (
 
 	"go.uber.org/zap"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/cache"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"

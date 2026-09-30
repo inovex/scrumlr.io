@@ -5,13 +5,13 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 )
 
 type DatabaseReactionTestSuite struct {
@@ -192,7 +192,7 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetAllForNote() {
 type TestUser struct {
 	id          uuid.UUID
 	name        string
-	accountType common.AccountType
+	accountType account.Type
 }
 
 type TestBoard struct {
@@ -218,8 +218,8 @@ type TestNote struct {
 func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	// test users
 	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Anonymous}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: account.Anonymous}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: account.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 2)

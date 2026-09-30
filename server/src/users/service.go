@@ -10,6 +10,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/sessions"
@@ -58,7 +59,7 @@ func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService session
 	return service
 }
 
-func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error) {
+func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, accountType account.Type) (*User, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.users.service.create")
 	defer span.End()
 
@@ -77,25 +78,25 @@ func (service *Service) Create(ctx context.Context, id, name, avatarUrl string, 
 	var specificCounter metric.Int64Counter
 
 	switch accountType {
-	case common.Anonymous:
+	case account.Anonymous:
 		specificCounter = anonymousUserCreatedCounter
 		user, err = service.database.CreateAnonymousUser(ctx, name)
-	case common.Apple:
+	case account.Apple:
 		specificCounter = appleUserCreatedCounter
 		user, err = service.database.CreateAppleUser(ctx, id, name, avatarUrl)
-	case common.AzureAd:
+	case account.AzureAd:
 		specificCounter = azureAdUserCreatedCounter
 		user, err = service.database.CreateAzureAdUser(ctx, id, name, avatarUrl)
-	case common.GitHub:
+	case account.GitHub:
 		specificCounter = githubUserCreatedCounter
 		user, err = service.database.CreateGitHubUser(ctx, id, name, avatarUrl)
-	case common.Google:
+	case account.Google:
 		specificCounter = googleUserCreatedCounter
 		user, err = service.database.CreateGoogleUser(ctx, id, name, avatarUrl)
-	case common.Microsoft:
+	case account.Microsoft:
 		specificCounter = microsoftUserCreatedCounter
 		user, err = service.database.CreateMicrosoftUser(ctx, id, name, avatarUrl)
-	case common.TypeOIDC:
+	case account.OIDC:
 		specificCounter = oicdUserCreatedCounter
 		user, err = service.database.CreateOIDCUser(ctx, id, name, avatarUrl)
 	default:
