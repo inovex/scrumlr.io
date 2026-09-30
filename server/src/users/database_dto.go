@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 )
 
@@ -14,7 +15,7 @@ type DatabaseUser struct {
 	ID            uuid.UUID      `bun:"type:uuid"`
 	Avatar        *common.Avatar `bun:"type:jsonb,nullzero"`
 	Name          string
-	AccountType   common.AccountType
+	AccountType   account.Type
 	KeyMigration  *time.Time
 	CreatedAt     time.Time
 }
@@ -23,7 +24,7 @@ type DatabaseUser struct {
 type DatabaseUserInsert struct {
 	bun.BaseModel `bun:"table:users"`
 	Name          string
-	AccountType   common.AccountType
+	AccountType   account.Type
 }
 
 type DatabaseUserUpdate struct {

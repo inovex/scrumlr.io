@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/timeprovider"
 
@@ -14,7 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votings"
@@ -478,7 +478,7 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser_NotFound() {
 type TestUser struct {
 	id          uuid.UUID
 	name        string
-	accountType common.AccountType
+	accountType account.Type
 }
 
 type TestSession struct {
@@ -491,8 +491,8 @@ func (suite *DatabaseBoardTestSuite) seedData(db *bun.DB) {
 
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: account.Google}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: account.Anonymous}
 
 	// tests boards
 	suite.boards = make(map[string]DatabaseBoard, 10)

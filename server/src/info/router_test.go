@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -26,7 +26,7 @@ func TestRegisterRoutes(t *testing.T) {
 
 func TestGetInfoRegistered(t *testing.T) {
 	info := &Info{
-		AuthProvider:                  []common.AccountType{common.Google, common.GitHub, common.TypeOIDC},
+		AuthProvider:                  []account.Type{account.Google, account.GitHub, account.OIDC},
 		AnonymousLoginDisabled:        false,
 		AllowAnonymousCustomTemplates: false,
 		AllowAnonymousBoardCreation:   true,

@@ -13,6 +13,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
@@ -99,12 +100,12 @@ func (t *testAuthService) Authenticator() func(http.Handler) http.Handler {
 	}
 }
 
-func (t *testAuthService) Exists(_ common.AccountType) bool {
+func (t *testAuthService) Exists(_ auth.AccountType) bool {
 	return true
 }
 
-func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
-	return &auth.UserInformation{
+func (t *testAuthService) ExtractUserInformation(accountType auth.AccountType, _ *goth.User) (*oldauth.UserInformation, error) {
+	return &oldauth.UserInformation{
 		Provider:  accountType,
 		Ident:     "test-user",
 		Name:      "Test User",
@@ -119,35 +120,35 @@ func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
 	tests := []struct {
 		name                          string
 		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
+		userAccountType               account.Type
 		expectedStatus                int
 		expectedToCallNext            bool
 	}{
 		{
 			name:                          "authenticated user can create templates when flag is disabled",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "authenticated user can create templates when flag is enabled",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "anonymous user can create templates when flag is enabled",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "anonymous user receives 403 forbidden when allowAnonymousCustomTemplates is false",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 			expectedToCallNext:            false,
 		},
@@ -263,7 +264,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 		method                        string
 		path                          string
 		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
+		userAccountType               account.Type
 		expectedStatus                int
 		needsRequestBody              bool
 		requestBodyType               string // "create" or "update"
@@ -274,7 +275,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		{
@@ -282,7 +283,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusCreated,
 			needsRequestBody:              true,
 			requestBodyType:               "create",
@@ -293,7 +294,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "GET",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// GET /templates/{id}
@@ -302,7 +303,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "GET",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// PUT /templates/{id}
@@ -311,7 +312,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "PUT",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// DELETE /templates/{id}
@@ -320,7 +321,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "DELETE",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// Authenticated users should always pass
@@ -329,7 +330,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusCreated,
 			needsRequestBody:              true,
 			requestBodyType:               "create",

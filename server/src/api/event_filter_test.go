@@ -4,13 +4,13 @@ import (
 	"math/rand"
 	"testing"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/role"
 	"scrumlr.io/server/users"
 
 	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -31,7 +31,7 @@ var (
 	}
 	participantUser = users.User{
 		ID:          uuid.New(),
-		AccountType: common.Anonymous,
+		AccountType: account.Anonymous,
 	}
 	moderatorBoardSession = sessions.BoardSession{
 		UserID: moderatorUser.ID,
@@ -211,7 +211,7 @@ func testRaiseHandShouldBeUpdatedAfterSessionUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		user := getUserById(session.UserID)
-		return user.AccountType == common.Anonymous
+		return user.AccountType == account.Anonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
@@ -227,7 +227,7 @@ func testRaiseHandShouldBeUpdatedAfterSessionUpdated(t *testing.T) {
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		user := getUserById(session.UserID)
-		return user.AccountType == common.Anonymous
+		return user.AccountType == account.Anonymous
 	})[0]
 
 	assert.Equal(t, true, isUpdated)

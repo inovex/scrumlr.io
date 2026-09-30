@@ -48,8 +48,8 @@ func (service *Service) Get(ctx context.Context) *Info {
 	info.AllowAnonymousBoardCreation = service.serverConfig.AllowAnonymousBoardCreation
 	info.AllowAnonymousHistory = service.serverConfig.AllowAnonymousHistory
 
-	info.AuthProvider = make([]common.AccountType, 0, 6)
-	for _, provider := range []common.AccountType{common.Google, common.GitHub, common.Microsoft, common.AzureAd, common.Apple, common.TypeOIDC} {
+	info.AuthProvider = make([]auth.AccountType, 0, 6)
+	for _, provider := range []auth.AccountType{auth.Google, auth.GitHub, auth.Microsoft, auth.AzureAd, auth.Apple, auth.TypeOIDC} {
 		if service.authService.Exists(provider) {
 			info.AuthProvider = append(info.AuthProvider, provider)
 		}

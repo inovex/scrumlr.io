@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/initialize/testDbTemplates"
@@ -53,9 +54,9 @@ func (suite *BoardTemplateServiceIntegrationTestSuite) SetupTest() {
 
 func (suite *BoardTemplateServiceIntegrationTestSuite) initTestData() {
 	suite.users = map[string]testDbTemplates.TestUser{
-		"Stan":  {Name: "Stan", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: common.Google},
-		"Santa": {Name: "Santa", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
-		"Bob":   {Name: "Bob", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567003"), AccountType: common.Anonymous},
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: account.Google},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: account.Anonymous},
+		"Bob":   {Name: "Bob", ID: uuid.MustParse("b1b2c3d4-e5f6-7890-abcd-ef1234567003"), AccountType: account.Anonymous},
 	}
 
 	suite.templates = map[string]BoardTemplate{

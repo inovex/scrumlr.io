@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/realtime"
@@ -79,8 +79,8 @@ func (suite *ReactionServiceIntegrationTestSuite) SetupTest() {
 
 func (suite *ReactionServiceIntegrationTestSuite) initTestData() {
 	suite.users = map[string]testDbTemplates.TestUser{
-		"Stan":  {Name: "Stan", ID: uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: common.Anonymous},
-		"Santa": {Name: "Santa", ID: uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
+		"Stan":  {Name: "Stan", ID: uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567001"), AccountType: account.Anonymous},
+		"Santa": {Name: "Santa", ID: uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567002"), AccountType: account.Anonymous},
 	}
 
 	suite.boards = map[string]testDbTemplates.TestBoard{
