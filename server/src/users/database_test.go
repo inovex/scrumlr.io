@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
 	"scrumlr.io/server/initialize/testDbTemplates"
@@ -55,7 +56,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateAnonymousUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.Anonymous, dbUser.AccountType)
+	assert.Equal(t, account.Anonymous, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -70,7 +71,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateAppleUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.Apple, dbUser.AccountType)
+	assert.Equal(t, account.Apple, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -85,7 +86,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateAzureAdUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.AzureAd, dbUser.AccountType)
+	assert.Equal(t, account.AzureAd, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -100,7 +101,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateGitHubUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.GitHub, dbUser.AccountType)
+	assert.Equal(t, account.GitHub, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -115,7 +116,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateGoogleUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Equal(t, account.Google, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -136,7 +137,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUser() {
 	assert.Nil(t, err)
 	assert.Equal(t, existingUser.ID, dbUser.ID)
 	assert.Equal(t, updatedName, dbUser.Name)
-	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Equal(t, account.Google, dbUser.AccountType)
 	assert.Equal(t, existingUser.Avatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
@@ -172,7 +173,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateExistingGoogleUserWithManu
 	assert.Nil(t, err)
 	assert.Equal(t, existingUser.ID, dbUser.ID)
 	assert.Equal(t, existingUser.Name, dbUser.Name)
-	assert.Equal(t, common.Google, dbUser.AccountType)
+	assert.Equal(t, account.Google, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 
@@ -201,7 +202,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateMicrosoftUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.Microsoft, dbUser.AccountType)
+	assert.Equal(t, account.Microsoft, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -216,7 +217,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseCreateOIDCUser() {
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.TypeOIDC, dbUser.AccountType)
+	assert.Equal(t, account.OIDC, dbUser.AccountType)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
 	assert.Nil(t, dbUser.Avatar)
@@ -235,7 +236,7 @@ func (suite *DatabaseUserTestSuite) TestDatabaseUpdateUser() {
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbUser.ID)
 	assert.Equal(t, userName, dbUser.Name)
-	assert.Equal(t, common.Anonymous, dbUser.AccountType)
+	assert.Equal(t, account.Anonymous, dbUser.AccountType)
 	assert.Equal(t, &userAvatar, dbUser.Avatar)
 	assert.Nil(t, dbUser.KeyMigration)
 	assert.NotNil(t, dbUser.CreatedAt)
@@ -457,13 +458,13 @@ func (suite *DatabaseUserTestSuite) seedData(db *bun.DB) {
 
 	// test users
 	suite.users = make(map[string]DatabaseUser, 6)
-	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
-	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: common.Anonymous}
-	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
-	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: common.GitHub}
-	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: common.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
-	suite.users["ExistingGoogleUserManualName"] = DatabaseUser{ID: uuid.New(), Name: "CustomName", AccountType: common.Google}
+	suite.users["Stan"] = DatabaseUser{ID: uuid.New(), Name: "Stan", AccountType: account.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
+	suite.users["Friend"] = DatabaseUser{ID: uuid.New(), Name: "Friend", AccountType: account.Anonymous}
+	suite.users["Santa"] = DatabaseUser{ID: uuid.New(), Name: "Santa", AccountType: account.Anonymous}
+	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: account.Anonymous}
+	suite.users["Delete"] = DatabaseUser{ID: uuid.New(), Name: "DeleteMe", AccountType: account.GitHub}
+	suite.users["ExistingGoogleUser"] = DatabaseUser{ID: uuid.New(), Name: "OldName", AccountType: account.Google, Avatar: &common.Avatar{AccessoriesType: avatar.AccessoriesTypeBlank, ClotheColor: avatar.ClotheColorBlack}}
+	suite.users["ExistingGoogleUserManualName"] = DatabaseUser{ID: uuid.New(), Name: "CustomName", AccountType: account.Google}
 
 	// test boards
 	suite.boards = make(map[string]testBoard, 1)

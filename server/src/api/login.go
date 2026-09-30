@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/users"
 
@@ -50,7 +51,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
+	user, err := s.users.Create(ctx, "", body.Name, "", auth.Anonymous)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create anonyoums user"))
 		common.Throw(w, r, common.InternalServerError)
@@ -145,7 +146,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider, err := common.NewAccountType(externalUser.Provider)
+	provider, err := auth.NewAccountType(externalUser.Provider)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("user provider not supported"))
 		w.WriteHeader(http.StatusInternalServerError)
