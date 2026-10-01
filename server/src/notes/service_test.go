@@ -7,7 +7,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/cache"
@@ -28,7 +29,7 @@ type NotesServiceTestSuite struct {
 	rank                     int
 	mockBroker               *realtime.MockClient
 	broker                   *realtime.Broker
-	stackID                  uuid.NullUUID
+	stackID                  common.NullUUID
 	mockCache                *cache.MockClient
 	mockBoardModifiedUpdater *common.MockBoardLastModifiedUpdater
 	pos                      NotePosition
@@ -61,7 +62,7 @@ func (suite *NotesServiceTestSuite) SetupTest() {
 	suite.noteID = uuid.New()
 	suite.rank = 0
 
-	suite.stackID = uuid.NullUUID{Valid: true, UUID: uuid.New()}
+	suite.stackID = common.NullUUID{Valid: true, UUID: uuid.New()}
 
 	suite.pos = NotePosition{
 		Column: suite.columnID,
@@ -124,7 +125,7 @@ func (suite *NotesServiceTestSuite) Test_Create() {
 	text := "This is a text on a note"
 
 	suite.mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text}).
-		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: common.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
 	suite.expectGetAllEmpty()
 	suite.expectPublish()
 	suite.expectBoardLastModifiedAtTouched()
@@ -169,7 +170,7 @@ func (suite *NotesServiceTestSuite) Test_Import() {
 	text := "This is a text on a note"
 
 	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
-		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: common.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
 	suite.expectBoardLastModifiedAtTouched()
 
 	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
@@ -450,7 +451,7 @@ func (suite *NotesServiceTestSuite) Test_Update_StackingNotAllowed() {
 func (suite *NotesServiceTestSuite) Test_Update_StackOnSelf() {
 	callerRole := role.ParticipantRole
 	stackAllowed := true
-	stackIDNote := uuid.NullUUID{Valid: true, UUID: suite.noteID}
+	stackIDNote := common.NullUUID{Valid: true, UUID: suite.noteID}
 	pos := suite.pos
 	pos.Rank = 0
 	pos.Stack = stackIDNote
@@ -509,7 +510,7 @@ func (suite *NotesServiceTestSuite) Test_Import_UpdateLastModifiedError() {
 	text := "This is a text on a note"
 
 	suite.mockDB.EXPECT().ImportNote(mock.Anything, DatabaseNoteImport{Author: suite.authorID, Board: suite.boardID, Text: text, Position: &NoteUpdatePosition{Column: suite.columnID}}).
-		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: uuid.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
+		Return(DatabaseNote{ID: suite.noteID, Author: suite.authorID, Board: suite.boardID, Column: suite.columnID, Text: text, Stack: common.NullUUID{}, Rank: suite.rank, Edited: edited}, nil)
 	suite.mockBoardModifiedUpdater.EXPECT().UpdateLastModified(mock.Anything, suite.boardID, mock.AnythingOfType("time.Time")).Return(errors.New("cannot update board"))
 
 	note, err := suite.service.Import(context.Background(), NoteImportRequest{User: suite.authorID, Board: suite.boardID, Text: text, Position: NotePosition{Column: suite.columnID}})
@@ -609,7 +610,7 @@ func (suite *NotesServiceTestSuite) Test_Update_NegativeRankIsResetToZero() {
 
 func (suite *NotesServiceTestSuite) expectDeleteSequence(deleteStack bool) {
 	suite.mockDB.EXPECT().GetStack(mock.Anything, suite.noteID).
-		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: uuid.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
+		Return([]DatabaseNote{{ID: suite.noteID, Author: suite.authorID}, {ID: uuid.New(), Author: suite.authorID, Stack: common.NullUUID{UUID: suite.noteID, Valid: true}}}, nil)
 	suite.mockDB.EXPECT().DeleteNote(mock.Anything, suite.authorID, suite.boardID, suite.noteID, deleteStack).
 		Return(nil)
 	suite.expectPublish()
@@ -729,8 +730,8 @@ func (suite *NotesServiceTestSuite) Test_GetAll() {
 
 	suite.mockDB.EXPECT().GetAll(mock.Anything, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: firstNoteID, Author: firstAuthorID, Board: suite.boardID, Text: firstNoteText, Column: firstColumnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
-			{ID: secondNoteID, Author: secondAuthorID, Board: suite.boardID, Text: secondNoteText, Column: secondColumnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: true},
+			{ID: firstNoteID, Author: firstAuthorID, Board: suite.boardID, Text: firstNoteText, Column: firstColumnID, Stack: common.NullUUID{}, Rank: 0, Edited: false},
+			{ID: secondNoteID, Author: secondAuthorID, Board: suite.boardID, Text: secondNoteText, Column: secondColumnID, Stack: common.NullUUID{}, Rank: 0, Edited: true},
 		}, nil)
 
 	notes, err := suite.service.GetAll(context.Background(), suite.boardID)
@@ -811,7 +812,7 @@ func (suite *NotesServiceTestSuite) Test_GetByUserAndBoard() {
 
 	suite.mockDB.EXPECT().GetByUserAndBoard(mock.Anything, suite.authorID, suite.boardID).
 		Return([]DatabaseNote{
-			{ID: oteID, Author: suite.authorID, Board: suite.boardID, Text: noteText, Column: suite.columnID, Stack: uuid.NullUUID{}, Rank: 0, Edited: false},
+			{ID: oteID, Author: suite.authorID, Board: suite.boardID, Text: noteText, Column: suite.columnID, Stack: common.NullUUID{}, Rank: 0, Edited: false},
 		}, nil)
 
 	notes, err := suite.service.GetByUserAndBoard(context.Background(), suite.authorID, suite.boardID)

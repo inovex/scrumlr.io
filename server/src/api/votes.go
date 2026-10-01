@@ -10,7 +10,7 @@ import (
 	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"uuid"
 )
 
 // Add a new vote to a board

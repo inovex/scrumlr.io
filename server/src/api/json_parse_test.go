@@ -10,7 +10,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/technical_helper"
 
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/stretchr/testify/suite"
 )
 

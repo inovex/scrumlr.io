@@ -14,7 +14,8 @@ import (
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )

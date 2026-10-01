@@ -1,7 +1,8 @@
 package reactions
 
 import (
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 )
 

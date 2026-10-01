@@ -3,9 +3,11 @@ package boards
 import (
 	"time"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/sessions"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
@@ -30,8 +32,8 @@ type DatabaseBoard struct {
 	CreatedAt             time.Time
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            uuid.NullUUID
-	ShowVoting            uuid.NullUUID
+	SharedNote            common.NullUUID
+	ShowVoting            common.NullUUID
 	LastModifiedAt        time.Time
 }
 
@@ -66,8 +68,8 @@ type DatabaseBoardUpdate struct {
 	IsLocked              *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            uuid.NullUUID
-	ShowVoting            uuid.NullUUID
+	SharedNote            common.NullUUID
+	ShowVoting            common.NullUUID
 	LastModifiedAt        time.Time
 }
 

@@ -7,7 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
@@ -336,7 +337,7 @@ func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 	if err := testDbTemplates.InsertColumn(db, suite.deleteColumn.ID, suite.deleteColumn.BoardID, suite.deleteColumn.Name, "", "backlog-blue", true, 0); err != nil {
 		log.Fatalf("Failed to insert delete user column: %s", err)
 	}
-	if err := testDbTemplates.InsertNote(db, suite.deleteNote.ID, suite.deleteNote.AuthorID, suite.deleteNote.BoardID, suite.deleteNote.ColumnID, suite.deleteNote.Text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+	if err := testDbTemplates.InsertNote(db, suite.deleteNote.ID, suite.deleteNote.AuthorID, suite.deleteNote.BoardID, suite.deleteNote.ColumnID, suite.deleteNote.Text, common.NullUUID{UUID: uuid.UUID{}, Valid: false}, 0); err != nil {
 		log.Fatalf("Failed to insert delete user note: %s", err)
 	}
 

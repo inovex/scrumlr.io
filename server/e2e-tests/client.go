@@ -9,8 +9,8 @@ import (
 	"net/http/cookiejar"
 	"os"
 	"strings"
+	"uuid"
 
-	"github.com/google/uuid"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"

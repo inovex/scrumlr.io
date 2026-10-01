@@ -3,8 +3,10 @@ package testDbTemplates
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string, avatar *string) error {
@@ -13,7 +15,7 @@ func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string, avata
 }
 
 func InsertGoogleUser(db *bun.DB, userID uuid.UUID, googleID string, name string, avatarUrl string) error {
-	_, err := db.Exec("INSERT INTO google_users (\"user\", id, name, \"avatar_url\") VALUES (?, ?, ?, ?)", userID, googleID, name, avatarUrl)
+	_, err := db.Exec("INSERT INTO google_users (\"user\", id, name, \"avatar_url\") VALUES (?, ?, ?, ?)", userID.String(), googleID, name, avatarUrl)
 	return err
 }
 
@@ -29,7 +31,7 @@ func InsertColumn(db *bun.DB, id uuid.UUID, boardId uuid.UUID, name string, desc
 	return err
 }
 
-func InsertNote(db *bun.DB, id uuid.UUID, author uuid.UUID, board uuid.UUID, column uuid.UUID, text string, stack uuid.NullUUID, rank int) error {
+func InsertNote(db *bun.DB, id uuid.UUID, author uuid.UUID, board uuid.UUID, column uuid.UUID, text string, stack common.NullUUID, rank int) error {
 	var stackId *string
 	if stack.Valid {
 		id := stack.UUID.String()
@@ -45,31 +47,31 @@ func InsertReaction(db *bun.DB, id uuid.UUID, note uuid.UUID, user uuid.UUID, re
 }
 
 func InsertSession(db *bun.DB, user uuid.UUID, board uuid.UUID, role string, banned bool, ready bool, connected bool, handRaised bool) error {
-	_, err := db.Exec("INSERT INTO \"board_sessions\" (\"user\", \"board\", \"role\", \"banned\", \"ready\", \"connected\", \"raised_hand\") VALUES (?, ?, ?, ?, ?, ?, ?);", user, board, role, banned, ready, connected, handRaised)
+	_, err := db.Exec("INSERT INTO \"board_sessions\" (\"user\", \"board\", \"role\", \"banned\", \"ready\", \"connected\", \"raised_hand\") VALUES (?, ?, ?, ?, ?, ?, ?);", user.String(), board.String(), role, banned, ready, connected, handRaised)
 	return err
 }
 
 func InsertSessionRequest(db *bun.DB, user uuid.UUID, board uuid.UUID, status string) error {
-	_, err := db.Exec("INSERT INTO \"board_session_requests\" (\"user\", \"board\", \"status\") VALUES(?, ?, ?);", user, board, status)
+	_, err := db.Exec("INSERT INTO \"board_session_requests\" (\"user\", \"board\", \"status\") VALUES(?, ?, ?);", user.String(), board.String(), status)
 	return err
 }
 
 func InsertBoardTemplate(db *bun.DB, id uuid.UUID, creator uuid.UUID, name string, description string, favourite bool) error {
-	_, err := db.Exec("INSERT INTO \"board_templates\" (\"id\", \"creator\", \"name\", \"description\", \"favourite\") VALUES (?, ?, ?, ?, ?);", id, creator, name, description, favourite)
+	_, err := db.Exec("INSERT INTO \"board_templates\" (\"id\", \"creator\", \"name\", \"description\", \"favourite\") VALUES (?, ?, ?, ?, ?);", id.String(), creator.String(), name, description, favourite)
 	return err
 }
 
 func InsertColumnTemplate(db *bun.DB, id uuid.UUID, board uuid.UUID, name string, description string, color string, visible bool, index int) error {
-	_, err := db.Exec("INSERT INTO \"column_templates\" (\"id\", \"board_template\", \"name\", \"description\", \"color\", \"visible\", \"index\") VALUES (?, ?, ?, ?, ?, ?, ?);", id, board, name, description, color, visible, index)
+	_, err := db.Exec("INSERT INTO \"column_templates\" (\"id\", \"board_template\", \"name\", \"description\", \"color\", \"visible\", \"index\") VALUES (?, ?, ?, ?, ?, ?, ?);", id.String(), board.String(), name, description, color, visible, index)
 	return err
 }
 
 func InsertVoting(db *bun.DB, id uuid.UUID, board uuid.UUID, limit int, multiple bool, others bool, status string, anonymous bool) error {
-	_, err := db.Exec("INSERT INTO \"votings\" (\"id\", \"board\", \"vote_limit\", \"allow_multiple_votes\", \"show_votes_of_others\", \"status\", \"is_anonymous\") VALUES (?, ?, ?, ?, ?, ?, ?);", id, board, limit, multiple, others, status, anonymous)
+	_, err := db.Exec("INSERT INTO \"votings\" (\"id\", \"board\", \"vote_limit\", \"allow_multiple_votes\", \"show_votes_of_others\", \"status\", \"is_anonymous\") VALUES (?, ?, ?, ?, ?, ?, ?);", id.String(), board.String(), limit, multiple, others, status, anonymous)
 	return err
 }
 
 func InsertVote(db *bun.DB, board uuid.UUID, voting uuid.UUID, user uuid.UUID, note uuid.UUID) error {
-	_, err := db.Exec("INSERT INTO \"votes\" (\"board\", \"voting\", \"user\", \"note\") VALUES (?, ?, ?, ?);", board, voting, user, note)
+	_, err := db.Exec("INSERT INTO \"votes\" (\"board\", \"voting\", \"user\", \"note\") VALUES (?, ?, ?, ?);", board.String(), voting.String(), user.String(), note.String())
 	return err
 }
