@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"
@@ -388,6 +389,15 @@ func main() {
 				Required: false,
 			},
 			&cli.StringFlag{
+				Name: "password-encoder",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_PASSWORD_ENCODER"),
+					toml.TOML("password-encoder", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+				),
+				Usage: "Id of the password encoder to encrypt the passwords. Defaults to `argon2id`. Possible values are: `sha512`, `argon2id`",
+				Value: "argon2id",
+			},
+			&cli.StringFlag{
 				Name: "otel-grpc",
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_OTEL_GRPC"),
@@ -529,7 +539,13 @@ func run(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
+	passwordEncoder, err := encoder.InitializePasswordEncoder(cli.String("password-encoder"))
+	if err != nil {
+		log.Fatalf("failed to configure password encoder: %v", err)
+		return err
+	}
+
+	initializer := serviceinitialize.NewServiceInitializer(db, rt, c, passwordEncoder)
 
 	wsService := initializer.InitializeWebSocketService()
 	websocket := initializer.InitializeSessionRequestWebsocket(wsService)

@@ -351,3 +351,18 @@ The path to the Scrumlr configuration file.
 ```ini
 SCRUMLR_CONFIG_PATH=''
 ```
+
+### Scrumlr password encoder
+
+The password encoder to encode the password can be choosen. Currently there are the following encoders available
+
+- `sha512`
+- `argon2id`
+
+To set a specific password encoder set the environment variable
+
+```ini
+SCRUMLR_PASSWORD_ENCODER=
+```
+
+If not set it will default to `argon2id`.

@@ -118,6 +118,19 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 
 }
 
+func (d *DB) UpdateBoardPassphrase(ctx context.Context, update DatabaseBoardPassphraseUpdate) (DatabaseBoard, error) {
+	var board DatabaseBoard
+
+	_, err := d.db.NewUpdate().
+		Model(&update).
+		Column("passphrase", "salt").
+		Where("id = ?", update.ID).
+		Returning("*").
+		Exec(common.ContextWithValues(ctx, "Database", d, "Result", &board), &board)
+
+	return board, err
+}
+
 func (d *DB) DeleteBoard(ctx context.Context, id uuid.UUID) error {
 	_, err := d.db.NewDelete().
 		Model((*DatabaseBoard)(nil)).
