@@ -587,3 +587,95 @@ func (_c *MockUserService_Update_Call) RunAndReturn(run func(ctx context.Context
 	_c.Call.Return(run)
 	return _c
 }
+
+// UpgradeAnonymousUser provides a mock function for the type MockUserService
+func (_mock *MockUserService) UpgradeAnonymousUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl, accountType)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeAnonymousUser")
+	}
+
+	var r0 *User
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) (*User, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) *User); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*User)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserService_UpgradeAnonymousUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeAnonymousUser'
+type MockUserService_UpgradeAnonymousUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeAnonymousUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+//   - accountType common.AccountType
+func (_e *MockUserService_Expecter) UpgradeAnonymousUser(ctx any, userId any, id any, name any, avatarUrl any, accountType any) *MockUserService_UpgradeAnonymousUser_Call {
+	return &MockUserService_UpgradeAnonymousUser_Call{Call: _e.mock.On("UpgradeAnonymousUser", ctx, userId, id, name, avatarUrl, accountType)}
+}
+
+func (_c *MockUserService_UpgradeAnonymousUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserService_UpgradeAnonymousUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		var arg5 common.AccountType
+		if args[5] != nil {
+			arg5 = args[5].(common.AccountType)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserService_UpgradeAnonymousUser_Call) Return(user *User, err error) *MockUserService_UpgradeAnonymousUser_Call {
+	_c.Call.Return(user, err)
+	return _c
+}
+
+func (_c *MockUserService_UpgradeAnonymousUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error)) *MockUserService_UpgradeAnonymousUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
