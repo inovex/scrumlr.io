@@ -309,7 +309,7 @@ export const editBoard = createAsyncThunk<
         showAuthors: payload.showAuthors,
         showNotesOfOtherUsers: payload.showNotesOfOtherUsers,
         showNoteReactions: payload.showNoteReactions,
-        name: payload.name == null ? board.name : payload.name,
+        name: payload.name ?? board.name,
         isLocked: payload.isLocked,
       }),
     dispatch,
