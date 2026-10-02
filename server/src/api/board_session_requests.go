@@ -62,7 +62,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	request, err := s.sessionRequests.Get(ctx, board, user)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get session request"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -96,7 +96,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get all session requests"))
 		log.Error(err, "failed to get all session requetsts", "board", board)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -150,7 +150,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to update session request"))
 		log.Errorw("failed to update board session request", "request", body, "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 

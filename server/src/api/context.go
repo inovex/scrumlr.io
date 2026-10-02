@@ -334,18 +334,6 @@ func (s *Server) VotingContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		boardTemplateParam := chi.URLParam(r, "id")
-		boardTemplate, err := uuid.Parse(boardTemplateParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
-		}
-		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
-		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
-	})
-}
-
 func (s *Server) JoinBoardRateLimiter(next http.Handler) http.Handler {
 	limiter := httprate.LimitBy(
 		s.joinBoardRateLimit,
@@ -392,19 +380,5 @@ func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Apply the rate limiter to the next handler
 		limiter(next).ServeHTTP(w, r)
-	})
-}
-
-func (s *Server) ColumnTemplateContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		columnTemplateParam := chi.URLParam(r, "columnTemplate")
-		columnTemplate, err := uuid.Parse(columnTemplateParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
-			return
-		}
-
-		columnTemplateContext := context.WithValue(r.Context(), identifiers.ColumnTemplateIdentifier, columnTemplate)
-		next.ServeHTTP(w, r.WithContext(columnTemplateContext))
 	})
 }

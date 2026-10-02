@@ -41,7 +41,7 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 	reaction, err := s.reactions.Get(ctx, id)
 	if err != nil {
 		scrumlrOtel.RecordErrorSpan(span, err, new("failed to get reaction"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -73,7 +73,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 	reactions, err := s.reactions.GetAll(ctx, board)
 	if err != nil {
 		scrumlrOtel.RecordErrorSpan(span, err, new("failed to get reactions for board"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -120,7 +120,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 	reaction, err := s.reactions.Create(ctx, body)
 	if err != nil {
 		scrumlrOtel.RecordErrorSpan(span, err, new("failed to create reaction"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -154,7 +154,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 
 	if err := s.reactions.Delete(ctx, board, user, id); err != nil {
 		scrumlrOtel.RecordErrorSpan(span, err, new("failed to remove reaction"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -199,7 +199,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	reaction, err := s.reactions.Update(ctx, board, user, id, body)
 	if err != nil {
 		scrumlrOtel.RecordErrorSpan(span, err, new("failed to update reaction"))
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 

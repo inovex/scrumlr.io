@@ -11,7 +11,7 @@ import (
 	"scrumlr.io/server/common"
 )
 
-func TestCreateColumnTemplate(t *testing.T) {
+func TestCreate(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
@@ -59,7 +59,7 @@ func TestCreateColumnTemplate(t *testing.T) {
 	assert.Equal(t, visible, column.Visible)
 }
 
-func TestCreateColumnTemplate_NegativeIndex(t *testing.T) {
+func TestCreate_NegativeIndex(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
@@ -108,7 +108,7 @@ func TestCreateColumnTemplate_NegativeIndex(t *testing.T) {
 	assert.Equal(t, visible, column.Visible)
 }
 
-func TestCreateColumnTemplate_HigherIndex(t *testing.T) {
+func TestCreate_HigherIndex(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
@@ -157,7 +157,7 @@ func TestCreateColumnTemplate_HigherIndex(t *testing.T) {
 	assert.Equal(t, visible, column.Visible)
 }
 
-func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
+func TestCreate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	board := uuid.New()
 	name := "template test"
@@ -192,7 +192,7 @@ func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestGetColumnTemplate(t *testing.T) {
+func TestGet(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
 	name := "template test"
@@ -223,7 +223,7 @@ func TestGetColumnTemplate(t *testing.T) {
 	assert.Equal(t, color, column.Color)
 }
 
-func TestGetColumnTemplate_DatabaseError(t *testing.T) {
+func TestGet_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 	columnId := uuid.New()
@@ -241,7 +241,7 @@ func TestGetColumnTemplate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestGetAllColumnTemplate(t *testing.T) {
+func TestGetAll(t *testing.T) {
 	boardId := uuid.New()
 	firstColumnId := uuid.New()
 	secondColumnId := uuid.New()
@@ -280,7 +280,7 @@ func TestGetAllColumnTemplate(t *testing.T) {
 	assert.Equal(t, secondColumnName, columns[1].Name)
 }
 
-func TestGetAllColumnTemplate_DatabaseError(t *testing.T) {
+func TestGetAll_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 
@@ -297,7 +297,7 @@ func TestGetAllColumnTemplate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestUpdateColumnTemplate(t *testing.T) {
+func TestUpdate(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "New Name"
@@ -340,7 +340,7 @@ func TestUpdateColumnTemplate(t *testing.T) {
 	assert.Equal(t, color, column.Color)
 }
 
-func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
+func TestUpdate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	id := uuid.New()
 	board := uuid.New()
@@ -373,7 +373,7 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestUpdateColumnTemplate_NegativeIndex(t *testing.T) {
+func TestUpdate_NegativeIndex(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "New Name"
@@ -421,7 +421,7 @@ func TestUpdateColumnTemplate_NegativeIndex(t *testing.T) {
 	assert.Equal(t, 0, column.Index)
 }
 
-func TestDeleteColumnTemplate(t *testing.T) {
+func TestDelete(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
 
@@ -435,7 +435,7 @@ func TestDeleteColumnTemplate(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestDeleteColumnTemplate_DatabaseError(t *testing.T) {
+func TestDelete_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 	columnId := uuid.New()

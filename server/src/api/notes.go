@@ -42,7 +42,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+		otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -55,7 +55,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create note"))
 		log.Warnw("unable to create note", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 	w.Header().Set("Location", s.buildRelativeURL(fmt.Sprintf("/boards/%s/notes/%s", board, note.ID)))
@@ -90,7 +90,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get note"))
 		log.Warnw("unable to get note", "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -124,7 +124,7 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get all notes"))
 		log.Warnw("unable to get notes for board", "board", board, "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -160,7 +160,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+		otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -172,7 +172,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to update note"))
 		log.Warnw("unable to update note", "note", note, "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
@@ -207,7 +207,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
+		otel.RecordErrorSpan(span, err, new(common.DecodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -220,7 +220,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to delete note"))
 		log.Warnw("unable to delete note", "note", note, "err", err)
-		common.Throw(w, r, mapError(err))
+		common.Throw(w, r, common.MapError(err))
 		return
 	}
 
