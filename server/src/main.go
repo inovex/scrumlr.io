@@ -18,8 +18,7 @@ import (
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
 
-	"scrumlr.io/server/auth"
-
+	"github.com/go-chi/chi/v5"
 	altsrc "github.com/urfave/cli-altsrc/v3"
 	"github.com/urfave/cli-altsrc/v3/toml"
 	"github.com/urfave/cli/v3"
@@ -523,12 +522,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 		}
 	}
 
-	providersMap, err := configureAuthProvider(ctx, cli, basePath)
-	if err != nil {
-		log.Fatalf("failed to configure auth provider: %v", err)
-		return err
-	}
-
 	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
 
 	wsService := initializer.InitializeWebSocketService()
@@ -553,7 +546,20 @@ func run(ctx context.Context, cli *cli.Command) error {
 
 	keyWithNewlines := strings.ReplaceAll(cli.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(cli.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, db, userService)
+
+	callbackHost := cli.String("auth-callback-host")
+	auth, err := auth.NewAuthManager(
+		ctx,
+		unsafeKeyWithNewlines,
+		keyWithNewlines,
+		userService,
+		auth.WithAppleAuthProvider(ctx, cli.String("auth-apple-client-id"), cli.String("auth-apple-client-secret"), fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithAzureAuthProvider(ctx, cli.String("auth-azure-ad-client-id"), cli.String("auth-azure-ad-client-secret"), cli.String("auth-azure-ad-tenant-id"), fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithGithubAuthProvider(cli.String("auth-github-client-id"), cli.String("auth-github-client-secret"), fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithGoogleAuthProvider(ctx, cli.String("auth-google-client-id"), cli.String("auth-google-client-secret"), fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithMicrosoftAuthProvider(ctx, cli.String("auth-microsoft-client-id"), cli.String("auth-microsoft-client-secret"), fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithOidcAuthProvider(ctx, cli.String("auth-oidc-discovery-url"), cli.String("auth-oidc-client-id"), cli.String("auth-oidc-client-secret"), fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")), cli.String("auth-oidc-user-ident-scope"), cli.String("auth-oidc-user-name-scope")),
+	)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -565,7 +571,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		AllowAnonymousHistory:         cli.Bool("allow-anonymous-history"),
 	}
 
-	infoService := initializer.InitializeInfoService(authConfig, feedbackService, serverconfig)
+	infoService := initializer.InitializeInfoService(auth, feedbackService, serverconfig)
 	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
@@ -587,8 +593,9 @@ func run(ctx context.Context, cli *cli.Command) error {
 		basePath,
 		rt,
 		wsService,
-		authConfig,
+		auth,
 
+		chi.NewRouter(), //TODO
 		healthRoutes,
 		feedbackRoutes,
 		infoRoutes,
@@ -625,83 +632,83 @@ func run(ctx context.Context, cli *cli.Command) error {
 	return http.ListenAndServe(listen, s)
 }
 
-func configureAuthProvider(ctx context.Context, cli *cli.Command, basePath string) (map[string]auth.AuthProviderConfiguration, error) {
-	log := logger.FromContext(ctx)
-	providersMap := make(map[string]auth.AuthProviderConfiguration)
-
-	log.Debug("configuring auth provider")
-
-	callbackHost := cli.String("auth-callback-host")
-	if callbackHost == "" {
-		log.Info("No auth callback host configured. Can not configure any auth provider")
-		return providersMap, nil
-	}
-
-	if cli.String("auth-google-client-id") != "" && cli.String("auth-google-client-secret") != "" {
-		log.Info("Using google authentication")
-		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-google-client-id"),
-			ClientSecret: cli.String("auth-google-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-github-client-id") != "" && cli.String("auth-github-client-secret") != "" {
-		log.Info("Using github authentication")
-		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-github-client-id"),
-			ClientSecret: cli.String("auth-github-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-microsoft-client-id") != "" && cli.String("auth-microsoft-client-secret") != "" {
-		log.Info("Using microsoft authentication")
-		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-microsoft-client-id"),
-			ClientSecret: cli.String("auth-microsoft-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-azure-ad-tenant-id") != "" && cli.String("auth-azure-ad-client-id") != "" && cli.String("auth-azure-ad-client-secret") != "" {
-		log.Info("Using azure authentication")
-		providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
-			TenantId:     cli.String("auth-azure-ad-tenant-id"),
-			ClientId:     cli.String("auth-azure-ad-client-id"),
-			ClientSecret: cli.String("auth-azure-ad-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-apple-client-id") != "" && cli.String("auth-apple-client-secret") != "" {
-		log.Info("Using apple authentication.")
-		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-apple-client-id"),
-			ClientSecret: cli.String("auth-apple-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-oidc-discovery-url") != "" && cli.String("auth-oidc-client-id") != "" && cli.String("auth-oidc-client-secret") != "" {
-		log.Info("Using oidc authentication.")
-		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
-			ClientId:       cli.String("auth-oidc-client-id"),
-			ClientSecret:   cli.String("auth-oidc-client-secret"),
-			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-			DiscoveryUri:   cli.String("auth-oidc-discovery-url"),
-			UserIdentScope: cli.String("auth-oidc-user-ident-scope"),
-			UserNameScope:  cli.String("auth-oidc-user-name-scope"),
-		}
-	}
-
-	// session secret is used by the auth lib github.com/markbates/goth
-	// the lib takes the session secret from the env var
-	if cli.String("session-secret") == "" && len(providersMap) != 0 {
-		return nil, errors.New("you may not start the application without a session secret if an authentication provider is configured")
-	}
-
-	log.Debugf("Configured %d auth provider", len(providersMap))
-
-	return providersMap, nil
-}
+// func configureAuthProvider(ctx context.Context, cli *cli.Command, basePath string) (map[string]oldauth.AuthProviderConfiguration, error) {
+// 	log := logger.FromContext(ctx)
+// 	providersMap := make(map[string]oldauth.AuthProviderConfiguration)
+//
+// 	log.Debug("configuring auth provider")
+//
+// 	callbackHost := cli.String("auth-callback-host")
+// 	if callbackHost == "" {
+// 		log.Info("No auth callback host configured. Can not configure any auth provider")
+// 		return providersMap, nil
+// 	}
+//
+// 	if cli.String("auth-google-client-id") != "" && cli.String("auth-google-client-secret") != "" {
+// 		log.Info("Using google authentication")
+// 		providersMap[(string)(account.Google)] = oldauth.AuthProviderConfiguration{
+// 			ClientId:     cli.String("auth-google-client-id"),
+// 			ClientSecret: cli.String("auth-google-client-secret"),
+// 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 		}
+// 	}
+//
+// 	if cli.String("auth-github-client-id") != "" && cli.String("auth-github-client-secret") != "" {
+// 		log.Info("Using github authentication")
+// 		providersMap[(string)(account.GitHub)] = oldauth.AuthProviderConfiguration{
+// 			ClientId:     cli.String("auth-github-client-id"),
+// 			ClientSecret: cli.String("auth-github-client-secret"),
+// 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 		}
+// 	}
+//
+// 	if cli.String("auth-microsoft-client-id") != "" && cli.String("auth-microsoft-client-secret") != "" {
+// 		log.Info("Using microsoft authentication")
+// 		providersMap[(string)(account.Microsoft)] = oldauth.AuthProviderConfiguration{
+// 			ClientId:     cli.String("auth-microsoft-client-id"),
+// 			ClientSecret: cli.String("auth-microsoft-client-secret"),
+// 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 		}
+// 	}
+//
+// 	if cli.String("auth-azure-ad-tenant-id") != "" && cli.String("auth-azure-ad-client-id") != "" && cli.String("auth-azure-ad-client-secret") != "" {
+// 		log.Info("Using azure authentication")
+// 		providersMap[(string)(account.AzureAd)] = oldauth.AuthProviderConfiguration{
+// 			TenantId:     cli.String("auth-azure-ad-tenant-id"),
+// 			ClientId:     cli.String("auth-azure-ad-client-id"),
+// 			ClientSecret: cli.String("auth-azure-ad-client-secret"),
+// 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 		}
+// 	}
+//
+// 	if cli.String("auth-apple-client-id") != "" && cli.String("auth-apple-client-secret") != "" {
+// 		log.Info("Using apple authentication.")
+// 		providersMap[(string)(account.Apple)] = oldauth.AuthProviderConfiguration{
+// 			ClientId:     cli.String("auth-apple-client-id"),
+// 			ClientSecret: cli.String("auth-apple-client-secret"),
+// 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 		}
+// 	}
+//
+// 	if cli.String("auth-oidc-discovery-url") != "" && cli.String("auth-oidc-client-id") != "" && cli.String("auth-oidc-client-secret") != "" {
+// 		log.Info("Using oidc authentication.")
+// 		providersMap[(string)(account.OIDC)] = oldauth.AuthProviderConfiguration{
+// 			ClientId:       cli.String("auth-oidc-client-id"),
+// 			ClientSecret:   cli.String("auth-oidc-client-secret"),
+// 			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
+// 			DiscoveryUri:   cli.String("auth-oidc-discovery-url"),
+// 			UserIdentScope: cli.String("auth-oidc-user-ident-scope"),
+// 			UserNameScope:  cli.String("auth-oidc-user-name-scope"),
+// 		}
+// 	}
+//
+// 	// session secret is used by the auth lib github.com/markbates/goth
+// 	// the lib takes the session secret from the env var
+// 	if cli.String("session-secret") == "" && len(providersMap) != 0 {
+// 		return nil, errors.New("you may not start the application without a session secret if an authentication provider is configured")
+// 	}
+//
+// 	log.Debugf("Configured %d auth provider", len(providersMap))
+//
+// 	return providersMap, nil
+// }
