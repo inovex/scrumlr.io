@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 )
 
 var baseSeedHash = "base_seed_hash_v1"
@@ -28,7 +28,7 @@ const columnWriteUUID = "15ab1fe0-8c5d-53c9-8e46-f8db2ea66a09"
 type TestUser struct {
 	Name        string
 	ID          uuid.UUID
-	AccountType common.AccountType
+	AccountType account.Type
 }
 
 type TestBoard struct {
@@ -72,8 +72,8 @@ type DbBaseIDs struct {
 
 var (
 	users = []TestUser{
-		{"Stan", uuid.MustParse("e12ef59c-e424-5e25-8290-1e3fb88088d3"), common.Google},
-		{"Santa", uuid.MustParse("39eb88b4-674a-5609-9ad8-6804e8d78961"), common.Anonymous},
+		{"Stan", uuid.MustParse("e12ef59c-e424-5e25-8290-1e3fb88088d3"), account.Google},
+		{"Santa", uuid.MustParse("39eb88b4-674a-5609-9ad8-6804e8d78961"), account.Anonymous},
 	}
 
 	stanID = users[0].ID

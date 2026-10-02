@@ -1,26 +1,30 @@
-package api
+package auth
 
 import (
+	"crypto/rand"
+	"encoding/base64"
+	"fmt"
 	"math"
 	"net/http"
 	"strings"
 	"time"
 
-	"scrumlr.io/server/otel"
-	"scrumlr.io/server/users"
-
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
-	"github.com/markbates/goth/gothic"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+type Api struct {
+	auth Auth
+}
 
-// AnonymousSignUpRequest represents the request to create a new anonymous user.
-type AnonymousSignUpRequest struct {
-	// The display name of the user.
-	Name string
+func NewauthApi(auth Auth) AuthApi {
+	api := new(Api)
+	api.auth = auth
+	return api
 }
 
 // Create a new anonymous user
@@ -37,7 +41,7 @@ type AnonymousSignUpRequest struct {
 //	@Failure		403	{object}	common.APIError
 //	@Failure		500	{object}	common.APIError
 //	@Router			/login/anonymous [post]
-func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
+func (api *Api) SignInAnonymously(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.signin.anonymous")
 	defer span.End()
 	log := logger.FromContext(ctx)
@@ -50,22 +54,20 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
+	user, token, err := api.auth.CreateUser(ctx, UserInformation{Name: body.Name, Provider: account.Anonymous})
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create anonyoums user"))
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
-	tokenString, err := s.auth.Sign(map[string]any{"id": user.ID})
-	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to generate token string"))
-		log.Errorw("unable to generate token string", "err", err)
-		common.Throw(w, r, common.InternalServerError)
-		return
+	cookie := http.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		MaxAge:   math.MaxInt32,
 	}
-
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
 	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
@@ -82,7 +84,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 //	@Produce		json
 //	@Success		204
 //	@Router			/login [delete]
-func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
+func (api *Api) Logout(w http.ResponseWriter, r *http.Request) {
 	_, span := tracer.Start(r.Context(), "scrumlr.login.api.logout")
 	defer span.End()
 
@@ -112,8 +114,44 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 //	@Success		307
 //	@Failure		400	{object}	common.APIError
 //	@Router			/login/{provider} [get]
-func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
-	gothic.BeginAuthHandler(w, r)
+func (api *Api) BeginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
+	providerName := chi.URLParam(r, "provider")
+	accountType, err := account.NewAccountType(providerName)
+	if err != nil {
+		http.Error(w, "unsupported auth provider", http.StatusBadRequest)
+		return
+	}
+
+	provider, err := api.auth.GetProvider(accountType)
+	if err != nil {
+		http.Error(w, "auth provider not configured", http.StatusBadRequest)
+		return
+	}
+
+	nonce, err := api.generateNonce(32)
+	if err != nil {
+		http.Error(w, "failed to generate state nonce", http.StatusInternalServerError)
+		return
+	}
+
+	state := nonce
+	returnUrl := r.URL.Query().Get("state")
+	if returnUrl != "" {
+		state = fmt.Sprintf("%s__%s", state, returnUrl)
+	}
+
+	stateCookie := http.Cookie{
+		Name:     "auth_state",
+		Value:    state,
+		MaxAge:   int(time.Minute.Seconds() * 5),
+		Path:     "/",
+		HttpOnly: true,
+	}
+	common.SealCookie(r, &stateCookie)
+	http.SetCookie(w, &stateCookie)
+
+	authUrl := provider.AuthUrl(nonce)
+	http.Redirect(w, r, authUrl, http.StatusTemporaryRedirect)
 }
 
 // Verify the auth provider call and create or update a user
@@ -132,37 +170,54 @@ func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Re
 //	@Failure		403	{object}	common.APIError
 //	@Failure		500	{object}	common.APIError
 //	@Router			/login/{provider}/callback [get]
-func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
+func (api *Api) VerifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "scrumlr.login.api.verify_auth_provider")
 	defer span.End()
 	log := logger.FromContext(ctx)
 
-	externalUser, err := gothic.CompleteUserAuth(w, r)
+	state, err := r.Cookie("auth_state")
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to complete user auth"))
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("could not complete user auth", "err", err)
+		http.Error(w, "auth state not found", http.StatusBadRequest)
 		return
 	}
 
-	provider, err := common.NewAccountType(externalUser.Provider)
+	queryState := r.URL.Query().Get("state")
+	if queryState != state.Value {
+		http.Error(w, "auth state did not match", http.StatusBadRequest)
+		return
+	}
+
+	providerName := chi.URLParam(r, "provider")
+	accountType, err := account.NewAccountType(providerName)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("user provider not supported"))
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("unsupported user provider", "err", err)
+		http.Error(w, "unsupported auth provider", http.StatusBadRequest)
 		return
 	}
 
-	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
+	provider, err := api.auth.GetProvider(accountType)
 	if err != nil {
-		otel.RecordErrorSpan(span, err, new("insufficient user information from external auth source"))
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Errorw("insufficient user information from external auth source", "err", err)
+		http.Error(w, "auth provider not configured", http.StatusBadRequest)
 		return
 	}
 
-	var internalUser *users.User
-	internalUser, err = s.users.Create(ctx, userInfo.Ident, userInfo.Name, userInfo.AvatarURL, provider)
+	providerError := r.URL.Query().Get("error")
+	if providerError != "" {
+		errorDescription := r.URL.Query().Get("error_description")
+		log.Errorw("auth provider returned an error", "error", providerError, "description", errorDescription)
+		http.Error(w, fmt.Sprintf("authentication failed: %s", providerError), http.StatusBadRequest)
+		return
+	}
+
+	code := r.URL.Query().Get("code")
+	userInfo, err := provider.Authenticate(ctx, code)
+	if err != nil {
+		otel.RecordErrorSpan(span, err, new("failed to complete user auth"))
+		http.Error(w, "failed to exchange token", http.StatusInternalServerError)
+		return
+	}
+
+	_, token, err := api.auth.CreateUser(ctx, *userInfo)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create user"))
 		w.WriteHeader(http.StatusInternalServerError)
@@ -170,18 +225,32 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	tokenString, _ := s.auth.Sign(map[string]any{"id": internalUser.ID})
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
+	cookie := http.Cookie{
+		Name:    "jwt",
+		Value:   token,
+		Path:    "/",
+		Expires: time.Now().AddDate(0, 0, 3*7),
+	}
 	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
-	state := gothic.GetState(r)
-	stateSplit := strings.Split(state, "__")
-	if len(stateSplit) > 1 {
-		w.Header().Set("Location", stateSplit[1])
+	redirectState := strings.Split(queryState, "__")
+	if len(redirectState) > 1 && redirectState[1] != "" {
+		w.Header().Set("Location", redirectState[1])
 		w.WriteHeader(http.StatusSeeOther)
 		return
 	}
+
 	w.Header().Set("Location", s.buildRelativeURL("/"))
 	w.WriteHeader(http.StatusSeeOther)
+}
+
+func (api *Api) generateNonce(length int) (string, error) {
+	nonce := make([]byte, length)
+	_, err := rand.Read(nonce)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.RawURLEncoding.EncodeToString(nonce), nil
 }

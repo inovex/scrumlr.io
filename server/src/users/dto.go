@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 )
 
@@ -19,7 +20,7 @@ type User struct {
 	Avatar *common.Avatar `json:"avatar,omitempty"`
 
 	// The user's account type configuration
-	AccountType common.AccountType `json:"accountType"`
+	AccountType account.Type `json:"accountType"`
 }
 
 type UserUpdateRequest struct {

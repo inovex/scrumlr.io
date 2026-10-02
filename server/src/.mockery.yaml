@@ -13,6 +13,7 @@ packages:
       dir: auth
     interfaces:
       Auth:
+      AuthProvider:
 
   scrumlr.io/server/boards:
     config:

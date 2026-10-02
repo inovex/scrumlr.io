@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/timeprovider"
 )
@@ -15,18 +15,8 @@ func TestGetInfo(t *testing.T) {
 	ctx := t.Context()
 
 	mockAuthService := auth.NewMockAuth(t)
-	mockAuthService.EXPECT().Exists(common.Google).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.GitHub).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.Microsoft).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.AzureAd).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.Apple).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.TypeOIDC).
-		Return(true)
+	mockAuthService.EXPECT().ConfiguredProvider().
+		Return([]account.Type{account.Google, account.GitHub, account.Microsoft, account.AzureAd, account.Apple, account.OIDC})
 
 	mockFeedbackService := feedback.NewMockFeedbackService(t)
 	mockFeedbackService.EXPECT().Enabled().
@@ -49,9 +39,9 @@ func TestGetInfo(t *testing.T) {
 	info := infoService.Get(ctx)
 
 	assert.Len(t, info.AuthProvider, 3)
-	assert.Contains(t, info.AuthProvider, common.Google)
-	assert.Contains(t, info.AuthProvider, common.GitHub)
-	assert.Contains(t, info.AuthProvider, common.TypeOIDC)
+	assert.Contains(t, info.AuthProvider, account.Google)
+	assert.Contains(t, info.AuthProvider, account.GitHub)
+	assert.Contains(t, info.AuthProvider, account.OIDC)
 	assert.True(t, info.FeedbackEnabled)
 	assert.False(t, info.AnonymousLoginDisabled)
 	assert.True(t, info.AllowAnonymousBoardCreation)
@@ -60,22 +50,12 @@ func TestGetInfo(t *testing.T) {
 	assert.Equal(t, dateTime, info.ServerTime)
 }
 
-func TestGetInfoAllAuthProviders(t *testing.T) {
+func TestGetInfoAllAccountProviders(t *testing.T) {
 	ctx := t.Context()
 
 	mockAuthService := auth.NewMockAuth(t)
-	mockAuthService.EXPECT().Exists(common.Google).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.GitHub).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.Microsoft).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.AzureAd).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.Apple).
-		Return(true)
-	mockAuthService.EXPECT().Exists(common.TypeOIDC).
-		Return(true)
+	mockAuthService.EXPECT().ConfiguredProvider().
+		Return([]account.Type{account.Google, account.GitHub, account.Microsoft, account.AzureAd, account.Apple, account.OIDC})
 
 	mockFeedbackService := feedback.NewMockFeedbackService(t)
 	mockFeedbackService.EXPECT().Enabled().
@@ -98,7 +78,7 @@ func TestGetInfoAllAuthProviders(t *testing.T) {
 	info := infoService.Get(ctx)
 
 	assert.Len(t, info.AuthProvider, 6)
-	assert.Equal(t, []common.AccountType{common.Google, common.GitHub, common.Microsoft, common.AzureAd, common.Apple, common.TypeOIDC}, info.AuthProvider)
+	assert.Equal(t, []account.Type{account.Google, account.GitHub, account.Microsoft, account.AzureAd, account.Apple, account.OIDC}, info.AuthProvider)
 	assert.True(t, info.FeedbackEnabled)
 	assert.False(t, info.AnonymousLoginDisabled)
 	assert.True(t, info.AllowAnonymousBoardCreation)
@@ -107,22 +87,12 @@ func TestGetInfoAllAuthProviders(t *testing.T) {
 	assert.Equal(t, dateTime, info.ServerTime)
 }
 
-func TestGetInfoNoAuthProviders(t *testing.T) {
+func TestGetInfoNoAccountProviders(t *testing.T) {
 	ctx := t.Context()
 
 	mockAuthService := auth.NewMockAuth(t)
-	mockAuthService.EXPECT().Exists(common.Google).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.GitHub).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.Microsoft).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.AzureAd).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.Apple).
-		Return(false)
-	mockAuthService.EXPECT().Exists(common.TypeOIDC).
-		Return(false)
+	mockAuthService.EXPECT().ConfiguredProvider().
+		Return([]account.Type{})
 
 	mockFeedbackService := feedback.NewMockFeedbackService(t)
 	mockFeedbackService.EXPECT().Enabled().

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize/testDbTemplates"
 )
 
@@ -167,7 +167,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll_NoTemplates() 
 type TestUser struct {
 	id          uuid.UUID
 	name        string
-	accountType common.AccountType
+	accountType account.Type
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
@@ -175,9 +175,9 @@ func (suite *DatabaseBoardTemplateTestSuite) seedData(db *bun.DB) {
 
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
-	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: common.Anonymous}
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: account.Google}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: account.Anonymous}
+	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: account.Anonymous}
 
 	// test board templates
 	suite.templates = make(map[string]DatabaseBoardTemplate, 4)
