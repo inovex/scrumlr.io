@@ -1,0 +1,872 @@
+{
+  "BoardEditor": {
+    "editTitle": "Editar un tablero",
+    "save": "Guardar",
+    "loadError": "Lo sentimos, no hemos podido cargar este tablero."
+  },
+  "InfoBar": {
+    "ReturnToPresentedNote": "Volver a la nota presentada",
+    "VotingIsAnonymous": "La votación es anónima",
+    "VotingIsNotAnonymous": "La votación no es anónima"
+  },
+  "LegacyNewBoard": {
+    "boardName": "Nombre del tablero",
+    "description": "Descripción del tablero",
+    "createNewBoard": "Crear un tablero",
+    "extendedConfigurationButton": "Configuración avanzada",
+    "basicConfigurationButton": "Selección de plantilla",
+    "extendedConfigurationTitle": "Configuración avanzada",
+    "basicConfigurationTitle": "Elige una plantilla",
+    "importBoard": "Importar JSON",
+    "uploadFile": "Sube un archivo o arrástralo aquí",
+    "importNewBoard": "Importar ahora"
+  },
+  "ImportBoard": {
+    "button": "Importar JSON",
+    "importNotAllowedForAnonymousUsers": "Los usuarios anónimos no pueden importar tableros.",
+    "title": "Importar tablero",
+    "step1Title": "Seleccionar archivo",
+    "errorInvalid": "No se ha podido leer el archivo. Utiliza una exportación JSON válida.",
+    "errorRead": "No se ha podido leer el archivo. Compruébalo e inténtalo de nuevo.",
+    "continue": "Continuar",
+    "cancel": "Cancelar",
+    "back": "Atrás",
+    "openBoard": "Abrir tablero",
+    "FileDropzoneCard": {
+      "title": "Añadir archivo JSON",
+      "description": "Haz clic o arrastra aquí un archivo para subirlo (máx. 1 archivo)"
+    },
+    "FilePreview": {
+      "loadingState": "Subiendo...",
+      "uploadedState": "Subido",
+      "removeFile": "Eliminar archivo"
+    }
+  },
+  "EditorShell": {
+    "boardNamePlaceholder": "Nombre",
+    "boardDescriptionPlaceholder": "Descripción (opcional)",
+    "ColumnsConfiguratorColumn": {
+      "defaultColumnName": "Columna 1",
+      "defaultActionsName": "Acciones",
+      "indexedColumnName": "Columna {{index}}",
+      "namePlaceholder": "Título",
+      "descriptionPlaceholder": "Descripción (opcional)",
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    }
+  },
+  "Templates": {
+    "switchTitle": "Plantillas",
+    "title": "Elige una plantilla",
+    "savedTemplates": "Tus plantillas",
+    "recommendedTemplates": "Nuestras recomendaciones",
+    "CreateTemplateCard": {
+      "create": "Crear una plantilla"
+    },
+    "TemplateCard": {
+      "addFavourite": "Marcar como favorita",
+      "removeFavourite": "Desmarcar como favorita",
+      "column_one": "{{count}} columna",
+      "column_other": "{{count}} columnas",
+      "start": "Empezar",
+      "save": "Guardar",
+      "signInToCreateBoards": "Inicia sesión con un proveedor de identidad para crear un tablero."
+    },
+    "TemplateEditor": {
+      "createTitle": "Crear una plantilla",
+      "editTitle": "Editar una plantilla",
+      "cancel": "Cancelar",
+      "saveEdit": "Guardar",
+      "saveCreate": "Crear plantilla",
+      "info": "Puedes hacer cambios en cualquier momento, también desde el tablero."
+    },
+    "AccessSettings": {
+      "title": "Configuración de acceso",
+      "Options": {
+        "Public": {
+          "title": "Abierto",
+          "description": "Los participantes pueden unirse fácil y rápidamente mediante el enlace. Ofrece seguridad básica."
+        },
+        "By_Invite": {
+          "title": "Aprobación",
+          "description": "Los participantes deben recibir aprobación antes de unirse, lo que garantiza un alto nivel de seguridad."
+        },
+        "By_Passphrase": {
+          "title": "Protegido con contraseña",
+          "description": "Solo se puede acceder con la contraseña establecida, lo que garantiza un alto nivel de seguridad.",
+          "inputPlaceholder": "Introduce aquí la contraseña",
+          "hint": "La contraseña se puede cambiar más adelante en los ajustes."
+        }
+      },
+      "Buttons": {
+        "cancel": "Volver",
+        "start": "Iniciar la sesión"
+      }
+    }
+  },
+  "History": {
+    "switchTitle": "Historial",
+    "title": "Gestiona tus tableros",
+    "savedBoards": "Usados recientemente",
+    "empty": "Tu historial de sesiones está vacío. Cuando te unas a un tablero o crees uno, aparecerá aquí.",
+    "requireRegisteredAccount": "Inicia sesión con Google, Microsoft o SSO para guardar y gestionar tus tableros de forma permanente. Los perfiles anónimos (acceso como invitado) no pueden asociarse a tableros, por lo que estos no se guardarán.",
+    "registerNow": "Iniciar sesión ahora",
+    "HistoryCard": {
+      "Info": {
+        "amountColumns_one": "{{count}} columna",
+        "amountColumns_other": "{{count}} columnas",
+        "amountParticipants_one": "{{count}} participante",
+        "amountParticipants_other": "{{count}} participantes",
+        "amountNotes_one": "{{count}} nota",
+        "amountNotes_other": "{{count}} notas",
+        "lastUpdated": "Última actualización: {{date}}"
+      },
+      "Menu": {
+        "delete": "Eliminar",
+        "copyLink": "Copiar enlace",
+        "createTemplate": "Crear una plantilla",
+        "edit": "Editar",
+        "close": "Cerrar"
+      },
+      "readOnly": "Solo lectura",
+      "openBoardButton": "Ir a la sesión",
+      "linkCopied": "Enlace del tablero copiado",
+      "deleteConfirmationTitle": "¿Eliminar tablero?",
+      "deleteConfirmationText": "El tablero se eliminará permanentemente para todos. Esta acción no se puede deshacer."
+    }
+  },
+  "CreateBoard": {
+    "title": "Crear un tablero",
+    "dropdown": {
+      "open": "Abierto",
+      "password": "Contraseña",
+      "approval": "Aprobación"
+    },
+    "validation": {
+      "REQUIRED": "Este campo es obligatorio."
+    }
+  },
+  "LoginBoard": {
+    "title": "Iniciar sesión",
+    "subtitleLogin": "Inicia sesión y disfruta de las ventajas",
+    "loginFeatures": ["Crea y guarda plantillas personalizadas", "Tus ajustes se guardan en tu perfil", "Accede a tableros anteriores y gestiónalos en cualquier momento"],
+    "subtitleAnonymous": "Acceder de forma anónima",
+    "anonymousLogin": "Continuar como invitado (funciones limitadas)",
+    "noLoginAvailable": "No hay ningún método de acceso válido disponible",
+    "dividerWord": "o",
+    "login": "Continuar de forma anónima",
+    "acceptTerms": "Al continuar, aceptas nuestros <terms>Términos y condiciones</terms> y nuestra <privacy>Política de privacidad</privacy>.",
+    "generateRandomName": "Generar un nombre aleatorio"
+  },
+  "AccessPolicy": {
+    "PUBLIC": "Abierto",
+    "BY_PASSPHRASE": "Protegido con contraseña",
+    "BY_INVITE": "Cerrado"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "La contraseña no es correcta.",
+    "reject": "Tu solicitud ha sido rechazada.",
+    "returnToHomepage": "Volver a la página de inicio",
+    "waitingForApproval": "Esperando aprobación."
+  },
+  "AuthRedirect": {
+    "error": "¡Vaya! No se ha podido iniciar sesión. Inténtalo de nuevo."
+  },
+  "AccessPolicySelection": {
+    "title": "Política de acceso",
+    "publicTitle": "Abierto",
+    "byPassphraseTitle": "Protegido",
+    "manualVerificationTitle": "Aprobación manual",
+    "passphrase": "Contraseña",
+    "public": "Acceso mediante URL sin verificación adicional. Las URL son difíciles de adivinar, por lo que debería ser suficiente para la mayoría de sesiones.",
+    "byPassphrase": "Acceso mediante URL y contraseña. Es la mejor opción si quieres incluir información confidencial y el equipo no va a colaborar al mismo tiempo.",
+    "manualVerification": "Los administradores del tablero pueden aprobar o rechazar cada solicitud de acceso. Es la opción más segura, ya que pueden denegar cualquier acceso no autorizado.",
+    "generatePassphrase": "Generar una contraseña aleatoria",
+    "copyPassphraseToClipboard": "Copiar contraseña al portapapeles",
+    "passphraseValidationError": "Debes establecer una contraseña",
+    "togglePassphraseVisibility": "Mostrar u ocultar la contraseña"
+  },
+  "BoardHeader": {
+    "returnToHomepage": "Volver a la página de inicio",
+    "showParticipants": "Mostrar participantes",
+    "showAllBoardSettings": "Mostrar todos los ajustes del tablero",
+    "showProfileSettings": "Mostrar ajustes del perfil"
+  },
+  "ConfirmationDialog": {
+    "returnToHomepage": "¿Seguro que quieres abandonar esta sesión y volver a la página de inicio?",
+    "deleteBoard": "¿Seguro que quieres eliminar este tablero?",
+    "deleteNote": "¿Seguro que quieres eliminar esta nota?",
+    "deleteNoteButton": "Eliminar nota",
+    "deleteStackButton": "Eliminar grupo",
+    "deleteOptions": "¿Qué quieres eliminar?",
+    "deleteAccount": "¿Seguro que quieres eliminar tu cuenta?",
+    "deleteAccountText": "Si eliminas tu cuenta, también se borrarán permanentemente todos los datos relacionados, incluidos:",
+    "deleteAccountItems": "las plantillas que hayas creado \n tus notas y votos en otros tableros",
+    "deleteAccountTextAfterItems": "Esta acción no se puede deshacer.",
+    "deleteAccountCheck": "Entiendo y acepto la eliminación permanente.",
+    "deleteAccountWarning": "Debes confirmar la eliminación.",
+    "deleteAccountButton": "Eliminar cuenta",
+    "banParticipant": "¿Seguro que quieres expulsar de la sesión a '{{user}}'?",
+    "unbanParticipant": "¿Seguro que quieres permitir que '{{user}}' vuelva a unirse a la sesión?",
+    "warning": "Esta acción no se puede deshacer.",
+    "yes": "Sí",
+    "no": "No",
+    "cancel": "Cancelar",
+    "close": "Cerrar"
+  },
+  "DeleteBoardOption": {
+    "warning": "¿Seguro que quieres eliminar el tablero? Esta acción no se puede deshacer.",
+    "button": "Eliminar tablero"
+  },
+  "ExportBoardOption": {
+    "title": "Exportar tablero",
+    "info": "Los ajustes de acceso no se conservan al exportar un tablero. Además, los tableros solo se pueden importar mediante un archivo JSON.",
+    "button": "Exportar tablero",
+    "exportAsJson": "Exportar como JSON",
+    "exportAsCSV": "Exportar como CSV",
+    "openPrintView": "Exportar como PDF",
+    "exportToClipboard": "Copiar Markdown al portapapeles",
+    "copyToClipboardSuccess": "Markdown copiado",
+    "hintHiddenColumns": "Las siguientes columnas están ocultas y no se exportarán:",
+    "hintHiddenNotes": "Las notas de otros participantes están ocultas y no se exportarán."
+  },
+  "PrintView": {
+    "Participants": "Participantes",
+    "GeneratedOn": "Generado en",
+    "ProvidedBy": "Creado con ♥️ por",
+    "Notes": "Notas",
+    "Votes": "Votos",
+    "Print": "Imprimir",
+    "Close": "Cerrar"
+  },
+  "MarkdownExport": {
+    "columns": "Columnas",
+    "note": "Nota",
+    "notes": "Notas",
+    "participants": "Participantes",
+    "linkToBoard": "Enlace al tablero",
+    "vote": "Voto",
+    "votes": "Votos",
+    "stackSize": "Tamaño del grupo",
+    "showAuthorsDisabled": "Los autores de las notas están ocultos"
+  },
+  "ShareQrCodeOption": {
+    "title": "Compartir sesión",
+    "button": "Compartir tablero",
+    "copyInviteURL": "Copiar URL de invitación",
+    "inviteUrlCopied": "URL de invitación copiada",
+    "hint": "La contraseña se puede cambiar en los ajustes del tablero."
+  },
+  "Column": {
+    "settings": "Ajustes",
+    "editName": "Cambiar el nombre",
+    "submitName": "Confirmar nombre",
+    "resetName": "Cancelar",
+    "hideColumn": "Ocultar la columna",
+    "showColumn": "Mostrar la columna",
+    "deleteColumn": "Eliminar columna",
+    "addColumnLeft": "Añadir columna a la izquierda",
+    "addColumnRight": "Añadir columna a la derecha",
+    "hiddenColumn": "La columna está oculta para todos los participantes",
+    "notes_one": "{{count}} nota",
+    "notes_other": "{{count}} notas",
+    "color": "Cambiar color",
+    "Header": {
+      "descriptionPlaceholder": "Añadir descripción (opcional)"
+    }
+  },
+  "ErrorPage": {
+    "navigateHome": "Inicio",
+    "navigateBack": "Volver"
+  },
+  "NotFoundPage": {
+    "title": "¡Vaya! Se ha producido un error",
+    "descriptionLine1": "Esta página no existe.",
+    "descriptionLine2": "Vuelve a la página de inicio.",
+    "navigateHome": "Volver a la página de inicio"
+  },
+  "JoinRequest": {
+    "title": "Solicita participar",
+    "accept": "Aceptar",
+    "reject": "Rechazar"
+  },
+  "RaiseRequest": {
+    "title": "Ha levantado la mano",
+    "lower": "Bajar la mano"
+  },
+  "Request": {
+    "title": "Alguien solicita participar o ha levantado la mano"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "signInWithGitHub": "Iniciar sesión con GitHub",
+    "signInWithMicrosoft": "Iniciar sesión con Microsoft",
+    "signInWithAzureAd": "Iniciar sesión con Azure AD",
+    "signInWithApple": "Iniciar sesión con Apple",
+    "signInWithOIDC": "Iniciar sesión con OpenID Connect"
+  },
+  "NoteInput": {
+    "placeholder": "Añade tu nota...",
+    "imageInfo": "Este enlace se añadirá como imagen.",
+    "create": "Crear nota"
+  },
+  "PassphraseDialog": {
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "label": "Introduce la contraseña para abrir este tablero",
+    "submit": "Abrir tablero",
+    "inputPlaceholder": "Contraseña",
+    "incorrectPassphrase": "Esa no es la contraseña correcta. Inténtalo de nuevo."
+  },
+  "PassphraseModal": {
+    "title": "Asignar una contraseña nueva",
+    "continuePublic": "Continuar sin contraseña",
+    "newPassword": "Abrir tablero",
+    "info": "Este tablero estuvo protegido con contraseña. Introduce una contraseña nueva para mantener la protección o continúa sin contraseña. Puedes cambiar todos los ajustes en cualquier momento.",
+    "submit": "Abrir tablero",
+    "inputPlaceholder": "Contraseña",
+    "showPassword": "Mostrar contraseña"
+  },
+  "Timer": {
+    "endTimer": "Finalizar temporizador",
+    "addOneMinute": "Añadir un minuto al temporizador",
+    "reduce": "Reducir tiempo",
+    "increase": "Aumentar tiempo"
+  },
+  "CookieNotice": {
+    "description": "Nosotros y determinados colaboradores utilizamos cookies o tecnologías similares, tal como se especifica en la política de cookies. Puedes aceptar su uso cerrando este aviso, interactuando con cualquier enlace o botón fuera de él o continuando la navegación.",
+    "learnMore": "Más información sobre nuestra política de cookies",
+    "decline": "Rechazar",
+    "accept": "Aceptar"
+  },
+  "CookiePolicy": {
+    "title": "Política de cookies de scrumlr.io",
+    "decline": "Rechazar",
+    "accept": "Aceptar"
+  },
+  "MenuBars": {
+    "markAsDone": "Marcarme como listo",
+    "unmarkAsDone": "Desmarcarme como listo",
+    "addImage": "Añadir imagen o GIF",
+    "addSticker": "Añadir pegatina",
+    "themeToggle": "Cambiar esquema de color",
+    "editColumns": "Empezar a editar columnas",
+    "stopEditingColumns": "Terminar de editar columnas",
+    "startPresenterMode": "Iniciar modo de presentación",
+    "stopPresenterMode": "Finalizar modo de presentación",
+    "returnToHomepage": "Volver a la página de inicio",
+    "raiseHand": "Levantar la mano",
+    "lowerHand": "Bajar la mano",
+    "openBoardReactionMenu": "Reaccionar",
+    "settings": "Ajustes",
+    "openMenu": "Abrir menú de usuario"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Atajos de teclado activados",
+    "hotkeysDisabled": "Atajos de teclado desactivados",
+    "hotkeyToggle": "Activar atajos de teclado",
+    "timerStarted": "Se ha iniciado un temporizador de {{duration}} minutos",
+    "cheatSheet": "Guía de atajos de teclado",
+    "toggleColumnVisibility": {
+      "hide": "Las columnas ocultas ya no son visibles para ti",
+      "show": "Las columnas ocultas ahora son visibles para ti"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "Las notas de otros participantes ahora están ocultas",
+      "show": "Las notas de otros participantes ahora son visibles"
+    },
+    "toggleShowAuthors": {
+      "hide": "Los autores de las notas ahora están ocultos",
+      "show": "Los autores de las notas ahora son visibles"
+    },
+    "toggleRaisedHand": {
+      "raise": "Has levantado la mano",
+      "lower": "Has bajado la mano"
+    },
+    "toggleReadyState": {
+      "ready": "Te has marcado como listo",
+      "notReady": "Te has marcado como no listo"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "Has iniciado el modo de presentación",
+      "endPresenting": "Has finalizado el modo de presentación"
+    }
+  },
+  "VoteConfigurationButton": {
+    "label": "Votación",
+    "isAnonymous": "Votación anónima",
+    "allowMultipleVotesPerNote": "Permitir votos acumulativos",
+    "numberOfVotes": "Número de votos",
+    "increaseVotes": "Aumentar número de votos",
+    "decreaseVotes": "Reducir número de votos",
+    "startVoting": "Iniciar fase de votación",
+    "cancelVoting": "Cancelar fase de votación",
+    "stopVoting": "Finalizar fase de votación"
+  },
+  "VoteDisplay": {
+    "finishActionTooltip": "Finalizar votación",
+    "tooltip": "Quedan {{remaining}} de {{total}} votos"
+  },
+  "TimerToggleButton": {
+    "label": "Temporizador",
+    "1min": "1 minuto",
+    "3min": "3 minutos",
+    "5min": "5 minutos",
+    "min": "minutos",
+    "customTime": "Tiempo personalizado",
+    "cancelTimer": "Cancelar temporizador"
+  },
+  "BoardReactionsMenu": {
+    "react": "Reaccionar con {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Yo"
+  },
+  "AppInfo": {
+    "version": "Enlace a la lista de versiones en GitHub"
+  },
+  "Toast": {
+    "authenticationError": "Se ha producido un problema al iniciar sesión",
+    "votingStarted": "Has iniciado la fase de votación",
+    "votingFinished": "Has finalizado la fase de votación",
+    "focusModeStart": "Has iniciado la fase de moderación. Las notas que selecciones se presentarán a todos los usuarios",
+    "focusModeFinished": "Has finalizado la fase de moderación",
+    "votingPhaseStarted": "La fase de votación ha comenzado. Ya puedes votar.",
+    "votingPhaseEnded": "La fase de votación ha terminado. Ya no puedes votar.",
+    "moderationStarted": "La fase de moderación ha comenzado",
+    "moderationEnded": "La fase de moderación ha terminado",
+    "timerStarted": "Temporizador iniciado",
+    "timerEnded": "Temporizador finalizado",
+    "timerCancelled": "Temporizador cancelado",
+    "hiddenColumnsVisible": "Las columnas ocultas ahora son visibles para ti",
+    "passwordCopied": "Tablero protegido y contraseña copiada",
+    "boardMadePublic": "El tablero ahora es público",
+    "accessPolicyChanged": "Acceso cambiado a {{policy}}",
+    "allParticipantsDone": "Todos los participantes están listos",
+    "moderatorResetReadyStates": "¿Quieres restablecer el estado de preparación de los participantes?",
+    "moderatorResetReadyStatesButton": "Restablecer",
+    "bannedParticipant": "Se ha expulsado a '{{user}}'",
+    "unbannedParticipant": "Se ha revocado la expulsión de '{{user}}'",
+    "lockedBoard": "El tablero está bloqueado; solo los moderadores pueden modificarlo.",
+    "noteToHiddenColumn": "Acabas de añadir una nota a una columna oculta",
+    "noteToHiddenColumnButton": "Mostrar columna",
+    "noteMovedToStack": "La nota se ha movido a un grupo",
+    "noteDeleted": "La nota se ha eliminado",
+    "emptyNoteDialog": "La nota debe contener texto.",
+    "ready": "¿Todo listo?",
+    "readyButton": "Listo",
+    "boardReactionsDisabled": "Las reacciones del tablero están desactivadas",
+    "enable": "Activar",
+    "failedImport": "Error al importar el archivo",
+    "importRemovedNotes_one": "Se ha eliminado {{count}} nota durante la importación porque no se ha podido identificar a su autor.",
+    "importRemovedNotes_other": "Se han eliminado {{count}} notas durante la importación porque no se ha podido identificar a sus autores."
+  },
+  "Language": {
+    "german": "Alemán",
+    "english": "Inglés",
+    "french": "Francés",
+    "spanish": "Español"
+  },
+  "Homepage": {
+    "developers": "© 2021-{{currentYear}}, creado con ❤️ por <inovex>inovex</inovex>",
+    "teaserTitle": "Lleva a tu <team>equipo</team> más lejos y comienza tu primera <retrospective>retrospectiva.</retrospective>",
+    "teaserText": "Inicia tu primera sesión colaborativa al instante, sin necesidad de registrarte y totalmente gratis.",
+    "startButton": "Empezar ahora",
+    "privacyPolicy": "Política de privacidad",
+    "cookiePolicy": "Política de cookies",
+    "terms": "Términos y condiciones"
+  },
+  "Note": {
+    "me": "Yo",
+    "you": "ti",
+    "userImageAlt": "contenido proporcionado por {{user}}",
+    "edited": "editada",
+    "isMovingThis": "{{user}}",
+    "showMore": "Mostrar más"
+  },
+  "StackView": {
+    "prevNote": "Nota anterior",
+    "nextNote": "Nota siguiente",
+    "close": "Cerrar"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Eliminar este grupo"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Eliminar esta nota"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Quitar esta nota del grupo"
+  },
+  "NoteReactionList": {
+    "toggleBarLabel": "Mostrar u ocultar la barra de reacciones"
+  },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "Todas"
+  },
+  "Input": {
+    "placeholder": {
+      "search": "Buscar"
+    }
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Ajustes del tablero",
+    "BoardSettingsDescription": "Nombre, política de acceso",
+    "Participants": "Participantes",
+    "ParticipantsDescription": "Lista y roles de usuario",
+    "Appearance": "Apariencia",
+    "AppearanceDescription": "Notificaciones, idioma, interfaz",
+    "ShareSession": "Compartir sesión",
+    "ShareSessionDescription": "Código QR, URL",
+    "ExportBoard": "Exportar tablero",
+    "ExportBoardDescription": "Compartir el tablero",
+    "Feedback": "Comentarios",
+    "FeedbackDescription": "Nos encantará conocer tu opinión",
+    "ProfileDescription": "Editar perfil",
+    "Logout": "Cerrar sesión"
+  },
+  "BoardSettings": {
+    "BoardName": "Nombre del tablero",
+    "Password": "Contraseña",
+    "DeleteBoard": "Eliminar tablero",
+    "ShowAuthorOption": "Mostrar autores de las notas",
+    "ShowHiddenColumnsOption": "Mostrarme las columnas ocultas",
+    "ShowOtherUsersNotesOption": "Mostrar notas de otros usuarios",
+    "ShowNoteReactionsOptions": "Mostrar reacciones de las notas",
+    "AllowNoteRepositioningOption": "Permitir cambiar las notas de posición",
+    "IsLocked": "Bloquear tablero",
+    "save": "guardar",
+    "edit": "editar",
+    "subtitle": "Los ajustes de acceso no se guardan al exportar. Además, para reutilizar un tablero solo se puede importar un archivo JSON desde la página de plantillas.",
+    "AccessPolicyPublicLabel": "Abierto",
+    "AccessPolicyByInviteLabel": "Con aprobación",
+    "AccessPolicyByPassphraseLabel": "Protegido con contraseña"
+  },
+  "Participants": {
+    "Title": "Participantes",
+    "OwnerFilterTooltip": "Mostrar solo al propietario",
+    "ModeratorFilterTooltip": "Mostrar solo moderadores",
+    "ParticipantFilterTooltip": "Mostrar solo participantes",
+    "OnlineFilterTooltip": "Mostrar participantes desconectados",
+    "ChangeRoleToParticipantTooltip": "Cambiar rol a participante",
+    "ChangeRoleToModeratorTooltip": "Cambiar rol a moderador",
+    "ResetBannerText": "Restablecer el estado de preparación de todos los usuarios.",
+    "ResetBannerButton": "Restablecer",
+    "BanParticipantTooltip": "Expulsar a '{{user}}'",
+    "UnbanParticipantTooltip": "Revocar la expulsión de '{{user}}'"
+  },
+  "UserRole": {
+    "Owner": "Propietario",
+    "Moderator": "Moderador",
+    "Participant": "Participante"
+  },
+  "Appearance": {
+    "SyncMode": "Sincronizar la apariencia con el sistema",
+    "SyncModeDescription": "Scrumlr usará el modo claro u oscuro seleccionado en el sistema",
+    "AllowNotifications": "Permitir notificaciones",
+    "Language": "Idioma",
+    "EmojiSkinTone": "Tono de piel de los emojis",
+    "colorScheme": "Esquema de color",
+    "colorSchemeLight": "Claro",
+    "colorSchemeDark": "Oscuro",
+    "showHotkeyNotifications": "Mostrar notificaciones de atajos de teclado",
+    "showBoardReactions": "Mostrar reacciones del tablero",
+    "showSnowfall": "Mostrar nieve"
+  },
+  "Feedback": {
+    "PraiseInputLabel": "¿Quieres contarnos algo más?",
+    "BugReportInputLabel": "¿Qué error quieres comunicar?",
+    "FeatureRequestInputLabel": "¿Qué función te gustaría tener?",
+    "FeedbackInputPlaceholder": "Escribe aquí cualquier información adicional",
+    "ContactInputLabel": "Si quieres que contactemos contigo, deja tu correo electrónico (opcional)",
+    "SubmitButton": "Enviar comentarios",
+    "ErrorUndefinedType": "Selecciona el tipo de comentario.",
+    "ErrorInvalidEmail": "Introduce un correo electrónico válido.",
+    "ErrorMissingFeatureRequestText": "Describe la función que quieres solicitar.",
+    "ErrorMissingBugReportText": "Describe el error que quieres comunicar.",
+    "SubmitNotification": "Gracias por tus comentarios"
+  },
+  "ProfileSettings": {
+    "Profile": "Perfil",
+    "UserName": "Nombre de usuario",
+    "deleteAccount": "Eliminar cuenta"
+  },
+  "Error": {
+    "editBoard": "No hemos podido actualizar el tablero. Inténtalo de nuevo.",
+    "shareNote": "No hemos podido compartir la nota. Inténtalo de nuevo.",
+    "unshareNote": "No hemos podido dejar de compartir la nota. Inténtalo de nuevo.",
+    "deleteBoard": "No hemos podido eliminar el tablero. Inténtalo de nuevo.",
+    "importBoard": "No hemos podido importar el tablero. Inténtalo de nuevo.",
+    "createBoard": "No hemos podido crear el tablero. Inténtalo de nuevo.",
+    "editColumn": "No hemos podido actualizar la columna. Inténtalo de nuevo.",
+    "createColumn": "No hemos podido añadir la columna. Inténtalo de nuevo.",
+    "deleteColumn": "No hemos podido eliminar la columna. Inténtalo de nuevo.",
+    "addNote": "No hemos podido añadir la nota. Inténtalo de nuevo.",
+    "deleteNote": "No hemos podido eliminar la nota. Inténtalo de nuevo.",
+    "deleteNoteWhenShared": "No puedes eliminar tu nota mientras está compartida.",
+    "editNote": "No hemos podido actualizar la nota. Inténtalo de nuevo.",
+    "unstackNote": "No hemos podido sacar la nota del grupo. Inténtalo de nuevo.",
+    "setRaiseHand": "No hemos podido cambiar el estado de tu mano. Inténtalo de nuevo.",
+    "setUserReady": "No hemos podido cambiar tu estado de preparación. Inténtalo de nuevo.",
+    "setUserBanned": "No hemos podido expulsar o readmitir a este usuario. Inténtalo de nuevo.",
+    "setShowHiddenColumns": "No hemos podido cambiar la visibilidad de las columnas. Inténtalo de nuevo.",
+    "changePermission": "No hemos podido actualizar los permisos. Inténtalo de nuevo.",
+    "logout": "No hemos podido cerrar tu sesión.",
+    "serverConnection": "No se ha podido establecer la conexión con el servidor. Prueba a recargar la página.",
+    "retry": "Reintentar",
+    "joinBoard": "No hemos podido acceder al tablero. Inténtalo de nuevo.",
+    "boardDeleted": "El tablero se ha eliminado. Te hemos redirigido a la página de inicio.",
+    "acceptJoinRequests": "No hemos podido aceptar las solicitudes. Inténtalo de nuevo.",
+    "rejectJoinRequests": "No hemos podido rechazar las solicitudes. Inténtalo de nuevo.",
+    "initApplication": "No hemos podido obtener información del servidor. Prueba a recargar la página.",
+    "addVote": "No hemos podido añadir el voto. Inténtalo de nuevo.",
+    "deleteVote": "No hemos podido eliminar el voto. Inténtalo de nuevo.",
+    "createVoting": "No hemos podido iniciar una votación. Inténtalo de nuevo.",
+    "closeVoting": "No hemos podido finalizar la votación. Inténtalo de nuevo.",
+    "abortVoting": "No hemos podido cancelar la votación. Inténtalo de nuevo.",
+    "editSelf": "No hemos podido actualizar tu información. Inténtalo de nuevo.",
+    "deleteAccount": "No hemos podido eliminar tu cuenta. Inténtalo de nuevo."
+  },
+  "Validation": {
+    "REQUIRED": "obligatorio",
+    "BAD_INPUT": "entrada no válida",
+    "PATTERN_MISMATCH": "el formato no coincide",
+    "TYPE_MISMATCH": "el tipo no coincide",
+    "RANGE": "fuera de rango"
+  },
+  "TimeDifference": {
+    "now": "Ahora",
+    "minutes_one": "Hace {{count}} minuto",
+    "minutes_other": "Hace {{count}} minutos",
+    "hours_one": "Hace {{count}} hora",
+    "hours_other": "Hace {{count}} horas",
+    "days_one": "Hace {{count}} día",
+    "days_other": "Hace {{count}} días",
+    "yesterday": "Ayer"
+  },
+  "Avatar": {
+    "random": "Generar un avatar aleatorio",
+    "prevOption": "Opción anterior",
+    "nextOption": "Opción siguiente",
+    "groups": {
+      "hair": "Sombreros y peinados",
+      "facialFeatures": "Rasgos faciales",
+      "clothing": "Ropa",
+      "background": "Fondo"
+    },
+    "hairColor": {
+      "label": "Color de pelo",
+      "Auburn": "Castaño rojizo",
+      "Black": "Negro",
+      "Blonde": "Rubio",
+      "BlondeGolden": "Rubio dorado",
+      "Brown": "Castaño",
+      "BrownDark": "Castaño oscuro",
+      "PastelPink": "Rosa pastel",
+      "Blue": "Azul",
+      "Platinum": "Platino",
+      "Red": "Rojo",
+      "SilverGray": "Gris plateado"
+    },
+    "eyebrowType": {
+      "label": "Tipo de cejas",
+      "Angry": "Enfadadas n.º 1",
+      "AngryNatural": "Enfadadas n.º 2",
+      "Default": "Predeterminadas n.º 1",
+      "DefaultNatural": "Predeterminadas n.º 2",
+      "FlatNatural": "Rectas",
+      "FrownNatural": "Fruncidas",
+      "RaisedExcited": "Entusiasmadas n.º 1",
+      "RaisedExcitedNatural": "Entusiasmadas n.º 2",
+      "SadConcerned": "Preocupadas n.º 1",
+      "SadConcernedNatural": "Preocupadas n.º 2",
+      "UnibrowNatural": "Uniceja",
+      "UpDown": "Levantadas n.º 1",
+      "UpDownNatural": "Levantadas n.º 2"
+    },
+    "facialHairColor": {
+      "label": "Color del vello facial",
+      "Auburn": "Castaño rojizo",
+      "Black": "Negro",
+      "Blonde": "Rubio",
+      "BlondeGolden": "Rubio dorado",
+      "Brown": "Castaño",
+      "BrownDark": "Castaño oscuro",
+      "Platinum": "Platino",
+      "Red": "Rojo"
+    },
+    "facialHairType": {
+      "label": "Tipo de vello facial",
+      "Blank": "Sin vello facial",
+      "BeardMedium": "Barba media",
+      "BeardLight": "Barba ligera",
+      "BeardMajestic": "Barba majestuosa",
+      "MoustacheFancy": "Bigote elegante",
+      "MoustacheMagnum": "Bigote Magnum"
+    },
+    "skinColor": {
+      "label": "Color de piel",
+      "Tanned": "Bronceada",
+      "Yellow": "Amarilla",
+      "Pale": "Pálida",
+      "Light": "Clara",
+      "Brown": "Morena",
+      "DarkBrown": "Morena oscura",
+      "Black": "Negra"
+    },
+    "eyeType": {
+      "label": "Tipo de ojos",
+      "Close": "Cerrados",
+      "Cry": "Llorando",
+      "Default": "Predeterminados",
+      "Dizzy": "Mareados",
+      "EyeRoll": "En blanco",
+      "Happy": "Felices",
+      "Hearts": "Corazones",
+      "Side": "Mirada lateral",
+      "Squint": "Entrecerrados",
+      "Surprised": "Sorprendidos",
+      "Wink": "Guiño",
+      "WinkWacky": "Guiño alocado"
+    },
+    "mouthType": {
+      "label": "Tipo de boca",
+      "Concerned": "Preocupada",
+      "Default": "Predeterminada",
+      "Disbelief": "Incrédula",
+      "Eating": "Comiendo",
+      "Grimace": "Mueca",
+      "Sad": "Triste",
+      "ScreamOpen": "Gritando",
+      "Serious": "Seria",
+      "Smile": "Sonrisa",
+      "Tongue": "Sacando la lengua",
+      "Twinkle": "Radiante",
+      "Vomit": "Vómito"
+    },
+    "topType": {
+      "label": "Peinado o accesorio",
+      "Eyepatch": "Parche",
+      "Hat": "Sombrero",
+      "Hijab": "Hiyab",
+      "LongHairBigHair": "Pelo largo y ondulado",
+      "LongHairBob": "Media melena",
+      "LongHairBun": "Moño",
+      "LongHairCurly": "Pelo largo y rizado",
+      "LongHairCurvy": "Pelo largo con ondas",
+      "LongHairDreads": "Rastas",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro con cinta",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Media melena",
+      "LongHairShavedSides": "Pelo largo con laterales rapados",
+      "LongHairStraight": "Pelo largo y liso n.º 1",
+      "LongHairStraight2": "Pelo largo y liso n.º 2",
+      "LongHairStraightStrand": "Pelo largo y liso n.º 3",
+      "NoHair": "Sin pelo",
+      "ShortHairDreads01": "Rastas cortas n.º 1",
+      "ShortHairDreads02": "Rastas cortas n.º 2",
+      "ShortHairFrizzle": "Pelo encrespado",
+      "ShortHairShaggyMullet": "Mullet despeinado",
+      "ShortHairShortCurly": "Pelo corto y rizado",
+      "ShortHairShortFlat": "Pelo corto y liso",
+      "ShortHairShortRound": "Pelo corto redondeado",
+      "ShortHairShortWaved": "Pelo corto y ondulado",
+      "ShortHairSides": "Semicalvo",
+      "ShortHairTheCaesar": "Corte César n.º 1",
+      "ShortHairTheCaesarSidePart": "Corte César n.º 2",
+      "Turban": "Turbante",
+      "WinterHat1": "Gorro de invierno n.º 1",
+      "WinterHat2": "Gorro de invierno n.º 2",
+      "WinterHat3": "Gorro de invierno n.º 3",
+      "WinterHat4": "Gorro de invierno n.º 4"
+    },
+    "accessoriesType": {
+      "label": "Gafas",
+      "Blank": "Sin gafas",
+      "Kurt": "Kurt",
+      "Prescription01": "Graduadas n.º 1",
+      "Prescription02": "Graduadas n.º 2",
+      "Round": "Gafas redondas",
+      "Sunglasses": "Gafas de sol",
+      "Wayfarers": "Wayfarer"
+    },
+    "clotheColor": {
+      "label": "Color de la ropa",
+      "Black": "Negro",
+      "Blue01": "Azul n.º 1",
+      "Blue02": "Azul n.º 2",
+      "Blue03": "Azul n.º 3",
+      "Gray01": "Gris n.º 1",
+      "Gray02": "Gris n.º 2",
+      "Heather": "Gris jaspeado",
+      "PastelBlue": "Azul pastel",
+      "PastelGreen": "Verde pastel",
+      "PastelOrange": "Naranja pastel",
+      "PastelRed": "Rojo pastel",
+      "PastelYellow": "Amarillo pastel",
+      "Pink": "Rosa",
+      "Red": "Rojo",
+      "White": "Blanco"
+    },
+    "clotheType": {
+      "label": "Tipo de ropa",
+      "BlazerShirt": "Americana con camisa",
+      "BlazerSweater": "Americana con jersey",
+      "CollarSweater": "Jersey con cuello",
+      "GraphicShirt": "Camiseta estampada",
+      "Hoodie": "Sudadera con capucha",
+      "Overall": "Peto",
+      "ShirtCrewNeck": "Camiseta de cuello redondo",
+      "ShirtScoopNeck": "Camiseta de cuello amplio",
+      "ShirtVNeck": "Camiseta de cuello de pico"
+    },
+    "graphicType": {
+      "label": "Tipo de estampado",
+      "Bat": "Murciélago",
+      "Cumbia": "¡Cumbia!",
+      "Deer": "Ciervo",
+      "Diamond": "Diamante",
+      "Hola": "¡Hola!",
+      "Pizza": "Pizza",
+      "Resist": "¡Resiste!",
+      "Selena": "Selena",
+      "Bear": "Oso",
+      "SkullOutline": "Contorno de calavera",
+      "Skull": "Calavera"
+    },
+    "backgroundColor": {
+      "label": "Color de fondo",
+      "backlog-blue": "Azul",
+      "planning-pink": "Rosa",
+      "poker-purple": "Morado",
+      "value-violet": "Violeta",
+      "goal-green": "Verde",
+      "yielding-yellow": "Amarillo",
+      "online-orange": "Naranja"
+    }
+  },
+  "ToggleButton": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "RejectionPage": {
+    "title": "¡Vaya!",
+    "description": "Parece que, por ahora, esta sesión permanece cerrada. Agradecemos tu interés, pero tu solicitud para unirte ha sido rechazada.",
+    "banned": "Lo sentimos, parece que se te ha excluido de esta sesión.",
+    "button": "Volver a la página de inicio"
+  },
+  "Votes": {
+    "AddVote": "Añadir voto",
+    "RemoveVote": "Quitar voto",
+    "VotesOnNote_one": "{{count}} voto",
+    "VotesOnNote_other": "{{count}} votos",
+    "VoteLimitReached": "Has alcanzado el número máximo de votos",
+    "MultipleVotesNotAllowed": "No se permiten varios votos"
+  },
+  "Snowfall": {
+    "toastTitle": "Felices fiestas 🎄",
+    "toastMessage": "El equipo de Scrumlr te desea unas felices fiestas. Puedes desactivar la animación de nieve en los ajustes de apariencia."
+  }
+}
