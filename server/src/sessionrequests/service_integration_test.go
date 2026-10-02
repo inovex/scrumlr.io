@@ -8,8 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"scrumlr.io/server/initialize/testDbTemplates"
 
-	"scrumlr.io/server/websocket"
-
 	"scrumlr.io/server/users"
 
 	"github.com/google/uuid"
@@ -63,8 +61,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	suite.broker = broker
 
 	database := NewSessionRequestDatabase(db)
-	wsService := websocket.NewWebSocketUpgrader()
-	sessionRequestWebsocket := NewSessionRequestWebsocket(wsService, broker)
+
 	ch, err := cache.NewNats(suite.natsConnectionString, "scrumlr-test-sessionrequests")
 	require.NoError(suite.T(), err, "Failed to connect to nats cache")
 
@@ -75,7 +72,7 @@ func (suite *SessionRequestServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	suite.service = NewSessionRequestService(database, broker, sessionRequestWebsocket, sessionService)
+	suite.service = NewSessionRequestService(database, broker, sessionService)
 }
 
 func (suite *SessionRequestServiceIntegrationTestSuite) TearDownSuite() {
