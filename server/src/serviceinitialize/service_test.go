@@ -3,9 +3,12 @@ package serviceinitialize
 import (
 	"testing"
 
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/info"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -13,6 +16,7 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
+	"scrumlr.io/server/websocket"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -32,35 +36,156 @@ func TestNewServiceInitializer(t *testing.T) {
 	assert.False(t, initializer.checkOrigin)
 }
 
-func TestServiceInitializer_InitializeServices(t *testing.T) {
+func TestInitializeBoardService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	columnService := columns.NewMockColumnService(t)
+	sessionService := sessions.NewMockSessionService(t)
+	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
+	noteService := notes.NewMockNotesService(t)
+	userSession := users.NewMockUserService(t)
+	votingService := votings.NewMockVotingService(t)
+	reactionService := reactions.NewMockReactionService(t)
+
+	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession)
+
+	assert.NotNil(t, boardService)
+}
+
+func TestInitializeColumnService(t *testing.T) {
 	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
 
 	noteService := notes.NewMockNotesService(t)
+
+	columnService := initializer.InitializeColumnService(noteService)
+
+	assert.NotNil(t, columnService)
+}
+
+func TestInitializeSessionService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
 	columnService := columns.NewMockColumnService(t)
-	reactionService := reactions.NewMockReactionService(t)
-	votingService := votings.NewMockVotingService(t)
-	sessionService := sessions.NewMockSessionService(t)
-	userSession := users.NewMockUserService(t)
-	sessionRequestService := sessionrequests.NewMockSessionRequestService(t)
+	noteService := notes.NewMockNotesService(t)
+
+	sessionService := initializer.InitializeSessionService(columnService, noteService)
+
+	assert.NotNil(t, sessionService)
+}
+
+func TestInitializeSessionRequestService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
 	sessionRequestWebsocket := sessionrequests.NewMockSessionRequestWebsocket(t)
+	sessionService := sessions.NewMockSessionService(t)
+
+	sessionRequestService := initializer.InitializeSessionRequestService(sessionRequestWebsocket, sessionService)
+
+	assert.NotNil(t, sessionRequestService)
+}
+
+func TestInitializeNoteService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	noteService := initializer.InitializeNotesService()
+
+	assert.NotNil(t, noteService)
+}
+
+func TestInitializeUserService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	sessionService := sessions.NewMockSessionService(t)
+	noteService := notes.NewMockNotesService(t)
+
+	userService := initializer.InitializeUserService(sessionService, noteService)
+
+	assert.NotNil(t, userService)
+}
+
+func TestInitializeVotingService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	votingService := initializer.InitializeVotingService()
+
+	assert.NotNil(t, votingService)
+}
+
+func TestInitializeReactionService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	reactionService := initializer.InitializeReactionService()
+
+	assert.NotNil(t, reactionService)
+}
+
+func TestInitializeBoardReactionService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	boardReactionService := initializer.InitializeBoardReactionService()
+
+	assert.NotNil(t, boardReactionService)
+}
+
+func TestInitializeBoardTemplateService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
 	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
 
-	assert.NotNil(t, initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession))
-	assert.NotNil(t, initializer.InitializeColumnService(noteService))
-	assert.NotNil(t, initializer.InitializeBoardReactionService())
-	assert.NotNil(t, initializer.InitializeBoardTemplateService(columnTemplateService))
-	assert.NotNil(t, initializer.InitializeColumnTemplateService())
-	assert.NotNil(t, initializer.InitializeFeedbackService("https://example.com/webhook"))
-	assert.NotNil(t, initializer.InitializeHealthService())
-	assert.NotNil(t, initializer.InitializeReactionService())
-	assert.NotNil(t, initializer.InitializeSessionService(columnService, noteService))
-	assert.NotNil(t, initializer.InitializeSessionRequestService(sessionRequestWebsocket, sessionService))
+	boardTemplateService := initializer.InitializeBoardTemplateService(columnTemplateService)
 
-	wsService := initializer.InitializeWebSocketService()
-	assert.NotNil(t, wsService)
-	assert.NotNil(t, initializer.InitializeSessionRequestWebsocket(wsService))
+	assert.NotNil(t, boardTemplateService)
+}
 
-	assert.NotNil(t, initializer.InitializeUserService(sessionService, noteService))
-	assert.NotNil(t, initializer.InitializeNotesService())
-	assert.NotNil(t, initializer.InitializeVotingService())
+func TestInitializeColumnTemplateService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	columnTemplateService := initializer.InitializeColumnTemplateService()
+
+	assert.NotNil(t, columnTemplateService)
+}
+
+func TestInitializeFeedbackService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	feedbackService := initializer.InitializeFeedbackService("https://example.com/webhook")
+
+	assert.NotNil(t, feedbackService)
+}
+
+func TestInitializeHealthService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	healthService := initializer.InitializeHealthService()
+
+	assert.NotNil(t, healthService)
+}
+
+func TestInitializeInfoService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	auth := auth.NewMockAuth(t)
+	feedbackService := feedback.NewMockFeedbackService(t)
+
+	infoService := initializer.InitializeInfoService(auth, feedbackService, info.ServerConfig{})
+
+	assert.NotNil(t, infoService)
+}
+
+func TestInitializeWebsocketService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	webSocketService := initializer.InitializeWebSocketService()
+
+	assert.NotNil(t, webSocketService)
+}
+
+func TestInitializeSessionRequestWebsocketService(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	webSocket := websocket.NewMockUpgrader(t)
+
+	sessionRequestWebsocketService := initializer.InitializeSessionRequestWebsocket(webSocket)
+
+	assert.NotNil(t, sessionRequestWebsocketService)
 }
