@@ -103,7 +103,7 @@ func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
 	return healthService
 }
 
-func (init *ServiceInitializer) InitializeInfoService(authService auth.Auth, feedbackService feedback.FeedbackService, serverConfig info.ServerConfig) info.InfoService {
+func (init *ServiceInitializer) InitializeInfoService(authService auth.AuthService, feedbackService feedback.FeedbackService, serverConfig info.ServerConfig) info.InfoService {
 	infoService := info.NewInfoService(authService, feedbackService, init.clock, serverConfig)
 	return infoService
 }
