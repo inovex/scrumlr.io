@@ -91,8 +91,14 @@ auth-azure-ad-client-secret = ""
 # Set the client ID for Apple OAuth authentication.
 auth-apple-client-id = ""
 
-# Set the client secret for Apple OAuth authentication.
-auth-apple-client-secret = ""
+# Set the key id for Apple OAuth authentication.
+auth-apple-key-id = ""
+
+# Set the team id for Apple OAuth authentication.
+auth-apple-team-id = ""
+
+# Set the private key for Apple OAuth authentication.
+auth-apple-private-key = ""
 
 # Set the client ID for OIDC authentication.
 auth-oidc-client-id = ""
@@ -108,9 +114,6 @@ auth-oidc-user-ident-scope = ""
 
 # Set the JWT scope to request from the IDP for user name information.
 auth-oidc-user-name-scope = ""
-
-# Set the session secret for the authentication providers
-session-secret = ""
 
 # Set the OTel grpc endpoint for sending logs, traces and metrics
 otel-grpc = ""

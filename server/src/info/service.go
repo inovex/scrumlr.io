@@ -6,7 +6,6 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/timeprovider"
 )
@@ -15,7 +14,7 @@ var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/info")
 
 type Service struct {
 	clock           timeprovider.TimeProvider
-	authService     auth.Auth
+	authService     auth.AuthService
 	feedbackService feedback.FeedbackService
 	serverConfig    ServerConfig
 }
@@ -27,7 +26,7 @@ type ServerConfig struct {
 	AllowAnonymousHistory         bool
 }
 
-func NewInfoService(authService auth.Auth, feedbackService feedback.FeedbackService, clock timeprovider.TimeProvider, serverConfig ServerConfig) InfoService {
+func NewInfoService(authService auth.AuthService, feedbackService feedback.FeedbackService, clock timeprovider.TimeProvider, serverConfig ServerConfig) InfoService {
 	service := new(Service)
 	service.clock = clock
 	service.serverConfig = serverConfig
@@ -48,12 +47,7 @@ func (service *Service) Get(ctx context.Context) *Info {
 	info.AllowAnonymousBoardCreation = service.serverConfig.AllowAnonymousBoardCreation
 	info.AllowAnonymousHistory = service.serverConfig.AllowAnonymousHistory
 
-	info.AuthProvider = make([]auth.AccountType, 0, 6)
-	for _, provider := range []auth.AccountType{auth.Google, auth.GitHub, auth.Microsoft, auth.AzureAd, auth.Apple, auth.TypeOIDC} {
-		if service.authService.Exists(provider) {
-			info.AuthProvider = append(info.AuthProvider, provider)
-		}
-	}
+	info.AuthProvider = service.authService.ConfiguredProvider()
 
 	info.FeedbackEnabled = service.feedbackService.Enabled()
 	info.ServerTime = service.clock.Now()

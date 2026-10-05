@@ -1,8 +1,6 @@
 package api
 
 import (
-	"os"
-
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/events"
 
@@ -19,11 +17,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	gorillaSessions "github.com/gorilla/sessions"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
@@ -38,7 +34,7 @@ type Server struct {
 	basePath string
 
 	realtime *realtime.Broker
-	auth     auth.Auth
+	auth     auth.AuthService
 
 	healthRoutes         chi.Router
 	feedbackRoutes       chi.Router
@@ -67,7 +63,6 @@ type Server struct {
 	allowAnonymousCustomTemplates bool
 	allowAnonymousBoardCreation   bool
 	allowAnonymousHistory         bool
-	experimentalFileSystemStore   bool
 	enableSwagger                 bool
 
 	joinBoardRateLimit int
@@ -78,7 +73,7 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	auth auth.Auth,
+	auth auth.AuthService,
 
 	healtRoutes chi.Router,
 	feedbackRoutes chi.Router,
@@ -106,7 +101,6 @@ func New(
 	allowAnonymousCustomTemplates bool,
 	allowAnonymousBoardCreation bool,
 	allowAnonymousHistory bool,
-	experimentalFileSystemStore bool,
 	enableSwagger bool,
 
 	joinBoardRateLimit int,
@@ -166,22 +160,11 @@ func New(
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
 		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
 		allowAnonymousHistory:         allowAnonymousHistory,
-		experimentalFileSystemStore:   experimentalFileSystemStore,
 		checkOrigin:                   checkOrigin,
 		enableSwagger:                 enableSwagger,
 
 		joinBoardRateLimit: joinBoardRateLimit,
 		templateRateLimit:  templateRateLimit,
-	}
-
-	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
-	// this might be required when using some OIDC providers which exceed the 4KB limit.
-	// see https://github.com/markbates/goth/pull/141
-	if s.experimentalFileSystemStore {
-		logger.Get().Infow("using experimental file system store")
-		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
-		store.MaxLength(0x8000) // 32KB should be plenty of space
-		gothic.Store = store
 	}
 
 	r.Route(s.basePath, func(router chi.Router) {
@@ -203,7 +186,8 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 
 			r.Route("/{provider}", func(r chi.Router) {
 				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
+				r.Get("/callback", s.verifyQueryAuthProviderCallback)
+				r.Post("/callback", s.verifyPostFormauthProviderCallback)
 			})
 		})
 
@@ -218,7 +202,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(s.auth.Authenticator())
-		r.Use(auth.AuthContext)
+		r.Use(auth.AuthMiddleware)
 
 		r.With(
 			s.BoardTemplateRateLimiter,
