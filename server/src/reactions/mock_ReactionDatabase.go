@@ -6,8 +6,8 @@ package reactions
 
 import (
 	"context"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -17,10 +17,19 @@ func NewMockReactionDatabase(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockReactionDatabase {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockReactionDatabase{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }

@@ -10,7 +10,7 @@ import (
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/websocket"
 
-	"github.com/google/uuid"
+	"uuid"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/identifiers"

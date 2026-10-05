@@ -7,8 +7,8 @@ package sessionrequests
 import (
 	"context"
 	"net/http"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -18,10 +18,19 @@ func NewMockSessionRequestService(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockSessionRequestService {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockSessionRequestService{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }

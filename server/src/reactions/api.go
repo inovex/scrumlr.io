@@ -3,7 +3,7 @@ package reactions
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type ReactionService interface {

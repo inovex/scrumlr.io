@@ -4,7 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/websocket"
 )
 

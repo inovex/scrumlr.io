@@ -3,7 +3,7 @@ package columntemplates
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type ColumnTemplateService interface {

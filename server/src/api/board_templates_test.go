@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/go-chi/jwtauth/v5"
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

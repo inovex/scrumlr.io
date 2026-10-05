@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/realtime"
 )

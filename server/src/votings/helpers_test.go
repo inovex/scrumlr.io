@@ -4,7 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 )
