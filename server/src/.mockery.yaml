@@ -12,7 +12,8 @@ packages:
     config:
       dir: auth
     interfaces:
-      Auth:
+      AuthService:
+      AuthProvider:
 
   scrumlr.io/server/boards:
     config:
