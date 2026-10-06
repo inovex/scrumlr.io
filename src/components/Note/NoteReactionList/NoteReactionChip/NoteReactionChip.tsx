@@ -4,6 +4,7 @@ import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
+import {isParticipantModerator} from "utils/participant";
 import "./NoteReactionChip.scss";
 
 interface NoteReactionChipProps {
@@ -20,7 +21,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const baseId = useId();
   const anchorId = `reaction-${props.reaction.noteId}-${props.reaction.reactionType}-${baseId}`;
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {

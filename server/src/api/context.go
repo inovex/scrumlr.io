@@ -346,10 +346,34 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) JoinBoardRateLimiter(next http.Handler) http.Handler {
+	limiter := httprate.LimitBy(
+		s.joinBoardRateLimit,
+		5*time.Second,
+		func(r *http.Request) (string, error) {
+			return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
+		},
+		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+			if err != nil {
+				log := logger.FromRequest(r)
+				log.Errorw("Could not write error", "error", err)
+				return
+			}
+		}),
+	)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		limiter(next).ServeHTTP(w, r)
+	})
+}
+
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.LimitBy(
-		20,
+		s.templateRateLimit,
 		1*time.Second,
 		func(r *http.Request) (string, error) {
 			return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil

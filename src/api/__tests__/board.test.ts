@@ -2,6 +2,7 @@ import {vi} from "vitest";
 import {SERVER_HTTP_URL} from "config";
 import {BoardImportData} from "store/features/board/types";
 import {BoardAPI} from "../board";
+import * as config from "config";
 
 describe("BoardAPI", () => {
   const payload = {
@@ -14,6 +15,10 @@ describe("BoardAPI", () => {
     participants: [],
     votings: null,
   } as BoardImportData;
+
+  beforeEach(() => {
+    vi.spyOn(config, "SERVER_HTTP_URL", "get").mockReturnValue("http://localhost:8080");
+  });
 
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -35,7 +40,7 @@ describe("BoardAPI", () => {
 
     await expect(BoardAPI.importBoard(payload)).resolves.toEqual(responseBody);
 
-    expect(fetchMock).toHaveBeenCalledWith(`${SERVER_HTTP_URL}/import`, {
+    expect(fetchMock).toHaveBeenCalledWith(new URL(`${SERVER_HTTP_URL}/import`), {
       method: "POST",
       credentials: "include",
       headers: {

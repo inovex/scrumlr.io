@@ -94,7 +94,8 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 			s.votings = votingMock
 			s.notes = notesMock
 
-			req := technical_helper.NewTestRequestBuilder("PUT", "/", nil)
+			votingStatus := votings.Closed
+			req := technical_helper.NewTestRequestBuilder("PUT", "/", strings.NewReader(fmt.Sprintf(`{"status": "%s"}`, votingStatus)))
 			req.Req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.VotingIdentifier, votingId)
@@ -102,16 +103,49 @@ func (suite *VotingTestSuite) TestCloseVoting() {
 
 			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
-			votingMock.EXPECT().Close(mock.Anything, votingId, boardId, []votings.Note(nil)).
-				Return(&votings.Voting{Status: votings.Closed}, tt.err)
+			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Closed, []votings.Note(nil)).
+				Return(&votings.Voting{Status: votings.Closed}, tt.err).Once()
 
 			s.updateVoting(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			votingMock.AssertExpectations(suite.T())
-			votingMock.AssertNumberOfCalls(suite.T(), "Close", 1)
 		})
 	}
 
+}
+
+func (suite *VotingTestSuite) TestAbortVoting() {
+
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusOK, nil, false, false, nil).
+		Append("unexpected error", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
+		suite.Run(tt.name, func() {
+			s := new(Server)
+			votingMock := votings.NewMockVotingService(suite.T())
+			notesMock := notes.NewMockNotesService(suite.T())
+
+			boardId, _ := uuid.NewRandom()
+			votingId, _ := uuid.NewRandom()
+			s.votings = votingMock
+			s.notes = notesMock
+
+			votingStatus := votings.Aborted
+			req := technical_helper.NewTestRequestBuilder("PUT", "/", strings.NewReader(fmt.Sprintf(`{"status": "%s"}`, votingStatus)))
+			req.Req = logger.InitTestLoggerRequest(req.Request())
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
+				AddToContext(identifiers.VotingIdentifier, votingId)
+
+			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
+
+			votingMock.EXPECT().Update(mock.Anything, votingId, boardId, votings.Aborted, []votings.Note(nil)).
+				Return(&votings.Voting{Status: votings.Aborted}, tt.err).Once()
+
+			rr := httptest.NewRecorder()
+			s.updateVoting(rr, req.Request())
+			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+		})
+	}
 }
 
 func (suite *VotingTestSuite) TestGetVoting() {

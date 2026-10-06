@@ -212,6 +212,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       description: "sample description 1",
       favourite: false,
       type: "CUSTOM",
+      createdAt: new Date("2026-08-31").toISOString(),
+      modifiedAt: new Date("2026-08-31").toISOString(),
     },
     {
       id: "test-templates-id-2",
@@ -220,6 +222,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       description: "sample description 2",
       favourite: true,
       type: "CUSTOM",
+      createdAt: new Date("2026-08-31").toISOString(),
+      modifiedAt: new Date("2026-08-31").toISOString(),
     },
   ],
   templateColumns: [

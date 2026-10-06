@@ -6,7 +6,7 @@
       "column": {
         "lean_coffee": {
           "name": "Lean Coffee",
-          "description": "Collectez des sujets, des idées et des questions."
+          "description": "Collecte des sujets, des idées et des questions."
         },
         "actions": {
           "name": "Actions",
@@ -116,7 +116,7 @@
         },
         "lacked": {
           "name": "Manqué",
-          "description": "Qu'est-ce qui aurait pu être amélioré ?"
+          "description": "Qu'est-ce qui a manqué ?"
         },
         "longed_for": {
           "name": "Souhaité",

@@ -9,8 +9,8 @@ import (
 	"github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 type redisClient struct {
@@ -59,11 +59,11 @@ func (r *redisClient) Create(ctx context.Context, key string, value any, ttl tim
 
 	data, err := json.Marshal(value)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to marshal value")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to marshal value"))
 		log.Errorw("unable to marshal value in create", "key", key, "value", value, "err", err)
 		return err
 	}
+
 	status := r.store.SetArgs(ctx, key, string(data), redis.SetArgs{Mode: "NX", TTL: ttl})
 	if errors.Is(status.Err(), redis.Nil) {
 		return &KeyAlreadyExists{status.Err()}
@@ -83,8 +83,7 @@ func (r *redisClient) Put(ctx context.Context, key string, value any) error {
 
 	data, err := json.Marshal(value)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to marshal value")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to marshal value"))
 		log.Errorw("unable to marshal value in put", "key", key, "value", value, "err", err)
 		return err
 	}
@@ -104,13 +103,11 @@ func (r *redisClient) Get(ctx context.Context, key string) ([]byte, error) {
 	val, err := r.store.Get(ctx, key).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
-			span.SetStatus(codes.Ok, "key does not exists")
-			span.RecordError(err)
+			otel.RecordErrorSpan(span, err, new("key does not exists"))
 			return nil, &KeyNotFound{err}
 		}
 
-		span.SetStatus(codes.Error, "failed to get value for key")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get value for key"))
 		log.Errorw("unable to get value for key", "key", key, "error", err)
 		return nil, err
 	}

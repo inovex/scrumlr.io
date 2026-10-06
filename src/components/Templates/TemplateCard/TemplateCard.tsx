@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-textarea-autosize";
+import {isEqual} from "underscore";
 import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
 import {useAppSelector} from "store";
@@ -37,7 +38,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
   const {
     template: {template},
   } = props;
-  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.id));
+  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.id), isEqual);
 
   const {t} = useTranslation();
 

@@ -4,6 +4,7 @@ import {AvataaarProps} from "types/avatar";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {useAppSelector} from "store";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
+import {isParticipantModerator} from "utils/participant";
 import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
@@ -26,7 +27,7 @@ export type NoteDialogNoteProps = {
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
 
   return (
     <button

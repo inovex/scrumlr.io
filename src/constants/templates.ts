@@ -15,6 +15,8 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     description: "",
     favourite: false,
     type: "CUSTOM",
+    createdAt: new Date("2026-08-31").toISOString(),
+    modifiedAt: new Date("2026-08-31").toISOString(),
   },
   columns: [
     {

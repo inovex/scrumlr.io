@@ -32,16 +32,16 @@ describe("MenuBars", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
 
     const {container} = render(createMenuBars("MODERATOR"));
-    expect(container.getElementsByClassName("admin-menu").length).toBe(1);
-    expect(container.getElementsByClassName("user-menu").length).toBe(1);
+    expect(container.getElementsByClassName("admin-menu")).toHaveLength(1);
+    expect(container.getElementsByClassName("user-menu")).toHaveLength(1);
   });
 
   test("should only render user-menu for participants", () => {
     (useTimer as Mock).mockReturnValue({timerExpired: false});
 
     const {container} = render(createMenuBars("PARTICIPANT"));
-    expect(container.getElementsByClassName("menu__items").length).toBe(1);
-    expect(container.getElementsByClassName("user-menu").length).toBe(1);
+    expect(container.getElementsByClassName("menu__items")).toHaveLength(1);
+    expect(container.getElementsByClassName("user-menu")).toHaveLength(1);
   });
 });
 

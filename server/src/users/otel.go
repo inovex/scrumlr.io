@@ -1,6 +1,13 @@
 package users
 
-import "go.opentelemetry.io/otel/metric"
+import (
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/users")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/users")
 
 var userCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.users.created.counter",
@@ -40,13 +47,13 @@ var googleUserCreatedCounter, _ = meter.Int64Counter(
 
 var microsoftUserCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.users.microsoft.created.counter",
-	metric.WithDescription("Number of anonymous users created"),
+	metric.WithDescription("Number of microsoft users created"),
 	metric.WithUnit("users"),
 )
 
 var oicdUserCreatedCounter, _ = meter.Int64Counter(
 	"scrumlr.users.oicd.created.counter",
-	metric.WithDescription("Number of anonymous users created"),
+	metric.WithDescription("Number of oicd users created"),
 	metric.WithUnit("users"),
 )
 

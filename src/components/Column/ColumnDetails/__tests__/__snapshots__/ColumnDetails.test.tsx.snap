@@ -19,6 +19,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
       </div>
       <button
         class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+        data-cy="column-settings-mini-menu"
       >
         <svg
           class="column-details__settings-icon"
@@ -165,6 +166,7 @@ exports[`ColumnDetails > should render correctly (view) 1`] = `
       </div>
       <button
         class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+        data-cy="column-settings-mini-menu"
       >
         <svg
           class="column-details__settings-icon"

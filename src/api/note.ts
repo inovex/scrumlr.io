@@ -1,7 +1,58 @@
-import {SERVER_HTTP_URL} from "../config";
 import {EditNote, Note} from "../store/features/notes/types";
+import {buildUrl} from "./index";
 
 export const NoteAPI = {
+  /**
+   * Get all notes for a board
+   *
+   * @param boardId the board id
+   *
+   * @returns the requested notes
+   */
+  getNotes: async (boardId: string): Promise<Note[]> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/notes`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Note[];
+      }
+
+      throw new Error(`get notes request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get notes`, {cause: error});
+    }
+  },
+
+  /**
+   * Get a note for a board
+   *
+   * @param boardId board id
+   * @param noteId note id to request
+   *
+   * @returns the requested note
+   */
+  getNote: async (boardId: string, noteId: string): Promise<Note> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/notes/${noteId}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Note;
+      }
+
+      throw new Error(`get note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get note`, {cause: error});
+    }
+  },
+
   /**
    * Adds a note to a board.
    *
@@ -9,11 +60,12 @@ export const NoteAPI = {
    * @param columnId the column id
    * @param text the note text
    *
-   * @returns `true` if the operation succeeded or throws an error otherwise
+   * @returns created note
    */
-  addNote: async (boardId: string, columnId: string, text: string) => {
+  addNote: async (boardId: string, columnId: string, text: string): Promise<Note> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes`, {
+      const url = buildUrl(`./boards/${boardId}/notes`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -35,14 +87,14 @@ export const NoteAPI = {
   /**
    * Deletes a note with the specified id.
    *
+   * @param boardId board id
    * @param noteId the note id
    * @param deleteStack delete entire stack of note
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  deleteNote: async (board: string, noteId: string, deleteStack: boolean) => {
+  deleteNote: async (boardId: string, noteId: string, deleteStack: boolean) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
+      const url = buildUrl(`./boards/${boardId}/notes/${noteId}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
         body: JSON.stringify({
@@ -63,18 +115,22 @@ export const NoteAPI = {
   /**
    * Edit a note with the specified id.
    *
-   * @returns `true` if the operation succeeded or throws an error otherwise
+   * @param boardId board id
+   * @param noteId note id
+   *
+   * @returns updated note
    */
-  editNote: async (board: string, note: string, request: EditNote) => {
+  editNote: async (boardId: string, noteId: string, request: EditNote): Promise<Note> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${note}`, {
+      const url = buildUrl(`./boards/${boardId}/notes/${noteId}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(request),
       });
 
       if (response.status === 200) {
-        return await response.json();
+        return (await response.json()) as Note;
       }
 
       throw new Error(`unable to update note with response status ${response.status}`);

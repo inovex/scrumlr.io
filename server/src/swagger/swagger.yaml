@@ -5,25 +5,6 @@ definitions:
         description: The display name of the user.
         type: string
     type: object
-  api.Info:
-    properties:
-      allowAnonymousBoardCreation:
-        type: boolean
-      allowAnonymousCustomTemplates:
-        type: boolean
-      allowAnonymousHistory:
-        type: boolean
-      anonymousLoginDisabled:
-        type: boolean
-      authProvider:
-        items:
-          $ref: '#/definitions/common.AccountType'
-        type: array
-      feedbackEnabled:
-        type: boolean
-      serverTime:
-        type: string
-    type: object
   avatar.AccessoriesType:
     enum:
     - Blank
@@ -551,6 +532,8 @@ definitions:
     type: object
   boardtemplates.BoardTemplate:
     properties:
+      createdAt:
+        type: string
       creator:
         description: The board template creator id
         type: string
@@ -562,6 +545,8 @@ definitions:
         type: boolean
       id:
         description: The board template id
+        type: string
+      modifiedAt:
         type: string
       name:
         description: The board template name
@@ -812,6 +797,25 @@ definitions:
     - BugReport
     - FeatureRequest
     - Praise
+  info.Info:
+    properties:
+      allowAnonymousBoardCreation:
+        type: boolean
+      allowAnonymousCustomTemplates:
+        type: boolean
+      allowAnonymousHistory:
+        type: boolean
+      anonymousLoginDisabled:
+        type: boolean
+      authProvider:
+        items:
+          $ref: '#/definitions/common.AccountType'
+        type: array
+      feedbackEnabled:
+        type: boolean
+      serverTime:
+        type: string
+    type: object
   notes.Note:
     properties:
       author:
@@ -1100,11 +1104,18 @@ definitions:
   votings.VotingStatus:
     enum:
     - OPEN
+    - ABORTED
     - CLOSED
     type: string
     x-enum-varnames:
     - Open
+    - Aborted
     - Closed
+  votings.VotingUpdateRequest:
+    properties:
+      status:
+        $ref: '#/definitions/votings.VotingStatus'
+    type: object
 info:
   contact:
     email: info@scrumlr.io
@@ -1114,13 +1125,13 @@ info:
     url: https://github.com/inovex/scrumlr.io/blob/main/LICENSE
   termsOfService: https://scrumlr.io/terms
   title: Scrumlr backend
-  version: 5.3.1
+  version: 5.4.0
 paths:
   /boards:
     get:
       consumes:
       - application/json
-      description: Delete a board
+      description: Get all board
       parameters:
       - description: jwt token to authenticate
         in: header
@@ -1142,7 +1153,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.APIError'
-      summary: Delete a board
+      summary: Get all board
       tags:
       - boards
     post:
@@ -1711,7 +1722,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update a sessions for a board
+      description: Update all sessions for a board
       parameters:
       - description: jwt token to authenticate
         in: header
@@ -1748,7 +1759,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/common.APIError'
-      summary: Update a sessions for a board
+      summary: Update all sessions for a board
       tags:
       - sessions
   /boards/{boardId}/participants/{id}:
@@ -2551,6 +2562,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: voting to update
+        in: body
+        name: voting
+        required: true
+        schema:
+          $ref: '#/definitions/votings.VotingUpdateRequest'
       produces:
       - application/json
       responses:
@@ -2654,79 +2671,6 @@ paths:
       summary: Get a board
       tags:
       - boards
-  /boards/{id}/board-reactions:
-    post:
-      consumes:
-      - application/json
-      description: Create a board reaction
-      parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: Board reaction to create
-        in: body
-        name: boardreaction
-        required: true
-        schema:
-          $ref: '#/definitions/boardreactions.BoardReactionCreateRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-      summary: Create a board reaction
-      tags:
-      - board reactions
-  /boards/{id}/participants:
-    post:
-      consumes:
-      - application/json
-      description: Join an existing board
-      parameters:
-      - description: jwt token to authenticate
-        in: header
-        name: Cookie
-        required: true
-        type: string
-      - description: id of the board to join
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: join request for the board
-        in: body
-        name: join
-        schema:
-          $ref: '#/definitions/boards.JoinBoardRequest'
-      produces:
-      - application/json
-      responses:
-        "303":
-          description: See Other
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.APIError'
-        "429":
-          description: Too Many Requests
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.APIError'
-      summary: Join an existing board
-      tags:
-      - boards
-  /boards{id}:
     put:
       consumes:
       - application/json
@@ -2774,7 +2718,32 @@ paths:
       summary: Update a board
       tags:
       - boards
-  /boards{id}/export:
+  /boards/{id}/board-reactions:
+    post:
+      consumes:
+      - application/json
+      description: Create a board reaction
+      parameters:
+      - description: jwt token to authenticate
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      - description: Board reaction to create
+        in: body
+        name: boardreaction
+        required: true
+        schema:
+          $ref: '#/definitions/boardreactions.BoardReactionCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a board reaction
+      tags:
+      - board reactions
+  /boards/{id}/export:
     get:
       consumes:
       - json text/csv
@@ -2816,6 +2785,53 @@ paths:
           schema:
             $ref: '#/definitions/common.APIError'
       summary: Export a board
+      tags:
+      - boards
+  /boards/{id}/participants:
+    post:
+      consumes:
+      - application/json
+      description: Join an existing board
+      parameters:
+      - description: jwt token to authenticate
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      - description: id of the board to join
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: join request for the board
+        in: body
+        name: join
+        schema:
+          $ref: '#/definitions/boards.JoinBoardRequest'
+      produces:
+      - application/json
+      responses:
+        "303":
+          description: See Other
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.APIError'
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.APIError'
+      summary: Join an existing board
       tags:
       - boards
   /boards{id}/timer:
@@ -3032,7 +3048,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.Info'
+            $ref: '#/definitions/info.Info'
       summary: Show server info
       tags:
       - info

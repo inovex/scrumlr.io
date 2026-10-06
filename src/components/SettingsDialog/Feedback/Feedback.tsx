@@ -10,6 +10,8 @@ import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
+const contactRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export const Feedback = () => {
   const {t} = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
@@ -41,12 +43,7 @@ export const Feedback = () => {
       setErrorMessage(t("Feedback.ErrorUndefinedType"));
       return;
     }
-    if (
-      contact.value !== "" &&
-      !String(contact.value)
-        .toLowerCase()
-        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-    ) {
+    if (contact.value !== "" && !contactRegex.test(String(contact.value).toLowerCase())) {
       setErrorMessage(t("Feedback.ErrorInvalidEmail"));
       return;
     }

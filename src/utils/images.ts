@@ -1,3 +1,5 @@
+import {isValidWebUrl, normalizeAndParseUrl} from "utils/url";
+
 // checks if the given url starts with http(s)://, if not adds https:// to the beginning
 export const addProtocol = (url: string): string => {
   if (!/^http(s)?:\/\//.test(url)) {
@@ -6,28 +8,39 @@ export const addProtocol = (url: string): string => {
   return url;
 };
 
-// takes a string and returns true if it is a valid image url
-export const isImageUrl = async (url: string): Promise<boolean> => {
-  // check if given text could be a url, if not return false
-  const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/;
-  if (!urlRegex.test(url)) {
+// handles domain syntax validation + image checks
+export const isImageUrl = async (url: string, signal: AbortSignal): Promise<boolean> => {
+  // 1. fail early if the raw input doesn't resemble a domain structure
+  const parsedUrl = normalizeAndParseUrl(url);
+
+  if (!parsedUrl) {
     return false;
   }
 
-  // check if the url ends with an image extension, if so return true
-  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|bmp ico|png ico|ico|webp)$/;
-  if (imageExtensionRegex.test(url)) {
-    // pre-fetch image for faster load times once note is added
-    fetch(addProtocol(url));
+  if (!isValidWebUrl(parsedUrl)) {
+    return false;
+  }
+
+  // 2. image extension check
+  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|ico|webp)$/i;
+  if (imageExtensionRegex.test(parsedUrl.pathname)) {
     return true;
   }
 
-  // check if the url returns an image content type, if so return true
+  // 3. fallback: check header mime type for dynamic image URLs without extensions
   try {
-    const response = await fetch(addProtocol(url));
+    const response = await fetch(parsedUrl.href, {
+      method: "HEAD",
+      signal,
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
     const contentType = response.headers.get("Content-Type");
-    return contentType !== null && contentType.startsWith("image/");
-  } catch (_error) {
+    return contentType?.toLowerCase().startsWith("image/") ?? false;
+  } catch {
     return false;
   }
 };

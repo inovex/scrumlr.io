@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/otel"
 )
 
 type BoardEventType string
@@ -62,8 +62,7 @@ func (b *Broker) GetBoardChannel(ctx context.Context, boardID uuid.UUID) (chan *
 
 	c, err := b.Con.SubscribeToBoardEvents(ctx, boardsSubject(boardID))
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to subscribe to board channel")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to subscribe to board channel"))
 		log.Errorw("failed to subscribe to BoardChannel", "err", err)
 		return nil, err
 	}

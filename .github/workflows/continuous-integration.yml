@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Corepack # for yarn berry
         run: |
-          npm install -g corepack@0.35.0 --ignore-scripts
+          npm install -g corepack@0.36.0 --ignore-scripts
           corepack enable
           corepack install
 
@@ -147,7 +147,7 @@ jobs:
           sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
+        uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # v8.2.2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -186,7 +186,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: paths-filter
         id: docs_changes
-        uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
           filters: |
             docs:
@@ -249,7 +249,7 @@ jobs:
 
       - name: Install Corepack # for yarn berry
         run: |
-          npm install -g corepack@0.35.0 --ignore-scripts
+          npm install -g corepack@0.36.0 --ignore-scripts
           corepack enable
           corepack install
 
@@ -265,7 +265,7 @@ jobs:
         working-directory: server
 
       - name: Setup client and run tests
-        uses: cypress-io/github-action@fa4a118725a8f001170d49631ea89e5d66fee626 # v7.4.1
+        uses: cypress-io/github-action@01e3b659a495b41649cdd0aa82e1d1624e26520b # v7.4.4
         with:
           browser: chrome
           install-command: yarn install --immutable

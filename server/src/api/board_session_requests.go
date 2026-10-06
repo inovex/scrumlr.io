@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/otel"
 	"scrumlr.io/server/sessionrequests"
 
 	"github.com/go-chi/chi/v5"
@@ -41,8 +41,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Error(err, "unable to parse body", "err", err)
 		common.Throw(w, r, err)
 		return
@@ -50,8 +49,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	// user should only be allowed to get own session request
 	if user != ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
 		err := common.ForbiddenError(errors.New("not allowed"))
-		span.SetStatus(codes.Error, "not allowed to get session from other users")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("not allowed to get session from other users"))
 		common.Throw(w, r, err)
 		return
 	}
@@ -63,8 +61,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 
 	request, err := s.sessionRequests.Get(ctx, board, user)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get session request")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get session request"))
 		common.Throw(w, r, mapError(err))
 		return
 	}
@@ -97,8 +94,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 
 	requests, err := s.sessionRequests.GetAll(ctx, board, statusQuery)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to get all session requests")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to get all session requests"))
 		log.Error(err, "failed to get all session requetsts", "board", board)
 		common.Throw(w, r, mapError(err))
 		return
@@ -134,16 +130,14 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to parse user id")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to parse user id"))
 		common.Throw(w, r, common.BadRequestError(errors.New("invalid user id")))
 		return
 	}
 
 	var body sessionrequests.BoardSessionRequestUpdate
 	if err := render.Decode(r, &body); err != nil {
-		span.SetStatus(codes.Error, "unable to decode body")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("unable to decode body"))
 		log.Error(err, "unable to parse body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -154,8 +148,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 
 	request, err := s.sessionRequests.Update(r.Context(), body)
 	if err != nil {
-		span.SetStatus(codes.Error, "failed to update session request")
-		span.RecordError(err)
+		otel.RecordErrorSpan(span, err, new("failed to update session request"))
 		log.Errorw("failed to update board session request", "request", body, "err", err)
 		common.Throw(w, r, mapError(err))
 		return

@@ -3,6 +3,7 @@ import {useOnBlur} from "utils/hooks/useOnBlur";
 import {useTranslation} from "react-i18next";
 import {CloseIcon, CheckDoneIcon} from "components/Icon";
 import {TextArea} from "components/TextArea/TextArea";
+import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState} from "react";
 import {MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
@@ -120,6 +121,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             onSubmit={saveChanges}
             onCancel={cancelChanges}
           />
+          <CharacterCountIndicator value={description} maxLength={MAX_COLUMN_DESCRIPTION_LENGTH} />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} transparent />
         </div>
       ) : (

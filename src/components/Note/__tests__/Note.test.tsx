@@ -11,6 +11,10 @@ import getTestApplicationState from "utils/test/getTestApplicationState";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 import * as useTextOverflowModule from "utils/hooks/useTextOverflow";
 
+vi.mock("utils/hooks/useImageChecker.ts", async () => ({
+  useImageChecker: () => false,
+}));
+
 const NOTE_ID = "test-notes-id-1";
 
 const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<BoardState, "status">>): BoardState => {

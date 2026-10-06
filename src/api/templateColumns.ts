@@ -1,16 +1,24 @@
-import {SERVER_HTTP_URL} from "config";
 import {TemplateColumn} from "store/features";
+import {buildUrl} from "./index";
 
 export const TemplateColumnsAPI = {
+  /**
+   * Get all template columns for a boad template
+   *
+   * @param templateId board template id
+   *
+   * @returns all template columns
+   */
   getTemplateColumns: async (templateId: string): Promise<TemplateColumn[]> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns`, {
+      const url = buildUrl(`./templates/${templateId}/columns`);
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
 
       if (response.ok) {
-        return await response.json();
+        return (await response.json()) as TemplateColumn[];
       }
 
       throw new Error(`get all template columns request resulted in status ${response.status}`);
@@ -19,10 +27,46 @@ export const TemplateColumnsAPI = {
     }
   },
 
-  createTemplateColumn: async (templateId: string, templateColumn: TemplateColumn) => {
-    const {id: _id, ...templateColumnWithoutId} = templateColumn;
+  /**
+   * Get a template columns for a boad template
+   *
+   * @param templateId board template id
+   * @param templateColumnId column template id
+   *
+   * @returns all template columns
+   */
+  getTemplateColumn: async (templateId: string, templateColumnId: string): Promise<TemplateColumn> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns`, {
+      const url = buildUrl(`./templates/${templateId}/columns/${templateColumnId}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as TemplateColumn;
+      }
+
+      throw new Error(`get a template columns request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get a templates columns`, {cause: error});
+    }
+  },
+
+  /**
+   * Create a new column template
+   *
+   * @param templateId board template id
+   * @param templateColumn column template
+   *
+   * @returnscreated column template
+   */
+  createTemplateColumn: async (templateId: string, templateColumn: TemplateColumn): Promise<TemplateColumn> => {
+    const {id: _id, ...templateColumnWithoutId} = templateColumn;
+
+    try {
+      const url = buildUrl(`./templates/${templateId}/columns`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(templateColumnWithoutId),
@@ -38,9 +82,19 @@ export const TemplateColumnsAPI = {
     }
   },
 
-  editTemplateColumn: async (templateId: string, columnId: string, overwrite: Partial<TemplateColumn>) => {
+  /**
+   * Update a column template
+   *
+   * @param templateId board template id
+   * @param columnId column template id
+   * @param overwrite new column template values
+   *
+   * @returns updated column template
+   */
+  editTemplateColumn: async (templateId: string, columnId: string, overwrite: Partial<TemplateColumn>): Promise<TemplateColumn> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns/${columnId}`, {
+      const url = buildUrl(`./templates/${templateId}/columns/${columnId}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(overwrite),
@@ -56,9 +110,16 @@ export const TemplateColumnsAPI = {
     }
   },
 
+  /**
+   * Delete a column template
+   *
+   * @param templateId board template id
+   * @param columnId column template id
+   */
   deleteTemplateColumn: async (templateId: string, columnId: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns/${columnId}`, {
+      const url = buildUrl(`./templates/${templateId}/columns/${columnId}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });

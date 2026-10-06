@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"context"
 	"database/sql"
 	"embed"
 	"errors"
@@ -15,7 +16,7 @@ import (
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
 	"github.com/uptrace/bun/extra/bunotel"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -30,14 +31,14 @@ var Migrations embed.FS
 var traceProvider trace.TracerProvider = otel.GetTracerProvider()
 var meterProvider metric.MeterProvider = otel.GetMeterProvider()
 
-func InitializeDatabase(ctx *cli.Context) (*bun.DB, error) {
-	log := logger.FromContext(ctx.Context)
+func InitializeDatabase(ctx context.Context, cli *cli.Command) (*bun.DB, error) {
+	log := logger.FromContext(ctx)
 
 	var databaseUrl string
-	if ctx.String("database") != "" {
-		databaseUrl = ctx.String("database")
-	} else if ctx.String("database-host") != "" && ctx.String("database-username") != "" && ctx.String("database-password") != "" {
-		databaseUrl = fmt.Sprintf("postgresql://%s:%s@%s", ctx.String("database-username"), ctx.String("database-password"), ctx.String("database-host"))
+	if cli.String("database") != "" {
+		databaseUrl = cli.String("database")
+	} else if cli.String("database-host") != "" && cli.String("database-username") != "" && cli.String("database-password") != "" {
+		databaseUrl = fmt.Sprintf("postgresql://%s:%s@%s", cli.String("database-username"), cli.String("database-password"), cli.String("database-host"))
 	} else {
 		return nil, errors.New("no valid database connection found")
 	}
@@ -67,12 +68,26 @@ func InitializeDatabase(ctx *cli.Context) (*bun.DB, error) {
 		return nil, err
 	}
 
+	version, _, err := m.Version()
+	if errors.Is(err, migrate.ErrNilVersion) {
+		log.Infow("no database migrations yet applied")
+	} else if err != nil {
+		return nil, err
+	} else {
+		log.Infow("current active migration", "version", version)
+	}
+
 	err = m.Up()
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return nil, err
 	}
 
-	log.Infow("successfully migrated database")
+	version, _, err = m.Version()
+	if err != nil {
+		log.Error("failed to get migration version")
+	}
+
+	log.Infow("successfully migrated database", "version", version)
 
 	return InitializeBun(db, logger.GetLogLevel()), nil
 }

@@ -12,6 +12,17 @@ vi.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
 }));
 
+// submitting a note would otherwise dispatch the real thunk and fire an HTTP request at the dev server.
+// usually this isn't an issue since we often use callback functions which are easily interceptable using spies.
+// but this isn't the case here, and the component does the dispatching itself, and the thunk is explicitly triggered; so we mock it like this
+vi.mock("store/features/notes/thunks", async () => {
+  const actual = await vi.importActual<typeof import("store/features/notes/thunks")>("store/features/notes/thunks");
+  return {
+    ...actual,
+    addNote: vi.fn(() => ({type: "notes/addNote"})),
+  };
+});
+
 const createNoteInput = (columnId: string) => {
   const store = getTestStore();
   const column = store.getState().columns.find((c) => c.id === columnId)!;
@@ -54,6 +65,16 @@ describe("Note Input", () => {
     // More than the limit works as expected
     fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "123456"}});
     fireEvent.keyDown(container.querySelector(".note-input__input")!, {key: "Enter", code: "Enter", charCode: 13});
+  });
+
+  test("should show the character count indicator for a long note", () => {
+    const {container} = createNoteInput("test-columns-id-1");
+
+    expect(container.querySelector(".character-count-indicator")).toBeNull();
+
+    fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "a".repeat(1536)}});
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("1536/2048");
   });
 
   // why is this so over-complicated and weird?? TODO fix this mess

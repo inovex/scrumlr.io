@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Outlet, useNavigate, useOutletContext} from "react-router";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -9,6 +9,8 @@ import {useAppDispatch, useAppSelector} from "store";
 import {HistoryBoard, getBoards} from "store/features";
 import {HistoryCard} from "./HistoryCard/HistoryCard";
 import {Button} from "components/Button";
+import {LoadingIndicator} from "components/LoadingIndicator";
+import {useDelayedLoading} from "utils/hooks/useDelayedLoading";
 import "./History.scss";
 
 export type {HistoryBoard} from "store/features";
@@ -21,6 +23,8 @@ export const History = () => {
 
   const dispatch = useAppDispatch();
   const historyBoards = useAppSelector((state) => state.history);
+  const [isLoading, setIsLoading] = useState(false);
+  const showLoading = useDelayedLoading(isLoading, 200);
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousHistory = useAppSelector((state) => state.view.allowAnonymousHistory);
 
@@ -29,7 +33,8 @@ export const History = () => {
   // init history boards
   useEffect(() => {
     if (canViewHistory) {
-      dispatch(getBoards());
+      setIsLoading(true);
+      dispatch(getBoards()).finally(() => setIsLoading(false));
     }
   }, [dispatch, canViewHistory]);
 
@@ -65,12 +70,17 @@ export const History = () => {
     if (!canViewHistory) {
       return renderRequireRegisteredUser();
     }
+
+    if (isLoading) {
+      return showLoading ? <LoadingIndicator /> : null;
+    }
+
     if (historyBoards.length === 0) {
       return renderEmptyHistory();
     }
     return historyBoards
       .filter(matchSearchInput)
-      .sort((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime()) // move favourites to the top, then sort by latest modifiedAt
+      .toSorted((a, b) => Number(b.favourite) - Number(a.favourite) || new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime()) // move favourites to the top, then sort by latest modifiedAt
       .map((hb) => <HistoryCard key={hb.id} board={hb} />);
   };
 

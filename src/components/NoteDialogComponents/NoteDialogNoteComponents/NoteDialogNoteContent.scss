@@ -52,8 +52,8 @@ $min-lines: 3;
 
   @include mixins.scrollbar();
 
-  // also subtract edited marker
-  &--edited {
+  // also subtract footer (edited marker / character count)
+  &--with-footer {
     max-height: calc(styles.$stack-content-max-height - 20px - 36px - 36px - 2 * (styles.$spacing--base + styles.$spacing--sm));
   }
 
@@ -65,10 +65,21 @@ $min-lines: 3;
   }
 }
 
+.note-dialog__note-content-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: styles.$spacing--xs;
+  padding: 0 styles.$spacing--xxs;
+
+  .character-count-indicator {
+    margin-left: auto; // keep the count on the right, even without the edited marker
+  }
+}
+
 .note-dialog__marker-edited {
   color: styles.$gray--700;
   font-size: styles.$text--base;
-  padding: 0 styles.$spacing--xxs;
 }
 
 .note-dialog__note-content-image-container {

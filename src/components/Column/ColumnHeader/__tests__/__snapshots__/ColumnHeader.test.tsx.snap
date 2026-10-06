@@ -60,6 +60,7 @@ exports[`ColumnHeader > should render correctly 1`] = `
         </div>
         <button
           class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+          data-cy="column-settings-mini-menu"
         >
           <svg
             class="column-details__settings-icon"
@@ -117,7 +118,7 @@ exports[`ColumnHeader > should render correctly 1`] = `
       <textarea
         class="note-input__input"
         data-clarity-mask="True"
-        maxlength="1024"
+        maxlength="2048"
         placeholder="Add your note..."
       />
       <div

@@ -45,6 +45,13 @@ describe("ColumnDetails", () => {
     expect(changeModeSpy).toHaveBeenCalledWith("edit");
   });
 
+  it("should show the character count indicator for a long description", () => {
+    const columnWithLongDescription = {...getTestApplicationState().columns[0], description: "a".repeat(768)};
+    const {container} = renderColumnDetails({column: columnWithLongDescription, mode: "edit"});
+
+    expect(container.querySelector(".character-count-indicator")).toHaveTextContent("768/1024");
+  });
+
   it("should not switch to edit mode (self is participant)", () => {
     const changeModeSpy = vi.fn();
     const {container} = renderColumnDetails({changeMode: changeModeSpy}, "PARTICIPANT");

@@ -1,10 +1,71 @@
-import {SERVER_HTTP_URL} from "../config";
 import {Reaction} from "../store/features/reactions/types";
+import {buildUrl} from "./index";
 
 export const ReactionAPI = {
-  addReaction: async (board: string, note: string, emoji: string) => {
+  /**
+   * Get all reactions for a board
+   *
+   * @param boardId the board id
+   *
+   * @returns the requested reactions
+   */
+  getReactions: async (boardId: string): Promise<Reaction[]> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions`, {
+      const url = buildUrl(`./boards/${boardId}/reactions`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status == 200) {
+        return (await response.json()) as Reaction[];
+      }
+
+      throw new Error(`get reactions request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get reactions`, {cause: error});
+    }
+  },
+
+  /**
+   * Get a reaction for a board
+   *
+   * @param boardId the board id
+   * @param reactionId the reaction id
+   *
+   * @returns the requested reaction
+   */
+  getReaction: async (boardId: string, reactionId: string): Promise<Reaction> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/reactions/${reactionId}`);
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status == 200) {
+        return (await response.json()) as Reaction;
+      }
+
+      throw new Error(`get reaction request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get reaction`, {cause: error});
+    }
+  },
+
+  /**
+   * Add a new reaction to a note
+   *
+   * @param boardId board id
+   * @param note note id
+   * @param emoji reaction to add
+   *
+   * @returns the created reaction
+   */
+  addReaction: async (boardId: string, note: string, emoji: string): Promise<Reaction> => {
+    try {
+      const url = buildUrl(`./boards/${boardId}/reactions`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -23,9 +84,16 @@ export const ReactionAPI = {
     }
   },
 
-  deleteReaction: async (board: string, reaction: string) => {
+  /**
+   * Delete a reaction from a note
+   *
+   * @param boardId board id
+   * @param reactionId reaction id
+   */
+  deleteReaction: async (boardId: string, reactionId: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {
+      const url = buildUrl(`./boards/${boardId}/reactions/${reactionId}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });
@@ -39,9 +107,20 @@ export const ReactionAPI = {
       throw new Error(`unable to remove reaction`, {cause: error});
     }
   },
-  updateReaction: async (board: string, reaction: string, reactionType: string) => {
+
+  /**
+   * Update a reaction
+   *
+   * @param boardId board id
+   * @param reactionId reaction id
+   * @param reactionType new reaction
+   *
+   * @returns updated reaction
+   */
+  updateReaction: async (boardId: string, reactionId: string, reactionType: string): Promise<Reaction> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {
+      const url = buildUrl(`./boards/${boardId}/reactions/${reactionId}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({reactionType}),

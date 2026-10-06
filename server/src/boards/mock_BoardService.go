@@ -359,6 +359,80 @@ func (_c *MockBoardService_DeleteTimer_Call) RunAndReturn(run func(ctx context.C
 	return _c
 }
 
+// Export provides a mock function for the type MockBoardService
+func (_mock *MockBoardService) Export(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error) {
+	ret := _mock.Called(ctx, boardID, accept)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Export")
+	}
+
+	var r0 *ExportBoardResponse
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) (*ExportBoardResponse, error)); ok {
+		return returnFunc(ctx, boardID, accept)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) *ExportBoardResponse); ok {
+		r0 = returnFunc(ctx, boardID, accept)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*ExportBoardResponse)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string) error); ok {
+		r1 = returnFunc(ctx, boardID, accept)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockBoardService_Export_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Export'
+type MockBoardService_Export_Call struct {
+	*mock.Call
+}
+
+// Export is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - accept string
+func (_e *MockBoardService_Expecter) Export(ctx any, boardID any, accept any) *MockBoardService_Export_Call {
+	return &MockBoardService_Export_Call{Call: _e.mock.On("Export", ctx, boardID, accept)}
+}
+
+func (_c *MockBoardService_Export_Call) Run(run func(ctx context.Context, boardID uuid.UUID, accept string)) *MockBoardService_Export_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardService_Export_Call) Return(exportBoardResponse *ExportBoardResponse, err error) *MockBoardService_Export_Call {
+	_c.Call.Return(exportBoardResponse, err)
+	return _c
+}
+
+func (_c *MockBoardService_Export_Call) RunAndReturn(run func(ctx context.Context, boardID uuid.UUID, accept string) (*ExportBoardResponse, error)) *MockBoardService_Export_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FullBoard provides a mock function for the type MockBoardService
 func (_mock *MockBoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
 	ret := _mock.Called(ctx, boardID)
@@ -701,6 +775,96 @@ func (_c *MockBoardService_IncrementTimer_Call) Return(board *Board, err error) 
 }
 
 func (_c *MockBoardService_IncrementTimer_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (*Board, error)) *MockBoardService_IncrementTimer_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Join provides a mock function for the type MockBoardService
+func (_mock *MockBoardService) Join(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
+	ret := _mock.Called(ctx, board, user, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Join")
+	}
+
+	var r0 bool
+	var r1 string
+	var r2 int
+	var r3 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *Board, uuid.UUID, JoinBoardRequest) (bool, string, int, error)); ok {
+		return returnFunc(ctx, board, user, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *Board, uuid.UUID, JoinBoardRequest) bool); ok {
+		r0 = returnFunc(ctx, board, user, request)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *Board, uuid.UUID, JoinBoardRequest) string); ok {
+		r1 = returnFunc(ctx, board, user, request)
+	} else {
+		r1 = ret.Get(1).(string)
+	}
+	if returnFunc, ok := ret.Get(2).(func(context.Context, *Board, uuid.UUID, JoinBoardRequest) int); ok {
+		r2 = returnFunc(ctx, board, user, request)
+	} else {
+		r2 = ret.Get(2).(int)
+	}
+	if returnFunc, ok := ret.Get(3).(func(context.Context, *Board, uuid.UUID, JoinBoardRequest) error); ok {
+		r3 = returnFunc(ctx, board, user, request)
+	} else {
+		r3 = ret.Error(3)
+	}
+	return r0, r1, r2, r3
+}
+
+// MockBoardService_Join_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Join'
+type MockBoardService_Join_Call struct {
+	*mock.Call
+}
+
+// Join is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board *Board
+//   - user uuid.UUID
+//   - request JoinBoardRequest
+func (_e *MockBoardService_Expecter) Join(ctx any, board any, user any, request any) *MockBoardService_Join_Call {
+	return &MockBoardService_Join_Call{Call: _e.mock.On("Join", ctx, board, user, request)}
+}
+
+func (_c *MockBoardService_Join_Call) Run(run func(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest)) *MockBoardService_Join_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *Board
+		if args[1] != nil {
+			arg1 = args[1].(*Board)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 JoinBoardRequest
+		if args[3] != nil {
+			arg3 = args[3].(JoinBoardRequest)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardService_Join_Call) Return(b bool, s string, n int, err error) *MockBoardService_Join_Call {
+	_c.Call.Return(b, s, n, err)
+	return _c
+}
+
+func (_c *MockBoardService_Join_Call) RunAndReturn(run func(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error)) *MockBoardService_Join_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
@@ -24,16 +24,16 @@ type Cache struct {
 	Con Client
 }
 
-func InitializeCache(ctx *cli.Context) (*Cache, error) {
-	log := logger.FromContext(ctx.Context)
+func InitializeCache(ctx context.Context, cli *cli.Command) (*Cache, error) {
+	log := logger.FromContext(ctx)
 
 	var cache *Cache
 
-	if ctx.String("redis-address") != "" {
+	if cli.String("redis-address") != "" {
 		redis := RedisServer{
-			Addr:     ctx.String("redis-address"),
-			Username: ctx.String("redis-username"),
-			Password: ctx.String("redis-password"),
+			Addr:     cli.String("redis-address"),
+			Username: cli.String("redis-username"),
+			Password: cli.String("redis-password"),
 		}
 
 		log.Infof("Connecting to redis at %v as cache", redis.Addr)
@@ -42,8 +42,8 @@ func InitializeCache(ctx *cli.Context) (*Cache, error) {
 		return cache, err
 	}
 
-	if ctx.String("nats") != "" {
-		address := ctx.String("nats")
+	if cli.String("nats") != "" {
+		address := cli.String("nats")
 
 		log.Infof("Connecting to nats at %v as cache", address)
 

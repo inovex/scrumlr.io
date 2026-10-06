@@ -12,6 +12,8 @@ import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import TextareaAutosize from "react-textarea-autosize";
+import {CharacterCountIndicator, isCharacterCountVisible} from "components/CharacterCountIndicator/CharacterCountIndicator";
+import {MAX_NOTE_LENGTH} from "constants/misc";
 import i18n from "../../../i18n";
 import "./NoteDialogNoteContent.scss";
 
@@ -70,6 +72,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(noteValue);
 
+  const showFooter = note?.edited || isCharacterCountVisible(noteValue, MAX_NOTE_LENGTH);
+
   const {...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
     inputRef: ref,
     value: noteValue,
@@ -109,7 +113,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
           <TextareaAutosize
             ref={ref}
             data-clarity-mask="True"
-            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
+            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--with-footer": showFooter})}
             disabled={!editable || (!isModerator && boardLocked)}
             onBlur={onEdit}
             onFocus={onFocus}
@@ -130,7 +134,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             }}
           />
 
-          {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
+          {showFooter && (
+            <div className="note-dialog__note-content-footer">
+              {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
+              <CharacterCountIndicator value={noteValue} maxLength={MAX_NOTE_LENGTH} />
+            </div>
+          )}
           {!isStackedNote && <EmojiSuggestions {...emoji.suggestionsProps} />}
         </>
       )}

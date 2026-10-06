@@ -1,10 +1,16 @@
 import {Template, TemplateWithColumns} from "store/features";
-import {SERVER_HTTP_URL} from "config";
+import {buildUrl} from "./index";
 
 export const TemplatesAPI = {
-  getTemplates: async () => {
+  /**
+   * Get all templates
+   *
+   * @returns all templates
+   */
+  getTemplates: async (): Promise<TemplateWithColumns[]> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates`, {
+      const url = buildUrl(`./templates`);
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
@@ -19,9 +25,17 @@ export const TemplatesAPI = {
     }
   },
 
-  getTemplate: async (id: string) => {
+  /**
+   * Get a board template
+   *
+   * @param id id of a template
+   *
+   * @returns requested template
+   */
+  getTemplate: async (id: string): Promise<Template> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${id}`, {
+      const url = buildUrl(`./templates/${id}`);
+      const response = await fetch(url, {
         method: "GET",
         credentials: "include",
       });
@@ -36,12 +50,21 @@ export const TemplatesAPI = {
     }
   },
 
-  createTemplate: async (templateWithColumns: TemplateWithColumns) => {
+  /**
+   * Create a new board template
+   *
+   * @param templateWithColumns template to create
+   *
+   * @returns created template
+   */
+  createTemplate: async (templateWithColumns: TemplateWithColumns): Promise<Template> => {
     // strip UUIDs as they'll get assigned by the backend
     const {id: _templateId, creator: _creator, ...strippedTemplate} = templateWithColumns.template;
     const strippedColumnTemplates = templateWithColumns.columns.map(({id: _columnId, template: _template, ...columnRest}) => columnRest);
+
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates`, {
+      const url = buildUrl(`./templates`);
+      const response = await fetch(url, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -61,9 +84,18 @@ export const TemplatesAPI = {
     }
   },
 
-  editTemplate: async (templateId: string, overwrite: Partial<Template>) => {
+  /**
+   * Update the board template
+   *
+   * @param templateId template id
+   * @param overwrite updated template
+   *
+   * @returns updated template
+   */
+  editTemplate: async (templateId: string, overwrite: Partial<Template>): Promise<Template> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}`, {
+      const url = buildUrl(`./templates/${templateId}`);
+      const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(overwrite),
@@ -79,9 +111,15 @@ export const TemplatesAPI = {
     }
   },
 
+  /**
+   * Delete a board template
+   *
+   * @param templateId template id
+   */
   deleteTemplate: async (templateId: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}`, {
+      const url = buildUrl(`./templates/${templateId}`);
+      const response = await fetch(url, {
         method: "DELETE",
         credentials: "include",
       });

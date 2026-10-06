@@ -142,7 +142,7 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
     const lastWord = value.slice(0, cursor).split(/\s+/).pop();
     if (!lastWord) return;
 
-    const [, newEmojiName] = lastWord.match(emojiRegex) || [];
+    const [, newEmojiName] = emojiRegex.exec(lastWord) || [];
     if (!newEmojiName || newEmojiName.length < MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS) return;
 
     if (lastWord.endsWith(":")) {
