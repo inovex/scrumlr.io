@@ -18,6 +18,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "server/go.mod"
+
+      - name: Install Swag CLI
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+
       - name: Find and replace version strings
         env:
           NEW_VERSION: ${{ inputs.new_version }}
