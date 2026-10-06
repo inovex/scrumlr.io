@@ -3,6 +3,9 @@ import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {useId} from "react";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
+import {useAppSelector} from "store";
+import {isParticipantModerator} from "utils/participant";
+import classNames from "classnames";
 import "./NoteReactionChipCondensed.scss";
 
 interface NoteReactionChipPropsCondensed {
@@ -23,6 +26,10 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const baseId = useId();
   const anchorId = `reactions-${noteId}-condensed-${baseId}`;
 
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
+  const isDisabled = !isModerator && boardLocked;
+
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
@@ -33,7 +40,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
     <>
       <div
         id={`${anchorId}`}
-        className="note-reaction-chip-condensed__root"
+        className={classNames("note-reaction-chip-condensed__root", {"note-reaction-chip-condensed__root--disabled": isDisabled})}
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()}
       >
