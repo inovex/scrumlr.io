@@ -60,7 +60,7 @@ func (api *API) CreateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	body.Creator = creator
 
-	b, err := api.service.Create(r.Context(), body)
+	b, err := api.service.Create(ctx, body)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create board template"))
 		log.Errorw("Unable to create board template", "err", err)

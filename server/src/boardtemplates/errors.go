@@ -52,9 +52,9 @@ func MapBoardTemplateError(err error) error {
 		return common.NotFoundError
 	}
 
-	var bErr BoardTemplateError
-	if errors.As(err, &bErr) {
-		switch bErr.Category {
+	var boardErr BoardTemplateError
+	if errors.As(err, &boardErr) {
+		switch boardErr.Category {
 		case NotFound:
 			return common.NotFoundError
 		}

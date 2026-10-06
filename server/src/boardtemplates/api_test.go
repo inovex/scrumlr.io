@@ -28,10 +28,11 @@ func TestApiBoardTemplateContext(t *testing.T) {
 		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
 	response := httptest.NewRecorder()
 
-	api.BoardTemplateContext(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	nextHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, templateID, r.Context().Value(identifiers.BoardTemplateIdentifier))
 		w.WriteHeader(http.StatusNoContent)
-	})).ServeHTTP(response, request)
+	})
+	api.BoardTemplateContext(nextHandler).ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusNoContent, response.Code)
 }
@@ -44,9 +45,10 @@ func TestApiBoardTemplateContext_BadRequest(t *testing.T) {
 		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
 	response := httptest.NewRecorder()
 
-	api.BoardTemplateContext(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+	handler := http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
 		t.Fatal("next handler should not be called")
-	})).ServeHTTP(response, request)
+	})
+	api.BoardTemplateContext(handler).ServeHTTP(response, request)
 
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 }
@@ -255,9 +257,7 @@ func TestApiUpdateBoardTemplate_BadRequest(t *testing.T) {
 func TestApiUpdateBoardTemplate_ServiceError(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
-	service.EXPECT().Update(mock.Anything, mock.MatchedBy(func(request BoardTemplateUpdateRequest) bool {
-		return request.ID == templateID
-	})).Return(nil, errors.New("service failure"))
+	service.EXPECT().Update(mock.Anything, BoardTemplateUpdateRequest{ID: templateID}).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
 	bodyBytes, err := json.Marshal(BoardTemplateUpdateRequest{})
