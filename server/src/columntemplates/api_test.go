@@ -56,18 +56,6 @@ func TestApiColumnTemplateContext_BadRequest(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 }
 
-func testColumnTemplate() *ColumnTemplate {
-	return &ColumnTemplate{
-		ID:            uuid.New(),
-		BoardTemplate: uuid.New(),
-		Name:          "TestColumnTemplate",
-		Description:   "Template Description",
-		Color:         common.ColorGoalGreen,
-		Visible:       true,
-		Index:         0,
-	}
-}
-
 func TestApiCreateColumnTemplate(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
@@ -83,7 +71,15 @@ func TestApiCreateColumnTemplate(t *testing.T) {
 	expectedBody := body
 	expectedBody.BoardTemplate = boardID
 	expectedBody.User = userID
-	template := testColumnTemplate()
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
 	template.BoardTemplate = boardID
 
 	service := NewMockColumnTemplateService(t)
@@ -145,7 +141,15 @@ func TestApiCreateColumnTemplate_ServiceError(t *testing.T) {
 }
 
 func TestApiGetColumnTemplate(t *testing.T) {
-	template := testColumnTemplate()
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
 	service := NewMockColumnTemplateService(t)
 	service.EXPECT().Get(mock.Anything, template.BoardTemplate, template.ID).Return(template, nil)
 	api := NewColumnTemplateApi(service)
@@ -184,7 +188,15 @@ func TestApiGetColumnTemplate_ServiceError(t *testing.T) {
 func TestApiGetColumnTemplates(t *testing.T) {
 	boardID := uuid.New()
 
-	templates := []*ColumnTemplate{testColumnTemplate()}
+	templates := []*ColumnTemplate{&ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}}
 	templates[0].BoardTemplate = boardID
 
 	service := NewMockColumnTemplateService(t)
@@ -221,7 +233,15 @@ func TestApiGetColumnTemplates_ServiceError(t *testing.T) {
 }
 
 func TestApiUpdateColumnTemplate(t *testing.T) {
-	template := testColumnTemplate()
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
 	body := ColumnTemplateUpdateRequest{
 		Name: "Updated column", Description: "An updated column",
 		Color: common.ColorOnlineOrange, Visible: false, Index: 2,
