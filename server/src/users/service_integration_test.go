@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"slices"
 	"testing"
@@ -35,11 +36,14 @@ type UserServiceIntegrationTestsuite struct {
 	testUserName         string
 
 	// Additional test-specific data
-	updateUser   testDbTemplates.TestUser
-	deleteUser   testDbTemplates.TestUser
-	updateBoard  testDbTemplates.TestBoard
-	deleteColumn testDbTemplates.TestColumn
-	deleteNote   testDbTemplates.TestNote
+	updateUser    testDbTemplates.TestUser
+	upgradeUser   testDbTemplates.TestUser
+	mergeUser     testDbTemplates.TestUser
+	mergeIntoUser testDbTemplates.TestUser
+	deleteUser    testDbTemplates.TestUser
+	updateBoard   testDbTemplates.TestBoard
+	deleteColumn  testDbTemplates.TestColumn
+	deleteNote    testDbTemplates.TestNote
 }
 
 func TestUserServiceIntegrationTestSuite(t *testing.T) {
@@ -63,6 +67,21 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 		Name:        "UpdateMe",
 		ID:          uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
 		AccountType: common.Anonymous,
+	}
+	suite.upgradeUser = testDbTemplates.TestUser{
+		Name:        "UpgradeMe",
+		ID:          uuid.MustParse("abde2c23-e9c6-4374-b763-5884f8d38f9f"),
+		AccountType: common.Anonymous,
+	}
+	suite.mergeUser = testDbTemplates.TestUser{
+		Name:        "MergeMe",
+		ID:          uuid.MustParse("544d9abe-4c90-4a77-9551-2702631b770f"),
+		AccountType: common.Anonymous,
+	}
+	suite.mergeIntoUser = testDbTemplates.TestUser{
+		Name:        "MergeIntoMe",
+		ID:          uuid.MustParse("e184a897-1e88-43b7-9f9a-d80e22280129"),
+		AccountType: common.Google,
 	}
 	suite.deleteUser = testDbTemplates.TestUser{
 		Name:        "DeleteMe",
@@ -209,6 +228,33 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	suite.Equal(suite.testUserName, userData.Name)
 }
 
+func (suite *UserServiceIntegrationTestsuite) TestUpgradeAnonymousUserToGoogleUser() {
+	ctx := context.Background()
+	userId := suite.upgradeUser.ID
+	googleUserName := "Stan"
+
+	user, err := suite.userService.UpgradeAnonymousUser(ctx, userId, fmt.Sprintf("%s-Google", userId), googleUserName, "", common.Google)
+
+	suite.Nil(err)
+	suite.Equal(userId, user.ID)
+	suite.Equal(common.Google, user.AccountType)
+	suite.Equal(googleUserName, user.Name)
+}
+
+func (suite *UserServiceIntegrationTestsuite) TestUpgradeAnonymousUserToExistingGoogleUser() {
+	ctx := context.Background()
+	userId := suite.mergeUser.ID
+	existingUserId := suite.mergeIntoUser.ID
+	googleUserName := "Stan"
+
+	user, err := suite.userService.UpgradeAnonymousUser(ctx, userId, fmt.Sprintf("%s-Google", existingUserId), googleUserName, "", common.Google)
+
+	suite.Nil(err)
+	suite.Equal(existingUserId, user.ID)
+	suite.Equal(common.Google, user.AccountType)
+	suite.Equal(suite.mergeIntoUser.Name, user.Name)
+}
+
 func (suite *UserServiceIntegrationTestsuite) Test_Delete_WithNotes() {
 	ctx := context.Background()
 	userId := suite.deleteUser.ID
@@ -325,6 +371,18 @@ func (suite *UserServiceIntegrationTestsuite) seedUsersTestData(db *bun.DB) {
 
 	if err := testDbTemplates.InsertUser(db, suite.updateUser.ID, suite.updateUser.Name, string(suite.updateUser.AccountType), nil); err != nil {
 		log.Fatalf("Failed to insert update user: %s", err)
+	}
+	if err := testDbTemplates.InsertUser(db, suite.upgradeUser.ID, suite.upgradeUser.Name, string(suite.upgradeUser.AccountType), nil); err != nil {
+		log.Fatalf("Failed to insert update user: %s", err)
+	}
+	if err := testDbTemplates.InsertUser(db, suite.mergeUser.ID, suite.mergeUser.Name, string(suite.mergeUser.AccountType), nil); err != nil {
+		log.Fatalf("Failed to insert merge user: %s", err)
+	}
+	if err := testDbTemplates.InsertUser(db, suite.mergeIntoUser.ID, suite.mergeIntoUser.Name, string(suite.mergeIntoUser.AccountType), nil); err != nil {
+		log.Fatalf("Failed to insert merge into user: %s", err)
+	}
+	if err := testDbTemplates.InsertGoogleUser(db, suite.mergeIntoUser.ID, fmt.Sprintf("%s-Google", suite.mergeIntoUser.ID), suite.mergeIntoUser.Name, ""); err != nil {
+		log.Fatalf("Failed to insert merge into google user: %s", err)
 	}
 	if err := testDbTemplates.InsertUser(db, suite.deleteUser.ID, suite.deleteUser.Name, string(suite.deleteUser.AccountType), nil); err != nil {
 		log.Fatalf("Failed to insert delete user: %s", err)

@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/common"
 )
 
 // NewMockUserDatabase creates a new instance of MockUserDatabase. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -763,6 +764,80 @@ func (_c *MockUserDatabase_GetUser_Call) RunAndReturn(run func(ctx context.Conte
 	return _c
 }
 
+// GetUserIdByExternalId provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) GetUserIdByExternalId(ctx context.Context, id string, accountType common.AccountType) (uuid.UUID, error) {
+	ret := _mock.Called(ctx, id, accountType)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetUserIdByExternalId")
+	}
+
+	var r0 uuid.UUID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, common.AccountType) (uuid.UUID, error)); ok {
+		return returnFunc(ctx, id, accountType)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, common.AccountType) uuid.UUID); ok {
+		r0 = returnFunc(ctx, id, accountType)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(uuid.UUID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, common.AccountType) error); ok {
+		r1 = returnFunc(ctx, id, accountType)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_GetUserIdByExternalId_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetUserIdByExternalId'
+type MockUserDatabase_GetUserIdByExternalId_Call struct {
+	*mock.Call
+}
+
+// GetUserIdByExternalId is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - accountType common.AccountType
+func (_e *MockUserDatabase_Expecter) GetUserIdByExternalId(ctx any, id any, accountType any) *MockUserDatabase_GetUserIdByExternalId_Call {
+	return &MockUserDatabase_GetUserIdByExternalId_Call{Call: _e.mock.On("GetUserIdByExternalId", ctx, id, accountType)}
+}
+
+func (_c *MockUserDatabase_GetUserIdByExternalId_Call) Run(run func(ctx context.Context, id string, accountType common.AccountType)) *MockUserDatabase_GetUserIdByExternalId_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 common.AccountType
+		if args[2] != nil {
+			arg2 = args[2].(common.AccountType)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_GetUserIdByExternalId_Call) Return(uUID uuid.UUID, err error) *MockUserDatabase_GetUserIdByExternalId_Call {
+	_c.Call.Return(uUID, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_GetUserIdByExternalId_Call) RunAndReturn(run func(ctx context.Context, id string, accountType common.AccountType) (uuid.UUID, error)) *MockUserDatabase_GetUserIdByExternalId_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetUsersByBoardID provides a mock function for the type MockUserDatabase
 func (_mock *MockUserDatabase) GetUsersByBoardID(ctx context.Context, boardID uuid.UUID) ([]DatabaseUser, error) {
 	ret := _mock.Called(ctx, boardID)
@@ -963,6 +1038,78 @@ func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) RunAndReturn(run
 	return _c
 }
 
+// MergeUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) MergeUser(ctx context.Context, mergeInto uuid.UUID, merge uuid.UUID) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, mergeInto, merge)
+
+	if len(ret) == 0 {
+		panic("no return value specified for MergeUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, mergeInto, merge)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) DatabaseUser); ok {
+		r0 = returnFunc(ctx, mergeInto, merge)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, mergeInto, merge)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_MergeUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'MergeUser'
+type MockUserDatabase_MergeUser_Call struct {
+	*mock.Call
+}
+
+// MergeUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - mergeInto uuid.UUID
+//   - merge uuid.UUID
+func (_e *MockUserDatabase_Expecter) MergeUser(ctx any, mergeInto any, merge any) *MockUserDatabase_MergeUser_Call {
+	return &MockUserDatabase_MergeUser_Call{Call: _e.mock.On("MergeUser", ctx, mergeInto, merge)}
+}
+
+func (_c *MockUserDatabase_MergeUser_Call) Run(run func(ctx context.Context, mergeInto uuid.UUID, merge uuid.UUID)) *MockUserDatabase_MergeUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_MergeUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_MergeUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_MergeUser_Call) RunAndReturn(run func(ctx context.Context, mergeInto uuid.UUID, merge uuid.UUID) (DatabaseUser, error)) *MockUserDatabase_MergeUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // SetKeyMigration provides a mock function for the type MockUserDatabase
 func (_mock *MockUserDatabase) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	ret := _mock.Called(ctx, id)
@@ -1091,6 +1238,96 @@ func (_c *MockUserDatabase_UpdateUser_Call) Return(databaseUser DatabaseUser, er
 }
 
 func (_c *MockUserDatabase_UpdateUser_Call) RunAndReturn(run func(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)) *MockUserDatabase_UpdateUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpgradeUser provides a mock function for the type MockUserDatabase
+func (_mock *MockUserDatabase) UpgradeUser(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, userId, id, name, avatarUrl, accountType)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpgradeUser")
+	}
+
+	var r0 DatabaseUser
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) DatabaseUser); ok {
+		r0 = returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	} else {
+		r0 = ret.Get(0).(DatabaseUser)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, string, string, string, common.AccountType) error); ok {
+		r1 = returnFunc(ctx, userId, id, name, avatarUrl, accountType)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockUserDatabase_UpgradeUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpgradeUser'
+type MockUserDatabase_UpgradeUser_Call struct {
+	*mock.Call
+}
+
+// UpgradeUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userId uuid.UUID
+//   - id string
+//   - name string
+//   - avatarUrl string
+//   - accountType common.AccountType
+func (_e *MockUserDatabase_Expecter) UpgradeUser(ctx any, userId any, id any, name any, avatarUrl any, accountType any) *MockUserDatabase_UpgradeUser_Call {
+	return &MockUserDatabase_UpgradeUser_Call{Call: _e.mock.On("UpgradeUser", ctx, userId, id, name, avatarUrl, accountType)}
+}
+
+func (_c *MockUserDatabase_UpgradeUser_Call) Run(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserDatabase_UpgradeUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
+		var arg4 string
+		if args[4] != nil {
+			arg4 = args[4].(string)
+		}
+		var arg5 common.AccountType
+		if args[5] != nil {
+			arg5 = args[5].(common.AccountType)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+		)
+	})
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeUser_Call) Return(databaseUser DatabaseUser, err error) *MockUserDatabase_UpgradeUser_Call {
+	_c.Call.Return(databaseUser, err)
+	return _c
+}
+
+func (_c *MockUserDatabase_UpgradeUser_Call) RunAndReturn(run func(ctx context.Context, userId uuid.UUID, id string, name string, avatarUrl string, accountType common.AccountType) (DatabaseUser, error)) *MockUserDatabase_UpgradeUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
