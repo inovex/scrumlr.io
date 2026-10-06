@@ -36,14 +36,14 @@ func (init *RoutesInitializer) InitializeBoardReactionRoutes() {
 	panic("Not implemented")
 }
 
-func (init *RoutesInitializer) InitializeBoardTemplateRoutes() {
-	// board template routes are currently not initialized through the route initializer
-	panic("Not implemented")
+func (init *RoutesInitializer) InitializeBoardTemplateRoutes(boardTemplateAPI boardtemplates.BoardTemplateApi) chi.Router {
+	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI).RegisterRoutes()
+	return boardTemplateRouter
 }
 
-func (init *RoutesInitializer) InitializeColumnTemplateRoutes() {
-	// column template routes are currently not initialized through the route initializer
-	panic("Not implemented")
+func (init *RoutesInitializer) InitializeColumnTemplateRoutes(columnTemplateAPI columntemplates.ColumnTemplateApi) chi.Router {
+	columnTemplateRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
+	return columnTemplateRouter
 }
 
 func (init *RoutesInitializer) InitializeFeedbackRoutes(feedbackApi feedback.FeedbackApi) chi.Router {
@@ -94,10 +94,4 @@ func (init *RoutesInitializer) InitializeVotingRoutes() {
 func (init *RoutesInitializer) InitializeSwaggerRoutes(basePath string) chi.Router {
 	router := swagger.InitializeSwagger(basePath).RegisterRoutes()
 	return router
-}
-
-func (init *RoutesInitializer) InitializeTemplateRoutes(boardTemplateAPI boardtemplates.BoardTemplateApi, columnTemplateAPI columntemplates.ColumnTemplateApi) chi.Router {
-	columnRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
-	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI, columnRouter).RegisterRoutes()
-	return boardTemplateRouter
 }

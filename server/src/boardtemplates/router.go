@@ -20,11 +20,10 @@ type Router struct {
   columnRouter     chi.Router
 }
 
-func NewBoardTemplateRouter(boardTemplateApi BoardTemplateApi, columnRouter chi.Router) *Router {
-	return &Router{
-    boardTemplateAPI: boardTemplateApi,
-    columnRouter:     columnRouter,
-  }
+func NewBoardTemplateRouter(boardTemplateApi BoardTemplateApi) *Router {
+	r := new(Router)
+	r.boardTemplateAPI = boardTemplateApi
+	return r
 }
 
 func (r *Router) RegisterRoutes() chi.Router {
@@ -39,8 +38,6 @@ func (r *Router) RegisterRoutes() chi.Router {
     sub.Get("/", r.boardTemplateAPI.GetBoardTemplate)
     sub.Put("/", r.boardTemplateAPI.UpdateBoardTemplate)
     sub.Delete("/", r.boardTemplateAPI.DeleteBoardTemplate)
-
-    sub.Mount("/columns", r.columnRouter)
   })
 	return router
 }

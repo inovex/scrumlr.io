@@ -13,9 +13,7 @@ import (
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardreactions"
-	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
 	"github.com/go-chi/chi/v5"
@@ -49,7 +47,8 @@ type Server struct {
 	userRoutes     chi.Router
 	sessionRoutes  chi.Router
 	swaggerRoutes  chi.Router
-	templateRoutes chi.Router
+	boardTemplateRoutes chi.Router
+  columnTemplateRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -92,7 +91,8 @@ func New(
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
-	templateRoutes chi.Router,
+	boardTemplateRoutes chi.Router,
+  columnTemplateRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -103,8 +103,6 @@ func New(
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
 	boardReactions boardreactions.BoardReactionCreater,
-	boardTemplates boardtemplates.BoardTemplateService,
-	columnTemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
@@ -154,7 +152,8 @@ func New(
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
 		swaggerRoutes:  swaggerRoutes,
-		templateRoutes: templateRoutes,
+		boardTemplateRoutes: boardTemplateRoutes,
+    columnTemplateRoutes: columnTemplateRoutes,
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
@@ -230,7 +229,12 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.With(
 			s.BoardTemplateRateLimiter,
 			s.AnonymousCustomTemplateCreationContext,
-		).Mount("/templates", s.templateRoutes)
+		).Mount("/templates", s.boardTemplateRoutes)
+
+    r.With(
+			s.BoardTemplateRateLimiter,
+			s.AnonymousCustomTemplateCreationContext,
+		).Mount("/templates/{id}/columns", s.columnTemplateRoutes)
 
 		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)
 		r.With(s.AnonymousBoardCreationContext).Post("/import", s.importBoard)
