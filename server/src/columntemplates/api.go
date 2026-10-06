@@ -33,8 +33,6 @@ func NewColumnTemplateApi(service ColumnTemplateService) ColumnTemplateApi {
 	return api
 }
 
-//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
-
 // Create a new column template for a board template
 //
 //	@Summary		Create a column template for a board template

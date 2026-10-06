@@ -13,7 +13,7 @@ import (
 	"scrumlr.io/server/timeprovider"
 )
 
-func TestCreate(t *testing.T) {
+func TestCreateBoardTemplate(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
@@ -80,7 +80,7 @@ func TestCreate(t *testing.T) {
 	assert.Equal(t, &description, board.Description)
 }
 
-func TestCreate_DatabaseError(t *testing.T) {
+func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	userId := uuid.New()
 	name := "Template"
@@ -130,7 +130,7 @@ func TestCreate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestGet(t *testing.T) {
+func TestGetBoardTemplate(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
@@ -162,7 +162,7 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, &description, board.Description)
 }
 
-func TestGet_DatabaseError(t *testing.T) {
+func TestGetBoardTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	id := uuid.New()
 
@@ -183,7 +183,7 @@ func TestGet_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestGetAll(t *testing.T) {
+func TestGetAllBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	firstBoardId := uuid.New()
 	secondBoardId := uuid.New()
@@ -252,7 +252,7 @@ func TestGetAll(t *testing.T) {
 	assert.Equal(t, secondColumnName, boards[1].ColumnTemplates[0].Name)
 }
 
-func TestGetAll_DatabaseError(t *testing.T) {
+func TestGetAllBoardTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	userId := uuid.New()
 
@@ -273,7 +273,7 @@ func TestGetAll_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestUpdate(t *testing.T) {
+func TestUpdateBoardTemplate(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	name := "Template"
@@ -312,7 +312,7 @@ func TestUpdate(t *testing.T) {
 	assert.NotNil(t, board)
 }
 
-func TestUpdate_DatabaseError(t *testing.T) {
+func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 	name := "Template"
@@ -346,7 +346,7 @@ func TestUpdate_DatabaseError(t *testing.T) {
 	assert.ErrorIs(t, err, dbError)
 }
 
-func TestDelete(t *testing.T) {
+func TestDeleteBoardTemplate(t *testing.T) {
 	id := uuid.New()
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)

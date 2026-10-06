@@ -19,7 +19,7 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-func TestBoardTemplateContext(t *testing.T) {
+func TestApiBoardTemplateContext(t *testing.T) {
 	templateID := uuid.New()
 	api := NewBoardTemplateApi(NewMockBoardTemplateService(t))
 	routeContext := chi.NewRouteContext()
@@ -36,7 +36,7 @@ func TestBoardTemplateContext(t *testing.T) {
 	assert.Equal(t, http.StatusNoContent, response.Code)
 }
 
-func TestBoardTemplateContext_BadRequest(t *testing.T) {
+func TestApiBoardTemplateContext_BadRequest(t *testing.T) {
 	api := NewBoardTemplateApi(NewMockBoardTemplateService(t))
 	routeContext := chi.NewRouteContext()
 	routeContext.URLParams.Add("id", "invalid")
@@ -51,17 +51,7 @@ func TestBoardTemplateContext_BadRequest(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 }
 
-func testBoardTemplate() *BoardTemplate {
-	return &BoardTemplate{
-		ID:          uuid.New(),
-		Creator:     uuid.New(),
-		Name:        new("Test template"),
-		Description: new("A template for testing"),
-		Favourite:   new(false),
-	}
-}
-
-func TestCreateBoardTemplate(t *testing.T) {
+func TestApiCreateBoardTemplate(t *testing.T) {
 	creator := uuid.New()
 	body := CreateBoardTemplateRequest{
 		Name:        new("Test template"),
@@ -73,7 +63,13 @@ func TestCreateBoardTemplate(t *testing.T) {
 	}
 	expectedBody := body
 	expectedBody.Creator = creator
-	template := testBoardTemplate()
+	template := &BoardTemplate{
+		ID:          uuid.New(),
+		Creator:     uuid.New(),
+		Name:        new("Test template"),
+		Description: new("A template for testing"),
+		Favourite:   new(false),
+	}
 
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Create(mock.Anything, expectedBody).Return(template, nil)
@@ -82,8 +78,8 @@ func TestCreateBoardTemplate(t *testing.T) {
 	bodyBytes, err := json.Marshal(body)
 	assert.NoError(t, err)
 	response := httptest.NewRecorder()
-	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes))
-	request.AddToContext(identifiers.UserIdentifier, creator)
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.UserIdentifier, creator)
 
 	api.CreateBoardTemplate(response, request.Request())
 
@@ -93,7 +89,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 	assert.Equal(t, template.ID, result.ID)
 }
 
-func TestCreateBoardTemplate_BadRequest(t *testing.T) {
+func TestApiCreateBoardTemplate_BadRequest(t *testing.T) {
 	service := NewMockBoardTemplateService(t)
 	api := NewBoardTemplateApi(service)
 
@@ -106,14 +102,15 @@ func TestCreateBoardTemplate_BadRequest(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 }
 
-func TestCreateBoardTemplate_ServiceError(t *testing.T) {
+func TestApiCreateBoardTemplate_ServiceError(t *testing.T) {
 	creator := uuid.New()
-	body := CreateBoardTemplateRequest{Name: new("Test template")}
+	body := CreateBoardTemplateRequest{
+		Name:    new("Test template"),
+		Creator: creator,
+	}
 
 	service := NewMockBoardTemplateService(t)
-	service.EXPECT().Create(mock.Anything, mock.MatchedBy(func(request CreateBoardTemplateRequest) bool {
-		return request.Creator == creator
-	})).Return(nil, errors.New("service failure"))
+	service.EXPECT().Create(mock.Anything, body).Return(nil, errors.New("service failure"))
 	api := NewBoardTemplateApi(service)
 
 	bodyBytes, err := json.Marshal(body)
@@ -127,8 +124,14 @@ func TestCreateBoardTemplate_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, response.Code)
 }
 
-func TestGetBoardTemplate(t *testing.T) {
-	template := testBoardTemplate()
+func TestApiGetBoardTemplate(t *testing.T) {
+	template := &BoardTemplate{
+		ID:          uuid.New(),
+		Creator:     uuid.New(),
+		Name:        new("Test template"),
+		Description: new("A template for testing"),
+		Favourite:   new(false),
+	}
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Get(mock.Anything, template.ID).Return(template, nil)
 	api := NewBoardTemplateApi(service)
@@ -145,7 +148,7 @@ func TestGetBoardTemplate(t *testing.T) {
 	assert.Equal(t, template.ID, result.ID)
 }
 
-func TestGetBoardTemplate_ServiceError(t *testing.T) {
+func TestApiGetBoardTemplate_ServiceError(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Get(mock.Anything, templateID).Return(nil, errors.New("service failure"))
@@ -160,9 +163,15 @@ func TestGetBoardTemplate_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, response.Code)
 }
 
-func TestGetBoardTemplates(t *testing.T) {
+func TestApiGetBoardTemplates(t *testing.T) {
 	userID := uuid.New()
-	templates := []*BoardTemplateFull{{Template: testBoardTemplate()}}
+	templates := []*BoardTemplateFull{{Template: &BoardTemplate{
+		ID:          uuid.New(),
+		Creator:     uuid.New(),
+		Name:        new("Test template"),
+		Description: new("A template for testing"),
+		Favourite:   new(false),
+	}}}
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().GetAll(mock.Anything, userID).Return(templates, nil)
 	api := NewBoardTemplateApi(service)
@@ -180,7 +189,7 @@ func TestGetBoardTemplates(t *testing.T) {
 	assert.Equal(t, templates[0].Template.ID, result[0].Template.ID)
 }
 
-func TestGetBoardTemplates_ServiceError(t *testing.T) {
+func TestApiGetBoardTemplates_ServiceError(t *testing.T) {
 	userID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().GetAll(mock.Anything, userID).Return(nil, errors.New("service failure"))
@@ -195,8 +204,14 @@ func TestGetBoardTemplates_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, response.Code)
 }
 
-func TestUpdateBoardTemplate(t *testing.T) {
-	template := testBoardTemplate()
+func TestApiUpdateBoardTemplate(t *testing.T) {
+	template := &BoardTemplate{
+		ID:          uuid.New(),
+		Creator:     uuid.New(),
+		Name:        new("Test template"),
+		Description: new("A template for testing"),
+		Favourite:   new(false),
+	}
 	body := BoardTemplateUpdateRequest{
 		Name:        new("Updated template"),
 		Description: new("Updated description"),
@@ -223,7 +238,7 @@ func TestUpdateBoardTemplate(t *testing.T) {
 	assert.Equal(t, template.ID, result.ID)
 }
 
-func TestUpdateBoardTemplate_BadRequest(t *testing.T) {
+func TestApiUpdateBoardTemplate_BadRequest(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	api := NewBoardTemplateApi(service)
@@ -237,7 +252,7 @@ func TestUpdateBoardTemplate_BadRequest(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, response.Code)
 }
 
-func TestUpdateBoardTemplate_ServiceError(t *testing.T) {
+func TestApiUpdateBoardTemplate_ServiceError(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Update(mock.Anything, mock.MatchedBy(func(request BoardTemplateUpdateRequest) bool {
@@ -256,7 +271,7 @@ func TestUpdateBoardTemplate_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, response.Code)
 }
 
-func TestDeleteBoardTemplate(t *testing.T) {
+func TestApiDeleteBoardTemplate(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Delete(mock.Anything, templateID).Return(nil)
@@ -271,7 +286,7 @@ func TestDeleteBoardTemplate(t *testing.T) {
 	assert.Equal(t, http.StatusNoContent, response.Code)
 }
 
-func TestDeleteBoardTemplate_ServiceError(t *testing.T) {
+func TestApiDeleteBoardTemplate_ServiceError(t *testing.T) {
 	templateID := uuid.New()
 	service := NewMockBoardTemplateService(t)
 	service.EXPECT().Delete(mock.Anything, templateID).Return(errors.New("service failure"))
