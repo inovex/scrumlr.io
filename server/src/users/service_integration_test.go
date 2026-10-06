@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -62,12 +63,12 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 	suite.updateUser = testDbTemplates.TestUser{
 		Name:        "UpdateMe",
 		ID:          uuid.MustParse("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-		AccountType: common.Anonymous,
+		AccountType: account.Anonymous,
 	}
 	suite.deleteUser = testDbTemplates.TestUser{
 		Name:        "DeleteMe",
 		ID:          uuid.MustParse("b2c3d4e5-f6a7-8901-bcde-f12345678901"),
-		AccountType: common.GitHub,
+		AccountType: account.GitHub,
 	}
 	suite.updateBoard = testDbTemplates.TestBoard{
 		Name: "UsersTestUpdate",
@@ -121,71 +122,71 @@ func (suite *UserServiceIntegrationTestsuite) SetupTest() {
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAnonymous() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "", suite.testUserName, "", common.Anonymous)
+	user, err := suite.userService.Create(ctx, "", suite.testUserName, "", account.Anonymous)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.Anonymous, user.AccountType)
+	suite.Equal(account.Anonymous, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAppleUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "appleId", suite.testUserName, "", common.Apple)
+	user, err := suite.userService.Create(ctx, "appleId", suite.testUserName, "", account.Apple)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.Apple, user.AccountType)
+	suite.Equal(account.Apple, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateAzureAdUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "azureId", suite.testUserName, "", common.AzureAd)
+	user, err := suite.userService.Create(ctx, "azureId", suite.testUserName, "", account.AzureAd)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.AzureAd, user.AccountType)
+	suite.Equal(account.AzureAd, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGitHubUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "githubId", suite.testUserName, "", common.GitHub)
+	user, err := suite.userService.Create(ctx, "githubId", suite.testUserName, "", account.GitHub)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.GitHub, user.AccountType)
+	suite.Equal(account.GitHub, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateGoogleUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "googleId", suite.testUserName, "", common.Google)
+	user, err := suite.userService.Create(ctx, "googleId", suite.testUserName, "", account.Google)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.Google, user.AccountType)
+	suite.Equal(account.Google, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateMicrosoft() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "microsoftId", suite.testUserName, "", common.Microsoft)
+	user, err := suite.userService.Create(ctx, "microsoftId", suite.testUserName, "", account.Microsoft)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.Microsoft, user.AccountType)
+	suite.Equal(account.Microsoft, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_CreateOIDCUser() {
 	ctx := context.Background()
 
-	user, err := suite.userService.Create(ctx, "oidcId", suite.testUserName, "", common.TypeOIDC)
+	user, err := suite.userService.Create(ctx, "oidcId", suite.testUserName, "", account.OIDC)
 
 	suite.Nil(err)
 	suite.Equal(suite.testUserName, user.Name)
-	suite.Equal(common.TypeOIDC, user.AccountType)
+	suite.Equal(account.OIDC, user.AccountType)
 }
 
 func (suite *UserServiceIntegrationTestsuite) Test_Update() {

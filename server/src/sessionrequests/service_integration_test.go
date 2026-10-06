@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"scrumlr.io/server/websocket"
@@ -180,12 +181,12 @@ func (suite *SessionRequestServiceIntegrationTestSuite) Test_Exists() {
 func (suite *SessionRequestServiceIntegrationTestSuite) seedSessionRequestTestData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]users.User, 6)
-	suite.users["Stan"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567024"), Name: "Stan", AccountType: common.Google}
-	suite.users["Friend"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567025"), Name: "Friend", AccountType: common.Anonymous}
-	suite.users["Santa"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567026"), Name: "Santa", AccountType: common.Anonymous}
-	suite.users["Bob"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567027"), Name: "Bob", AccountType: common.Anonymous}
-	suite.users["Luke"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567028"), Name: "Luke", AccountType: common.Anonymous}
-	suite.users["Leia"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567029"), Name: "Leia", AccountType: common.Anonymous}
+	suite.users["Stan"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567024"), Name: "Stan", AccountType: account.Google}
+	suite.users["Friend"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567025"), Name: "Friend", AccountType: account.Anonymous}
+	suite.users["Santa"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567026"), Name: "Santa", AccountType: account.Anonymous}
+	suite.users["Bob"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567027"), Name: "Bob", AccountType: account.Anonymous}
+	suite.users["Luke"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567028"), Name: "Luke", AccountType: account.Anonymous}
+	suite.users["Leia"] = users.User{ID: uuid.MustParse("c1d2e3f4-a5b6-7890-abcd-ef1234567029"), Name: "Leia", AccountType: account.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 2)

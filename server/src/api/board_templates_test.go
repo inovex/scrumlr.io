@@ -8,11 +8,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
-	"github.com/markbates/goth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
@@ -53,65 +52,6 @@ func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateR
 	}
 }
 
-// createTestAuth creates a minimal auth implementation for testing
-// This allows requests to pass through without actual authentication
-func createTestAuth() auth.Auth {
-	return &testAuthService{}
-}
-
-// testAuthService implements auth.Auth interface for testing purposes
-type testAuthService struct{}
-
-func (t *testAuthService) Sign(_ map[string]any) (string, error) {
-	return "test-token", nil
-}
-
-func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Create proper JWT context using jwtauth library
-			// Extract user ID from context if present, otherwise use test user ID
-			userID := "test-user-id"
-			if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
-				if userUUID, ok := uid.(uuid.UUID); ok {
-					userID = userUUID.String()
-				}
-			}
-
-			// Create JWT token and context using jwtauth
-			tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
-			claims := map[string]any{"id": userID}
-			token, _, _ := tokenAuth.Encode(claims)
-
-			// Set the JWT context the way jwtauth expects it
-			ctx := jwtauth.NewContext(r.Context(), token, nil)
-			next.ServeHTTP(w, r.WithContext(ctx))
-		})
-	}
-}
-
-func (t *testAuthService) Authenticator() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Pass through without authentication for testing
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-func (t *testAuthService) Exists(_ common.AccountType) bool {
-	return true
-}
-
-func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
-	return &auth.UserInformation{
-		Provider:  accountType,
-		Ident:     "test-user",
-		Name:      "Test User",
-		AvatarURL: "",
-	}, nil
-}
-
 // Test suite for AnonymousCustomTemplateCreationContext middleware
 func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
 	userID := uuid.New()
@@ -119,35 +59,35 @@ func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
 	tests := []struct {
 		name                          string
 		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
+		userAccountType               account.Type
 		expectedStatus                int
 		expectedToCallNext            bool
 	}{
 		{
 			name:                          "authenticated user can create templates when flag is disabled",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "authenticated user can create templates when flag is enabled",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "anonymous user can create templates when flag is enabled",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusOK,
 			expectedToCallNext:            true,
 		},
 		{
 			name:                          "anonymous user receives 403 forbidden when allowAnonymousCustomTemplates is false",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 			expectedToCallNext:            false,
 		},
@@ -263,7 +203,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 		method                        string
 		path                          string
 		allowAnonymousCustomTemplates bool
-		userAccountType               common.AccountType
+		userAccountType               account.Type
 		expectedStatus                int
 		needsRequestBody              bool
 		requestBodyType               string // "create" or "update"
@@ -274,7 +214,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		{
@@ -282,7 +222,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: true,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusCreated,
 			needsRequestBody:              true,
 			requestBodyType:               "create",
@@ -293,7 +233,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "GET",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// GET /templates/{id}
@@ -302,7 +242,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "GET",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// PUT /templates/{id}
@@ -311,7 +251,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "PUT",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// DELETE /templates/{id}
@@ -320,7 +260,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "DELETE",
 			path:                          "/templates/" + uuid.New().String(),
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Anonymous,
+			userAccountType:               account.Anonymous,
 			expectedStatus:                http.StatusForbidden,
 		},
 		// Authenticated users should always pass
@@ -329,7 +269,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			method:                        "POST",
 			path:                          "/templates",
 			allowAnonymousCustomTemplates: false,
-			userAccountType:               common.Google,
+			userAccountType:               account.Google,
 			expectedStatus:                http.StatusCreated,
 			needsRequestBody:              true,
 			requestBodyType:               "create",
@@ -353,7 +293,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
 
 			// Create a simple auth mock that allows all requests to pass
-			mockAuth := createTestAuth()
+			mockAuth := auth.NewMockAuth(t)
 
 			// Create mock handlers that return proper template objects
 			templateID := uuid.New()
@@ -408,6 +348,7 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				nil,      // realtime (not needed for templates)
 				nil,      // wsService (not needed for templates)
 				mockAuth, // auth
+				nil,      //TODO
 				healthRoutes,
 				feedbackRoutes,
 				infoRoutes,

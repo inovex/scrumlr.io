@@ -6,7 +6,6 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/timeprovider"
 )
@@ -48,12 +47,7 @@ func (service *Service) Get(ctx context.Context) *Info {
 	info.AllowAnonymousBoardCreation = service.serverConfig.AllowAnonymousBoardCreation
 	info.AllowAnonymousHistory = service.serverConfig.AllowAnonymousHistory
 
-	info.AuthProvider = make([]common.AccountType, 0, 6)
-	for _, provider := range []common.AccountType{common.Google, common.GitHub, common.Microsoft, common.AzureAd, common.Apple, common.TypeOIDC} {
-		if service.authService.Exists(provider) {
-			info.AuthProvider = append(info.AuthProvider, provider)
-		}
-	}
+	info.AuthProvider = service.authService.ConfiguredProvider()
 
 	info.FeedbackEnabled = service.feedbackService.Enabled()
 	info.ServerTime = service.clock.Now()

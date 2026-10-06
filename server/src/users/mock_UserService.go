@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 )
 
 // NewMockUserService creates a new instance of MockUserService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -40,7 +40,7 @@ func (_m *MockUserService) EXPECT() *MockUserService_Expecter {
 }
 
 // Create provides a mock function for the type MockUserService
-func (_mock *MockUserService) Create(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error) {
+func (_mock *MockUserService) Create(ctx context.Context, id string, name string, avatarUrl string, accountType account.Type) (*User, error) {
 	ret := _mock.Called(ctx, id, name, avatarUrl, accountType)
 
 	if len(ret) == 0 {
@@ -49,17 +49,17 @@ func (_mock *MockUserService) Create(ctx context.Context, id string, name string
 
 	var r0 *User
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType) (*User, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, account.Type) (*User, error)); ok {
 		return returnFunc(ctx, id, name, avatarUrl, accountType)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, common.AccountType) *User); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string, account.Type) *User); ok {
 		r0 = returnFunc(ctx, id, name, avatarUrl, accountType)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string, common.AccountType) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string, account.Type) error); ok {
 		r1 = returnFunc(ctx, id, name, avatarUrl, accountType)
 	} else {
 		r1 = ret.Error(1)
@@ -77,12 +77,12 @@ type MockUserService_Create_Call struct {
 //   - id string
 //   - name string
 //   - avatarUrl string
-//   - accountType common.AccountType
+//   - accountType account.Type
 func (_e *MockUserService_Expecter) Create(ctx any, id any, name any, avatarUrl any, accountType any) *MockUserService_Create_Call {
 	return &MockUserService_Create_Call{Call: _e.mock.On("Create", ctx, id, name, avatarUrl, accountType)}
 }
 
-func (_c *MockUserService_Create_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType)) *MockUserService_Create_Call {
+func (_c *MockUserService_Create_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string, accountType account.Type)) *MockUserService_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -100,9 +100,9 @@ func (_c *MockUserService_Create_Call) Run(run func(ctx context.Context, id stri
 		if args[3] != nil {
 			arg3 = args[3].(string)
 		}
-		var arg4 common.AccountType
+		var arg4 account.Type
 		if args[4] != nil {
-			arg4 = args[4].(common.AccountType)
+			arg4 = args[4].(account.Type)
 		}
 		run(
 			arg0,
@@ -120,7 +120,7 @@ func (_c *MockUserService_Create_Call) Return(user *User, err error) *MockUserSe
 	return _c
 }
 
-func (_c *MockUserService_Create_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType common.AccountType) (*User, error)) *MockUserService_Create_Call {
+func (_c *MockUserService_Create_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string, accountType account.Type) (*User, error)) *MockUserService_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }

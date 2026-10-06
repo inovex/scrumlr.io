@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/nats"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -83,11 +84,11 @@ func (suite *SessionServiceIntegrationTestSuite) SetupTest() {
 func (suite *SessionServiceIntegrationTestSuite) initTestData() {
 	// Additional users not in base seed
 	suite.users = map[string]testDbTemplates.TestUser{
-		"Friend": {Name: "Friend", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567001"), AccountType: common.Anonymous},
-		"Bob":    {Name: "Bob", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567002"), AccountType: common.Anonymous},
-		"Luke":   {Name: "Luke", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567003"), AccountType: common.Anonymous},
-		"Leia":   {Name: "Leia", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567004"), AccountType: common.Anonymous},
-		"Han":    {Name: "Han", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567005"), AccountType: common.Anonymous},
+		"Friend": {Name: "Friend", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567001"), AccountType: account.Anonymous},
+		"Bob":    {Name: "Bob", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567002"), AccountType: account.Anonymous},
+		"Luke":   {Name: "Luke", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567003"), AccountType: account.Anonymous},
+		"Leia":   {Name: "Leia", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567004"), AccountType: account.Anonymous},
+		"Han":    {Name: "Han", ID: uuid.MustParse("d1e2f3a4-b5c6-7890-abcd-ef1234567005"), AccountType: account.Anonymous},
 	}
 
 	// Test boards

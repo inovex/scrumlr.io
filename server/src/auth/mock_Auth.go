@@ -5,11 +5,12 @@
 package auth
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/markbates/goth"
 	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
+	"scrumlr.io/server/users"
 )
 
 // NewMockAuth creates a new instance of MockAuth. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -85,106 +86,107 @@ func (_c *MockAuth_Authenticator_Call) RunAndReturn(run func() func(http.Handler
 	return _c
 }
 
-// Exists provides a mock function for the type MockAuth
-func (_mock *MockAuth) Exists(accountType common.AccountType) bool {
-	ret := _mock.Called(accountType)
+// ConfiguredProvider provides a mock function for the type MockAuth
+func (_mock *MockAuth) ConfiguredProvider() []account.Type {
+	ret := _mock.Called()
 
 	if len(ret) == 0 {
-		panic("no return value specified for Exists")
+		panic("no return value specified for ConfiguredProvider")
 	}
 
-	var r0 bool
-	if returnFunc, ok := ret.Get(0).(func(common.AccountType) bool); ok {
-		r0 = returnFunc(accountType)
+	var r0 []account.Type
+	if returnFunc, ok := ret.Get(0).(func() []account.Type); ok {
+		r0 = returnFunc()
 	} else {
-		r0 = ret.Get(0).(bool)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]account.Type)
+		}
 	}
 	return r0
 }
 
-// MockAuth_Exists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Exists'
-type MockAuth_Exists_Call struct {
+// MockAuth_ConfiguredProvider_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ConfiguredProvider'
+type MockAuth_ConfiguredProvider_Call struct {
 	*mock.Call
 }
 
-// Exists is a helper method to define mock.On call
-//   - accountType common.AccountType
-func (_e *MockAuth_Expecter) Exists(accountType any) *MockAuth_Exists_Call {
-	return &MockAuth_Exists_Call{Call: _e.mock.On("Exists", accountType)}
+// ConfiguredProvider is a helper method to define mock.On call
+func (_e *MockAuth_Expecter) ConfiguredProvider() *MockAuth_ConfiguredProvider_Call {
+	return &MockAuth_ConfiguredProvider_Call{Call: _e.mock.On("ConfiguredProvider")}
 }
 
-func (_c *MockAuth_Exists_Call) Run(run func(accountType common.AccountType)) *MockAuth_Exists_Call {
+func (_c *MockAuth_ConfiguredProvider_Call) Run(run func()) *MockAuth_ConfiguredProvider_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 common.AccountType
-		if args[0] != nil {
-			arg0 = args[0].(common.AccountType)
-		}
-		run(
-			arg0,
-		)
+		run()
 	})
 	return _c
 }
 
-func (_c *MockAuth_Exists_Call) Return(b bool) *MockAuth_Exists_Call {
-	_c.Call.Return(b)
+func (_c *MockAuth_ConfiguredProvider_Call) Return(types []account.Type) *MockAuth_ConfiguredProvider_Call {
+	_c.Call.Return(types)
 	return _c
 }
 
-func (_c *MockAuth_Exists_Call) RunAndReturn(run func(accountType common.AccountType) bool) *MockAuth_Exists_Call {
+func (_c *MockAuth_ConfiguredProvider_Call) RunAndReturn(run func() []account.Type) *MockAuth_ConfiguredProvider_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// ExtractUserInformation provides a mock function for the type MockAuth
-func (_mock *MockAuth) ExtractUserInformation(accountType common.AccountType, user *goth.User) (*UserInformation, error) {
-	ret := _mock.Called(accountType, user)
+// CreateUser provides a mock function for the type MockAuth
+func (_mock *MockAuth) CreateUser(ctx context.Context, userInfo UserInformation) (*users.User, string, error) {
+	ret := _mock.Called(ctx, userInfo)
 
 	if len(ret) == 0 {
-		panic("no return value specified for ExtractUserInformation")
+		panic("no return value specified for CreateUser")
 	}
 
-	var r0 *UserInformation
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(common.AccountType, *goth.User) (*UserInformation, error)); ok {
-		return returnFunc(accountType, user)
+	var r0 *users.User
+	var r1 string
+	var r2 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, UserInformation) (*users.User, string, error)); ok {
+		return returnFunc(ctx, userInfo)
 	}
-	if returnFunc, ok := ret.Get(0).(func(common.AccountType, *goth.User) *UserInformation); ok {
-		r0 = returnFunc(accountType, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, UserInformation) *users.User); ok {
+		r0 = returnFunc(ctx, userInfo)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*UserInformation)
+			r0 = ret.Get(0).(*users.User)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(common.AccountType, *goth.User) error); ok {
-		r1 = returnFunc(accountType, user)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, UserInformation) string); ok {
+		r1 = returnFunc(ctx, userInfo)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(string)
 	}
-	return r0, r1
+	if returnFunc, ok := ret.Get(2).(func(context.Context, UserInformation) error); ok {
+		r2 = returnFunc(ctx, userInfo)
+	} else {
+		r2 = ret.Error(2)
+	}
+	return r0, r1, r2
 }
 
-// MockAuth_ExtractUserInformation_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExtractUserInformation'
-type MockAuth_ExtractUserInformation_Call struct {
+// MockAuth_CreateUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateUser'
+type MockAuth_CreateUser_Call struct {
 	*mock.Call
 }
 
-// ExtractUserInformation is a helper method to define mock.On call
-//   - accountType common.AccountType
-//   - user *goth.User
-func (_e *MockAuth_Expecter) ExtractUserInformation(accountType any, user any) *MockAuth_ExtractUserInformation_Call {
-	return &MockAuth_ExtractUserInformation_Call{Call: _e.mock.On("ExtractUserInformation", accountType, user)}
+// CreateUser is a helper method to define mock.On call
+//   - ctx context.Context
+//   - userInfo UserInformation
+func (_e *MockAuth_Expecter) CreateUser(ctx any, userInfo any) *MockAuth_CreateUser_Call {
+	return &MockAuth_CreateUser_Call{Call: _e.mock.On("CreateUser", ctx, userInfo)}
 }
 
-func (_c *MockAuth_ExtractUserInformation_Call) Run(run func(accountType common.AccountType, user *goth.User)) *MockAuth_ExtractUserInformation_Call {
+func (_c *MockAuth_CreateUser_Call) Run(run func(ctx context.Context, userInfo UserInformation)) *MockAuth_CreateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 common.AccountType
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(common.AccountType)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 *goth.User
+		var arg1 UserInformation
 		if args[1] != nil {
-			arg1 = args[1].(*goth.User)
+			arg1 = args[1].(UserInformation)
 		}
 		run(
 			arg0,
@@ -194,19 +196,81 @@ func (_c *MockAuth_ExtractUserInformation_Call) Run(run func(accountType common.
 	return _c
 }
 
-func (_c *MockAuth_ExtractUserInformation_Call) Return(userInformation *UserInformation, err error) *MockAuth_ExtractUserInformation_Call {
-	_c.Call.Return(userInformation, err)
+func (_c *MockAuth_CreateUser_Call) Return(user *users.User, s string, err error) *MockAuth_CreateUser_Call {
+	_c.Call.Return(user, s, err)
 	return _c
 }
 
-func (_c *MockAuth_ExtractUserInformation_Call) RunAndReturn(run func(accountType common.AccountType, user *goth.User) (*UserInformation, error)) *MockAuth_ExtractUserInformation_Call {
+func (_c *MockAuth_CreateUser_Call) RunAndReturn(run func(ctx context.Context, userInfo UserInformation) (*users.User, string, error)) *MockAuth_CreateUser_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetProvider provides a mock function for the type MockAuth
+func (_mock *MockAuth) GetProvider(accountType account.Type) (AuthProvider, error) {
+	ret := _mock.Called(accountType)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetProvider")
+	}
+
+	var r0 AuthProvider
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(account.Type) (AuthProvider, error)); ok {
+		return returnFunc(accountType)
+	}
+	if returnFunc, ok := ret.Get(0).(func(account.Type) AuthProvider); ok {
+		r0 = returnFunc(accountType)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(AuthProvider)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(account.Type) error); ok {
+		r1 = returnFunc(accountType)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockAuth_GetProvider_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetProvider'
+type MockAuth_GetProvider_Call struct {
+	*mock.Call
+}
+
+// GetProvider is a helper method to define mock.On call
+//   - accountType account.Type
+func (_e *MockAuth_Expecter) GetProvider(accountType any) *MockAuth_GetProvider_Call {
+	return &MockAuth_GetProvider_Call{Call: _e.mock.On("GetProvider", accountType)}
+}
+
+func (_c *MockAuth_GetProvider_Call) Run(run func(accountType account.Type)) *MockAuth_GetProvider_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 account.Type
+		if args[0] != nil {
+			arg0 = args[0].(account.Type)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockAuth_GetProvider_Call) Return(authProvider AuthProvider, err error) *MockAuth_GetProvider_Call {
+	_c.Call.Return(authProvider, err)
+	return _c
+}
+
+func (_c *MockAuth_GetProvider_Call) RunAndReturn(run func(accountType account.Type) (AuthProvider, error)) *MockAuth_GetProvider_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Sign provides a mock function for the type MockAuth
-func (_mock *MockAuth) Sign(stringToV map[string]any) (string, error) {
-	ret := _mock.Called(stringToV)
+func (_mock *MockAuth) Sign(claims map[string]any) (string, error) {
+	ret := _mock.Called(claims)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Sign")
@@ -215,15 +279,15 @@ func (_mock *MockAuth) Sign(stringToV map[string]any) (string, error) {
 	var r0 string
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(map[string]any) (string, error)); ok {
-		return returnFunc(stringToV)
+		return returnFunc(claims)
 	}
 	if returnFunc, ok := ret.Get(0).(func(map[string]any) string); ok {
-		r0 = returnFunc(stringToV)
+		r0 = returnFunc(claims)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 	if returnFunc, ok := ret.Get(1).(func(map[string]any) error); ok {
-		r1 = returnFunc(stringToV)
+		r1 = returnFunc(claims)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -236,12 +300,12 @@ type MockAuth_Sign_Call struct {
 }
 
 // Sign is a helper method to define mock.On call
-//   - stringToV map[string]any
-func (_e *MockAuth_Expecter) Sign(stringToV any) *MockAuth_Sign_Call {
-	return &MockAuth_Sign_Call{Call: _e.mock.On("Sign", stringToV)}
+//   - claims map[string]any
+func (_e *MockAuth_Expecter) Sign(claims any) *MockAuth_Sign_Call {
+	return &MockAuth_Sign_Call{Call: _e.mock.On("Sign", claims)}
 }
 
-func (_c *MockAuth_Sign_Call) Run(run func(stringToV map[string]any)) *MockAuth_Sign_Call {
+func (_c *MockAuth_Sign_Call) Run(run func(claims map[string]any)) *MockAuth_Sign_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 map[string]any
 		if args[0] != nil {
@@ -259,7 +323,7 @@ func (_c *MockAuth_Sign_Call) Return(s string, err error) *MockAuth_Sign_Call {
 	return _c
 }
 
-func (_c *MockAuth_Sign_Call) RunAndReturn(run func(stringToV map[string]any) (string, error)) *MockAuth_Sign_Call {
+func (_c *MockAuth_Sign_Call) RunAndReturn(run func(claims map[string]any) (string, error)) *MockAuth_Sign_Call {
 	_c.Call.Return(run)
 	return _c
 }

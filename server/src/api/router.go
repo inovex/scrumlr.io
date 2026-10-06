@@ -43,6 +43,7 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
+	authRoutes     chi.Router
 	healthRoutes   chi.Router
 	feedbackRoutes chi.Router
 	infoRoutes     chi.Router
@@ -87,6 +88,7 @@ func New(
 	wsService websocket.Upgrader,
 	auth auth.Auth,
 
+	authRoutes chi.Router,
 	healtRoutes chi.Router,
 	feedbackRoutes chi.Router,
 	infoRoutes chi.Router,
@@ -148,6 +150,7 @@ func New(
 		realtime:  rt,
 		wsService: wsService,
 
+		authRoutes:     authRoutes,
 		healthRoutes:   healtRoutes,
 		feedbackRoutes: feedbackRoutes,
 		infoRoutes:     infoRoutes,
@@ -205,15 +208,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Mount("/info", s.infoRoutes)
 		r.Mount("/health", s.healthRoutes)
 		r.Mount("/feedback", s.feedbackRoutes)
-		r.Route("/login", func(r chi.Router) {
-			r.Delete("/", s.logout)
-			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
-
-			r.Route("/{provider}", func(r chi.Router) {
-				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
-			})
-		})
+		r.Mount("/login", s.authRoutes)
 
 		if s.enableSwagger {
 			r.Mount("/swagger", s.swaggerRoutes)
@@ -226,7 +221,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(s.auth.Authenticator())
-		r.Use(auth.AuthContext)
+		r.Use(auth.AuthMiddleware)
 
 		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
