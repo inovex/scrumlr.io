@@ -80,6 +80,19 @@ Cypress.Commands.add("createCustomTemplate", (templateName: string)=>{
     .click()
 })
 
+Cypress.Commands.add("createBoard", ()=>{
+  cy
+    // select template
+    .get<HTMLDivElement>("[data-cy='template-card--RECOMMENDED']")
+    .first()
+    .find<HTMLButtonElement>("[data-cy='template-card__start-button']")
+    .first()
+    .click()
+    // select access setting (default public) and click button to start session
+    .get("[data-testid='simple-modal__primary-button']")
+    .click()
+})
+
 Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
   cy
     .get(`[data-cy='${cyData}']`)
@@ -88,4 +101,17 @@ Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
   cy
     .get(`[data-cy='${cyData}-item-${itemLabel}']`)
     .click()
+})
+
+// create a note and return the subject
+Cypress.Commands.add("createNote", (text: string)=>{
+  cy
+    .get<HTMLInputElement>(".note-input__input")
+    .first()
+    .type(text)
+    .press("Enter")
+
+  // note: since notes pop up on top, we assume the first note we grab is the one we just created
+  // this strategy will probably fall short if a columnId parameter is added
+  return cy.get<HTMLDivElement>(".note").first()
 })
