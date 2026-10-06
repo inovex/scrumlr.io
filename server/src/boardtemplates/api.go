@@ -2,10 +2,8 @@ package boardtemplates
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -52,7 +50,6 @@ func (api *API) CreateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	creator := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	// parse request
 	var body CreateBoardTemplateRequest
 	if err := render.Decode(r, &body); err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to decode body"))
@@ -212,17 +209,4 @@ func (api *API) DeleteBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
-}
-
-func (api *API) BoardTemplateContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		boardTemplateParam := chi.URLParam(r, "id")
-		boardTemplate, err := uuid.Parse(boardTemplateParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
-			return
-		}
-		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
-		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
-	})
 }

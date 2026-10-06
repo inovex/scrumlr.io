@@ -16,10 +16,19 @@ func NewMockBoardTemplateApi(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockBoardTemplateApi {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockBoardTemplateApi{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }

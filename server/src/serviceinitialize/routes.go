@@ -2,6 +2,8 @@ package serviceinitialize
 
 import (
 	"github.com/go-chi/chi/v5"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
@@ -92,4 +94,10 @@ func (init *RoutesInitializer) InitializeVotingRoutes() {
 func (init *RoutesInitializer) InitializeSwaggerRoutes(basePath string) chi.Router {
 	router := swagger.InitializeSwagger(basePath).RegisterRoutes()
 	return router
+}
+
+func (init *RoutesInitializer) InitializeTemplateRoutes(boardTemplateAPI boardtemplates.BoardTemplateApi, columnTemplateAPI columntemplates.ColumnTemplateApi) chi.Router {
+	columnRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
+	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI, columnRouter).RegisterRoutes()
+	return boardTemplateRouter
 }

@@ -11,7 +11,9 @@ import (
 
 	"go.uber.org/zap"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
@@ -582,6 +584,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
+	templateRoutes := routesInitializer.InitializeTemplateRoutes(boardtemplates.NewBoardTemplateApi(boardTemplateService), columntemplates.NewColumnTemplateApi(columnTemplateService))
 
 	s := api.New(
 		basePath,
@@ -595,7 +598,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		userRoutes,
 		sessionRoutes,
 		swaggerRoutes,
-
+		templateRoutes,
 		boardService,
 		columnService,
 		votingService,

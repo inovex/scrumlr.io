@@ -17,20 +17,30 @@ type BoardTemplateApi interface {
 
 type Router struct {
 	boardTemplateAPI BoardTemplateApi
+  columnRouter     chi.Router
 }
 
-func NewBoardTemplateRouter(boardTemplateApi BoardTemplateApi) *Router {
-	r := new(Router)
-	r.boardTemplateAPI = boardTemplateApi
-	return r
+func NewBoardTemplateRouter(boardTemplateApi BoardTemplateApi, columnRouter chi.Router) *Router {
+	return &Router{
+    boardTemplateAPI: boardTemplateApi,
+    columnRouter:     columnRouter,
+  }
 }
 
 func (r *Router) RegisterRoutes() chi.Router {
 	router := chi.NewRouter()
+
 	router.Post("/", r.boardTemplateAPI.CreateBoardTemplate)
 	router.Get("/", r.boardTemplateAPI.GetBoardTemplates)
-	router.With(r.boardTemplateAPI.BoardTemplateContext).Get("/{id}", r.boardTemplateAPI.GetBoardTemplate)
-	router.With(r.boardTemplateAPI.BoardTemplateContext).Put("/{id}", r.boardTemplateAPI.UpdateBoardTemplate)
-	router.With(r.boardTemplateAPI.BoardTemplateContext).Delete("/{id}", r.boardTemplateAPI.DeleteBoardTemplate)
+
+  router.Route("/{id}", func(sub chi.Router) {
+    sub.Use(r.boardTemplateAPI.BoardTemplateContext)
+
+    sub.Get("/", r.boardTemplateAPI.GetBoardTemplate)
+    sub.Put("/", r.boardTemplateAPI.UpdateBoardTemplate)
+    sub.Delete("/", r.boardTemplateAPI.DeleteBoardTemplate)
+
+    sub.Mount("/columns", r.columnRouter)
+  })
 	return router
 }

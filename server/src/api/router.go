@@ -49,6 +49,7 @@ type Server struct {
 	userRoutes     chi.Router
 	sessionRoutes  chi.Router
 	swaggerRoutes  chi.Router
+	templateRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -93,6 +94,7 @@ func New(
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
+	templateRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -104,7 +106,7 @@ func New(
 	sessionRequests sessionrequests.SessionRequestService,
 	boardReactions boardreactions.BoardReactionCreater,
 	boardTemplates boardtemplates.BoardTemplateService,
-	columntemplates columntemplates.ColumnTemplateService,
+	columnTemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
@@ -143,6 +145,12 @@ func New(
 		r.Use(logger.ChiZapLogger())
 	}
 
+	boardTemplateAPI := boardtemplates.NewBoardTemplateApi(boardTemplates)
+	columnTemplateAPI := columntemplates.NewColumnTemplateApi(columnTemplates)
+
+	columnRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
+	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI, columnRouter).RegisterRoutes()
+
 	s := Server{
 		basePath:  basePath,
 		realtime:  rt,
@@ -154,6 +162,7 @@ func New(
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
 		swaggerRoutes:  swaggerRoutes,
+		templateRoutes: boardTemplateRouter,
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
@@ -168,7 +177,7 @@ func New(
 		sessionRequests:                  sessionRequests,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
-		columntemplates:                  columntemplates,
+		columntemplates:                  columnTemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
@@ -228,24 +237,10 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
-		boardTemplateAPI := boardtemplates.NewBoardTemplateApi(s.boardTemplates)
-		columnTemplateAPI := columntemplates.NewColumnTemplateApi(s.columntemplates)
-
-		r.Route("/templates", func(r chi.Router) {
-			r.Use(s.BoardTemplateRateLimiter)
-			r.Use(s.AnonymousCustomTemplateCreationContext)
-
-			r.Post("/", boardTemplateAPI.CreateBoardTemplate)
-			r.Get("/", boardTemplateAPI.GetBoardTemplates)
-
-			r.Route("/{id}", func(r chi.Router) {
-				r.Use(boardTemplateAPI.BoardTemplateContext)
-				r.Get("/", boardTemplateAPI.GetBoardTemplate)
-				r.Put("/", boardTemplateAPI.UpdateBoardTemplate)
-				r.Delete("/", boardTemplateAPI.DeleteBoardTemplate)
-				r.Mount("/columns", columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes())
-			})
-		})
+		r.With(
+			s.BoardTemplateRateLimiter,
+			s.AnonymousCustomTemplateCreationContext,
+		).Mount("/templates", s.templateRoutes)
 
 		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)
 		r.With(s.AnonymousBoardCreationContext).Post("/import", s.importBoard)
