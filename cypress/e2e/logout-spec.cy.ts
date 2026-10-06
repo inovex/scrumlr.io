@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 /// <reference path="../support/index.d.ts" />
 
+// there's a reason for using this custom login instead of the session command:
+// cy.session() is designed solely to establish and cache state (cookies, localStorage, sessionStorage).
+// it deliberately does not preserve the page URL or DOM state (redirect to about:blank)
+// this test is designed around implicit redirects which is why it's done like this.
+// (note: with testIsolation set to true which is the default, so if we set it false we could use cy.session and the like, but I think there are good reasons to keep it).
 const loginAnonymously = (name: string) => {
   cy.get("[data-cy='login-board__anonymous-toggle']").click();
   cy.get<HTMLInputElement>("input[data-cy='login-board__username']").clear().type(name);
