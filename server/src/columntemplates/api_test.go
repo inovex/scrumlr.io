@@ -70,7 +70,8 @@ func TestApiCreateColumnTemplate(t *testing.T) {
 		Name:        "TestColumnTemplate",
 		Description: "Template Description",
 		Color:       common.ColorGoalGreen,
-		Visible:     &visible, Index: &index,
+		Visible:     &visible,
+		Index:       &index,
 	}
 	expectedBody := body
 	expectedBody.BoardTemplate = boardID
