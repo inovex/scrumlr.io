@@ -44,7 +44,7 @@ describe("Board", () => {
 
     cy.get('.board-reaction__root').should("not.exist")
 
-    cy.get('.board-reactions-menu__item').first().click()
+    cy.get('.board-reactions-menu__item').first().click({force: true})
 
     cy.get('.board-reaction__root').should("exist")
   });

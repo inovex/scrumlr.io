@@ -18,7 +18,7 @@ Cypress.Commands.add("login", () => {
     cy.acceptCookies()
 
     cy
-      .get<HTMLAnchorElement>("a.homepage__start-button")
+      .get<HTMLButtonElement>(".homepage__start-button")
       .focus()
       .click()
 
@@ -91,6 +91,8 @@ Cypress.Commands.add("createBoard", ()=>{
     // select access setting (default public) and click button to start session
     .get("[data-testid='simple-modal__primary-button']")
     .click()
+
+  cy.url().should("include", "/board/")
 })
 
 Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
