@@ -6,6 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
@@ -46,17 +48,25 @@ func TestInitializeBoardReactionRoutes(t *testing.T) {
 func TestInitializeBoardTemplateRoutes(t *testing.T) {
 	initializer := NewRoutesInitializer()
 
-	assert.Panics(t, func() {
-		initializer.InitializeBoardTemplateRoutes()
-	})
+	boardTemplateApi := boardtemplates.NewMockBoardTemplateApi(t)
+	boardTemplateApi.EXPECT().BoardTemplateContext(mock.Anything).
+		RunAndReturn(func(next http.Handler) http.Handler { return next })
+
+	boardTemplateRoutes := initializer.InitializeBoardTemplateRoutes(boardTemplateApi)
+
+	assert.NotNil(t, boardTemplateRoutes)
 }
 
 func TestInitializeColumnTemplateRoutes(t *testing.T) {
 	initializer := NewRoutesInitializer()
 
-	assert.Panics(t, func() {
-		initializer.InitializeColumnTemplateRoutes()
-	})
+	columnTemplateApi := columntemplates.NewMockColumnTemplateApi(t)
+	columnTemplateApi.EXPECT().ColumnTemplateContext(mock.Anything).
+		RunAndReturn(func(next http.Handler) http.Handler { return next })
+
+	columnTemplateRoutes := initializer.InitializeColumnTemplateRoutes(columnTemplateApi)
+
+	assert.NotNil(t, columnTemplateRoutes)
 }
 
 func TestInitializeFeedbackRoutes(t *testing.T) {

@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
@@ -45,17 +47,21 @@ func TestInitializeBoardReactionApi(t *testing.T) {
 func TestInitializeBoardTemplateApi(t *testing.T) {
 	initializer := NewApiInitializer("/")
 
-	assert.Panics(t, func() {
-		initializer.InitializeBoardTemplateApi()
-	})
+	boardTemplateService := boardtemplates.NewMockBoardTemplateService(t)
+
+	boardTemplateApi := initializer.InitializeBoardTemplateApi(boardTemplateService)
+
+	assert.NotNil(t, boardTemplateApi)
 }
 
 func TestInitializeColumnTemplateApi(t *testing.T) {
 	initializer := NewApiInitializer("/")
 
-	assert.Panics(t, func() {
-		initializer.InitializeColumnTemplateApi()
-	})
+	columnTemplateService := columntemplates.NewMockColumnTemplateService(t)
+
+	columnTemplateApi := initializer.InitializeColumnTemplateApi(columnTemplateService)
+
+	assert.NotNil(t, columnTemplateApi)
 }
 
 func TestInitializeFeedbackApi(t *testing.T) {
