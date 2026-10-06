@@ -63,7 +63,8 @@ func testColumnTemplate() *ColumnTemplate {
 }
 
 func TestApiCreateColumnTemplate(t *testing.T) {
-	boardID, userID := uuid.New(), uuid.New()
+	boardID := uuid.New()
+	userID := uuid.New()
 	visible := true
 	index := 1
 	body := ColumnTemplateRequest{
@@ -110,15 +111,16 @@ func TestApiCreateColumnTemplate_BadRequest(t *testing.T) {
 }
 
 func TestApiCreateColumnTemplate_ServiceError(t *testing.T) {
-	boardID, userID := uuid.New(), uuid.New()
-	service := NewMockColumnTemplateService(t)
-	service.EXPECT().Create(mock.Anything, mock.MatchedBy(func(body ColumnTemplateRequest) bool {
-		return body.BoardTemplate == boardID && body.User == userID
-	})).Return(nil, errors.New("service failure"))
-	api := NewColumnTemplateApi(service)
+	boardID := uuid.New()
+	userID := uuid.New()
 	body := ColumnTemplateRequest{
-		Color: common.ColorGoalGreen,
+		BoardTemplate: boardID,
+		User:          userID,
+		Color:         common.ColorGoalGreen,
 	}
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Create(mock.Anything, body).Return(nil, errors.New("service failure"))
+	api := NewColumnTemplateApi(service)
 	bodyBytes, err := json.Marshal(body)
 	assert.NoError(t, err)
 	response := httptest.NewRecorder()

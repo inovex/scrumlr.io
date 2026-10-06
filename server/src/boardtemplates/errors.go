@@ -52,17 +52,11 @@ func MapBoardTemplateError(err error) error {
 		return common.NotFoundError
 	}
 
-	var s interface{ Status() string }
-	if errors.As(err, &s) {
-		switch s.Status() {
-		case "BAD_REQUEST":
-			return common.BadRequestError(err)
-		case "FORBIDDEN":
-			return common.ForbiddenError(err)
-		case "NOT_FOUND":
+	var bErr BoardTemplateError
+	if errors.As(err, &bErr) {
+		switch bErr.Category {
+		case NotFound:
 			return common.NotFoundError
-		case "CONFLICT":
-			return common.ConflictError(err)
 		}
 	}
 

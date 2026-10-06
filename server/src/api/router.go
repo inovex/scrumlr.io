@@ -60,8 +60,6 @@ type Server struct {
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
 	boardReactions  boardreactions.BoardReactionCreater
-	boardTemplates  boardtemplates.BoardTemplateService
-	columntemplates columntemplates.ColumnTemplateService
 
 	checkOrigin bool
 
@@ -145,12 +143,6 @@ func New(
 		r.Use(logger.ChiZapLogger())
 	}
 
-	boardTemplateAPI := boardtemplates.NewBoardTemplateApi(boardTemplates)
-	columnTemplateAPI := columntemplates.NewColumnTemplateApi(columnTemplates)
-
-	columnRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
-	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI, columnRouter).RegisterRoutes()
-
 	s := Server{
 		basePath:  basePath,
 		realtime:  rt,
@@ -162,7 +154,7 @@ func New(
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
 		swaggerRoutes:  swaggerRoutes,
-		templateRoutes: boardTemplateRouter,
+		templateRoutes: templateRoutes,
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
@@ -176,8 +168,6 @@ func New(
 		sessions:                         sessions,
 		sessionRequests:                  sessionRequests,
 		boardReactions:                   boardReactions,
-		boardTemplates:                   boardTemplates,
-		columntemplates:                  columnTemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
