@@ -15,13 +15,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version-file: "server/go.mod"
+          go-version: "^1.26"
+          cache: false
 
       - name: Install Swag CLI
         run: go install github.com/swaggo/swag/cmd/swag@latest
@@ -55,6 +56,7 @@ jobs:
       - name: Commit and Push Changes
         env:
           NEW_VERSION: ${{ inputs.new_version }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "Scrumlr Upgrade Version Bot[bot]"
           git config user.email \<\>
@@ -62,7 +64,15 @@ jobs:
           if git diff --quiet; then
             echo "No changes detected."
           else
+            BRANCH_NAME="bump-version/v${NEW_VERSION}"
+
+            git checkout -b "$BRANCH_NAME"
             git commit -am "chore: bump version to $NEW_VERSION"
-            git tag "v$NEW_VERSION"
-            git push origin main --tags
+            git push -u origin "$BRANCH_NAME"
+
+            gh pr create \
+              --title "chore: bump version to $NEW_VERSION" \
+              --body "Automated version bump to $NEW_VERSION." \
+              --base main \
+              --head "$BRANCH_NAME"
           fi
