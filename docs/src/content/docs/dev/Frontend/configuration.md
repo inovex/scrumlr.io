@@ -36,12 +36,11 @@ That is why `yarn start` reaches a local backend without any setup on your part.
 | `VITE_SERVER_WEBSOCKET_URL` | `src/config.ts` | Base URL for the board WebSocket |
 | `VITE_VERSION` | `src/index.tsx`, `components/AppInfo` | Displayed version; set from `$npm_package_version` |
 | `VITE_LEGACY_CREATE_BOARD` | `store/features/view/reducer.ts` | Enables the legacy `/new` board creation route |
-| `VITE_SHOW_HISTORY_PAGE` | `routes/Boards/Sessions/History.tsx` | Renders the board history list instead of the teaser |
 | `BASE_URL` | several components | Vite's own built-in; used to build URLs for static assets in `public/` |
 
 Vite only exposes variables prefixed with `VITE_` to client code, plus its own built-ins.
 
-If you add a variable, declare it in `vite-env.d.ts` as well so `import.meta.env` stays typed. Note: `vite-env.d.ts` is still incomplete as some flags like `VITE_SHOW_HISTORY_PAGE` are currently missing from it
+If you add a variable, declare it in `vite-env.d.ts` as well so `import.meta.env` stays typed.
 
 ## Runtime configuration (cookies)
 
