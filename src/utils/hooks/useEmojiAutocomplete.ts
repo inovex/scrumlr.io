@@ -5,7 +5,7 @@ import {SkinToneComponent} from "store/features/skinTone/types";
 import {useAppSelector} from "store";
 import {useOnBlur} from "./useOnBlur";
 
-export const emojiRegex = /^:([\w\d]+):?$/i;
+export const emojiRegex = /^:(\w+):?$/i;
 
 export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean, names: string[]];
 
