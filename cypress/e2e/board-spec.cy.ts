@@ -56,8 +56,9 @@ describe("Board", () => {
 
     cy.get('.timer').should("exist")
 
-    // timer actions are hidden until mouseover which I couldnt simulate easily so we're just gonna pretend we can see it
-    cy.get('#timer__end-timer').click({force: true})
+    cy.get('.timer').trigger('mouseover')
+
+    cy.get('#timer__end-timer').should('be.visible').click()
 
     cy.get('.timer').should("not.exist")
   });
