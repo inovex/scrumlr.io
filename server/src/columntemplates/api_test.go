@@ -1,0 +1,335 @@
+package columntemplates
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/technical_helper"
+)
+
+func TestApiColumnTemplateContext(t *testing.T) {
+	templateID := uuid.New()
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("columnTemplate", templateID.String())
+
+	request := httptest.NewRequest(http.MethodGet, "/"+templateID.String(), nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	nextHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, templateID, r.Context().Value(identifiers.ColumnTemplateIdentifier))
+		w.WriteHeader(http.StatusNoContent)
+	})
+	api.ColumnTemplateContext(nextHandler).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusNoContent, response.Code)
+}
+
+func TestApiColumnTemplateContext_BadRequest(t *testing.T) {
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+
+	routeContext := chi.NewRouteContext()
+	routeContext.URLParams.Add("columnTemplate", "invalid")
+
+	request := httptest.NewRequest(http.MethodGet, "/invalid", nil).
+		WithContext(context.WithValue(context.Background(), chi.RouteCtxKey, routeContext))
+	response := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		t.Fatal("next handler should not be called")
+	})
+	api.ColumnTemplateContext(handler).ServeHTTP(response, request)
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+}
+
+func TestApiCreateColumnTemplate(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	visible := true
+	index := 1
+	body := ColumnTemplateRequest{
+		Name:        "TestColumnTemplate",
+		Description: "Template Description",
+		Color:       common.ColorGoalGreen,
+		Visible:     &visible,
+		Index:       &index,
+	}
+	expectedBody := body
+	expectedBody.BoardTemplate = boardID
+	expectedBody.User = userID
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
+	template.BoardTemplate = boardID
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Create(mock.Anything, expectedBody).Return(template, nil)
+	api := NewColumnTemplateApi(service)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID).
+		AddToContext(identifiers.UserIdentifier, userID)
+
+	api.CreateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusCreated, response.Code)
+	var result ColumnTemplate
+	assert.NoError(t, json.Unmarshal(response.Body.Bytes(), &result))
+	assert.Equal(t, template.ID, result.ID)
+}
+
+func TestApiCreateColumnTemplate_BadRequest(t *testing.T) {
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewBufferString("{")).
+		AddToContext(identifiers.BoardTemplateIdentifier, uuid.New()).
+		AddToContext(identifiers.UserIdentifier, uuid.New())
+
+	api.CreateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+}
+
+func TestApiCreateColumnTemplate_ServiceError(t *testing.T) {
+	boardID := uuid.New()
+	userID := uuid.New()
+	body := ColumnTemplateRequest{
+		BoardTemplate: boardID,
+		User:          userID,
+		Color:         common.ColorGoalGreen,
+	}
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Create(mock.Anything, body).Return(nil, errors.New("service failure"))
+
+	api := NewColumnTemplateApi(service)
+
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPost, "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID).
+		AddToContext(identifiers.UserIdentifier, userID)
+
+	api.CreateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, response.Code)
+}
+
+func TestApiGetColumnTemplate(t *testing.T) {
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Get(mock.Anything, template.BoardTemplate, template.ID).Return(template, nil)
+	api := NewColumnTemplateApi(service)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil).
+		AddToContext(identifiers.BoardTemplateIdentifier, template.BoardTemplate).
+		AddToContext(identifiers.ColumnTemplateIdentifier, template.ID)
+
+	api.GetColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	var result ColumnTemplate
+	assert.NoError(t, json.Unmarshal(response.Body.Bytes(), &result))
+	assert.Equal(t, template.ID, result.ID)
+}
+
+func TestApiGetColumnTemplate_ServiceError(t *testing.T) {
+	boardID, columnID := uuid.New(), uuid.New()
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Get(mock.Anything, boardID, columnID).Return(nil, errors.New("service failure"))
+
+	api := NewColumnTemplateApi(service)
+
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil)
+
+	request.AddToContext(identifiers.BoardTemplateIdentifier, boardID)
+	request.AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
+
+	api.GetColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, response.Code)
+}
+
+func TestApiGetColumnTemplates(t *testing.T) {
+	boardID := uuid.New()
+
+	templates := []*ColumnTemplate{&ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}}
+	templates[0].BoardTemplate = boardID
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().GetAll(mock.Anything, boardID).Return(templates, nil)
+
+	api := NewColumnTemplateApi(service)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID)
+
+	api.GetColumnTemplates(response, request.Request())
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	var result []*ColumnTemplate
+	assert.NoError(t, json.Unmarshal(response.Body.Bytes(), &result))
+	assert.Len(t, result, 1)
+	assert.Equal(t, templates[0].ID, result[0].ID)
+}
+
+func TestApiGetColumnTemplates_ServiceError(t *testing.T) {
+	boardID := uuid.New()
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().GetAll(mock.Anything, boardID).Return(nil, errors.New("service failure"))
+
+	api := NewColumnTemplateApi(service)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodGet, "/", nil).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID)
+
+	api.GetColumnTemplates(response, request.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, response.Code)
+}
+
+func TestApiUpdateColumnTemplate(t *testing.T) {
+	template := &ColumnTemplate{
+		ID:            uuid.New(),
+		BoardTemplate: uuid.New(),
+		Name:          "TestColumnTemplate",
+		Description:   "Template Description",
+		Color:         common.ColorGoalGreen,
+		Visible:       true,
+		Index:         0,
+	}
+	body := ColumnTemplateUpdateRequest{
+		Name: "Updated column", Description: "An updated column",
+		Color: common.ColorOnlineOrange, Visible: false, Index: 2,
+	}
+	expectedBody := body
+	expectedBody.ID, expectedBody.BoardTemplate = template.ID, template.BoardTemplate
+
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Update(mock.Anything, expectedBody).Return(template, nil)
+
+	api := NewColumnTemplateApi(service)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardTemplateIdentifier, template.BoardTemplate).
+		AddToContext(identifiers.ColumnTemplateIdentifier, template.ID)
+
+	api.UpdateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusOK, response.Code)
+	var result ColumnTemplate
+	assert.NoError(t, json.Unmarshal(response.Body.Bytes(), &result))
+	assert.Equal(t, template.ID, result.ID)
+}
+
+func TestApiUpdateColumnTemplate_BadRequest(t *testing.T) {
+	api := NewColumnTemplateApi(NewMockColumnTemplateService(t))
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/", bytes.NewBufferString("{")).
+		AddToContext(identifiers.BoardTemplateIdentifier, uuid.New()).
+		AddToContext(identifiers.ColumnTemplateIdentifier, uuid.New())
+
+	api.UpdateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusBadRequest, response.Code)
+}
+
+func TestApiUpdateColumnTemplate_ServiceError(t *testing.T) {
+	boardID := uuid.New()
+	columnID := uuid.New()
+	body := ColumnTemplateUpdateRequest{
+		ID:            columnID,
+		BoardTemplate: boardID,
+		Color:         common.ColorGoalGreen,
+	}
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Update(mock.Anything, body).Return(nil, errors.New("service failure"))
+	api := NewColumnTemplateApi(service)
+	bodyBytes, err := json.Marshal(body)
+	assert.NoError(t, err)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodPut, "/", bytes.NewReader(bodyBytes)).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID).
+		AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
+
+	api.UpdateColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, response.Code)
+}
+
+func TestApiDeleteColumnTemplate(t *testing.T) {
+	boardID, columnID := uuid.New(), uuid.New()
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Delete(mock.Anything, boardID, columnID).Return(nil)
+	api := NewColumnTemplateApi(service)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/", nil).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID).
+		AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
+
+	api.DeleteColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusNoContent, response.Code)
+}
+
+func TestApiDeleteColumnTemplate_ServiceError(t *testing.T) {
+	boardID, columnID := uuid.New(), uuid.New()
+	service := NewMockColumnTemplateService(t)
+	service.EXPECT().Delete(mock.Anything, boardID, columnID).Return(errors.New("service failure"))
+	api := NewColumnTemplateApi(service)
+	response := httptest.NewRecorder()
+	request := technical_helper.NewTestRequestBuilder(http.MethodDelete, "/", nil).
+		AddToContext(identifiers.BoardTemplateIdentifier, boardID).
+		AddToContext(identifiers.ColumnTemplateIdentifier, columnID)
+
+	api.DeleteColumnTemplate(response, request.Request())
+
+	assert.Equal(t, http.StatusInternalServerError, response.Code)
+}

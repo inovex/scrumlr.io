@@ -574,6 +574,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 	infoApi := apiInitializer.InitializeInfoApi(infoService)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, serverconfig.AllowAnonymousBoardCreation, serverconfig.AllowAnonymousCustomTemplates)
+	boardTemplateApi := apiInitializer.InitializeBoardTemplateApi(boardTemplateService)
+	columnTemplateApi := apiInitializer.InitializeColumnTemplateApi(columnTemplateService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	infoRoutes := routesInitializer.InitializeInfoRoutes(infoApi)
@@ -582,6 +584,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
+	boardTemplateRoutes := routesInitializer.InitializeBoardTemplateRoutes(boardTemplateApi)
+  columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
 
 	s := api.New(
 		basePath,
@@ -595,7 +599,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 		userRoutes,
 		sessionRoutes,
 		swaggerRoutes,
-
+		boardTemplateRoutes,
+		columnTemplateRoutes,
 		boardService,
 		columnService,
 		votingService,
@@ -605,8 +610,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 		sessionService,
 		sessionRequestService,
 		boardReactionService,
-		boardTemplateService,
-		columnTemplateService,
 
 		logger.GetLogLevel() == zap.DebugLevel,
 		!cli.Bool("disable-check-origin"),

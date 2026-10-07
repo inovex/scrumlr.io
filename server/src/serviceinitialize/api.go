@@ -1,6 +1,8 @@
 package serviceinitialize
 
 import (
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
@@ -35,14 +37,14 @@ func (init *ApiInitializer) InitializeBoardReactionApi() {
 	panic(notImplemented)
 }
 
-func (init *ApiInitializer) InitializeBoardTemplateApi() {
-	// board template api is currently not initialized through the api initializer
-	panic(notImplemented)
+func (init *ApiInitializer) InitializeBoardTemplateApi(boardTemplateService boardtemplates.BoardTemplateService) boardtemplates.BoardTemplateApi {
+	boardTemplateAPI := boardtemplates.NewBoardTemplateApi(boardTemplateService)
+	return boardTemplateAPI
 }
 
-func (init *ApiInitializer) InitializeColumnTemplateApi() {
-	// column template api is currently not initialized through the api initializer
-	panic(notImplemented)
+func (init *ApiInitializer) InitializeColumnTemplateApi(columnTemplateService columntemplates.ColumnTemplateService) columntemplates.ColumnTemplateApi {
+	columnTemplateAPI := columntemplates.NewColumnTemplateApi(columnTemplateService)
+	return columnTemplateAPI
 }
 
 func (init *ApiInitializer) InitializeFeedbackApi(feedbackService feedback.FeedbackService) feedback.FeedbackApi {

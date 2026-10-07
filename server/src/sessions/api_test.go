@@ -19,7 +19,7 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-func Test_GetBoardSessions_api(t *testing.T) {
+func TestApiGetBoardSessions(t *testing.T) {
 	boardID := uuid.New()
 	mockFilter := BoardSessionFilter{Ready: nil}
 	mockSessions := []*BoardSession{
@@ -44,7 +44,7 @@ func Test_GetBoardSessions_api(t *testing.T) {
 	assert.Len(t, sessions, 1)
 }
 
-func Test_GetBoardSessions_ServiceError(t *testing.T) {
+func TestApiGetBoardSessionsServiceError(t *testing.T) {
 	boardID := uuid.New()
 	mockFilter := BoardSessionFilter{}
 
@@ -62,7 +62,7 @@ func Test_GetBoardSessions_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_GetBoardSession_api(t *testing.T) {
+func TestApiGetBoardSession(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	mockSession := &BoardSession{Board: uuid.New(), UserID: userID, Role: "PARTICIPANT"}
@@ -88,7 +88,7 @@ func Test_GetBoardSession_api(t *testing.T) {
 	assert.Equal(t, userID, session.UserID)
 }
 
-func Test_GetBoardSession_ServiceError(t *testing.T) {
+func TestApiGetBoardSessionServiceError(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 
@@ -109,7 +109,7 @@ func Test_GetBoardSession_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_GetBoardSession_InvalidUUID(t *testing.T) {
+func TestApiGetBoardSessionInvalidUUID(t *testing.T) {
 
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
@@ -122,7 +122,7 @@ func Test_GetBoardSession_InvalidUUID(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_UpdateBoardSession_api(t *testing.T) {
+func TestApiUpdateBoardSession(t *testing.T) {
 	boardID := uuid.New()
 	callerID := uuid.New()
 	targetUserID := uuid.New()
@@ -164,7 +164,7 @@ func Test_UpdateBoardSession_api(t *testing.T) {
 	assert.Equal(t, ready, session.Ready)
 }
 
-func Test_UpdateBoardSession_NoUUID(t *testing.T) {
+func TestApiUpdateBoardSessionNoUUID(t *testing.T) {
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
 
@@ -177,7 +177,7 @@ func Test_UpdateBoardSession_NoUUID(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }
 
-func Test_UpdateBoardSession_BadBody(t *testing.T) {
+func TestApiUpdateBoardSessionBadBody(t *testing.T) {
 	mockService := NewMockSessionService(t)
 	api := NewSessionApi(mockService)
 
@@ -194,7 +194,7 @@ func Test_UpdateBoardSession_BadBody(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, rr.Result().StatusCode)
 }
 
-func Test_UpdateBoardSession_ServiceError(t *testing.T) {
+func TestApiUpdateBoardSessionServiceError(t *testing.T) {
 	boardID := uuid.New()
 	callerID := uuid.New()
 	targetUserID := uuid.New()
@@ -230,7 +230,7 @@ func Test_UpdateBoardSession_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_UpdateBoardSessions_api(t *testing.T) {
+func TestApiUpdateBoardSessions(t *testing.T) {
 	boardID := uuid.New()
 	body := BoardSessionsUpdateRequest{
 		Board: boardID,
@@ -258,7 +258,7 @@ func Test_UpdateBoardSessions_api(t *testing.T) {
 	assert.Len(t, sessions, 1)
 }
 
-func Test_UpdateBoardSessions_ServiceError(t *testing.T) {
+func TestApiUpdateBoardSessionsServiceError(t *testing.T) {
 	boardID := uuid.New()
 	body := BoardSessionsUpdateRequest{
 		Board: boardID,
@@ -279,7 +279,7 @@ func Test_UpdateBoardSessions_ServiceError(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
 }
 
-func Test_DeleteBoardSession(t *testing.T) {
+func TestApiDeleteBoardSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 
@@ -303,7 +303,7 @@ func Test_DeleteBoardSession(t *testing.T) {
 	assert.Equal(t, http.StatusNoContent, rr.Result().StatusCode)
 }
 
-func Test_DeleteBoardSessionDifferentCaller(t *testing.T) {
+func TestApiDeleteBoardSessionDifferentCaller(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 	callerId := uuid.New()
@@ -328,7 +328,7 @@ func Test_DeleteBoardSessionDifferentCaller(t *testing.T) {
 	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 }
 
-func Test_DeleteBoardsessionNotFound(t *testing.T) {
+func TestApiDeleteBoardSessionNotFound(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 
@@ -352,7 +352,7 @@ func Test_DeleteBoardsessionNotFound(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, rr.Result().StatusCode)
 }
 
-func Test_DeleteBoardsessionForbidden(t *testing.T) {
+func TestApiDeleteBoardSessionForbidden(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 
@@ -376,7 +376,7 @@ func Test_DeleteBoardsessionForbidden(t *testing.T) {
 	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 }
 
-func Test_BoardParticipantContext(t *testing.T) {
+func TestApiBoardParticipantContext(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 
@@ -402,7 +402,7 @@ func Test_BoardParticipantContext(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_BoardParticipantContext_NoParticipant(t *testing.T) {
+func TestApiBoardParticipantContextNoParticipant(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 
@@ -427,7 +427,7 @@ func Test_BoardParticipantContext_NoParticipant(t *testing.T) {
 	assert.Equal(t, http.StatusForbidden, rr.Result().StatusCode)
 }
 
-func Test_BoardParticipantContext_ParticipantBanned(t *testing.T) {
+func TestApiBoardParticipantContextParticipantBanned(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 
@@ -454,7 +454,7 @@ func Test_BoardParticipantContext_ParticipantBanned(t *testing.T) {
 	assert.Error(t, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 }
 
-func Test_BoardModeratorContext_Exists(t *testing.T) {
+func TestApiBoardModeratorContextExists(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	sessionServiceMock := NewMockSessionService(t)
@@ -479,7 +479,7 @@ func Test_BoardModeratorContext_Exists(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_BoardModeratorContext_DoesNotExists(t *testing.T) {
+func TestApiBoardModeratorContextDoesNotExists(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	sessionServiceMock := NewMockSessionService(t)
@@ -504,7 +504,7 @@ func Test_BoardModeratorContext_DoesNotExists(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, rr.Result().StatusCode)
 }
 
-func Test_BoardOwnerContext_Exists(t *testing.T) {
+func TestApiBoardOwnerContextExists(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	sessionServiceMock := NewMockSessionService(t)
@@ -529,7 +529,7 @@ func Test_BoardOwnerContext_Exists(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rr.Result().StatusCode)
 }
 
-func Test_BoardOwnerContext_DoesNotExists(t *testing.T) {
+func TestApiBoardOwnerContextDoesNotExists(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	sessionServiceMock := NewMockSessionService(t)

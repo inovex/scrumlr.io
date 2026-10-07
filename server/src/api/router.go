@@ -13,9 +13,7 @@ import (
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardreactions"
-	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
 	"github.com/go-chi/chi/v5"
@@ -49,6 +47,8 @@ type Server struct {
 	userRoutes     chi.Router
 	sessionRoutes  chi.Router
 	swaggerRoutes  chi.Router
+	boardTemplateRoutes chi.Router
+  columnTemplateRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -59,8 +59,6 @@ type Server struct {
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
 	boardReactions  boardreactions.BoardReactionCreater
-	boardTemplates  boardtemplates.BoardTemplateService
-	columntemplates columntemplates.ColumnTemplateService
 
 	checkOrigin bool
 
@@ -93,6 +91,8 @@ func New(
 	userRoutes chi.Router,
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
+	boardTemplateRoutes chi.Router,
+  columnTemplateRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -103,8 +103,6 @@ func New(
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
 	boardReactions boardreactions.BoardReactionCreater,
-	boardTemplates boardtemplates.BoardTemplateService,
-	columntemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
@@ -154,6 +152,8 @@ func New(
 		userRoutes:     userRoutes,
 		sessionRoutes:  sessionRoutes,
 		swaggerRoutes:  swaggerRoutes,
+		boardTemplateRoutes: boardTemplateRoutes,
+    columnTemplateRoutes: columnTemplateRoutes,
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
@@ -167,8 +167,6 @@ func New(
 		sessions:                         sessions,
 		sessionRequests:                  sessionRequests,
 		boardReactions:                   boardReactions,
-		boardTemplates:                   boardTemplates,
-		columntemplates:                  columntemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
@@ -228,34 +226,15 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
-		r.Route("/templates", func(r chi.Router) {
-			r.Use(s.BoardTemplateRateLimiter)
-			r.Use(s.AnonymousCustomTemplateCreationContext)
+		r.With(
+			s.BoardTemplateRateLimiter,
+			s.AnonymousCustomTemplateCreationContext,
+		).Mount("/templates", s.boardTemplateRoutes)
 
-			r.Post("/", s.createBoardTemplate)
-			r.Get("/", s.getBoardTemplates)
-
-			r.Route("/{id}", func(r chi.Router) {
-				r.Use(s.BoardTemplateContext)
-
-				r.Get("/", s.getBoardTemplate)
-				r.Put("/", s.updateBoardTemplate)
-				r.Delete("/", s.deleteBoardTemplate)
-
-				r.Route("/columns", func(r chi.Router) {
-					r.Post("/", s.createColumnTemplate)
-					r.Get("/", s.getColumnTemplates)
-
-					r.Route("/{columnTemplate}", func(r chi.Router) {
-						r.Use(s.ColumnTemplateContext)
-
-						r.Get("/", s.getColumnTemplate)
-						r.Put("/", s.updateColumnTemplate)
-						r.Delete("/", s.deleteColumnTemplate)
-					})
-				})
-			})
-		})
+    r.With(
+			s.BoardTemplateRateLimiter,
+			s.AnonymousCustomTemplateCreationContext,
+		).Mount("/templates/{id}/columns", s.columnTemplateRoutes)
 
 		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)
 		r.With(s.AnonymousBoardCreationContext).Post("/import", s.importBoard)
