@@ -5,7 +5,7 @@ import {sendWebSocketMessage} from "../board";
 
 export const updateNoteDragState = createAsyncThunk<void, {noteId: string; dragging: boolean}, {state: ApplicationState}>(
   "dragLocks/updateNoteDragState",
-  async ({noteId, dragging}) => {
+  ({noteId, dragging}) => {
     try {
       const message: DragLockMessage = {
         type: "DRAG_LOCK_MESSAGE",
@@ -23,9 +23,9 @@ export const updateNoteDragState = createAsyncThunk<void, {noteId: string; dragg
 
 // Convenience thunks for backward compatibility
 export const broadcastNoteDragStart = createAsyncThunk<void, string, {state: ApplicationState}>("dragLocks/broadcastNoteDragStart", async (noteId, {dispatch}) => {
-  dispatch(updateNoteDragState({noteId, dragging: true}));
+  await dispatch(updateNoteDragState({noteId, dragging: true}));
 });
 
 export const broadcastNoteDragEnd = createAsyncThunk<void, string, {state: ApplicationState}>("dragLocks/broadcastNoteDragEnd", async (noteId, {dispatch}) => {
-  dispatch(updateNoteDragState({noteId, dragging: false}));
+  await dispatch(updateNoteDragState({noteId, dragging: false}));
 });
