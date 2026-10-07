@@ -29,7 +29,7 @@ export const resources = {
 
 export type AppLanguage = keyof typeof resources;
 
-await i18n
+i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
@@ -45,7 +45,8 @@ await i18n
     fallbackLng: "en",
     returnNull: false,
   })
-
-if (store) store.dispatch(setLanguage(i18n.language));
+  .then(() => {
+    if (store) store.dispatch(setLanguage(i18n.language));
+  });
 
 export default i18n;
