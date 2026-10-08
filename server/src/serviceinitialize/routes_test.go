@@ -49,8 +49,6 @@ func TestInitializeBoardTemplateRoutes(t *testing.T) {
 	initializer := NewRoutesInitializer()
 
 	boardTemplateApi := boardtemplates.NewMockBoardTemplateApi(t)
-	boardTemplateApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
 
 	boardTemplateRoutes := initializer.InitializeBoardTemplateRoutes(boardTemplateApi)
 
@@ -61,8 +59,6 @@ func TestInitializeColumnTemplateRoutes(t *testing.T) {
 	initializer := NewRoutesInitializer()
 
 	columnTemplateApi := columntemplates.NewMockColumnTemplateApi(t)
-	columnTemplateApi.EXPECT().ColumnTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
 
 	columnTemplateRoutes := initializer.InitializeColumnTemplateRoutes(columnTemplateApi)
 
