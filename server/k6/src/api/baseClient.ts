@@ -17,7 +17,7 @@ export class BaseClient {
 		const url = this.buildUrl(path, queryParameter);
 		const headers = this.buildHeaders(cookieJar, extraHeaders);
 
-    console.debug("get request: ", url.toString())
+		console.debug("get request: ", url.toString());
 
 		return http.get(url.toString(), headers);
 	}
@@ -34,7 +34,7 @@ export class BaseClient {
 		const payload = this.buildPayload(body);
 		const headers = this.buildHeaders(cookieJar, extraHeaders);
 
-    console.debug("post request: ", url.toString())
+		console.debug("post request: ", url.toString());
 
 		return http.post(url.toString(), payload, headers);
 	}
@@ -50,7 +50,7 @@ export class BaseClient {
 		const payload = this.buildPayload(body);
 		const headers = this.buildHeaders(cookieJar, extraHeaders);
 
-    console.debug("put request: ", url.toString())
+		console.debug("put request: ", url.toString());
 
 		return http.put(url.toString(), payload, headers);
 	}
@@ -66,7 +66,7 @@ export class BaseClient {
 		const payload = this.buildPayload(body);
 		const headers = this.buildHeaders(cookieJar, extraHeaders);
 
-    console.debug("patch request: ", url.toString())
+		console.debug("patch request: ", url.toString());
 
 		return http.patch(url.toString(), payload, headers);
 	}
@@ -82,7 +82,7 @@ export class BaseClient {
 		const payload = this.buildPayload(body);
 		const headers = this.buildHeaders(cookieJar, extraHeaders);
 
-    console.debug("delete request: ", url.toString())
+		console.debug("delete request: ", url.toString());
 
 		return http.del(url.toString(), payload, headers);
 	}

@@ -6,12 +6,12 @@ import type { CreateVoteRequest } from "./requests.ts";
 export class VoteClient extends BaseClient {
 	createVote(boardId: string, voteReq: CreateVoteRequest, cookieJar?: http.CookieJar): [Vote | null, http.Response] {
 		const response = this.post(`./boards/${boardId}/votes`, voteReq, [], cookieJar);
-    if (response.error_code) {
-      return [null, response]
-    }
+		if (response.error_code) {
+			return [null, response];
+		}
 
-    const vote: Vote = response.json() as unknown as Vote
-    return [vote, response]
+		const vote: Vote = response.json() as unknown as Vote;
+		return [vote, response];
 	}
 
 	getVotes(
