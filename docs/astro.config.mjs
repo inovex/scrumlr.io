@@ -34,6 +34,16 @@ export default defineConfig({
 
         },
         {
+          label: "Features",
+          items: [
+            {
+              autogenerate: {
+                directory: "features"
+              }
+            }
+          ],
+        },
+        {
           label: "Development",
           items: [
             {
