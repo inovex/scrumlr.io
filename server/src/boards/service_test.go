@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/hash"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -19,7 +20,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
@@ -76,7 +76,7 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
 	suite.mockHash = hash.NewMockHash(suite.T())
 
-	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionsMock, suite.sessionRequestMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
 
 	suite.boardID = uuid.New()
 	suite.userID = uuid.New()
@@ -115,8 +115,6 @@ func (suite *BoardServiceTestSuite) TestExport_JSON() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -171,8 +169,6 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -383,8 +379,6 @@ func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -521,8 +515,10 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest()
 func (suite *BoardServiceTestSuite) TestJoin_ByInvite() {
 	board := &Board{ID: suite.boardID, AccessPolicy: ByInvite}
 
-	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
-	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
 	suite.sessionRequestMock.EXPECT().Create(mock.Anything, suite.boardID, suite.userID).
 		Return(&sessionrequests.BoardSessionRequest{}, nil)
 
