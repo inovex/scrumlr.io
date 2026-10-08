@@ -12,7 +12,6 @@ type BoardTemplateApi interface {
 	GetBoardTemplates(w http.ResponseWriter, r *http.Request)
 	UpdateBoardTemplate(w http.ResponseWriter, r *http.Request)
 	DeleteBoardTemplate(w http.ResponseWriter, r *http.Request)
-	BoardTemplateContext(next http.Handler) http.Handler
 }
 
 type Router struct {
@@ -32,7 +31,7 @@ func (r *Router) RegisterRoutes() chi.Router {
 	router.Get("/", r.boardTemplateAPI.GetBoardTemplates)
 
 	router.Route("/{id}", func(sub chi.Router) {
-		sub.Use(r.boardTemplateAPI.BoardTemplateContext)
+		sub.Use(BoardTemplateContext)
 
 		sub.Get("/", r.boardTemplateAPI.GetBoardTemplate)
 		sub.Put("/", r.boardTemplateAPI.UpdateBoardTemplate)
