@@ -19,7 +19,7 @@ export class VoteClient extends BaseClient {
 		votingId: string | null = null,
 		noteId: string | null = null,
 		cookieJar?: http.CookieJar,
-	): [Vote[] | null, http.Response] {
+	): [Vote[], http.Response] {
 		const queryParameter: QueryParameter[] = [
 			{ key: "voting", value: votingId },
 			{ key: "note", value: noteId },
@@ -27,7 +27,7 @@ export class VoteClient extends BaseClient {
 
 		const response = this.get(`./boards/${boardId}/votes`, queryParameter, cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const votes: Vote[] = response.json() as unknown as Vote[];
