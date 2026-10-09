@@ -11,7 +11,7 @@
             "name": "MIT",
             "url": "https://github.com/inovex/scrumlr.io/blob/main/LICENSE"
         },
-        "version": "5.4.1"
+        "version": "5.4.2"
     },
     "paths": {
         "/boards": {

@@ -37,8 +37,8 @@ func NewColumnTemplateApi(service ColumnTemplateService) ColumnTemplateApi {
 //	@Description	Create a column template for an existing board template
 //	@Tags			column templates
 //	@Accept			json
-//	@Param			Cookie			header	string									true	"jwt token to authenticate"
-//	@Param			boardid			path	string									true	"id of the board template"
+//	@Param			Cookie			header	string					true	"jwt token to authenticate"
+//	@Param			boardid			path	string					true	"id of the board template"
 //	@Param			columntemplate	body	ColumnTemplateRequest	true	"column template to create"
 //	@Produce		json
 //	@Success		201	{object}	ColumnTemplate

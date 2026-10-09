@@ -28,7 +28,7 @@ import (
 )
 
 // @title			Scrumlr backend
-// @version		5.4.1
+// @version		5.4.2
 // @description	This is the scrumlr backend server.
 // @termsOfService	https://scrumlr.io/terms
 // @contact.email	info@scrumlr.io
@@ -585,7 +585,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
 	boardTemplateRoutes := routesInitializer.InitializeBoardTemplateRoutes(boardTemplateApi)
-  columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
+	columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
 
 	s := api.New(
 		basePath,
