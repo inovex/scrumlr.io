@@ -78,7 +78,7 @@ export const createBoardFromTemplate = createAsyncThunk<
   }
 });
 
-export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
+export const leaveBoard = createAsyncThunk("board/leaveBoard", () => {
   if (socket) {
     socket.close();
     socket = null;
@@ -92,7 +92,7 @@ export const permittedBoardAccess = createAsyncThunk<
   {
     state: ApplicationState;
   }
->("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
+>("board/permittedBoardAccess", (boardId: string, {dispatch, getState}) => {
   const {serverTimeOffset} = getState().view;
   const self = getState().auth.user!;
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
@@ -411,7 +411,7 @@ export const deleteBoard = createAsyncThunk<
   }
 >("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
-  retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
+    await retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
     redirectToBoardDeletedPage();
   });
 });

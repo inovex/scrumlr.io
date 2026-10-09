@@ -1,20 +1,20 @@
 import classNames from "classnames";
-import {useTranslation} from "react-i18next";
-import {FileCsvIcon, FileJsonIcon, DuplicateIcon, PrinterIcon} from "components/Icon";
-import {useAppSelector} from "store";
-import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
-import {Toast} from "utils/Toast";
-import {TOAST_TIMER_SHORT} from "constants/misc";
-import {MenuItemConfig} from "constants/settings";
-import {useOutletContext} from "react-router";
-import {getColorClassName} from "constants/colors";
+import { useTranslation } from "react-i18next";
+import { FileCsvIcon, FileJsonIcon, DuplicateIcon, PrinterIcon } from "components/Icon";
+import { useAppSelector } from "store";
+import { exportAsJSON, exportAsCSV, getMarkdownExport } from "utils/export";
+import { Toast } from "utils/Toast";
+import { TOAST_TIMER_SHORT } from "constants/misc";
+import { MenuItemConfig } from "constants/settings";
+import { useOutletContext } from "react-router";
+import { getColorClassName } from "constants/colors";
 import ExportHintHiddenContent from "./ExportHintHiddenContent/ExportHintHiddenContent";
-import {SettingsButton} from "../Components/SettingsButton";
+import { SettingsButton } from "../Components/SettingsButton";
 import "../SettingsDialog.scss";
 import "./ExportBoard.scss";
 
 export const ExportBoard = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
@@ -63,11 +63,12 @@ export const ExportBoard = () => {
           <SettingsButton
             label={t("ExportBoardOption.exportToClipboard")}
             icon={DuplicateIcon}
-            onClick={() => {
-              getMarkdownExport(boardId).then((result) => {
-                navigator.clipboard.writeText(result).then(() => {
-                  Toast.success({title: t("ExportBoardOption.copyToClipboardSuccess"), autoClose: TOAST_TIMER_SHORT});
-                });
+            onClick={async () => {
+              const result = await getMarkdownExport(boardId);
+              await navigator.clipboard.writeText(result);
+              Toast.success({
+                title: t("ExportBoardOption.copyToClipboardSuccess"),
+                autoClose: TOAST_TIMER_SHORT,
               });
             }}
             data-testid="export-markdown"

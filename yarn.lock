@@ -5,6 +5,15 @@ __metadata:
   version: 9
   cacheKey: 10c0
 
+"@4tw/cypress-drag-drop@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@4tw/cypress-drag-drop@npm:2.3.1"
+  peerDependencies:
+    cypress: ">=2"
+  checksum: 10c0/dd283d29ff4f5693ae50e99f95806965bf8900caf5b589ed761226b20aa41d81ceb2f7fe2d33f48aca336aa499faade0fc6c83c8a09b947dd2efb1b4d08d1bbe
+  languageName: node
+  linkType: hard
+
 "@aashutoshrathi/word-wrap@npm:^1.2.3":
   version: 1.2.6
   resolution: "@aashutoshrathi/word-wrap@npm:1.2.6"
@@ -6574,6 +6583,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "scrumlr.io@workspace:."
   dependencies:
+    "@4tw/cypress-drag-drop": "npm:^2.3.1"
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"

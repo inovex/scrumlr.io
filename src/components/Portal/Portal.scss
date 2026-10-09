@@ -18,6 +18,18 @@
   user-select: none; // fix a bug where opening portal via touch action leads to weird selection behaviour
 }
 
+dialog.portal__content {
+  // Reset browser default dialog styling
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
 .portal__frame {
   position: absolute;
   width: 100vw;
