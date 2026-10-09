@@ -21,7 +21,7 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
@@ -39,7 +39,7 @@ const boardTimerUpdateFailureMessage = "failed to update board timer"
 
 type Service struct {
 	clock                    timeprovider.TimeProvider
-	hash                     hash.Hash
+	passwordEncoder          encoder.PasswordEncoder
 	database                 BoardDatabase
 	realtime                 *realtime.Broker
 	boardLastModifiedUpdater BoardLastModifiedUpdater
@@ -60,8 +60,9 @@ type LastModifiedUpdater struct {
 
 type BoardDatabase interface {
 	CreateBoard(ctx context.Context, board DatabaseBoardInsert) (DatabaseBoard, error)
-	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
 	UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error)
+	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
+	UpdateBoardPassphrase(ctx context.Context, update DatabaseBoardPassphraseUpdate) (DatabaseBoard, error)
 	GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error)
 	DeleteBoard(ctx context.Context, id uuid.UUID) error
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
@@ -82,11 +83,11 @@ func NewBoardService(
 	votingService votings.VotingService,
 	userService users.UserService,
 	clock timeprovider.TimeProvider,
-	hash hash.Hash,
+	passwordEncoder encoder.PasswordEncoder,
 ) BoardService {
 	b := new(Service)
 	b.clock = clock
-	b.hash = hash
+	b.passwordEncoder = passwordEncoder
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
@@ -475,7 +476,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				return nil, CreateBoardError(BadRequest, "passphrase must be set on access policy 'BY_PASSPHRASE'", err)
 			}
 
-			passphrase, salt, err := service.hash.HashWithSalt(*body.Passphrase)
+			passphrase, salt, err := service.passwordEncoder.Encode(*body.Passphrase)
 			if err != nil {
 				otel.RecordErrorSpan(span, err, new("failed to encode passphrase"))
 				log.Error("failed to encode passphrase")
@@ -800,6 +801,7 @@ func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.
 func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_passphrase")
 	defer span.End()
+	log := logger.FromContext(ctx)
 
 	if request.Passphrase == "" {
 		err := errors.New("missing passphrase")
@@ -813,11 +815,39 @@ func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user
 		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
 	}
 
-	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
-	if encodedPassphrase != *board.Passphrase {
+	matches, err := service.passwordEncoder.Matches(request.Passphrase, *board.Passphrase, *board.Salt)
+	if err != nil {
+		log.Errorw("failed to decode passphrase")
+		otel.RecordErrorSpan(span, err, nil)
+		return false, "", 0, CreateBoardError(BadRequest, "failed to decode passphrase", err)
+	}
+
+	if !matches {
 		err := errors.New("wrong passphrase")
 		otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
 		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
+	}
+
+	upgradePassword := service.passwordEncoder.UpgradeEncoding(*board.Passphrase)
+	if upgradePassword {
+		encoded, salt, err := service.passwordEncoder.Encode(request.Passphrase)
+		if err != nil {
+			log.Warn("failed to encode passphrase")
+			otel.RecordErrorSpan(span, err, new("failed to encode passphrase"))
+		}
+
+		if encoded != nil && salt != nil {
+			_, err = service.database.UpdateBoardPassphrase(ctx, DatabaseBoardPassphraseUpdate{
+				ID:         board.ID,
+				Passphrase: *encoded,
+				Salt:       *salt,
+			})
+
+			if err != nil {
+				log.Warn("failed to update passphrase")
+				otel.RecordErrorSpan(span, err, new("failed to update passphrase"))
+			}
+		}
 	}
 
 	return service.joinPublic(ctx, board, user)
@@ -861,7 +891,11 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 			return board, err
 		}
 
-		encodedPassphrase, salt, _ := service.hash.HashWithSalt(*body.Passphrase)
+		encodedPassphrase, salt, err := service.passwordEncoder.Encode(*body.Passphrase)
+		if err != nil {
+			return board, CreateBoardError(Internal, "failed to encode passphrase", err)
+		}
+
 		board = DatabaseBoardInsert{
 			Name:         body.Name,
 			Description:  body.Description,
