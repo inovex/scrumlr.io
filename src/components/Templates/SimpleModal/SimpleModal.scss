@@ -86,16 +86,19 @@ $max-clamp-width: 600px;
   }
 
   .simple-modal__main {
+    // min-height: 0 lets this flex child shrink below its content, so it scrolls instead of pushing the footer out
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 
   .simple-modal__footer {
+    // show the primary button above the secondary one without changing the DOM order
     flex-direction: column-reverse;
     gap: styles.$spacing--base;
   }
 
+  // align the modal to the top of the visible screen (dvh excludes mobile browser toolbars)
   .portal__frame:has(.simple-modal) {
     align-items: flex-start;
     height: 100dvh;
