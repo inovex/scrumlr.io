@@ -5,15 +5,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/identifiers"
 )
 
 func TestBoardTemplateRouterRegistersRoutes(t *testing.T) {
 	boardApi := NewMockBoardTemplateApi(t)
-
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
 
 	routes := NewBoardTemplateRouter(boardApi).RegisterRoutes().Routes()
 
@@ -21,13 +20,13 @@ func TestBoardTemplateRouterRegistersRoutes(t *testing.T) {
 	assert.ElementsMatch(t, []string{"/", "/{id}/*"}, []string{routes[0].Pattern, routes[1].Pattern})
 }
 
-func TestBoardTemplateRouterCreatesTemplate(t *testing.T) {
+func TestBoardTemplateRouterCreateTemplate(t *testing.T) {
 	boardApi := NewMockBoardTemplateApi(t)
 
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
 	boardApi.EXPECT().CreateBoardTemplate(mock.Anything, mock.Anything).
-		Run(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusCreated) })
+		RunAndReturn(func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusCreated)
+		})
 
 	router := NewBoardTemplateRouter(boardApi).RegisterRoutes()
 	request := httptest.NewRequest(http.MethodPost, "/", nil)
@@ -38,12 +37,13 @@ func TestBoardTemplateRouterCreatesTemplate(t *testing.T) {
 	assert.Equal(t, http.StatusCreated, response.Code)
 }
 
-func TestBoardTemplateRouterGetsTemplates(t *testing.T) {
+func TestBoardTemplateRouterGetTemplates(t *testing.T) {
 	boardApi := NewMockBoardTemplateApi(t)
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
+
 	boardApi.EXPECT().GetBoardTemplates(mock.Anything, mock.Anything).
-		Run(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusOK) })
+		Run(func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
 
 	router := NewBoardTemplateRouter(boardApi).RegisterRoutes()
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -54,15 +54,22 @@ func TestBoardTemplateRouterGetsTemplates(t *testing.T) {
 	assert.Equal(t, http.StatusOK, response.Code)
 }
 
-func TestBoardTemplateRouterGetsTemplate(t *testing.T) {
+func TestBoardTemplateRouterGetTemplate(t *testing.T) {
+	templateId := uuid.New()
 	boardApi := NewMockBoardTemplateApi(t)
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
+
 	boardApi.EXPECT().GetBoardTemplate(mock.Anything, mock.Anything).
-		Run(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusOK) })
+		Run(func(w http.ResponseWriter, r *http.Request) {
+			id, ok := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
+
+			assert.True(t, ok)
+			assert.Equal(t, templateId, id)
+
+			w.WriteHeader(http.StatusOK)
+		})
 
 	router := NewBoardTemplateRouter(boardApi).RegisterRoutes()
-	request := httptest.NewRequest(http.MethodGet, "/template-id", nil)
+	request := httptest.NewRequest(http.MethodGet, "/"+templateId.String(), nil)
 	response := httptest.NewRecorder()
 
 	router.ServeHTTP(response, request)
@@ -71,15 +78,22 @@ func TestBoardTemplateRouterGetsTemplate(t *testing.T) {
 }
 
 func TestBoardTemplateRouterUpdatesTemplate(t *testing.T) {
+	templateId := uuid.New()
+
 	boardApi := NewMockBoardTemplateApi(t)
 
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
 	boardApi.EXPECT().UpdateBoardTemplate(mock.Anything, mock.Anything).
-		Run(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusOK) })
+		Run(func(w http.ResponseWriter, r *http.Request) {
+			id, ok := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
+
+			assert.True(t, ok)
+			assert.Equal(t, templateId, id)
+
+			w.WriteHeader(http.StatusOK)
+		})
 
 	router := NewBoardTemplateRouter(boardApi).RegisterRoutes()
-	request := httptest.NewRequest(http.MethodPut, "/template-id", nil)
+	request := httptest.NewRequest(http.MethodPut, "/"+templateId.String(), nil)
 	response := httptest.NewRecorder()
 
 	router.ServeHTTP(response, request)
@@ -88,14 +102,22 @@ func TestBoardTemplateRouterUpdatesTemplate(t *testing.T) {
 }
 
 func TestBoardTemplateRouterDeletesTemplate(t *testing.T) {
+	templateId := uuid.New()
+
 	boardApi := NewMockBoardTemplateApi(t)
-	boardApi.EXPECT().BoardTemplateContext(mock.Anything).
-		RunAndReturn(func(next http.Handler) http.Handler { return next })
+
 	boardApi.EXPECT().DeleteBoardTemplate(mock.Anything, mock.Anything).
-		Run(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusNoContent) })
+		Run(func(w http.ResponseWriter, r *http.Request) {
+			id, ok := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
+
+			assert.True(t, ok)
+			assert.Equal(t, templateId, id)
+
+			w.WriteHeader(http.StatusNoContent)
+		})
 
 	router := NewBoardTemplateRouter(boardApi).RegisterRoutes()
-	request := httptest.NewRequest(http.MethodDelete, "/template-id", nil)
+	request := httptest.NewRequest(http.MethodDelete, "/"+templateId.String(), nil)
 	response := httptest.NewRecorder()
 
 	router.ServeHTTP(response, request)

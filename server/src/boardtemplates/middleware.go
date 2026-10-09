@@ -11,7 +11,7 @@ import (
 	"scrumlr.io/server/identifiers"
 )
 
-func (api *API) BoardTemplateContext(next http.Handler) http.Handler {
+func BoardTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		boardTemplateParam := chi.URLParam(r, "id")
 		boardTemplate, err := uuid.Parse(boardTemplateParam)

@@ -3,6 +3,7 @@ package api
 import (
 	"os"
 
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/websocket"
 
 	"scrumlr.io/server/sessions"
@@ -41,14 +42,14 @@ type Server struct {
 	wsService websocket.Upgrader
 	auth      auth.Auth
 
-	healthRoutes   chi.Router
-	feedbackRoutes chi.Router
-	infoRoutes     chi.Router
-	userRoutes     chi.Router
-	sessionRoutes  chi.Router
-	swaggerRoutes  chi.Router
-	boardTemplateRoutes chi.Router
-  columnTemplateRoutes chi.Router
+	healthRoutes         chi.Router
+	feedbackRoutes       chi.Router
+	infoRoutes           chi.Router
+	userRoutes           chi.Router
+	sessionRoutes        chi.Router
+	swaggerRoutes        chi.Router
+	boardTemplateRoutes  chi.Router
+	columnTemplateRoutes chi.Router
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -92,7 +93,7 @@ func New(
 	sessionRoutes chi.Router,
 	swaggerRoutes chi.Router,
 	boardTemplateRoutes chi.Router,
-  columnTemplateRoutes chi.Router,
+	columnTemplateRoutes chi.Router,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -146,14 +147,14 @@ func New(
 		realtime:  rt,
 		wsService: wsService,
 
-		healthRoutes:   healtRoutes,
-		feedbackRoutes: feedbackRoutes,
-		infoRoutes:     infoRoutes,
-		userRoutes:     userRoutes,
-		sessionRoutes:  sessionRoutes,
-		swaggerRoutes:  swaggerRoutes,
-		boardTemplateRoutes: boardTemplateRoutes,
-    columnTemplateRoutes: columnTemplateRoutes,
+		healthRoutes:         healtRoutes,
+		feedbackRoutes:       feedbackRoutes,
+		infoRoutes:           infoRoutes,
+		userRoutes:           userRoutes,
+		sessionRoutes:        sessionRoutes,
+		swaggerRoutes:        swaggerRoutes,
+		boardTemplateRoutes:  boardTemplateRoutes,
+		columnTemplateRoutes: columnTemplateRoutes,
 
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
@@ -231,9 +232,10 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.AnonymousCustomTemplateCreationContext,
 		).Mount("/templates", s.boardTemplateRoutes)
 
-    r.With(
+		r.With(
 			s.BoardTemplateRateLimiter,
 			s.AnonymousCustomTemplateCreationContext,
+			boardtemplates.BoardTemplateContext,
 		).Mount("/templates/{id}/columns", s.columnTemplateRoutes)
 
 		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)

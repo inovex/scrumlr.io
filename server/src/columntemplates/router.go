@@ -12,7 +12,6 @@ type ColumnTemplateApi interface {
 	GetColumnTemplates(w http.ResponseWriter, r *http.Request)
 	UpdateColumnTemplate(w http.ResponseWriter, r *http.Request)
 	DeleteColumnTemplate(w http.ResponseWriter, r *http.Request)
-	ColumnTemplateContext(next http.Handler) http.Handler
 }
 
 type Router struct {
@@ -28,9 +27,9 @@ func NewColumnTemplateRouter(columnTemplateApi ColumnTemplateApi) *Router {
 func (r *Router) RegisterRoutes() chi.Router {
 	router := chi.NewRouter()
 	router.Post("/", r.columnTemplateAPI.CreateColumnTemplate)
-	router.With(r.columnTemplateAPI.ColumnTemplateContext).Get("/{id}", r.columnTemplateAPI.GetColumnTemplate)
+	router.With(ColumnTemplateContext).Get("/{columnTemplate}", r.columnTemplateAPI.GetColumnTemplate)
 	router.Get("/", r.columnTemplateAPI.GetColumnTemplates)
-	router.With(r.columnTemplateAPI.ColumnTemplateContext).Put("/{id}", r.columnTemplateAPI.UpdateColumnTemplate)
-	router.With(r.columnTemplateAPI.ColumnTemplateContext).Delete("/{id}", r.columnTemplateAPI.DeleteColumnTemplate)
+	router.With(ColumnTemplateContext).Put("/{columnTemplate}", r.columnTemplateAPI.UpdateColumnTemplate)
+	router.With(ColumnTemplateContext).Delete("/{columnTemplate}", r.columnTemplateAPI.DeleteColumnTemplate)
 	return router
 }
