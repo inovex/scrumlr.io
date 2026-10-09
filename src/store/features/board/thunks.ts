@@ -14,7 +14,7 @@ import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
 import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
-import {createdVoting, updatedVoting} from "../votings";
+import {createdVoting, syncVotingResults, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
@@ -185,8 +185,15 @@ export const permittedBoardAccess = createAsyncThunk<
         }
 
         case "NOTES_SYNC": {
-          const notes = message.data;
-          dispatch(syncNotes(notes ?? []));
+          const notes = message.data ?? [];
+          const knownNoteIds = new Set(getState().notes.map((note) => note.id));
+          const hasNewlyVisibleNotes = notes.some((note) => !knownNoteIds.has(note.id));
+          dispatch(syncNotes(notes));
+          // results of a closed voting only contain notes that were visible when the voting ended,
+          // so they need to be refetched once previously hidden notes are revealed
+          if (hasNewlyVisibleNotes) {
+            dispatch(syncVotingResults());
+          }
           break;
         }
 
