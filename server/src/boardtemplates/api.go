@@ -36,7 +36,7 @@ func NewBoardTemplateApi(service BoardTemplateService) BoardTemplateApi {
 //	@Description	Create a board template
 //	@Tags			board templates
 //	@Accept			json
-//	@Param			Cookie			header	string										true	"jwt token to authenticate"
+//	@Param			Cookie			header	string						true	"jwt token to authenticate"
 //	@Param			boardtemplate	body	CreateBoardTemplateRequest	true	"Board template to create"
 //	@Produce		json
 //	@Success		201	{object}	BoardTemplate
@@ -142,8 +142,8 @@ func (api *API) GetBoardTemplates(w http.ResponseWriter, r *http.Request) {
 //	@Description	Update a board template for a user
 //	@Tags			board templates
 //	@Accept			json
-//	@Param			Cookie			header	string										true	"jwt token to authenticate"
-//	@Param			id				path	string										true	"Id of the template to update"
+//	@Param			Cookie			header	string						true	"jwt token to authenticate"
+//	@Param			id				path	string						true	"Id of the template to update"
 //	@Param			boardtemplate	body	BoardTemplateUpdateRequest	true	"Board template to update"
 //	@Produce		json
 //	@Success		200	{object}	BoardTemplate
