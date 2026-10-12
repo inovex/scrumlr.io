@@ -4,9 +4,11 @@ import (
 	"testing"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/eventfilter"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/notes"
@@ -47,7 +49,7 @@ func TestInitializeBoardService(t *testing.T) {
 	votingService := votings.NewMockVotingService(t)
 	reactionService := reactions.NewMockReactionService(t)
 
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userSession)
+	boardService := initializer.InitializeBoardService(sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userSession)
 
 	assert.NotNil(t, boardService)
 }
@@ -76,10 +78,9 @@ func TestInitializeSessionService(t *testing.T) {
 func TestInitializeSessionRequestService(t *testing.T) {
 	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
 
-	sessionRequestWebsocket := sessionrequests.NewMockSessionRequestWebsocket(t)
 	sessionService := sessions.NewMockSessionService(t)
 
-	sessionRequestService := initializer.InitializeSessionRequestService(sessionRequestWebsocket, sessionService)
+	sessionRequestService := initializer.InitializeSessionRequestService(sessionService)
 
 	assert.NotNil(t, sessionRequestService)
 }
@@ -180,12 +181,27 @@ func TestInitializeWebsocketService(t *testing.T) {
 	assert.NotNil(t, webSocketService)
 }
 
-func TestInitializeSessionRequestWebsocketService(t *testing.T) {
+func TestInitializeEventFilter(t *testing.T) {
+	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
+
+	boardService := boards.NewMockBoardService(t)
+	columnService := columns.NewMockColumnService(t)
+	sessionService := sessions.NewMockSessionService(t)
+
+	filter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
+
+	assert.NotNil(t, filter)
+}
+
+func TestInitializeEventListener(t *testing.T) {
 	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
 
 	webSocket := websocket.NewMockUpgrader(t)
+	eventFilter := eventfilter.NewMockEventFilter(t)
+	sessionService := sessions.NewMockSessionService(t)
+	noteService := notes.NewMockNotesService(t)
 
-	sessionRequestWebsocketService := initializer.InitializeSessionRequestWebsocket(webSocket)
+	eventListener := initializer.InitializeEventListener(webSocket, eventFilter, sessionService, noteService)
 
-	assert.NotNil(t, sessionRequestWebsocketService)
+	assert.NotNil(t, eventListener)
 }

@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
@@ -26,7 +27,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 )
@@ -74,8 +74,8 @@ type BoardLastModifiedUpdater interface {
 func NewBoardService(
 	db BoardDatabase,
 	rt *realtime.Broker,
-	sessionRequestService sessionrequests.SessionRequestService,
 	sessionService sessions.SessionService,
+	sessionRequestService sessionrequests.SessionRequestService,
 	columnService columns.ColumnService,
 	noteService notes.NotesService,
 	reactionService reactions.ReactionService,
@@ -190,7 +190,6 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 	}
 
 	switch board.AccessPolicy {
-
 	case Public:
 		return service.joinPublic(ctx, board, user)
 
@@ -339,13 +338,6 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 		return nil, err
 	}
 
-	boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, string(sessionrequests.RequestAccepted))
-	if err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to get session requests"))
-		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
-		return nil, err
-	}
-
 	boardSessions, err := service.sessionService.GetAll(ctx, boardID, sessions.BoardSessionFilter{})
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to get sessions"))
@@ -389,14 +381,13 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 	}
 
 	return &FullBoard{
-		Board:                board,
-		BoardSessionRequests: boardRequests,
-		BoardSessions:        boardSessions,
-		Columns:              boardColumns,
-		Notes:                boardNotes,
-		Reactions:            boardReactions,
-		Votings:              boardVotings,
-		Votes:                boardVotes,
+		Board:         board,
+		BoardSessions: boardSessions,
+		Columns:       boardColumns,
+		Notes:         boardNotes,
+		Reactions:     boardReactions,
+		Votings:       boardVotings,
+		Votes:         boardVotes,
 	}, nil
 }
 

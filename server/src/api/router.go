@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"scrumlr.io/server/boardtemplates"
-	"scrumlr.io/server/websocket"
+	"scrumlr.io/server/events"
 
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -23,7 +23,6 @@ import (
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -38,9 +37,8 @@ import (
 type Server struct {
 	basePath string
 
-	realtime  *realtime.Broker
-	wsService websocket.Upgrader
-	auth      auth.Auth
+	realtime *realtime.Broker
+	auth     auth.Auth
 
 	healthRoutes         chi.Router
 	feedbackRoutes       chi.Router
@@ -60,12 +58,9 @@ type Server struct {
 	sessions        sessions.SessionService
 	sessionRequests sessionrequests.SessionRequestService
 	boardReactions  boardreactions.BoardReactionCreater
+	eventListener   events.EventListener
 
 	checkOrigin bool
-
-	// map of boardSubscriptions with maps of users with connections
-	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        bool
@@ -83,7 +78,6 @@ func New(
 	basePath string,
 
 	rt *realtime.Broker,
-	wsService websocket.Upgrader,
 	auth auth.Auth,
 
 	healtRoutes chi.Router,
@@ -104,6 +98,7 @@ func New(
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,
 	boardReactions boardreactions.BoardReactionCreater,
+	eventListener events.EventListener,
 
 	verbose bool,
 	checkOrigin bool,
@@ -143,9 +138,8 @@ func New(
 	}
 
 	s := Server{
-		basePath:  basePath,
-		realtime:  rt,
-		wsService: wsService,
+		basePath: basePath,
+		realtime: rt,
 
 		healthRoutes:         healtRoutes,
 		feedbackRoutes:       feedbackRoutes,
@@ -156,18 +150,17 @@ func New(
 		boardTemplateRoutes:  boardTemplateRoutes,
 		columnTemplateRoutes: columnTemplateRoutes,
 
-		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-		auth:                             auth,
-		boards:                           boards,
-		columns:                          columns,
-		votings:                          votings,
-		users:                            users,
-		notes:                            notes,
-		reactions:                        reactions,
-		sessions:                         sessions,
-		sessionRequests:                  sessionRequests,
-		boardReactions:                   boardReactions,
+		auth:            auth,
+		boards:          boards,
+		columns:         columns,
+		votings:         votings,
+		users:           users,
+		notes:           notes,
+		reactions:       reactions,
+		sessions:        sessions,
+		sessionRequests: sessionRequests,
+		boardReactions:  boardReactions,
+		eventListener:   eventListener,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
