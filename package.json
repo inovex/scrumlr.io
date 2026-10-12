@@ -78,7 +78,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "5.0.2",
     "cross-env": "^10.1.0",
-    "cypress": "^16.1.0",
+    "cypress": "^16.1.1",
     "eslint": "10.11.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
