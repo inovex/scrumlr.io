@@ -3117,6 +3117,7 @@ __metadata:
     astro: "npm:7.2.8"
     astro-mermaid: "npm:^2.1.0"
     mermaid: "npm:^11.16.1"
+    sharp: "npm:^0.35.5"
     typescript: "npm:^6.0.3"
   languageName: unknown
   linkType: soft
@@ -6160,7 +6161,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharp@npm:^0.35.4":
+"sharp@npm:^0.35.4, sharp@npm:^0.35.5":
   version: 0.35.5
   resolution: "sharp@npm:0.35.5"
   dependencies:
