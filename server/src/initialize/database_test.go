@@ -1,32 +1,18 @@
 package initialize
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/urfave/cli/v3"
 )
 
-const POSTGRES_IMAGE = "postgres:18.4-alpine"
-const DATABASE_NAME = "scrumlr_test"
-const DATABASE_USERNAME = "stan"
-const DATABASE_PASSWORD = "scrumlr"
-
 func TestInitializeDatabase_DatabaseUrl(t *testing.T) {
-	ctx := context.Background()
-	container, err := postgres.Run(
-		ctx,
-		POSTGRES_IMAGE,
-		postgres.WithDatabase(DATABASE_NAME),
-		postgres.WithUsername(DATABASE_USERNAME),
-		postgres.WithPassword(DATABASE_PASSWORD),
-		postgres.BasicWaitStrategies(),
-	)
+	ctx := t.Context()
+	container, err := StartTestDatabase(ctx)
 
 	assert.NoError(t, err, "failed to create test container")
 
@@ -60,15 +46,8 @@ func TestInitializeDatabase_DatabaseUrl(t *testing.T) {
 }
 
 func TestInitializeDatabase_DatabaseParameter(t *testing.T) {
-	ctx := context.Background()
-	container, err := postgres.Run(
-		ctx,
-		POSTGRES_IMAGE,
-		postgres.WithDatabase(DATABASE_NAME),
-		postgres.WithUsername(DATABASE_USERNAME),
-		postgres.WithPassword(DATABASE_PASSWORD),
-		postgres.BasicWaitStrategies(),
-	)
+	ctx := t.Context()
+	container, err := StartTestDatabase(ctx)
 
 	assert.NoError(t, err, "failed to create test container")
 
@@ -106,15 +85,8 @@ func TestInitializeDatabase_DatabaseParameter(t *testing.T) {
 }
 
 func TestInitializeDatabase_NotConfigured(t *testing.T) {
-	ctx := context.Background()
-	container, err := postgres.Run(
-		ctx,
-		POSTGRES_IMAGE,
-		postgres.WithDatabase(DATABASE_NAME),
-		postgres.WithUsername(DATABASE_USERNAME),
-		postgres.WithPassword(DATABASE_PASSWORD),
-		postgres.BasicWaitStrategies(),
-	)
+	ctx := t.Context()
+	container, err := StartTestDatabase(ctx)
 
 	assert.NoError(t, err, "failed to create test container")
 
@@ -139,15 +111,8 @@ func TestInitializeDatabase_NotConfigured(t *testing.T) {
 }
 
 func TestInitializeDatabase_PrefereDatabaseUrl(t *testing.T) {
-	ctx := context.Background()
-	container, err := postgres.Run(
-		ctx,
-		POSTGRES_IMAGE,
-		postgres.WithDatabase(DATABASE_NAME),
-		postgres.WithUsername(DATABASE_USERNAME),
-		postgres.WithPassword(DATABASE_PASSWORD),
-		postgres.BasicWaitStrategies(),
-	)
+	ctx := t.Context()
+	container, err := StartTestDatabase(ctx)
 
 	assert.NoError(t, err, "failed to create test container")
 

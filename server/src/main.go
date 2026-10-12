@@ -23,6 +23,8 @@ import (
 	altsrc "github.com/urfave/cli-altsrc/v3"
 	"github.com/urfave/cli-altsrc/v3/toml"
 	"github.com/urfave/cli/v3"
+	"scrumlr.io/server/cmd/database"
+	"scrumlr.io/server/cmd/healthcheck"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -40,8 +42,12 @@ func main() {
 	app := &cli.Command{
 		Name:      "scrumlr.io",
 		Usage:     "Awesome & scalable server for the scrumlr.io web application",
-		UsageText: "scrumlr [global options]",
+		UsageText: "scrumlr [sub command] [global options]",
 		Action:    run,
+		Commands: []*cli.Command{
+			healthcheck.RegisterHealthCheckCommand(),
+			database.RegisterDatabaseCommands(),
+		},
 		Flags: []cli.Flag{
 			&cli.IntFlag{
 				Name:    "port",
