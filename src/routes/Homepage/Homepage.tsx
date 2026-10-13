@@ -58,26 +58,27 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <Button icon={<German />} iconPosition="left" className="homepage__language" hideLabel onClick={changeLanguage("de")}>
-                Deutsch
-              </Button>
+              <button className="homepage__language" onClick={changeLanguage("de")}>
+                <German className={"homepage__language-icon"}></German>
+              </button>
             </li>
             <li>
-              <Button icon={<English />} iconPosition="left" className="homepage__language" hideLabel onClick={changeLanguage("en")}>
-                English
-              </Button>
+              <button className="homepage__language" onClick={changeLanguage("en")}>
+                <English className={"homepage__language-icon"} />
+              </button>
             </li>
             <li>
-              <Button icon={<French />} iconPosition="left" className="homepage__language" hideLabel onClick={changeLanguage("fr")}>
-                Français
-              </Button>
+              <button className="homepage__language" onClick={changeLanguage("fr")}>
+                <French className={"homepage__language-icon"} />
+              </button>
             </li>
 
             {!!user && (
               <li>
-                <Button variant="primary" onClick={onLogout} icon={<LogoutIcon className="homepage__logout-button-icon" />} iconPosition="left" className="homepage__logout-button">
-                  Logout
-                </Button>
+                <button onClick={onLogout} className={"homepage__logout-container"}>
+                  <LogoutIcon className="homepage__logout-icon" />
+                  <div className="homepage__logout-button-text">Logout</div>
+                </button>
               </li>
             )}
           </ul>
