@@ -68,12 +68,26 @@ func InitializeDatabase(ctx context.Context, cli *cli.Command) (*bun.DB, error) 
 		return nil, err
 	}
 
+	version, _, err := m.Version()
+	if errors.Is(err, migrate.ErrNilVersion) {
+		log.Infow("no database migrations yet applied")
+	} else if err != nil {
+		return nil, err
+	} else {
+		log.Infow("current active migration", "version", version)
+	}
+
 	err = m.Up()
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return nil, err
 	}
 
-	log.Infow("successfully migrated database")
+	version, _, err = m.Version()
+	if err != nil {
+		log.Error("failed to get migration version")
+	}
+
+	log.Infow("successfully migrated database", "version", version)
 
 	return InitializeBun(db, logger.GetLogLevel()), nil
 }
@@ -83,14 +97,14 @@ func InitializeBun(db *sql.DB, logLevel zapcore.Level) *bun.DB {
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
 	d.SetMaxOpenConns(maxOpenConnections)
 	d.SetMaxIdleConns(maxOpenConnections)
-	d.AddQueryHook(bunotel.NewQueryHook(
+	d.WithQueryHook(bunotel.NewQueryHook(
 		bunotel.WithDBName("scruml-database"),
 		bunotel.WithTracerProvider(traceProvider),
 		bunotel.WithMeterProvider(meterProvider),
 	))
 
 	if logLevel == zap.DebugLevel {
-		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+		d.WithQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 
 	return d

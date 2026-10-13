@@ -5,11 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"time"
 
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
-	"scrumlr.io/server/websocket"
+	"scrumlr.io/server/sessions"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -18,8 +17,9 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessions"
 )
+
+const sessionRequestNotFoundMessage = "board session request not found"
 
 type SessionRequestDatabase interface {
 	Create(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
@@ -29,24 +29,16 @@ type SessionRequestDatabase interface {
 	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 }
 
-type SessionRequestWebsocket interface {
-	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)
-	closeSocket(conn websocket.Connection)
-}
-
 type BoardSessionRequestService struct {
 	database       SessionRequestDatabase
 	broker         *realtime.Broker
-	websocket      SessionRequestWebsocket
 	sessionService sessions.SessionService
 }
 
-func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket SessionRequestWebsocket, sessionService sessions.SessionService) SessionRequestService {
+func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, sessionService sessions.SessionService) SessionRequestService {
 	service := new(BoardSessionRequestService)
 	service.database = db
 	service.broker = rt
-	service.websocket = websocket
 	service.sessionService = sessionService
 
 	return service
@@ -92,8 +84,8 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 	request, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			otel.RecordErrorSpan(span, err, new("board session request not found"))
-			return nil, CreateSessionRequestError(NotFound, "board session request not found", err)
+			otel.RecordErrorSpan(span, err, new(sessionRequestNotFoundMessage))
+			return nil, CreateSessionRequestError(NotFound, sessionRequestNotFoundMessage, err)
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to get board session request"))
@@ -190,13 +182,6 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	return new(BoardSessionRequest).From(request), err
 }
 
-func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	_, span := tracer.Start(ctx, "scrumlr.session_requests.service.open_socket")
-	defer span.End()
-
-	service.websocket.OpenSocket(w, r)
-}
-
 // this needs to be moved to the middleware later
 func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -227,7 +212,7 @@ func (service *BoardSessionRequestService) BoardCandidateContext(next http.Handl
 		}
 
 		if !exists {
-			err := errors.New("board session request not found")
+			err := errors.New(sessionRequestNotFoundMessage)
 			otel.RecordErrorSpan(span, err, nil)
 			common.Throw(w, r, common.NotFoundError)
 			return

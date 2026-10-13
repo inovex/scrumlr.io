@@ -15,7 +15,7 @@
     "astro": "7.2.8",
     "astro-mermaid": "^2.1.0",
     "mermaid": "^11.16.1",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "packageManager": "yarn@4.17.1"

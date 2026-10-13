@@ -3,14 +3,16 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
+	"net/http"
 	"testing"
 	"time"
 
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/users"
-	"scrumlr.io/server/websocket"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -26,7 +28,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/timeprovider"
@@ -108,13 +109,11 @@ func (suite *BoardServiceIntegrationTestSuite) SetupTest() {
 	columnService := columns.NewColumnService(columnDatabase, broker, noteService, boardLastModifiedUpdater)
 	sessionDatabase := sessions.NewSessionDatabase(db)
 	sessionService := sessions.NewSessionService(sessionDatabase, broker, columnService, noteService)
-	wsService := websocket.NewWebSocketUpgrader()
-	ws := sessionrequests.NewSessionRequestWebsocket(wsService, broker)
 	sessionRequestDatabase := sessionrequests.NewSessionRequestDatabase(db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, ws, sessionService)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDatabase, broker, sessionService)
 	userDatabase := users.NewUserDatabase(db)
 	userService := users.NewUserService(userDatabase, broker, sessionService, noteService)
-	suite.service = NewBoardService(database, broker, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
+	suite.service = NewBoardService(database, broker, sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService, clock, generatedHash)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) initTestData() {
@@ -231,6 +230,29 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Create_Public() {
 	assert.True(t, board.ShowAuthors)
 	assert.True(t, board.ShowNoteReactions)
 	assert.True(t, board.ShowNotesOfOtherUsers)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Join_PublicBoard() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+	userID := suite.users["Santa"].ID
+
+	// non existing session
+	shouldRedirect, location, status, err := suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.False(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusCreated, status)
+
+	// existing session
+	shouldRedirect, location, status, err = suite.service.Join(ctx, &board, userID, JoinBoardRequest{})
+
+	require.NoError(t, err)
+	assert.True(t, shouldRedirect)
+	assert.Equal(t, fmt.Sprintf("/boards/%s/participants/%s", board.ID, userID), location)
+	assert.Equal(t, http.StatusSeeOther, status)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_Create_Passphrase() {
@@ -584,7 +606,6 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard() {
 	assert.Equal(t, suite.boards["Read1"].Description, board.Board.Description)
 	assert.Equal(t, suite.boards["Read1"].AccessPolicy, board.Board.AccessPolicy)
 	assert.Equal(t, suite.boards["Read1"].ShowAuthors, board.Board.ShowAuthors)
-	assert.Nil(t, board.BoardSessionRequests)
 	assert.Nil(t, board.Columns)
 	assert.Nil(t, board.Notes)
 	assert.Nil(t, board.Votes)
@@ -603,6 +624,24 @@ func (suite *BoardServiceIntegrationTestSuite) Test_GetFullBoard_NotFound() {
 	assert.Nil(t, board)
 	assert.NotNil(t, err)
 	assert.ErrorIs(t, err, sql.ErrNoRows)
+}
+
+func (suite *BoardServiceIntegrationTestSuite) Test_Export() {
+	t := suite.T()
+	ctx := context.Background()
+	board := suite.boards["Read1"]
+
+	export, err := suite.service.Export(ctx, board.ID, "application/json")
+
+	require.NoError(t, err)
+	require.NotNil(t, export)
+	assert.Equal(t, board.ID, export.Board.ID)
+	assert.Equal(t, board.Name, export.Board.Name)
+	require.Len(t, export.Participants, 1)
+	assert.Equal(t, suite.users["Stan"].ID, export.Participants[0].UserID)
+	assert.Empty(t, export.Columns)
+	assert.Empty(t, export.Notes)
+	assert.Empty(t, export.Votings)
 }
 
 func (suite *BoardServiceIntegrationTestSuite) Test_GetBoardOverview() {

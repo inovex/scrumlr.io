@@ -6,7 +6,6 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.43.0"
@@ -76,7 +75,7 @@ func SetupOpenTelemetry(ctx context.Context, opts ...OTelOption) (func(context.C
 		}
 
 		shutdownFuncs = append(shutdownFuncs, loggerProvider.Shutdown)
-		global.SetLoggerProvider(loggerProvider)
+		otel.SetLoggerProvider(loggerProvider)
 		logger.EnableOtelLogging()
 
 	} else if options.httpEndpoint != nil {
@@ -105,7 +104,7 @@ func SetupOpenTelemetry(ctx context.Context, opts ...OTelOption) (func(context.C
 		}
 
 		shutdownFuncs = append(shutdownFuncs, loggerProvider.Shutdown)
-		global.SetLoggerProvider(loggerProvider)
+		otel.SetLoggerProvider(loggerProvider)
 		logger.EnableOtelLogging()
 	}
 
@@ -148,7 +147,7 @@ func newResource() (*resource.Resource, error) {
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
 			semconv.ServiceName("scrumlr"),
-			semconv.ServiceVersion("5.4.0"),
+			semconv.ServiceVersion("5.4.2"),
 		),
 	)
 }

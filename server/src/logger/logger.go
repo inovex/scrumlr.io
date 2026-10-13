@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5/middleware"
 	"go.opentelemetry.io/contrib/bridges/otelzap"
-	"go.opentelemetry.io/otel/log/global"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -68,7 +68,7 @@ func EnableDevelopmentLogger() {
 
 // EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger
 func EnableOtelLogging() {
-	provider := global.GetLoggerProvider()
+	provider := otel.GetLoggerProvider()
 
 	config := zap.NewProductionEncoderConfig()
 	config.StacktraceKey = ""

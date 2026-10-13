@@ -1,12 +1,16 @@
 package serviceinitialize
 
 import (
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
+
+const notImplemented = "Not implemented"
 
 type ApiInitializer struct {
 	basePath string
@@ -20,27 +24,27 @@ func NewApiInitializer(basePath string) ApiInitializer {
 
 func (init *ApiInitializer) InitializeBoardApi() {
 	// board api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeColumnApi() {
 	// column api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeBoardReactionApi() {
 	// board reaction api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
-func (init *ApiInitializer) InitializeBoardTemplateApi() {
-	// board template api is currently not initialized through the api initializer
-	panic("Not implemented")
+func (init *ApiInitializer) InitializeBoardTemplateApi(boardTemplateService boardtemplates.BoardTemplateService) boardtemplates.BoardTemplateApi {
+	boardTemplateAPI := boardtemplates.NewBoardTemplateApi(boardTemplateService)
+	return boardTemplateAPI
 }
 
-func (init *ApiInitializer) InitializeColumnTemplateApi() {
-	// column template api is currently not initialized through the api initializer
-	panic("Not implemented")
+func (init *ApiInitializer) InitializeColumnTemplateApi(columnTemplateService columntemplates.ColumnTemplateService) columntemplates.ColumnTemplateApi {
+	columnTemplateAPI := columntemplates.NewColumnTemplateApi(columnTemplateService)
+	return columnTemplateAPI
 }
 
 func (init *ApiInitializer) InitializeFeedbackApi(feedbackService feedback.FeedbackService) feedback.FeedbackApi {
@@ -60,7 +64,7 @@ func (init *ApiInitializer) InitializeHealthApi(healthService health.HealthServi
 
 func (init *ApiInitializer) InitializeReactionApi() {
 	// reaction api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeSessionApi(sessionService sessions.SessionService) sessions.SessionApi {
@@ -70,7 +74,7 @@ func (init *ApiInitializer) InitializeSessionApi(sessionService sessions.Session
 
 func (init *ApiInitializer) InitializeSessionRequestApi() {
 	// session request api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeUserApi(userService users.UserService, sessionService sessions.SessionService, allowAnonymousBoardCreation, allowAnonymousCustomTemplates bool) users.UsersApi {
@@ -80,10 +84,10 @@ func (init *ApiInitializer) InitializeUserApi(userService users.UserService, ses
 
 func (init *ApiInitializer) InitializeNotesApi() {
 	// notes api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }
 
 func (init *ApiInitializer) InitializeVotingApi() {
 	// voting api is currently not initialized through the api initializer
-	panic("Not implemented")
+	panic(notImplemented)
 }

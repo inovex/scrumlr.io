@@ -20,6 +20,8 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
+const userNotFoundMessage = "user not found"
+
 type UserDatabase interface {
 	CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error)
 	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error)
@@ -123,8 +125,8 @@ func (service *Service) Get(ctx context.Context, userID uuid.UUID) (*User, error
 	user, err := service.database.GetUser(ctx, userID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			otel.RecordErrorSpan(span, err, new("user not found"))
-			return nil, CreateUserError(NotFound, "user not found", err)
+			otel.RecordErrorSpan(span, err, new(userNotFoundMessage))
+			return nil, CreateUserError(NotFound, userNotFoundMessage, err)
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to get user"))
@@ -191,7 +193,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 		if errors.Is(err, sql.ErrNoRows) {
 			otel.RecordErrorSpan(span, err, new("user to update not found"))
 			log.Errorw("user to update not found", "user", body.ID, "err", err)
-			return nil, CreateUserError(NotFound, "user not found", err)
+			return nil, CreateUserError(NotFound, userNotFoundMessage, err)
 		}
 
 		otel.RecordErrorSpan(span, err, new("failed to update user"))

@@ -39,7 +39,7 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -86,7 +86,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	var body votings.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
-		otel.RecordErrorSpan(span, err, new("failed to decode body"))
+		otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -140,7 +140,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if votingQuery != "" {
 		voting, err := uuid.Parse(votingQuery)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to decode body"))
+			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
@@ -152,7 +152,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if noteQuery != "" {
 		note, err := uuid.Parse(noteQuery)
 		if err != nil {
-			otel.RecordErrorSpan(span, err, new("failed to decode body"))
+			otel.RecordErrorSpan(span, err, new(decodeFailureMessage))
 			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return

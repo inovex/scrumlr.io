@@ -9,7 +9,7 @@
           "description": "Themen, Ideen und Fragen sammeln."
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
@@ -27,7 +27,7 @@
           "description": "Was lief nicht gut?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
@@ -49,7 +49,7 @@
           "description": "Was läuft gut und sollte beibehalten werden?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
@@ -71,40 +71,40 @@
           "description": "Was hat Freude oder Motivation hervorgerufen?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
     },
     "kalm": {
       "name": "KALM",
-      "description": "Die Teilnehmenden identifizieren, was erhalten, erweitert, reduziert und optimiert werden soll, um die Leistung zu steigern.",
+      "description": "Das Team identifiziert, was beibehalten, hinzugefügt, reduziert oder verstärkt werden soll, um die Leistung zu steigern.",
       "column": {
         "keep": {
-          "name": "Erhalten",
+          "name": "Beibehalten",
           "description": "Was sollte beibehalten werden?"
         },
         "add": {
-          "name": "Erweitern",
+          "name": "Hinzufügen",
           "description": "Was könnte Mehrwert bringen?"
         },
         "less": {
-          "name": "Reduzieren",
+          "name": "Weniger",
           "description": "Was sollte seltener gemacht werden?"
         },
         "more": {
-          "name": "Optimieren",
+          "name": "Mehr",
           "description": "Was sollte häufiger gemacht werden?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
     },
     "4l": {
       "name": "4L",
-      "description": "Die Teilnehmenden identifizieren, was erhalten, erweitert, reduziert und optimiert werden soll, um die Leistung zu steigern.",
+      "description": "Die Teilnehmenden reflektieren darüber, was ihnen gefallen hat, was sie gelernt haben, was ihnen gefehlt hat und was sie sich gewünscht haben.",
       "column": {
         "liked": {
           "name": "Geschätzt",
@@ -123,7 +123,7 @@
           "description": "Was wäre für die Zukunft wünschenswert?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
@@ -142,14 +142,14 @@
         },
         "opportunities": {
           "name": "Chancen",
-          "description": "Welchen Chancen könnten genutzt werden?"
+          "description": "Welche Chancen könnten genutzt werden?"
         },
         "threats": {
           "name": "Risiken",
-          "description": "Welchen Herausforderungen sollten berücksichtigt werden?"
+          "description": "Welche Herausforderungen sollten berücksichtigt werden?"
         },
         "actions": {
-          "name": "Actions",
+          "name": "Maßnahmen",
           "description": ""
         }
       }
