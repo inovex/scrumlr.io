@@ -64,10 +64,12 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumnTemp
 }
 
 func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
-	return db.db.NewSelect().
+	index, err := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
 		Where("board_template = ?", board).
 		Count(ctx)
+
+	return int(index), err
 }
 
 // UpdateColumnTemplate updates the column template  and re-orders all indices of the column templates if necessary.
