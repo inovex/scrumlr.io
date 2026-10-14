@@ -303,7 +303,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   <TooltipButton
                     active={state.activeTimer}
                     direction="left"
-                    label="Timer"
+                    label={t("MenuBars.timer")}
                     onClick={toggleTimerMenu}
                     icon={TimerIcon}
                     hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()}
@@ -314,7 +314,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   <TooltipButton
                     active={state.activeVoting}
                     direction="left"
-                    label="Voting"
+                    label={t("MenuBars.voting")}
                     onClick={toggleVotingMenu}
                     icon={VotingIcon}
                     hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
