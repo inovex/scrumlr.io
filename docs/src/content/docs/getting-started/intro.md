@@ -18,6 +18,7 @@ Scrumlr is an online collaboration tool that helps teams reach new heights. Star
 More features of scrumlr can be found at [Features](/features/)
 
 ## Contributing
+
 Read our [Contributing Guidelines](/dev/contributing/) to learn how you can contribute to Scrumlr. We welcome all contributions, big or small!
 
 ## Self-hosting
