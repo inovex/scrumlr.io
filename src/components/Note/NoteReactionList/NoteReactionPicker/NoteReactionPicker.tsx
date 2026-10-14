@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef, MouseEvent} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import {useLocation} from "react-router";
@@ -50,6 +50,9 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
       props.closeReactionBar();
     }
   }, [location, props]);
+
+  // don't let clicks within the Picker bubble outside
+  const trapEvent = (e: MouseEvent) => e.stopPropagation();
 
   const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement> | Event, unicode: string) => {
     e.stopPropagation();
@@ -129,6 +132,7 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
             <div
               className="note-reaction-picker__picker-portal"
               aria-label="Emoji picker"
+              onClick={trapEvent}
               style={{
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
