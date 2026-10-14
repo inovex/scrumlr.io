@@ -51,9 +51,6 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
     }
   }, [location, props]);
 
-  // don't let clicks within the Picker bubble outside
-  const trapEvent = (e: MouseEvent) => e.stopPropagation();
-
   const handleEmojiClick = (e: React.MouseEvent<HTMLButtonElement> | Event, unicode: string) => {
     e.stopPropagation();
     dispatch(addRecentEmoji({reactionType: unicode}));
@@ -132,7 +129,6 @@ export const NoteReactionPicker = (props: NoteReactionPickerProps) => {
             <div
               className="note-reaction-picker__picker-portal"
               aria-label="Emoji picker"
-              onClick={trapEvent}
               style={{
                 position: "fixed",
                 top: `${pickerPosition.top}px`,
