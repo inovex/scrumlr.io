@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, MouseEvent} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
 import {useLocation} from "react-router";
