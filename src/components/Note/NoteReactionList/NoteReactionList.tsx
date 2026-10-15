@@ -7,7 +7,7 @@ import {isEqual} from "underscore";
 import {Reaction} from "store/features/reactions/types";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
-import {useAppDispatch, useAppSelector} from "../../../store";
+import {useAppDispatch, useAppSelector} from "store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
