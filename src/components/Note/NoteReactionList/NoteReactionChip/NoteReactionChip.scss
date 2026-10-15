@@ -20,6 +20,10 @@
   user-select: none;
   cursor: pointer;
 
+  &--disabled {
+    cursor: not-allowed;
+  }
+
   &:not(.note-reaction-chip__root--disabled):hover {
     background-color: styles.$gray--500;
   }
