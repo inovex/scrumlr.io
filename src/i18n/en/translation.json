@@ -354,6 +354,8 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
+    "timer": "Timer",
+    "voting": "Voting",
     "startPresenterMode": "Start presenter mode",
     "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
