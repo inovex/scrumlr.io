@@ -20,7 +20,7 @@
   user-select: none;
   cursor: pointer;
 
-  &:hover {
+  &:not(.note-reaction-chip__root--disabled):hover {
     background-color: styles.$gray--500;
   }
 }
@@ -38,7 +38,7 @@
 .note-reaction-chip__root--self {
   background-color: var(--accent-color--100);
 
-  &:hover {
+  &:not(.note-reaction-chip__root--disabled):hover {
     background-color: var(--accent-color--200);
   }
 }
@@ -51,7 +51,7 @@
     color: styles.$gray--000;
   }
 
-  &:hover {
+  &:not(.note-reaction-chip__root--disabled):hover {
     background-color: var(--accent-color--light); // essentially no hover color when active.
   }
 }
@@ -60,7 +60,7 @@
   .note-reaction-chip__root {
     background-color: styles.$navy--600;
 
-    &:hover {
+    &:not(.note-reaction-chip__root--disabled):hover {
       background-color: styles.$navy--300;
     }
   }
@@ -68,7 +68,7 @@
   .note-reaction-chip__root--self {
     background-color: rgba(var(--accent-color--dark-rgb), 0.6);
 
-    &:hover {
+    &:not(.note-reaction-chip__root--disabled):hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
@@ -76,41 +76,12 @@
   .note-reaction-chip__root--override-active {
     background-color: rgba(var(--accent-color--dark-rgb), 0.8);
 
-    &:hover {
+    &:not(.note-reaction-chip__root--disabled):hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 
   .note-reaction-chip__amount {
     color: styles.$gray--000;
-  }
-}
-
-// disabled look, chip stays clickable.
-.note-reaction-chip__root.note-reaction-chip__root--disabled {
-  &,
-  &:hover {
-    background-color: styles.$gray--300;
-  }
-
-  &.note-reaction-chip__root--self {
-    &,
-    &:hover {
-      background-color: var(--accent-color--100);
-    }
-  }
-}
-
-[data-theme="dark"] .note-reaction-chip__root.note-reaction-chip__root--disabled {
-  &,
-  &:hover {
-    background-color: styles.$navy--600;
-  }
-
-  &.note-reaction-chip__root--self {
-    &,
-    &:hover {
-      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
-    }
   }
 }
