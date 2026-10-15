@@ -1,6 +1,10 @@
 @use "constants/colors";
 @use "constants/styles";
 
+.emoji-picker__container {
+  all: unset;
+}
+
 // Styling the emoji-picker-element via css variables, see here: https://www.webcomponents.org/element/@@npm/emoji-picker-element#css-variables
 emoji-picker {
   --num-columns: 6;
