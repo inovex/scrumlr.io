@@ -149,7 +149,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
               );
             })}
           </div>
-          <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="right" color={getNextColor(props.columns.at(-1)?.color ?? "backlog-blue")} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 

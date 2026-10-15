@@ -31,23 +31,73 @@
 }
 
 .homepage__language {
-  background: styles.$gray--600;
+  all: unset;
+  cursor: pointer;
+  padding: styles.$spacing--xxs;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: styles.$rounded--full;
+  background-color: styles.$gray--600;
+
   box-shadow: 0 0 rgba(styles.$gray--700, 0);
 
   &:hover {
     box-shadow: 0 2px 12px 6px rgba(styles.$gray--700, 0.2);
+    background-color: styles.$gray--700;
   }
+}
+
+.homepage__language-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
 }
 
 [data-theme="dark"] {
   .homepage__language {
     background: styles.$navy--500;
     box-shadow: none;
+
+    &:hover {
+      background-color: styles.$navy--300;
+    }
   }
 }
 
-.homepage__logout-button {
-  margin-left: styles.$spacing--xs;
+.homepage__logout-container {
+  all: unset;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+
+  cursor: pointer;
+
+  &:hover {
+    .homepage__logout-button-text {
+      text-decoration: underline;
+    }
+  }
+}
+
+.homepage__logout-icon {
+  width: styles.$icon--large;
+  height: styles.$icon--large;
+}
+
+.homepage__logout-button-text {
+  font-size: styles.$text--lg;
+  font-weight: bold;
+}
+
+[data-theme="dark"] {
+  .homepage__logout-container {
+    color: styles.$gray--000;
+  }
 }
 
 .homepage__hero-content-wrapper {

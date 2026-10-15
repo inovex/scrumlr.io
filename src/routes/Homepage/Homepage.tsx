@@ -5,20 +5,20 @@ import German from "assets/flags/DE.svg?react";
 import English from "assets/flags/US.svg?react";
 import French from "assets/flags/FR.svg?react";
 import {ArrowRightIcon, LogoutIcon} from "components/Icon";
-import {Link, useHref} from "react-router";
+import {Link, useNavigate} from "react-router";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
-import {LegacyButton} from "components/Button";
 import {useAppDispatch, useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
 import {setLanguage, signOut} from "store/features";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
+import {Button} from "components/Button";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
-  const newHref = useHref("/new");
+  const navigate = useNavigate();
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
@@ -58,26 +58,27 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <LegacyButton leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
-                Deutsch
-              </LegacyButton>
+              <button className="homepage__language" onClick={changeLanguage("de")}>
+                <German className={"homepage__language-icon"}></German>
+              </button>
             </li>
             <li>
-              <LegacyButton leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
-                English
-              </LegacyButton>
+              <button className="homepage__language" onClick={changeLanguage("en")}>
+                <English className={"homepage__language-icon"} />
+              </button>
             </li>
             <li>
-              <LegacyButton leftIcon={<French />} className="homepage__language" hideLabel onClick={changeLanguage("fr")}>
-                Français
-              </LegacyButton>
+              <button className="homepage__language" onClick={changeLanguage("fr")}>
+                <French className={"homepage__language-icon"} />
+              </button>
             </li>
 
             {!!user && (
               <li>
-                <LegacyButton variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon className="homepage__logout-button-icon" />} className="homepage__logout-button">
-                  Logout
-                </LegacyButton>
+                <button onClick={onLogout} className={"homepage__logout-container"}>
+                  <LogoutIcon className="homepage__logout-icon" />
+                  <div className="homepage__logout-button-text">Logout</div>
+                </button>
               </li>
             )}
           </ul>
@@ -96,9 +97,9 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <LegacyButton href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRightIcon className="homepage__proceed-icon" />}>
+              <Button onClick={() => navigate("/new")} className="homepage__start-button" icon={<ArrowRightIcon className="homepage__proceed-icon" />} iconPosition="right">
                 <Trans i18nKey="Homepage.startButton" />
-              </LegacyButton>
+              </Button>
             </main>
 
             <HeroIllustration className="homepage__illustration" />
