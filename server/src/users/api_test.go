@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/realtime"
@@ -25,7 +26,7 @@ func TestApiGetUser(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Anonymous}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Anonymous}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -70,7 +71,7 @@ func TestApiGetUserById(t *testing.T) {
 		ID:          uuid.New(),
 		Name:        "Joseph",
 		Avatar:      nil,
-		AccountType: common.Anonymous,
+		AccountType: account.Anonymous,
 	}
 
 	mockUserService := NewMockUserService(t)
@@ -139,8 +140,8 @@ func TestApiGetUserByIdServiceError(t *testing.T) {
 func TestApiGetBoardUsers(t *testing.T) {
 	boardID := uuid.New()
 	mockUsers := []*User{
-		{ID: uuid.New(), Name: "User A", AccountType: common.Anonymous},
-		{ID: uuid.New(), Name: "User B", AccountType: common.Anonymous},
+		{ID: uuid.New(), Name: "User A", AccountType: account.Anonymous},
+		{ID: uuid.New(), Name: "User B", AccountType: account.Anonymous},
 	}
 
 	mockUserService := NewMockUserService(t)
@@ -186,7 +187,7 @@ func TestApiUpdateUser(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
-	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: common.Anonymous}
+	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: account.Anonymous}
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -235,7 +236,7 @@ func TestApiUpdateUserBoardsServiceError(t *testing.T) {
 	userID := uuid.New()
 
 	updateBody := UserUpdateRequest{Name: "Jose", ID: userID}
-	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: common.Anonymous}
+	mockUpdatedUser := &User{ID: userID, Name: "Jose", AccountType: account.Anonymous}
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
@@ -317,7 +318,7 @@ func TestApiBoardAuthenticatedContext(t *testing.T) {
 	rctx.URLParams.Add("id", boardId.String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
 
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Google}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Google}, nil)
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -343,7 +344,7 @@ func TestApiBoardAuthenticatedContextNotAuthenticated(t *testing.T) {
 	rctx.URLParams.Add("id", boardId.String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
 
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Anonymous}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Anonymous}, nil)
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -418,7 +419,7 @@ func TestApiAnonymousBoardCreationContext(t *testing.T) {
 	rctx.URLParams.Add("id", userId.String())
 	req.AddToContext(chi.RouteCtxKey, rctx)
 
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Anonymous}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Anonymous}, nil)
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -442,7 +443,7 @@ func TestApiAnonymousBoardCreationContextNotAllowed(t *testing.T) {
 	rctx := chi.NewRouteContext()
 	rctx.URLParams.Add("id", userId.String())
 
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Anonymous}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Anonymous}, nil)
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -464,7 +465,7 @@ func TestApiAnonymousCustomTemplateCreationContextNotAllowed(t *testing.T) {
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 		AddToContext(identifiers.UserIdentifier, userId)
 
-	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: common.Anonymous}, nil)
+	mockUserService.EXPECT().Get(mock.Anything, userId).Return(&User{ID: userId, AccountType: account.Anonymous}, nil)
 
 	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

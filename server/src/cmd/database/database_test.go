@@ -11,7 +11,7 @@ import (
 	"scrumlr.io/server/initialize"
 )
 
-const currentVersion uint = 28
+const currentVersion uint = 30
 
 func TestGetVersion(t *testing.T) {
 	ctx := t.Context()

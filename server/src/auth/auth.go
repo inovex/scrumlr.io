@@ -1,302 +1,230 @@
 package auth
 
 import (
+	"context"
 	"crypto/ecdsa"
-	"crypto/rand"
-	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
 	"math"
 	"net/http"
-	"strings"
+	"slices"
 
-	"scrumlr.io/server/users"
-
-	"github.com/uptrace/bun"
-
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
 	"github.com/lestrrat-go/jwx/v3/jwt"
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/apple"
-	"github.com/markbates/goth/providers/azureadv2"
-	"github.com/markbates/goth/providers/github"
-	"github.com/markbates/goth/providers/google"
-	"github.com/markbates/goth/providers/microsoftonline"
-	oidc "github.com/markbates/goth/providers/openidConnect"
 	"golang.org/x/crypto/ssh"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/users"
 )
 
-type Auth interface {
-	Sign(map[string]any) (string, error)
+type UserInformation struct {
+	Provider  account.Type
+	Ident     string
+	Name      string
+	AvatarURL string
+}
+
+type AuthProvider interface {
+	AuthUrl(state string) string
+	Authenticate(ctx context.Context, code string) (*UserInformation, error)
+}
+
+type AuthService interface {
+	Sign(claims map[string]any) (string, error)
 	Verifier() func(http.Handler) http.Handler
 	Authenticator() func(http.Handler) http.Handler
-	Exists(accountType common.AccountType) bool
-	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
+	ConfiguredProvider() []account.Type
+	GetProvider(accountType account.Type) (AuthProvider, error)
 }
 
-type AuthProviderConfiguration struct {
-	TenantId       string
-	ClientId       string
-	ClientSecret   string
-	RedirectUri    string
-	DiscoveryUri   string
-	UserIdentScope string
-	UserNameScope  string
-}
-
-type AuthConfiguration struct {
-	providers        map[string]AuthProviderConfiguration
+type Service struct {
+	providers        map[account.Type]AuthProvider
 	unsafePrivateKey string
 	privateKey       string
 	unsafeAuth       *jwtauth.JWTAuth
 	auth             *jwtauth.JWTAuth
-	database         *bun.DB
 	userService      users.UserService
 }
 
-type UserInformation struct {
-	Provider               common.AccountType
-	Ident, Name, AvatarURL string
-}
+func NewAuthService(ctx context.Context, unsafePrivateKey string, privateKey string, userService users.UserService, opts ...AuthOptions) (AuthService, error) {
+	var options options
+	for _, opt := range opts {
+		err := opt(&options)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService users.UserService) (Auth, error) {
-	a := new(AuthConfiguration)
-	a.providers = providers
-	a.unsafePrivateKey = unsafePrivateKey
-	a.database = database
-	a.userService = userService
-	a.privateKey = privateKey
-	if err := a.initializeProviders(); err != nil {
+	manager := new(Service)
+
+	manager.providers = options.provider
+	manager.unsafePrivateKey = unsafePrivateKey
+	manager.privateKey = privateKey
+
+	err := manager.initializeJWTAuth(ctx)
+	if err != nil {
 		return nil, err
 	}
-	if err := a.initializeJWTAuth(); err != nil {
-		return nil, err
-	}
 
-	return a, nil
+	return manager, nil
 }
 
-func (a *AuthConfiguration) initializeProviders() error {
-	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(common.Google)]; ok {
-		p := google.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"openid",
-			"profile",
-		)
-		p.SetName(strings.ToLower((string)(common.Google)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.GitHub)]; ok {
-		p := github.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"user",
-		)
-		p.SetName(strings.ToLower((string)(common.GitHub)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.Microsoft)]; ok {
-		p := microsoftonline.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			"User.Read",
-		)
-		p.SetName(strings.ToLower((string)(common.Microsoft)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.AzureAd)]; ok {
-		p := azureadv2.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			azureadv2.ProviderOptions{
-				Tenant: azureadv2.TenantType(provider.TenantId),
-				Scopes: []azureadv2.ScopeType{"User.Read"},
-			},
-		)
-		p.SetName(strings.ToLower((string)(common.AzureAd)))
-		providers = append(providers, p)
-	}
-	if provider, ok := a.providers[(string)(common.Apple)]; ok {
-		providers = append(providers, apple.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			nil,
-			apple.ScopeName,
-			apple.ScopeEmail,
-		))
-	}
-	if provider, ok := a.providers[(string)(common.TypeOIDC)]; ok {
-		p, err := oidc.New(
-			provider.ClientId,
-			provider.ClientSecret,
-			provider.RedirectUri,
-			provider.DiscoveryUri,
-			provider.UserIdentScope,
-			provider.UserNameScope,
-		)
-		if err != nil {
-			logger.Get().Errorw("OIDC provider setup failed", "error", err)
-		}
-
-		p.SetName(strings.ToLower((string)(common.TypeOIDC)))
-		providers = append(providers, p)
-	}
-	goth.UseProviders(providers...)
-	gothic.GetProviderName = func(r *http.Request) (string, error) {
-		return chi.URLParam(r, "provider"), nil
-	}
-	gothic.SetState = func(r *http.Request) string {
-		nonceBytes := make([]byte, 64)
-		_, err := io.ReadFull(rand.Reader, nonceBytes)
-		if err != nil {
-			panic("gothic: source of randomness unavailable: " + err.Error())
-		}
-		nonce := base64.URLEncoding.EncodeToString(nonceBytes)
-
-		state := r.URL.Query().Get("state")
-		if len(state) > 0 {
-			return fmt.Sprintf("%s__%s", nonce, state)
-		}
-
-		return nonce
-	}
-
-	return nil
-}
-
-func (a *AuthConfiguration) Sign(claims map[string]any) (string, error) {
-	_, token, err := a.auth.Encode(claims)
+func (service *Service) Sign(claims map[string]any) (string, error) {
+	_, token, err := service.auth.Encode(claims)
 	return token, err
 }
 
-func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
-	if a.unsafeAuth != nil {
-		return func(next http.Handler) http.Handler {
-			hfn := func(w http.ResponseWriter, r *http.Request) {
-				ctx := r.Context()
-				log := logger.FromContext(ctx)
-				var token jwt.Token
-				var err error
+func (service *Service) Verifier() func(http.Handler) http.Handler {
+	if service.unsafeAuth == nil {
+		return jwtauth.Verifier(service.auth)
+	}
 
-				if token, err = jwtauth.VerifyRequest(a.unsafeAuth, r, jwtauth.TokenFromCookie); err == nil {
-					// check if user tries to authenticate by a prior authentication key
-					// attempt to migrate JWT to new key
-					var userID string
-					err = token.Get("id", &userID)
-					if err != nil {
-						log.Errorw("Error getting user ID", "error", err)
-					}
-					var user uuid.UUID
-					user, err = uuid.Parse(userID)
+	return func(next http.Handler) http.Handler {
+		hfn := func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
+			log := logger.FromContext(ctx)
 
-					if err == nil {
-						var ok bool
-						if ok, err = a.userService.IsUserAvailableForKeyMigration(ctx, user); ok {
-							// prepare new JWT
-							tokenString, _ := a.Sign(map[string]any{"id": user})
-							cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
-							common.SealCookie(r, &cookie)
-							http.SetCookie(w, &cookie)
-
-							// update rotation flag in database for user, ignore errors
-							_, _ = a.userService.SetKeyMigration(ctx, user)
-						} else {
-							err = errors.New("not permitted to access key rotation")
-						}
-					}
-				} else {
-					// attempt to verify request by new key
-					token, err = jwtauth.VerifyRequest(a.auth, r, jwtauth.TokenFromCookie)
-				}
-
+			token, err := jwtauth.VerifyRequest(service.auth, r, jwtauth.TokenFromCookie)
+			if err == nil {
+				// token is valid
 				ctx = jwtauth.NewContext(ctx, token, err)
 				next.ServeHTTP(w, r.WithContext(ctx))
+				return
 			}
-			return http.HandlerFunc(hfn)
+
+			log.Debug("check if user tries to authenticate by a prior authentication key and attempt to migrate JWT to new key")
+			token, err = service.migrateUnsafeKey(w, r)
+
+			ctx = jwtauth.NewContext(ctx, token, err)
+			next.ServeHTTP(w, r.WithContext(ctx))
 		}
+
+		return http.HandlerFunc(hfn)
 	}
-	return jwtauth.Verifier(a.auth)
 }
 
-func (a *AuthConfiguration) Authenticator() func(http.Handler) http.Handler {
-	return jwtauth.Authenticator(a.auth)
+func (service *Service) Authenticator() func(http.Handler) http.Handler {
+	return jwtauth.Authenticator(service.auth)
 }
 
-func (a *AuthConfiguration) Exists(accountType common.AccountType) bool {
-	if _, ok := a.providers[string(accountType)]; ok {
-		return true
+func (service *Service) ConfiguredProvider() []account.Type {
+	configured := make([]account.Type, 0, len(service.providers))
+
+	for key := range service.providers {
+		configured = append(configured, key)
 	}
-	return false
+
+	slices.Sort(configured)
+
+	return configured
 }
 
-func (a *AuthConfiguration) ExtractUserInformation(accountType common.AccountType, user *goth.User) (*UserInformation, error) {
-	ident := user.UserID
-	name := user.NickName
-	avatar := user.AvatarURL
-
-	if ident == "" {
-		return nil, fmt.Errorf("unable to extract identifier information for user")
+func (service *Service) GetProvider(accountType account.Type) (AuthProvider, error) {
+	provider, ok := service.providers[accountType]
+	if !ok {
+		return nil, fmt.Errorf("provider for %s not configured", accountType)
 	}
 
-	if name == "" {
-		name = user.Name
-	}
-
-	if name == "" {
-		return nil, fmt.Errorf("unable to extract name information for user %q", ident)
-	}
-
-	result := &UserInformation{
-		Provider:  accountType,
-		Ident:     ident,
-		Name:      name,
-		AvatarURL: avatar,
-	}
-
-	return result, nil
+	return provider, nil
 }
 
-func (a *AuthConfiguration) initializeJWTAuth() error {
-	if a.privateKey == "" {
-		logger.Get().Warnw("invalid keypair config, falling back to dev keys!")
-		a.privateKey = devkeys.PrivateKey
+func (service *Service) initializeJWTAuth(ctx context.Context) error {
+	log := logger.FromContext(ctx)
+
+	if service.privateKey == "" {
+		log.Warnw("invalid keypair config, falling back to dev keys!")
+		service.privateKey = devkeys.PrivateKey
 	}
 
-	if a.unsafePrivateKey != "" {
-		unsafeKey, err := ssh.ParseRawPrivateKey([]byte(a.unsafePrivateKey))
+	if service.unsafePrivateKey != "" {
+		unsafeKey, err := ssh.ParseRawPrivateKey([]byte(service.unsafePrivateKey))
 		if err != nil {
-			return fmt.Errorf("unable parse unsafe auth keys: %w", err)
+			return fmt.Errorf("unable to parse unsafe auth keys: %w", err)
 		}
+
 		unsafePrivateKey, ok := unsafeKey.(*ecdsa.PrivateKey)
 		if !ok {
 			return errors.New("the provided unsafe keys are no ecdsa keys")
 		}
-		a.unsafeAuth = jwtauth.New("ES512", unsafePrivateKey, unsafePrivateKey.PublicKey)
+
+		service.unsafeAuth = jwtauth.New("ES512", unsafePrivateKey, unsafePrivateKey.PublicKey)
 	}
 
-	key, err := ssh.ParseRawPrivateKey([]byte(a.privateKey))
+	key, err := ssh.ParseRawPrivateKey([]byte(service.privateKey))
 	if err != nil {
 		return fmt.Errorf("unable to parse auth keys: %w", err)
 	}
+
 	privateKey, ok := key.(*ecdsa.PrivateKey)
 	if !ok {
 		return errors.New("the provided keys are no ecdsa keys")
 	}
 
-	a.auth = jwtauth.New("ES512", privateKey, privateKey.PublicKey)
+	service.auth = jwtauth.New("ES512", privateKey, privateKey.PublicKey)
+
 	return nil
+}
+
+func (service *Service) migrateUnsafeKey(w http.ResponseWriter, r *http.Request) (jwt.Token, error) {
+	ctx := r.Context()
+	log := logger.FromContext(ctx)
+
+	token, err := jwtauth.VerifyRequest(service.unsafeAuth, r, jwtauth.TokenFromCookie)
+	if err != nil {
+		return nil, err
+	}
+
+	var id string
+	err = token.Get("id", &id)
+	if err != nil {
+		log.Errorw("failed to get user id", "err", err)
+		return nil, err
+	}
+
+	userId, err := uuid.Parse(id)
+	if err != nil {
+		log.Errorw("failed to parse user id", "err", err)
+		return nil, err
+	}
+
+	canMigrate, err := service.userService.IsUserAvailableForKeyMigration(ctx, userId)
+	if err != nil {
+		log.Errorw("failed to check for key migration", "err", err)
+		return nil, err
+	}
+
+	if !canMigrate {
+		err := errors.New("not permitted to access key rotation")
+		log.Errorw("not permitted to access key rotation", "err", err)
+		return nil, err
+	}
+
+	tokenString, err := service.Sign(map[string]any{
+		"id": userId,
+	})
+	if err != nil {
+		log.Errorw("failed to sign claims", "err", err)
+		return nil, err
+	}
+
+	cookie := http.Cookie{
+		Name:     "jwt",
+		Value:    tokenString,
+		Path:     "/",
+		HttpOnly: true,
+		MaxAge:   math.MaxInt32,
+		Secure:   true,
+	}
+	common.SealCookie(r, &cookie)
+	http.SetCookie(w, &cookie)
+
+	_, err = service.userService.SetKeyMigration(ctx, userId)
+	if err != nil {
+		log.Errorw("failed to set key migration", "err", err)
+	}
+
+	return token, nil
 }

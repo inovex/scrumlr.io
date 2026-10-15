@@ -178,3 +178,67 @@ or run
 ```bash
 newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
 ```
+
+## Local OIDC setup
+
+For some of the auth provider you need to configure scrumlr or your maschine in a different way.
+
+### Google
+
+For google
+
+### Microsoft
+
+### Azure
+
+### Apple
+
+Apple does not let you redirect to `localhost`. To redirect to your local maschine you also need a certificate.
+The problem with redirecting can be mitigated by adding an entry like
+
+```ini
+127.0.0.1 local.test
+```
+
+to your `hosts` file. This file can be found at
+
+- Linux: `/etc/hosts`
+- Mac: `/etc/hosts`
+- Windows: `C:\Windows\System32\drivers\etc\hosts`
+
+Add `local.test:8443/login/apple/callback` to the `Return URLs` on the apple configuration site.
+
+To get a certificate you can start a wiremock docker container with
+
+```bash
+docker run -it --rm -p 8443:8443 \
+  --add-host host.docker.internal:host-gateway \
+  --name wiremock wiremock/wiremock:3.13.2 \
+  --https-port 8443 \
+  --port 8081 \
+  --proxy-all http://host.docker.internal:8080 \
+  --verbose
+```
+
+Wiremock will create a self signed certificate for you and redirects all trafic through wiremock to `localhost:8080`.
+
+Then you need to change some configuration.
+First add
+
+```js
+  server: {
+    allowedHosts: ["local.test"]
+  }
+```
+
+to the `vite.config.ts` file. This will allow you to go to `local.test:5713`.
+
+Then we also change the callback address in our environment variables. Set
+
+```ini
+SCRUMLR_AUTH_CALLBACK_HOST="https://local.test:8443"
+```
+
+After these configurations you should be able to go to `http://local.test:5713` and then login with your apple id.
+
+### Generic OIDC

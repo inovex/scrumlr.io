@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/role"
 )
@@ -22,7 +23,7 @@ type DatabaseBoardSession struct {
 	Role              role.Role
 	Banned            bool
 	Favourite         bool
-	AccountType       common.AccountType
+	AccountType       account.Type
 	CreatedAt         time.Time
 }
 

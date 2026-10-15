@@ -165,7 +165,7 @@ func TestInitializeHealthService(t *testing.T) {
 func TestInitializeInfoService(t *testing.T) {
 	initializer := NewServiceInitializer(nil, &realtime.Broker{}, &cache.Cache{})
 
-	auth := auth.NewMockAuth(t)
+	auth := auth.NewMockAuthService(t)
 	feedbackService := feedback.NewMockFeedbackService(t)
 
 	infoService := initializer.InitializeInfoService(auth, feedbackService, info.ServerConfig{})
