@@ -13,6 +13,8 @@ import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import {isParticipantModerator} from "utils/participant";
+import {Toast} from "utils/Toast";
+import {TOAST_TIMER_SHORT} from "constants/misc";
 import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
@@ -141,6 +143,11 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     e.stopPropagation();
 
     if (showReactionPopup) return;
+
+    if (boardLocked && !isModerator) {
+      Toast.info({title: t("Toast.lockedBoard"), autoClose: TOAST_TIMER_SHORT});
+      return;
+    }
 
     const isSameReaction = reactionMadeByUser?.reactionType === emoji;
 
