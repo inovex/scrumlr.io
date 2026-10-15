@@ -85,13 +85,9 @@ describe("templates", () => {
       .should("have.class", "columns-configurator-column--hidden");
 
 
-    // cannot get it to work :(
-    cy
-      .get("[data-cy='columns-configurator-column__drag-element']")
+    cy.get("[data-cy='columns-configurator-column__drag-element']")
       .first()
-      .trigger("mousedown", {force: true, button: 0})
-      .trigger("mousemove", {clientX:1000, clientY:300, force: true})
-      .trigger("mouseup", {force:true})
+      .drag("[data-cy='columns-configurator__column']:nth-child(2)");
 
     cy
       .get<HTMLButtonElement>("[data-cy='editor-shell__button--create']")

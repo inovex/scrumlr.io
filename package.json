@@ -50,6 +50,7 @@
     "use-sound": "^5.0.0"
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.3.1",
     "@eslint/compat": "^2.1.1",
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",

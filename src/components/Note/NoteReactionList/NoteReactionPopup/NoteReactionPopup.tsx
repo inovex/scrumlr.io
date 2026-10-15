@@ -104,7 +104,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
           <div className="note-reaction-popup__notch" />
         </div>
         <nav className="note-reaction-popup__tab-bar">
-          <button className={classNames("note-reaction-popup__tab-all", {"note-reaction-popup__tab-all--active": !activeTab})} onClick={(e) => changeTab(e, undefined)}>
+          <button className={classNames("note-reaction-popup__tab-all", {"note-reaction-popup__tab-all--active": !activeTab})} onClick={(e) => changeTab(e)}>
             <div className="note-reaction-popup__tab--text">{t("NoteReactionsPopup.allReactionsTab")}</div>
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
           </button>
@@ -119,7 +119,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
           ))}
         </nav>
         <main className="note-reaction-popup__main" ref={containerRef}>
-          {renderContainer(undefined) /* render all first */}
+          {renderContainer() /* render all first */}
           {props.reactionsReduced.map((r) => renderContainer(r)) /* now for each reaction type */}
         </main>
       </div>
