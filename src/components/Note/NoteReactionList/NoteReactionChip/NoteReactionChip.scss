@@ -23,10 +23,6 @@
   &:hover {
     background-color: styles.$gray--500;
   }
-
-  &:disabled {
-    background-color: styles.$gray--300;
-  }
 }
 
 .note-reaction-chip__reaction {
@@ -45,10 +41,6 @@
   &:hover {
     background-color: var(--accent-color--200);
   }
-
-  &:disabled {
-    background-color: styles.$gray--300;
-  }
 }
 
 // override
@@ -62,10 +54,6 @@
   &:hover {
     background-color: var(--accent-color--light); // essentially no hover color when active.
   }
-
-  &:disabled {
-    background-color: styles.$gray--300;
-  }
 }
 
 [data-theme="dark"] {
@@ -75,10 +63,6 @@
     &:hover {
       background-color: styles.$navy--300;
     }
-
-    &:disabled {
-      background-color: styles.$navy--600;
-    }
   }
 
   .note-reaction-chip__root--self {
@@ -86,10 +70,6 @@
 
     &:hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.8);
-    }
-
-    &:disabled {
-      background-color: styles.$navy--600;
     }
   }
 
@@ -99,13 +79,38 @@
     &:hover {
       background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
-
-    &:disabled {
-      background-color: styles.$navy--600;
-    }
   }
 
   .note-reaction-chip__amount {
     color: styles.$gray--000;
+  }
+}
+
+// disabled look, chip stays clickable.
+.note-reaction-chip__root.note-reaction-chip__root--disabled {
+  &,
+  &:hover {
+    background-color: styles.$gray--300;
+  }
+
+  &.note-reaction-chip__root--self {
+    &,
+    &:hover {
+      background-color: var(--accent-color--100);
+    }
+  }
+}
+
+[data-theme="dark"] .note-reaction-chip__root.note-reaction-chip__root--disabled {
+  &,
+  &:hover {
+    background-color: styles.$navy--600;
+  }
+
+  &.note-reaction-chip__root--self {
+    &,
+    &:hover {
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
+    }
   }
 }

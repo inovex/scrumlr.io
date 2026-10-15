@@ -23,6 +23,8 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
 
+  const isDisabled = !isModerator && boardLocked;
+
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
@@ -32,11 +34,11 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   return (
     <>
       <button
-        disabled={!isModerator && boardLocked}
         id={anchorId} // unique identifier
         className={classNames("note-reaction-chip__root", {
           "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
           "note-reaction-chip__root--override-active": props.overrideActive,
+          "note-reaction-chip__root--disabled": isDisabled,
         })}
         onClick={(e) => {
           if (props.handleClickReaction) {
