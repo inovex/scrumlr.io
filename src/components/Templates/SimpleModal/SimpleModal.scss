@@ -80,14 +80,7 @@ $max-clamp-width: 600px;
     gap: styles.$spacing--md;
   }
 
-  .simple-modal__header,
-  .simple-modal__footer {
-    flex-shrink: 0;
-  }
-
   .simple-modal__main {
-    // min-height: 0 lets this flex child shrink below its content, so it scrolls instead of pushing the footer out
-    min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
@@ -98,11 +91,10 @@ $max-clamp-width: 600px;
     gap: styles.$spacing--base;
   }
 
-  // align the modal to the top of the visible screen (dvh excludes mobile browser toolbars)
+  // center in the visible screen, without the header padding so the modal is fully visible
   .portal__frame:has(.simple-modal) {
-    align-items: flex-start;
     height: 100dvh;
-    padding-top: styles.$spacing--xl;
+    padding-top: 0;
   }
 }
 
