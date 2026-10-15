@@ -48,6 +48,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
+  const isDisabled = boardLocked && !isModerator;
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
@@ -144,7 +145,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
     if (showReactionPopup) return;
 
-    if (boardLocked && !isModerator) {
+    if (isDisabled) {
       Toast.info({title: t("Toast.lockedBoard"), autoClose: TOAST_TIMER_SHORT});
       return;
     }
@@ -219,12 +220,25 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             <>
               <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} />
               {reactionMadeByUser && (
-                <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
+                <NoteReactionChip
+                  reaction={reactionMadeByUser}
+                  handleClickReaction={handleClickReaction}
+                  handleLongPressReaction={openReactionsPopup}
+                  showTooltip
+                  isDisabled={isDisabled}
+                />
               )}
             </>
           ) : (
             reactionsReduced.map((r) => (
-              <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
+              <NoteReactionChip
+                reaction={r}
+                key={r.reactionType}
+                handleClickReaction={handleClickReaction}
+                handleLongPressReaction={openReactionsPopup}
+                showTooltip
+                isDisabled={isDisabled}
+              />
             ))
           ))}
       </div>

@@ -1,16 +1,15 @@
 import classNames from "classnames";
-import React, {useId} from "react";
+import {useId, MouseEvent} from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
-import {isParticipantModerator} from "utils/participant";
 import "./NoteReactionChip.scss";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
-  handleClickReaction?: (e: React.MouseEvent<HTMLButtonElement>, reactionType: string) => void;
+  handleClickReaction?: (e: MouseEvent<HTMLButtonElement>, reactionType: string) => void;
   handleLongPressReaction?: (e: LongPressReactEvents) => void;
+  isDisabled: boolean;
   showTooltip?: boolean;
   overrideActive?: boolean; // if this is set, the chip will be highlighted no matter if yourself reacted to it
 }
@@ -20,10 +19,6 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const baseId = useId();
   const anchorId = `reaction-${props.reaction.noteId}-${props.reaction.reactionType}-${baseId}`;
-  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
-
-  const isDisabled = !isModerator && boardLocked;
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -38,7 +33,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         className={classNames("note-reaction-chip__root", {
           "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
           "note-reaction-chip__root--override-active": props.overrideActive,
-          "note-reaction-chip__root--disabled": isDisabled,
+          "note-reaction-chip__root--disabled": props.isDisabled,
         })}
         onClick={(e) => {
           if (props.handleClickReaction) {

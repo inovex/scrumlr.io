@@ -115,6 +115,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
               overrideActive={r.reactionType === activeTab}
               showTooltip={false}
               handleClickReaction={(e) => changeTab(e, r.reactionType)}
+              isDisabled={false}
             />
           ))}
         </nav>
