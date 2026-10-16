@@ -3,6 +3,7 @@
 exports[`SelectOption (multiple) > should render correctly 1`] = `
 <div>
   <button
+    aria-label="test 1"
     class="select-option select-option--0 select-option--active"
     tabindex="0"
   >
@@ -50,6 +51,7 @@ exports[`SelectOption (multiple) > should render correctly 1`] = `
     />
   </button>
   <button
+    aria-label="test 2"
     class="select-option select-option--1"
     tabindex="0"
   >
@@ -109,6 +111,7 @@ exports[`SelectOption (multiple) > should render correctly 1`] = `
 exports[`SelectOption (single) > should render correctly 1`] = `
 <div>
   <button
+    aria-label="test"
     class="select-option select-option--0 select-option--active"
     tabindex="0"
   >

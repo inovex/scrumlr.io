@@ -272,3 +272,45 @@ jobs:
           start: yarn run start
           working-directory: ./
           wait-on: "http://localhost:5173"
+
+  playwright-e2e-tests:
+    name: Playwright End-to-End test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install Corepack # for yarn berry
+      run: |
+        npm install -g corepack@0.36.0 --ignore-scripts
+        corepack enable
+        corepack install
+
+    - name: Setup Node.js with cache
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: "26"
+        cache: "yarn"
+        cache-dependency-path: "yarn.lock"
+
+    - name: Install dependencies
+      run: yarn install --immutable
+
+    - name: Install Playwright Browsers
+      run: yarn playwright install --with-deps
+
+    - name: Start server
+      run: docker compose --profile build up -d
+      working-directory: server
+
+    - name: Run Playwright tests
+      run: yarn playwright test
+
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
