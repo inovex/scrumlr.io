@@ -30,10 +30,10 @@ export class BoardClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the boards and the response
 	 */
-	getBoards(cookieJar?: http.CookieJar): [BoardOverview[] | null, http.Response] {
+	getBoards(cookieJar?: http.CookieJar): [BoardOverview[], http.Response] {
 		const response = this.get("./boards", [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const boards: BoardOverview[] = response.json() as unknown as BoardOverview[];
@@ -172,8 +172,13 @@ export class BoardClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the response
 	 */
-	joinBoard(boardId: string, joinReq: JoinBoardRequest = {}, cookieJar?: http.CookieJar): http.Response {
-		const response = this.post(`./boards/${boardId}/participants`, joinReq, [], cookieJar);
+	joinBoard(
+		boardId: string,
+		joinReq: JoinBoardRequest = {},
+		cookieJar?: http.CookieJar,
+		extraHeaders?: Record<string, string>,
+	): http.Response {
+		const response = this.post(`./boards/${boardId}/participants`, joinReq, [], cookieJar, extraHeaders);
 		return response;
 	}
 
@@ -185,10 +190,10 @@ export class BoardClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the users and the response
 	 */
-	getBoardUsers(boardId: string, cookieJar?: http.CookieJar): [User[] | null, http.Response] {
+	getBoardUsers(boardId: string, cookieJar?: http.CookieJar): [User[], http.Response] {
 		const response = this.get(`./users/board/${boardId}`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const users: User[] = response.json() as unknown as User[];

@@ -35,10 +35,10 @@ export class ReactionClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the reactions and the response
 	 */
-	getReactions(boardId: string, cookieJar?: http.CookieJar): [Reaction[] | null, http.Response] {
+	getReactions(boardId: string, cookieJar?: http.CookieJar): [Reaction[], http.Response] {
 		const response = this.get(`./boards/${boardId}/reactions`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const reaction: Reaction[] = response.json() as unknown as Reaction[];

@@ -35,10 +35,10 @@ export class ColumnTemplateClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the column templates and teh response
 	 */
-	getColumnTemplates(templateId: string, cookieJar?: http.CookieJar): [ColumnTemplate[] | null, http.Response] {
+	getColumnTemplates(templateId: string, cookieJar?: http.CookieJar): [ColumnTemplate[], http.Response] {
 		const response = this.get(`./templates/${templateId}/columns`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const template: ColumnTemplate[] = response.json() as unknown as ColumnTemplate[];
