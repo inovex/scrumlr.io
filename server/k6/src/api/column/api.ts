@@ -35,10 +35,10 @@ export class ColumnClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the columns of the board and the response
 	 */
-	getColumns(boardId: string, cookieJar?: http.CookieJar): [Column[] | null, http.Response] {
+	getColumns(boardId: string, cookieJar?: http.CookieJar): [Column[], http.Response] {
 		const response = this.get(`./boards/${boardId}/columns`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const columns: Column[] = response.json() as unknown as Column[];
