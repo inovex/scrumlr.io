@@ -1,0 +1,105 @@
+name: Update Hardcoded Versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: "New Version (e.g. 5.2.0)"
+        required: false
+        type: string
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Calculate Next Semantic Version
+        id: semver
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          tag_prefix: "v"
+          version_format: "${major}.${minor}.${patch}"
+
+      - name: Resolve Target Version
+        id: resolve-version
+        run: |
+          if [ -n "${{ inputs.new_version }}" ]; then
+            TARGET_VERSION="${{ inputs.new_version }}"
+          else
+            TARGET_VERSION="${{ steps.semver.outputs.version }}"
+          fi
+
+          if [ -z "$TARGET_VERSION" ]; then
+            echo "Error: Could not determine version."
+            exit 1
+          fi
+
+          echo "target_version=$TARGET_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Target version set to: $TARGET_VERSION"
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "^1.26"
+          cache: false
+
+      - name: Install Swag CLI
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+
+      - name: Find and replace version strings
+        env:
+          NEW_VERSION: ${{ steps.resolve-version.outputs.target_version }}
+        run: |
+          OLD_VERSION=$(jq -r '.version' package.json)
+
+          echo "Bumping version from $OLD_VERSION to $NEW_VERSION"
+
+          yarn version --new-version "$NEW_VERSION" --no-git-tag-version
+
+          files=(
+            "deployment/docker/.env.example"
+            "deployment/docker/docker-compose.yml"
+            "deployment/helm/scrumlr/Chart.yaml"
+            "deployment/helm/scrumlr/tests/backend/deployment_test.yaml"
+            "deployment/helm/scrumlr/tests/frontend/deployment_test.yaml"
+            "server/src/main.go"
+            "server/src/otel/otel.go"
+          )
+
+          for file in "${files[@]}"; do
+            sed -i "s/$OLD_VERSION/$NEW_VERSION/g" "$file"
+          done
+
+          cd server && make swagger
+
+      - name: Commit and Push Changes
+        env:
+          NEW_VERSION: ${{ steps.resolve-version.outputs.target_version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "Scrumlr Upgrade Version Bot[bot]"
+          git config user.email \<\>
+
+          if git diff --quiet; then
+            echo "No changes detected."
+          else
+            BRANCH_NAME="bump-version/v${NEW_VERSION}"
+
+            git checkout -b "$BRANCH_NAME"
+            git commit -am "chore: bump version to $NEW_VERSION"
+            git push -u origin "$BRANCH_NAME" --force
+
+            gh pr create \
+              --title "chore: bump version to $NEW_VERSION" \
+              --body "Automated version bump to $NEW_VERSION." \
+              --base main \
+              --head "$BRANCH_NAME"
+          fi
