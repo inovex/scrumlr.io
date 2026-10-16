@@ -4,6 +4,7 @@ import {Trans, useTranslation, withTranslation} from "react-i18next";
 import German from "assets/flags/DE.svg?react";
 import English from "assets/flags/US.svg?react";
 import French from "assets/flags/FR.svg?react";
+import Spanish from "assets/flags/ES.svg?react";
 import {ArrowRightIcon, LogoutIcon} from "components/Icon";
 import {Link, useNavigate} from "react-router";
 import {AppInfo} from "components/AppInfo";
@@ -71,6 +72,11 @@ export const Homepage = withTranslation()(() => {
               <button className="homepage__language" onClick={changeLanguage("fr")}>
                 <French className={"homepage__language-icon"} />
               </button>
+            </li>
+            <li>
+              <LegacyButton leftIcon={<Spanish />} className="homepage__language" hideLabel onClick={changeLanguage("es")}>
+                Español
+              </LegacyButton>
             </li>
 
             {!!user && (

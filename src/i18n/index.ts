@@ -8,9 +8,19 @@ import {setLanguage} from "store/features";
 import translationDe from "./de/translation.json";
 import translationEn from "./en/translation.json";
 import translationFr from "./fr/translation.json";
+import translationEs from "./es/translation.json";
 import templatesDe from "./de/templates.json";
 import templatesEn from "./en/templates.json";
 import templatesFr from "./fr/templates.json";
+import templatesEs from "./es/templates.json";
+
+const translationEsWithLegalFallback = {
+  ...translationEs,
+  CookiePolicy: {
+    ...translationEs.CookiePolicy,
+    body: translationEn.CookiePolicy.body,
+  },
+};
 
 export const resources = {
   en: {
@@ -24,6 +34,10 @@ export const resources = {
   fr: {
     translation: translationFr,
     templates: templatesFr,
+  },
+  es: {
+    translation: translationEsWithLegalFallback,
+    templates: templatesEs,
   },
 };
 
