@@ -100,7 +100,7 @@ export const Timer = (props: TimerProps) => {
 
   return (
     <div className="timer__container">
-      <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+      <div id="timer" role="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
         <div className="timer__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
         <span>
           {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
