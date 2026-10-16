@@ -73,7 +73,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
   };
 
   return (
-    <div className={classNames("template-card", {"template-card--disabled": props.disabled})} data-cy={`template-card--${props.templateType}`}>
+    <div className={classNames("template-card", {"template-card--disabled": props.disabled})} data-cy={`template-card--${props.templateType}`} role="group" aria-label={getDisplayText(template.name)}>
       <FavouriteButton
         className="template-card__favourite"
         active={template.favourite}
