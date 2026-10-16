@@ -101,6 +101,8 @@ spec:
               value: "true"
             - name: SCRUMLR_ALLOW_ANONYMOUS_HISTORY
               value: "true"
+            - name: SCRUMLR_JOIN_RATE_LIMIT
+              value: 6
           ports:
             - containerPort: 8080
 ---
