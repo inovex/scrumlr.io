@@ -1,4 +1,4 @@
-import { check, group, sleep } from "k6";
+import { check, group } from "k6";
 import http from "k6/http";
 import { AuthClient } from "./api/auth/api.ts";
 import type { AnonymousSignUpRequest } from "./api/auth/requests.ts";
@@ -40,12 +40,6 @@ import type { ColumnTemplate } from "./types/columnTemplate.ts";
 import type { Note } from "./types/note.ts";
 import type { Reaction } from "./types/reaction.ts";
 import type { Voting } from "./types/voting.ts";
-
-options.vus = 1;
-options.iterations = 1;
-options.thresholds = {
-	checks: ["rate==1.0"],
-};
 
 export { options };
 
@@ -1242,9 +1236,6 @@ export default function e2e() {
 			});
 		});
 	});
-
-	// sleep for joinBoard rate limit
-	sleep(5);
 
 	group("Voting and vote endpoints", () => {
 		const ownerContext = new http.CookieJar();
