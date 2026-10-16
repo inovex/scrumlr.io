@@ -16,7 +16,7 @@ describe("logout", () => {
   it("does not redirect a new user to the previous user's board", () => {
     cy.visit("/");
     cy.acceptCookies();
-    cy.get<HTMLAnchorElement>("a.homepage__start-button").click();
+    cy.get<HTMLButtonElement>(".homepage__start-button").click();
     loginAnonymously("Logout User A");
 
     cy.get<HTMLDivElement>("[data-cy='template-card--RECOMMENDED']").first().find<HTMLButtonElement>("[data-cy='template-card__start-button']").click();

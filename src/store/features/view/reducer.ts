@@ -63,7 +63,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.allowAnonymousCustomTemplates = action.payload.allowAnonymousCustomTemplates;
       state.allowAnonymousBoardCreation = action.payload.allowAnonymousBoardCreation;
       state.allowAnonymousHistory = action.payload.allowAnonymousHistory;
-      state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
+      state.serverTimeOffset = Date.now() - action.payload.serverTime;
       state.feedbackEnabled = action.payload.feedbackEnabled;
     })
     .addCase(setRoute, (state, action) => {

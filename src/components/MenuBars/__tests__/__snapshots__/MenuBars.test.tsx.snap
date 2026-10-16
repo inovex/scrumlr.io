@@ -329,7 +329,6 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         </ul>
       </section>
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -355,7 +354,6 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the poss
         class="menu admin-menu admin-menu--empty"
       />
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -1041,7 +1039,6 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         </ul>
       </section>
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -1067,7 +1064,6 @@ exports[`Mark me as Done Tooltip Logic > Does not expand the tooltip if the time
         class="menu admin-menu admin-menu--empty"
       />
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -1753,7 +1749,6 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         </ul>
       </section>
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -1779,7 +1774,6 @@ exports[`Mark me as Done Tooltip Logic > Expand the tooltip everytime a potentia
         class="menu admin-menu admin-menu--empty"
       />
       <button
-        aria-hidden="true"
         class="menu-bars__navigation menu-bars__navigation--visible"
       >
         <svg
@@ -2464,7 +2458,6 @@ exports[`MenuBars > should match snapshot 1`] = `
       </ul>
     </section>
     <button
-      aria-hidden="true"
       class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg
@@ -2756,7 +2749,6 @@ exports[`MenuBars > should match snapshot 1`] = `
       </ul>
     </section>
     <button
-      aria-hidden="true"
       class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg

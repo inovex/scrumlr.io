@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { VotingsState } from "./types";
 import { initializeBoard } from "../board";
-import { createdVoting, updatedVoting } from "./actions";
+import { createdVoting, syncedVotingResults, updatedVoting } from "./actions";
 
 const initialState: VotingsState = { open: undefined, past: [] };
 
@@ -29,5 +29,11 @@ export const votingsReducer = createReducer(initialState, (builder) =>
       const lastKnown = state.past[0];
       const votingToPush = incoming.votes ? incoming : { ...incoming, votes: lastKnown?.votes };
       state.past.unshift(votingToPush);
+    })
+    .addCase(syncedVotingResults, (state, action) => {
+      const index = state.past.findIndex((voting) => voting.id === action.payload.id);
+      if (index !== -1) {
+        state.past[index] = action.payload;
+      }
     })
 );

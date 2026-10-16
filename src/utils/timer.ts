@@ -1,5 +1,5 @@
 const calculateTimeLeft = (endTime: Date): {h: number; m: number; s: number} => {
-  const difference = +endTime - +new Date();
+  const difference = +endTime - +Date.now();
   return {
     h: Math.max(Math.floor((difference / 1000 / 60 / 60) % 24), 0),
     m: Math.max(Math.floor((difference / 1000 / 60) % 60), 0),
@@ -9,7 +9,7 @@ const calculateTimeLeft = (endTime: Date): {h: number; m: number; s: number} => 
 
 // Returns the percentage of the total time that is left
 const calculateElapsedTimePercentage = (startTime: Date, endTime: Date): number => {
-  const difference = +new Date() - +startTime;
+  const difference = +Date.now() - +startTime;
   const total = +endTime - +startTime;
   return 1 - Math.min(difference / total, 1);
 };
