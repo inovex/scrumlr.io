@@ -191,7 +191,7 @@ export const Templates = () => {
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
-        <section className="templates__container templates__container--recommended">
+        <section className="templates__container templates__container--recommended" aria-label={t("Templates.recommendedTemplates")}>
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {sortBy(
@@ -206,12 +206,13 @@ export const Templates = () => {
                 disabled={!canCreateBoard}
                 disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
                 key={template.id}
+                aria-label={template.name}
               />
             ))}
           </div>
         </section>
         {showCustomTemplates && (
-          <section className="templates__container templates__container--saved">
+          <section className="templates__container templates__container--saved" aria-label={t("Templates.savedTemplates")}>
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
