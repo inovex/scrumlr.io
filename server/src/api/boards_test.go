@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 
@@ -18,6 +18,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
@@ -258,8 +259,11 @@ func (suite *BoardTestSuite) TestGetBoard() {
 func (suite *BoardTestSuite) TestJoinBoard() {
 	boardName := "Test Name"
 	boardDescription := "Test Description"
-	salt := "z9YcpBno6azI2ueA"
-	passphrase := hash.NewHashSha512().HashBySalt("123", salt)
+
+	passwordEncoder, err := encoder.NewArgon2IdEncoder(encoder.WithOWASPRecomended())
+	assert.NoError(suite.T(), err)
+	passphrase, salt, err := passwordEncoder.Encode("SuperSecretStrongPassword")
+	assert.NoError(suite.T(), err)
 
 	testParameterBundles := *TestParameterBundles{}.
 		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
@@ -271,9 +275,9 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				ErrorText:  "Could not join board",
 			}, true, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
 		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
-		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByPassphrase, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, &passphrase, &salt))
+		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByPassphrase, passphrase, salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, passphrase, salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, passphrase, salt))
 
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {

@@ -370,6 +370,72 @@ func (_c *MockBoardDatabase_UpdateBoard_Call) RunAndReturn(run func(ctx context.
 	return _c
 }
 
+// UpdateBoardPassphrase provides a mock function for the type MockBoardDatabase
+func (_mock *MockBoardDatabase) UpdateBoardPassphrase(ctx context.Context, update DatabaseBoardPassphraseUpdate) (DatabaseBoard, error) {
+	ret := _mock.Called(ctx, update)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateBoardPassphrase")
+	}
+
+	var r0 DatabaseBoard
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardPassphraseUpdate) (DatabaseBoard, error)); ok {
+		return returnFunc(ctx, update)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardPassphraseUpdate) DatabaseBoard); ok {
+		r0 = returnFunc(ctx, update)
+	} else {
+		r0 = ret.Get(0).(DatabaseBoard)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardPassphraseUpdate) error); ok {
+		r1 = returnFunc(ctx, update)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockBoardDatabase_UpdateBoardPassphrase_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBoardPassphrase'
+type MockBoardDatabase_UpdateBoardPassphrase_Call struct {
+	*mock.Call
+}
+
+// UpdateBoardPassphrase is a helper method to define mock.On call
+//   - ctx context.Context
+//   - update DatabaseBoardPassphraseUpdate
+func (_e *MockBoardDatabase_Expecter) UpdateBoardPassphrase(ctx any, update any) *MockBoardDatabase_UpdateBoardPassphrase_Call {
+	return &MockBoardDatabase_UpdateBoardPassphrase_Call{Call: _e.mock.On("UpdateBoardPassphrase", ctx, update)}
+}
+
+func (_c *MockBoardDatabase_UpdateBoardPassphrase_Call) Run(run func(ctx context.Context, update DatabaseBoardPassphraseUpdate)) *MockBoardDatabase_UpdateBoardPassphrase_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseBoardPassphraseUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseBoardPassphraseUpdate)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockBoardDatabase_UpdateBoardPassphrase_Call) Return(databaseBoard DatabaseBoard, err error) *MockBoardDatabase_UpdateBoardPassphrase_Call {
+	_c.Call.Return(databaseBoard, err)
+	return _c
+}
+
+func (_c *MockBoardDatabase_UpdateBoardPassphrase_Call) RunAndReturn(run func(ctx context.Context, update DatabaseBoardPassphraseUpdate) (DatabaseBoard, error)) *MockBoardDatabase_UpdateBoardPassphrase_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateBoardTimer provides a mock function for the type MockBoardDatabase
 func (_mock *MockBoardDatabase) UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error) {
 	ret := _mock.Called(ctx, update)

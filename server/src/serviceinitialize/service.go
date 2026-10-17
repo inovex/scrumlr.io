@@ -6,9 +6,9 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/cache"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/eventfilter"
 	"scrumlr.io/server/events"
-	"scrumlr.io/server/hash"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -32,19 +32,19 @@ import (
 )
 
 type ServiceInitializer struct {
-	clock       timeprovider.TimeProvider
-	hash        hash.Hash
-	db          *bun.DB
-	broker      *realtime.Broker
-	checkOrigin bool
-	cache       *cache.Cache
-	client      *http.Client
+	clock           timeprovider.TimeProvider
+	passwordEncoder encoder.PasswordEncoder
+	db              *bun.DB
+	broker          *realtime.Broker
+	checkOrigin     bool
+	cache           *cache.Cache
+	client          *http.Client
 }
 
-func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cache) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cache, passwordEncoder encoder.PasswordEncoder) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.clock = timeprovider.NewClock()
-	initializer.hash = hash.NewHashSha512()
+	initializer.passwordEncoder = passwordEncoder
 	initializer.db = db
 	initializer.broker = broker
 	initializer.checkOrigin = false
@@ -56,7 +56,7 @@ func NewServiceInitializer(db *bun.DB, broker *realtime.Broker, cache *cache.Cac
 
 func (init *ServiceInitializer) InitializeBoardService(sessionService sessions.SessionService, sessionRequestService sessionrequests.SessionRequestService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, userService users.UserService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db, init.clock)
-	boardService := boards.NewBoardService(boardDB, init.broker, sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService, init.clock, init.hash)
+	boardService := boards.NewBoardService(boardDB, init.broker, sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService, init.clock, init.passwordEncoder)
 
 	return boardService
 }
