@@ -19,6 +19,7 @@ type UsersApi interface {
 	AnonymousBoardCreationContext(next http.Handler) http.Handler
 	AnonymousCustomTemplateCreationContext(next http.Handler) http.Handler
 }
+
 type Router struct {
 	usersApi   UsersApi
 	sessionApi sessions.SessionApi
