@@ -27,6 +27,7 @@ export type TextAreaProps = {
   maxLength?: number;
   disabled?: boolean;
   readOnly?: boolean;
+  ariaLabel?: string;
 
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
@@ -76,6 +77,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         maxLength={props.maxLength}
         maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
         placeholder={props.placeholder}
+        aria-label={props.ariaLabel ?? props.placeholder}
         autoFocus={props.autoFocus}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
