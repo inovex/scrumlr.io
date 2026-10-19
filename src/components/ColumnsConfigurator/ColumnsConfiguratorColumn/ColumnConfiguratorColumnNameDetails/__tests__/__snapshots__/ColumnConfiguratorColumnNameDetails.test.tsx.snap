@@ -39,6 +39,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (d
         .text-area { --text-area-rows: 7 }
       </style>
       <textarea
+        aria-label="Description (optional)"
         class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         maxlength="1024"
         placeholder="Description (optional)"
@@ -124,6 +125,7 @@ exports[`ColumnConfiguratorColumnNameDetails render > should render correctly (n
         .text-area { --text-area-rows: 7 }
       </style>
       <textarea
+        aria-label="Description (optional)"
         class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         maxlength="1024"
         placeholder="Description (optional)"
