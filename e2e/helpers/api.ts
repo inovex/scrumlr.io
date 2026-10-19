@@ -1,5 +1,5 @@
 import {expect, Page} from "@playwright/test";
-import { CreateBoardRequest, CreateTimerRequest, CreateVotingRequest, JoinRequest, UpdateUserSessionRequest } from "./requests";
+import { CreateBoardRequest, CreateBoardTemplateRequest, CreateTimerRequest, CreateVotingRequest, JoinRequest, UpdateUserSessionRequest } from "./requests";
 
 const apiUrl = process.env.API_BASE_URL
 
@@ -87,4 +87,18 @@ export async function createVoting(page: Page, boardId: string, votingRequest: C
 
   await response.dispose();
   return voting.id;
+}
+
+export async function createBoardTemplate(page: Page, boardTemplate: CreateBoardTemplateRequest): Promise<string> {
+  const response = await page.request.post(`${apiUrl}/templates`, {
+    data: JSON.stringify(boardTemplate),
+  });
+
+  await expect(response).toBeOK();
+
+  const boardTemplateResponse = await response.json();
+
+  await response.dispose();
+  return boardTemplateResponse.id;
+}
 }
