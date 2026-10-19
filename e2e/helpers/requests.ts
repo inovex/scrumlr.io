@@ -42,7 +42,7 @@ export interface CreateVotingRequest {
   isAnonymous: boolean;
   showVotesOfOthers: boolean;
   voteLimit: number;
-}
+};
 
 export interface CreateBoardTemplateRequest {
   creator: string;
@@ -50,6 +50,27 @@ export interface CreateBoardTemplateRequest {
   description?: string | undefined;
   favourite: boolean;
   columnTemplates: Column[];
+};
+
+export interface CreateNoteRequest {
+  column: string;
+  text: string;
+}
+
+interface NotePosition {
+  column: string;
+  stack?: string | undefined;
+  rank: number;
+}
+
+export interface UpdateNoteRequest {
+  text?: string | undefined;
+  position?: NotePosition | undefined;
+}
+
+export interface CreateReactionRequest {
+  note: string;
+  reactionType: string;
 }
 
 export interface CreateNoteRequest {
