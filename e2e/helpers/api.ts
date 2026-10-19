@@ -1,7 +1,17 @@
 import {expect, Page} from "@playwright/test";
-import { CreateBoardRequest, CreateBoardTemplateRequest, CreateTimerRequest, CreateVotingRequest, JoinRequest, UpdateUserSessionRequest } from "./requests";
+import {
+  CreateBoardRequest,
+  CreateBoardTemplateRequest,
+  CreateNoteRequest,
+  CreateReactionRequest,
+  CreateTimerRequest,
+  CreateVotingRequest,
+  JoinRequest,
+  UpdateNoteRequest,
+  UpdateUserSessionRequest,
+} from "./requests";
 
-const apiUrl = process.env.API_BASE_URL
+const apiUrl = process.env.API_BASE_URL;
 
 export async function loginAnonymous(page: Page, name: string): Promise<string> {
   const response = await page.request.post(`${apiUrl}/login/anonymous`, {
@@ -101,4 +111,49 @@ export async function createBoardTemplate(page: Page, boardTemplate: CreateBoard
   await response.dispose();
   return boardTemplateResponse.id;
 }
+
+export async function createNote(page: Page, boardId: string, note: CreateNoteRequest): Promise<string> {
+  const response = await page.request.post(`${apiUrl}/boards/${boardId}/notes`, {
+    data: JSON.stringify(note),
+  });
+
+  await expect(response).toBeOK();
+
+  const noteResponse = await response.json();
+
+  await response.dispose();
+  return noteResponse.id;
+}
+
+export async function getBoardColumns(page: Page, boardId: string): Promise<{id: string; name: string}[]> {
+  const response = await page.request.get(`${apiUrl}/boards/${boardId}/columns`);
+
+  await expect(response).toBeOK();
+
+  const columns = await response.json();
+
+  await response.dispose();
+  return columns;
+}
+
+export async function updateNote(page: Page, boardId: string, noteId: string, updateRequest: UpdateNoteRequest): Promise<void> {
+  const response = await page.request.put(`${apiUrl}/boards/${boardId}/notes/${noteId}`, {
+    data: JSON.stringify(updateRequest),
+  });
+
+  await expect(response).toBeOK();
+  await response.dispose();
+}
+
+export async function createNoteReaction(page: Page, boardId: string, reaction: CreateReactionRequest): Promise<string> {
+  const response = await page.request.post(`${apiUrl}/boards/${boardId}/reactions`, {
+    data: JSON.stringify(reaction),
+  });
+
+  await expect(response).toBeOK();
+
+  const reactionResponse = await response.json();
+
+  await response.dispose();
+  return reactionResponse.id;
 }

@@ -104,7 +104,7 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
-      <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
+      <div tabIndex={0} role="article" aria-label={note.text} className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
           <div data-clarity-mask="True" className="note__author-container">
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
