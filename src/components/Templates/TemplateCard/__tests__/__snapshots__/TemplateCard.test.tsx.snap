@@ -47,10 +47,12 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
       class="template-card__menu-icon-container"
     >
       <svg
+        aria-label="Template options"
         class="template-card__icon template-card__icon--menu"
         data-cy="template-card__menu"
         fill="none"
         height="32"
+        role="button"
         viewBox="0 0 32 32"
         width="32"
         xmlns="http://www.w3.org/2000/svg"

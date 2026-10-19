@@ -50,7 +50,7 @@ export interface CreateBoardTemplateRequest {
   description?: string | undefined;
   favourite: boolean;
   columnTemplates: Column[];
-};
+}
 
 export interface CreateNoteRequest {
   column: string;

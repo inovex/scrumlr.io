@@ -121,6 +121,7 @@ export const Input = (props: SearchBarProps) => {
           onKeyDown={handleKeyDown}
           maxLength={props.maxLength}
           required={props.required}
+          aria-label={props.placeholder}
           data-cy={props.dataCy}
         />
         {renderRightIcon()}
