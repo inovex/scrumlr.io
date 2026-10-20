@@ -59,23 +59,23 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <button className="homepage__language" onClick={changeLanguage("de")}>
-                <German className={"homepage__language-icon"}></German>
+              <button className="homepage__language" onClick={changeLanguage("de")} aria-label={i18n.t("Language.german")}>
+                <German className={"homepage__language-icon"} aria-hidden></German>
               </button>
             </li>
             <li>
-              <button className="homepage__language" onClick={changeLanguage("en")}>
-                <English className={"homepage__language-icon"} />
+              <button className="homepage__language" onClick={changeLanguage("en")} aria-label={i18n.t("Language.english")}>
+                <English className={"homepage__language-icon"} aria-hidden />
               </button>
             </li>
             <li>
-              <button className="homepage__language" onClick={changeLanguage("fr")}>
-                <French className={"homepage__language-icon"} />
+              <button className="homepage__language" onClick={changeLanguage("fr")} aria-label={i18n.t("Language.french")}>
+                <French className={"homepage__language-icon"} aria-hidden />
               </button>
             </li>
             <li>
-              <button className="homepage__language" onClick={changeLanguage("es")}>
-                <Spanish className={"homepage__language-icon"} />
+              <button className="homepage__language" onClick={changeLanguage("es")} aria-label={i18n.t("Language.spanish")}>
+                <Spanish className={"homepage__language-icon"} aria-hidden />
               </button>
             </li>
 
