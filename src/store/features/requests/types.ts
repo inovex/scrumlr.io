@@ -1,9 +1,9 @@
 import {Auth} from "../auth";
 
 export enum JoinRequestStatus {
-  "PENDING" = 0,
-  "ACCEPTED" = 1,
-  "REJECTED" = 2,
+  PENDING = 0,
+  ACCEPTED = 1,
+  REJECTED = 2,
 }
 
 export type JoinRequestStatusType = keyof typeof JoinRequestStatus;

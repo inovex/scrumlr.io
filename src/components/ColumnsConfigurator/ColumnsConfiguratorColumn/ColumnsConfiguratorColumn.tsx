@@ -64,24 +64,24 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
 
   return (
     <div
-    className={classNames(
-      props.className,
-      "columns-configurator-column",
-      `columns-configurator-column--border-${props.placement ?? "ghost"}`,
-      {
-        "columns-configurator-column--even": props.index % 2 === 0,
-        "columns-configurator-column--odd": props.index % 2 !== 0,
-        "columns-configurator-column--hidden": !props.column.visible,
-        "columns-configurator-column--active-drag": props.activeDrag,
-        "columns-configurator-column--active-drop": props.activeDrop,
-      },
-      getColorClassName(props.column.color)
-    )}
-    ref={combinedRef}
-    style={style}
-    {...attributes}
-    aria-label={props.column.name}
-    data-cy="columns-configurator__column"
+      className={classNames(
+        props.className,
+        "columns-configurator-column",
+        `columns-configurator-column--border-${props.placement ?? "ghost"}`,
+        {
+          "columns-configurator-column--even": props.index % 2 === 0,
+          "columns-configurator-column--odd": props.index % 2 !== 0,
+          "columns-configurator-column--hidden": !props.column.visible,
+          "columns-configurator-column--active-drag": props.activeDrag,
+          "columns-configurator-column--active-drop": props.activeDrop,
+        },
+        getColorClassName(props.column.color)
+      )}
+      ref={combinedRef}
+      style={style}
+      {...attributes}
+      aria-label={props.column.name}
+      data-cy="columns-configurator__column"
     >
       <ColumnConfiguratorColumnNameDetails
         className="columns-configurator-column__name-details"
@@ -94,7 +94,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       {titleEditState === "closed" && (
         <div className="columns-configurator-column__menu">
           <DragAndDropIcon
-          role="button"
+            role="button"
             className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--dnd", "columns-configurator-column__drag-element", {
               "columns-configurator-column__drag-element--dragging": props.activeDrag,
             })}

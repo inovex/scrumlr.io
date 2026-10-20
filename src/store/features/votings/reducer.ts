@@ -1,9 +1,9 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { VotingsState } from "./types";
-import { initializeBoard } from "../board";
-import { createdVoting, syncedVotingResults, updatedVoting } from "./actions";
+import {createReducer} from "@reduxjs/toolkit";
+import {VotingsState} from "./types";
+import {initializeBoard} from "../board";
+import {createdVoting, syncedVotingResults, updatedVoting} from "./actions";
 
-const initialState: VotingsState = { open: undefined, past: [] };
+const initialState: VotingsState = {open: undefined, past: []};
 
 export const votingsReducer = createReducer(initialState, (builder) =>
   builder
@@ -17,7 +17,7 @@ export const votingsReducer = createReducer(initialState, (builder) =>
           }
           return acc;
         },
-        { open: undefined, past: [] }
+        {open: undefined, past: []}
       )
     )
     .addCase(createdVoting, (state, action) => {
@@ -27,7 +27,7 @@ export const votingsReducer = createReducer(initialState, (builder) =>
       state.open = undefined;
       const incoming = action.payload.voting;
       const lastKnown = state.past[0];
-      const votingToPush = incoming.votes ? incoming : { ...incoming, votes: lastKnown?.votes };
+      const votingToPush = incoming.votes ? incoming : {...incoming, votes: lastKnown?.votes};
       state.past.unshift(votingToPush);
     })
     .addCase(syncedVotingResults, (state, action) => {
