@@ -18,7 +18,7 @@
 
   cursor: pointer;
 
-  &:hover {
+  &:not(&--disabled):hover {
     background-color: styles.$gray--300;
   }
 }
@@ -50,7 +50,7 @@
   .note-reaction-chip-condensed__root {
     background-color: styles.$navy--600;
 
-    &:hover {
+    &:not(&--disabled):hover {
       background-color: styles.$navy--300;
     }
   }

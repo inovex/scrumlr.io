@@ -3,11 +3,13 @@ import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {useId} from "react";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
+import classNames from "classnames";
 import "./NoteReactionChipCondensed.scss";
 
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
   handleLongPressReaction: (e: LongPressReactEvents) => void;
+  isDisabled: boolean;
 }
 
 export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed) => {
@@ -33,7 +35,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
     <>
       <div
         id={`${anchorId}`}
-        className="note-reaction-chip-condensed__root"
+        className={classNames("note-reaction-chip-condensed__root", {"note-reaction-chip-condensed__root--disabled": props.isDisabled})}
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()}
       >
