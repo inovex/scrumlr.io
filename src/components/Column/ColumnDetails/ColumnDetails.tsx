@@ -149,6 +149,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     props.mode === "edit" ? (
       <input
         {...emoji.inputBindings}
+        aria-label="Column name"
         ref={inputRef}
         className={classNames("column-details__name", "column-details__name--editing")}
         maxLength={MAX_BOARD_NAME_LENGTH}
@@ -197,6 +198,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <div className="column-details__notes-count">{props.notesCount}</div>
         {props.mode === "moderator-view" && (
           <EditIcon
+            role="button"
+            aria-label="Edit column name"
+            tabIndex={0}
             className="column-details__edit-icon"
             onClick={() => {
               setFocusTarget("name");
@@ -219,6 +223,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <>
           <TextArea
             ref={viewDescriptionRef}
+            ariaLabel="Column description"
             className={classNames({
               "column-details__description--moderator": props.mode === "moderator-view",
             })}
@@ -274,6 +279,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     <>
       <TextArea
         ref={descriptionRef}
+        ariaLabel="Column description"
         className="column-details__description-text-area"
         input={localDescription}
         setInput={setLocalDescription}
@@ -315,6 +321,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     }
     return (
       <button
+        aria-label="Column settings"
         className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
         onClick={() => setOpenSettings(true)}
         data-cy={"column-settings-mini-menu"}

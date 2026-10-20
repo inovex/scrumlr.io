@@ -6,6 +6,7 @@ exports[`Select > should render correctly 1`] = `
     class="select"
   >
     <button
+      aria-label="test 1"
       class="select-option select-option--0 select-option--active"
       tabindex="0"
     >
@@ -53,6 +54,7 @@ exports[`Select > should render correctly 1`] = `
       />
     </button>
     <button
+      aria-label="test 2"
       class="select-option select-option--1"
       tabindex="0"
     >
@@ -107,6 +109,7 @@ exports[`Select > should render correctly 1`] = `
       />
     </button>
     <button
+      aria-label="test 3"
       class="select-option select-option--2"
       tabindex="0"
     >

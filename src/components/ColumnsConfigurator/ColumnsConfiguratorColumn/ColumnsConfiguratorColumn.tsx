@@ -80,6 +80,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       ref={combinedRef}
       style={style}
       {...attributes}
+      aria-label={props.column.name}
       data-cy="columns-configurator__column"
     >
       <ColumnConfiguratorColumnNameDetails
@@ -93,10 +94,12 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       {titleEditState === "closed" && (
         <div className="columns-configurator-column__menu">
           <DragAndDropIcon
+            role="button"
             className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--dnd", "columns-configurator-column__drag-element", {
               "columns-configurator-column__drag-element--dragging": props.activeDrag,
             })}
             {...listeners}
+            aria-label="Drag column"
             data-cy="columns-configurator-column__drag-element"
           />
           <ColorPicker
@@ -117,6 +120,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
           <button
             className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": false}, "column-configurator-column__visibility-button")}
             onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
+            aria-label={props.column.visible ? "Hide column" : "Show column"}
           >
             {props.column.visible ? (
               <VisibleIcon

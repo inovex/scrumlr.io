@@ -63,6 +63,7 @@ export const Column = ({id, name, description, color, visible, index}: ColumnPro
 
   return (
     <section
+      aria-label={name}
       className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)}
       style={stripeStyle}
       ref={(r) => {

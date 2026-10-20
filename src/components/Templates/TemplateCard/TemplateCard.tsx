@@ -67,13 +67,24 @@ export const TemplateCard = (props: TemplateCardProps) => {
       />
     ) : (
       <div className="template-card__menu-icon-container">
-        <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} data-cy="template-card__menu" />
+        <MenuIcon
+          role="button"
+          className={classNames("template-card__icon", "template-card__icon--menu")}
+          onClick={() => setShowMiniMenu(true)}
+          aria-label="Template options"
+          data-cy="template-card__menu"
+        />
       </div>
     );
   };
 
   return (
-    <div className={classNames("template-card", {"template-card--disabled": props.disabled})} data-cy={`template-card--${props.templateType}`}>
+    <div
+      className={classNames("template-card", {"template-card--disabled": props.disabled})}
+      data-cy={`template-card--${props.templateType}`}
+      role="group"
+      aria-label={getDisplayText(template.name)}
+    >
       <FavouriteButton
         className="template-card__favourite"
         active={template.favourite}
