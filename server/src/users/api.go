@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -19,7 +20,7 @@ const fetchUserFailureMessage = "could not fetch user"
 const improperUserIDMessage = "invalid or missing user identifier in context"
 
 type UserService interface {
-	Create(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType) (*User, error)
+	Create(ctx context.Context, id, name, avatarUrl string, accountType account.Type) (*User, error)
 	Get(ctx context.Context, id uuid.UUID) (*User, error)
 	GetBoardUsers(ctx context.Context, boardID uuid.UUID) ([]*User, error)
 	GetExistingUserIDs(ctx context.Context, userIDs []uuid.UUID) ([]uuid.UUID, error)

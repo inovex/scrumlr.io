@@ -11,14 +11,13 @@ import (
 
 	"go.uber.org/zap"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/cache"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/serviceinitialize"
-
-	"scrumlr.io/server/auth"
+	"scrumlr.io/server/timeprovider"
 
 	altsrc "github.com/urfave/cli-altsrc/v3"
 	"github.com/urfave/cli-altsrc/v3/toml"
@@ -220,16 +219,6 @@ func main() {
 				Required: false,
 				Value:    false,
 			},
-			&cli.BoolFlag{
-				Name: "auth-enable-experimental-file-system-store",
-				Sources: cli.NewValueSourceChain(
-					cli.EnvVar("SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"),
-					toml.TOML("auth-enable-experimental-file-system-store", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
-				),
-				Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
-				Required: false,
-				Value:    false,
-			},
 			&cli.StringFlag{
 				Name:    "auth-callback-host",
 				Aliases: []string{"c"},
@@ -331,12 +320,30 @@ func main() {
 				Required: false,
 			},
 			&cli.StringFlag{
-				Name: "auth-apple-client-secret",
+				Name: "auth-apple-key-id",
 				Sources: cli.NewValueSourceChain(
-					cli.EnvVar("SCRUMLR_AUTH_APPLE_CLIENT_SECRET"),
-					toml.TOML("auth-apple-client-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+					cli.EnvVar("SCRUMLR_AUTH_APPLE_KEY_ID"),
+					toml.TOML("auth-apple-key-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
 				),
-				Usage:    "the client `secret` for Apple",
+				Usage:    "the `key id` for Apple",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name: "auth-apple-team-id",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_AUTH_APPLE_TEAM_ID"),
+					toml.TOML("auth-apple-team-id", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+				),
+				Usage:    "the `team id` for Apple",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name: "auth-apple-private-key",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_AUTH_APPLE_PRIVATE_KEY"),
+					toml.TOML("auth-apple-private-key", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+				),
+				Usage:    "the private key for Apple",
 				Required: false,
 			},
 			&cli.StringFlag{
@@ -383,15 +390,6 @@ func main() {
 				),
 				Usage: "JWT claim to request for the user name",
 				Value: "profile",
-			},
-			&cli.StringFlag{
-				Name: "session-secret",
-				Sources: cli.NewValueSourceChain(
-					cli.EnvVar("SESSION_SECRET"),
-					toml.TOML("session-secret", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
-				),
-				Usage:    "Session secret for the authentication provider. Must be provided if an authentication provider is used.",
-				Required: false,
 			},
 			&cli.StringFlag{
 				Name: "otel-grpc",
@@ -529,12 +527,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 		}
 	}
 
-	providersMap, err := configureAuthProvider(ctx, cli, basePath)
-	if err != nil {
-		log.Fatalf("failed to configure auth provider: %v", err)
-		return err
-	}
-
 	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
 
 	websocket := initializer.InitializeWebSocketService()
@@ -562,7 +554,20 @@ func run(ctx context.Context, cli *cli.Command) error {
 
 	keyWithNewlines := strings.ReplaceAll(cli.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(cli.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, db, userService)
+
+	callbackHost := cli.String("auth-callback-host")
+	auth, err := auth.NewAuthService(
+		ctx,
+		unsafeKeyWithNewlines,
+		keyWithNewlines,
+		userService,
+		auth.WithAppleAuthProvider(ctx, timeprovider.NewClock(), cli.String("auth-apple-client-id"), cli.String("auth-apple-key-id"), cli.String("auth-apple-team-id"), cli.String("auth-apple-private-key"), fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithAzureAuthProvider(ctx, cli.String("auth-azure-ad-client-id"), cli.String("auth-azure-ad-client-secret"), cli.String("auth-azure-ad-tenant-id"), fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithGithubAuthProvider(cli.String("auth-github-client-id"), cli.String("auth-github-client-secret"), fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithGoogleAuthProvider(ctx, cli.String("auth-google-client-id"), cli.String("auth-google-client-secret"), fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithMicrosoftAuthProvider(ctx, cli.String("auth-microsoft-client-id"), cli.String("auth-microsoft-client-secret"), fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/"))),
+		auth.WithOidcAuthProvider(ctx, cli.String("auth-oidc-discovery-url"), cli.String("auth-oidc-client-id"), cli.String("auth-oidc-client-secret"), fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")), cli.String("auth-oidc-user-ident-scope"), cli.String("auth-oidc-user-name-scope")),
+	)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -574,7 +579,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		AllowAnonymousHistory:         cli.Bool("allow-anonymous-history"),
 	}
 
-	infoService := initializer.InitializeInfoService(authConfig, feedbackService, serverconfig)
+	infoService := initializer.InitializeInfoService(auth, feedbackService, serverconfig)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	healthApi := apiInitializer.InitializeHealthApi(healthService)
@@ -598,7 +603,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 	s := api.New(
 		basePath,
 		rt,
-		authConfig,
+		auth,
 
 		healthRoutes,
 		feedbackRoutes,
@@ -625,7 +630,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 		serverconfig.AllowAnonymousCustomTemplates,
 		serverconfig.AllowAnonymousBoardCreation,
 		serverconfig.AllowAnonymousHistory,
-		cli.Bool("auth-enable-experimental-file-system-store"),
 		cli.Bool("enable-swagger"),
 		cli.Int("join-rate-limit"),
 		cli.Int("template-rate-limit"),
@@ -634,85 +638,4 @@ func run(ctx context.Context, cli *cli.Command) error {
 	listen := fmt.Sprintf("%s:%d", cli.String("address"), cli.Int("port"))
 	logger.Get().Infow("starting server", "base-path", basePath, "listen", listen)
 	return http.ListenAndServe(listen, s)
-}
-
-func configureAuthProvider(ctx context.Context, cli *cli.Command, basePath string) (map[string]auth.AuthProviderConfiguration, error) {
-	log := logger.FromContext(ctx)
-	providersMap := make(map[string]auth.AuthProviderConfiguration)
-
-	log.Debug("configuring auth provider")
-
-	callbackHost := cli.String("auth-callback-host")
-	if callbackHost == "" {
-		log.Info("No auth callback host configured. Can not configure any auth provider")
-		return providersMap, nil
-	}
-
-	if cli.String("auth-google-client-id") != "" && cli.String("auth-google-client-secret") != "" {
-		log.Info("Using google authentication")
-		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-google-client-id"),
-			ClientSecret: cli.String("auth-google-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-github-client-id") != "" && cli.String("auth-github-client-secret") != "" {
-		log.Info("Using github authentication")
-		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-github-client-id"),
-			ClientSecret: cli.String("auth-github-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-microsoft-client-id") != "" && cli.String("auth-microsoft-client-secret") != "" {
-		log.Info("Using microsoft authentication")
-		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-microsoft-client-id"),
-			ClientSecret: cli.String("auth-microsoft-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-azure-ad-tenant-id") != "" && cli.String("auth-azure-ad-client-id") != "" && cli.String("auth-azure-ad-client-secret") != "" {
-		log.Info("Using azure authentication")
-		providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
-			TenantId:     cli.String("auth-azure-ad-tenant-id"),
-			ClientId:     cli.String("auth-azure-ad-client-id"),
-			ClientSecret: cli.String("auth-azure-ad-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-apple-client-id") != "" && cli.String("auth-apple-client-secret") != "" {
-		log.Info("Using apple authentication.")
-		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
-			ClientId:     cli.String("auth-apple-client-id"),
-			ClientSecret: cli.String("auth-apple-client-secret"),
-			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-		}
-	}
-
-	if cli.String("auth-oidc-discovery-url") != "" && cli.String("auth-oidc-client-id") != "" && cli.String("auth-oidc-client-secret") != "" {
-		log.Info("Using oidc authentication.")
-		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
-			ClientId:       cli.String("auth-oidc-client-id"),
-			ClientSecret:   cli.String("auth-oidc-client-secret"),
-			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(callbackHost, "/"), strings.TrimSuffix(basePath, "/")),
-			DiscoveryUri:   cli.String("auth-oidc-discovery-url"),
-			UserIdentScope: cli.String("auth-oidc-user-ident-scope"),
-			UserNameScope:  cli.String("auth-oidc-user-name-scope"),
-		}
-	}
-
-	// session secret is used by the auth lib github.com/markbates/goth
-	// the lib takes the session secret from the env var
-	if cli.String("session-secret") == "" && len(providersMap) != 0 {
-		return nil, errors.New("you may not start the application without a session secret if an authentication provider is configured")
-	}
-
-	log.Debugf("Configured %d auth provider", len(providersMap))
-
-	return providersMap, nil
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"scrumlr.io/server/common"
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -23,35 +23,35 @@ func TestAnonymousBoardCreationContext(t *testing.T) {
 	tests := []struct {
 		name                        string
 		allowAnonymousBoardCreation bool
-		userAccountType             common.AccountType
+		userAccountType             account.Type
 		expectedStatus              int
 		expectedToCallNext          bool
 	}{
 		{
 			name:                        "authenticated user can create boards when flag is disabled",
 			allowAnonymousBoardCreation: false,
-			userAccountType:             common.Google,
+			userAccountType:             account.Google,
 			expectedStatus:              http.StatusOK,
 			expectedToCallNext:          true,
 		},
 		{
 			name:                        "authenticated user can create boards when flag is enabled",
 			allowAnonymousBoardCreation: true,
-			userAccountType:             common.Google,
+			userAccountType:             account.Google,
 			expectedStatus:              http.StatusOK,
 			expectedToCallNext:          true,
 		},
 		{
 			name:                        "anonymous user can create boards when flag is enabled",
 			allowAnonymousBoardCreation: true,
-			userAccountType:             common.Anonymous,
+			userAccountType:             account.Anonymous,
 			expectedStatus:              http.StatusOK,
 			expectedToCallNext:          true,
 		},
 		{
 			name:                        "anonymous user receives 403 forbidden when allowAnonymousBoardCreation is false",
 			allowAnonymousBoardCreation: false,
-			userAccountType:             common.Anonymous,
+			userAccountType:             account.Anonymous,
 			expectedStatus:              http.StatusForbidden,
 			expectedToCallNext:          false,
 		},

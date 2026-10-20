@@ -46,7 +46,7 @@ spec:
             - name: SCRUMLR_SERVER_PORT
               value: "8080"
             - name: SCRUMLR_LOG_LEVEL
-              value: "INFO"
+              value: "DEBUG"
             - name: SCRUMLR_API_HOST
               value: "https://PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
             - name: SCRUMLR_SERVER_NATS_URL
@@ -93,6 +93,26 @@ spec:
                 secretKeyRef:
                   name: scrumlr-secrets
                   key: SESSION_SECRET
+            - name: SCRUMLR_AUTH_APPLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: apple-oidc
+                  key: SCRUMLR_AUTH_APPLE_CLIENT_ID
+            - name: SCRUMLR_AUTH_APPLE_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: apple-oidc
+                  key: SCRUMLR_AUTH_APPLE_KEY_ID
+            - name: SCRUMLR_AUTH_APPLE_TEAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: apple-oidc
+                  key: SCRUMLR_AUTH_APPLE_TEAM_ID
+            - name: SCRUMLR_AUTH_APPLE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: apple-oidc-key
+                  key: SECRET_KEY
             - name: SCRUMLR_BASE_PATH
               value: "/api"
             - name: SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES
@@ -241,7 +261,7 @@ metadata:
 spec:
   secretName: scrumlr-development-certificate-PR_NUMBER
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-production
     kind: ClusterIssuer
   commonName: PR_NUMBER.development.scrumlr.fra.ics.inovex.io
   dnsNames:

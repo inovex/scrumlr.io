@@ -6,6 +6,7 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize/testDbTemplates"
 
 	"github.com/google/uuid"
@@ -299,7 +300,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_GetAll_NotFound() {
 type TestUser struct {
 	id          uuid.UUID
 	name        string
-	accountType common.AccountType
+	accountType account.Type
 }
 
 type TestBoardTemplate struct {
@@ -313,8 +314,8 @@ type TestBoardTemplate struct {
 func (suite *DatabaseColumnTemplateTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 2)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: account.Google}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: account.Anonymous}
 
 	// test board templates
 	suite.boardTemplates = make(map[string]TestBoardTemplate, 7)

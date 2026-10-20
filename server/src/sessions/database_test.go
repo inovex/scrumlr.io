@@ -6,13 +6,13 @@ import (
 	"log"
 	"testing"
 
+	"scrumlr.io/server/account"
 	"scrumlr.io/server/initialize/testDbTemplates"
 	"scrumlr.io/server/role"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 )
 
 type DatabaseSessionTestSuite struct {
@@ -653,7 +653,7 @@ func (suite *DatabaseSessionTestSuite) TestDatabaseDelete() {
 type TestUser struct {
 	id          uuid.UUID
 	name        string
-	accountType common.AccountType
+	accountType account.Type
 }
 
 type TestBoard struct {
@@ -664,13 +664,13 @@ type TestBoard struct {
 func (suite *DatabaseSessionTestSuite) seedData(db *bun.DB) {
 	// tests users
 	suite.users = make(map[string]TestUser, 7)
-	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: common.Google}
-	suite.users["Friend"] = TestUser{id: uuid.New(), name: "Friend", accountType: common.Anonymous}
-	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: common.Anonymous}
-	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: common.Anonymous}
-	suite.users["Luke"] = TestUser{id: uuid.New(), name: "Luke", accountType: common.Anonymous}
-	suite.users["Leia"] = TestUser{id: uuid.New(), name: "Leia", accountType: common.Anonymous}
-	suite.users["Han"] = TestUser{id: uuid.New(), name: "Han", accountType: common.Anonymous}
+	suite.users["Stan"] = TestUser{id: uuid.New(), name: "Stan", accountType: account.Google}
+	suite.users["Friend"] = TestUser{id: uuid.New(), name: "Friend", accountType: account.Anonymous}
+	suite.users["Santa"] = TestUser{id: uuid.New(), name: "Santa", accountType: account.Anonymous}
+	suite.users["Bob"] = TestUser{id: uuid.New(), name: "Bob", accountType: account.Anonymous}
+	suite.users["Luke"] = TestUser{id: uuid.New(), name: "Luke", accountType: account.Anonymous}
+	suite.users["Leia"] = TestUser{id: uuid.New(), name: "Leia", accountType: account.Anonymous}
+	suite.users["Han"] = TestUser{id: uuid.New(), name: "Han", accountType: account.Anonymous}
 
 	// test boards
 	suite.boards = make(map[string]TestBoard, 5)
