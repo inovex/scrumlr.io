@@ -74,9 +74,9 @@ export const Homepage = withTranslation()(() => {
               </button>
             </li>
             <li>
-              <LegacyButton leftIcon={<Spanish />} className="homepage__language" hideLabel onClick={changeLanguage("es")}>
-                Español
-              </LegacyButton>
+              <button className="homepage__language" onClick={changeLanguage("es")}>
+                <Spanish className={"homepage__language-icon"} />
+              </button>
             </li>
 
             {!!user && (
