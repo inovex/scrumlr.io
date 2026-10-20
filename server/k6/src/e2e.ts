@@ -1243,8 +1243,6 @@ export default function e2e() {
 		});
 	});
 
-	// sleep for joinBoard rate limit
-	sleep(5);
 
 	group("Voting and vote endpoints", () => {
 		const ownerContext = new http.CookieJar();
