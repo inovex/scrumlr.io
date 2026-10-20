@@ -150,11 +150,7 @@
   "LoginBoard": {
     "title": "Iniciar sesión",
     "subtitleLogin": "Inicia sesión y disfruta de las ventajas",
-    "loginFeatures": [
-      "Crea y guarda plantillas personalizadas",
-      "Tus ajustes se guardan en tu perfil",
-      "Accede a tableros anteriores y gestiónalos en cualquier momento"
-    ],
+    "loginFeatures": ["Crea y guarda plantillas personalizadas", "Tus ajustes se guardan en tu perfil", "Accede a tableros anteriores y gestiónalos en cualquier momento"],
     "subtitleAnonymous": "Acceder de forma anónima",
     "anonymousLogin": "Continuar como invitado (funciones limitadas)",
     "noLoginAvailable": "No hay ningún método de acceso válido disponible",
@@ -357,6 +353,8 @@
     "themeToggle": "Cambiar esquema de color",
     "editColumns": "Empezar a editar columnas",
     "stopEditingColumns": "Terminar de editar columnas",
+    "timer": "Temporizador",
+    "voting": "Votación",
     "startPresenterMode": "Iniciar modo de presentación",
     "stopPresenterMode": "Finalizar modo de presentación",
     "returnToHomepage": "Volver a la página de inicio",
@@ -364,9 +362,7 @@
     "lowerHand": "Bajar la mano",
     "openBoardReactionMenu": "Reaccionar",
     "settings": "Ajustes",
-    "openMenu": "Abrir menú de usuario",
-    "timer": "Temporizador",
-    "voting": "Votación"
+    "openMenu": "Abrir menú de usuario"
   },
   "Hotkeys": {
     "hotkeysEnabled": "Atajos de teclado activados",
@@ -407,9 +403,8 @@
     "increaseVotes": "Aumentar número de votos",
     "decreaseVotes": "Reducir número de votos",
     "startVoting": "Iniciar fase de votación",
-    "cancelVoting": "Cancelar fase de votación",
-    "stopVoting": "Finalizar fase de votación",
-    "abortVoting": "Cancelar fase de votación"
+    "abortVoting": "Cancelar fase de votación",
+    "stopVoting": "Finalizar fase de votación"
   },
   "VoteDisplay": {
     "finishActionTooltip": "Finalizar votación",
@@ -863,10 +858,10 @@
     "title": "¡Vaya!",
     "description": "Parece que, por ahora, esta sesión permanece cerrada. Agradecemos tu interés, pero tu solicitud para unirte ha sido rechazada.",
     "banned": "Lo sentimos, parece que se te ha excluido de esta sesión.",
-    "button": "Volver a la página de inicio",
     "bannedRetryHint": "Si te han readmitido, puedes intentar volver a entrar. También comprobaremos automáticamente cada {{interval}} segundos si puedes acceder.",
     "retry": "Intentar volver a entrar",
-    "retrying": "Reintentando..."
+    "retrying": "Reintentando...",
+    "button": "Volver a la página de inicio"
   },
   "Votes": {
     "AddVote": "Añadir voto",
