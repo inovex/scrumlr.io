@@ -63,3 +63,10 @@ type DatabaseBoardUpdate struct {
 	ShowVoting            uuid.NullUUID
 	LastModifiedAt        time.Time
 }
+
+type DatabaseBoardPassphraseUpdate struct {
+	bun.BaseModel `bun:"table:boards"`
+	ID            uuid.UUID
+	Passphrase    string
+	Salt          string
+}
