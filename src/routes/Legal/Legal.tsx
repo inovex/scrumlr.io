@@ -15,7 +15,8 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
 
   useEffect(() => {
     if (i18n.resolvedLanguage) {
-      const legalDocument = generatePath(`/locales/:lang/${document}.md`, {lang: i18n.resolvedLanguage || "en"});
+      const legalLanguage = ["en", "de"].includes(i18n.resolvedLanguage) ? i18n.resolvedLanguage : "en";
+      const legalDocument = generatePath(`/locales/:lang/${document}.md`, {lang: legalLanguage});
 
       fetch(legalDocument)
         .then((response) => response.text())

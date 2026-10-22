@@ -4,6 +4,7 @@ import {Trans, useTranslation, withTranslation} from "react-i18next";
 import German from "assets/flags/DE.svg?react";
 import English from "assets/flags/US.svg?react";
 import French from "assets/flags/FR.svg?react";
+import Spanish from "assets/flags/ES.svg?react";
 import {ArrowRightIcon, LogoutIcon} from "components/Icon";
 import {Link, useNavigate} from "react-router";
 import {AppInfo} from "components/AppInfo";
@@ -58,18 +59,23 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <button className="homepage__language" onClick={changeLanguage("de")}>
-                <German className={"homepage__language-icon"}></German>
+              <button className="homepage__language" onClick={changeLanguage("de")} aria-label={i18n.t("Language.german")}>
+                <German className={"homepage__language-icon"} aria-hidden></German>
               </button>
             </li>
             <li>
-              <button className="homepage__language" onClick={changeLanguage("en")}>
-                <English className={"homepage__language-icon"} />
+              <button className="homepage__language" onClick={changeLanguage("en")} aria-label={i18n.t("Language.english")}>
+                <English className={"homepage__language-icon"} aria-hidden />
               </button>
             </li>
             <li>
-              <button className="homepage__language" onClick={changeLanguage("fr")}>
-                <French className={"homepage__language-icon"} />
+              <button className="homepage__language" onClick={changeLanguage("fr")} aria-label={i18n.t("Language.french")}>
+                <French className={"homepage__language-icon"} aria-hidden />
+              </button>
+            </li>
+            <li>
+              <button className="homepage__language" onClick={changeLanguage("es")} aria-label={i18n.t("Language.spanish")}>
+                <Spanish className={"homepage__language-icon"} aria-hidden />
               </button>
             </li>
 
