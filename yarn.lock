@@ -1460,10 +1460,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.25":
-  version: 4.17.25
-  resolution: "@types/lodash@npm:4.17.25"
-  checksum: 10c0/ca2049f16bf527e04d6e27702e3912a484faaff587de77a5c58e0d243b9292a655e1d7f7e5bdf2ffdf49a76da10673097f8dd4901990679058d47ccd99051877
+"@types/lodash@npm:^4.17.26":
+  version: 4.17.26
+  resolution: "@types/lodash@npm:4.17.26"
+  checksum: 10c0/7f8a95db94698f009e59c612deaba1ee98ac738156926f4c1c062853b9e46fe5fb3a7a34a15ad2f2c846f7c24b0e61e0109dfac2d9e4fa8eaa71330fd0862ea3
   languageName: node
   linkType: hard
 
@@ -4167,9 +4167,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^20.14.6":
-  version: 20.14.6
-  resolution: "happy-dom@npm:20.14.6"
+"happy-dom@npm:^21.0.1":
+  version: 21.0.1
+  resolution: "happy-dom@npm:21.0.1"
   dependencies:
     "@types/node": "npm:>=20.0.0"
     "@types/whatwg-mimetype": "npm:^3.0.2"
@@ -4178,7 +4178,7 @@ __metadata:
     entities: "npm:^7.0.1"
     whatwg-mimetype: "npm:^3.0.0"
     ws: "npm:^8.21.0"
-  checksum: 10c0/47bdcb7ec7f22c7270b5c1e8b25bb9cd847aa35ee84d6e0870123463db63ad335fa2eb9e6d15a6e3b2ad843586139a0e2fbc6d6dfc120ff0f91f693efea74e4d
+  checksum: 10c0/55d9c49dc5cad314cb3f0579de67f7f8f448ad277e547de43781504a86dc6ec4c43f0475eb795780d852db7ca43a15c0100025087c1078a27d2dec699d9949a1
   languageName: node
   linkType: hard
 
@@ -4368,15 +4368,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.4.3":
-  version: 26.4.3
-  resolution: "i18next@npm:26.4.3"
+"i18next@npm:^26.4.4":
+  version: 26.4.4
+  resolution: "i18next@npm:26.4.4"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/099480c24c18039d78c9cadb04cdcb24a2aca579a21678bfdde89a2007c7109cc41afc34d74ede73aed6fa51fa3ee44752dc042b9e10e144fe13d367a777ed40
+  checksum: 10c0/7d94bb6cea2bdbf293547565d565b12fb0f2a24f462f06f6cc1cd08367f14cc36bd488c7abb01d2b9b827bd46e7d4b0713b44543f7ed0c43f32d1371f85dd305
   languageName: node
   linkType: hard
 
@@ -5903,12 +5903,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.9.9":
-  version: 3.9.9
-  resolution: "prettier@npm:3.9.9"
+"prettier@npm:^3.9.10":
+  version: 3.9.10
+  resolution: "prettier@npm:3.9.10"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/d50ea2537b2ff7dbd5088a214f4d936484e55c665cea2185b477a55b0770be55f3b156a71f63a9a639def6b334667bb327139dc85f2a1041c0a34752cdc74647
+  checksum: 10c0/0b3531593aa6fb36ac6baf629cb058bda472c59a6938774f931fe55283a07c62e6f56e621b043a82d8a3e21fc284c08c34f9e539fc70072635f79b7bae1a1067
   languageName: node
   linkType: hard
 
@@ -6624,7 +6624,7 @@ __metadata:
     "@types/history": "npm:^5.0.0"
     "@types/i18next-fs-backend": "npm:^1.2.0"
     "@types/js-cookie": "npm:^3.0.6"
-    "@types/lodash": "npm:^4.17.25"
+    "@types/lodash": "npm:^4.17.26"
     "@types/node": "npm:^26.6.5"
     "@types/node-localstorage": "npm:^1.3.3"
     "@types/qrcode.react": "npm:^3.0.0"
@@ -6657,9 +6657,9 @@ __metadata:
     eslint-plugin-react-hooks: "npm:7.1.1"
     file-saver: "npm:^2.0.5"
     globals: "npm:^17.13.0"
-    happy-dom: "npm:^20.14.6"
+    happy-dom: "npm:^21.0.1"
     husky: "npm:^9.1.7"
-    i18next: "npm:^26.4.3"
+    i18next: "npm:^26.4.4"
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-fs-backend: "npm:^2.6.8"
     js-cookie: "npm:^3.0.8"
@@ -6669,7 +6669,7 @@ __metadata:
     marked: "npm:18.1.0"
     node-localstorage: "npm:^3.0.5"
     plausible-tracker: "npm:^0.3.9"
-    prettier: "npm:^3.9.9"
+    prettier: "npm:^3.9.10"
     qrcode.react: "npm:^4.2.0"
     react: "npm:^19.3.0"
     react-dnd-test-backend: "npm:^16.0.1"

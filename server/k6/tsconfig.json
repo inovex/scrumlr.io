@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"noEmit": true,
+		"rootDir": ".",
+		"types": ["k6"],
+		"allowImportingTsExtensions": true
+	},
+	"include": ["**/*.ts"]
+}

@@ -7,12 +7,14 @@ import {isEqual} from "underscore";
 import {Reaction} from "store/features/reactions/types";
 import {ParticipantWithUser} from "store/features/participants/types";
 import {addReaction, deleteReaction, updateReaction} from "store/features";
-import {useAppDispatch, useAppSelector} from "../../../store";
+import {useAppDispatch, useAppSelector} from "store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionPicker} from "./NoteReactionPicker/NoteReactionPicker";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import {isParticipantModerator} from "utils/participant";
+import {Toast} from "utils/Toast";
+import {TOAST_TIMER_SHORT} from "constants/misc";
 import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
@@ -46,6 +48,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const isModerator = useAppSelector((state) => isParticipantModerator(state.participants!.self!.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
+  const isDisabled = boardLocked && !isModerator;
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
@@ -142,6 +145,11 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
     if (showReactionPopup) return;
 
+    if (isDisabled) {
+      Toast.info({title: t("Toast.lockedBoard"), autoClose: TOAST_TIMER_SHORT});
+      return;
+    }
+
     const isSameReaction = reactionMadeByUser?.reactionType === emoji;
 
     // no reaction exists -> add
@@ -210,14 +218,27 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           // show either condensed or normal reaction chips
           (showCondensed ? (
             <>
-              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} />
+              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} isDisabled={isDisabled} />
               {reactionMadeByUser && (
-                <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
+                <NoteReactionChip
+                  reaction={reactionMadeByUser}
+                  handleClickReaction={handleClickReaction}
+                  handleLongPressReaction={openReactionsPopup}
+                  showTooltip
+                  isDisabled={isDisabled}
+                />
               )}
             </>
           ) : (
             reactionsReduced.map((r) => (
-              <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
+              <NoteReactionChip
+                reaction={r}
+                key={r.reactionType}
+                handleClickReaction={handleClickReaction}
+                handleLongPressReaction={openReactionsPopup}
+                showTooltip
+                isDisabled={isDisabled}
+              />
             ))
           ))}
       </div>
