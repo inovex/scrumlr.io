@@ -24,7 +24,7 @@ export class SessionClient extends BaseClient {
 		raisedHand: boolean | null = null,
 		role: Role | null = null,
 		cookieJar?: http.CookieJar,
-	): [BoardSession[] | null, http.Response] {
+	): [BoardSession[], http.Response] {
 		const queryparams: QueryParameter[] = [
 			{ key: "connected", value: connected },
 			{ key: "ready", value: ready },
@@ -34,7 +34,7 @@ export class SessionClient extends BaseClient {
 
 		const response = this.get(`./boards/${boardId}/participants`, queryparams, cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const sessions: BoardSession[] = response.json() as unknown as BoardSession[];
@@ -73,10 +73,10 @@ export class SessionClient extends BaseClient {
 		boardId: string,
 		updateReq: BoardSessionsUpdateRequest,
 		cookieJar?: http.CookieJar,
-	): [BoardSession[] | null, http.Response] {
+	): [BoardSession[], http.Response] {
 		const response = this.put(`./boards/${boardId}/participants`, updateReq, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const sessions: BoardSession[] = response.json() as unknown as BoardSession[];

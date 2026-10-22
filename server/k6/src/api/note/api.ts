@@ -31,10 +31,10 @@ export class NoteClient extends BaseClient {
 	 * @param cookieJar cookie jar with the authentication token
 	 * @returns the notes and the response
 	 */
-	getNotes(boardId: string, cookieJar?: http.CookieJar): [Note[] | null, http.Response] {
+	getNotes(boardId: string, cookieJar?: http.CookieJar): [Note[], http.Response] {
 		const response = this.get(`./boards/${boardId}/notes`, [], cookieJar);
 		if (response.error_code) {
-			return [null, response];
+			return [[], response];
 		}
 
 		const note: Note[] = response.json() as unknown as Note[];
