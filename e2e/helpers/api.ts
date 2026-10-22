@@ -9,7 +9,7 @@ import {
   JoinRequest,
   UpdateNoteRequest,
   UpdateUserSessionRequest,
-} from "./requests";
+} from "@helpers/requests";
 
 const apiUrl = process.env.API_BASE_URL;
 

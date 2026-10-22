@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { boardTest } from "@fixtures/board";
-import { loginAnonymous, acceptCookies, joinBoard, updateUserSession, createTimer, createVoting } from "@helpers/api";
+import { loginAnonymous, acceptCookies, createBoard, joinBoard, updateUserSession, createTimer, createVoting } from "@helpers/api";
 
 test.describe.configure({mode: "parallel"});
 
