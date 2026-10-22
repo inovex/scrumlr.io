@@ -15,7 +15,8 @@ import (
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/users"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -843,7 +844,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Root note",
 				Position: notes.NotePosition{
 					Column: sourceColumnIdeasID,
-					Stack:  uuid.NullUUID{},
+					Stack:  common.NullUUID{},
 					Rank:   0,
 				},
 			},
@@ -853,7 +854,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Child note",
 				Position: notes.NotePosition{
 					Column: sourceColumnIdeasID,
-					Stack: uuid.NullUUID{
+					Stack: common.NullUUID{
 						UUID:  sourceRootNoteID,
 						Valid: true,
 					},
@@ -866,7 +867,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Action note",
 				Position: notes.NotePosition{
 					Column: sourceColumnActionsID,
-					Stack:  uuid.NullUUID{},
+					Stack:  common.NullUUID{},
 					Rank:   0,
 				},
 			},
@@ -959,7 +960,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import_WithMissingAuthorWarn
 				Text:   "Kept note",
 				Position: notes.NotePosition{
 					Column: sourceColumnID,
-					Stack:  uuid.NullUUID{},
+					Stack:  common.NullUUID{},
 					Rank:   0,
 				},
 			},
@@ -969,7 +970,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import_WithMissingAuthorWarn
 				Text:   "Removed note",
 				Position: notes.NotePosition{
 					Column: sourceColumnID,
-					Stack:  uuid.NullUUID{},
+					Stack:  common.NullUUID{},
 					Rank:   1,
 				},
 			},

@@ -3,7 +3,8 @@ package testDbTemplates
 import (
 	"log"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 )
@@ -190,7 +191,7 @@ func SeedDBBase(db *bun.DB) {
 	}
 
 	for _, note := range notes {
-		if err := InsertNote(db, note.ID, note.AuthorID, note.BoardID, note.ColumnID, note.Text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0); err != nil {
+		if err := InsertNote(db, note.ID, note.AuthorID, note.BoardID, note.ColumnID, note.Text, common.NullUUID{UUID: uuid.UUID{}, Valid: false}, 0); err != nil {
 			log.Fatalf("Failed to insert test note %s: %s", note.Name, err)
 		}
 	}

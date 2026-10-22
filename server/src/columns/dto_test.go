@@ -4,7 +4,8 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -24,7 +25,7 @@ func TestShouldColumnContainNote(t *testing.T) {
 		Edited: false,
 		Position: notes.NotePosition{
 			Column: columnId,
-			Stack:  uuid.NullUUID{},
+			Stack:  common.NullUUID{},
 			Rank:   0,
 		},
 	}
@@ -45,7 +46,7 @@ func TestShouldNotColumnContainNote(t *testing.T) {
 		Edited: false,
 		Position: notes.NotePosition{
 			Column: uuid.New(),
-			Stack:  uuid.NullUUID{},
+			Stack:  common.NullUUID{},
 			Rank:   0,
 		},
 	}
