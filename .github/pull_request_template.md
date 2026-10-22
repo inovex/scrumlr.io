@@ -12,6 +12,8 @@ refactor: A code change that neither fixes a bug nor adds a feature
 revert: Revert something
 style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 test: Adding missing tests or correcting existing tests
+
+**IMPORTANT**: For breaking changes, make sure to append a *`!`* after the semantic prefix (i.e. `chore!: upgrade database to incompatible schema`)
 -->
 
 ## Description

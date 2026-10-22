@@ -148,6 +148,8 @@ Make sure the title starts with a semantic prefix:
 - **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - **test**: Adding missing tests or correcting existing tests
 
+**IMPORTANT**: For breaking changes, make sure to append a *`!`* after the semantic prefix (i.e. `chore!: upgrade database to incompatible schema`)
+
 ### Description
 
 The description section serves as a crucial component of a pull request, providing an overview of the changes made and
