@@ -7,7 +7,7 @@ import {retryable} from "store";
 
 export const initAuth = createAsyncThunk("auth/initAuth", async (_payload, {dispatch}) => {
   dispatch(setServerInfo());
-  retryable(() => API.getCurrentUser(), dispatch, initAuth, "serverConnection")
+  await retryable(() => API.getCurrentUser(), dispatch, initAuth, "serverConnection")
     .then((user) => {
       if (user) {
         const isAnonymous = user.accountType === ACCOUNT_TYPE_ANONYMOUS;

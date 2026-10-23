@@ -9,7 +9,7 @@ let socket: Socket | null = null;
 
 export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
   "requests/pendingBardAccessConfirmation",
-  async (payload, {dispatch}) => {
+  (payload, {dispatch}) => {
     // change protocol of url
     const websocketURL = new URL(payload.requestReference);
     websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
@@ -20,7 +20,7 @@ export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: str
       onmessage: async (evt: MessageEvent<string>) => {
         const message = JSON.parse(evt.data);
         if (message === "SESSION_ACCEPTED") {
-          dispatch(permittedBoardAccess(payload.board));
+          await dispatch(permittedBoardAccess(payload.board));
         } else if (message === "SESSION_REJECTED") {
           dispatch(rejectedBoardAccess());
         }
