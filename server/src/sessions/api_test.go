@@ -116,7 +116,7 @@ func TestApiGetBoardSessionInvalidUUID(t *testing.T) {
 	api := NewSessionApi(mockService)
 
 	rr := httptest.NewRecorder()
-	req := technical_helper.NewTestRequestBuilder("GET", "/sessions/not-a-uuid", nil).AddToContext(identifiers.BoardIdentifier, uuid.Nil)
+	req := technical_helper.NewTestRequestBuilder("GET", "/sessions/not-a-uuid", nil).AddToContext(identifiers.BoardIdentifier, uuid.Nil())
 
 	api.GetBoardSession(rr, req.Request())
 

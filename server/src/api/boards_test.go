@@ -65,8 +65,8 @@ func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *st
 		IsLocked:              true,
 		TimerStart:            nil,
 		TimerEnd:              nil,
-		SharedNote:            common.NullUUID{},
-		ShowVoting:            common.NullUUID{},
+		SharedNote:            nil,
+		ShowVoting:            nil,
 		Passphrase:            passphrase,
 		Salt:                  salt,
 	}

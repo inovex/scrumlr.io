@@ -6,7 +6,6 @@ import (
 	"uuid"
 
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 )
 
 func InsertUser(db *bun.DB, id uuid.UUID, name string, accountType string, avatar *string) error {
@@ -31,13 +30,13 @@ func InsertColumn(db *bun.DB, id uuid.UUID, boardId uuid.UUID, name string, desc
 	return err
 }
 
-func InsertNote(db *bun.DB, id uuid.UUID, author uuid.UUID, board uuid.UUID, column uuid.UUID, text string, stack common.NullUUID, rank int) error {
-	var stackId *string
-	if stack.Valid {
-		id := stack.UUID.String()
-		stackId = &id
+func InsertNote(db *bun.DB, id uuid.UUID, author uuid.UUID, board uuid.UUID, column uuid.UUID, text string, stack *uuid.UUID, rank int) error {
+	var stackID *string
+	if stack != nil {
+		value := stack.String()
+		stackID = &value
 	}
-	_, err := db.Exec("INSERT INTO notes (\"id\", \"author\", \"board\", \"column\", \"text\", \"stack\", \"rank\") VALUES (?, ?, ?, ?, ?, ?, ?);", id.String(), author.String(), board.String(), column.String(), text, stackId, rank)
+	_, err := db.Exec("INSERT INTO notes (\"id\", \"author\", \"board\", \"column\", \"text\", \"stack\", \"rank\") VALUES (?, ?, ?, ?, ?, ?, ?);", id.String(), author.String(), board.String(), column.String(), text, stackID, rank)
 	return err
 }
 
