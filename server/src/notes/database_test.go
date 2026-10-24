@@ -65,7 +65,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Create() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -118,7 +118,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Import() {
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -174,7 +174,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_Text() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.True(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -208,7 +208,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_HigherPosition() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 1, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -242,7 +242,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_HighPosition() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 2, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -276,7 +276,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_LowerPosition() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 1, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -310,7 +310,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_NegativePosition() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, -99, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -344,7 +344,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_ZeroPosition() {
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, text, dbNote.Text)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -375,7 +375,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveStack() {
 	assert.Equal(t, boardID, dbNote.Board)
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{}, dbNote.Stack)
+	assert.Nil(t, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -396,7 +396,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveNoteToOtherStack() 
 			ID:    noteId,
 			Board: boardID,
 			Position: &NoteUpdatePosition{
-				Stack:  common.NullUUID{UUID: baseNoteId, Valid: true},
+				Stack:  new(baseNoteId),
 				Column: columnId,
 			},
 		},
@@ -408,7 +408,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveNoteToOtherStack() 
 	assert.Equal(t, boardID, dbNote.Board)
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, 0, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{UUID: baseNoteId, Valid: true}, dbNote.Stack)
+	assert.Equal(t, &baseNoteId, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -430,7 +430,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveWithinStack() {
 			Board: boardID,
 			Position: &NoteUpdatePosition{
 				Column: columnId,
-				Stack:  common.NullUUID{UUID: stackId, Valid: true},
+				Stack:  new(stackId),
 			},
 		},
 	)
@@ -441,7 +441,7 @@ func (suite *DatabaseNoteTestSuite) Test_Database_Update_MoveWithinStack() {
 	assert.Equal(t, boardID, dbNote.Board)
 	assert.Equal(t, columnId, dbNote.Column)
 	assert.Equal(t, 1, dbNote.Rank)
-	assert.Equal(t, common.NullUUID{UUID: stackId, Valid: true}, dbNote.Stack)
+	assert.Equal(t, &stackId, dbNote.Stack)
 	assert.False(t, dbNote.Edited)
 	assert.NotNil(t, dbNote.CreatedAt)
 }
@@ -797,21 +797,21 @@ func (suite *DatabaseNoteTestSuite) seedData(db *bun.DB) {
 	suite.notes[6] = DatabaseNote{ID: uuid.New(), Author: suite.users["Stan"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateDown"].id, Text: "This is a note", Rank: 2}
 	suite.notes[7] = DatabaseNote{ID: uuid.New(), Author: suite.users["Stan"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateDown"].id, Text: "This is a note", Rank: 3}
 	suite.notes[8] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Update stack base"}
-	suite.notes[9] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Update stack rank 0", Stack: common.NullUUID{UUID: suite.notes[8].ID, Valid: true}}
+	suite.notes[9] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Update stack rank 0", Stack: new(suite.notes[8].ID)}
 	suite.notes[10] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Will become stack base"}
 	suite.notes[11] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Move into stack"}
 	suite.notes[12] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Base stack"}
-	suite.notes[13] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "First note of stack", Stack: common.NullUUID{UUID: suite.notes[12].ID, Valid: true}, Rank: 0}
-	suite.notes[14] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Second note of stack", Stack: common.NullUUID{UUID: suite.notes[13].ID, Valid: true}, Rank: 1}
+	suite.notes[13] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "First note of stack", Stack: new(suite.notes[12].ID), Rank: 0}
+	suite.notes[14] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Update"].id, Column: suite.columns["UpdateStack1"].id, Text: "Second note of stack", Stack: new(suite.notes[13].ID), Rank: 1}
 	suite.notes[15] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["Delete"].id, Text: "Also a note"}
 	suite.notes[16] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack base"}
-	suite.notes[17] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack rank 0", Stack: common.NullUUID{UUID: suite.notes[16].ID, Valid: true}}
+	suite.notes[17] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack rank 0", Stack: new(suite.notes[16].ID)}
 	suite.notes[18] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack base"}
-	suite.notes[19] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack rank 0", Stack: common.NullUUID{UUID: suite.notes[18].ID, Valid: true}}
+	suite.notes[19] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Delete"].id, Column: suite.columns["DeleteStack"].id, Text: "Delete stack rank 0", Stack: new(suite.notes[18].ID)}
 	// test notes for stacking
 	suite.notes[20] = DatabaseNote{ID: uuid.New(), Author: suite.users["Stan"].id, Board: suite.boards["Stack"].id, Column: suite.columns["Stack"].id, Text: "This the base of a stack"}
-	suite.notes[21] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Stack"].id, Column: suite.columns["Stack"].id, Text: "Stack note rank 0", Stack: common.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 0}
-	suite.notes[22] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Stack"].id, Column: suite.columns["Stack"].id, Text: "Stack note rank 1", Stack: common.NullUUID{UUID: suite.notes[20].ID, Valid: true}, Rank: 1}
+	suite.notes[21] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Stack"].id, Column: suite.columns["Stack"].id, Text: "Stack note rank 0", Stack: new(suite.notes[20].ID), Rank: 0}
+	suite.notes[22] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Stack"].id, Column: suite.columns["Stack"].id, Text: "Stack note rank 1", Stack: new(suite.notes[20].ID), Rank: 1}
 	// test notes for reading
 	suite.notes[23] = DatabaseNote{ID: uuid.New(), Author: suite.users["Stan"].id, Board: suite.boards["Read"].id, Column: suite.columns["Read1"].id, Text: "This is a note", Rank: 0}
 	suite.notes[24] = DatabaseNote{ID: uuid.New(), Author: suite.users["Santa"].id, Board: suite.boards["Read"].id, Column: suite.columns["Read1"].id, Text: "Also a note", Rank: 1}

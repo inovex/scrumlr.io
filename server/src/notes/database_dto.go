@@ -6,7 +6,6 @@ import (
 	"uuid"
 
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/role"
 )
 
@@ -18,7 +17,7 @@ type DatabaseNote struct {
 	Board         uuid.UUID
 	Column        uuid.UUID
 	Text          string
-	Stack         common.NullUUID
+	Stack         *uuid.UUID
 	Rank          int
 	Edited        bool
 }

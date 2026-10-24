@@ -4,8 +4,6 @@ import (
 	"net/http"
 
 	"uuid"
-
-	"scrumlr.io/server/common"
 )
 
 type Vote struct {
@@ -130,7 +128,7 @@ type NotePosition struct {
 	Column uuid.UUID `json:"column"`
 
 	// The parent note for this note in a stack.
-	Stack common.NullUUID `json:"stack"`
+	Stack *uuid.UUID `json:"stack"`
 
 	// The note rank.
 	Rank int `json:"rank"`

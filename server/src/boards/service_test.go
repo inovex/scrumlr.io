@@ -1481,7 +1481,7 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 			Text:   "Imported note",
 			Position: notes.NotePosition{
 				Column: importedColumnID,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 				Rank:   0,
 			},
 		}},
@@ -1519,7 +1519,7 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 		return request.Text == "Imported note" &&
 			request.Board == suite.boardID &&
 			request.User == authorID &&
-			request.Position.Stack == (common.NullUUID{}) &&
+			request.Position.Stack == (nil) &&
 			request.Position.Rank == 0 &&
 			request.Position.Column != uuid.UUID{}
 	})).Return(nil, errors.New("import failed"))
@@ -1573,10 +1573,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes() {
 			Position: notes.NotePosition{
 				Column: columnID,
 				Rank:   child.Position.Rank,
-				Stack: common.NullUUID{
-					UUID:  parentID,
-					Valid: true,
-				},
+				Stack:  new(parentID),
 			},
 		}).Return(&notes.Note{ID: uuid.New()}, nil).Once()
 	}
@@ -1625,7 +1622,7 @@ func (suite *BoardServiceTestSuite) TestImportChildNotes_ReturnsErrorAndStopsOnF
 		Position: notes.NotePosition{
 			Column: columnID,
 			Rank:   1,
-			Stack:  common.NullUUID{UUID: parentID, Valid: true},
+			Stack:  new(parentID),
 		},
 	}).Return(nil, importErr).Once()
 
@@ -1689,7 +1686,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 			Text:   "Imported note",
 			Position: notes.NotePosition{
 				Column: importColumnID,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 				Rank:   3,
 			},
 		}},
@@ -1702,7 +1699,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Success() {
 		User:  authorID,
 		Position: notes.NotePosition{
 			Column: createdColumnID,
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   3,
 		},
 	}).Return(&notes.Note{ID: importedParentID}, nil).Once()
@@ -1739,7 +1736,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 			Text:   "Imported note",
 			Position: notes.NotePosition{
 				Column: importColumnID,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 				Rank:   0,
 			},
 		}},
@@ -1752,7 +1749,7 @@ func (suite *BoardServiceTestSuite) TestProcessImportedNotes_Failure() {
 		User:  authorID,
 		Position: notes.NotePosition{
 			Column: createdColumnID,
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   0,
 		},
 	}).Return(nil, importError).Once()
@@ -1944,7 +1941,7 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 			Position: notes.NotePosition{
 				Column: columnID,
 				Rank:   4,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 			},
 		},
 		{
@@ -1953,7 +1950,7 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 			Position: notes.NotePosition{
 				Column: columnID,
 				Rank:   10,
-				Stack:  common.NullUUID{UUID: removedRootID, Valid: true},
+				Stack:  new(removedRootID),
 			},
 		},
 		{
@@ -1962,7 +1959,7 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 			Position: notes.NotePosition{
 				Column: columnID,
 				Rank:   20,
-				Stack:  common.NullUUID{UUID: removedRootID, Valid: true},
+				Stack:  new(removedRootID),
 			},
 		},
 		{
@@ -1971,7 +1968,7 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 			Position: notes.NotePosition{
 				Column: columnID,
 				Rank:   30,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 			},
 		},
 	}
@@ -1990,16 +1987,16 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 	}
 
 	replacementRoot := notesByID[childTwoID]
-	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.False(replacementRoot.Position.Stack != nil)
 	suite.Equal(0, replacementRoot.Position.Rank)
 
 	stackChild := notesByID[childOneID]
-	suite.True(stackChild.Position.Stack.Valid)
-	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.True(stackChild.Position.Stack != nil)
+	suite.Equal(childTwoID, *stackChild.Position.Stack)
 	suite.Equal(0, stackChild.Position.Rank)
 
 	otherRoot := notesByID[otherRootID]
-	suite.False(otherRoot.Position.Stack.Valid)
+	suite.False(otherRoot.Position.Stack != nil)
 	suite.Equal(1, otherRoot.Position.Rank)
 }
 
@@ -2027,9 +2024,9 @@ func (suite *BoardServiceTestSuite) TestIndexAndGroupStacks() {
 	rootID := uuid.New()
 	columnID := uuid.New()
 
-	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{}, Rank: 0}}
-	childOne := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootID, Valid: true}, Rank: 3}}
-	childTwo := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootID, Valid: true}, Rank: 7}}
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: nil, Rank: 0}}
+	childOne := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootID), Rank: 3}}
+	childTwo := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootID), Rank: 7}}
 
 	notesByID, stackChildrenByRoot := indexAndGroupStacks([]notes.Note{root, childOne, childTwo})
 
@@ -2044,9 +2041,9 @@ func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootExists() {
 	columnID := uuid.New()
 
 	filteredNotes := []notes.Note{
-		{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{}, Rank: 4}},
-		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootID, Valid: true}, Rank: 8}},
-		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootID, Valid: true}, Rank: 2}},
+		{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: nil, Rank: 4}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootID), Rank: 8}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootID), Rank: 2}},
 	}
 
 	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
@@ -2058,10 +2055,10 @@ func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootExists() {
 	suite.Len(stackChildren, 2)
 	suite.Equal(0, stackChildren[0].Position.Rank)
 	suite.Equal(1, stackChildren[1].Position.Rank)
-	suite.True(stackChildren[0].Position.Stack.Valid)
-	suite.Equal(rootID, stackChildren[0].Position.Stack.UUID)
-	suite.True(stackChildren[1].Position.Stack.Valid)
-	suite.Equal(rootID, stackChildren[1].Position.Stack.UUID)
+	suite.NotNil(stackChildren[0].Position.Stack)
+	suite.Equal(rootID, *stackChildren[0].Position.Stack)
+	suite.NotNil(stackChildren[1].Position.Stack)
+	suite.Equal(rootID, *stackChildren[1].Position.Stack)
 }
 
 func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromotesLastChild() {
@@ -2071,8 +2068,8 @@ func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromot
 	columnID := uuid.New()
 
 	filteredNotes := []notes.Note{
-		{ID: childOneID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: removedRootID, Valid: true}, Rank: 10}},
-		{ID: childTwoID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: removedRootID, Valid: true}, Rank: 20}},
+		{ID: childOneID, Position: notes.NotePosition{Column: columnID, Stack: new(removedRootID), Rank: 10}},
+		{ID: childTwoID, Position: notes.NotePosition{Column: columnID, Stack: new(removedRootID), Rank: 20}},
 	}
 
 	notesByID, stackChildrenByRoot := indexAndGroupStacks(filteredNotes)
@@ -2081,12 +2078,12 @@ func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromot
 	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
 
 	replacementRoot := notesByID[childTwoID]
-	suite.False(replacementRoot.Position.Stack.Valid)
+	suite.False(replacementRoot.Position.Stack != nil)
 	suite.Equal(6, replacementRoot.Position.Rank)
 
 	stackChild := notesByID[childOneID]
-	suite.True(stackChild.Position.Stack.Valid)
-	suite.Equal(childTwoID, stackChild.Position.Stack.UUID)
+	suite.True(stackChild.Position.Stack != nil)
+	suite.Equal(childTwoID, *stackChild.Position.Stack)
 	suite.Equal(0, stackChild.Position.Rank)
 }
 
@@ -2097,9 +2094,9 @@ func (suite *BoardServiceTestSuite) TestReorderStackRootNotes() {
 	rootTwoID := uuid.New()
 
 	processedNotes := []notes.Note{
-		{ID: rootOneID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{}, Rank: 10}},
-		{ID: rootTwoID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{}, Rank: 1}},
-		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootOneID, Valid: true}, Rank: 99}},
+		{ID: rootOneID, Position: notes.NotePosition{Column: columnID, Stack: nil, Rank: 10}},
+		{ID: rootTwoID, Position: notes.NotePosition{Column: columnID, Stack: nil, Rank: 1}},
+		{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootOneID), Rank: 99}},
 	}
 
 	reorderStackRootNotes(processedNotes)
@@ -2117,8 +2114,8 @@ func (suite *BoardServiceTestSuite) TestOrganizeStackNotes() {
 	rootID := uuid.New()
 	columnID := uuid.New()
 
-	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{}, Rank: 0}}
-	child := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: common.NullUUID{UUID: rootID, Valid: true}, Rank: 1}}
+	root := notes.Note{ID: rootID, Position: notes.NotePosition{Column: columnID, Stack: nil, Rank: 0}}
+	child := notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: columnID, Stack: new(rootID), Rank: 1}}
 
 	stackRootNotes, stackChildrenByRoot := organizeStackNotes([]notes.Note{root, child})
 
@@ -2151,7 +2148,7 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_SuccessAndSkipsMissingC
 			Position: notes.NotePosition{
 				Column: mappedImportColumnID,
 				Rank:   2,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 			},
 		},
 		secondRootID: {
@@ -2161,7 +2158,7 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_SuccessAndSkipsMissingC
 			Position: notes.NotePosition{
 				Column: unmappedImportColumnID,
 				Rank:   9,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 			},
 		},
 	}
@@ -2181,7 +2178,7 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_SuccessAndSkipsMissingC
 		User:  author,
 		Position: notes.NotePosition{
 			Column: mappedCreatedColumnID,
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   2,
 		},
 	}).Return(&notes.Note{ID: createdRootID, Position: notes.NotePosition{Column: mappedCreatedColumnID}}, nil).Once()
@@ -2216,7 +2213,7 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
 			Position: notes.NotePosition{
 				Column: importColumnID,
 				Rank:   2,
-				Stack:  common.NullUUID{},
+				Stack:  nil,
 			},
 		},
 	}
@@ -2229,7 +2226,7 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
 		User:  author,
 		Position: notes.NotePosition{
 			Column: createdColumnID,
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   2,
 		},
 	}).Return(nil, importErr).Once()

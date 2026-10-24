@@ -8,6 +8,6 @@ export interface Note {
 
 export interface NotePosition {
 	column: string;
-	stack?: { uuid: string; valid: boolean } | null;
+	stack?: string | null;
 	rank: number;
 }

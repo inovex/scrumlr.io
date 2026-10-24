@@ -7,7 +7,6 @@ import (
 	"uuid"
 
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/role"
@@ -45,9 +44,9 @@ type Board struct {
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
 
 	// The id of a note to share with other users.
-	SharedNote common.NullUUID `json:"sharedNote"`
+	SharedNote *uuid.UUID `json:"sharedNote"`
 
-	ShowVoting common.NullUUID `json:"showVoting"`
+	ShowVoting *uuid.UUID `json:"showVoting"`
 
 	Passphrase *string `json:"-"`
 	Salt       *string `json:"-"`
@@ -139,9 +138,9 @@ type BoardUpdateRequest struct {
 	TimerEnd *time.Time `json:"timerEnd"`
 
 	// Set the note id of the note to share with other users.
-	SharedNote common.NullUUID `json:"sharedNote"`
+	SharedNote *uuid.UUID `json:"sharedNote"`
 
-	ShowVoting common.NullUUID `json:"showVoting"`
+	ShowVoting *uuid.UUID `json:"showVoting"`
 
 	ID uuid.UUID `json:"-"`
 }
