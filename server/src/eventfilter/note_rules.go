@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/logger"
