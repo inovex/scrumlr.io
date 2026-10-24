@@ -51,7 +51,7 @@ func TestApiGetUserInvalidUUID(t *testing.T) {
 
 	mockUserService := NewMockUserService(t)
 	mockSessionService := sessions.NewMockSessionService(t)
-	mockUserService.EXPECT().Get(mock.Anything, uuid.Nil).Return(nil, errors.New("uuid required"))
+	mockUserService.EXPECT().Get(mock.Anything, uuid.Nil()).Return(nil, errors.New("uuid required"))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -60,7 +60,7 @@ func TestApiGetUserInvalidUUID(t *testing.T) {
 	userApi := NewUserApi(mockUserService, mockSessionService, true, true)
 	rr := httptest.NewRecorder()
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, uuid.Nil)
+		AddToContext(identifiers.UserIdentifier, uuid.Nil())
 
 	userApi.GetUser(rr, req.Request())
 	assert.Equal(t, http.StatusInternalServerError, rr.Result().StatusCode)
@@ -109,7 +109,7 @@ func TestApiGetUserByIdInvalidUUID(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
-		AddToContext(identifiers.UserIdentifier, uuid.Nil)
+		AddToContext(identifiers.UserIdentifier, uuid.Nil())
 
 	userApi.GetUserByID(rr, req.Request())
 

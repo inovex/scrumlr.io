@@ -2,8 +2,6 @@ package notes
 
 import (
 	"uuid"
-
-	"scrumlr.io/server/common"
 )
 
 // NoteCreateRequest represents the request to create a new note.
@@ -56,7 +54,7 @@ type NoteDeleteRequest struct {
 type NoteUpdatePosition struct {
 	Column uuid.UUID
 	Rank   int
-	Stack  common.NullUUID
+	Stack  *uuid.UUID `json:"stack"`
 }
 
 type NoteSlice []*Note
@@ -84,7 +82,7 @@ type NotePosition struct {
 	Column uuid.UUID `json:"column"`
 
 	// The parent note for this note in a stack.
-	Stack common.NullUUID `json:"stack"`
+	Stack *uuid.UUID `json:"stack"`
 
 	// The note rank.
 	Rank int `json:"rank"`

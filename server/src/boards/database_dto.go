@@ -3,8 +3,6 @@ package boards
 import (
 	"time"
 
-	"scrumlr.io/server/common"
-
 	"uuid"
 
 	"github.com/uptrace/bun"
@@ -26,8 +24,8 @@ type DatabaseBoard struct {
 	CreatedAt             time.Time
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            common.NullUUID
-	ShowVoting            common.NullUUID
+	SharedNote            *uuid.UUID
+	ShowVoting            *uuid.UUID
 	LastModifiedAt        time.Time
 }
 
@@ -62,8 +60,8 @@ type DatabaseBoardUpdate struct {
 	IsLocked              *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            common.NullUUID
-	ShowVoting            common.NullUUID
+	SharedNote            *uuid.UUID
+	ShowVoting            *uuid.UUID
 	LastModifiedAt        time.Time
 }
 

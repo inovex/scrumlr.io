@@ -274,7 +274,7 @@ func (suite *DatabaseReactionTestSuite) seedData(db *bun.DB) {
 	}
 
 	for _, note := range suite.notes {
-		err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, common.NullUUID{UUID: uuid.UUID{}, Valid: false}, 0)
+		err := testDbTemplates.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, nil, 0)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}

@@ -263,13 +263,13 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 	var positionUpdate *NoteUpdatePosition
 	edited := body.Text != nil || body.Edited
 	if body.Position != nil {
-		if !precondition.StackingAllowed && body.Position.Stack.Valid {
+		if !precondition.StackingAllowed && body.Position.Stack != nil {
 			err := errors.New("not allowed to stack notes")
 			otel.RecordErrorSpan(span, err, nil)
 			return nil, CreateNoteError(Forbidden, "not allowed to stack notes", err)
 		}
 
-		if body.Position.Stack.Valid && body.Position.Stack.UUID == body.ID {
+		if body.Position.Stack != nil && *body.Position.Stack == body.ID {
 			err := errors.New("not allowed to stack a note on self")
 			otel.RecordErrorSpan(span, err, nil)
 			return nil, CreateNoteError(Forbidden, "not allowed to stack a note on self", err)
@@ -285,10 +285,14 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 			Stack:  body.Position.Stack,
 		}
 
+		stackID := ""
+		if body.Position.Stack != nil {
+			stackID = body.Position.Stack.String()
+		}
 		span.SetAttributes(
 			attribute.String("scrumlr.notes.service.update.position.column", body.Position.Column.String()),
 			attribute.Int("scrumlr.notes.service.update.position.rank", body.Position.Rank),
-			attribute.String("scrumlr.notes.service.update.position.stack", body.Position.Stack.UUID.String()),
+			attribute.String("scrumlr.notes.service.update.position.stack", stackID),
 		)
 	}
 
