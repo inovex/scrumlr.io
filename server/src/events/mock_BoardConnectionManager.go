@@ -7,7 +7,8 @@ package events
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/websocket"
 )
