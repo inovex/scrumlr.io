@@ -3,7 +3,8 @@ package eventfilter
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/realtime"
 )
 

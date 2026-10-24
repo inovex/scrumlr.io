@@ -5,7 +5,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/timeprovider"
