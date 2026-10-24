@@ -86,7 +86,7 @@ func (d *DB) UpdateNote(ctx context.Context, caller uuid.UUID, update DatabaseNo
 	if update.Text != nil && update.Position == nil {
 		note, err = d.updateNoteText(ctx, update)
 	} else if update.Position != nil {
-		if !update.Position.Stack.Valid {
+		if update.Position.Stack == nil {
 			note, err = d.updateNoteWithoutStack(ctx, update)
 		} else {
 			note, err = d.updateNoteWithStack(ctx, update)

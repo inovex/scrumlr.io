@@ -25,7 +25,7 @@ func TestShouldColumnContainNote(t *testing.T) {
 		Edited: false,
 		Position: notes.NotePosition{
 			Column: columnId,
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   0,
 		},
 	}
@@ -46,7 +46,7 @@ func TestShouldNotColumnContainNote(t *testing.T) {
 		Edited: false,
 		Position: notes.NotePosition{
 			Column: uuid.New(),
-			Stack:  common.NullUUID{},
+			Stack:  nil,
 			Rank:   0,
 		},
 	}
