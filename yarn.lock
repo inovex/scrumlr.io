@@ -6122,9 +6122,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.16":
-  version: 17.0.16
-  resolution: "react-i18next@npm:17.0.16"
+"react-i18next@npm:^17.0.19":
+  version: 17.0.19
+  resolution: "react-i18next@npm:17.0.19"
   dependencies:
     "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
@@ -6140,7 +6140,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/4e5e1b6a79228532fb51140fbbb26d019fe48d0d600213b81ece5d66c4d3b99b94cf97c54cd6c49bb4af6ff8504baa8327397f9ddf264455ad3fa6ea114cffa2
+  checksum: 10c0/98097d39d3772d145d6effbc4fae5b29dc07032070124ed1f64fdae2f2492a6c9f1148fc29b15af857c372fbf4c35cbedba2591beee85aa0896baa24cb392fe5
   languageName: node
   linkType: hard
 
@@ -6678,7 +6678,7 @@ __metadata:
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
     react-hotkeys-hook: "npm:^5.3.3"
-    react-i18next: "npm:^17.0.16"
+    react-i18next: "npm:^17.0.19"
     react-redux: "npm:^9.3.0"
     react-router: "npm:^8.4.0"
     react-snowfall: "npm:^2.4.0"
