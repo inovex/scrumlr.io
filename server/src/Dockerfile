@@ -1,5 +1,5 @@
 # Build application
-FROM golang:1.26-alpine AS build
+FROM golang:1.27-alpine AS build
 
 ARG TARGETARCH
 ARG TARGETOS
