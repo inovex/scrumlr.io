@@ -150,14 +150,13 @@ exports[`ColumnDetails > should render correctly (view) 1`] = `
       <div
         class="column-details__name-wrapper"
       >
-        <div
+        <button
           class="column-details__name"
           id="col-test-columns-id-1-name"
-          role="button"
-          tabindex="0"
+          type="button"
         >
           test-columns-name-1
-        </div>
+        </button>
         <div
           class="column-details__notes-count"
         >
@@ -200,13 +199,12 @@ exports[`ColumnDetails > should render correctly (view) 1`] = `
     <div
       class="column-details__description-wrapper column-details__description-wrapper--view column-details__description-wrapper--empty"
     >
-      <div
+      <button
         class="column-details__description--placeholder"
-        role="button"
-        tabindex="0"
+        type="button"
       >
         Add description (optional)
-      </div>
+      </button>
     </div>
     <div
       class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"

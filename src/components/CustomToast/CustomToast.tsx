@@ -102,11 +102,10 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       )}
       {!isSingleToast && buttons && buttons.length > 0 && (
         <div className="toast__buttons-multi">
-          {buttons?.map((button, index) => {
-            if (index > 1) return false;
+          {buttons.slice(0, 2).map((button, index) => {
             return (
               <button
-                key={index}
+                key={button}
                 className={
                   index === 0
                     ? `toast__button toast__button-multi toast__button-multi-primary toast__button-${type}`

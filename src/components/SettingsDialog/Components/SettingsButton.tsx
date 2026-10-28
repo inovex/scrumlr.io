@@ -5,8 +5,8 @@ import "./SettingsButton.scss";
 export interface SettingsButtonProps {
   label?: string;
   icon?: ElementType;
-  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
-  onBlur?: FocusEventHandler<HTMLButtonElement> | undefined;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onBlur?: FocusEventHandler<HTMLButtonElement>;
   className?: string;
   disabled?: boolean;
   reverseOrder?: boolean;

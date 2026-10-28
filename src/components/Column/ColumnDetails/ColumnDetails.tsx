@@ -38,7 +38,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description);
-  const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
+  const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLButtonElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -172,7 +172,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       />
     ) : (
       <>
-        <div
+        <button
+          type="button"
           ref={viewNameRef}
           id={`col-${props.column.id}-name`}
           className={classNames("column-details__name", {
@@ -182,18 +183,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             setFocusTarget("name");
             changeMode("edit");
           }}
-          role="button"
-          tabIndex={0}
-          onKeyUp={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setFocusTarget("name");
-              changeMode("edit");
-            }
-          }}
         >
           {props.column.name}
-        </div>
+        </button>
         <div className="column-details__notes-count">{props.notesCount}</div>
         {props.mode === "moderator-view" && (
           <EditIcon
@@ -244,7 +236,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (isModerator) {
       // placeholder
       return (
-        <div
+        <button
+          type="button"
           className={classNames("column-details__description--placeholder", {
             "column-details__description--placeholder-moderator": props.mode === "moderator-view",
           })}
@@ -252,18 +245,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             setFocusTarget("description");
             changeMode("edit");
           }}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setFocusTarget("description");
-              changeMode("edit");
-            }
-          }}
         >
           {t("Column.Header.descriptionPlaceholder")}
-        </div>
+        </button>
       );
     }
     // empty placeholder space

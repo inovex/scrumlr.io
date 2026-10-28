@@ -82,7 +82,7 @@ describe("<HeaderMenu/>", () => {
     describe("Allow participant changes", () => {
       it("should display button if participant has moderation permission", () => {
         render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.queryByText(i18n.t("BoardSettings.IsLocked"))).toBeInTheDocument();
+        expect(screen.getByText(i18n.t("BoardSettings.IsLocked"))).toBeInTheDocument();
       });
 
       it("should not display button if participant does not have moderation permission", () => {
