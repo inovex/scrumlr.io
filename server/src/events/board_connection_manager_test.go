@@ -28,7 +28,9 @@ func TestBoardConnectionManagerRegister(t *testing.T) {
 	}
 
 	connection := websocket.NewMockConnection(t)
+	writes := make(chan struct{}, 1)
 	connection.EXPECT().WriteJSON(mock.Anything, &event).
+		Run(func(context.Context, any) { writes <- struct{}{} }).
 		Return(nil)
 
 	boardChannel := make(chan *realtime.BoardEvent)
@@ -53,6 +55,11 @@ func TestBoardConnectionManagerRegister(t *testing.T) {
 
 	boardChannel <- &event
 	close(boardChannel)
+	select {
+	case <-writes:
+	case <-time.After(time.Second):
+		t.Fatal("event was not delivered to client")
+	}
 }
 
 func TestBoardConnectionManagerRegisterMultipleClients(t *testing.T) {
@@ -67,11 +74,15 @@ func TestBoardConnectionManagerRegisterMultipleClients(t *testing.T) {
 		Data: boardId,
 	}
 
+	writes := make(chan struct{}, 2)
+
 	firstUserConnection := websocket.NewMockConnection(t)
 	firstUserConnection.EXPECT().WriteJSON(mock.Anything, &event).
+		Run(func(context.Context, any) { writes <- struct{}{} }).
 		Return(nil)
 	secondUserConnection := websocket.NewMockConnection(t)
 	secondUserConnection.EXPECT().WriteJSON(mock.Anything, &event).
+		Run(func(context.Context, any) { writes <- struct{}{} }).
 		Return(nil)
 
 	boardChannel := make(chan *realtime.BoardEvent)
@@ -100,6 +111,13 @@ func TestBoardConnectionManagerRegisterMultipleClients(t *testing.T) {
 
 	boardChannel <- &event
 	close(boardChannel)
+	for range 2 {
+		select {
+		case <-writes:
+		case <-time.After(time.Second):
+			t.Fatal("event was not delivered to both clients")
+		}
+	}
 }
 
 func TestBoardConnectionManagerRegisterFailedToGetBoardChannel(t *testing.T) {
