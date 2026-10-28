@@ -3,7 +3,8 @@ package boards
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 )
 
@@ -23,8 +24,8 @@ type DatabaseBoard struct {
 	CreatedAt             time.Time
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            uuid.NullUUID
-	ShowVoting            uuid.NullUUID
+	SharedNote            *uuid.UUID
+	ShowVoting            *uuid.UUID
 	LastModifiedAt        time.Time
 }
 
@@ -59,8 +60,8 @@ type DatabaseBoardUpdate struct {
 	IsLocked              *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
-	SharedNote            uuid.NullUUID
-	ShowVoting            uuid.NullUUID
+	SharedNote            *uuid.UUID
+	ShowVoting            *uuid.UUID
 	LastModifiedAt        time.Time
 }
 

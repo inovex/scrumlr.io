@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
+	"uuid"
 
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/otel"

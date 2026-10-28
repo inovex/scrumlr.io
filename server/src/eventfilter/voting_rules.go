@@ -5,7 +5,8 @@ import (
 	"errors"
 	"slices"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/logger"
@@ -93,7 +94,7 @@ func (votingRules *votingEventRules) votingUpdate(ctx context.Context, event *re
 		if slices.Contains(visibleColumnIds, note.Position.Column) {
 			if board.ShowNotesOfOtherUsers || userId == note.Author {
 				if !board.ShowAuthors && note.Author != userId {
-					note.Author = uuid.Nil
+					note.Author = uuid.Nil()
 				}
 
 				filteredNotes = append(filteredNotes, note)

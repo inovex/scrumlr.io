@@ -5,8 +5,9 @@ import (
 	"errors"
 	"net/http"
 
+	"uuid"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 )

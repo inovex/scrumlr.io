@@ -10,7 +10,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"go.opentelemetry.io/otel/attribute"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/otel"
@@ -713,8 +714,8 @@ func (service *Service) buildCSVRecords(ctx context.Context, board *FullBoard, c
 
 	for _, note := range notes {
 		stack := "null"
-		if note.Position.Stack.Valid {
-			stack = note.Position.Stack.UUID.String()
+		if note.Position.Stack != nil {
+			stack = note.Position.Stack.String()
 		}
 
 		colName := note.Position.Column.String()
@@ -1214,8 +1215,8 @@ func indexAndGroupStacks(filteredNotes []notes.Note) (map[uuid.UUID]*notes.Note,
 		note := &filteredNotes[i]
 		notesByID[note.ID] = note
 
-		if note.Position.Stack.Valid {
-			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
+		if note.Position.Stack != nil {
+			stackChildrenByRoot[*note.Position.Stack] = append(stackChildrenByRoot[*note.Position.Stack], note)
 		}
 	}
 	return notesByID, stackChildrenByRoot
@@ -1248,11 +1249,12 @@ func reorderAndRepairStacks(stackChildrenByRoot map[uuid.UUID][]*notes.Note, not
 		}
 
 		replacementStackRoot := stackChildren[len(stackChildren)-1]
-		replacementStackRoot.Position.Stack = uuid.NullUUID{}
+		replacementStackRoot.Position.Stack = nil
 		replacementStackRoot.Position.Rank = removedStackRoot.Position.Rank
 
 		for i := 0; i < len(stackChildren)-1; i++ {
-			stackChildren[i].Position.Stack = uuid.NullUUID{UUID: replacementStackRoot.ID, Valid: true}
+			stackID := replacementStackRoot.ID
+			stackChildren[i].Position.Stack = &stackID
 		}
 	}
 }
@@ -1265,7 +1267,7 @@ type stackRootChildrenNotes struct {
 func reorderStackRootNotes(processedNotes []notes.Note) {
 	stackRootsByColumn := make(map[uuid.UUID][]*notes.Note)
 	for i := range processedNotes {
-		if processedNotes[i].Position.Stack.Valid {
+		if processedNotes[i].Position.Stack != nil {
 			continue
 		}
 
@@ -1292,10 +1294,10 @@ func organizeStackNotes(allNotes []notes.Note) (map[uuid.UUID]notes.Note, map[uu
 	stackChildrenByRoot := make(map[uuid.UUID][]notes.Note)
 
 	for _, note := range allNotes {
-		if !note.Position.Stack.Valid {
+		if note.Position.Stack == nil {
 			stackRootNotes[note.ID] = note
 		} else {
-			stackChildrenByRoot[note.Position.Stack.UUID] = append(stackChildrenByRoot[note.Position.Stack.UUID], note)
+			stackChildrenByRoot[*note.Position.Stack] = append(stackChildrenByRoot[*note.Position.Stack], note)
 		}
 	}
 	return stackRootNotes, stackChildrenByRoot
@@ -1314,7 +1316,7 @@ func (service *Service) importStackRoots(ctx context.Context, boardID uuid.UUID,
 			Text: stackRootNote.Text,
 			Position: notes.NotePosition{
 				Column: newColumnID,
-				Stack:  uuid.NullUUID{},
+				Stack:  nil,
 				Rank:   stackRootNote.Position.Rank,
 			},
 			Board: boardID,
@@ -1343,10 +1345,7 @@ func (service *Service) importStackChildren(ctx context.Context, boardID uuid.UU
 				Position: notes.NotePosition{
 					Column: stackGroup.StackRoot.Position.Column,
 					Rank:   note.Position.Rank,
-					Stack: uuid.NullUUID{
-						UUID:  stackGroup.StackRoot.ID,
-						Valid: true,
-					},
+					Stack:  &stackGroup.StackRoot.ID,
 				},
 			})
 			if err != nil {

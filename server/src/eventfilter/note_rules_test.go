@@ -4,7 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/boards"
@@ -205,7 +206,7 @@ func TestNoteRulehandleUpdatedEventAsParticipantWithDontShowAuthors(t *testing.T
 		case userNoteId:
 			assert.Equal(t, userId, note.Author)
 		case visibleNoteId:
-			assert.Equal(t, uuid.Nil, note.Author)
+			assert.Equal(t, uuid.Nil(), note.Author)
 		default:
 			assert.Fail(t, "note id should not be present")
 		}

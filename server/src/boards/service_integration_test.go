@@ -15,7 +15,8 @@ import (
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/users"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -843,7 +844,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Root note",
 				Position: notes.NotePosition{
 					Column: sourceColumnIdeasID,
-					Stack:  uuid.NullUUID{},
+					Stack:  nil,
 					Rank:   0,
 				},
 			},
@@ -853,11 +854,8 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Child note",
 				Position: notes.NotePosition{
 					Column: sourceColumnIdeasID,
-					Stack: uuid.NullUUID{
-						UUID:  sourceRootNoteID,
-						Valid: true,
-					},
-					Rank: 0,
+					Stack:  new(sourceRootNoteID),
+					Rank:   0,
 				},
 			},
 			{
@@ -866,7 +864,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 				Text:   "Action note",
 				Position: notes.NotePosition{
 					Column: sourceColumnActionsID,
-					Stack:  uuid.NullUUID{},
+					Stack:  nil,
 					Rank:   0,
 				},
 			},
@@ -906,20 +904,20 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 	rootNote, found := notesByText["Root note"]
 	require.True(t, found)
 	assert.Equal(t, rootColumnID, rootNote.Position.Column)
-	assert.False(t, rootNote.Position.Stack.Valid)
+	assert.False(t, rootNote.Position.Stack != nil)
 	assert.Equal(t, 0, rootNote.Position.Rank)
 
 	childNote, found := notesByText["Child note"]
 	require.True(t, found)
 	assert.Equal(t, rootColumnID, childNote.Position.Column)
-	assert.True(t, childNote.Position.Stack.Valid)
-	assert.Equal(t, rootNote.ID, childNote.Position.Stack.UUID)
+	assert.True(t, childNote.Position.Stack != nil)
+	assert.Equal(t, rootNote.ID, *childNote.Position.Stack)
 	assert.Equal(t, 0, childNote.Position.Rank)
 
 	actionNote, found := notesByText["Action note"]
 	require.True(t, found)
 	assert.Equal(t, actionsColumnID, actionNote.Position.Column)
-	assert.False(t, actionNote.Position.Stack.Valid)
+	assert.False(t, actionNote.Position.Stack != nil)
 	assert.Equal(t, 0, actionNote.Position.Rank)
 }
 
@@ -959,7 +957,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import_WithMissingAuthorWarn
 				Text:   "Kept note",
 				Position: notes.NotePosition{
 					Column: sourceColumnID,
-					Stack:  uuid.NullUUID{},
+					Stack:  nil,
 					Rank:   0,
 				},
 			},
@@ -969,7 +967,7 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import_WithMissingAuthorWarn
 				Text:   "Removed note",
 				Position: notes.NotePosition{
 					Column: sourceColumnID,
-					Stack:  uuid.NullUUID{},
+					Stack:  nil,
 					Rank:   1,
 				},
 			},

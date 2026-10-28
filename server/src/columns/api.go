@@ -3,7 +3,7 @@ package columns
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type ColumnService interface {

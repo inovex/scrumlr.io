@@ -4376,11 +4376,7 @@ const docTemplate = `{
                 },
                 "sharedNote": {
                     "description": "The id of a note to share with other users.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/uuid.NullUUID"
-                        }
-                    ]
+                    "type": "string"
                 },
                 "showAuthors": {
                     "description": "The show authors",
@@ -4395,7 +4391,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "showVoting": {
-                    "$ref": "#/definitions/uuid.NullUUID"
+                    "type": "string"
                 },
                 "timerEnd": {
                     "type": "string"
@@ -4467,11 +4463,7 @@ const docTemplate = `{
                 },
                 "sharedNote": {
                     "description": "Set the note id of the note to share with other users.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/uuid.NullUUID"
-                        }
-                    ]
+                    "type": "string"
                 },
                 "showAuthors": {
                     "description": "Set whether authors of notes should be shown to all users.",
@@ -4486,7 +4478,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "showVoting": {
-                    "$ref": "#/definitions/uuid.NullUUID"
+                    "type": "string"
                 },
                 "timerEnd": {
                     "description": "Set the timer end.",
@@ -5027,11 +5019,7 @@ const docTemplate = `{
                 },
                 "stack": {
                     "description": "The parent note for this note in a stack.",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/uuid.NullUUID"
-                        }
-                    ]
+                    "type": "string"
                 }
             }
         },
@@ -5267,18 +5255,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "uuid.NullUUID": {
-            "type": "object",
-            "properties": {
-                "uuid": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if UUID is not NULL",
-                    "type": "boolean"
                 }
             }
         },

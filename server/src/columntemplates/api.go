@@ -7,8 +7,9 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/otel"
 
+	"uuid"
+
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 )

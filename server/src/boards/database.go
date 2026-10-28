@@ -7,7 +7,8 @@ import (
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
@@ -62,7 +63,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 	if update.TimerEnd != nil {
 		query.Column("timer_end")
 	}
-	if update.SharedNote.Valid {
+	if update.SharedNote != nil {
 		query.Column("shared_note")
 	}
 	if update.Name != nil {
@@ -92,12 +93,12 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 
 	var board DatabaseBoard
 	var err error
-	if update.ShowVoting.Valid {
+	if update.ShowVoting != nil {
 		votingQuery := d.db.NewSelect().
 			Model((*common.DatabaseVoting)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
-			Where("id = ?", update.ShowVoting.UUID).
+			Where("id = ?", *update.ShowVoting).
 			Where("status = ?", votings.Closed)
 
 		_, err = query.

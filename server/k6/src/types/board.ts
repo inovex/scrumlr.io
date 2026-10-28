@@ -14,8 +14,8 @@ export interface Board {
 	showNotesOfOtherUsers: boolean;
 	timerStart?: string;
 	timerEnd?: string;
-	sharedNote?: { uuid: string; valid: boolean } | null;
-	showVoting?: { uuid: string; valid: boolean } | null;
+	sharedNote?: string | null;
+	showVoting?: string | null;
 	createdAt: string;
 	lastModifiedAt: string;
 }
