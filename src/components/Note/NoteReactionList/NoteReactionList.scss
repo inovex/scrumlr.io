@@ -5,6 +5,8 @@
   flex-direction: row;
   align-items: center;
   gap: styles.$reaction__gap-size;
+
+  pointer-events: auto;
 }
 
 .note-reaction-list__reaction-bar-container {

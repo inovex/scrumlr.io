@@ -37,6 +37,12 @@ $note__text-line-height: styles.$line-height--medium;
   overflow: hidden;
 }
 
+.note .note__main-trigger {
+  all: unset;
+  position: absolute;
+  inset: 0;
+}
+
 .note .note__user-avatar {
   height: 28px;
   width: 28px;
@@ -217,6 +223,8 @@ $note__text-line-height: styles.$line-height--medium;
   flex-direction: row;
   gap: styles.$spacing--sm;
 
+  pointer-events: none;
+
   z-index: styles.$note-z-index; // prevent the background image from overlaying it
 }
 
@@ -233,6 +241,8 @@ $note__text-line-height: styles.$line-height--medium;
 
   height: $note__footer-height;
   margin-left: -(styles.$reaction-list__left-spacing); // a little to the left, the icon in NoteReactionList lines up
+
+  pointer-events: none;
 
   &--collapsed {
     height: 0;
