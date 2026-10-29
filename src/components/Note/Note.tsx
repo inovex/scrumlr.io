@@ -104,7 +104,8 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
-      <div tabIndex={0} role="article" aria-label={note.text} className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
+      <article aria-label={note.text} className={`note note--${stackSetting}`} ref={noteRef}>
+        <button className={"note__main-trigger"} tabIndex={0} onClick={handleClick} onKeyDown={handleKeyPress}></button>
         <header className="note__header">
           <div data-clarity-mask="True" className="note__author-container">
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
@@ -141,7 +142,7 @@ export const Note = (props: NoteProps) => {
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>
-      </div>
+      </article>
       {isStack && <div className="note__in-stack" />}
     </Sortable>
   );
