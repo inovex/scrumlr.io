@@ -1,14 +1,14 @@
 import test from "@playwright/test";
 import { acceptCookies, createBoard, loginAnonymous } from "@helpers/api";
 
-type BoardFixtire = {
+type BoardFixture = {
   board: {
     boardId: string,
     userId: string,
   }
 };
 
-export const boardTest = test.extend<BoardFixtire>({
+export const boardTest = test.extend<BoardFixture>({
   board: async ({page}, use) => {
     const userName = "board playwright agent"
     const userId = await loginAnonymous(page, userName);
