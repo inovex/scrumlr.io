@@ -189,12 +189,14 @@ exports[`Column > should have correct style > show column with correct style 1`]
             role="button"
             tabindex="-1"
           >
-            <div
+            <article
               aria-label="Lorem Ipsum"
               class="note note--stackBetween"
-              role="article"
-              tabindex="0"
             >
+              <button
+                class="note__main-trigger"
+                tabindex="0"
+              />
               <header
                 class="note__header"
               >
@@ -749,7 +751,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                   </div>
                 </div>
               </footer>
-            </div>
+            </article>
           </div>
         </li>
         <li>
@@ -761,12 +763,14 @@ exports[`Column > should have correct style > show column with correct style 1`]
             role="button"
             tabindex="-1"
           >
-            <div
+            <article
               aria-label="Lorem Ipsum"
               class="note note--stackBetween"
-              role="article"
-              tabindex="0"
             >
+              <button
+                class="note__main-trigger"
+                tabindex="0"
+              />
               <header
                 class="note__header"
               >
@@ -1268,7 +1272,7 @@ exports[`Column > should have correct style > show column with correct style 1`]
                   </div>
                 </div>
               </footer>
-            </div>
+            </article>
           </div>
         </li>
       </ul>
@@ -1467,12 +1471,14 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
               role="button"
               tabindex="-1"
             >
-              <div
+              <article
                 aria-label="Lorem Ipsum"
                 class="note note--stackBetween"
-                role="article"
-                tabindex="0"
               >
+                <button
+                  class="note__main-trigger"
+                  tabindex="0"
+                />
                 <header
                   class="note__header"
                 >
@@ -2027,7 +2033,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                     </div>
                   </div>
                 </footer>
-              </div>
+              </article>
             </div>
           </li>
           <li>
@@ -2039,12 +2045,14 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
               role="button"
               tabindex="-1"
             >
-              <div
+              <article
                 aria-label="Lorem Ipsum"
                 class="note note--stackBetween"
-                role="article"
-                tabindex="0"
               >
+                <button
+                  class="note__main-trigger"
+                  tabindex="0"
+                />
                 <header
                   class="note__header"
                 >
@@ -2546,7 +2554,7 @@ exports[`Column > should render correctly > column has correct accent-color 1`] 
                     </div>
                   </div>
                 </footer>
-              </div>
+              </article>
             </div>
           </li>
         </ul>
