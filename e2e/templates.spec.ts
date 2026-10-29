@@ -131,7 +131,7 @@ test.describe("testing templates", () => {
     await expect(page).toHaveURL("/boards/templates");
   });
 
-  templateTest("should drag the first column into the second spot on a custom template", async ({page, template}) => {
+  templateTest("should drag and swap first and second columns on custom template", async ({page, template}) => {
     await page.goto("/boards/templates");
 
     const templateSection = page.getByRole("region", {name: "Your Templates"});
