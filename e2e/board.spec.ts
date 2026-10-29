@@ -6,10 +6,9 @@ test.describe.configure({mode: "parallel"});
 
 test.describe("testing board creation", () => {
   test.describe.configure({mode: "parallel"});
-  const userName = "board playwright agent"
 
-  test.beforeEach(async ({page}) => {
-    await loginAnonymous(page, userName);
+  test.beforeEach(async ({page}, testInfo) => {
+    await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     await page.goto("/boards/templates");

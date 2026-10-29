@@ -10,10 +10,9 @@ type TemplateFixture = {
 };
 
 export const templateTest = test.extend<TemplateFixture>({
-  template: async ({page}, use) => {
-    const userName = "template playwright agent";
+  template: async ({page}, use, testInfo) => {
     const templateName = "template test"
-    const userId = await loginAnonymous(page, userName);
+    const userId = await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     const templateId = await createBoardTemplate(page, {

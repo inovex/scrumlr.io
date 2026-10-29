@@ -9,9 +9,8 @@ type NoteFixture = {
 };
 
 export const noteTest = test.extend<NoteFixture>({
-  note: async ({page}, use) => {
-    const userName = "note playwright agent"
-    await loginAnonymous(page, userName);
+  note: async ({page}, use, testInfo) => {
+    await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     const boardId = await createBoard(page, {
