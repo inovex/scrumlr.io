@@ -9,9 +9,8 @@ type BoardFixture = {
 };
 
 export const boardTest = test.extend<BoardFixture>({
-  board: async ({page}, use) => {
-    const userName = "board playwright agent"
-    const userId = await loginAnonymous(page, userName);
+  board: async ({page}, use, testInfo) => {
+    const userId = await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     const boardId = await createBoard(page, {

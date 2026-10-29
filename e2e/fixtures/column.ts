@@ -9,9 +9,8 @@ type ColumnFixture = {
 };
 
 export const columnTest = test.extend<ColumnFixture>({
-  column: async ({page}, use) => {
-    const userName = "column playwright agent";
-    const userId = await loginAnonymous(page, userName);
+  column: async ({page}, use, testInfo) => {
+    const userId = await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     const boardId = await createBoard(page, {

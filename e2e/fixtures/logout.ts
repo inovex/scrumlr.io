@@ -8,13 +8,12 @@ type LogoutFixture = {
 };
 
 export const logoutTest = test.extend<LogoutFixture>({
-  logout: async ({page}, use) => {
-    const userName = "logout playwright agent"
-    await loginAnonymous(page, userName);
+  logout: async ({page}, use, testInfo) => {
+    await loginAnonymous(page, testInfo.title);
     await acceptCookies(page);
 
     await page.on("dialog", (dialog) => dialog.accept());
 
-    await use({userName})
+    await use({userName: testInfo.title})
   },
 });
