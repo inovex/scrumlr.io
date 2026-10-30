@@ -1,21 +1,21 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { API } from "api";
-import { ApplicationState, retryable } from "store";
-import { CreateVotingRequest } from "./types";
-import { syncedVotingResults } from "./actions";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {API} from "api";
+import {ApplicationState, retryable} from "store";
+import {CreateVotingRequest} from "./types";
+import {syncedVotingResults} from "./actions";
 
-export const createVoting = createAsyncThunk<void, CreateVotingRequest, { state: ApplicationState }>("votings/createVoting", async (payload, { dispatch, getState }) => {
+export const createVoting = createAsyncThunk<void, CreateVotingRequest, {state: ApplicationState}>("votings/createVoting", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
   await retryable(
     () => API.createVoting(boardId, payload),
     dispatch,
-    () => createVoting({ ...payload }),
+    () => createVoting({...payload}),
     "createVoting"
   );
 });
 
-export const closeVoting = createAsyncThunk<void, string, { state: ApplicationState }>("votings/closeVoting", async (payload, { dispatch, getState }) => {
+export const closeVoting = createAsyncThunk<void, string, {state: ApplicationState}>("votings/closeVoting", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
   await retryable(
@@ -26,7 +26,7 @@ export const closeVoting = createAsyncThunk<void, string, { state: ApplicationSt
   );
 });
 
-export const abortVoting = createAsyncThunk<void, string, { state: ApplicationState }>("votings/abortVoting", async (payload, { dispatch, getState }) => {
+export const abortVoting = createAsyncThunk<void, string, {state: ApplicationState}>("votings/abortVoting", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
   await retryable(
@@ -38,7 +38,7 @@ export const abortVoting = createAsyncThunk<void, string, { state: ApplicationSt
 });
 
 // refetches the results of the latest closed voting, e.g. when previously hidden notes became visible
-export const syncVotingResults = createAsyncThunk<void, void, { state: ApplicationState }>("votings/syncVotingResults", async (_payload, { dispatch, getState }) => {
+export const syncVotingResults = createAsyncThunk<void, void, {state: ApplicationState}>("votings/syncVotingResults", async (_payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
   const latestVoting = getState().votings.past[0];
 

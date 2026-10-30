@@ -55,11 +55,11 @@ export const VotingDialog = () => {
     <Dialog className="voting-dialog accent-color__planning-pink" title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
       {voting ? (
         <>
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__stop-button" onClick={() => stopVoting()}>
+          <button className="voting-dialog__start-button" onClick={() => stopVoting()}>
             <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
 
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__abort-button" onClick={() => abortVotingCallback()}>
+          <button className="voting-dialog__start-button" onClick={() => abortVotingCallback()}>
             <label>{t("VoteConfigurationButton.abortVoting")}</label>
           </button>
         </>
@@ -102,7 +102,7 @@ export const VotingDialog = () => {
               </button>
             </div>
           </div>
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__start-button" onClick={() => startVoting()}>
+          <button className="voting-dialog__start-button" onClick={() => startVoting()}>
             <label>{t("VoteConfigurationButton.startVoting")}</label>
           </button>
         </>
