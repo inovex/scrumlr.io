@@ -52,7 +52,7 @@ func (manager *boardConnectionManager) Register(ctx context.Context, connection 
 	subscription, exists := manager.subscriptions[boardId]
 	if !exists {
 		subCtx, cancel := context.WithCancel(context.Background())
-		channel, err := manager.getBoardChannel(ctx, boardId)
+		channel, err := manager.getBoardChannel(ctx, subCtx, boardId)
 		if err != nil {
 			log.Warnw("failed to get board channel", "boardId", boardId, "err", err)
 			cancel()
@@ -135,11 +135,11 @@ func (manager *boardConnectionManager) broadcast(ctx context.Context, subscripti
 	}
 }
 
-func (manager *boardConnectionManager) getBoardChannel(ctx context.Context, boardId uuid.UUID) (chan *realtime.BoardEvent, error) {
-	log := logger.FromContext(ctx)
+func (manager *boardConnectionManager) getBoardChannel(reqCtx context.Context, subCtx context.Context, boardId uuid.UUID) (chan *realtime.BoardEvent, error) {
+	log := logger.FromContext(reqCtx)
 
 	for i := range MaxRetries {
-		channel, err := manager.realtime.GetBoardChannel(ctx, boardId)
+		channel, err := manager.realtime.GetBoardChannel(subCtx, boardId)
 		if err == nil {
 			return channel, err
 		}
@@ -150,9 +150,12 @@ func (manager *boardConnectionManager) getBoardChannel(ctx context.Context, boar
 		// the retries are done and can also abort the function.
 		timer := manager.clock.NewTimer(SleepBetweenRetries)
 		select {
-		case <-ctx.Done():
+		case <-reqCtx.Done():
 			timer.Stop()
-			return nil, ctx.Err()
+			return nil, reqCtx.Err()
+		case <-subCtx.Done():
+			timer.Stop()
+			return nil, subCtx.Err()
 		case <-timer.C:
 		}
 	}
