@@ -26,7 +26,7 @@
     "i18next": "^26.5.6",
     "i18next-browser-languagedetector": "^8.2.1",
     "js-cookie": "^3.0.8",
-    "linkify-react": "^4.3.3",
+    "linkify-react": "^4.4.0",
     "linkifyjs": "^4.4.0",
     "marked": "18.1.1",
     "plausible-tracker": "^0.3.9",

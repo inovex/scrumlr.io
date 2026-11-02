@@ -5138,13 +5138,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkify-react@npm:^4.3.3":
-  version: 4.3.3
-  resolution: "linkify-react@npm:4.3.3"
+"linkify-react@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "linkify-react@npm:4.4.0"
   peerDependencies:
-    linkifyjs: "*"
+    linkifyjs: 4.4.0
     react: ">= 15.0.0"
-  checksum: 10c0/67885ea9466003cdd1c7c8bbecbc9fb5f903bde93bb3333bab1e61f12b76af93ba0bc40c7d9f0be3751e48d1dd1a10e3b0499691bfc8a249ef3267e62b03770e
+  checksum: 10c0/d67cc5cfce04b34eaa0bc40cecfe4f296983600eab8750a26e7c6be46c1500d8f1f36515f281c1708404df0afb1dcb1b31aac7081f25f9c0fef20f5fb0de0b41
   languageName: node
   linkType: hard
 
@@ -6658,7 +6658,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.2.1"
     i18next-fs-backend: "npm:^2.6.9"
     js-cookie: "npm:^3.0.8"
-    linkify-react: "npm:^4.3.3"
+    linkify-react: "npm:^4.4.0"
     linkifyjs: "npm:^4.4.0"
     lint-staged: "npm:^17.6.0"
     marked: "npm:18.1.1"
