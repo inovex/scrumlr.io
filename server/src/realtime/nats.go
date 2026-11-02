@@ -58,7 +58,7 @@ func (n *natsClient) SubscribeToBoardSessionEvents(ctx context.Context, subject 
 	)
 
 	receiverChan := make(chan *BoardSessionRequestEventType)
-	_, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
+	subscription, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
 		var event BoardSessionRequestEventType
 		if err := json.Unmarshal(msg.Data, &event); err != nil {
 			otel.RecordErrorSpan(span, err, new("failed to unmarshal event"))
@@ -72,6 +72,12 @@ func (n *natsClient) SubscribeToBoardSessionEvents(ctx context.Context, subject 
 		otel.RecordErrorSpan(span, err, new("failed to subcribe to subject"))
 		return nil, fmt.Errorf("failed to subscribe to subject %s: %w", subject, err)
 	}
+
+	go func() {
+		<-ctx.Done()
+		_ = subscription.Unsubscribe()
+		close(receiverChan)
+	}()
 
 	return receiverChan, nil
 }
@@ -87,7 +93,7 @@ func (n *natsClient) SubscribeToBoardEvents(ctx context.Context, subject string)
 	)
 
 	receiverChan := make(chan *BoardEvent)
-	_, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
+	subscription, err := n.con.Subscribe(subject, func(msg *nats.Msg) {
 		var event BoardEvent
 		if err := json.Unmarshal(msg.Data, &event); err != nil {
 			otel.RecordErrorSpan(span, err, new("failed to unmarshal event"))
@@ -95,12 +101,22 @@ func (n *natsClient) SubscribeToBoardEvents(ctx context.Context, subject string)
 			return
 		}
 
-		receiverChan <- &event
+		select {
+		case receiverChan <- &event:
+		case <-ctx.Done():
+		}
+
 	})
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to subcribe to subject"))
 		return nil, fmt.Errorf("failed to subscribe to subject %s: %w", subject, err)
 	}
+
+	go func() {
+		<-ctx.Done()
+		_ = subscription.Unsubscribe()
+		close(receiverChan)
+	}()
 
 	return receiverChan, nil
 }

@@ -252,7 +252,7 @@ func TestBoardConnectionManagerGetBoardChannel(t *testing.T) {
 	manager := NewBoardConnectionManager(broker, clock, filter)
 	mgr := manager.(*boardConnectionManager)
 
-	channel, err := mgr.getBoardChannel(ctx, boardId)
+	channel, err := mgr.getBoardChannel(ctx, ctx, boardId)
 
 	assert.NoError(t, err)
 	assert.Equal(t, boardChannel, channel)
@@ -286,7 +286,7 @@ func TestBoardConnectionManagerGetBoardChannelWithRetry(t *testing.T) {
 	manager := NewBoardConnectionManager(broker, clock, filter)
 	mgr := manager.(*boardConnectionManager)
 
-	channel, err := mgr.getBoardChannel(ctx, boardId)
+	channel, err := mgr.getBoardChannel(ctx, ctx, boardId)
 
 	assert.NoError(t, err)
 	assert.Equal(t, boardChannel, channel)
@@ -315,7 +315,7 @@ func TestBoardConnectionManagerGetBoardChannelFail(t *testing.T) {
 	manager := NewBoardConnectionManager(broker, clock, filter)
 	mgr := manager.(*boardConnectionManager)
 
-	channel, err := mgr.getBoardChannel(ctx, boardId)
+	channel, err := mgr.getBoardChannel(ctx, ctx, boardId)
 
 	assert.Error(t, err)
 	assert.Equal(t, errors.New("failed to subscribe to board channel"), err)
@@ -346,7 +346,7 @@ func TestBoardConnectionManagerGetBoardChannelCancel(t *testing.T) {
 	manager := NewBoardConnectionManager(broker, clock, filter)
 	mgr := manager.(*boardConnectionManager)
 
-	channel, err := mgr.getBoardChannel(ctx, boardId)
+	channel, err := mgr.getBoardChannel(ctx, ctx, boardId)
 
 	assert.Error(t, err)
 	assert.Equal(t, context.Canceled, err)

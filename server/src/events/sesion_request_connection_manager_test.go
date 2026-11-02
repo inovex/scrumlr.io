@@ -244,7 +244,7 @@ func TestSessionRequestConnectionManagerGetSessionRequestChannel(t *testing.T) {
 	manager := NewSessionRequestConnectionManager(broker, clock)
 	mgr := manager.(*sessionRequestConnectionManager)
 
-	channel, err := mgr.getSessionRequestChannel(ctx, boardId, userId)
+	channel, err := mgr.getSessionRequestChannel(ctx, ctx, boardId, userId)
 
 	assert.NoError(t, err)
 	assert.Equal(t, sessionRequestChannel, channel)
@@ -277,7 +277,7 @@ func TestSessionRequestConnectionManagerGetSessionRequestChannelWithRetry(t *tes
 	manager := NewSessionRequestConnectionManager(broker, clock)
 	mgr := manager.(*sessionRequestConnectionManager)
 
-	channel, err := mgr.getSessionRequestChannel(ctx, boardId, userId)
+	channel, err := mgr.getSessionRequestChannel(ctx, ctx, boardId, userId)
 
 	assert.NoError(t, err)
 	assert.Equal(t, sessionRequestChannel, channel)
@@ -305,7 +305,7 @@ func TestSessionRequestConnectionManagerGetSessionRequestChannelFail(t *testing.
 	manager := NewSessionRequestConnectionManager(broker, clock)
 	mgr := manager.(*sessionRequestConnectionManager)
 
-	channel, err := mgr.getSessionRequestChannel(ctx, boardId, userId)
+	channel, err := mgr.getSessionRequestChannel(ctx, ctx, boardId, userId)
 
 	assert.Error(t, err)
 	assert.Equal(t, errors.New("failed to subscribe to session request channel"), err)
@@ -335,7 +335,7 @@ func TestSessionRequestConnectionManagerGetSessionRequestChannelCancel(t *testin
 	manager := NewSessionRequestConnectionManager(broker, clock)
 	mgr := manager.(*sessionRequestConnectionManager)
 
-	channel, err := mgr.getSessionRequestChannel(ctx, boardId, userId)
+	channel, err := mgr.getSessionRequestChannel(ctx, ctx, boardId, userId)
 
 	assert.Error(t, err)
 	assert.Equal(t, context.Canceled, err)

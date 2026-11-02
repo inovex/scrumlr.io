@@ -57,7 +57,7 @@ func (manager *sessionRequestConnectionManager) Register(ctx context.Context, co
 	}
 
 	subCtx, cancel := context.WithCancel(context.Background())
-	channel, err := manager.getSessionRequestChannel(ctx, boardId, userId)
+	channel, err := manager.getSessionRequestChannel(ctx, subCtx, boardId, userId)
 	if err != nil {
 		log.Warnw("failed to get session request channel", "boardId", boardId, "userId", userId, "err", err)
 		cancel()
@@ -123,11 +123,11 @@ func (manager *sessionRequestConnectionManager) listen(ctx context.Context, subs
 	}
 }
 
-func (manager *sessionRequestConnectionManager) getSessionRequestChannel(ctx context.Context, boardId, userId uuid.UUID) (chan *realtime.BoardSessionRequestEventType, error) {
-	log := logger.FromContext(ctx)
+func (manager *sessionRequestConnectionManager) getSessionRequestChannel(reqCtx context.Context, subCtx context.Context, boardId, userId uuid.UUID) (chan *realtime.BoardSessionRequestEventType, error) {
+	log := logger.FromContext(reqCtx)
 
 	for i := range MaxRetries {
-		channel, err := manager.realtime.GetBoardSessionRequestChannel(ctx, boardId, userId)
+		channel, err := manager.realtime.GetBoardSessionRequestChannel(subCtx, boardId, userId)
 		if err == nil {
 			return channel, err
 		}
@@ -138,9 +138,12 @@ func (manager *sessionRequestConnectionManager) getSessionRequestChannel(ctx con
 		// the retries are done and can also abort the function.
 		timer := manager.clock.NewTimer(SleepBetweenRetries)
 		select {
-		case <-ctx.Done():
+		case <-reqCtx.Done():
 			timer.Stop()
-			return nil, ctx.Err()
+			return nil, reqCtx.Err()
+		case <-subCtx.Done():
+			timer.Stop()
+			return nil, subCtx.Err()
 		case <-timer.C:
 		}
 	}
