@@ -30,6 +30,20 @@ func TestNoteRuleSupportUpdatedEvent(t *testing.T) {
 	assert.True(t, supports)
 }
 
+func TestNoteRuleSupportSyncEvent(t *testing.T) {
+	ctx := t.Context()
+
+	mockBoardService := boards.NewMockBoardService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
+	mockColumnService := columns.NewMockColumnService(t)
+
+	filterRule := NewNoteRuleFilter(mockBoardService, mockColumnService, mockSessionService)
+
+	supports := filterRule.Supports(ctx, realtime.BoardEventNotesSync)
+
+	assert.True(t, supports)
+}
+
 func TestNoteRuleSupportDeletedEvent(t *testing.T) {
 	ctx := t.Context()
 
@@ -255,6 +269,83 @@ func TestNoteRuleHandleUpdatedEventAsParticipantwithDontShowNotesOfOtherUsers(t 
 	assert.Len(t, filteredNotes, 1)
 
 	assert.Equal(t, userId, filteredNotes[0].Author)
+}
+
+func TestNoteRuleHandleSyncEventAsOwner(t *testing.T) {
+	ctx := t.Context()
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	event := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: []notes.Note{
+			{ID: uuid.New(), Author: userId, Text: "Test Note 1", Edited: false, Position: notes.NotePosition{Column: uuid.New()}},
+			{ID: uuid.New(), Author: uuid.New(), Text: "Test Note 2", Edited: false, Position: notes.NotePosition{Column: uuid.New()}},
+			{ID: uuid.New(), Author: uuid.New(), Text: "Test Note 3", Edited: false, Position: notes.NotePosition{Column: uuid.New()}},
+		},
+	}
+
+	mockBoardService := boards.NewMockBoardService(t)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+	mockSessionService.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(&sessions.BoardSession{UserID: userId, Board: boardId, Role: role.OwnerRole}, nil)
+
+	mockColumnService := columns.NewMockColumnService(t)
+
+	filterRule := NewNoteRuleFilter(mockBoardService, mockColumnService, mockSessionService)
+
+	filteredEvent, err := filterRule.Handle(ctx, event, boardId, userId)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, filteredEvent)
+
+	filteredNotes, err := technical_helper.UnmarshalSlice[notes.Note](filteredEvent.Data)
+	assert.NoError(t, err)
+	assert.Len(t, filteredNotes, 3)
+}
+
+func TestNoteRuleHandleSyncEventAsParticipant(t *testing.T) {
+	ctx := t.Context()
+	boardId := uuid.New()
+	userId := uuid.New()
+	visibleColumnId := uuid.New()
+	columnId := uuid.New()
+
+	event := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: []notes.Note{
+			{ID: uuid.New(), Author: userId, Text: "Test Note 1", Edited: false, Position: notes.NotePosition{Column: visibleColumnId}},
+			{ID: uuid.New(), Author: uuid.New(), Text: "Test Note 2", Edited: false, Position: notes.NotePosition{Column: visibleColumnId}},
+			{ID: uuid.New(), Author: uuid.New(), Text: "Test Note 3", Edited: false, Position: notes.NotePosition{Column: columnId}},
+		},
+	}
+
+	mockBoardService := boards.NewMockBoardService(t)
+	mockBoardService.EXPECT().Get(mock.Anything, boardId).
+		Return(&boards.Board{ID: boardId, ShowAuthors: true, ShowNotesOfOtherUsers: true}, nil)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+	mockSessionService.EXPECT().Get(mock.Anything, boardId, userId).
+		Return(&sessions.BoardSession{UserID: userId, Board: boardId, Role: role.ParticipantRole}, nil)
+
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(mock.Anything, boardId).
+		Return([]*columns.Column{
+			{ID: visibleColumnId, Visible: true},
+			{ID: columnId, Visible: false},
+		}, nil)
+
+	filterRule := NewNoteRuleFilter(mockBoardService, mockColumnService, mockSessionService)
+
+	filteredEvent, err := filterRule.Handle(ctx, event, boardId, userId)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, filteredEvent)
+
+	filteredNotes, err := technical_helper.UnmarshalSlice[notes.Note](filteredEvent.Data)
+	assert.NoError(t, err)
+	assert.Len(t, filteredNotes, 2)
 }
 
 func TestNoteRuleHandleDeletedEvent(t *testing.T) {
