@@ -1,10 +1,8 @@
 @use "constants/styles";
 
-//todo remove these later
-
-// button heights
-$button-height--default: 52px;
-$button-height--small: 46px;
+$icon-button-size: 52px; // matches default button height
+$icon-circle-size: 44px;
+$icon-circle-edge-gap: 3px;
 
 .login-providers {
   display: flex;
@@ -30,74 +28,51 @@ $button-height--small: 46px;
   padding: 0 20px;
 }
 
-// --- FULL MODE STYLES (Primary) ---
-
-.full-stack-wrapper {
-  position: relative;
+// primary provider in full mode: icon circle pinned to the left edge, label centered in the remaining space
+// extra specificity needed to override .button--with-icon.button--icon-left padding
+.login-providers .login-providers__primary-button.button {
   width: 100%;
-  display: flex;
+  min-width: 0;
+  padding: 0 styles.$spacing--xs 0 $icon-circle-edge-gap;
 }
 
-.overlay-icon-button {
-  pointer-events: none;
-  position: absolute;
-  left: 4px; // manual tweak to center it visually
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-
-  background-color: styles.$gray--000;
+.login-providers__icon-circle {
+  flex: 0 0 $icon-circle-size;
+  width: $icon-circle-size;
+  height: $icon-circle-size;
   border-radius: 50%;
-  width: calc(#{$button-height--default} * 0.85);
-  height: calc(#{$button-height--default} * 0.85);
-  padding: 0;
-  min-width: unset;
-  flex: 0 0 calc(#{$button-height--default} * 0.85);
+  background-color: styles.$gray--000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.login-providers__button.text-button {
-  // Add padding to the left so text doesn't hide behind the white circle
-  padding-left: calc(#{$button-height--small} + #{styles.$spacing--xxs});
-  padding-right: styles.$spacing--xxs;
-  justify-content: center;
+// must stay wrappable: the form is sized with fit-content, a nowrap label would widen the whole layout
+.login-providers__primary-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
 }
 
-// --- GENERAL & SHARED STYLES ---
-
+// compact / secondary providers
 .login-providers__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 0 0 auto;
+  width: $icon-button-size;
+  height: $icon-button-size;
 }
 
-//Only the buttons inside the primary wrapper should expand, excluding the overlay icon button
-.primary-provider-wrapper .login-providers__button:not(.overlay-icon-button) {
+// the primary provider fills the remaining space even in compact mode
+.primary-provider-wrapper .login-providers__button.button {
   width: 100%;
 }
 
-//Secondary buttons (direct children) should not grow
-.login-providers > .login-providers__button {
-  flex: 0 0 auto;
-  width: $button-height--default;
-  height: $button-height--default;
-}
-
-// Icon Sizing
 .login-providers__icon {
   height: styles.$icon--large;
   width: styles.$icon--large;
   flex: 0 0 styles.$icon--large;
 }
 
-.login-providers__button svg {
+.login-providers__button svg,
+.login-providers__primary-button svg {
   pointer-events: none;
-}
-
-[data-theme="dark"] {
-  .overlay-icon-button {
-    background-color: styles.$gray--000;
-  }
 }
