@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useNavigate, useParams} from "react-router";
+import {Navigate, useNavigate, useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {animated, Transition} from "@react-spring/web";
@@ -55,7 +55,7 @@ export const StackView = () => {
         })),
     _.isEqual
   );
-  const column = columns.find((c) => c.id === note?.position.column)!;
+  const column = columns.find((c) => c.id === note?.position.column);
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the last stack in the previous column
@@ -210,9 +210,8 @@ export const StackView = () => {
     }
   }, [note, t]);
 
-  if (!note) {
-    navigate(`/board/${boardId}`);
-    return null;
+  if (!note || !column) {
+    return <Navigate to={`/board/${boardId}`} />;
   }
 
   const handleClose = () => {
