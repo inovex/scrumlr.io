@@ -203,7 +203,7 @@ export const StackView = () => {
     }
   }, [boardId, navigate, note, t]);
 
-  // show toast if note has been deleted
+  // show toast for respective redirect action
   useLayoutEffect(() => {
     if (!column) {
       Toast.info({title: t("Toast.columnHidden"), icon: HiddenIcon});
@@ -212,6 +212,7 @@ export const StackView = () => {
     }
   }, [note, t]);
 
+  // redirect if missing crucial state
   if (!note || !column) {
     return <Navigate to={`/board/${boardId}`} />;
   }
