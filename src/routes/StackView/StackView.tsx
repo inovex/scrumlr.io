@@ -7,7 +7,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppDispatch, useAppSelector} from "store";
-import {CloseIcon, TrashIcon} from "components/Icon";
+import {CloseIcon, TrashIcon, HiddenIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -205,7 +205,9 @@ export const StackView = () => {
 
   // show toast if note has been deleted
   useLayoutEffect(() => {
-    if (prevNote.current && !note) {
+    if (!column) {
+      Toast.info({title: t("Toast.columnHidden"), icon: HiddenIcon});
+    } else if (prevNote.current && !note) {
       Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
