@@ -22,7 +22,6 @@ import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
-import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
 import {BoardEditor, TemplateEditor} from "routes/Boards/Editor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
@@ -32,7 +31,6 @@ const renderLegacyRoute = (legacy: boolean) =>
       path="/new"
       element={
         <RequireAuthentication>
-          <LegacyNewBoard />
         </RequireAuthentication>
       }
     />

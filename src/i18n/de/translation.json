@@ -9,18 +9,6 @@
     "VotingIsAnonymous": "Abstimmung ist anonym",
     "VotingIsNotAnonymous": "Abstimmung ist nicht anonym"
   },
-  "LegacyNewBoard": {
-    "boardName": "Sitzungsname",
-    "description": "Sitzungsbeschreibung",
-    "createNewBoard": "Erstelle eine Sitzung",
-    "extendedConfigurationButton": "Erweiterte Einstellungen",
-    "basicConfigurationButton": "Vorlagenauswahl",
-    "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage",
-    "importBoard": "JSON Importieren",
-    "uploadFile": "Datei hochladen oder hierher ziehen",
-    "importNewBoard": "Jetzt importieren"
-  },
   "ImportBoard": {
     "button": "JSON Importieren",
     "importNotAllowedForAnonymousUsers": "Das Importieren von Boards ist für anonyme Benutzer deaktiviert.",
