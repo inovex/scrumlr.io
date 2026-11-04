@@ -35,7 +35,6 @@ That is why `yarn start` reaches a local backend without any setup on your part.
 | `VITE_SERVER_HTTP_URL` | `src/config.ts` | Base URL for REST calls |
 | `VITE_SERVER_WEBSOCKET_URL` | `src/config.ts` | Base URL for the board WebSocket |
 | `VITE_VERSION` | `src/index.tsx`, `components/AppInfo` | Displayed version; set from `$npm_package_version` |
-| `VITE_LEGACY_CREATE_BOARD` | `store/features/view/reducer.ts` | Enables the legacy `/new` board creation route |
 | `VITE_SHOW_HISTORY_PAGE` | `routes/Boards/Sessions/History.tsx` | Renders the board history list instead of the teaser |
 | `BASE_URL` | several components | Vite's own built-in; used to build URLs for static assets in `public/` |
 
@@ -68,8 +67,6 @@ Feature flags reach the store from two directions, and both end up in `state.vie
 - **From the server.** The `setServerInfo` thunk calls `GET /info` and the `view` reducer copies the response into
   `state.view`. The same response carries `serverTime`, which the reducer turns
   into `serverTimeOffset` - the clock skew the timer uses so every participant sees the same countdown
-- **From the build.** `legacyCreateBoard` is derived from `import.meta.env.VITE_LEGACY_CREATE_BOARD === "true"` in the
-  slice's initial state.
 
 Read either kind the same way:
 
