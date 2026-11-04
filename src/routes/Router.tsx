@@ -25,21 +25,7 @@ import RouteChangeObserver from "./RouteChangeObserver";
 import {BoardEditor, TemplateEditor} from "routes/Boards/Editor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
-const renderLegacyRoute = (legacy: boolean) =>
-  legacy ? (
-    <Route
-      path="/new"
-      element={
-        <RequireAuthentication>
-        </RequireAuthentication>
-      }
-    />
-  ) : (
-    <Route path="/new" element={<Navigate to="/boards" />} />
-  );
-
 const Router = () => {
-  const legacyCreateBoard = !!useAppSelector((state) => state.view.legacyCreateBoard);
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
   const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
 
@@ -51,7 +37,6 @@ const Router = () => {
         <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
         <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
         <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
-        {renderLegacyRoute(legacyCreateBoard)}
         <Route
           path="/boards"
           element={
