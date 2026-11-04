@@ -7,7 +7,7 @@ import {TextInput} from "components/TextInput";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputAction} from "components/TextInputAction";
 import {ValidationError} from "components/ValidationError";
-import {LegacyButton} from "components/Button";
+import {Button} from "components/Button";
 import {AccessPolicy} from "store/features";
 import "./PassphraseModal.scss";
 
@@ -80,24 +80,23 @@ export const PassphraseModal = ({passphrase, onPassphraseChange, onSubmit, onClo
           {!passphrase && <ValidationError>{t("AccessPolicySelection.passphraseValidationError")}</ValidationError>}
         </div>
         <div className="new-board__actions import-board__action">
-          <LegacyButton
-            aria-label={t("PassphraseModal.submit")}
+          <Button
+            ariaLabel={t("PassphraseModal.submit")}
             className="new-board__action import-board__action"
-            color="primary"
-            aria-disabled={passphrase.length <= 0}
+            color="planning-pink"
             disabled={passphrase.length <= 0}
             onClick={() => onSubmit(passphrase, "BY_PASSPHRASE")}
           >
             {t("PassphraseModal.newPassword")}
-          </LegacyButton>
+          </Button>
 
-          <LegacyButton
+          <Button
             className="new-board__action import-board__action"
-            color="primary"
+            color="planning-pink"
             onClick={() => onSubmit("", "PUBLIC")} // Call onSubmit with an empty string to continue without a password
           >
             {t("PassphraseModal.continuePublic")}
-          </LegacyButton>
+          </Button>
         </div>
       </div>
     </div>
