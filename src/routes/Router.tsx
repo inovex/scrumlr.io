@@ -37,6 +37,7 @@ const Router = () => {
         <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
         <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
         <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        <Route path="/new" element={<Navigate to="/boards" />} />
         <Route
           path="/boards"
           element={
