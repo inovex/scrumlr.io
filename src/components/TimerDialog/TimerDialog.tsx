@@ -27,15 +27,15 @@ export const TimerDialog = () => {
 
   return (
     <Dialog className="timer-dialog accent-color__planning-pink" title={t("TimerToggleButton.label")} onClose={() => navigate("..")}>
-      <button className="dialog__button" onClick={() => startTimer(1)} data-testid="timer-dialog__1-minute-button">
+      <button className="dialog__button" onClick={() => startTimer(1)}>
         <label>{t("TimerToggleButton.1min")}</label>
         <span className="timer-dialog__button-icon">1</span>
       </button>
-      <button className="dialog__button" onClick={() => startTimer(3)} data-testid="timer-dialog__3-minute-button">
+      <button className="dialog__button" onClick={() => startTimer(3)}>
         <label>{t("TimerToggleButton.3min")}</label>
         <span className="timer-dialog__button-icon">3</span>
       </button>
-      <button className="dialog__button" onClick={() => startTimer(5)} data-testid="timer-dialog__5-minute-button">
+      <button className="dialog__button" onClick={() => startTimer(5)}>
         <label>{t("TimerToggleButton.5min")}</label>
         <span className="timer-dialog__button-icon">5</span>
       </button>

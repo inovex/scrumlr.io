@@ -18,6 +18,7 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
             class="input input--text input--height-normal"
           >
             <input
+              aria-label="Name"
               class="input__input input__input--text"
               data-cy="editor-shell__name-input"
               placeholder="Name"
@@ -36,6 +37,7 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
           .text-area { --text-area-rows: 7 }
         </style>
         <textarea
+          aria-label="Description (optional)"
           class="editor-shell__description-text-area text-area text-area--border-transparent text-area--text-align-left"
           maxlength="1024"
           placeholder="Description (optional)"
@@ -101,6 +103,7 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
             <div
               aria-describedby="DndDescribedBy-0"
               aria-disabled="false"
+              aria-label="Column 1"
               aria-roledescription="sortable"
               class="columns-configurator__column columns-configurator-column columns-configurator-column--border-first columns-configurator-column--even accent-color__backlog-blue"
               data-cy="columns-configurator__column"
@@ -128,10 +131,12 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                 class="columns-configurator-column__menu"
               >
                 <svg
+                  aria-label="Drag column"
                   class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
                   data-cy="columns-configurator-column__drag-element"
                   fill="none"
                   height="17"
+                  role="button"
                   viewBox="0 0 24 17"
                   width="24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -184,12 +189,13 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                   </g>
                 </svg>
                 <button
-                  aria-label="current colorBacklog Blue"
+                  aria-label="current color Backlog Blue"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
                   tabindex="0"
                 />
                 <button
+                  aria-label="Hide column"
                   class="columns-configurator-column__button column-configurator-column__visibility-button"
                 >
                   <svg
@@ -273,6 +279,7 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
             <div
               aria-describedby="DndDescribedBy-0"
               aria-disabled="false"
+              aria-label="Actions"
               aria-roledescription="sortable"
               class="columns-configurator__column columns-configurator-column columns-configurator-column--border-last columns-configurator-column--odd columns-configurator-column--hidden accent-color__planning-pink"
               data-cy="columns-configurator__column"
@@ -300,10 +307,12 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                 class="columns-configurator-column__menu"
               >
                 <svg
+                  aria-label="Drag column"
                   class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
                   data-cy="columns-configurator-column__drag-element"
                   fill="none"
                   height="17"
+                  role="button"
                   viewBox="0 0 24 17"
                   width="24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -356,12 +365,13 @@ exports[`TemplateEditor create > should render correctly (create) 1`] = `
                   </g>
                 </svg>
                 <button
-                  aria-label="current colorPlanning Pink"
+                  aria-label="current color Planning Pink"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
                   tabindex="0"
                 />
                 <button
+                  aria-label="Show column"
                   class="columns-configurator-column__button column-configurator-column__visibility-button"
                 >
                   <svg
@@ -644,6 +654,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
             class="input input--text input--height-normal"
           >
             <input
+              aria-label="Name"
               class="input__input input__input--text"
               data-cy="editor-shell__name-input"
               placeholder="Name"
@@ -687,6 +698,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
           .text-area { --text-area-rows: 7 }
         </style>
         <textarea
+          aria-label="Description (optional)"
           class="editor-shell__description-text-area text-area text-area--border-transparent text-area--text-align-left"
           maxlength="1024"
           placeholder="Description (optional)"
@@ -754,6 +766,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
             <div
               aria-describedby="DndDescribedBy-3"
               aria-disabled="false"
+              aria-label="sample templates col name 1"
               aria-roledescription="sortable"
               class="columns-configurator__column columns-configurator-column columns-configurator-column--border-first columns-configurator-column--even accent-color__backlog-blue"
               data-cy="columns-configurator__column"
@@ -781,10 +794,12 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                 class="columns-configurator-column__menu"
               >
                 <svg
+                  aria-label="Drag column"
                   class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
                   data-cy="columns-configurator-column__drag-element"
                   fill="none"
                   height="17"
+                  role="button"
                   viewBox="0 0 24 17"
                   width="24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -837,12 +852,13 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                   </g>
                 </svg>
                 <button
-                  aria-label="current colorBacklog Blue"
+                  aria-label="current color Backlog Blue"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
                   tabindex="0"
                 />
                 <button
+                  aria-label="Hide column"
                   class="columns-configurator-column__button column-configurator-column__visibility-button"
                 >
                   <svg
@@ -926,6 +942,7 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
             <div
               aria-describedby="DndDescribedBy-3"
               aria-disabled="false"
+              aria-label="sample templates col name 2"
               aria-roledescription="sortable"
               class="columns-configurator__column columns-configurator-column columns-configurator-column--border-last columns-configurator-column--odd columns-configurator-column--hidden accent-color__planning-pink"
               data-cy="columns-configurator__column"
@@ -953,10 +970,12 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                 class="columns-configurator-column__menu"
               >
                 <svg
+                  aria-label="Drag column"
                   class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
                   data-cy="columns-configurator-column__drag-element"
                   fill="none"
                   height="17"
+                  role="button"
                   viewBox="0 0 24 17"
                   width="24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -1009,12 +1028,13 @@ exports[`TemplateEditor edit > should render correctly (edit) 1`] = `
                   </g>
                 </svg>
                 <button
-                  aria-label="current colorPlanning Pink"
+                  aria-label="current color Planning Pink"
                   class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
                   data-cy="columns-configurator-column__color-picker"
                   tabindex="0"
                 />
                 <button
+                  aria-label="Show column"
                   class="columns-configurator-column__button column-configurator-column__visibility-button"
                 >
                   <svg

@@ -111,6 +111,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <TextareaAutosize
+            aria-label="Edit note"
             ref={ref}
             data-clarity-mask="True"
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--with-footer": showFooter})}
