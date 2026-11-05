@@ -7,8 +7,8 @@ package notes
 import (
 	"context"
 	"encoding/json"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/websocket"
 )

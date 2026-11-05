@@ -3,7 +3,8 @@ package boardtemplates
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"scrumlr.io/server/columntemplates"
 )
 

@@ -4,7 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/technical_helper"

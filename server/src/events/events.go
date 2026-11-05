@@ -6,7 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"go.opentelemetry.io/otel/attribute"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"

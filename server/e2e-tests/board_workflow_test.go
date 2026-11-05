@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -55,7 +56,7 @@ func (s *E2ESuite) TestHealthCheck() {
 func (s *E2ESuite) TestAnonymousLogin() {
 	user, err := s.client.LoginAnonymous(s.cfg.Users.Default.Name)
 	require.NoError(s.T(), err)
-	assert.NotEqual(s.T(), uuid.Nil, user.ID)
+	assert.NotEqual(s.T(), uuid.Nil(), user.ID)
 	assert.Equal(s.T(), s.cfg.Users.Default.Name, user.Name)
 }
 
@@ -113,7 +114,7 @@ func (s *E2ESuite) CreatePublicBoardWithNote() {
 		Columns:      cols,
 	})
 	require.NoError(s.T(), err)
-	require.NotEqual(s.T(), uuid.Nil, board.ID)
+	require.NotEqual(s.T(), uuid.Nil(), board.ID)
 	s.T().Logf("Created board: %s", board.ID)
 
 	defer func() {
@@ -137,7 +138,7 @@ func (s *E2ESuite) CreatePublicBoardWithNote() {
 		Text:   "This is a test note from e2e tests",
 	})
 	require.NoError(s.T(), err)
-	assert.NotEqual(s.T(), uuid.Nil, note.ID)
+	assert.NotEqual(s.T(), uuid.Nil(), note.ID)
 	s.T().Logf("Created note: %s", note.ID)
 
 	fetchedNotes, err := s.client.GetNotes(board.ID)
@@ -467,7 +468,7 @@ func (s *E2ESuite) TestMultipleUsersOnBoard() {
 		Text:   "Note from participant",
 	})
 	require.NoError(s.T(), err)
-	assert.NotEqual(s.T(), uuid.Nil, note.ID)
+	assert.NotEqual(s.T(), uuid.Nil(), note.ID)
 
 	noteList, err := moderatorClient.GetNotes(board.ID)
 	require.NoError(s.T(), err)
