@@ -4357,12 +4357,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^8.2.2":
-  version: 8.2.2
-  resolution: "i18next-browser-languagedetector@npm:8.2.2"
+"i18next-browser-languagedetector@npm:^8.2.3":
+  version: 8.2.3
+  resolution: "i18next-browser-languagedetector@npm:8.2.3"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
-  checksum: 10c0/c4380554d871928153a442c80f647161227146f84d9c56e77cf6bc096c47125fb48272f8904eef869800bcfd86b062e72611e815a37c186888a086acd1f627cd
+  checksum: 10c0/f3af9c54a586f95bda29565c07ad660503efe7df59eb1e751a93ee675dac8b06d36788e8b142dd176ba53621107521b24e8905a6732f72b8e3140140efb10d7e
   languageName: node
   linkType: hard
 
@@ -6662,7 +6662,7 @@ __metadata:
     happy-dom: "npm:^21.0.4"
     husky: "npm:^9.1.7"
     i18next: "npm:^26.5.11"
-    i18next-browser-languagedetector: "npm:^8.2.2"
+    i18next-browser-languagedetector: "npm:^8.2.3"
     i18next-fs-backend: "npm:^2.6.9"
     js-cookie: "npm:^3.0.8"
     linkify-react: "npm:^4.4.0"
