@@ -13,13 +13,13 @@ describe("<PassphraseDialog />", () => {
   test("should disable submit button if no passphrase has been entered", () => {
     const {getByLabelText} = render(<PassphraseModal onSubmit={vi.fn()} onClose={vi.fn()} onPassphraseChange={vi.fn()} passphrase={""} />);
     const submitButton = getByLabelText(t("PassphraseModal.submit"));
-    expect(submitButton).toHaveAttribute("aria-disabled", "true");
+    expect(submitButton).toBeDisabled();
   });
 
   test("should enable submit button if passphrase has been entered", () => {
     const {getByLabelText} = render(<PassphraseModal onSubmit={vi.fn()} onClose={vi.fn()} onPassphraseChange={vi.fn()} passphrase={"testPassword"} />);
     const submitButton = getByLabelText(t("PassphraseModal.submit"));
-    expect(submitButton).toHaveAttribute("aria-disabled", "false");
+    expect(submitButton).toBeEnabled();
   });
 
   test("should toggle the password visibility", () => {

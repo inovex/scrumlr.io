@@ -162,25 +162,16 @@ exports[`<PassphraseDialog /> > snapshot test 1`] = `
       class="new-board__actions import-board__action"
     >
       <button
-        aria-disabled="true"
         aria-label="Open board"
-        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
+        class="new-board__action import-board__action button button--primary accent-color__planning-pink"
         disabled=""
       >
-        <span
-          class="legacy-button__label"
-        >
-          Open Board
-        </span>
+        Open Board
       </button>
       <button
-        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
+        class="new-board__action import-board__action button button--primary accent-color__planning-pink"
       >
-        <span
-          class="legacy-button__label"
-        >
-          Continue without password
-        </span>
+        Continue without password
       </button>
     </div>
   </div>
