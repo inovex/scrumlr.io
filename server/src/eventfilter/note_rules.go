@@ -30,7 +30,7 @@ func NewNoteRuleFilter(boardService boards.BoardService, columnService columns.C
 
 func (noteRules *noteEventRules) Supports(ctx context.Context, eventType realtime.BoardEventType) bool {
 	switch eventType {
-	case realtime.BoardEventNotesUpdated:
+	case realtime.BoardEventNotesUpdated, realtime.BoardEventNotesSync:
 		return true
 	default:
 		return false
@@ -39,7 +39,7 @@ func (noteRules *noteEventRules) Supports(ctx context.Context, eventType realtim
 
 func (noteRules *noteEventRules) Handle(ctx context.Context, event *realtime.BoardEvent, boardId, userId uuid.UUID) (*realtime.BoardEvent, error) {
 	switch event.Type {
-	case realtime.BoardEventNotesUpdated:
+	case realtime.BoardEventNotesUpdated, realtime.BoardEventNotesSync:
 		return noteRules.noteUpdated(ctx, event, boardId, userId)
 	default:
 		return nil, errors.New("event not supported")

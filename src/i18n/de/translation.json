@@ -460,6 +460,7 @@
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
     "noteDeleted": "Die Karte wurde gelöscht!",
+    "columnHidden": "Die Spalte wurde ausgeblendet!",
     "emptyNoteDialog": "Die Karte muss Text enthalten.",
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
