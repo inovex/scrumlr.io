@@ -12,7 +12,7 @@ import {MAX_RECENT_EMOJIS} from "./types";
  * - Maximum of 3 recent emojis
  * - Permanent emojis are ignored
  */
-export const addRecentEmoji = createAsyncThunk<EmojiData[], EmojiData, {state: ApplicationState}>("recentEmojis/addRecentEmoji", async (emojiData, {getState}) => {
+export const addRecentEmoji = createAsyncThunk<EmojiData[], EmojiData, {state: ApplicationState}>("recentEmojis/addRecentEmoji", (emojiData, {getState}) => {
   if (isPermanentEmoji(emojiData.reactionType)) {
     return getState().recentEmojis.emojis;
   }
