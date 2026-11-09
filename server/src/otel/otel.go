@@ -147,7 +147,7 @@ func newResource() (*resource.Resource, error) {
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
 			semconv.ServiceName("scrumlr"),
-			semconv.ServiceVersion("5.5.1"),
+			semconv.ServiceVersion("5.5.2"),
 		),
 	)
 }
