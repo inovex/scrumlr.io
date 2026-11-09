@@ -460,6 +460,7 @@
     "noteToHiddenColumnButton": "Révéler la colonne",
     "noteMovedToStack": "La note a été déplacée vers une pile !",
     "noteDeleted": "La note a été supprimée !",
+    "columnHidden": "La colonne a été masquée!",
     "emptyNoteDialog": "La note doit contenir du texte.",
     "ready": "Es-tu prêt ?",
     "readyButton": "Prêt !",

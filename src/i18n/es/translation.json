@@ -455,6 +455,7 @@
     "noteToHiddenColumnButton": "Mostrar columna",
     "noteMovedToStack": "La nota se ha movido a un grupo",
     "noteDeleted": "La nota se ha eliminado",
+    "columnHidden": "La columna se ha ocultado",
     "emptyNoteDialog": "La nota debe contener texto.",
     "ready": "¿Todo listo?",
     "readyButton": "Listo",
