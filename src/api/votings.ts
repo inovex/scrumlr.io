@@ -1,5 +1,5 @@
-import { CreateVotingRequest, Voting, VotingStatus } from "store/features/votings/types";
-import { buildUrl } from "./index";
+import {CreateVotingRequest, Voting, VotingStatus} from "store/features/votings/types";
+import {buildUrl} from "./index";
 
 export const VotingAPI = {
   /**
@@ -23,7 +23,7 @@ export const VotingAPI = {
 
       throw new Error(`get votings request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get votings`, { cause: error });
+      throw new Error(`unable to get votings`, {cause: error});
     }
   },
 
@@ -49,7 +49,7 @@ export const VotingAPI = {
 
       throw new Error(`get voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get voting`, { cause: error });
+      throw new Error(`unable to get voting`, {cause: error});
     }
   },
 
@@ -75,7 +75,7 @@ export const VotingAPI = {
 
       throw new Error(`create voting request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create voting`, { cause: error });
+      throw new Error(`unable to create voting`, {cause: error});
     }
   },
 
@@ -93,16 +93,16 @@ export const VotingAPI = {
       const response = await fetch(url, {
         method: "PUT",
         credentials: "include",
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({status}),
       });
 
       if (response.status === 200) {
-        return (await response.json());
+        return await response.json();
       }
 
       throw new Error(`change voting status request resulted in response with status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to change voting status`, { cause: error });
+      throw new Error(`unable to change voting status`, {cause: error});
     }
   },
 };

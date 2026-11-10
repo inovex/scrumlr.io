@@ -12,12 +12,14 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
         class="column-details__name-wrapper"
       >
         <input
+          aria-label="Column name"
           class="column-details__name column-details__name--editing"
           maxlength="128"
           value="test-columns-name-1"
         />
       </div>
       <button
+        aria-label="Column settings"
         class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
         data-cy="column-settings-mini-menu"
       >
@@ -57,6 +59,7 @@ exports[`ColumnDetails > should render correctly (edit) 1`] = `
         .text-area { --text-area-rows: 3 }
       </style>
       <textarea
+        aria-label="Column description"
         class="column-details__description-text-area text-area text-area--extendable text-area--embedded text-area--border-thick text-area--text-align-left"
         maxlength="1024"
         placeholder="Add description (optional)"
@@ -165,6 +168,7 @@ exports[`ColumnDetails > should render correctly (view) 1`] = `
         </div>
       </div>
       <button
+        aria-label="Column settings"
         class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
         data-cy="column-settings-mini-menu"
       >

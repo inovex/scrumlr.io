@@ -5,6 +5,7 @@ exports[`ColumnConfiguratorColumn render > should render correctly 1`] = `
   <div
     aria-describedby=""
     aria-disabled="false"
+    aria-label="sample templates col name 1"
     aria-roledescription="sortable"
     class="columns-configurator-column columns-configurator-column--border-ghost columns-configurator-column--even accent-color__backlog-blue"
     data-cy="columns-configurator__column"
@@ -32,10 +33,12 @@ exports[`ColumnConfiguratorColumn render > should render correctly 1`] = `
       class="columns-configurator-column__menu"
     >
       <svg
+        aria-label="Drag column"
         class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
         data-cy="columns-configurator-column__drag-element"
         fill="none"
         height="17"
+        role="button"
         viewBox="0 0 24 17"
         width="24"
         xmlns="http://www.w3.org/2000/svg"
@@ -88,12 +91,13 @@ exports[`ColumnConfiguratorColumn render > should render correctly 1`] = `
         </g>
       </svg>
       <button
-        aria-label="current colorBacklog Blue"
+        aria-label="current color Backlog Blue"
         class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-undefined color-picker__color-option color-picker__color-option--selected"
         data-cy="columns-configurator-column__color-picker"
         tabindex="0"
       />
       <button
+        aria-label="Hide column"
         class="columns-configurator-column__button column-configurator-column__visibility-button"
       >
         <svg

@@ -27,6 +27,7 @@ export default defineConfig({
     assetsDir: 'static',
   },
   test: {
+    exclude: ['**\/node_modules/**', '**\/.git/**', 'e2e/*'],
     globals: true,
     environment: 'happy-dom',
     setupFiles: './src/setupTests.ts',
