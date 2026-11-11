@@ -38,7 +38,7 @@ func TestCorrectEmptySlice(t *testing.T) {
 }
 
 func TestCorrectUUID(t *testing.T) {
-	given := uuid.NewV4()
+	given := uuid.New()
 	actual, err := Unmarshal[uuid.UUID](given)
 
 	assert.NoError(t, err)
