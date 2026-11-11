@@ -13,6 +13,7 @@ import _ from "underscore";
 import {useDebounce} from "utils/hooks/useDebounce";
 import "./Participants.scss";
 import {changePermission, setUserBanned, setUserReadyStatus} from "store/features";
+import { Toast } from "utils/Toast";
 
 export const Participants = () => {
   const {t} = useTranslation();
@@ -59,7 +60,13 @@ export const Participants = () => {
   };
 
   const confirmBan = ({user}: ParticipantWithUser, banned: boolean) => {
-    dispatch(setUserBanned({userId: user.id, banned}));
+    dispatch(setUserBanned({userId: user.id, banned})).then((result) => {
+      if(setUserBanned.fulfilled.match(result)) {
+        Toast.info({
+          title: t(banned ? "Toast.bannedParticipant" : "Toast.unbannedParticipant", {user: user.name}),
+        });
+      }
+    });
     resetBanProcess();
   };
 

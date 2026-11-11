@@ -44,7 +44,6 @@ export const deleteNote = createAsyncThunk<void, {noteId: string; deleteStack: b
   const sharedNoteId = getState().board.data?.sharedNote;
 
   if (sharedNoteId === payload.noteId && !moderating) {
-    // TODO should this logic be here?
     Toast.error({title: i18n.t("Error.deleteNoteWhenShared")});
   } else
     await retryable(
