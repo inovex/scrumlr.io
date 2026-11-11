@@ -75,7 +75,7 @@ export const compareNotes = (
 
 export const getChildNotes = (notes: Note[], votings: Voting[], noteId: string) => notes.filter((n) => n.position.stack === noteId).sort((a, b) => compareNotes(a, b, votings));
 
-export const getAuthorName = (authorId: string, participants: ParticipantWithUser[]) => participants.filter((p: ParticipantWithUser) => p.user?.id === authorId)[0].user?.name;
+export const getAuthorName = (authorId: string, participants: ParticipantWithUser[]) => participants.find((p: ParticipantWithUser) => p.user?.id === authorId)?.user?.name;
 
 const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
 
@@ -90,7 +90,10 @@ const mdBoardProperties = (board: Board, participants: ParticipantWithUser[]) =>
 
 const mdVotesPerNote = (noteId: string, votings: Voting[]) => {
   const votes = votings ? getNoteVotes(noteId, votings) : 0;
-  return votes ? `${votes} ${votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes")}` : "";
+  if (!votes) return "";
+
+  const voteLabel = votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes");
+  return `${votes} ${voteLabel}`;
 };
 
 const mdNote = (note: Note, author: string, votes: string, stack: string) => {
@@ -106,7 +109,7 @@ const mdStack = (notesInStack: Note[], boardData: ExportBoardDataType) =>
         .map((n) =>
           mdNote(
             n,
-            boardData.board.showAuthors ? getAuthorName(n.author, boardData.participants) : "",
+            boardData.board.showAuthors ? (getAuthorName(n.author, boardData.participants) ?? "") : "",
             boardData.board.showAuthors ? mdVotesPerNote(n.id, boardData.votings) : "",
             ""
           )
@@ -120,7 +123,7 @@ const mdNotesPerColumn = (columnId: string, boardData: ExportBoardDataType) =>
     .sort((a, b) => compareNotes(a, b, boardData.votings))
     .map((n) => {
       const votes = boardData.board.showVoting ? mdVotesPerNote(n.id, boardData.votings) : "";
-      const author = boardData.board.showAuthors ? getAuthorName(n.author, boardData.participants) : "";
+      const author = boardData.board.showAuthors ? (getAuthorName(n.author, boardData.participants) ?? "") : "";
       const stack = mdStack(getChildNotes(boardData.notes, boardData.votings, n.id), boardData);
       return mdNote(n, author, votes, stack);
     })

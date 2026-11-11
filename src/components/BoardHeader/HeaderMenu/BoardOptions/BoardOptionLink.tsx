@@ -6,7 +6,7 @@ import "./BoardOptionLink.scss";
 export type BoardOptionLinkProps = {
   to: string;
   label: string;
-  onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 export const BoardOptionLink = (props: BoardOptionLinkProps) => (

@@ -23,37 +23,37 @@ export const setLanguage = createAsyncThunk<string, string>("view/setLanguage", 
   return payload;
 });
 
-export const setTheme = createAsyncThunk<Theme, Theme>("view/setTheme", async (payload) => {
+export const setTheme = createAsyncThunk<Theme, Theme>("view/setTheme", (payload) => {
   saveToStorage(THEME_STORAGE_KEY, payload);
   return payload;
 });
 
-export const enableHotkeyNotifications = createAsyncThunk<boolean>("view/enableHotkeyNotifications", async () => {
+export const enableHotkeyNotifications = createAsyncThunk<boolean>("view/enableHotkeyNotifications", () => {
   saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(true));
   return true;
 });
 
-export const disableHotkeyNotifications = createAsyncThunk<boolean>("view/disableHotkeyNotifications", async () => {
+export const disableHotkeyNotifications = createAsyncThunk<boolean>("view/disableHotkeyNotifications", () => {
   saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(false));
   return false;
 });
 
-export const setShowBoardReactions = createAsyncThunk<boolean, boolean>("view/setShowBoardReactions", async (payload) => {
+export const setShowBoardReactions = createAsyncThunk<boolean, boolean>("view/setShowBoardReactions", (payload) => {
   saveToStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY, JSON.stringify(payload));
   return payload;
 });
 
-export const enableSnowfall = createAsyncThunk<boolean>("view/enableSnowfall", async () => {
+export const enableSnowfall = createAsyncThunk<boolean>("view/enableSnowfall", () => {
   saveToStorage(SNOWFALL_STORAGE_KEY, JSON.stringify(true));
   return true;
 });
 
-export const disableSnowfall = createAsyncThunk<boolean>("view/disableSnowfall", async () => {
+export const disableSnowfall = createAsyncThunk<boolean>("view/disableSnowfall", () => {
   saveToStorage(SNOWFALL_STORAGE_KEY, JSON.stringify(false));
   return false;
 });
 
-export const setSnowfallNotification = createAsyncThunk<boolean, boolean>("view/setSnowfallNotification", async (payload) => {
+export const setSnowfallNotification = createAsyncThunk<boolean, boolean>("view/setSnowfallNotification", (payload) => {
   saveToStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY, JSON.stringify(payload));
   return payload;
 });

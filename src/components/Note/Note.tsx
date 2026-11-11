@@ -29,7 +29,7 @@ export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const noteRef = useRef<HTMLDivElement>(null);
+  const noteRef = useRef<HTMLButtonElement>(null);
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId));
   const isStack = useAppSelector((state) => state.notes.some((n) => n.position.stack === props.noteId));
@@ -104,7 +104,7 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
-      <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
+      <button type="button" tabIndex={0} className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
           <div data-clarity-mask="True" className="note__author-container">
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
@@ -141,7 +141,7 @@ export const Note = (props: NoteProps) => {
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>
-      </div>
+      </button>
       {isStack && <div className="note__in-stack" />}
     </Sortable>
   );

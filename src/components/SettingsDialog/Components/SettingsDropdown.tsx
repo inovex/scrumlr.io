@@ -38,7 +38,7 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
   return (
     // onBlur is not working on webkit due to not focussing the element.
     <div className="settings-dropdown" onBlur={(e) => handleBlur(e)}>
-      <button className="settings-dropdown__button" onClick={() => handleClick()} role="combobox" aria-controls="dropdown-list" aria-expanded={isOpen}>
+      <button className="settings-dropdown__button" onClick={() => handleClick()} aria-controls="dropdown-list" aria-expanded={isOpen}>
         <span>{label}</span>
         <p className="settings-dropdown__item--current">
           {current.icon && <current.icon className="settings-dropdown__item-icon" />}
@@ -46,7 +46,7 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
           <ArrowRightIcon className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
         </p>
       </button>
-      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox" ref={dropdownListRef}>
+      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} ref={dropdownListRef}>
         {items
           .filter((item) => current !== item)
           .map((item) => (
