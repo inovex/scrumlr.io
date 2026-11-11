@@ -285,15 +285,13 @@ func (service *Service) Update(ctx context.Context, user uuid.UUID, body NoteUpd
 			Stack:  body.Position.Stack,
 		}
 
-		stackID := ""
-		if body.Position.Stack != nil {
-			stackID = body.Position.Stack.String()
-		}
 		span.SetAttributes(
 			attribute.String("scrumlr.notes.service.update.position.column", body.Position.Column.String()),
 			attribute.Int("scrumlr.notes.service.update.position.rank", body.Position.Rank),
-			attribute.String("scrumlr.notes.service.update.position.stack", stackID),
 		)
+		if body.Position.Stack != nil {
+			span.SetAttributes(attribute.String("scrumlr.notes.service.update.position.stack", body.Position.Stack.String()))
+		}
 	}
 
 	note, err := service.database.UpdateNote(ctx, user, DatabaseNoteUpdate{
