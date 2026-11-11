@@ -19,6 +19,7 @@ func mapError(err error) error {
 	if errors.Is(err, sql.ErrNoRows) {
 		return common.NotFoundError
 	}
+
 	var s interface{ Status() string }
 	if errors.As(err, &s) {
 		switch s.Status() {
