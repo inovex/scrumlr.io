@@ -33,8 +33,7 @@ func InsertColumn(db *bun.DB, id uuid.UUID, boardId uuid.UUID, name string, desc
 func InsertNote(db *bun.DB, id uuid.UUID, author uuid.UUID, board uuid.UUID, column uuid.UUID, text string, stack *uuid.UUID, rank int) error {
 	var stackID *string
 	if stack != nil {
-		value := stack.String()
-		stackID = &value
+		stackID = new(stack.String())
 	}
 	_, err := db.Exec("INSERT INTO notes (\"id\", \"author\", \"board\", \"column\", \"text\", \"stack\", \"rank\") VALUES (?, ?, ?, ?, ?, ?, ?);", id.String(), author.String(), board.String(), column.String(), text, stackID, rank)
 	return err
