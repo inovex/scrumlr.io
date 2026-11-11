@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli/v3"
 	"scrumlr.io/server/boards"
@@ -452,7 +452,7 @@ func TestListWithUserNoBoards(t *testing.T) {
 	err = cmd.Set("database", databaseURL)
 	assert.NoError(t, err)
 
-	err = cmd.Set("user", uuid.NewString())
+	err = cmd.Set("user", uuid.New().String())
 	assert.NoError(t, err)
 
 	bunDb, err := initialize.InitializeDatabase(ctx, cmd)
@@ -625,7 +625,7 @@ func TestShowMultipleArgs(t *testing.T) {
 		Action: show,
 	}
 
-	err := cmd.Run(ctx, []string{"show", uuid.NewString(), uuid.NewString()})
+	err := cmd.Run(ctx, []string{"show", uuid.New().String(), uuid.New().String()})
 
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "only one board id must be given. Got 2")
@@ -667,7 +667,7 @@ func TestShowNoDatabaseConnection(t *testing.T) {
 		Action: show,
 	}
 
-	err := cmd.Run(ctx, []string{"show", uuid.NewString()})
+	err := cmd.Run(ctx, []string{"show", uuid.New().String()})
 
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "failed to connect to database")
