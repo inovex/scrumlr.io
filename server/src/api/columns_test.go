@@ -106,9 +106,9 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 
 			s.columns = columnMock
 
-			boardID := uuid.NewV4()
-			columnID := uuid.NewV4()
-			userID := uuid.NewV4()
+			boardID := uuid.New()
+			columnID := uuid.New()
+			userID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("DEL", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID).
@@ -147,8 +147,8 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 
 			s.columns = columnMock
 
-			boardID := uuid.NewV4()
-			columnID := uuid.NewV4()
+			boardID := uuid.New()
+			columnID := uuid.New()
 
 			colName := "TestColumn"
 			color := common.Color("online-orange")
@@ -202,8 +202,8 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			columnMock := columns.NewMockColumnService(suite.T())
-			boardID := uuid.NewV4()
-			columnID := uuid.NewV4()
+			boardID := uuid.New()
+			columnID := uuid.New()
 
 			colName := "Updated Column Name"
 			color := common.Color("online-orange")
@@ -253,8 +253,8 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			// given
 			s := new(Server)
 			columnsMock := columns.NewMockColumnService(suite.T())
-			boardID := uuid.NewV4()
-			columnID := uuid.NewV4()
+			boardID := uuid.New()
+			columnID := uuid.New()
 
 			colName := "TestColumn"
 			color := common.Color("online-orange")
