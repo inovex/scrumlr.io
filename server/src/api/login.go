@@ -53,7 +53,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	user, err := s.users.Create(ctx, "", body.Name, "", common.Anonymous)
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create anonyoums user"))
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, mapError(err))
 		return
 	}
 
