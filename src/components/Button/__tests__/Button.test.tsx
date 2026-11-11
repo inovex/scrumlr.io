@@ -17,6 +17,50 @@ describe("Button", () => {
 
     rerender(<Button variant="tertiary">Tertiary</Button>);
     expect(screen.getByRole("button")).toHaveClass("button--tertiary");
+
+    rerender(<Button variant="ghost">Ghost</Button>);
+    expect(screen.getByRole("button")).toHaveClass("button--ghost");
+  });
+
+  it("should render icon-only when label is hidden and use the label as accessible name", () => {
+    render(
+      <Button icon={<span data-testid="icon" />} hideLabel>
+        Sign in
+      </Button>
+    );
+
+    const button = screen.getByRole("button", {name: "Sign in"});
+    expect(button).toHaveClass("button--icon-only");
+    expect(button).not.toHaveClass("button--with-icon");
+    expect(button).not.toHaveTextContent("Sign in");
+    expect(screen.getByTestId("icon")).toBeInTheDocument();
+  });
+
+  it("should render icon-only when no children are passed", () => {
+    render(<Button icon={<span data-testid="icon" />} title="Refresh" />);
+
+    const button = screen.getByRole("button", {name: "Refresh"});
+    expect(button).toHaveClass("button--icon-only");
+  });
+
+  it("should place the icon before the label when iconPosition is left", () => {
+    render(
+      <Button icon={<span data-testid="icon" />} iconPosition="left">
+        Label
+      </Button>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("button--icon-left");
+    expect(button.firstChild).toBe(screen.getByTestId("icon"));
+  });
+
+  it("should place the icon after the label by default", () => {
+    render(<Button icon={<span data-testid="icon" />}>Label</Button>);
+
+    const button = screen.getByRole("button");
+    expect(button).not.toHaveClass("button--icon-left");
+    expect(button.lastChild).toBe(screen.getByTestId("icon"));
   });
 
   it("should render as disabled", () => {

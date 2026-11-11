@@ -14,11 +14,6 @@ $button-height--small: 46px;
   outline: 0;
 
   display: flex;
-
-  &--full-width {
-    width: 100%;
-  }
-
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -36,6 +31,15 @@ $button-height--small: 46px;
 
   @include mixins.compensate-padding(6px styles.$spacing--xl, $border-width);
 
+  // less padding on the icon side
+  &--with-icon {
+    @include mixins.compensate-padding(6px styles.$spacing--md 6px styles.$spacing--lg, $border-width);
+
+    &.button--icon-left {
+      @include mixins.compensate-padding(6px styles.$spacing--lg 6px styles.$spacing--md, $border-width);
+    }
+  }
+
   &--small {
     height: $button-height--small;
     gap: styles.$spacing--xxs;
@@ -43,17 +47,16 @@ $button-height--small: 46px;
     @include mixins.compensate-padding(6px styles.$spacing--base, $border-width);
 
     &.button--with-icon {
-      padding: 0;
-    }
-  }
+      @include mixins.compensate-padding(6px styles.$spacing--sm 6px styles.$spacing--base, $border-width);
 
-  &--with-icon {
-    padding: 0;
+      &.button--icon-left {
+        @include mixins.compensate-padding(6px styles.$spacing--base 6px styles.$spacing--sm, $border-width);
+      }
+    }
   }
 
   &--icon-only {
     width: $button-height--default;
-    min-width: unset;
     padding: 0;
     gap: 0;
 
@@ -156,89 +159,6 @@ $button-height--small: 46px;
       color: styles.$gray--800;
       background-color: styles.$gray--200;
     }
-  }
-}
-
-// helper for spaced icon alignment
-$icon-edge-gap--default: 3px;
-$icon-edge-gap--small: 2px;
-
-.button__content-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  gap: $content-gap;
-
-  @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--md styles.$spacing--sm styles.$spacing--lg, $border-width);
-
-  &[data-pos="left"] {
-    @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--lg styles.$spacing--sm styles.$spacing--md, $border-width);
-  }
-
-  &[data-size="small"] {
-    @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--sm styles.$spacing--sm styles.$spacing--md, $border-width);
-
-    &[data-pos="left"] {
-      @include mixins.compensate-padding(styles.$spacing--sm styles.$spacing--md styles.$spacing--sm styles.$spacing--sm, $border-width);
-    }
-  }
-
-  &[data-align="spaced"] {
-    display: grid;
-    width: 100%;
-    padding: 0;
-    column-gap: $content-gap;
-
-    // default: icon on right
-    grid-template-columns: 1fr auto;
-    justify-items: center;
-    padding-left: styles.$spacing--xs;
-
-    .button__icon-background {
-      margin-right: $icon-edge-gap--default;
-
-      &[data-size="small"] {
-        margin-right: $icon-edge-gap--small;
-      }
-    }
-
-    //icon on left
-    &[data-pos="left"] {
-      grid-template-columns: auto 1fr;
-      padding-left: 0;
-      padding-right: styles.$spacing--xs;
-
-      .button__icon-background {
-        margin-right: 0;
-        margin-left: $icon-edge-gap--default;
-
-        &[data-size="small"] {
-          margin-left: $icon-edge-gap--small;
-        }
-      }
-    }
-  }
-}
-
-.button__icon-background {
-  --icon-size: #{$button-height--default * 0.85};
-
-  width: var(--icon-size);
-  height: var(--icon-size);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &[data-size="small"] {
-    --icon-size: #{$button-height--small * 0.85};
-  }
-
-  &--embedded {
-    background-color: styles.$gray--000;
   }
 }
 

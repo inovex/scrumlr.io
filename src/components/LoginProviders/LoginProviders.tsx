@@ -53,63 +53,40 @@ export const LoginProviders = ({originURL = window.location.href}: LoginProvider
 
   const [primaryProvider, ...secondaryProviders] = enabledProviders;
 
+  const renderProviderButton = (provider: ProviderKey, compact: boolean) => {
+    const {label, icon, signInKey} = providerConfig[provider];
+    return compact ? (
+      <Button id={signInKey} key={provider} className="login-providers__button" color="backlog-blue" onClick={signIn(signInKey)} icon={icon} variant="ghost" hideLabel>
+        {label}
+      </Button>
+    ) : (
+      <Button
+        id={signInKey}
+        key={provider}
+        className="login-providers__primary-button"
+        color="backlog-blue"
+        onClick={signIn(signInKey)}
+        icon={<span className="login-providers__icon-circle">{icon}</span>}
+        iconPosition="left"
+      >
+        <span className="login-providers__primary-label">{label}</span>
+      </Button>
+    );
+  };
+
   return (
     <div className="login-providers">
-      {/* --- PRIMARY PROVIDER --- */}
       {primaryProvider && (
         <div className="primary-provider-wrapper" ref={containerRef}>
-          {/* Ghost: Invisible measurer */}
+          {/* invisible measurer to decide whether the label fits */}
           <span ref={ghostRef} className="ghost-measurer" aria-hidden="true">
             {providerConfig[primaryProvider].label}
           </span>
-          {!isCompact ? (
-            /* --- FULL MODE --- */
-            <div className="full-stack-wrapper">
-              <Button
-                id={providerConfig[primaryProvider].signInKey}
-                color="backlog-blue"
-                onClick={signIn(providerConfig[primaryProvider].signInKey)}
-                icon={providerConfig[primaryProvider].icon}
-                iconPosition="left"
-                iconStyle="embedded"
-                iconAlignment="spaced"
-              >
-                {providerConfig[primaryProvider].label}
-              </Button>
-            </div>
-          ) : (
-            /* --- COMPACT MODE --- */
-            <Button
-              id={providerConfig[primaryProvider].signInKey}
-              key={`${primaryProvider}-compact`}
-              className="login-providers__button"
-              color="backlog-blue"
-              onClick={signIn(providerConfig[primaryProvider].signInKey)}
-              icon={providerConfig[primaryProvider].icon}
-              hideLabel
-              variant="ghost"
-            >
-              {providerConfig[primaryProvider].label}
-            </Button>
-          )}
+          {renderProviderButton(primaryProvider, isCompact)}
         </div>
       )}
 
-      {/* --- SECONDARY PROVIDERS --- */}
-      {secondaryProviders.map((provider) => (
-        <Button
-          id={providerConfig[provider].signInKey}
-          key={provider}
-          className="login-providers__button"
-          color="backlog-blue"
-          onClick={signIn(providerConfig[provider].signInKey)}
-          icon={providerConfig[provider].icon}
-          hideLabel
-          variant="ghost"
-        >
-          {providerConfig[provider].label}
-        </Button>
-      ))}
+      {secondaryProviders.map((provider) => renderProviderButton(provider, true))}
     </div>
   );
 };
