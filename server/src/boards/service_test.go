@@ -1521,7 +1521,7 @@ func (suite *BoardServiceTestSuite) TestImport_FailsWhenProcessImportedNotesFail
 			request.User == authorID &&
 			request.Position.Stack == (nil) &&
 			request.Position.Rank == 0 &&
-			request.Position.Column != uuid.UUID{}
+			request.Position.Column != uuid.Nil()
 	})).Return(nil, errors.New("import failed"))
 
 	board, err := service.Import(ctx, owner, body)

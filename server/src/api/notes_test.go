@@ -16,8 +16,9 @@ import (
 
 	"scrumlr.io/server/boards"
 
-	"github.com/go-chi/chi/v5"
 	"uuid"
+
+	"github.com/go-chi/chi/v5"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/common"
@@ -99,7 +100,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 			noteMock := notes.NewMockNotesService(suite.T())
 			s.notes = noteMock
 
-			noteID := uuid.NewV4()
+			noteID := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.NoteIdentifier, noteID)
@@ -175,9 +176,9 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			s.sessions = sessionMock
 			s.votings = votingMock
 
-			boardID := uuid.NewV4()
-			userID := uuid.NewV4()
-			noteID := uuid.NewV4()
+			boardID := uuid.New()
+			userID := uuid.New()
+			noteID := uuid.New()
 
 			r := chi.NewRouter()
 			s.initNoteResources(r)
@@ -251,9 +252,9 @@ func (suite *NotesTestSuite) TestEditNote() {
 
 			s.notes = noteMock
 
-			boardID := uuid.NewV4()
-			noteId := uuid.NewV4()
-			userId := uuid.NewV4()
+			boardID := uuid.New()
+			noteId := uuid.New()
+			userId := uuid.New()
 
 			req := technical_helper.NewTestRequestBuilder("PUT", fmt.Sprintf("/notes/%s", noteId.String()), strings.NewReader(fmt.Sprintf(`{
 				"text": "%s"}`, updatedText)))

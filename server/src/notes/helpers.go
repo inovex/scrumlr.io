@@ -43,7 +43,7 @@ func (*Note) Render(_ http.ResponseWriter, _ *http.Request) error {
 func (n NoteSlice) hideOtherAuthors(userID uuid.UUID, showAuthors bool, visibleNotes []*Note) {
 	for _, note := range visibleNotes {
 		if !showAuthors && note.Author != userID {
-			note.Author = uuid.UUID{}
+			note.Author = uuid.Nil()
 		}
 	}
 }
