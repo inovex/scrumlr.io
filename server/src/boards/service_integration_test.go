@@ -904,20 +904,20 @@ func (suite *BoardServiceIntegrationTestSuite) Test_Import() {
 	rootNote, found := notesByText["Root note"]
 	require.True(t, found)
 	assert.Equal(t, rootColumnID, rootNote.Position.Column)
-	assert.False(t, rootNote.Position.Stack != nil)
+	assert.Nil(t, rootNote.Position.Stack)
 	assert.Equal(t, 0, rootNote.Position.Rank)
 
 	childNote, found := notesByText["Child note"]
 	require.True(t, found)
 	assert.Equal(t, rootColumnID, childNote.Position.Column)
-	assert.True(t, childNote.Position.Stack != nil)
+	assert.NotNil(t, childNote.Position.Stack)
 	assert.Equal(t, rootNote.ID, *childNote.Position.Stack)
 	assert.Equal(t, 0, childNote.Position.Rank)
 
 	actionNote, found := notesByText["Action note"]
 	require.True(t, found)
 	assert.Equal(t, actionsColumnID, actionNote.Position.Column)
-	assert.False(t, actionNote.Position.Stack != nil)
+	assert.Nil(t, actionNote.Position.Stack)
 	assert.Equal(t, 0, actionNote.Position.Rank)
 }
 
