@@ -7,8 +7,8 @@ package sessionrequests
 import (
 	"context"
 	"net/http"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 

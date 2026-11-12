@@ -11,7 +11,7 @@ import (
 	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"uuid"
 )
 
 //var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")

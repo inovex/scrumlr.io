@@ -6,8 +6,8 @@ package events
 
 import (
 	"context"
+	"uuid"
 
-	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/websocket"
 )
@@ -18,10 +18,19 @@ func NewMockSessionRequestConnectionManager(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockSessionRequestConnectionManager {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockSessionRequestConnectionManager{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }

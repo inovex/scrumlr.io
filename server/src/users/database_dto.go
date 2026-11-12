@@ -3,7 +3,8 @@ package users
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 )

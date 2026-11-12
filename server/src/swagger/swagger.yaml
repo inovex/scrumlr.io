@@ -399,9 +399,8 @@ definitions:
         description: The board name
         type: string
       sharedNote:
-        allOf:
-        - $ref: '#/definitions/uuid.NullUUID'
         description: The id of a note to share with other users.
+        type: string
       showAuthors:
         description: The show authors
         type: boolean
@@ -412,7 +411,7 @@ definitions:
         description: The show notes
         type: boolean
       showVoting:
-        $ref: '#/definitions/uuid.NullUUID'
+        type: string
       timerEnd:
         type: string
       timerStart:
@@ -460,9 +459,8 @@ definitions:
         description: The passphrase of the board.
         type: string
       sharedNote:
-        allOf:
-        - $ref: '#/definitions/uuid.NullUUID'
         description: Set the note id of the note to share with other users.
+        type: string
       showAuthors:
         description: Set whether authors of notes should be shown to all users.
         type: boolean
@@ -474,7 +472,7 @@ definitions:
           else.
         type: boolean
       showVoting:
-        $ref: '#/definitions/uuid.NullUUID'
+        type: string
       timerEnd:
         description: Set the timer end.
         type: string
@@ -852,9 +850,8 @@ definitions:
         description: The note rank.
         type: integer
       stack:
-        allOf:
-        - $ref: '#/definitions/uuid.NullUUID'
         description: The parent note for this note in a stack.
+        type: string
     type: object
   notes.NoteUpdateRequest:
     properties:
@@ -1025,14 +1022,6 @@ definitions:
         $ref: '#/definitions/common.Avatar'
       name:
         type: string
-    type: object
-  uuid.NullUUID:
-    properties:
-      uuid:
-        type: string
-      valid:
-        description: Valid is true if UUID is not NULL
-        type: boolean
     type: object
   votings.Vote:
     properties:

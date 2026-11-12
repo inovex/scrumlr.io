@@ -3,7 +3,7 @@ package notes
 import (
 	"encoding/json"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 // WebSocket message types
