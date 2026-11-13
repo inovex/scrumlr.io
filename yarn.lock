@@ -1860,9 +1860,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@vitejs/plugin-react@npm:6.2.0"
+"@vitejs/plugin-react@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@vitejs/plugin-react@npm:6.2.1"
   dependencies:
     "@rolldown/pluginutils": "npm:^1.0.1"
   peerDependencies:
@@ -1877,7 +1877,7 @@ __metadata:
       optional: true
     oxc-transform-react:
       optional: true
-  checksum: 10c0/05aef404577d1ce32cd7d7ae2a6d4c9926e7041ef19000a2bc2c2c816c599789c309d57f344c5d0f589c6ac9de6a0ef56e9da8341e314a17cd1e0c980df70829
+  checksum: 10c0/b591b19ff2a9909f57cb2d6d4a401f11242cbe9bd2e1647ab7d55f7f66c9a674f1c236c3931c3a0de14e1bc473523d2d6064a48ef57679bbacc2ef06bc4f7961
   languageName: node
   linkType: hard
 
@@ -6628,7 +6628,7 @@ __metadata:
     "@types/uuid": "npm:^11.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^8.72.1"
     "@typescript-eslint/parser": "npm:^8.72.1"
-    "@vitejs/plugin-react": "npm:^6.2.0"
+    "@vitejs/plugin-react": "npm:^6.2.1"
     "@vitest/coverage-v8": "npm:5.1.0"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^10.1.0"
