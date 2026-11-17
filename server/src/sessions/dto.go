@@ -40,13 +40,17 @@ type BoardSession struct {
 	// Flag indicates whether user has marked the board as one of their favourites.
 	Favourite bool `json:"favourite"`
 
+	// Time of the last successful passphrase check, nil if never verified.
+	PassphraseVerifiedAt *time.Time `json:"-"`
+
 	Board uuid.UUID `json:"-"`
 }
 
 type BoardSessionCreateRequest struct {
-	Board uuid.UUID
-	User  uuid.UUID
-	Role  role.Role
+	Board                uuid.UUID
+	User                 uuid.UUID
+	Role                 role.Role
+	PassphraseVerifiedAt *time.Time
 }
 
 // BoardSessionUpdateRequest represents the request to update a single participant.
@@ -75,6 +79,9 @@ type BoardSessionUpdateRequest struct {
 	User      uuid.UUID `json:"-"`
 	Caller    uuid.UUID `json:"-"`
 	Favourite *bool     `json:"favourite"`
+
+	// Time of the last successful passphrase check, only set internally.
+	PassphraseVerifiedAt *time.Time `json:"-"`
 }
 
 // BoardSessionsUpdateRequest represents the request to update all participants.
@@ -100,6 +107,7 @@ func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
 	b.Banned = session.Banned
 	b.Board = session.Board
 	b.Favourite = session.Favourite
+	b.PassphraseVerifiedAt = session.PassphraseVerifiedAt
 	return b
 }
 

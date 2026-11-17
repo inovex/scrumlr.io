@@ -36,6 +36,7 @@ const getColumnsFailureMessage = "failed to get columns"
 const getNotesFailureMessage = "failed to get notes"
 const byPassphrasePolicyMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
 const boardTimerUpdateFailureMessage = "failed to update board timer"
+const passphraseValidity = 7 * 24 * time.Hour
 
 type Service struct {
 	clock                    timeprovider.TimeProvider
@@ -186,13 +187,20 @@ func (service *Service) Join(ctx context.Context, board *Board, user uuid.UUID, 
 			return false, "", 0, CreateBoardError(Forbidden, err.Error(), err)
 		}
 
+		if board.AccessPolicy == ByPassphrase {
+			if err := service.renewPassphraseVerification(ctx, board, user, request); err != nil {
+				otel.RecordErrorSpan(span, err, new("passphrase verification required"))
+				return false, "", 0, err
+			}
+		}
+
 		return true, fmt.Sprintf("/boards/%s/participants/%s", board.ID, user), http.StatusSeeOther, nil
 	}
 
 	switch board.AccessPolicy {
 
 	case Public:
-		return service.joinPublic(ctx, board, user)
+		return service.joinPublic(ctx, board, user, nil)
 
 	case ByPassphrase:
 		return service.joinByPassphrase(ctx, board, user, request)
@@ -482,8 +490,10 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 				return nil, CreateBoardError(Internal, "failed to encode passphrase", err)
 			}
 
+			passphraseChangedAt := service.clock.Now()
 			update.Passphrase = passphrase
 			update.Salt = salt
+			update.PassphraseChangedAt = &passphraseChangedAt
 		}
 	}
 
@@ -780,14 +790,15 @@ func (service *Service) resolveAuthorName(ctx context.Context, authorID uuid.UUI
 	}
 }
 
-func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
+func (service *Service) joinPublic(ctx context.Context, board *Board, user uuid.UUID, passphraseVerifiedAt *time.Time) (bool, string, int, error) {
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_public")
 	defer span.End()
 
 	_, err := service.sessionService.Create(ctx, sessions.BoardSessionCreateRequest{
-		Board: board.ID,
-		User:  user,
-		Role:  role.ParticipantRole,
+		Board:                board.ID,
+		User:                 user,
+		Role:                 role.ParticipantRole,
+		PassphraseVerifiedAt: passphraseVerifiedAt,
 	})
 	if err != nil {
 		otel.RecordErrorSpan(span, err, new("failed to create session"))
@@ -801,26 +812,69 @@ func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user
 	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.join_by_passphrase")
 	defer span.End()
 
-	if request.Passphrase == "" {
+	if err := service.checkPassphrase(board, request.Passphrase); err != nil {
+		otel.RecordErrorSpan(span, err, new("passphrase check failed"))
+		return false, "", 0, err
+	}
+
+	now := service.clock.Now()
+	return service.joinPublic(ctx, board, user, &now)
+}
+
+func (service *Service) checkPassphrase(board *Board, passphrase string) error {
+	if passphrase == "" {
 		err := errors.New("missing passphrase")
-		otel.RecordErrorSpan(span, err, new("missing passphrase"))
-		return false, "", 0, CreateBoardError(BadRequest, "missing passphrase", err)
+		return CreateBoardError(BadRequest, "missing passphrase", err)
 	}
 
 	if board.Passphrase == nil || board.Salt == nil {
 		err := errors.New("board passphrase is not configured")
-		otel.RecordErrorSpan(span, err, new("board passphrase is not configured"))
-		return false, "", 0, CreateBoardError(Internal, "board passphrase is not configured", err)
+		return CreateBoardError(Internal, "board passphrase is not configured", err)
 	}
 
-	encodedPassphrase := service.hash.HashBySalt(request.Passphrase, *board.Salt)
+	encodedPassphrase := service.hash.HashBySalt(passphrase, *board.Salt)
 	if encodedPassphrase != *board.Passphrase {
 		err := errors.New("wrong passphrase")
-		otel.RecordErrorSpan(span, err, new("wrong passphrase provided"))
-		return false, "", 0, CreateBoardError(BadRequest, "wrong passphrase", err)
+		return CreateBoardError(BadRequest, "wrong passphrase", err)
 	}
 
-	return service.joinPublic(ctx, board, user)
+	return nil
+}
+
+func (service *Service) isPassphraseVerificationValid(board *Board, verifiedAt *time.Time) bool {
+	if verifiedAt == nil {
+		return false
+	}
+
+	if board.PassphraseChangedAt != nil && verifiedAt.Before(*board.PassphraseChangedAt) {
+		return false
+	}
+
+	return service.clock.Now().Sub(*verifiedAt) < passphraseValidity
+}
+
+func (service *Service) renewPassphraseVerification(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) error {
+	session, err := service.sessionService.Get(ctx, board.ID, user)
+	if err != nil {
+		return err
+	}
+
+	if session.Role == role.OwnerRole || service.isPassphraseVerificationValid(board, session.PassphraseVerifiedAt) {
+		return nil
+	}
+
+	if err := service.checkPassphrase(board, request.Passphrase); err != nil {
+		return err
+	}
+
+	now := service.clock.Now()
+	_, err = service.sessionService.Update(ctx, sessions.BoardSessionUpdateRequest{
+		Board:                board.ID,
+		User:                 user,
+		Caller:               user,
+		PassphraseVerifiedAt: &now,
+	})
+	return err
 }
 
 func (service *Service) joinByInvite(ctx context.Context, board *Board, user uuid.UUID) (bool, string, int, error) {
