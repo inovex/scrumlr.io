@@ -106,9 +106,9 @@ import Spanish from "assets/flags/ES.svg?react";
 
 ```tsx
 <li>
-  <LegacyButton leftIcon={<Spanish />} className="homepage__language" hideLabel onClick={changeLanguage("es")}>
+  <Button leftIcon={<Spanish />} className="homepage__language" hideLabel onClick={changeLanguage("es")}>
     Español
-  </LegacyButton>
+  </Button>
 </li>
 ```
 

@@ -15,6 +15,7 @@ type ButtonProps = {
   children?: ReactNode;
   testId?: string;
   id?: string;
+  ariaLabel?: string;
 
   // Style Props
   variant?: ButtonVariant;
@@ -87,7 +88,7 @@ export const Button = (props: ButtonProps) => {
       title={props.title}
       data-cy={props.testId}
       data-testid={props.testId}
-      aria-label={isIconOnly ? props.title || "Button" : undefined}
+      aria-label={props.ariaLabel ?? (isIconOnly ? props.title || "Button" : undefined)}
     >
       {renderButtonContent()}
     </button>

@@ -7,7 +7,7 @@ import {VisibleIcon, HiddenIcon, DuplicateIcon, RefreshIcon} from "components/Ic
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
-import {LegacyButton} from "../Button";
+import {Button} from "../Button";
 import {ValidationError} from "../ValidationError";
 import {TextInputAction} from "../TextInputAction";
 
@@ -76,27 +76,30 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
-        <LegacyButton
+        <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"}
+          variant={accessPolicy === "PUBLIC" ? "primary" : "secondary"}
+          color="backlog-blue"
           onClick={() => onAccessPolicyChange("PUBLIC")}
         >
           {t("AccessPolicySelection.publicTitle")}
-        </LegacyButton>
-        <LegacyButton
+        </Button>
+        <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === "BY_PASSPHRASE" ? "contained" : "outlined"}
+          variant={accessPolicy === "BY_PASSPHRASE" ? "primary" : "secondary"}
+          color="backlog-blue"
           onClick={() => onAccessPolicyChange("BY_PASSPHRASE")}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
-        </LegacyButton>
-        <LegacyButton
+        </Button>
+        <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === "BY_INVITE" ? "contained" : "outlined"}
+          variant={accessPolicy === "BY_INVITE" ? "primary" : "secondary"}
+          color="backlog-blue"
           onClick={() => onAccessPolicyChange("BY_INVITE")}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
-        </LegacyButton>
+        </Button>
       </div>
 
       <div className="access-policy__details">

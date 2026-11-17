@@ -9,7 +9,7 @@ import {Toast} from "utils/Toast";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {TextInputLabel} from "components/TextInputLabel";
 import {TextInput} from "components/TextInput";
-import {LegacyButton} from "components/Button";
+import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
 import {legacyColumnTemplates} from "./legacyColumnTemplates";
@@ -215,35 +215,35 @@ export const LegacyNewBoard = () => {
       </div>
       <div className="new-board__actions">
         {!importFile ? (
-          <LegacyButton
+          <Button
             className="new-board__action"
             onClick={onCreateBoard}
-            color="primary"
+            color="planning-pink"
             disabled={isCreateButtonDisabled}
             title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
           >
             {t("LegacyNewBoard.createNewBoard")}
-          </LegacyButton>
+          </Button>
         ) : (
-          <LegacyButton
+          <Button
             className="new-board__action"
             onClick={onImportBoard}
-            color="primary"
+            color="planning-pink"
             disabled={isImportButtonDisabled}
             title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
           >
             {t("LegacyNewBoard.importNewBoard")}
-          </LegacyButton>
+          </Button>
         )}
         {!extendedConfiguration && (
-          <LegacyButton className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+          <Button className="new-board__action" variant="secondary" color="planning-pink" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
             {t("LegacyNewBoard.extendedConfigurationButton")}
-          </LegacyButton>
+          </Button>
         )}
         {extendedConfiguration && (
-          <LegacyButton className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+          <Button className="new-board__action" variant="secondary" color="planning-pink" onClick={() => setExtendedConfiguration(false)}>
             {t("LegacyNewBoard.basicConfigurationButton")}
-          </LegacyButton>
+          </Button>
         )}
       </div>
       {showPasswordModal && <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} onSubmit={handlePasswordSubmit} onClose={closeModal} />}
