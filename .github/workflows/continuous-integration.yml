@@ -252,7 +252,7 @@ jobs:
         uses: grafana/setup-k6-action@c47136d33d365efbeb9ae7266908b5dcf98cdece # v1.3.0
 
       - name: Run k6 e2e tests
-        uses: grafana/run-k6-action@4082a08c7e40cf6d65863911077dfb60ae0a4f04 # v1.5.0
+        uses: grafana/run-k6-action@54385d2a25c222a08b4a3aec6b653b8fb370a1ed # v1.6.0
         env:
           BASEURL: ${{ env.BASE_URL }}/api
         with:
