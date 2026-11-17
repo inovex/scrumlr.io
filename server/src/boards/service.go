@@ -36,6 +36,8 @@ const getColumnsFailureMessage = "failed to get columns"
 const getNotesFailureMessage = "failed to get notes"
 const byPassphrasePolicyMessage = "passphrase should not be set for policies except 'BY_PASSPHRASE'"
 const boardTimerUpdateFailureMessage = "failed to update board timer"
+
+// passphraseValidity time
 const passphraseValidity = 7 * 24 * time.Hour
 
 type Service struct {
@@ -821,6 +823,7 @@ func (service *Service) joinByPassphrase(ctx context.Context, board *Board, user
 	return service.joinPublic(ctx, board, user, &now)
 }
 
+// checkPassphrase compares the given passphrase with the passphrase of board
 func (service *Service) checkPassphrase(board *Board, passphrase string) error {
 	if passphrase == "" {
 		err := errors.New("missing passphrase")
@@ -841,6 +844,8 @@ func (service *Service) checkPassphrase(board *Board, passphrase string) error {
 	return nil
 }
 
+// isPassphraseVerificationValid reports whether a passphrase check at the given time is still valid
+// expires after passphraseValidity or as soon as the passphrase of the board was changed afterwards
 func (service *Service) isPassphraseVerificationValid(board *Board, verifiedAt *time.Time) bool {
 	if verifiedAt == nil {
 		return false
@@ -853,6 +858,9 @@ func (service *Service) isPassphraseVerificationValid(board *Board, verifiedAt *
 	return service.clock.Now().Sub(*verifiedAt) < passphraseValidity
 }
 
+// renewPassphraseVerification makes sure that an existing session of a passphrase protected board is still verified
+// if verification expired, user has to provide the current passphrase, which renews the verification
+// the owner of a board is exempt
 func (service *Service) renewPassphraseVerification(ctx context.Context, board *Board, user uuid.UUID, request JoinBoardRequest) error {
 	session, err := service.sessionService.Get(ctx, board.ID, user)
 	if err != nil {
