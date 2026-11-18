@@ -4222,15 +4222,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.7.2":
-  version: 26.7.2
-  resolution: "i18next@npm:26.7.2"
+"i18next@npm:^27.0.1":
+  version: 27.0.1
+  resolution: "i18next@npm:27.0.1"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/671576c1a225e10994cff250dfc44585fcccc4486cda4162caadbefe5287052e56998fe80aa15e36e1c441215b601770702a820fd1dc5511255bc4ad514aa2cf
+  checksum: 10c0/b30a61d650e854d9b111e8289f870e8f0216438a9ce8e271a9bcabfb972ca57266607111e8157ca9e88ced18fd4653def91c6b867b65ee619bfc62542e739620
   languageName: node
   linkType: hard
 
@@ -6424,7 +6424,7 @@ __metadata:
     globals: "npm:^17.14.0"
     happy-dom: "npm:^21.0.4"
     husky: "npm:^9.1.7"
-    i18next: "npm:^26.7.2"
+    i18next: "npm:^27.0.1"
     i18next-browser-languagedetector: "npm:^8.3.0"
     i18next-fs-backend: "npm:^2.6.10"
     js-cookie: "npm:^3.0.8"
