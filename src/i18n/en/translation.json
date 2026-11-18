@@ -9,18 +9,6 @@
     "VotingIsAnonymous": "Voting is anonymous",
     "VotingIsNotAnonymous": "Voting is not anonymous"
   },
-  "LegacyNewBoard": {
-    "boardName": "Board name",
-    "description": "Board description",
-    "createNewBoard": "Create new Board",
-    "extendedConfigurationButton": "Extended configuration",
-    "basicConfigurationButton": "Template selection",
-    "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template",
-    "importBoard": "Import JSON",
-    "uploadFile": "Upload file or drag here",
-    "importNewBoard": "Import now"
-  },
   "ImportBoard": {
     "button": "Import JSON",
     "importNotAllowedForAnonymousUsers": "Importing boards is disabled for anonymous users.",

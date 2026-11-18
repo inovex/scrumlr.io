@@ -9,18 +9,6 @@
     "VotingIsAnonymous": "Le vote est anonyme",
     "VotingIsNotAnonymous": "Le vote n'est pas anonyme"
   },
-  "LegacyNewBoard": {
-    "boardName": "Nom du tableau",
-    "description": "Description du tableau",
-    "createNewBoard": "Créer un nouveau tableau",
-    "extendedConfigurationButton": "Configuration avancée",
-    "basicConfigurationButton": "Sélection de modèle",
-    "extendedConfigurationTitle": "Configuration avancée",
-    "basicConfigurationTitle": "Choisir un modèle",
-    "importBoard": "Importer JSON",
-    "uploadFile": "Importe un fichier ou dépose-le ici",
-    "importNewBoard": "Importer maintenant"
-  },
   "ImportBoard": {
     "button": "Importer JSON",
     "importNotAllowedForAnonymousUsers": "L'importation de tableaux est désactivée pour les utilisateurs anonymes.",
