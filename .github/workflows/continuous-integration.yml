@@ -2,14 +2,20 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - develop
   merge_group:
     types: [checks_requested]
   workflow_run:
     workflows: ["Package"]
-    branches: [main]
+    branches:
+      - main
+      - develop
     types:
       - completed
 
@@ -17,7 +23,7 @@ permissions:
   contents: read
 
 env:
-  BASE_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io
+  BASE_URL: https://${{ github.event.pull_request.number || github.ref_name }}.development.scrumlr.fra.ics.inovex.io
 
 concurrency:
   group: ${{ github.ref }}
@@ -171,7 +177,7 @@ jobs:
       contents: read
       actions: read
       pull-requests: write
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' || github.ref_name == 'develop' }}
     uses: ./.github/workflows/deploy_to_dev_cluster.yml
     secrets: inherit
     with:
@@ -179,7 +185,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.head.repo.fork == false || github.ref_name == 'main' || github.ref_name == 'develop' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -209,7 +215,7 @@ jobs:
 
   deployment_health_check:
     needs: deploy_to_dev_cluster
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' || github.ref_name == 'develop' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

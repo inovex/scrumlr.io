@@ -11,7 +11,7 @@ updates:
     cooldown:
       default-days: 10
     open-pull-requests-limit: 10
-    target-branch: "main"
+    target-branch: "develop"
     labels:
       - "Dependencies"
     versioning-strategy: increase
@@ -39,7 +39,7 @@ updates:
     cooldown:
       default-days: 10
     open-pull-requests-limit: 10
-    target-branch: "main"
+    target-branch: "develop"
     labels:
       - "Dependencies"
     commit-message:
@@ -72,7 +72,7 @@ updates:
     cooldown:
       default-days: 10
     open-pull-requests-limit: 10
-    target-branch: "main"
+    target-branch: "develop"
     labels:
       - "Dependencies"
     commit-message:
@@ -103,7 +103,7 @@ updates:
     cooldown:
       default-days: 10
     open-pull-requests-limit: 10
-    target-branch: "main"
+    target-branch: "develop"
     labels:
       - "Dependencies"
     commit-message:
