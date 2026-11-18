@@ -158,7 +158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.29.2, @babel/runtime@npm:^7.29.7, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.29.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.9.2":
   version: 7.29.10
   resolution: "@babel/runtime@npm:7.29.10"
   checksum: 10c0/32f975da8e9c2cae6b33e1a477f8fe8bbff6722c982b5ce35f99affaf3a7a1b612c8272b43afa0e51d3000928d6f3ba38f9296301115db5640264907c027b0cd
@@ -5904,25 +5904,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.1.13":
-  version: 17.1.13
-  resolution: "react-i18next@npm:17.1.13"
+"react-i18next@npm:^18.0.0":
+  version: 18.0.0
+  resolution: "react-i18next@npm:18.0.0"
   dependencies:
-    "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
-    use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 26.2.0"
-    react: ">= 16.8.0"
+    i18next: ">= 27.0.0"
+    react: ">= 18.0.0"
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
     typescript:
       optional: true
-  checksum: 10c0/961c7b43e8d568cc31499c810da8d3db7d4b1a8a5f14803c7e3462713bdae4f54444913e299750edd5fcf61f8b6962714d0781ee7399192fb94c3152bc894d38
+  checksum: 10c0/bcc02a3eac762ed1e419fcd45f010e78e952ddf4d2632610593da1539d5f5347ef9fa5d602df036f1e5ac3e8e813e59c2c29a4c4f89ccb8a024ef32369959acc
   languageName: node
   linkType: hard
 
@@ -6443,7 +6437,7 @@ __metadata:
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.0.0"
     react-hotkeys-hook: "npm:^5.3.3"
-    react-i18next: "npm:^17.1.13"
+    react-i18next: "npm:^18.0.0"
     react-redux: "npm:^9.3.1"
     react-router: "npm:^8.5.1"
     react-snowfall: "npm:^2.4.0"
@@ -7420,7 +7414,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.4.0, use-sync-external-store@npm:^1.6.0":
+"use-sync-external-store@npm:^1.4.0":
   version: 1.6.0
   resolution: "use-sync-external-store@npm:1.6.0"
   peerDependencies:
