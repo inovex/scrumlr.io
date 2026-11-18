@@ -1987,16 +1987,16 @@ func (suite *BoardServiceTestSuite) TestPrepareImportNotes_FiltersMissingAuthors
 	}
 
 	replacementRoot := notesByID[childTwoID]
-	suite.False(replacementRoot.Position.Stack != nil)
+	suite.Nil(replacementRoot.Position.Stack)
 	suite.Equal(0, replacementRoot.Position.Rank)
 
 	stackChild := notesByID[childOneID]
-	suite.True(stackChild.Position.Stack != nil)
+	suite.NotNil(stackChild.Position.Stack)
 	suite.Equal(childTwoID, *stackChild.Position.Stack)
 	suite.Equal(0, stackChild.Position.Rank)
 
 	otherRoot := notesByID[otherRootID]
-	suite.False(otherRoot.Position.Stack != nil)
+	suite.Nil(otherRoot.Position.Stack)
 	suite.Equal(1, otherRoot.Position.Rank)
 }
 
@@ -2078,11 +2078,11 @@ func (suite *BoardServiceTestSuite) TestReorderAndRepairStacks_RootMissingPromot
 	reorderAndRepairStacks(stackChildrenByRoot, notesByID, originalByID)
 
 	replacementRoot := notesByID[childTwoID]
-	suite.False(replacementRoot.Position.Stack != nil)
+	suite.Nil(replacementRoot.Position.Stack)
 	suite.Equal(6, replacementRoot.Position.Rank)
 
 	stackChild := notesByID[childOneID]
-	suite.True(stackChild.Position.Stack != nil)
+	suite.NotNil(stackChild.Position.Stack)
 	suite.Equal(childTwoID, *stackChild.Position.Stack)
 	suite.Equal(0, stackChild.Position.Rank)
 }
