@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /// <reference path="../support/index.d.ts" />
 
-const uniqueTemplateName = (prefix: string) => `${prefix} ${Date.now()}-${Cypress._.random(1000,9999)}`
+const uniqueTemplateName = (prefix: string) => `${prefix} ${Date.now()}-${Cypress._.random(1000, 9999)}`
 
 
 const getTemplateByName = (templateName: string): Cypress.Chainable<JQuery<HTMLElement>> =>
@@ -11,7 +11,7 @@ const getTemplateByName = (templateName: string): Cypress.Chainable<JQuery<HTMLE
 
 
 describe("templates", () => {
-  beforeEach (() => {
+  beforeEach(() => {
     cy.login()
     cy.visit("/boards/templates")
   })
@@ -45,7 +45,7 @@ describe("templates", () => {
   });
 
   it("should edit custom template", () => {
-        const templateName = uniqueTemplateName("Edit Template")
+    const templateName = uniqueTemplateName("Edit Template")
     cy
       .createCustomTemplate(templateName)
 
@@ -65,7 +65,7 @@ describe("templates", () => {
         .click();
       cy
         .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
-          .click();
+        .click();
     });
 
     cy
@@ -89,9 +89,9 @@ describe("templates", () => {
     cy
       .get("[data-cy='columns-configurator-column__drag-element']")
       .first()
-      .trigger("mousedown", {force: true, button: 0})
-      .trigger("mousemove", {clientX:1000, clientY:300, force: true})
-      .trigger("mouseup", {force:true})
+      .trigger("mousedown", { force: true, button: 0 })
+      .trigger("mousemove", { clientX: 1000, clientY: 300, force: true })
+      .trigger("mouseup", { force: true })
 
     cy
       .get<HTMLButtonElement>("[data-cy='editor-shell__button--create']")

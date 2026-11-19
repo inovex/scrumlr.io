@@ -20,9 +20,9 @@ exports[`<HeaderMenu/> > should render correctly > for moderator 1`] = `
       <div
         class="portal__frame portal__frame--align-here portal__frame--backdrop-transparent accent-color__backlog-blue"
       >
-        <div
+        <dialog
           class="portal__content"
-          role="dialog"
+          open=""
         >
           <div
             class="portal__content-container"
@@ -151,7 +151,7 @@ exports[`<HeaderMenu/> > should render correctly > for moderator 1`] = `
               </li>
             </ul>
           </div>
-        </div>
+        </dialog>
       </div>
     </div>
     <div
@@ -183,9 +183,9 @@ exports[`<HeaderMenu/> > should render correctly > for participants 1`] = `
       <div
         class="portal__frame portal__frame--align-here portal__frame--backdrop-transparent accent-color__backlog-blue"
       >
-        <div
+        <dialog
           class="portal__content"
-          role="dialog"
+          open=""
         >
           <div
             class="portal__content-container"
@@ -223,7 +223,7 @@ exports[`<HeaderMenu/> > should render correctly > for participants 1`] = `
               </li>
             </ul>
           </div>
-        </div>
+        </dialog>
       </div>
     </div>
     <div

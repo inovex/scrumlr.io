@@ -92,9 +92,9 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({
             getAccentColor()
           )}
         >
-          <div className="portal__content" role="dialog">
+          <dialog className="portal__content" open>
             <div className="portal__content-container">{children}</div>
-          </div>
+          </dialog>
         </div>
       </FocusLock>
     </div>,
