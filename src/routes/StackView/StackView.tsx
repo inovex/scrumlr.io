@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useNavigate, useParams} from "react-router";
+import {Navigate, useNavigate, useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {animated, Transition} from "@react-spring/web";
@@ -7,7 +7,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppDispatch, useAppSelector} from "store";
-import {CloseIcon, TrashIcon} from "components/Icon";
+import {CloseIcon, TrashIcon, HiddenIcon} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
@@ -55,7 +55,7 @@ export const StackView = () => {
         })),
     _.isEqual
   );
-  const column = columns.find((c) => c.id === note?.position.column)!;
+  const column = columns.find((c) => c.id === note?.position.column);
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the last stack in the previous column
@@ -203,16 +203,18 @@ export const StackView = () => {
     }
   }, [boardId, navigate, note, t]);
 
-  // show toast if note has been deleted
+  // show toast for respective redirect action
   useLayoutEffect(() => {
-    if (prevNote.current && !note) {
+    if (!column) {
+      Toast.info({title: t("Toast.columnHidden"), icon: HiddenIcon});
+    } else if (prevNote.current && !note) {
       Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
 
-  if (!note) {
-    navigate(`/board/${boardId}`);
-    return null;
+  // redirect if missing crucial state
+  if (!note || !column) {
+    return <Navigate to={`/board/${boardId}`} />;
   }
 
   const handleClose = () => {

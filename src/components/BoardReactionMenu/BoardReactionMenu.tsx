@@ -74,7 +74,7 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
               </button>
             );
           })}
-          <button className="board-reactions-menu__item board-reactions-menu__close" onClick={props.close} tabIndex={0} aria-hidden>
+          <button className="board-reactions-menu__item board-reactions-menu__close" onClick={props.close} tabIndex={0}>
             <CloseIcon />
           </button>
         </animated.div>

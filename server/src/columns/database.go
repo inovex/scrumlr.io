@@ -141,10 +141,12 @@ func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, er
 }
 
 func (db *DB) GetIndex(ctx context.Context, board uuid.UUID) (int, error) {
-	return db.db.NewSelect().
+	index, err := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
 		Where("board = ?", board).
 		Count(ctx)
+
+	return int(index), err
 }
 
 func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
@@ -153,5 +155,5 @@ func (db *DB) Count(ctx context.Context, board uuid.UUID) (int, error) {
 		Where("board = ?", board).
 		Count(ctx)
 
-	return count, err
+	return int(count), err
 }

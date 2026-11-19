@@ -55,7 +55,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
-		s.sessionRequests.OpenSocket(ctx, w, r)
+		s.eventListener.OpenSessionRequestSocket(w, r)
 		return
 	}
 

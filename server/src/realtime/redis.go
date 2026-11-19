@@ -124,6 +124,11 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
 
 	go func() {
+		defer func() {
+			_ = pubsub.Close()
+			close(retChannel)
+		}()
+
 		for {
 			select {
 			case msg := <-c:
@@ -133,7 +138,6 @@ func (r *redisClient) SubscribeToBoardSessionEvents(ctx context.Context, subject
 					retChannel <- &event
 				}
 			case <-ctx.Done():
-				close(retChannel)
 				return
 			}
 		}
@@ -174,6 +178,11 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 
 	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
 	go func() {
+		defer func() {
+			_ = pubsub.Close()
+			close(retChannel)
+		}()
+
 		for {
 			select {
 			case msg := <-c:
@@ -183,7 +192,6 @@ func (r *redisClient) SubscribeToBoardEvents(ctx context.Context, subject string
 					retChannel <- &event
 				}
 			case <-ctx.Done():
-				close(retChannel)
 				return
 			}
 		}

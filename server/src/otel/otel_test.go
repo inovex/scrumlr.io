@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 )
@@ -28,7 +27,7 @@ func TestSetupOpenTelemetryHttpEndpoint(t *testing.T) {
 	meterProvider := otel.GetMeterProvider()
 	assert.NotNil(t, meterProvider)
 
-	loggerProvider := global.GetLoggerProvider()
+	loggerProvider := otel.GetLoggerProvider()
 	assert.NotNil(t, loggerProvider)
 
 	propagator := otel.GetTextMapPropagator()
@@ -56,7 +55,7 @@ func TestSetupOpenTelemetryGrpcEndpoint(t *testing.T) {
 	meterProvider := otel.GetMeterProvider()
 	assert.NotNil(t, meterProvider)
 
-	loggerProvider := global.GetLoggerProvider()
+	loggerProvider := otel.GetLoggerProvider()
 	assert.NotNil(t, loggerProvider)
 
 	propagator := otel.GetTextMapPropagator()

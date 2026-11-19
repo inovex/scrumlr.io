@@ -1,0 +1,158 @@
+{
+  "template": {
+    "lean_coffee": {
+      "name": "Lean Coffee",
+      "description": "Un método de debate flexible y sin agenda fija. Ideal para identificar y tratar temas importantes.",
+      "column": {
+        "lean_coffee": {
+          "name": "Lean Coffee",
+          "description": "Recopila temas, ideas y preguntas."
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "quick_review": {
+      "name": "Revisión rápida",
+      "description": "Los participantes destacan aspectos positivos y negativos para identificar rápidamente logros y problemas.",
+      "column": {
+        "positive": {
+          "name": "Positivo",
+          "description": "¿Qué ha ido bien?"
+        },
+        "negative": {
+          "name": "Negativo",
+          "description": "¿Qué no ha ido bien?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "status_quo_check": {
+      "name": "Revisión del statu quo",
+      "description": "El equipo reflexiona sobre qué empezar a hacer, qué dejar de hacer y qué seguir haciendo para fomentar la mejora continua.",
+      "column": {
+        "start": {
+          "name": "Empezar",
+          "description": "¿Qué procesos nuevos deberíamos probar?"
+        },
+        "stop": {
+          "name": "Dejar",
+          "description": "¿Qué no funciona y deberíamos dejar de hacer?"
+        },
+        "continue": {
+          "name": "Continuar",
+          "description": "¿Qué funciona bien y deberíamos seguir haciendo?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "mood": {
+      "name": "Estado de ánimo",
+      "description": "Los participantes comparten lo que les ha enfadado, entristecido o alegrado. Ayuda a comprender el estado emocional del equipo.",
+      "column": {
+        "mad": {
+          "name": "Enfado",
+          "description": "¿Qué ha causado frustración o enfado?"
+        },
+        "sad": {
+          "name": "Tristeza",
+          "description": "¿Qué ha causado decepción?"
+        },
+        "glad": {
+          "name": "Alegría",
+          "description": "¿Qué ha aportado alegría o motivación?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "kalm": {
+      "name": "KALM",
+      "description": "El equipo identifica qué mantener, añadir, reducir o potenciar para mejorar su rendimiento.",
+      "column": {
+        "keep": {
+          "name": "Mantener",
+          "description": "¿Qué funciona bien y deberíamos mantener?"
+        },
+        "add": {
+          "name": "Añadir",
+          "description": "¿Qué podría aportar valor?"
+        },
+        "less": {
+          "name": "Reducir",
+          "description": "¿Qué deberíamos hacer con menos frecuencia?"
+        },
+        "more": {
+          "name": "Potenciar",
+          "description": "¿Qué deberíamos hacer más a menudo?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "4l": {
+      "name": "4L",
+      "description": "Los participantes revisan qué les gustó, qué aprendieron, qué echaron en falta y qué les habría gustado tener para fomentar el intercambio de opiniones.",
+      "column": {
+        "liked": {
+          "name": "Me gustó",
+          "description": "¿Qué ha sido especialmente positivo?"
+        },
+        "learned": {
+          "name": "Aprendí",
+          "description": "¿Qué conocimientos hemos adquirido?"
+        },
+        "lacked": {
+          "name": "Me faltó",
+          "description": "¿Qué podríamos haber mejorado?"
+        },
+        "longed_for": {
+          "name": "Me habría gustado",
+          "description": "¿Qué nos gustaría conseguir en el futuro?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    },
+    "swot": {
+      "name": "DAFO",
+      "description": "Analiza debilidades, amenazas, fortalezas y oportunidades para apoyar la planificación estratégica.",
+      "column": {
+        "strengths": {
+          "name": "Fortalezas",
+          "description": "¿Qué fortalezas nos proporcionan una ventaja?"
+        },
+        "weaknesses": {
+          "name": "Debilidades",
+          "description": "¿Qué debilidades deberíamos abordar?"
+        },
+        "opportunities": {
+          "name": "Oportunidades",
+          "description": "¿Qué oportunidades podemos aprovechar?"
+        },
+        "threats": {
+          "name": "Amenazas",
+          "description": "¿Qué amenazas deberíamos tener en cuenta?"
+        },
+        "actions": {
+          "name": "Acciones",
+          "description": ""
+        }
+      }
+    }
+  }
+}

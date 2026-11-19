@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/cache"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/info"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/otel"
@@ -23,12 +24,15 @@ import (
 	altsrc "github.com/urfave/cli-altsrc/v3"
 	"github.com/urfave/cli-altsrc/v3/toml"
 	"github.com/urfave/cli/v3"
+	"scrumlr.io/server/cmd/boards"
+	"scrumlr.io/server/cmd/database"
+	"scrumlr.io/server/cmd/healthcheck"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 // @title			Scrumlr backend
-// @version		5.4.0
+// @version		5.5.2
 // @description	This is the scrumlr backend server.
 // @termsOfService	https://scrumlr.io/terms
 // @contact.email	info@scrumlr.io
@@ -40,8 +44,13 @@ func main() {
 	app := &cli.Command{
 		Name:      "scrumlr.io",
 		Usage:     "Awesome & scalable server for the scrumlr.io web application",
-		UsageText: "scrumlr [global options]",
+		UsageText: "scrumlr [sub command] [global options]",
 		Action:    run,
+		Commands: []*cli.Command{
+			healthcheck.RegisterHealthCheckCommand(),
+			database.RegisterDatabaseCommands(),
+			boards.RegisterBoardCommands(),
+		},
 		Flags: []cli.Flag{
 			&cli.IntFlag{
 				Name:    "port",
@@ -388,6 +397,15 @@ func main() {
 				Required: false,
 			},
 			&cli.StringFlag{
+				Name: "password-encoder",
+				Sources: cli.NewValueSourceChain(
+					cli.EnvVar("SCRUMLR_PASSWORD_ENCODER"),
+					toml.TOML("password-encoder", altsrc.NewStringPtrSourcer(&tomlconfigFile)),
+				),
+				Usage: "Id of the password encoder to encrypt the passwords. Defaults to `argon2id`. Possible values are: `sha512`, `argon2id`",
+				Value: "argon2id",
+			},
+			&cli.StringFlag{
 				Name: "otel-grpc",
 				Sources: cli.NewValueSourceChain(
 					cli.EnvVar("SCRUMLR_OTEL_GRPC"),
@@ -529,10 +547,16 @@ func run(ctx context.Context, cli *cli.Command) error {
 		return err
 	}
 
-	initializer := serviceinitialize.NewServiceInitializer(db, rt, c)
+	passwordEncoder, err := encoder.InitializePasswordEncoder(cli.String("password-encoder"))
+	if err != nil {
+		log.Fatalf("failed to configure password encoder: %v", err)
+		return err
+	}
 
-	wsService := initializer.InitializeWebSocketService()
-	websocket := initializer.InitializeSessionRequestWebsocket(wsService)
+	initializer := serviceinitialize.NewServiceInitializer(db, rt, c, passwordEncoder)
+
+	websocket := initializer.InitializeWebSocketService()
+
 	feedbackService := initializer.InitializeFeedbackService(cli.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 
@@ -547,9 +571,12 @@ func run(ctx context.Context, cli *cli.Command) error {
 	columnService := initializer.InitializeColumnService(noteService)
 
 	sessionService := initializer.InitializeSessionService(columnService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
-
+	sessionRequestService := initializer.InitializeSessionRequestService(sessionService)
 	userService := initializer.InitializeUserService(sessionService, noteService)
+	boardService := initializer.InitializeBoardService(sessionService, sessionRequestService, columnService, noteService, reactionService, votingService, userService)
+
+	eventFilter := initializer.InitializeEventFilter(boardService, columnService, sessionService)
+	eventListener := initializer.InitializeEventListener(websocket, eventFilter, sessionService, noteService)
 
 	keyWithNewlines := strings.ReplaceAll(cli.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(cli.String("unsafe-key"), "\\n", "\n")
@@ -566,7 +593,6 @@ func run(ctx context.Context, cli *cli.Command) error {
 	}
 
 	infoService := initializer.InitializeInfoService(authConfig, feedbackService, serverconfig)
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, userService)
 
 	apiInitializer := serviceinitialize.NewApiInitializer(basePath)
 	healthApi := apiInitializer.InitializeHealthApi(healthService)
@@ -574,6 +600,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 	infoApi := apiInitializer.InitializeInfoApi(infoService)
 	sessionApi := apiInitializer.InitializeSessionApi(sessionService)
 	userApi := apiInitializer.InitializeUserApi(userService, sessionService, serverconfig.AllowAnonymousBoardCreation, serverconfig.AllowAnonymousCustomTemplates)
+	boardTemplateApi := apiInitializer.InitializeBoardTemplateApi(boardTemplateService)
+	columnTemplateApi := apiInitializer.InitializeColumnTemplateApi(columnTemplateService)
 
 	routesInitializer := serviceinitialize.NewRoutesInitializer()
 	infoRoutes := routesInitializer.InitializeInfoRoutes(infoApi)
@@ -582,11 +610,12 @@ func run(ctx context.Context, cli *cli.Command) error {
 	userRoutes := routesInitializer.InitializeUserRoutes(userApi, sessionApi)
 	sessionRoutes := routesInitializer.InitializeSessionRoutes(sessionApi)
 	swaggerRoutes := routesInitializer.InitializeSwaggerRoutes(basePath)
+	boardTemplateRoutes := routesInitializer.InitializeBoardTemplateRoutes(boardTemplateApi)
+	columnTemplateRoutes := routesInitializer.InitializeColumnTemplateRoutes(columnTemplateApi)
 
 	s := api.New(
 		basePath,
 		rt,
-		wsService,
 		authConfig,
 
 		healthRoutes,
@@ -595,7 +624,8 @@ func run(ctx context.Context, cli *cli.Command) error {
 		userRoutes,
 		sessionRoutes,
 		swaggerRoutes,
-
+		boardTemplateRoutes,
+		columnTemplateRoutes,
 		boardService,
 		columnService,
 		votingService,
@@ -605,8 +635,7 @@ func run(ctx context.Context, cli *cli.Command) error {
 		sessionService,
 		sessionRequestService,
 		boardReactionService,
-		boardTemplateService,
-		columnTemplateService,
+		eventListener,
 
 		logger.GetLogLevel() == zap.DebugLevel,
 		!cli.Bool("disable-check-origin"),

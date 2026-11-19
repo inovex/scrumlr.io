@@ -2,7 +2,7 @@
 title: Contributing Translations
 description: Complete guide for adding new language support to Scrumlr
 sidebar:
-    order: 11
+    order: 19
 ---
 
 This guide provides step-by-step instructions for contributing a new language translation to Scrumlr. The application uses i18next for internationalization and currently supports English, German and French.
@@ -13,7 +13,7 @@ Before starting your translation contribution:
 
 1. **Check existing languages**: Review `src/i18n/` to see currently supported languages
 2. **Language code**: Identify the appropriate ISO 639-1 language code for your language (e.g., `fr` for French, `es` for Spanish)
-3. **Development setup**: Ensure you have the development environment set up (see [Contributing Guide](./contributing))
+3. **Development setup**: Ensure you have the development environment set up (see [Setup](/dev/frontend/setup/) and the [Contributing Guide](/dev/contributing/))
 
 ## Translation Files Structure
 
@@ -22,72 +22,35 @@ Scrumlr uses two main translation files per language:
 - `src/i18n/{language_code}/translation.json` - Main UI translations
 - `src/i18n/{language_code}/templates.json` - Board template translations
 
+Adding a language touches more than these two files. There are **four separate hardcoded language lists** plus two
+directories of static assets.
+
 ## Step-by-Step Process
+
+Throughout this guide, replace `es` with your own language code.
 
 ### 1. Create Translation Files
 
 Create the translation directory and files for your language:
 
 ```bash
-# Create language directory
-mkdir src/i18n/{language_code}
-
-# Copy base translation files into the new directory
-cp src/i18n/en/translation.json src/i18n/{language_code}/translation.json
-cp src/i18n/en/templates.json src/i18n/{language_code}/templates.json
+mkdir src/i18n/es
+cp src/i18n/en/translation.json src/i18n/es/translation.json
+cp src/i18n/en/templates.json src/i18n/es/templates.json
 ```
 
 ### 2. Translate Content
 
-#### Main Translation File (`translation.json`)
+Open `src/i18n/es/translation.json` and `src/i18n/es/templates.json` and translate all JSON values while keeping the keys unchanged.
 
-Open `src/i18n/{language_code}/translation.json` and translate all JSON values while keeping the keys unchanged:
+### 3. Update the i18n Configuration
 
-```json
-{
-  "InfoBar": {
-    "ReturnToPresentedNote": "Your translation here",
-    "VotingIsAnonymous": "Your translation here",
-    "VotingIsNotAnonymous": "Your translation here"
-  },
-  "LegacyNewBoard": {
-    "boardName": "Your translation here",
-    "createNewBoard": "Your translation here"
-    // ... continue translating all values
-  }
-}
-```
-
-#### Template Translations (`templates.json`)
-
-Similarly, translate the template file:
-
-```json
-{
-  "template": {
-    "lean_coffee": {
-      "name": "Your translation here",
-      "description": "Your translation here",
-      "column": {
-        "lean_coffee": {
-          "name": "Your translation here",
-          "description": "Your translation here"
-        }
-        // ... continue translating
-      }
-    }
-  }
-}
-```
-
-### 3. Update i18n Configuration
-
-Add your language to the i18n configuration in `src/i18n/index.ts`:
+Register the language in `src/i18n/index.ts`. This is the **first** of four language lists:
 
 ```typescript
 // Import your translation files
-import translation{LanguageCode} from "./{language_code}/translation.json";
-import templates{LanguageCode} from "./{language_code}/templates.json";
+import translationEs from "./es/translation.json";
+import templatesEs from "./es/templates.json";
 
 export const resources = {
   en: {
@@ -96,69 +59,166 @@ export const resources = {
   },
   // ...
   // Add your language here
-  {language_code}: {
-    translation: translation{LanguageCode},
-    templates: templates{LanguageCode},
+  es: {
+    translation: translationEs,
+    templates: templatesEs,
   },
 };
 ```
 
 ### 4. Add Flag Icon
 
-Add a flag icon for your language:
+Flag icons live in **`src/assets/flags/`** and are named after the ISO 3166-1 alpha-2 **country** code, in uppercase —
+`DE.svg`, `FR.svg`, `US.svg`. Add yours the same way, e.g. `src/assets/flags/ES.svg`.
 
-1. Add the country flag as SVG file to `assets/flags/{COUNTRY_CODE}.svg`
-2. The flag will be used in the language dropdown component
+The existing flags are circular SVGs taken from [HatScripts/circle-flags](https://github.com/HatScripts/circle-flags)
+(see `src/assets/flags/readme.md`). Take yours from the same source so it matches the others visually.
 
-### 5. Add Language to UI Selector (language dropdown component)
+There is no top-level `assets/` directory — `assets/*` is a path alias for `src/assets/*`, which is why the import strings
+below look like they have no path.
 
-Update the language dropdown component in `src/components/SettingsDialog/Components/LanguageSettingsDropdown.tsx`:
+### 5. Add the Language to the Settings Dropdown
+
+Update `src/components/SettingsDialog/Components/LanguageSettingsDropdown.tsx` — the **second** language list:
 
 ```typescript
-// Import flag icon
-import {ReactComponent as {LanguageName}} from "assets/flags/{COUNTRY_CODE}.svg";
+// Import the flag icon. Note the `?react` suffix: it is what turns the SVG into a component.
+import Spanish from "assets/flags/ES.svg?react";
 
-// Add to languages array
+// Add to the languages array
 const languages = [
   {icon: English, text: t("Language.english"), callback: () => changeLanguage("en"), code: "en"},
   {icon: German, text: t("Language.german"), callback: () => changeLanguage("de"), code: "de"},
+  {icon: French, text: t("Language.french"), callback: () => changeLanguage("fr"), code: "fr"},
   // Add your language
-  {icon: {LanguageName}, text: t("Language.{language_name}"), callback: () => changeLanguage("{language_code}"), code: "{language_code}"},
+  {icon: Spanish, text: t("Language.spanish"), callback: () => changeLanguage("es"), code: "es"},
 ];
 ```
 
-### 6. Add Language Label Translation
+### 6. Add the Language to the Homepage Picker
 
-Add the language name translation to all existing translation files:
+The landing page has its **own** flag list, separate from the settings dialog. Update
+`src/routes/Homepage/Homepage.tsx`:
+
+```typescript
+import Spanish from "assets/flags/ES.svg?react";
+```
+
+```tsx
+<li>
+  <LegacyButton leftIcon={<Spanish />} className="homepage__language" hideLabel onClick={changeLanguage("es")}>
+    Español
+  </LegacyButton>
+</li>
+```
+
+Note that the label here is the language's own name, written out literally rather than translated.
+
+### 7. Add the Language to the Test i18n Instance
+
+`src/i18nTest.ts` is a second, test-only i18next instance with a **third** hardcoded list. It uses the `translation`
+namespace only:
+
+```typescript
+import translationEs from "./i18n/es/translation.json";
+
+export const resources = {
+  en: {translation: translationEn},
+  de: {translation: translationDe},
+  fr: {translation: translationFr},
+  es: {translation: translationEs},
+};
+```
+
+Skip this and tests that assert on translated text will render raw keys, with no obvious explanation.
+
+### 8. Add the Language Label Translation
+
+Add the language name to the `Language` key of **every** translation file, including the new one:
 
 e.g. `src/i18n/en/translation.json`:
+
 ```json
 {
   "Language": {
     "english": "English",
     "german": "German",
-    "{language_name}": "{Language Name in English}"
+    "french": "French",
+    "spanish": "Spanish"
   }
 }
 ```
 
-### 7. Testing Your Translation
+### 9. Add Emoji Picker Data
 
-1. **Start the development server**:
+The emoji picker loads its dataset per language from `public/emoji-data/<language_code>.json`. `EmojiPicker.tsx` builds
+the URL from `i18n.resolvedLanguage`, so a language without a matching file gets a 404 and a broken picker.
+
+Generate the file with:
+
+```bash
+node scripts/generateEmojiData.mjs
+```
+
+The script writes to `scripts/out/` (gitignored); copy the result into `public/emoji-data/`.
+
+### 10. Testing Your Translation
+
+1. **Run the key parity test**:
+
+   ```bash
+   yarn test --run src/__tests__/locales.test.ts
+   ```
+
+   This compares your `translation.json` against the English one. Be aware of its limits: it only checks the **top two
+   levels** of keys, and it does not look at `templates.json` at all. A green run means you have not missed a whole
+   section and not that the file is complete.
+
+2. **Start the development server**:
+
    ```bash
    yarn start
    ```
 
-2. **Test language switching**:
-   - Navigate to Settings → Appearance
-   - Select your language from the dropdown
-   - Verify all text displays correctly
+3. **Test language switching**:
+   - Switch from the homepage flag buttons, and from Settings → Appearance
+   - Verify all text displays correctly in both places
 
-3. **Test completeness**:
+4. **Test completeness**:
    - Navigate through all application features
    - Check that no English text remains
+   - Open the emoji picker and a board template to check the `templates` namespace and the emoji data
    - Verify special characters display correctly
 
+## Adding a Single Translation Key
+
+Far more common than adding a language: you are building a feature and need a new string.
+
+1. Add the key to `src/i18n/en/translation.json`, under an object named after your component
+   (`"Note": {"showMore": "Show more"}`).
+2. Add the same key to `de/translation.json` and `fr/translation.json`. A machine translation is acceptable — say so in
+   the pull request and a native speaker can correct it later. Leaving the key out is not, because
+   `src/__tests__/locales.test.ts` will fail.
+3. Use it in the component:
+
+   ```tsx
+   const {t} = useTranslation();
+   // ...
+   {t("Note.showMore")}
+   ```
+
+   With interpolation:
+
+   ```tsx
+   {t("Note.userImageAlt", {user: participant.user.name})}
+   ```
+
+Two special cases:
+
+- **Board templates** live in the `templates` namespace: `useTranslation(["translation", "templates"])`.
+- **`retryable` error keys** must go under the `Error` object in `src/i18n/en/translation.json`. The key is typed, so a
+  thunk using a missing one will not compile — see
+  [State & Realtime](/dev/frontend/state-management#error-handling-retryable).
 
 ## Translation Guidelines
 
@@ -223,9 +283,11 @@ If you need assistance during the translation process:
 We want to give a huge shoutout to all the incredible people who have made Scrumlr accessible to users around the world! 🙌
 
 ### 🇩🇪 German (Deutsch)
+
 - Core team contributors 💪
 
 ### 🇫🇷 French (Français)
+
 - **Loule95450** - Thank you for adding French support! 🥐✨
 
 ### 🚀 Want to see your name here?
@@ -234,7 +296,7 @@ Join our community and help make Scrumlr available in your language! Every contr
 
 ---
 
-## 💝 Thank You!
+## 💝 Thank You
 
 Thank you for contributing to make Scrumlr accessible to more users worldwide! Your efforts help break down language barriers and bring the power of collaborative retrospectives to teams everywhere.
 

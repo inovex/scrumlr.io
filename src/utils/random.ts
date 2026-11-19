@@ -47,7 +47,7 @@ export const getRandomName = () => {
 function hashString(str: string) {
   let hash = 5381;
   for (let i = 0; i < str.length; i++) {
-    hash = (hash * 33 + str.charCodeAt(i)) % 2 ** 32;
+    hash = (hash * 33 + (str.codePointAt(i) ?? 0)) % 2 ** 32;
   }
   return hash;
 }

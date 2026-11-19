@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Dialog } from "components/Dialog";
-import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "store";
-import { Toggle } from "components/Toggle";
-import { getNumberFromStorage, saveToStorage, getFromStorage } from "utils/storage";
-import { CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY } from "constants/storage";
-import { PlusIcon, MinusIcon } from "components/Icon";
+import {useState} from "react";
+import {useTranslation} from "react-i18next";
+import {Dialog} from "components/Dialog";
+import {useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "store";
+import {Toggle} from "components/Toggle";
+import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
+import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
+import {PlusIcon, MinusIcon} from "components/Icon";
 import "./VotingDialog.scss";
-import { closeVoting, createVoting, abortVoting } from "store/features";
+import {closeVoting, createVoting, abortVoting} from "store/features";
 
 export const VotingDialog = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
 
   const cumulativeVotingStorage = getFromStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY);
-  const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
+  const cumulativeVotingDefault = !(cumulativeVotingStorage !== undefined && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
   const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
   const [isAnonymous, setIsAnonymous] = useState(true);
@@ -49,7 +49,7 @@ export const VotingDialog = () => {
   const abortVotingCallback = () => {
     dispatch(abortVoting(voting!));
     navigate("..");
-  }
+  };
 
   return (
     <Dialog className="voting-dialog accent-color__planning-pink" title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>

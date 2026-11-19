@@ -1,4 +1,4 @@
-import {HTMLAttributes, useEffect, useRef, useState} from "react";
+import React, {HTMLAttributes, useEffect, useRef, useState, MouseEvent} from "react";
 import {Database, Picker} from "emoji-picker-element";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
@@ -26,6 +26,9 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
   const dataSourceUrl = `${import.meta.env.BASE_URL}emoji-data/${lang}.json`;
   const skinToneMapping = Object.keys(skinTones) as SkinToneName[];
   const skinToneIndex = Math.max(0, skinToneMapping.indexOf(currentSkinTone));
+
+  // don't let clicks within the Picker bubble outside
+  const trapEvent = (e: MouseEvent) => e.stopPropagation();
 
   useEffect(() => {
     // Update the internal database so the picker loads the correct skin tone on initialization
@@ -135,7 +138,11 @@ const EmojiPicker = ({onEmojiClick, ...props}: EmojiPickerProps) => {
     return null;
   }
 
-  return <emoji-picker ref={ref} class={(theme === "auto" ? autoTheme : theme) as string} data-source={dataSourceUrl} locale={lang} {...props} />;
+  return (
+    <button className={"emoji-picker__container"} onClick={trapEvent}>
+      <emoji-picker ref={ref} class={(theme === "auto" ? autoTheme : theme) as string} data-source={dataSourceUrl} locale={lang} {...props} />
+    </button>
+  );
 };
 
 export default EmojiPicker;

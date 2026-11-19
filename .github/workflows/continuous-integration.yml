@@ -38,7 +38,7 @@ jobs:
           corepack install
 
       - name: Setup Node.js with cache
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "26"
           cache: "yarn"
@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: "^1.26"
+          go-version: "^1.27"
           cache: false
 
       - name: Cache Go Modules
@@ -95,7 +95,7 @@ jobs:
       - name: Go lint
         uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
-          version: v2.11.4
+          version: v2.15.0
           skip-cache: true
           working-directory: ./server/src/
 
@@ -116,7 +116,7 @@ jobs:
 
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: "^1.26"
+          go-version: "^1.27"
           cache: false
 
       - name: Cache Go Modules
@@ -147,7 +147,7 @@ jobs:
           sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # v8.2.2
+        uses: SonarSource/sonarqube-scan-action@e805d875275f728fac1885b413934be6d7c63f65 # v8.4.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -226,17 +226,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: "^1.26"
+          go-version: "^1.27"
           cache: true
           cache-dependency-path: server/e2e-tests/go.sum
+
       - name: Run E2E tests
         working-directory: ./server/e2e-tests
         env:
           E2E_BASE_URL: ${{ env.BASE_URL }}/api
           E2E_INSECURE_SKIP_VERIFY: "true"
         run: go test ./...
+
+  k6_e2e_tests:
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@c47136d33d365efbeb9ae7266908b5dcf98cdece # v1.3.0
+
+      - name: Run k6 e2e tests
+        uses: grafana/run-k6-action@54385d2a25c222a08b4a3aec6b653b8fb370a1ed # v1.6.0
+        env:
+          BASEURL: ${{ env.BASE_URL }}/api
+        with:
+          disable-analytics: true
+          path: |
+            ./server/k6/src/e2e.ts
 
   cypress_end_to_end_test:
     name: Cypress End to End Test
@@ -254,7 +276,7 @@ jobs:
           corepack install
 
       - name: Setup Node.js with cache
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "26"
           cache: "yarn"
@@ -265,7 +287,7 @@ jobs:
         working-directory: server
 
       - name: Setup client and run tests
-        uses: cypress-io/github-action@01e3b659a495b41649cdd0aa82e1d1624e26520b # v7.4.4
+        uses: cypress-io/github-action@18016a55674bd02cabf197de5762a1710cb5577c # v7.4.9
         with:
           browser: chrome
           install-command: yarn install --immutable

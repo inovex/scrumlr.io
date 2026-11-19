@@ -3,15 +3,8 @@ package boards
 import (
 	"time"
 
-	"scrumlr.io/server/sessions"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/votings"
 )
 
 type DatabaseBoard struct {
@@ -73,13 +66,9 @@ type DatabaseBoardUpdate struct {
 	LastModifiedAt        time.Time
 }
 
-type DatabaseFullBoard struct {
-	Board                DatabaseBoard
-	BoardSessions        []sessions.DatabaseBoardSession
-	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
-	Columns              []columns.DatabaseColumn
-	Notes                []notes.DatabaseNote
-	Reactions            []reactions.DatabaseReaction
-	Votings              []votings.DatabaseVoting
-	Votes                []votings.DatabaseVote
+type DatabaseBoardPassphraseUpdate struct {
+	bun.BaseModel `bun:"table:boards"`
+	ID            uuid.UUID
+	Passphrase    string
+	Salt          string
 }

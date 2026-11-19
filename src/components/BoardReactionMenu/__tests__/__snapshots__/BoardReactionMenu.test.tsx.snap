@@ -52,7 +52,6 @@ exports[`board reaction menu > should render correctly 1`] = `
       </span>
     </button>
     <button
-      aria-hidden="true"
       class="board-reactions-menu__item board-reactions-menu__close"
       tabindex="0"
     >

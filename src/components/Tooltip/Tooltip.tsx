@@ -1,7 +1,7 @@
 import {PlacesType, Tooltip as ReactTooltip} from "react-tooltip";
 import classNames from "classnames";
 import {Color, getColorClassName} from "constants/colors";
-import {ReactNode} from "react";
+import type {ComponentProps, ReactNode} from "react";
 import "./Tooltip.scss";
 
 type TooltipProps = {
@@ -11,6 +11,7 @@ type TooltipProps = {
 
   color?: Color;
   place?: PlacesType;
+  openEvents?: ComponentProps<typeof ReactTooltip>["openEvents"];
 
   children: ReactNode;
 };
@@ -27,6 +28,7 @@ export const Tooltip = (props: TooltipProps) => {
         anchorSelect={escapedAnchor}
         className={classNames("tooltip", {"tooltip--colored": props.color}, props.className, getColorClassName(props.color))}
         place={props.place}
+        openEvents={props.openEvents ?? {mouseenter: true, focus: true}}
         delayHide={0}
         opacity={1}
         role="tooltip"

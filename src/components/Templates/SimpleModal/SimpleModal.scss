@@ -76,13 +76,25 @@ $max-clamp-width: 600px;
 
 @media screen and (max-width: styles.$breakpoint--smartphone) {
   .simple-modal {
-    height: 90%;
+    max-height: 90dvh;
     gap: styles.$spacing--md;
   }
 
+  .simple-modal__main {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
   .simple-modal__footer {
-    flex-direction: column;
+    // show the primary button above the secondary one without changing the DOM order
+    flex-direction: column-reverse;
     gap: styles.$spacing--base;
+  }
+
+  // center in the visible screen, without the header padding so the modal is fully visible
+  .portal__frame:has(.simple-modal) {
+    height: 100dvh;
+    padding-top: 0;
   }
 }
 

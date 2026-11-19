@@ -8,6 +8,7 @@ import {getColorClassName} from "constants/colors";
 import {Link, useOutletContext} from "react-router";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import {getCSSCustomPropertyValue} from "utils/computedStyles";
+import {isParticipantModerator} from "utils/participant";
 import "./ShareSession.scss";
 
 export const ShareSession = () => {
@@ -17,6 +18,7 @@ export const ShareSession = () => {
   const boardId = useAppSelector((state) => state.board.data?.id);
   const theme = useAppSelector((state) => state.view.theme);
   const accessPolicy = useAppSelector((state) => state.board.data?.accessPolicy);
+  const isModerator = useAppSelector((state) => isParticipantModerator(state.participants.self?.role ?? "PARTICIPANT"));
   const autoTheme = useAutoTheme(theme);
 
   const gray000 = getCSSCustomPropertyValue("--gray--000");
@@ -48,11 +50,11 @@ export const ShareSession = () => {
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}
         </button>
-        {accessPolicy === "BY_PASSPHRASE" ? (
+        {accessPolicy === "BY_PASSPHRASE" && isModerator && (
           <Link to="../board">
             <p className="share-session__hint">{t("ShareQrCodeOption.hint")}</p>
           </Link>
-        ) : undefined}
+        )}
       </div>
     </div>
   );

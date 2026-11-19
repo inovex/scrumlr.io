@@ -9,18 +9,6 @@
     "VotingIsAnonymous": "Abstimmung ist anonym",
     "VotingIsNotAnonymous": "Abstimmung ist nicht anonym"
   },
-  "LegacyNewBoard": {
-    "boardName": "Sitzungsname",
-    "description": "Sitzungsbeschreibung",
-    "createNewBoard": "Erstelle eine Sitzung",
-    "extendedConfigurationButton": "Erweiterte Einstellungen",
-    "basicConfigurationButton": "Vorlagenauswahl",
-    "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage",
-    "importBoard": "JSON Importieren",
-    "uploadFile": "Datei hochladen oder hierher ziehen",
-    "importNewBoard": "Jetzt importieren"
-  },
   "ImportBoard": {
     "button": "JSON Importieren",
     "importNotAllowedForAnonymousUsers": "Das Importieren von Boards ist für anonyme Benutzer deaktiviert.",
@@ -358,6 +346,8 @@
     "themeToggle": "Ändere Farbschema",
     "editColumns": "Spaltenbearbeitung starten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
+    "timer": "Timer",
+    "voting": "Abstimmung",
     "startPresenterMode": "Präsentiermodus starten",
     "stopPresenterMode": "Präsentiermodus beenden",
     "returnToHomepage": "Kehre zur Homepage zurück",
@@ -458,6 +448,7 @@
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
     "noteDeleted": "Die Karte wurde gelöscht!",
+    "columnHidden": "Die Spalte wurde ausgeblendet!",
     "emptyNoteDialog": "Die Karte muss Text enthalten.",
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
@@ -470,7 +461,8 @@
   "Language": {
     "german": "Deutsch",
     "english": "Englisch",
-    "french": "Französisch"
+    "french": "Französisch",
+    "spanish": "Spanisch"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, mit ❤️ von <inovex>inovex</inovex>",

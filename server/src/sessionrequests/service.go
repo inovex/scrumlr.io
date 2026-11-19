@@ -5,11 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"time"
 
 	"scrumlr.io/server/otel"
 	"scrumlr.io/server/role"
-	"scrumlr.io/server/websocket"
+	"scrumlr.io/server/sessions"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -18,7 +17,6 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessions"
 )
 
 const sessionRequestNotFoundMessage = "board session request not found"
@@ -31,24 +29,16 @@ type SessionRequestDatabase interface {
 	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 }
 
-type SessionRequestWebsocket interface {
-	OpenSocket(w http.ResponseWriter, r *http.Request)
-	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn websocket.Connection, retryDelay time.Duration)
-	closeSocket(conn websocket.Connection)
-}
-
 type BoardSessionRequestService struct {
 	database       SessionRequestDatabase
 	broker         *realtime.Broker
-	websocket      SessionRequestWebsocket
 	sessionService sessions.SessionService
 }
 
-func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket SessionRequestWebsocket, sessionService sessions.SessionService) SessionRequestService {
+func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, sessionService sessions.SessionService) SessionRequestService {
 	service := new(BoardSessionRequestService)
 	service.database = db
 	service.broker = rt
-	service.websocket = websocket
 	service.sessionService = sessionService
 
 	return service
@@ -190,13 +180,6 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	service.updatedSessionRequest(ctx, body.Board, request)
 
 	return new(BoardSessionRequest).From(request), err
-}
-
-func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	_, span := tracer.Start(ctx, "scrumlr.session_requests.service.open_socket")
-	defer span.End()
-
-	service.websocket.OpenSocket(w, r)
 }
 
 // this needs to be moved to the middleware later

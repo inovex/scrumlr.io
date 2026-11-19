@@ -13,6 +13,5 @@ type SessionRequestService interface {
 	GetAll(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error)
 	Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error)
-	OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request)
 	BoardCandidateContext(next http.Handler) http.Handler
 }

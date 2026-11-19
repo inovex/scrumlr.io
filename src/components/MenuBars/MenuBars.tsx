@@ -289,7 +289,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             </ul>
           </section>
 
-          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn}>
             <ArrowLeftIcon className="menu-bars__navigation-icon" />
           </button>
         </div>
@@ -303,7 +303,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   <TooltipButton
                     active={state.activeTimer}
                     direction="left"
-                    label="Timer"
+                    label={t("MenuBars.timer")}
                     onClick={toggleTimerMenu}
                     icon={TimerIcon}
                     hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()}
@@ -314,7 +314,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   <TooltipButton
                     active={state.activeVoting}
                     direction="left"
-                    label="Voting"
+                    label={t("MenuBars.voting")}
                     onClick={toggleVotingMenu}
                     icon={VotingIcon}
                     hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
@@ -335,7 +335,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </ul>
             )}
           </section>
-          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn} aria-hidden>
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn}>
             <ArrowRightIcon className="menu-bars__navigation-icon" />
           </button>
         </div>

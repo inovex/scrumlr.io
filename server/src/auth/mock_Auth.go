@@ -18,10 +18,19 @@ func NewMockAuth(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockAuth {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockAuth{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }
@@ -205,8 +214,8 @@ func (_c *MockAuth_ExtractUserInformation_Call) RunAndReturn(run func(accountTyp
 }
 
 // Sign provides a mock function for the type MockAuth
-func (_mock *MockAuth) Sign(stringToV map[string]any) (string, error) {
-	ret := _mock.Called(stringToV)
+func (_mock *MockAuth) Sign(stringToAnyMoqParam map[string]any) (string, error) {
+	ret := _mock.Called(stringToAnyMoqParam)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Sign")
@@ -215,15 +224,15 @@ func (_mock *MockAuth) Sign(stringToV map[string]any) (string, error) {
 	var r0 string
 	var r1 error
 	if returnFunc, ok := ret.Get(0).(func(map[string]any) (string, error)); ok {
-		return returnFunc(stringToV)
+		return returnFunc(stringToAnyMoqParam)
 	}
 	if returnFunc, ok := ret.Get(0).(func(map[string]any) string); ok {
-		r0 = returnFunc(stringToV)
+		r0 = returnFunc(stringToAnyMoqParam)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 	if returnFunc, ok := ret.Get(1).(func(map[string]any) error); ok {
-		r1 = returnFunc(stringToV)
+		r1 = returnFunc(stringToAnyMoqParam)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -236,12 +245,12 @@ type MockAuth_Sign_Call struct {
 }
 
 // Sign is a helper method to define mock.On call
-//   - stringToV map[string]any
-func (_e *MockAuth_Expecter) Sign(stringToV any) *MockAuth_Sign_Call {
-	return &MockAuth_Sign_Call{Call: _e.mock.On("Sign", stringToV)}
+//   - stringToAnyMoqParam map[string]any
+func (_e *MockAuth_Expecter) Sign(stringToAnyMoqParam any) *MockAuth_Sign_Call {
+	return &MockAuth_Sign_Call{Call: _e.mock.On("Sign", stringToAnyMoqParam)}
 }
 
-func (_c *MockAuth_Sign_Call) Run(run func(stringToV map[string]any)) *MockAuth_Sign_Call {
+func (_c *MockAuth_Sign_Call) Run(run func(stringToAnyMoqParam map[string]any)) *MockAuth_Sign_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 map[string]any
 		if args[0] != nil {
@@ -259,7 +268,7 @@ func (_c *MockAuth_Sign_Call) Return(s string, err error) *MockAuth_Sign_Call {
 	return _c
 }
 
-func (_c *MockAuth_Sign_Call) RunAndReturn(run func(stringToV map[string]any) (string, error)) *MockAuth_Sign_Call {
+func (_c *MockAuth_Sign_Call) RunAndReturn(run func(stringToAnyMoqParam map[string]any) (string, error)) *MockAuth_Sign_Call {
 	_c.Call.Return(run)
 	return _c
 }

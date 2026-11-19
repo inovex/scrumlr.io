@@ -38,7 +38,6 @@ const initialState: ViewState = {
   hotkeyNotificationsEnabled: getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
   theme: (getFromStorage(THEME_STORAGE_KEY) as Theme) ?? "auto",
-  legacyCreateBoard: import.meta.env.VITE_LEGACY_CREATE_BOARD === "true",
   snowfallEnabled: getFromStorage(SNOWFALL_STORAGE_KEY) !== "false",
   snowfallNotificationEnabled: getFromStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY) !== "false",
 };
@@ -63,7 +62,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.allowAnonymousCustomTemplates = action.payload.allowAnonymousCustomTemplates;
       state.allowAnonymousBoardCreation = action.payload.allowAnonymousBoardCreation;
       state.allowAnonymousHistory = action.payload.allowAnonymousHistory;
-      state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
+      state.serverTimeOffset = Date.now() - action.payload.serverTime;
       state.feedbackEnabled = action.payload.feedbackEnabled;
     })
     .addCase(setRoute, (state, action) => {

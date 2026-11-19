@@ -1,6 +1,12 @@
 package boardtemplates
 
-import "fmt"
+import (
+	"database/sql"
+	"errors"
+	"fmt"
+
+	"scrumlr.io/server/common"
+)
 
 type BoardTemplateErrorCategory string
 
@@ -33,4 +39,26 @@ func CreateBoardTemplateError(category BoardTemplateErrorCategory, message strin
 		Message:  message,
 		Err:      err,
 	}
+}
+
+// MapBoardTemplateError translates domain and database errors to HTTP API Errors.
+func MapBoardTemplateError(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	// DB "no rows" error is a common case for "not found"
+	if errors.Is(err, sql.ErrNoRows) {
+		return common.NotFoundError
+	}
+
+	var boardErr BoardTemplateError
+	if errors.As(err, &boardErr) {
+		switch boardErr.Category {
+		case NotFound:
+			return common.NotFoundError
+		}
+	}
+
+	return common.InternalServerError
 }

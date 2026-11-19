@@ -9,18 +9,6 @@
     "VotingIsAnonymous": "Voting is anonymous",
     "VotingIsNotAnonymous": "Voting is not anonymous"
   },
-  "LegacyNewBoard": {
-    "boardName": "Board name",
-    "description": "Board description",
-    "createNewBoard": "Create new Board",
-    "extendedConfigurationButton": "Extended configuration",
-    "basicConfigurationButton": "Template selection",
-    "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template",
-    "importBoard": "Import JSON",
-    "uploadFile": "Upload file or drag here",
-    "importNewBoard": "Import now"
-  },
   "ImportBoard": {
     "button": "Import JSON",
     "importNotAllowedForAnonymousUsers": "Importing boards is disabled for anonymous users.",
@@ -354,6 +342,8 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
+    "timer": "Timer",
+    "voting": "Voting",
     "startPresenterMode": "Start presenter mode",
     "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
@@ -454,6 +444,7 @@
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
     "noteDeleted": "The note has been deleted!",
+    "columnHidden": "The column has been hidden!",
     "emptyNoteDialog": "The note must contain text.",
     "ready": "Are you ready?",
     "readyButton": "Ready!",
@@ -466,7 +457,8 @@
   "Language": {
     "german": "German",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "spanish": "Spanish"
   },
   "Homepage": {
     "developers": "© 2021-{{currentYear}}, provided by <inovex>inovex</inovex> with ❤️",

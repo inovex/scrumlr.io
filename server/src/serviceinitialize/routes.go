@@ -2,6 +2,8 @@ package serviceinitialize
 
 import (
 	"github.com/go-chi/chi/v5"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/info"
@@ -34,14 +36,14 @@ func (init *RoutesInitializer) InitializeBoardReactionRoutes() {
 	panic("Not implemented")
 }
 
-func (init *RoutesInitializer) InitializeBoardTemplateRoutes() {
-	// board template routes are currently not initialized through the route initializer
-	panic("Not implemented")
+func (init *RoutesInitializer) InitializeBoardTemplateRoutes(boardTemplateAPI boardtemplates.BoardTemplateApi) chi.Router {
+	boardTemplateRouter := boardtemplates.NewBoardTemplateRouter(boardTemplateAPI).RegisterRoutes()
+	return boardTemplateRouter
 }
 
-func (init *RoutesInitializer) InitializeColumnTemplateRoutes() {
-	// column template routes are currently not initialized through the route initializer
-	panic("Not implemented")
+func (init *RoutesInitializer) InitializeColumnTemplateRoutes(columnTemplateAPI columntemplates.ColumnTemplateApi) chi.Router {
+	columnTemplateRouter := columntemplates.NewColumnTemplateRouter(columnTemplateAPI).RegisterRoutes()
+	return columnTemplateRouter
 }
 
 func (init *RoutesInitializer) InitializeFeedbackRoutes(feedbackApi feedback.FeedbackApi) chi.Router {

@@ -97,14 +97,14 @@ func InitializeBun(db *sql.DB, logLevel zapcore.Level) *bun.DB {
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
 	d.SetMaxOpenConns(maxOpenConnections)
 	d.SetMaxIdleConns(maxOpenConnections)
-	d.AddQueryHook(bunotel.NewQueryHook(
+	d.WithQueryHook(bunotel.NewQueryHook(
 		bunotel.WithDBName("scruml-database"),
 		bunotel.WithTracerProvider(traceProvider),
 		bunotel.WithMeterProvider(meterProvider),
 	))
 
 	if logLevel == zap.DebugLevel {
-		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+		d.WithQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 
 	return d

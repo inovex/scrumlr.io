@@ -9,8 +9,9 @@ import (
 	"time"
 
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/hash"
+	"scrumlr.io/server/encoder"
 	"scrumlr.io/server/role"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 
@@ -19,7 +20,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
@@ -40,10 +40,10 @@ type BoardServiceTestSuite struct {
 	votingMock         *votings.MockVotingService
 	userService        *users.MockUserService
 
-	broker     *realtime.Broker
-	mockBroker *realtime.MockClient
-	mockClock  *timeprovider.MockTimeProvider
-	mockHash   *hash.MockHash
+	broker              *realtime.Broker
+	mockBroker          *realtime.MockClient
+	mockClock           *timeprovider.MockTimeProvider
+	mockPasswordEncoder *encoder.MockPasswordEncoder
 
 	boardID   uuid.UUID
 	userID    uuid.UUID
@@ -74,9 +74,9 @@ func (suite *BoardServiceTestSuite) SetupTest() {
 	suite.broker.Con = suite.mockBroker
 
 	suite.mockClock = timeprovider.NewMockTimeProvider(suite.T())
-	suite.mockHash = hash.NewMockHash(suite.T())
+	suite.mockPasswordEncoder = encoder.NewMockPasswordEncoder(suite.T())
 
-	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionRequestMock, suite.sessionsMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockHash)
+	suite.service = NewBoardService(suite.mockBoardDatabase, suite.broker, suite.sessionsMock, suite.sessionRequestMock, suite.columnMock, suite.noteMock, suite.reactionMock, suite.votingMock, suite.userService, suite.mockClock, suite.mockPasswordEncoder)
 
 	suite.boardID = uuid.New()
 	suite.userID = uuid.New()
@@ -115,8 +115,6 @@ func (suite *BoardServiceTestSuite) TestExport_JSON() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -171,8 +169,6 @@ func (suite *BoardServiceTestSuite) TestExport_CSV() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -383,8 +379,6 @@ func (suite *BoardServiceTestSuite) TestExport_UnsupportedAcceptType() {
 			AllowStacking:         fullBoard.Board.AllowStacking,
 			IsLocked:              fullBoard.Board.IsLocked,
 		}, nil)
-	suite.sessionRequestMock.EXPECT().GetAll(mock.Anything, suite.boardID, string(sessionrequests.RequestAccepted)).
-		Return(fullBoard.BoardSessionRequests, nil)
 	suite.sessionsMock.EXPECT().GetAll(mock.Anything, suite.boardID, sessions.BoardSessionFilter{}).
 		Return(fullBoard.BoardSessions, nil)
 	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).
@@ -479,7 +473,51 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase() {
 	}
 
 	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
-	suite.mockHash.EXPECT().HashBySalt(passphrase, salt).Return("encoded")
+	suite.mockPasswordEncoder.EXPECT().Matches(passphrase, encodedPassphrase, salt).
+		Return(true, nil)
+	suite.mockPasswordEncoder.EXPECT().UpgradeEncoding(encodedPassphrase).
+		Return(false)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
+		Board:                suite.boardID,
+		User:                 suite.userID,
+		Role:                 role.ParticipantRole,
+		PassphraseVerifiedAt: &suite.updatedAt,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: passphrase})
+
+	suite.NoError(err)
+	suite.False(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusCreated, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_UpgradeEncoding() {
+	passphrase := "correct"
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	newEncodedPassphrase := "NewEncoded"
+	newSalt := "pepper"
+	board := &Board{
+		ID:           suite.boardID,
+		AccessPolicy: ByPassphrase,
+		Passphrase:   &encodedPassphrase,
+		Salt:         &salt,
+	}
+
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.mockPasswordEncoder.EXPECT().Matches(passphrase, encodedPassphrase, salt).
+		Return(true, nil)
+	suite.mockPasswordEncoder.EXPECT().UpgradeEncoding(encodedPassphrase).
+		Return(true)
+	suite.mockPasswordEncoder.EXPECT().Encode(passphrase).
+		Return(&newEncodedPassphrase, &newSalt, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoardPassphrase(mock.Anything, DatabaseBoardPassphraseUpdate{
+		ID:         suite.boardID,
+		Passphrase: newEncodedPassphrase,
+		Salt:       newSalt,
+	}).Return(DatabaseBoard{}, nil)
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
 		Board:                suite.boardID,
@@ -507,7 +545,8 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest()
 	}
 
 	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
-	suite.mockHash.EXPECT().HashBySalt("wrong", salt).Return("different")
+	suite.mockPasswordEncoder.EXPECT().Matches("wrong", encodedPassphrase, salt).
+		Return(false, nil)
 
 	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: "wrong"})
 
@@ -523,8 +562,10 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphraseRejectsInvalidRequest()
 func (suite *BoardServiceTestSuite) TestJoin_ByInvite() {
 	board := &Board{ID: suite.boardID, AccessPolicy: ByInvite}
 
-	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
-	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
+	suite.sessionRequestMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).
+		Return(false, nil)
 	suite.sessionRequestMock.EXPECT().Create(mock.Anything, suite.boardID, suite.userID).
 		Return(&sessionrequests.BoardSessionRequest{}, nil)
 
@@ -643,7 +684,7 @@ func (suite *BoardServiceTestSuite) TestCreate_ByPassphrase() {
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{Board: suite.boardID, User: suite.userID, Role: role.OwnerRole}).
 		Return(&sessions.BoardSession{UserID: suite.userID, Board: suite.boardID, Role: role.OwnerRole}, nil)
 
-	suite.mockHash.EXPECT().HashWithSalt(passPhrase).Return(&passPhrase, &salt, nil)
+	suite.mockPasswordEncoder.EXPECT().Encode(passPhrase).Return(&passPhrase, &salt, nil)
 
 	board, err := suite.service.Create(context.Background(),
 		CreateBoardRequest{
@@ -906,7 +947,7 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
-	suite.mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
+	suite.mockPasswordEncoder.EXPECT().Encode(passphrase).Return(&passphrase, &salt, nil)
 
 	board, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
 
@@ -2287,7 +2328,7 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExpiredSessionRenewedW
 	verifiedAt := suite.updatedAt.Add(-passphraseValidity - time.Hour)
 	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
-	suite.mockHash.EXPECT().HashBySalt("correct", "salt").Return("encoded")
+	suite.mockPasswordEncoder.EXPECT().Matches("correct", "encoded", "salt").Return(true, nil)
 	suite.sessionsMock.EXPECT().Update(mock.Anything, sessions.BoardSessionUpdateRequest{
 		Board:                suite.boardID,
 		User:                 suite.userID,
@@ -2306,7 +2347,7 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExpiredSessionWrongPas
 	verifiedAt := suite.updatedAt.Add(-passphraseValidity - time.Hour)
 	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
-	suite.mockHash.EXPECT().HashBySalt("wrong", "salt").Return("other")
+	suite.mockPasswordEncoder.EXPECT().Matches("wrong", "encoded", "salt").Return(false, nil)
 
 	_, _, _, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{Passphrase: "wrong"})
 
@@ -2342,7 +2383,7 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_KeepsExistingSession
 	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*notes.Note{}, nil)
 	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
-	suite.mockHash.EXPECT().HashWithSalt(passphrase).Return(&passphrase, &salt, nil)
+	suite.mockPasswordEncoder.EXPECT().Encode(passphrase).Return(&passphrase, &salt, nil)
 
 	_, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
 

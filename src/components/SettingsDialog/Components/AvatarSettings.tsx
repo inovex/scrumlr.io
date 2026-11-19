@@ -21,10 +21,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   const {t} = useTranslation();
   const self = useAppSelector((state) => state.auth.user!);
 
-  let initialState = self.avatar;
-  if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(props.id);
-  }
+  let initialState = self.avatar ?? generateRandomProps(props.id);
 
   // old authenticated accounts may be missing backgroundColor, so we set it explicitly. It will be persisted when going to the profile settings for the first time
   if (!initialState.backgroundColor) {

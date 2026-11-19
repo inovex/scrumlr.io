@@ -11,16 +11,7 @@ import {BoardReactionType} from "../store/features/boardReactions/types";
 
 export interface BoardInitEvent {
   type: "INIT";
-  data: {
-    board: Board;
-    columns: Column[];
-    notes?: Note[];
-    reactions?: Reaction[];
-    votings?: Voting[];
-    votes?: Vote[];
-    participants: ParticipantWithUserId[];
-    requests?: Request[];
-  };
+  data: string;
 }
 
 export interface BoardUpdateEvent {
