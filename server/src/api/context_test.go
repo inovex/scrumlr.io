@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"

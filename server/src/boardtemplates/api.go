@@ -4,8 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"uuid"
+
 	"github.com/go-chi/render"
-	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"

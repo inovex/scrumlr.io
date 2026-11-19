@@ -17,7 +17,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/lestrrat-go/jwx/v3/jwt"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
