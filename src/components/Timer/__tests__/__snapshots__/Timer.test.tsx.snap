@@ -7,6 +7,7 @@ exports[`Timer > should render correctly 1`] = `
   <div
     class="timer"
     id="timer"
+    role="timer"
   >
     <div
       class="timer__progress-bar"

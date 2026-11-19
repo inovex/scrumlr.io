@@ -20,7 +20,7 @@ type SimpleModalProps = {
 };
 
 export const SimpleModal = (props: SimpleModalProps) => (
-  <div className={classNames(props.className, "simple-modal")} data-testid="simple-modal">
+  <div className={classNames(props.className, "simple-modal")} role="dialog" aria-label={props.title} data-testid="simple-modal">
     <header className="simple-modal__header">
       <button className="simple-modal__close-button" onClick={props.secondaryButton.onClick} aria-label="Close modal">
         <CloseIcon className="simple-modal__close-icon" />
