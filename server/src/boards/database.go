@@ -72,7 +72,7 @@ func (d *DB) UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (Datab
 		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
-		query.Column("access_policy", "passphrase", "salt")
+		query.Column("access_policy", "passphrase", "salt", "passphrase_changed_at")
 	}
 	if update.ShowAuthors != nil {
 		query.Column("show_authors")

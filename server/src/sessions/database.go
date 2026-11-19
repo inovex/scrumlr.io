@@ -31,7 +31,7 @@ func (database *SessionDB) Create(ctx context.Context, boardSession DatabaseBoar
 		With("insertQuery", insertQuery).
 		Model((*DatabaseBoardSession)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.board = ?", boardSession.Board).
 		Where("s.user = ?", boardSession.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -80,6 +80,10 @@ func (database *SessionDB) Update(ctx context.Context, update DatabaseBoardSessi
 		updateQuery = updateQuery.Column("favourite")
 	}
 
+	if update.PassphraseVerifiedAt != nil {
+		updateQuery = updateQuery.Column("passphrase_verified_at")
+	}
+
 	updateQuery.Where("\"board\" = ?", update.Board).
 		Where("\"user\" = ?", update.User).
 		Returning("*")
@@ -89,7 +93,7 @@ func (database *SessionDB) Update(ctx context.Context, update DatabaseBoardSessi
 		With("updateQuery", updateQuery).
 		Model((*DatabaseBoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -123,7 +127,7 @@ func (database *SessionDB) UpdateAll(ctx context.Context, update DatabaseBoardSe
 		With("updateQuery", updateQuery).
 		Model((*DatabaseBoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.board = ?", update.Board).
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(ctx, &sessions)
@@ -170,7 +174,7 @@ func (database *SessionDB) Get(ctx context.Context, board, user uuid.UUID) (Data
 	var session DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -182,7 +186,7 @@ func (database *SessionDB) Get(ctx context.Context, board, user uuid.UUID) (Data
 func (database *SessionDB) GetAll(ctx context.Context, board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
 	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
@@ -211,7 +215,7 @@ func (database *SessionDB) GetUserBoardSessions(ctx context.Context, user uuid.U
 	var sessions []DatabaseBoardSession
 	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned, s.favourite, s.passphrase_verified_at").
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
