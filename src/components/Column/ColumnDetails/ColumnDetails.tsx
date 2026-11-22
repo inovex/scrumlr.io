@@ -37,7 +37,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description);
+  const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description ?? "");
   const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
@@ -45,7 +45,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [focusTarget, setFocusTarget] = useState<"name" | "description">("name");
 
   const [localName, setLocalName] = useState(props.column.name);
-  const [localDescription, setLocalDescription] = useState(props.column.description);
+  const [localDescription, setLocalDescription] = useState(props.column.description ?? "");
 
   // emoji autocomplete for column name
   const {...emoji} = useEmojiAutocomplete({

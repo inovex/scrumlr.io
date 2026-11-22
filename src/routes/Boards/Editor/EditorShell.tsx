@@ -38,7 +38,7 @@ export const EditorShell = ({editorId, initialName, initialDescription, initialC
   const {t} = useTranslation();
 
   const [nameInput, setNameInput] = useState(initialName);
-  const [descriptionInput, setDescriptionInput] = useState(initialDescription);
+  const [descriptionInput, setDescriptionInput] = useState(initialDescription ?? "");
   const [editableColumns, setEditableColumns] = useState<EditableTemplateColumn[]>(initialColumns);
   // separate to keep track of columns which will be deleted in the future
   const [deleteColumns, setDeleteColumns] = useState<EditableTemplateColumn[]>([]);

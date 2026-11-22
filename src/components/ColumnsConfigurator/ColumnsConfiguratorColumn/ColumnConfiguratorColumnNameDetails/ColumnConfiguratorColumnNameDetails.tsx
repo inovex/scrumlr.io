@@ -29,7 +29,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   // temporary state for name and description text as the changes have to be confirmed before applying
   const [name, setName] = useState(props.name);
-  const [description, setDescription] = useState(props.description);
+  const [description, setDescription] = useState(props.description ?? "");
 
   const isEditing = props.openState === "nameFirst" || props.openState === "descriptionFirst";
 
@@ -80,7 +80,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
   ];
 
   const openDescriptionWithCurrentValue = () => {
-    setDescription(props.description);
+    setDescription(props.description ?? "");
     props.setOpenState("descriptionFirst");
   };
 

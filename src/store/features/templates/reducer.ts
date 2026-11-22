@@ -38,7 +38,11 @@ export const templatesReducer = createReducer(initialState, (builder) => {
     .addCase(getTemplates.fulfilled, (_state, action) =>
       // action.payload: TemplateWithColumns[]
       // Only store Template objects in state, set type to CUSTOM
-      [DEFAULT_TEMPLATE.template, ...generateRecommendedTemplates(), ...action.payload.map((twc) => ({...twc.template, type: "CUSTOM"}) as Template)]
+      [
+        DEFAULT_TEMPLATE.template,
+        ...generateRecommendedTemplates(),
+        ...action.payload.map((twc) => ({...twc.template, description: twc.template.description ?? "", type: "CUSTOM"}) as Template),
+      ]
     )
     .addCase(editTemplate.fulfilled, (state, action) =>
       state.map(

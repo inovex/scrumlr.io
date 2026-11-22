@@ -96,11 +96,13 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   // seed columns from the board (create-from-board) or from the basis template (create/edit).
   const initialColumns: EditableTemplateColumn[] =
     mode === "createFromBoard"
-      ? [...board!.columns].sort((a, b) => a.index - b.index).map((column) => ({...column, template: templateId, persisted: true, mode: undefined}))
-      : basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined}));
+      ? [...board!.columns]
+          .sort((a, b) => a.index - b.index)
+          .map((column) => ({...column, description: column.description ?? "", template: templateId, persisted: true, mode: undefined}))
+      : basisColumns.map((bc) => ({...bc, description: bc.description ?? "", persisted: true, mode: undefined}));
 
   const initialName = mode === "createFromBoard" ? board!.name : id ? basisTemplate!.name : "";
-  const initialDescription = mode === "createFromBoard" ? board!.description : id ? basisTemplate!.description : "";
+  const initialDescription = (mode === "createFromBoard" ? board!.description : id ? basisTemplate!.description : "") ?? "";
 
   return (
     <>
