@@ -4215,10 +4215,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-fs-backend@npm:^2.6.11":
-  version: 2.6.11
-  resolution: "i18next-fs-backend@npm:2.6.11"
-  checksum: 10c0/9b75de187fdac6c9d96cfbdce7e12466a09a8fcef1a36c7a4c832b9e853d765096d855284f72b88fe94e6b54e3b2f1c70e39e44a6db37dd036f6b6c97e9216e0
+"i18next-fs-backend@npm:^2.6.12":
+  version: 2.6.12
+  resolution: "i18next-fs-backend@npm:2.6.12"
+  checksum: 10c0/be8e4b39cb480b2e5817a12d4b7954b83425bfea2c2d1752c9a815249f382cf42ae8124a238116894bd855fb1ae0eefa146542d2a44ed71dca689f03b94b3714
   languageName: node
   linkType: hard
 
@@ -6412,7 +6412,7 @@ __metadata:
     husky: "npm:^9.1.7"
     i18next: "npm:^27.1.0"
     i18next-browser-languagedetector: "npm:^8.3.0"
-    i18next-fs-backend: "npm:^2.6.11"
+    i18next-fs-backend: "npm:^2.6.12"
     js-cookie: "npm:^3.0.8"
     linkify-react: "npm:^4.4.0"
     linkifyjs: "npm:^4.4.0"
