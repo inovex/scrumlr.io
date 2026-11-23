@@ -3,8 +3,10 @@
 exports[`TemplateCard > should render correctly (custom) 1`] = `
 <div>
   <div
+    aria-label="sample name 1"
     class="template-card"
     data-cy="template-card--CUSTOM"
+    role="group"
   >
     <button
       class="template-card__favourite favourite-button accent-color__planning-pink"
@@ -45,10 +47,12 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
       class="template-card__menu-icon-container"
     >
       <svg
+        aria-label="Template options"
         class="template-card__icon template-card__icon--menu"
         data-cy="template-card__menu"
         fill="none"
         height="32"
+        role="button"
         viewBox="0 0 32 32"
         width="32"
         xmlns="http://www.w3.org/2000/svg"
@@ -189,8 +193,10 @@ exports[`TemplateCard > should render correctly (custom) 1`] = `
 exports[`TemplateCard > should render correctly (recommended) 1`] = `
 <div>
   <div
+    aria-label="sample name 1"
     class="template-card"
     data-cy="template-card--RECOMMENDED"
+    role="group"
   >
     <button
       class="template-card__favourite favourite-button accent-color__planning-pink"

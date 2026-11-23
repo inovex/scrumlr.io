@@ -37,7 +37,6 @@ exports[`VotingDialog > should match the snapshot with active voting 1`] = `
               </h2>
               <button
                 class="voting-dialog__start-button"
-                data-testid="voting-dialog__stop-button"
               >
                 <label>
                   End voting phase
@@ -45,7 +44,6 @@ exports[`VotingDialog > should match the snapshot with active voting 1`] = `
               </button>
               <button
                 class="voting-dialog__start-button"
-                data-testid="voting-dialog__abort-button"
               >
                 <label>
                   Abort voting phase
@@ -208,7 +206,6 @@ exports[`VotingDialog > should match the snapshot with no active voting 1`] = `
               </div>
               <button
                 class="voting-dialog__start-button"
-                data-testid="voting-dialog__start-button"
               >
                 <label>
                   Start voting phase

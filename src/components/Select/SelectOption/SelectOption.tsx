@@ -30,6 +30,7 @@ export const SelectOption = (props: SelectOptionProps) => {
       className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive}, {"select-option--extra": props.children})}
       onClick={handleSelect}
       tabIndex={0}
+      aria-label={props.label}
     >
       <div className="select-option__icon-container">{props.icon}</div>
       <div className="select-option__label">{props.label}</div>

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["node"],
+    "paths": {
+      "@helpers/*": ["./helpers/*"],
+      "@fixtures/*": ["./fixtures/*"],
+    }
+  },
+  "include": ["**/*.ts"]
+}
