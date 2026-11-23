@@ -34,7 +34,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-focus-lock": "^2.13.7",
-    "react-helmet-async": "^3.0.0",
+    "react-helmet-async": "^3.1.0",
     "react-hotkeys-hook": "^5.4.0",
     "react-i18next": "^18.0.1",
     "react-redux": "^9.3.1",
