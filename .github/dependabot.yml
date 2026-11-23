@@ -109,3 +109,33 @@ updates:
     commit-message:
       prefix: "gha"
       include: "scope"
+
+  # docker images
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    commit-message:
+      prefix: "docker"
+      include: scope
+
+  # docker compose images
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Dependencies"
+    commit-message:
+      prefix: "docker"
+      include: scope
