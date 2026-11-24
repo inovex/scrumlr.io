@@ -6013,16 +6013,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^6.0.11":
-  version: 6.0.11
-  resolution: "react-tooltip@npm:6.0.11"
+"react-tooltip@npm:^6.0.12":
+  version: 6.0.12
+  resolution: "react-tooltip@npm:6.0.12"
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     clsx: "npm:2.1.1"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10c0/d3619c944219f9f54d372f034600a5cb206ff51de1cf92aad9c4d0d7350d2cb8eedb59c3b569376365644effbb3e3cecb1fb16c55b172cee3730704fd0238829
+  checksum: 10c0/82571f445bba1e7f33ddcee33b3a9fb081aee4e423201ab4d63e243848d15484f190d1518a58c41d65f4483c1398b760f8ed001478716fdb24f803afb89298c0
   languageName: node
   linkType: hard
 
@@ -6436,7 +6436,7 @@ __metadata:
     react-textarea-autosize: "npm:^8.5.9"
     react-to-print: "npm:^3.3.0"
     react-toastify: "npm:^11.2.0"
-    react-tooltip: "npm:^6.0.11"
+    react-tooltip: "npm:^6.0.12"
     redux-mock-store: "npm:^1.5.4"
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.108.2"
