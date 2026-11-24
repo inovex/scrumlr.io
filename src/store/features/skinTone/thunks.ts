@@ -3,7 +3,7 @@ import {SKIN_TONE_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import {SkinToneName} from "./types";
 
-export const setSkinTone = createAsyncThunk<SkinToneName, SkinToneName>("skinTone/setSkinTone", async (payload) => {
+export const setSkinTone = createAsyncThunk<SkinToneName, SkinToneName>("skinTone/setSkinTone", (payload) => {
   saveToStorage(SKIN_TONE_STORAGE_KEY, payload);
   return payload;
 });

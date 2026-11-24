@@ -33,7 +33,7 @@ const signInAnonymously = async (displayName: string) => {
  * @param authProvider name of the OAuth Provider
  * @param originURL origin URL
  */
-const signInWithAuthProvider = async (authProvider: string, originURL: string) => {
+const signInWithAuthProvider = (authProvider: string, originURL: string) => {
   window.location.href = `${SERVER_HTTP_URL}/login/${authProvider}?state=${encodeURIComponent(originURL)}`;
 };
 
