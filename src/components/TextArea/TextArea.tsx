@@ -49,7 +49,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
 
   const {value: _value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
     inputRef: internalRef,
-    value: props.input,
+    value: props.input ?? "",
     onValueChange: props.setInput,
     maxInputLength: props.maxLength,
     suggestionsHidden: !props.emojiSuggestions,

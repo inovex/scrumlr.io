@@ -94,7 +94,7 @@ func (suite *BoardServiceTestSuite) TestExport_JSON() {
 	visibleNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: visibleColumnID}}
 	hiddenNote := &notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: hiddenColumnID}}
 	fullBoard := &FullBoard{
-		Board:         &Board{ID: suite.boardID, Name: &suite.boardName},
+		Board:         &Board{ID: suite.boardID, Name: &suite.boardName, Description: new("")},
 		BoardSessions: []*sessions.BoardSession{{UserID: suite.userID}},
 		Columns: []*columns.Column{
 			{ID: visibleColumnID, Name: "Visible", Visible: true},

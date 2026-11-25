@@ -8,8 +8,10 @@ const initialState: ColumnsState = [];
 
 export const columnsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.columns)
-    .addCase(updatedColumns, (_state, action) => action.payload)
+    .addCase(initializeBoard, (_state, action) =>
+      action.payload.fullBoard.columns.map((column) => ({...column, description: column.description ?? ""}))
+    )
+    .addCase(updatedColumns, (_state, action) => action.payload.map((column) => ({...column, description: column.description ?? ""})))
     // .toSpliced instead .splice because of Immer
     .addCase(createColumnOptimistically, (state, action) => state.toSpliced(action.payload.index, 0, action.payload))
     .addCase(deleteColumnOptimistically, (state) => state.filter((c) => c.id !== TEMPORARY_COLUMN_ID).map((col, idx) => ({...col, index: idx})))

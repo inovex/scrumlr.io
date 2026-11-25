@@ -42,10 +42,14 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 	defer span.End()
 
 	// map request on board object to insert into database
+	description := body.Description
+	if description == nil {
+		description = new("")
+	}
 	board := DatabaseBoardTemplateInsert{
 		Creator:     body.Creator,
 		Name:        body.Name,
-		Description: body.Description,
+		Description: description,
 		Favourite:   body.Favourite,
 	}
 

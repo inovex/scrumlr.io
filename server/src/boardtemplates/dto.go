@@ -33,6 +33,9 @@ func (bt *BoardTemplate) From(board DatabaseBoardTemplate) *BoardTemplate {
 	bt.Creator = board.Creator
 	bt.Name = board.Name
 	bt.Description = board.Description
+	if bt.Description == nil {
+		bt.Description = new("")
+	}
 	bt.Favourite = board.Favourite
 	bt.CreatedAt = board.CreatedAt
 	bt.ModifiedAt = board.ModifiedAt

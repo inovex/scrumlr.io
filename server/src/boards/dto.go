@@ -58,6 +58,9 @@ func (b *Board) From(board DatabaseBoard) *Board {
 	b.ID = board.ID
 	b.Name = board.Name
 	b.Description = board.Description
+	if b.Description == nil {
+		b.Description = new("")
+	}
 	b.AccessPolicy = board.AccessPolicy
 	b.ShowAuthors = board.ShowAuthors
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers

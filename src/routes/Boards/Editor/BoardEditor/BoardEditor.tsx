@@ -47,7 +47,7 @@ export const BoardEditor = () => {
   // seed the editor with the board's real columns, in their current order.
   const initialColumns: EditableTemplateColumn[] = [...board.columns]
     .sort((a, b) => a.index - b.index)
-    .map((column) => ({...column, template: board.id, persisted: true, mode: undefined}));
+    .map((column) => ({...column, description: column.description ?? "", template: board.id, persisted: true, mode: undefined}));
 
   const saveBoard = (payload: EditorSubmitPayload) => {
     dispatch(

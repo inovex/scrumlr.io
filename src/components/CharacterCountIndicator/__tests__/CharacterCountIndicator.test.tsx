@@ -2,6 +2,11 @@ import {render} from "testUtils";
 import {CharacterCountIndicator} from "components/CharacterCountIndicator/CharacterCountIndicator";
 
 describe("CharacterCountIndicator", () => {
+  it("should not render for a null value", () => {
+    const {container} = render(<CharacterCountIndicator value={null} maxLength={1024} />);
+    expect(container.querySelector(".character-count-indicator")).toBeNull();
+  });
+
   it("should not render below 75% of the limit", () => {
     const {container} = render(<CharacterCountIndicator value={"a".repeat(767)} maxLength={1024} />);
     expect(container.querySelector(".character-count-indicator")).toBeNull();

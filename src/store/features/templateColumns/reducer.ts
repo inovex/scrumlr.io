@@ -27,7 +27,11 @@ const initialState: TemplateColumnsState = [...defaultTemplateColumns, ...recomm
 export const templateColumnsReducer = createReducer(initialState, (builder) => {
   builder
     // each full template has a column prop which is an array, so we need to map out the columns prop and also flatten the array
-    .addCase(getTemplates.fulfilled, (_state, action) => [...defaultTemplateColumns, ...recommendedColumns, ...action.payload.flatMap((c) => c.columns)])
+    .addCase(getTemplates.fulfilled, (_state, action) => [
+      ...defaultTemplateColumns,
+      ...recommendedColumns,
+      ...action.payload.flatMap((c) => c.columns.map((column) => ({...column, description: column.description ?? ""}))),
+    ])
     // when retrieving template columns, update those which already exist and add the ones which don't
     // and return a new state in redux fashion
     .addCase(
