@@ -866,6 +866,10 @@ func (service *Service) joinByInvite(ctx context.Context, board *Board, user uui
 
 func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseBoardInsert, error) {
 	var board DatabaseBoardInsert
+	description := body.Description
+	if description == nil {
+		description = new("")
+	}
 
 	switch body.AccessPolicy {
 	case Public, ByInvite:
@@ -874,7 +878,7 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 			return board, err
 		}
 
-		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+		board = DatabaseBoardInsert{Name: body.Name, Description: description, AccessPolicy: body.AccessPolicy}
 
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
@@ -889,7 +893,7 @@ func (service *Service) mapCreateBoardInsert(body CreateBoardRequest) (DatabaseB
 
 		board = DatabaseBoardInsert{
 			Name:         body.Name,
-			Description:  body.Description,
+			Description:  description,
 			AccessPolicy: body.AccessPolicy,
 			Passphrase:   encodedPassphrase,
 			Salt:         salt,
