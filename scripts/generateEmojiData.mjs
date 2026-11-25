@@ -1,8 +1,8 @@
 "ts-check";
 
-import { writeFile } from "fs/promises";
-import { resolve, dirname } from "path";
-import { fileURLToPath } from "url";
+import { writeFile } from "node:fs/promises";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const outPath = resolve(dirname(fileURLToPath(import.meta.url)), "out");
 
@@ -16,49 +16,48 @@ const multipleSkinTonesExclude = [
   /^family(_(man|woman).*)?$/,
 ];
 
-async function main() {
 
-  console.log("Fetching emoji data...");
+console.log("Fetching emoji data...");
 
-  const dataByEmoji = await fetch(`https://unpkg.com/unicode-emoji-json@${unicodeEmojiJsonVersion}/data-by-emoji.json`).then(res => res.json());
-  const emojilibData = await fetch(`https://unpkg.com/emojilib@${emojilibVersion}/dist/emoji-en-US.json`).then(res => res.json());
+const dataByEmojiResponse = await fetch(`https://unpkg.com/unicode-emoji-json@${unicodeEmojiJsonVersion}/data-by-emoji.json`)
+const dataByEmoji = await dataByEmojiResponse.json();
 
-  console.log("Processing emoji data...");
+const emojilibResponse = await fetch(`https://unpkg.com/emojilib@${emojilibVersion}/dist/emoji-en-US.json`)
+const emojilibData = await emojilibResponse.json();
 
-  const result = [];
+console.log("Processing emoji data...");
 
-  for (const [emoji, { slug, skin_tone_support }] of Object.entries(dataByEmoji)) {
-    if (!(emoji in emojilibData)) console.warn(`Missing data in emojilib for emoji ${emoji} (${slug})`);
+const result = [];
 
-    let /** @type {string[]} */ alternateNames = emojilibData[emoji] ?? [];
-    // don't include the first name which is the slug as well as names with special characters
-    alternateNames = alternateNames.slice(1).filter(name => /^[\w\s]+$/.test(name));
+for (const [emoji, { slug, skin_tone_support }] of Object.entries(dataByEmoji)) {
+  if (!(emoji in emojilibData)) console.warn(`Missing data in emojilib for emoji ${emoji} (${slug})`);
 
-    let skinToneSupport = skin_tone_support;
-    if (multipleSkinTonesExclude.some(regex => regex.test(slug))) {
-      console.warn(`Excluding skin tone support for emoji ${emoji} (${slug})`);
-      skinToneSupport = false;
-    }
+  let /** @type {string[]} */ alternateNames = emojilibData[emoji] ?? [];
+  // don't include the first name which is the slug as well as names with special characters
+  alternateNames = alternateNames.slice(1).filter(name => /^[\w\s]+$/.test(name));
 
-    result.push(
-      [slug, emoji, skinToneSupport, alternateNames]
-    );
+  let skinToneSupport = skin_tone_support;
+  if (multipleSkinTonesExclude.some(regex => regex.test(slug))) {
+    console.warn(`Excluding skin tone support for emoji ${emoji} (${slug})`);
+    skinToneSupport = false;
   }
 
-  console.log("Writing emoji data...");
-
-  const json = JSON.stringify(result);
-
-  await writeFile(outPath + "/emojis.json", json);
-
-  console.log(`Wrote ${result.length} emojis. (/out/emojis.json)`);
-
-  console.log("5 random examples:");
-  for (let i = 0; i < 5; i++) {
-    console.log(result[Math.floor(Math.random() * result.length)]);
-  }
-
-  console.log("Done!");
+  result.push(
+    [slug, emoji, skinToneSupport, alternateNames]
+  );
 }
 
-main();
+console.log("Writing emoji data...");
+
+const json = JSON.stringify(result);
+
+await writeFile(outPath + "/emojis.json", json);
+
+console.log(`Wrote ${result.length} emojis. (/out/emojis.json)`);
+
+console.log("5 random examples:");
+for (let i = 0; i < 5; i++) {
+  console.log(result[Math.floor(Math.random() * result.length)]);
+}
+
+console.log("Done!");

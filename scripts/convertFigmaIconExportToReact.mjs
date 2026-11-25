@@ -1,6 +1,6 @@
-import { appendFile, readdir, writeFile, mkdir, readFile } from "fs/promises";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import { readdir, writeFile, mkdir, readFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const inPath = resolve(dirname(fileURLToPath(import.meta.url)), "in/icons");
 const outPath = resolve(dirname(fileURLToPath(import.meta.url)), "out/src");
@@ -41,8 +41,7 @@ function checkForInconsistentColors(svg, filename) {
   });
 }
 
-async function main() {
-  console.log(`This script will:
+console.log(`This script will:
 - read all icons from /in/icons
 - change the color of the icons to currentColor
 - add a class "icon" to the svg
@@ -50,14 +49,12 @@ async function main() {
 - create an index file in /out/src/components/Icons/index.ts that exports all icons as React components
 `);
 
-  console.log("Reading icons from /in...");
+console.log("Reading icons from /in...");
 
-  const icons = await readdir(inPath);
-  if (icons.length === 0) {
-    console.error("No icons found in /in");
-    return;
-  }
-
+const icons = await readdir(inPath);
+if (icons.length === 0) {
+  console.error("No icons found in /in");
+} else {
   // collect all unique icon names
   const iconNames = Array.from(new Set(icons.map(filename => {
     const name = filenameToIconName(filename);
@@ -72,40 +69,40 @@ async function main() {
   await mkdir(dirname(indexFile), { recursive: true });
   await writeFile(indexFile, "");
 
-  await appendFile(indexFile, `// This file was generated in convertFigmaIconExportToReact.mjs
+  const indexHeader = `// This file was generated in convertFigmaIconExportToReact.mjs
 
 import "./Icon.scss";
 
-`
-  );
+`;
 
   // setup icon output folder
   const iconOut = resolve(outPath, "assets/icons");
   await mkdir(iconOut, { recursive: true });
 
   console.log("Processing", iconNames.length, "icons...");
-  for (const iconName of iconNames) {
-    if (!iconName) return;
+  const exports = await Promise.all(
+    iconNames.map(async (iconName) => {
+      if (!iconName) return "";
 
-    // load the light variant of the icon
-    const lightVariantFile = resolve(inPath, iconNameToFilename(iconName));
-    const iconFile = await readFile(lightVariantFile).then(f => f.toString());
+      // load the light variant of the icon
+      const lightVariantFile = resolve(inPath, iconNameToFilename(iconName));
+      const iconFile = await readFile(lightVariantFile).then(f => f.toString());
 
-    // change the color of the icon to currentColor and add a class "Icon"
-    const iconComponentSVG = iconFile.replace(inputColors, "currentColor").replace("<svg", `<svg class="icon"`);
+      // change the color of the icon to currentColor and add a class "Icon"
+      const iconComponentSVG = iconFile.replaceAll(inputColors, "currentColor").replace("<svg", `<svg class="icon"`);
 
-    // check for inconsistent colors
-    checkForInconsistentColors(iconComponentSVG, lightVariantFile);
+      // check for inconsistent colors
+      checkForInconsistentColors(iconComponentSVG, lightVariantFile);
 
-    // write the icon to the output folder
-    await writeFile(resolve(outPath, resolve(iconOut, iconName + ".svg")), iconComponentSVG);
+      // write the icon to the output folder
+      await writeFile(resolve(outPath, resolve(iconOut, iconName + ".svg")), iconComponentSVG);
 
-    // add the icon to the index file
-    const componentName = iconNameToComponentName(iconName);
-    await appendFile(indexFile, `export {ReactComponent as ${componentName}} from "assets/icons/${iconName}.svg";\n`);
-  }
+      // add the icon to the index file
+      const componentName = iconNameToComponentName(iconName);
+      return `export {ReactComponent as ${componentName}} from "assets/icons/${iconName}.svg";\n`;
+    }),
+  );
 
-  console.log("Processing done.\nCheck for any warnings, then merge the out/src folder with the project's src folder.");
-}
-
-main();
+await writeFile(indexFile, indexHeader + exports.join(""));
+console.log("Processing done.\nCheck for any warnings, then merge the out/src folder with the project's src folder.");
+};
