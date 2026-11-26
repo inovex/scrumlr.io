@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/google/uuid"
+	"uuid"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/urfave/cli/v3"
@@ -106,7 +106,7 @@ func list(ctx context.Context, cmd *cli.Command) error {
 	limit := cmd.Int("limit")
 
 	user := cmd.String("user")
-	userId := uuid.Nil
+	userId := uuid.Nil()
 	if user != "" {
 		var err error
 		userId, err = uuid.Parse(user)
@@ -125,7 +125,7 @@ func list(ctx context.Context, cmd *cli.Command) error {
 		TableExpr("boards As b").
 		ColumnExpr("b.*")
 
-	if userId != uuid.Nil {
+	if userId != uuid.Nil() {
 		querry = querry.
 			Join("INNER JOIN board_sessions AS s ON s.board = b.id").
 			Where("s.user = ?", userId)

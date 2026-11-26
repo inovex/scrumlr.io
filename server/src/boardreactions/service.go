@@ -3,7 +3,7 @@ package boardreactions
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"

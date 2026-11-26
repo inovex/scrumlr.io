@@ -21,8 +21,8 @@ export interface UpdateBoardRequest {
 	showNotesOfOtherUsers?: boolean;
 	timerStart?: string;
 	timerEnd?: string;
-	sharedNote?: { uuid: string; valid: boolean } | null;
-	showVoting?: { uuid: string; valid: boolean } | null;
+	sharedNote?: string | null;
+	showVoting?: string | null;
 }
 
 export interface JoinBoardRequest {

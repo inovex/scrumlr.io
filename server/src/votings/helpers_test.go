@@ -4,7 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
+	"uuid"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 )
@@ -205,16 +206,6 @@ func TestShouldFailUnmarshallingVoteData(t *testing.T) {
 	assert.Error(t, err)
 }
 
-//func buildNote(noteId uuid.UUID) *notes.Note {
-//	return &notes.Note{
-//		ID:       noteId,
-//		Author:   uuid.UUID{},
-//		Text:     "",
-//		Edited:   false,
-//		Position: notes.NotePosition{},
-//	}
-//}
-
 func TestSortNotesByVotesOrdersDescending(t *testing.T) {
 	note1 := Note{ID: uuid.New()}
 	note2 := Note{ID: uuid.New()}
@@ -274,7 +265,7 @@ func buildVote(votingId, noteId, userId uuid.UUID) *DatabaseVote {
 	return &DatabaseVote{
 		Voting:    votingId,
 		BaseModel: bun.BaseModel{},
-		Board:     uuid.UUID{},
+		Board:     uuid.Nil(),
 		User:      userId,
 		Note:      noteId,
 	}
@@ -284,7 +275,7 @@ func buildVoting(id uuid.UUID, status VotingStatus, showVotesOfOthers bool, isAn
 	return &DatabaseVoting{
 		ID:                 id,
 		BaseModel:          bun.BaseModel{},
-		Board:              uuid.UUID{},
+		Board:              uuid.Nil(),
 		CreatedAt:          time.Time{},
 		VoteLimit:          0,
 		AllowMultipleVotes: false,

@@ -3,7 +3,7 @@ package votings
 import (
 	"net/http"
 
-	"github.com/google/uuid"
+	"uuid"
 )
 
 type Vote struct {
@@ -128,7 +128,7 @@ type NotePosition struct {
 	Column uuid.UUID `json:"column"`
 
 	// The parent note for this note in a stack.
-	Stack uuid.NullUUID `json:"stack"`
+	Stack *uuid.UUID `json:"stack"`
 
 	// The note rank.
 	Rank int `json:"rank"`
