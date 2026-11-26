@@ -95,7 +95,7 @@
     "happy-dom": "^21.0.4",
     "husky": "^9.1.7",
     "i18next-fs-backend": "^2.6.12",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "^17.6.1",
     "node-localstorage": "^3.0.5",
     "prettier": "^3.10.1",
     "react-dnd-test-backend": "^16.0.1",
