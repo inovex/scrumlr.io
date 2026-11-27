@@ -5915,9 +5915,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^18.0.1":
-  version: 18.0.1
-  resolution: "react-i18next@npm:18.0.1"
+"react-i18next@npm:^18.0.2":
+  version: 18.0.2
+  resolution: "react-i18next@npm:18.0.2"
   dependencies:
     html-parse-stringify: "npm:^4.0.1"
   peerDependencies:
@@ -5930,7 +5930,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/a372c17158db33d7deec495dfdff127930334cdc264a931ea942289f25ddbd45e9debb69e986e587db4be8e8eff6ea0a50351b73fd6469be65c1cfa0acde4120
+  checksum: 10c0/e6d3baf95c04a8fcde07d742d03ab02862488147128a7a4f9036b8909863e3be1803025d4fb5158f6467c3c48fcf525f27a82d1dbed04110f1da6a332da244ec
   languageName: node
   linkType: hard
 
@@ -6451,7 +6451,7 @@ __metadata:
     react-focus-lock: "npm:^2.13.7"
     react-helmet-async: "npm:^3.1.0"
     react-hotkeys-hook: "npm:^5.4.0"
-    react-i18next: "npm:^18.0.1"
+    react-i18next: "npm:^18.0.2"
     react-redux: "npm:^9.3.1"
     react-router: "npm:^8.5.1"
     react-snowfall: "npm:^2.4.0"
