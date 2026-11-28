@@ -478,10 +478,12 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase() {
 		Return(true, nil)
 	suite.mockPasswordEncoder.EXPECT().UpgradeEncoding(encodedPassphrase).
 		Return(false)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: suite.boardID,
-		User:  suite.userID,
-		Role:  role.ParticipantRole,
+		Board:                suite.boardID,
+		User:                 suite.userID,
+		Role:                 role.ParticipantRole,
+		PassphraseVerifiedAt: &suite.updatedAt,
 	}).Return(&sessions.BoardSession{}, nil)
 
 	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: passphrase})
@@ -517,10 +519,12 @@ func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_UpgradeEncoding() {
 		Passphrase: newEncodedPassphrase,
 		Salt:       newSalt,
 	}).Return(DatabaseBoard{}, nil)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
 	suite.sessionsMock.EXPECT().Create(mock.Anything, sessions.BoardSessionCreateRequest{
-		Board: suite.boardID,
-		User:  suite.userID,
-		Role:  role.ParticipantRole,
+		Board:                suite.boardID,
+		User:                 suite.userID,
+		Role:                 role.ParticipantRole,
+		PassphraseVerifiedAt: &suite.updatedAt,
 	}).Return(&sessions.BoardSession{}, nil)
 
 	shouldRedirect, location, status, err := suite.service.Join(context.Background(), board, suite.userID, JoinBoardRequest{Passphrase: passphrase})
@@ -929,7 +933,7 @@ func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase() {
 	passphrase := "SuperStrongPassword"
 	salt := "ThisIsTheSalt"
 
-	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt}).
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt, PassphraseChangedAt: &suite.updatedAt}).
 		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
 	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
 		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
@@ -2236,4 +2240,152 @@ func (suite *BoardServiceTestSuite) TestImportStackRoots_ReturnsError() {
 	suite.Nil(stackNotes)
 	suite.Equal(importErr, err)
 	notesMock.AssertExpectations(suite.T())
+}
+
+func (suite *BoardServiceTestSuite) passphraseBoard(changedAt *time.Time) *Board {
+	encodedPassphrase := "encoded"
+	salt := "salt"
+	return &Board{
+		ID:                  suite.boardID,
+		AccessPolicy:        ByPassphrase,
+		Passphrase:          &encodedPassphrase,
+		Salt:                &salt,
+		PassphraseChangedAt: changedAt,
+	}
+}
+
+func (suite *BoardServiceTestSuite) expectExistingSession(sessionRole role.Role, verifiedAt *time.Time) {
+	suite.sessionsMock.EXPECT().Exists(mock.Anything, suite.boardID, suite.userID).Return(true, nil)
+	suite.sessionsMock.EXPECT().IsParticipantBanned(mock.Anything, suite.boardID, suite.userID).Return(false, nil)
+	suite.sessionsMock.EXPECT().Get(mock.Anything, suite.boardID, suite.userID).
+		Return(&sessions.BoardSession{Role: sessionRole, PassphraseVerifiedAt: verifiedAt}, nil)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExistingSessionWithinValidity() {
+	verifiedAt := suite.updatedAt.Add(-passphraseValidity + time.Second)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+
+	shouldRedirect, location, status, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(fmt.Sprintf("/boards/%s/participants/%s", suite.boardID, suite.userID), location)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExistingSessionExpired() {
+	verifiedAt := suite.updatedAt.Add(-passphraseValidity)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+
+	_, _, _, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{})
+
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("missing passphrase", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExistingSessionNeverVerified() {
+	suite.expectExistingSession(role.ParticipantRole, nil)
+
+	_, _, _, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{})
+
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal("missing passphrase", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_PassphraseChangedAfterVerification() {
+	verifiedAt := suite.updatedAt.Add(-time.Hour)
+	changedAt := suite.updatedAt.Add(-time.Minute)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+
+	_, _, _, err := suite.service.Join(context.Background(), suite.passphraseBoard(&changedAt), suite.userID, JoinBoardRequest{})
+
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal("missing passphrase", boardErr.Message)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_VerifiedAfterPassphraseChange() {
+	changedAt := suite.updatedAt.Add(-time.Hour)
+	verifiedAt := suite.updatedAt.Add(-time.Minute)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+
+	shouldRedirect, _, status, err := suite.service.Join(context.Background(), suite.passphraseBoard(&changedAt), suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExpiredSessionRenewedWithCorrectPassphrase() {
+	verifiedAt := suite.updatedAt.Add(-passphraseValidity - time.Hour)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+	suite.mockPasswordEncoder.EXPECT().Matches("correct", "encoded", "salt").Return(true, nil)
+	suite.sessionsMock.EXPECT().Update(mock.Anything, sessions.BoardSessionUpdateRequest{
+		Board:                suite.boardID,
+		User:                 suite.userID,
+		Caller:               suite.userID,
+		PassphraseVerifiedAt: &suite.updatedAt,
+	}).Return(&sessions.BoardSession{}, nil)
+
+	shouldRedirect, _, status, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{Passphrase: "correct"})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_ExpiredSessionWrongPassphrase() {
+	verifiedAt := suite.updatedAt.Add(-passphraseValidity - time.Hour)
+	suite.expectExistingSession(role.ParticipantRole, &verifiedAt)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+	suite.mockPasswordEncoder.EXPECT().Matches("wrong", "encoded", "salt").Return(false, nil)
+
+	_, _, _, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{Passphrase: "wrong"})
+
+	var boardErr BoardError
+	suite.ErrorAs(err, &boardErr)
+	suite.Equal(BadRequest, boardErr.Category)
+	suite.Equal("wrong passphrase", boardErr.Message)
+	suite.sessionsMock.AssertNotCalled(suite.T(), "Update", mock.Anything, mock.Anything)
+}
+
+func (suite *BoardServiceTestSuite) TestJoin_ByPassphrase_OwnerIsExempt() {
+	suite.expectExistingSession(role.OwnerRole, nil)
+
+	shouldRedirect, _, status, err := suite.service.Join(context.Background(), suite.passphraseBoard(nil), suite.userID, JoinBoardRequest{})
+
+	suite.NoError(err)
+	suite.True(shouldRedirect)
+	suite.Equal(http.StatusSeeOther, status)
+}
+
+func (suite *BoardServiceTestSuite) TestUpdate_ToPassphrase_KeepsExistingSessions() {
+	updatedName := "Updated Board Name"
+	accessPolicy := ByPassphrase
+	passphrase := "SuperStrongPassword"
+	salt := "ThisIsTheSalt"
+
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, DatabaseBoardUpdate{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase, Salt: &salt, PassphraseChangedAt: &suite.updatedAt}).
+		Return(DatabaseBoard{ID: suite.boardID, Name: &updatedName, AccessPolicy: accessPolicy, Passphrase: &passphrase, Salt: &salt}, nil)
+	suite.mockBoardDatabase.EXPECT().UpdateBoard(mock.Anything, mock.MatchedBy(func(update DatabaseBoardUpdate) bool {
+		return update.ID == suite.boardID && update.LastModifiedAt.Equal(suite.updatedAt)
+	})).Return(DatabaseBoard{ID: suite.boardID}, nil)
+	suite.columnMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*columns.Column{}, nil)
+	suite.noteMock.EXPECT().GetAll(mock.Anything, suite.boardID).Return([]*notes.Note{}, nil)
+	suite.mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	suite.mockClock.EXPECT().Now().Return(suite.updatedAt)
+	suite.mockPasswordEncoder.EXPECT().Encode(passphrase).Return(&passphrase, &salt, nil)
+
+	_, err := suite.service.Update(context.Background(), BoardUpdateRequest{ID: suite.boardID, Name: &updatedName, AccessPolicy: &accessPolicy, Passphrase: &passphrase})
+
+	suite.NoError(err)
+	suite.sessionsMock.AssertNotCalled(suite.T(), "Delete", mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+	suite.sessionsMock.AssertNotCalled(suite.T(), "Update", mock.Anything, mock.Anything)
 }

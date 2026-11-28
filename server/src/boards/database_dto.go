@@ -16,6 +16,7 @@ type DatabaseBoard struct {
 	AccessPolicy          AccessPolicy
 	Passphrase            *string
 	Salt                  *string
+	PassphraseChangedAt   *time.Time
 	ShowAuthors           bool
 	ShowNotesOfOtherUsers bool
 	ShowNoteReactions     bool
@@ -53,6 +54,7 @@ type DatabaseBoardUpdate struct {
 	AccessPolicy          *AccessPolicy
 	Passphrase            *string
 	Salt                  *string
+	PassphraseChangedAt   *time.Time
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
 	ShowNoteReactions     *bool

@@ -66,9 +66,10 @@ func (service *BoardSessionService) Create(ctx context.Context, body BoardSessio
 	)
 
 	session, err := service.database.Create(ctx, DatabaseBoardSessionInsert{
-		Board: body.Board,
-		User:  body.User,
-		Role:  body.Role,
+		Board:                body.Board,
+		User:                 body.User,
+		Role:                 body.Role,
+		PassphraseVerifiedAt: body.PassphraseVerifiedAt,
 	})
 
 	if err != nil {
@@ -290,14 +291,15 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	}
 
 	session, err := service.database.Update(ctx, DatabaseBoardSessionUpdate{
-		Board:             body.Board,
-		User:              body.User,
-		Ready:             body.Ready,
-		RaisedHand:        body.RaisedHand,
-		ShowHiddenColumns: body.ShowHiddenColumns,
-		Role:              body.Role,
-		Banned:            body.Banned,
-		Favourite:         body.Favourite,
+		Board:                body.Board,
+		User:                 body.User,
+		Ready:                body.Ready,
+		RaisedHand:           body.RaisedHand,
+		ShowHiddenColumns:    body.ShowHiddenColumns,
+		Role:                 body.Role,
+		Banned:               body.Banned,
+		Favourite:            body.Favourite,
+		PassphraseVerifiedAt: body.PassphraseVerifiedAt,
 	})
 
 	if err != nil {

@@ -51,6 +51,9 @@ type Board struct {
 	Passphrase *string `json:"-"`
 	Salt       *string `json:"-"`
 
+	// Time of the last passphrase change, nil if the passphrase was never changed.
+	PassphraseChangedAt *time.Time `json:"-"`
+
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	CreatedAt      time.Time `json:"createdAt"`
 }
@@ -71,6 +74,7 @@ func (b *Board) From(board DatabaseBoard) *Board {
 	b.TimerEnd = board.TimerEnd
 	b.Passphrase = board.Passphrase
 	b.Salt = board.Salt
+	b.PassphraseChangedAt = board.PassphraseChangedAt
 	b.LastModifiedAt = board.LastModifiedAt
 	b.CreatedAt = board.CreatedAt
 	return b
